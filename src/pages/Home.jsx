@@ -48,14 +48,14 @@ export default function Home() {
 
   return (
     <div className="space-y-6">
-      {/* Hero Section - Wide Live Player with Minimal Sidebars */}
+      {/* Hero Section - Extended Live Player */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-3 -mx-4 px-4">
-        {/* Right Sidebar - Updates Feed (Narrower) */}
+        {/* Right Sidebar - Updates Feed */}
         <aside className="lg:col-span-2 hidden lg:block">
           <UpdatesFeed />
         </aside>
 
-        {/* Center - Extra Large Live Player */}
+        {/* Center - Extended Live Player */}
         <div className="lg:col-span-8">
           <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-t-lg p-3 flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -72,14 +72,70 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <LivePlayer 
-            title={activeLive?.title || "הרשת החדשה - שידור חי"}
-            isLive={!!activeLive?.is_active}
-            viewerCount={activeLive?.viewer_count || 3456}
-          />
+          <div className="relative">
+            <LivePlayer 
+              title={activeLive?.title || "הרשת החדשה - שידור חי"}
+              isLive={!!activeLive?.is_active}
+              viewerCount={activeLive?.viewer_count || 3456}
+            />
+            
+            {/* Features Below Player */}
+            <div className="grid grid-cols-3 gap-3 mt-3">
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1 }}
+                className="bg-white rounded-lg p-4 shadow-md border border-gray-200 hover:shadow-lg transition-shadow"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
+                    <span className="text-xl">🔴</span>
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-sm text-gray-900">שידור 24/7</h3>
+                    <p className="text-xs text-gray-500">תמיד מעודכנים</p>
+                  </div>
+                </div>
+              </motion.div>
+
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.2 }}
+                className="bg-white rounded-lg p-4 shadow-md border border-gray-200 hover:shadow-lg transition-shadow"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                    <span className="text-xl">⚡</span>
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-sm text-gray-900">עדכונים מהירים</h3>
+                    <p className="text-xs text-gray-500">בזמן אמת</p>
+                  </div>
+                </div>
+              </motion.div>
+
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.3 }}
+                className="bg-white rounded-lg p-4 shadow-md border border-gray-200 hover:shadow-lg transition-shadow"
+              >
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+                    <span className="text-xl">🎯</span>
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-sm text-gray-900">כיסוי מקיף</h3>
+                    <p className="text-xs text-gray-500">מכל הזירות</p>
+                  </div>
+                </div>
+              </motion.div>
+            </div>
+          </div>
         </div>
 
-        {/* Left Sidebar - Reporters Feed (Narrower) */}
+        {/* Left Sidebar - Reporters Feed */}
         <aside className="lg:col-span-2 hidden lg:block">
           <ReportersFeed />
         </aside>
