@@ -47,7 +47,7 @@ export default function Home() {
   }
 
   return (
-    <div className="space-y-10">
+    <div className="space-y-6">
       {/* Hero Section - Wide Live Player with Minimal Sidebars */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-3 -mx-4 px-4">
         {/* Right Sidebar - Updates Feed (Narrower) */}

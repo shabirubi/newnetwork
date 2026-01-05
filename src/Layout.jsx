@@ -61,18 +61,8 @@ export default function Layout({ children }) {
       {/* Header */}
       <header className="bg-white shadow-md sticky top-0 z-50">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="flex items-center justify-between h-20">
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 text-gray-600 hover:text-[#E31E24] transition-colors"
-            >
-              {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
-            </button>
-          </div>
-
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center justify-center gap-1 pb-3 border-t border-gray-100 pt-3">
+          <nav className="hidden lg:flex items-center justify-center gap-1 py-3">
             <Link
               to={createPageUrl("Live")}
               className="flex items-center gap-1.5 px-3 py-2 text-white bg-[#E31E24] hover:bg-[#B91C1C] rounded-lg transition-all text-xs font-bold"
@@ -105,6 +95,16 @@ export default function Layout({ children }) {
               אנשי השטח
             </Link>
           </nav>
+
+          {/* Mobile Menu Button */}
+          <div className="lg:hidden flex items-center justify-between py-3 border-t border-gray-100">
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2 text-gray-600 hover:text-[#E31E24] transition-colors"
+            >
+              {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+            </button>
+          </div>
         </div>
       </header>
 

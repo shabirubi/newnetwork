@@ -12,8 +12,7 @@ const reporters = [
     role: "כתבת פוליטית",
     image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop",
     articles: [
-      { title: "ראש הממשלה בהצהרה חריפה: 'לא נסוג צעד אחד'", time: "06:23", hasVideo: true },
-      { title: "המתיחות גוברת - האם נצפה להסלמה?", time: "05:45", hasVideo: false }
+      { title: "ראש הממשלה בהצהרה חריפה: 'לא נסוג צעד אחד'", time: "06:23", hasVideo: true }
     ]
   },
   {
@@ -22,8 +21,7 @@ const reporters = [
     role: "כתב ביטחון",
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop",
     articles: [
-      { title: "התקפה בגבול הצפון - צה\"ל בכוננות מירבית", time: "05:16", hasVideo: true },
-      { title: "מקורות ביטחוניים: מצב רגיעה יחסית", time: "04:32", hasVideo: false }
+      { title: "התקפה בגבול הצפון - צה\"ל בכוננות מירבית", time: "05:16", hasVideo: true }
     ]
   },
   {
@@ -32,8 +30,7 @@ const reporters = [
     role: "כתבת כלכלה",
     image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop",
     articles: [
-      { title: "עליית מחירים חדה - מה קורה בשוק?", time: "06:02", hasVideo: true },
-      { title: "בנק ישראל מעלה את הריבית", time: "03:21", hasVideo: false }
+      { title: "עליית מחירים חדה - מה קורה בשוק?", time: "06:02", hasVideo: true }
     ]
   },
   {
@@ -42,8 +39,7 @@ const reporters = [
     role: "כתב חקירות",
     image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop",
     articles: [
-      { title: "חשד לשחיתות ברמות הגבוהות - פרטים בלעדיים", time: "02:41", hasVideo: false },
-      { title: "חקירה מסועפת: המשטרה פשטה על משרדים", time: "01:12", hasVideo: true }
+      { title: "חשד לשחיתות ברמות הגבוהות - פרטים בלעדיים", time: "02:41", hasVideo: false }
     ]
   },
   {
@@ -53,6 +49,51 @@ const reporters = [
     image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop",
     articles: [
       { title: "אירוע דרמטי בתל אביב - פינוי דיירים", time: "02:01", hasVideo: true }
+    ]
+  },
+  {
+    id: 6,
+    name: "יואב שמעון",
+    role: "כתב ספורט",
+    image: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&h=400&fit=crop",
+    articles: [
+      { title: "ניצחון דרמטי: הפועל תל אביב מעלה למקום הראשון", time: "01:45", hasVideo: true }
+    ]
+  },
+  {
+    id: 7,
+    name: "מיכל אבני",
+    role: "כתבת בריאות",
+    image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=400&h=400&fit=crop",
+    articles: [
+      { title: "פריצת דרך רפואית: טיפול חדש לסרטן אושר", time: "01:20", hasVideo: false }
+    ]
+  },
+  {
+    id: 8,
+    name: "תומר דוד",
+    role: "כתב טכנולוגיה",
+    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop",
+    articles: [
+      { title: "חברת הייטק ישראלית גייסה 100 מיליון דולר", time: "00:58", hasVideo: true }
+    ]
+  },
+  {
+    id: 9,
+    name: "רותם אלון",
+    role: "כתבת עולם",
+    image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop",
+    articles: [
+      { title: "התפתחויות בארצות הברית - מה קורה בוושינגטון?", time: "00:32", hasVideo: false }
+    ]
+  },
+  {
+    id: 10,
+    name: "דניאל כץ",
+    role: "כתב תחבורה",
+    image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop",
+    articles: [
+      { title: "עומס חריג בכבישים - כל מה שצריך לדעת", time: "00:15", hasVideo: true }
     ]
   }
 ];
@@ -70,7 +111,7 @@ export default function ReportersFeed() {
 
       {/* Feed - No scroll, fixed height */}
       <div className="bg-gray-50 h-[500px] overflow-hidden">
-        {reporters.slice(0, 3).map((reporter, reporterIndex) => (
+        {reporters.slice(0, 6).map((reporter, reporterIndex) => (
           <div key={reporter.id}>
             {reporter.articles.slice(0, 1).map((article, articleIndex) => (
               <motion.div
