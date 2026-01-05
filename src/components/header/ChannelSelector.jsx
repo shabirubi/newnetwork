@@ -23,7 +23,10 @@ export default function ChannelSelector() {
     setSelectedChannel(channelId);
     localStorage.setItem('selectedChannel', channelId);
     setIsOpen(false);
-    window.dispatchEvent(new CustomEvent('channelChange', { detail: channelId }));
+    
+    // If 'all' is selected, pick the first channel for streaming
+    const streamChannelId = channelId === 'all' && channels.length > 0 ? channels[0].id : channelId;
+    window.dispatchEvent(new CustomEvent('channelChange', { detail: streamChannelId }));
   };
 
   const currentChannel = channels.find(c => c.id === selectedChannel);

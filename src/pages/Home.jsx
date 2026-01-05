@@ -16,12 +16,7 @@ import VideoHighlights from "../components/news/VideoHighlights";
 import LiveStats from "../components/news/LiveStats";
 
 export default function Home() {
-  const [selectedChannel, setSelectedChannel] = React.useState(() => {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('selectedChannel') || 'all';
-    }
-    return 'all';
-  });
+  const [selectedChannel, setSelectedChannel] = React.useState(null);
 
   React.useEffect(() => {
     const handleChannelChange = (e) => {
@@ -36,6 +31,13 @@ export default function Home() {
     queryFn: () => base44.entities.NewsChannel.filter({ is_active: true }),
     initialData: []
   });
+
+  // Auto-select first channel on load
+  React.useEffect(() => {
+    if (channels.length > 0 && !selectedChannel) {
+      setSelectedChannel(channels[0].id);
+    }
+  }, [channels, selectedChannel]);
 
   const { data: articles = [], isLoading } = useQuery({
     queryKey: ['news-articles', selectedChannel],
