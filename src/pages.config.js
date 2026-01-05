@@ -7,9 +7,9 @@ import NewsAdmin from './pages/NewsAdmin';
 import NewsLoader from './pages/NewsLoader';
 import PublicReports from './pages/PublicReports';
 import Schedule from './pages/Schedule';
-import WarRoom from './pages/WarRoom';
 import VOD from './pages/VOD';
 import VODPlayer from './pages/VODPlayer';
+import WarRoom from './pages/WarRoom';
 import __Layout from './Layout.jsx';
 
 
@@ -23,9 +23,9 @@ export const PAGES = {
     "NewsLoader": NewsLoader,
     "PublicReports": PublicReports,
     "Schedule": Schedule,
-    "WarRoom": WarRoom,
     "VOD": VOD,
     "VODPlayer": VODPlayer,
+    "WarRoom": WarRoom,
 }
 
 export const pagesConfig = {
