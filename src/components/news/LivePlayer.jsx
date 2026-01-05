@@ -69,7 +69,7 @@ export default function LivePlayer({
 
   // Setup HLS player for .m3u8 streams
   useEffect(() => {
-    if (!isPlaying || !currentStreamUrl || !currentStreamUrl.includes('.m3u8') || !videoRef.current) return;
+    if (!currentStreamUrl || !currentStreamUrl.includes('.m3u8') || !videoRef.current) return;
 
     const video = videoRef.current;
     
@@ -79,6 +79,11 @@ export default function LivePlayer({
       hlsRef.current = null;
     }
 
+    if (!isPlaying) {
+      video.pause();
+      return;
+    }
+
     // Set volume
     video.volume = volume / 100;
     video.muted = isMuted;
@@ -86,51 +91,51 @@ export default function LivePlayer({
     // Check if browser natively supports HLS (Safari)
     if (video.canPlayType('application/vnd.apple.mpegurl')) {
       video.src = currentStreamUrl;
-      video.play().catch(() => {});
+      video.play().catch(err => console.log('Play error:', err));
     } else {
       // Use HLS.js for other browsers
       loadHls().then((Hls) => {
         if (Hls.isSupported()) {
           const hls = new Hls({
+            debug: false,
             enableWorker: true,
             lowLatencyMode: false,
-            maxBufferLength: 30,
-            maxMaxBufferLength: 60,
-            maxLoadingDelay: 4,
-            maxBufferHole: 0.5,
-            manifestLoadingTimeOut: 10000,
-            manifestLoadingMaxRetry: 4,
-            levelLoadingTimeOut: 10000,
-            levelLoadingMaxRetry: 4,
-            xhrSetup: function(xhr, url) {
-              xhr.withCredentials = false;
-            }
+            backBufferLength: 90
           });
           hlsRef.current = hls;
-          hls.loadSource(currentStreamUrl);
-          hls.attachMedia(video);
-          hls.on(Hls.Events.MANIFEST_PARSED, () => {
-            video.play().catch(() => {});
-          });
-          hls.on(Hls.Events.ERROR, function (event, data) {
+          
+          hls.on(Hls.Events.ERROR, (event, data) => {
+            console.log('HLS Error:', data);
             if (data.fatal) {
               switch (data.type) {
                 case Hls.ErrorTypes.NETWORK_ERROR:
+                  console.log('Network error, trying to recover...');
                   hls.startLoad();
                   break;
                 case Hls.ErrorTypes.MEDIA_ERROR:
+                  console.log('Media error, trying to recover...');
                   hls.recoverMediaError();
                   break;
                 default:
+                  console.log('Fatal error, destroying HLS...');
+                  hls.destroy();
                   break;
               }
             }
           });
+
+          hls.loadSource(currentStreamUrl);
+          hls.attachMedia(video);
+          
+          hls.on(Hls.Events.MANIFEST_PARSED, () => {
+            console.log('Stream loaded successfully');
+            video.play().catch(err => console.log('Play error:', err));
+          });
         }
-      }).catch(() => {
-        // Fallback: try direct src
+      }).catch(err => {
+        console.log('HLS.js load error:', err);
         video.src = currentStreamUrl;
-        video.play().catch(() => {});
+        video.play().catch(err => console.log('Fallback play error:', err));
       });
     }
 
@@ -140,7 +145,7 @@ export default function LivePlayer({
         hlsRef.current = null;
       }
     };
-  }, [isPlaying, currentStreamUrl]);
+  }, [isPlaying, currentStreamUrl, volume, isMuted]);
 
   return (
     <motion.div
