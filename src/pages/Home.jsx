@@ -16,9 +16,29 @@ import VideoHighlights from "../components/news/VideoHighlights";
 import LiveStats from "../components/news/LiveStats";
 
 export default function Home() {
+  const [selectedChannel, setSelectedChannel] = React.useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('selectedChannel') || 'all';
+    }
+    return 'all';
+  });
+
+  React.useEffect(() => {
+    const handleChannelChange = (e) => {
+      setSelectedChannel(e.detail);
+    };
+    window.addEventListener('channelChange', handleChannelChange);
+    return () => window.removeEventListener('channelChange', handleChannelChange);
+  }, []);
+
   const { data: articles = [], isLoading } = useQuery({
-    queryKey: ['news-articles'],
-    queryFn: () => base44.entities.NewsArticle.list('-created_date', 20),
+    queryKey: ['news-articles', selectedChannel],
+    queryFn: () => {
+      if (selectedChannel === 'all') {
+        return base44.entities.NewsArticle.list('-created_date', 50);
+      }
+      return base44.entities.NewsArticle.filter({ channel_id: selectedChannel }, '-created_date', 50);
+    },
     initialData: []
   });
 

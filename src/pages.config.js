@@ -7,6 +7,7 @@ import NewsLoader from './pages/NewsLoader';
 import PublicReports from './pages/PublicReports';
 import Schedule from './pages/Schedule';
 import WarRoom from './pages/WarRoom';
+import ChannelsManager from './pages/ChannelsManager';
 import __Layout from './Layout.jsx';
 
 
@@ -20,6 +21,7 @@ export const PAGES = {
     "PublicReports": PublicReports,
     "Schedule": Schedule,
     "WarRoom": WarRoom,
+    "ChannelsManager": ChannelsManager,
 }
 
 export const pagesConfig = {

@@ -10,6 +10,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import ClockWidget from "./components/header/ClockWidget";
 import WeatherWidget from "./components/header/WeatherWidget";
+import ChannelSelector from "./components/header/ChannelSelector";
 
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/a44ef2558_212.png";
 
@@ -67,11 +68,12 @@ export default function Layout({ children }) {
       {/* Top Bar with Clock and Weather */}
       <div className="bg-gray-900 dark:bg-black text-white py-2 px-4 border-b border-gray-800">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <ClockWidget />
-            <WeatherWidget />
-          </div>
-          <div className="flex items-center gap-2">
+            <div className="flex items-center gap-4">
+              <ClockWidget />
+              <WeatherWidget />
+              <ChannelSelector />
+            </div>
+            <div className="flex items-center gap-2">
             <Link 
               to={createPageUrl("WarRoom")}
               className="flex items-center gap-1.5 px-3 py-1.5 bg-red-600 hover:bg-red-700 rounded-full text-xs font-bold transition-colors"
@@ -160,6 +162,13 @@ export default function Layout({ children }) {
               >
                 <Globe size={16} />
                 טעינת חדשות
+              </Link>
+              <Link
+                to={createPageUrl("ChannelsManager")}
+                className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
+              >
+                <Radio size={16} />
+                ניהול ערוצים
               </Link>
               <button
                 onClick={() => setDarkMode(!darkMode)}
