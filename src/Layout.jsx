@@ -4,7 +4,7 @@ import { createPageUrl } from "./utils";
 import { 
   Menu, X, Radio, Newspaper, Shield, TrendingUp, 
   Vote, Cpu, Trophy, Clapperboard, Globe, Heart,
-  Clock, ChevronLeft
+  Clock, ChevronLeft, Users
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -98,18 +98,25 @@ export default function Layout({ children }) {
               <Link
                 key={cat.id}
                 to={createPageUrl(cat.href)}
-                className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-[#E31E24] hover:bg-red-50 rounded-lg transition-all text-sm font-medium"
+                className="flex items-center gap-1.5 px-3 py-2 text-gray-700 hover:text-[#E31E24] hover:bg-red-50 rounded-lg transition-all text-xs font-medium"
               >
-                <cat.icon size={18} />
+                <cat.icon size={16} />
                 {cat.label}
               </Link>
             ))}
             <Link
               to={createPageUrl("Schedule")}
-              className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:text-[#E31E24] hover:bg-red-50 rounded-lg transition-all text-sm font-medium"
+              className="flex items-center gap-1.5 px-3 py-2 text-gray-700 hover:text-[#E31E24] hover:bg-red-50 rounded-lg transition-all text-xs font-medium"
             >
-              <Clock size={18} />
+              <Clock size={16} />
               לוח שידורים
+            </Link>
+            <Link
+              to={createPageUrl("Home")}
+              className="flex items-center gap-1.5 px-3 py-2 text-gray-700 hover:text-[#E31E24] hover:bg-red-50 rounded-lg transition-all text-xs font-medium"
+            >
+              <Users size={16} />
+              אנשי השטח
             </Link>
           </nav>
         </div>
