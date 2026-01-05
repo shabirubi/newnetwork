@@ -114,11 +114,11 @@ export default function LivePlayer({
 
         {/* Logo Watermark */}
         {isPlaying && (
-          <div className="absolute top-4 right-4 z-10 opacity-40 pointer-events-none">
+          <div className="absolute top-4 right-4 z-10 opacity-50 pointer-events-none">
             <img 
-              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/user_68238671d18a6312a669413d/a20bbab0c_image.png"
+              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/241671ab7_image.png"
               alt="הרשת החדשה"
-              className="h-12 w-auto"
+              className="h-16 w-auto"
             />
           </div>
         )}

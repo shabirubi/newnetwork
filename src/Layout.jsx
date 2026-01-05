@@ -11,7 +11,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import ClockWidget from "./components/header/ClockWidget";
 import WeatherWidget from "./components/header/WeatherWidget";
 
-const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/user_68238671d18a6312a669413d/a20bbab0c_image.png";
+const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/241671ab7_image.png";
 
 const categories = [
   { id: "home", label: "דף הבית", icon: Home, href: "Home" },
@@ -121,7 +121,7 @@ export default function Layout({ children }) {
             <img 
               src={LOGO_URL} 
               alt="הרשת החדשה" 
-              className="h-12 w-auto ml-3"
+              className="h-16 w-auto ml-3"
             />
             <Link
               to={createPageUrl("Live")}
@@ -249,7 +249,7 @@ export default function Layout({ children }) {
               <img 
                 src={LOGO_URL} 
                 alt="הרשת החדשה" 
-                className="h-12 w-auto mb-4 brightness-0 invert"
+                className="h-16 w-auto mb-4"
               />
               <p className="text-gray-400 text-sm">
                 ערוץ חדשות דיגיטלי מבוסס AI עם בקרה אנושית, המייצר תוכן דיגיטלי במהירות ובאיכות.
