@@ -95,7 +95,7 @@ export default function Layout({ children }) {
       {/* Breaking News Ticker */}
       <div className="bg-[#E31E24] dark:bg-[#B91C1C] text-white py-2 overflow-hidden">
         <div className="flex items-center">
-          <span className="bg-white text-[#E31E24] px-4 py-1 font-bold text-sm shrink-0 mr-4">
+          <span className="bg-black text-white px-4 py-1 font-bold text-sm shrink-0 mr-4">
             חדשות חמות
           </span>
           <div className="ticker-wrapper overflow-hidden flex-1">
