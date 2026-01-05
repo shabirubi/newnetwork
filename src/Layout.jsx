@@ -63,6 +63,32 @@ export default function Layout({ children }) {
         }
       `}</style>
 
+      {/* Top Bar with Clock and Weather */}
+      <div className="bg-gray-900 dark:bg-black text-white py-2 px-4 border-b border-gray-800">
+        <div className="max-w-7xl mx-auto flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <ClockWidget />
+            <WeatherWidget />
+          </div>
+          <div className="flex items-center gap-2">
+            <Link 
+              to={createPageUrl("WarRoom")}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-red-600 hover:bg-red-700 rounded-full text-xs font-bold transition-colors"
+            >
+              <Siren size={14} className="animate-pulse" />
+              חדר מלחמה
+            </Link>
+            <Link 
+              to={createPageUrl("PublicReports")}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-orange-500 hover:bg-orange-600 rounded-full text-xs font-bold transition-colors"
+            >
+              <MessageSquareWarning size={14} />
+              דיווח מפגע
+            </Link>
+          </div>
+        </div>
+      </div>
+
       {/* Breaking News Ticker */}
       <div className="bg-[#E31E24] dark:bg-[#B91C1C] text-white py-2 overflow-hidden">
         <div className="flex items-center">
