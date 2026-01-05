@@ -73,8 +73,17 @@ export default function ReportersFeed() {
         {reporters.slice(0, 3).map((reporter, reporterIndex) => (
           <div key={reporter.id}>
             {reporter.articles.slice(0, 1).map((article, articleIndex) => (
-              <div
+              <motion.div
                 key={`${reporter.id}-${articleIndex}`}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ 
+                  duration: 0.5,
+                  delay: reporterIndex * 0.2,
+                  repeat: Infinity,
+                  repeatType: "reverse",
+                  repeatDelay: 5
+                }}
                 className="bg-white border-b border-gray-100 hover:bg-gray-50 transition-colors"
               >
                 <Link 
@@ -83,15 +92,32 @@ export default function ReportersFeed() {
                 >
                   {/* Reporter Image - always show */}
                   <div className="relative shrink-0">
-                    <img 
+                    <motion.img 
                       src={reporter.image}
                       alt={reporter.name}
                       className="w-9 h-9 rounded-full object-cover ring-2 ring-gray-200"
+                      animate={{ 
+                        scale: [1, 1.05, 1],
+                        boxShadow: [
+                          "0 0 0 0px rgba(227, 30, 36, 0)",
+                          "0 0 0 3px rgba(227, 30, 36, 0.3)",
+                          "0 0 0 0px rgba(227, 30, 36, 0)"
+                        ]
+                      }}
+                      transition={{ 
+                        duration: 2,
+                        repeat: Infinity,
+                        delay: reporterIndex * 0.7
+                      }}
                     />
                     {article.hasVideo && (
-                      <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-[#E31E24] rounded-full flex items-center justify-center">
+                      <motion.div 
+                        className="absolute -bottom-1 -right-1 w-4 h-4 bg-[#E31E24] rounded-full flex items-center justify-center"
+                        animate={{ scale: [1, 1.2, 1] }}
+                        transition={{ duration: 1, repeat: Infinity }}
+                      >
                         <Play className="w-2 h-2 text-white" fill="white" />
-                      </div>
+                      </motion.div>
                     )}
                   </div>
 
@@ -101,12 +127,17 @@ export default function ReportersFeed() {
                       {article.title}
                     </p>
                     <div className="flex items-center gap-1 text-[9px] text-gray-500">
-                      <Clock size={9} />
+                      <motion.div
+                        animate={{ opacity: [0.5, 1, 0.5] }}
+                        transition={{ duration: 1.5, repeat: Infinity }}
+                      >
+                        <Clock size={9} />
+                      </motion.div>
                       {article.time}
                     </div>
                   </div>
                 </Link>
-              </div>
+              </motion.div>
             ))}
           </div>
         ))}
