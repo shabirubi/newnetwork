@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { Clock, AlertTriangle, ChevronLeft, Play } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import moment from "moment";
+import ShareButtons from "../shared/ShareButtons";
 
 const categoryLabels = {
   breaking: "חדשות חמות",
@@ -210,9 +211,19 @@ export default function NewsCard({
             </p>
           )}
           
-          <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 text-xs">
-            <Clock size={12} />
-            {moment(created_date).fromNow()}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 text-xs">
+              <Clock size={12} />
+              {moment(created_date).fromNow()}
+            </div>
+            <div onClick={(e) => e.preventDefault()}>
+              <ShareButtons 
+                url={`${window.location.origin}${createPageUrl(`Article?id=${id}`)}`}
+                title={title}
+                size="small"
+                showLabel={false}
+              />
+            </div>
           </div>
         </div>
       </Link>
