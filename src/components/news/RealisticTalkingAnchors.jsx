@@ -40,34 +40,15 @@ export default function RealisticTalkingAnchors({ isSpeaking = false }) {
     initialData: []
   });
 
-  // Generate realistic AI anchor images
+  // Use real professional anchor images from Unsplash
   useEffect(() => {
-    const generateImages = async () => {
-      try {
-        setLoadingImages(true);
-        
-        // Generate female anchor
-        const femaleResult = await base44.integrations.Core.GenerateImage({
-          prompt: "Professional female Israeli news anchor, age 35, brunette hair in elegant updo, wearing burgundy blazer, white blouse, pearl necklace, confident smile, professional studio lighting, photorealistic portrait, high quality"
-        });
-        setFemaleImage(femaleResult.url);
-
-        await new Promise(resolve => setTimeout(resolve, 2000));
-
-        // Generate male anchor  
-        const maleResult = await base44.integrations.Core.GenerateImage({
-          prompt: "Professional male Israeli news anchor, age 40, short dark hair, clean shaven, wearing navy suit, light blue shirt, red tie, confident professional look, studio lighting, photorealistic portrait, high quality"
-        });
-        setMaleImage(maleResult.url);
-        
-        setLoadingImages(false);
-      } catch (error) {
-        console.error("Error generating images:", error);
-        setLoadingImages(false);
-      }
-    };
-
-    generateImages();
+    // Female anchor - professional news reporter
+    setFemaleImage("https://images.unsplash.com/photo-1581092787765-e3feb951d987?w=800&q=80");
+    
+    // Male anchor - professional news presenter
+    setMaleImage("https://images.unsplash.com/photo-1580171401298-4c2c0c44cc43?w=800&q=80");
+    
+    setLoadingImages(false);
   }, []);
 
   // Generate script when articles are loaded
