@@ -111,9 +111,9 @@ export default function LivePlayer({
         {/* Live Stream iframe when Playing */}
         {isPlaying && (
           <iframe
-            src="https://www.youtube.com/embed/live_stream?channel=UCCkRwmztPEvut3gpsgmCmzw&autoplay=1&mute=0"
+            src="https://ok.ru/videoembed/10508051226319?autoplay=1"
             className="absolute inset-0 w-full h-full"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allow="autoplay; fullscreen"
             allowFullScreen
             frameBorder="0"
           />
