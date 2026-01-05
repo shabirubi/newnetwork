@@ -76,7 +76,7 @@ export default function Layout({ children }) {
       `}</style>
 
       {/* Top Bar with Clock and Weather */}
-      <div className="bg-gray-900 dark:bg-black text-white py-1.5 px-2 lg:px-4 border-b border-gray-800">
+      <div className="bg-gray-900 dark:bg-black text-white py-1.5 px-2 lg:px-4 border-b border-gray-800 hidden sm:block">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
             <div className="flex items-center gap-1.5 lg:gap-3">
               <ClockWidget />
@@ -121,7 +121,7 @@ export default function Layout({ children }) {
       </div>
 
       {/* Breaking News Ticker */}
-      <div className="bg-[#E31E24] dark:bg-[#B91C1C] text-white py-2 overflow-hidden">
+      <div className="bg-[#E31E24] dark:bg-[#B91C1C] text-white py-2 overflow-hidden hidden sm:block">
         <div className="flex items-center">
           <span className="bg-black text-white px-4 py-1 font-bold text-sm shrink-0 mr-4">
             חדשות חמות
@@ -144,7 +144,7 @@ export default function Layout({ children }) {
       </div>
 
       {/* Header */}
-      <header className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50 transition-colors duration-300 border-b border-gray-200 dark:border-gray-700">
+      <header className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50 transition-colors duration-300 border-b border-gray-200 dark:border-gray-700 hidden sm:block">
         <div className="max-w-7xl mx-auto px-4">
           {/* Mobile Header - Hidden on mobile, only on tablet+ */}
           <div className="hidden sm:flex lg:hidden items-center justify-between py-3">
@@ -320,7 +320,7 @@ export default function Layout({ children }) {
       </AnimatePresence>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-0 sm:px-4 py-0 sm:py-6 pb-24 lg:pb-6">
+      <main className="max-w-7xl mx-auto px-0 sm:px-4 py-0 sm:py-6 pb-16 sm:pb-24 lg:pb-6">
         {children}
       </main>
 

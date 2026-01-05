@@ -69,9 +69,9 @@ export default function Home() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-0 sm:space-y-6">
       {/* Hero Section - Extended Live Player */}
-      <section className="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-3 -mx-0 sm:mx-0 px-0 sm:px-4">
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-0 sm:gap-3 -mx-0 sm:mx-0 px-0 sm:px-4">
         {/* Right Sidebar - Updates Feed */}
         <aside className="lg:col-span-2 hidden lg:block">
           <UpdatesFeed />
@@ -164,8 +164,8 @@ export default function Home() {
             </section>
 
             {/* Mobile Only - Reporters Feed Below Player */}
-            <section className="sm:hidden px-4 mt-4">
-            <ReportersFeed />
+            <section className="sm:hidden px-4 py-4">
+              <ReportersFeed />
             </section>
 
             {/* Live Stats */}

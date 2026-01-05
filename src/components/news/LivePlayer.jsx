@@ -53,7 +53,7 @@ export default function LivePlayer({
       onMouseLeave={() => setShowControls(false)}
     >
       {/* Video Container */}
-      <div className="relative aspect-[9/16] sm:aspect-video min-h-[70vh] sm:min-h-0">
+      <div className="relative aspect-[9/16] sm:aspect-video h-screen sm:h-auto">
         {/* Placeholder/Thumbnail */}
         {!isPlaying && (
           <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
