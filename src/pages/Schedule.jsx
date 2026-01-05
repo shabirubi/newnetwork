@@ -192,10 +192,10 @@ export default function Schedule() {
       </div>
 
       {/* Info Section */}
-      <div className="bg-gray-100 rounded-2xl p-6 text-center">
+      <div className="bg-gray-100 dark:bg-gray-800 rounded-2xl p-6 text-center">
         <Clock className="w-10 h-10 text-[#E31E24] mx-auto mb-4" />
-        <h3 className="font-bold text-lg mb-2">שידורים 24/7</h3>
-        <p className="text-gray-600 max-w-md mx-auto">
+        <h3 className="font-bold text-lg mb-2 dark:text-white">שידורים 24/7</h3>
+        <p className="text-gray-600 dark:text-gray-400 max-w-md mx-auto">
           הרשת החדשה משדרת לכם חדשות, ניתוחים ותוכניות מיוחדות לאורך כל היום, כל יום
         </p>
       </div>
