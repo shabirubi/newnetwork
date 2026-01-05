@@ -12,6 +12,8 @@ import LivePlayer from "../components/news/LivePlayer";
 import NewsCard from "../components/news/NewsCard";
 import ReportersFeed from "../components/news/ReportersFeed";
 import UpdatesFeed from "../components/news/UpdatesFeed";
+import VideoHighlights from "../components/news/VideoHighlights";
+import LiveStats from "../components/news/LiveStats";
 
 export default function Home() {
   const { data: articles = [], isLoading } = useQuery({
@@ -48,6 +50,9 @@ export default function Home() {
 
   return (
     <div className="space-y-6">
+      {/* Live Stats */}
+      <LiveStats />
+
       {/* Hero Section - Extended Live Player */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-3 -mx-4 px-4">
         {/* Right Sidebar - Updates Feed */}
@@ -167,6 +172,9 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      {/* Video Highlights */}
+      <VideoHighlights />
 
       {/* Latest News Grid */}
       <section>

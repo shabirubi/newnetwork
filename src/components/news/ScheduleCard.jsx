@@ -29,7 +29,7 @@ export default function ScheduleCard({ schedule, isActive = false, index = 0 }) 
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.03 }}
-      className={`relative overflow-hidden rounded-xl transition-all ${
+      className={`relative overflow-hidden rounded-xl transition-all bg-white dark:bg-gradient-to-br dark:from-gray-800 dark:to-gray-900 border border-transparent dark:border-gray-700 ${
         isActive || is_live
           ? "shadow-2xl scale-[1.02]"
           : "shadow-md hover:shadow-lg"
@@ -39,7 +39,7 @@ export default function ScheduleCard({ schedule, isActive = false, index = 0 }) 
       <div className={`absolute right-0 top-0 bottom-0 w-1.5 ${categoryColors[category]}`} />
       
       {/* Main Content */}
-      <div className={`bg-white p-5 ${isActive || is_live ? 'bg-gradient-to-l from-red-50' : ''}`}>
+      <div className={`p-5 ${isActive || is_live ? 'bg-gradient-to-l from-red-50 dark:from-red-950/20' : ''}`}>
         <div className="flex items-start gap-4">
           {/* Time Badge */}
           <div className={`shrink-0 flex flex-col items-center justify-center w-20 h-20 rounded-xl ${
@@ -70,20 +70,20 @@ export default function ScheduleCard({ schedule, isActive = false, index = 0 }) 
               )}
             </div>
             
-            <h3 className="font-bold text-xl mb-2 text-gray-900 line-clamp-1">
+            <h3 className="font-bold text-xl mb-2 text-gray-900 dark:text-white line-clamp-1">
               {title}
             </h3>
             
             {description && (
-              <p className="text-sm text-gray-600 mb-2 line-clamp-2 leading-relaxed">
+              <p className="text-sm text-gray-600 dark:text-gray-300 mb-2 line-clamp-2 leading-relaxed">
                 {description}
               </p>
             )}
             
             {host && (
               <div className="flex items-center gap-2 text-sm">
-                <span className="text-gray-400">●</span>
-                <span className="text-gray-700 font-medium">{host}</span>
+                <span className="text-gray-400 dark:text-gray-500">●</span>
+                <span className="text-gray-700 dark:text-gray-300 font-medium">{host}</span>
               </div>
             )}
           </div>
