@@ -48,12 +48,12 @@ export default function LivePlayer({
       ref={containerRef}
       initial={{ opacity: 0, scale: 0.98 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="relative bg-black sm:rounded-b-lg overflow-hidden shadow-2xl group"
+      className="relative bg-black sm:rounded-b-lg overflow-hidden shadow-2xl group w-full"
       onMouseEnter={() => setShowControls(true)}
       onMouseLeave={() => setShowControls(false)}
     >
       {/* Video Container */}
-      <div className="relative aspect-[9/16] sm:aspect-video h-screen sm:h-auto">
+      <div className="relative w-full h-screen sm:h-auto sm:aspect-video">
         {/* Placeholder/Thumbnail */}
         {!isPlaying && (
           <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
@@ -111,7 +111,7 @@ export default function LivePlayer({
 
         {/* Logo Watermark */}
         {isPlaying && (
-          <div className="absolute top-2 sm:top-4 right-2 sm:right-4 z-10 opacity-30 sm:opacity-50 pointer-events-none">
+          <div className="absolute top-2 sm:top-4 right-2 sm:right-4 z-10 opacity-20 sm:opacity-50 pointer-events-none hidden sm:block">
             <img 
               src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/a44ef2558_212.png"
               alt="הרשת החדשה"
