@@ -69,16 +69,20 @@ export default function ReportersFeed() {
       </div>
 
       {/* Feed */}
-      <div className="max-h-[calc(100vh-180px)] overflow-y-auto bg-gray-50">
+      <div className="max-h-[calc(100vh-180px)] overflow-y-auto bg-gray-50 scroll-smooth">
         {reporters.map((reporter, reporterIndex) => (
           <div key={reporter.id}>
             {reporter.articles.map((article, articleIndex) => (
               <motion.div
                 key={`${reporter.id}-${articleIndex}`}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: (reporterIndex + articleIndex) * 0.1 }}
-                className="bg-white border-b border-gray-100 hover:bg-gray-50 transition-colors"
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ 
+                  duration: 0.3,
+                  ease: "easeOut",
+                  delay: (reporterIndex + articleIndex) * 0.08 
+                }}
+                className="bg-white border-b border-gray-100 hover:bg-gray-50 transition-all duration-200"
               >
                 <Link 
                   to={createPageUrl("Home")}

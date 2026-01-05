@@ -48,25 +48,25 @@ export default function Home() {
 
   return (
     <div className="space-y-10">
-      {/* Hero Section - Full Width 3 Columns: Updates + Live Player + Reporters */}
-      <section className="grid grid-cols-1 lg:grid-cols-12 gap-4 -mx-4 px-4">
+      {/* Hero Section - Full Width with Sidebars */}
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-3">
         {/* Right Sidebar - Updates Feed */}
         <aside className="lg:col-span-2 hidden lg:block">
           <UpdatesFeed />
         </aside>
 
-        {/* Center - Extra Large Live Player */}
+        {/* Center - Large Live Player */}
         <div className="lg:col-span-8">
-          <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
               <div className="relative flex h-3 w-3">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E31E24] opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-3 w-3 bg-[#E31E24]"></span>
               </div>
-              <h2 className="text-2xl font-bold">שידור חי</h2>
+              <h2 className="text-xl font-bold">שידור חי</h2>
             </div>
-            <div className="flex items-center gap-2 text-sm text-gray-600">
-              <Users size={18} />
+            <div className="flex items-center gap-2 text-xs text-gray-600">
+              <Users size={16} />
               <span className="font-bold">{activeLive?.viewer_count || 3456} צופים</span>
             </div>
           </div>
