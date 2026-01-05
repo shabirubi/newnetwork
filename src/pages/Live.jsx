@@ -9,9 +9,30 @@ import LivePlayer from "../components/news/LivePlayer";
 import ScheduleCard from "../components/news/ScheduleCard";
 
 export default function Live() {
+  const [selectedChannel, setSelectedChannel] = React.useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('selectedChannel') || 'all';
+    }
+    return 'all';
+  });
+
+  React.useEffect(() => {
+    const handleChannelChange = (e) => {
+      setSelectedChannel(e.detail);
+    };
+    window.addEventListener('channelChange', handleChannelChange);
+    return () => window.removeEventListener('channelChange', handleChannelChange);
+  }, []);
+
   const { data: liveStream } = useQuery({
     queryKey: ['live-stream'],
     queryFn: () => base44.entities.LiveStream.filter({ is_active: true }),
+    initialData: []
+  });
+
+  const { data: channels = [] } = useQuery({
+    queryKey: ['channels'],
+    queryFn: () => base44.entities.NewsChannel.filter({ is_active: true }),
     initialData: []
   });
 
@@ -22,6 +43,8 @@ export default function Live() {
   });
 
   const activeLive = liveStream[0];
+  const currentChannel = channels.find(c => c.id === selectedChannel);
+  const channelStreamUrl = currentChannel?.stream_url;
   const currentHour = new Date().getHours();
 
   // Daily schedule based on the document
@@ -56,9 +79,10 @@ export default function Live() {
       {/* Main Live Player */}
       <section className="max-w-5xl mx-auto">
         <LivePlayer 
-          title={activeLive?.title || "הרשת החדשה - שידור חי"}
+          title={currentChannel?.name || activeLive?.title || "הרשת החדשה - שידור חי"}
           isLive={true}
           viewerCount={activeLive?.viewer_count || 2847}
+          streamUrl={channelStreamUrl}
         />
         
         {/* Live Info Bar */}
