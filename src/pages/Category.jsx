@@ -140,10 +140,10 @@ export default function Category() {
           </div>
         </section>
       ) : (
-        <div className="text-center py-12 bg-white rounded-2xl">
-          <Icon className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-xl font-bold text-gray-700 mb-2">אין ידיעות בקטגוריה זו</h3>
-          <p className="text-gray-500">בקרוב יתווספו ידיעות חדשות</p>
+        <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-2xl border border-transparent dark:border-gray-700">
+          <Icon className="w-16 h-16 text-gray-300 dark:text-gray-600 mx-auto mb-4" />
+          <h3 className="text-xl font-bold text-gray-700 dark:text-gray-200 mb-2">אין ידיעות בקטגוריה זו</h3>
+          <p className="text-gray-500 dark:text-gray-400">בקרוב יתווספו ידיעות חדשות</p>
         </div>
       )}
     </div>

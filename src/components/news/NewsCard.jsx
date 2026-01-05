@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../../utils";
 import { motion } from "framer-motion";
-import { Clock, AlertTriangle, ChevronLeft } from "lucide-react";
+import { Clock, AlertTriangle, ChevronLeft, Play } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import moment from "moment";
 
@@ -35,7 +35,7 @@ export default function NewsCard({
   variant = "default", // default, featured, compact
   index = 0 
 }) {
-  const { title, subtitle, content, category, image_url, is_breaking, created_date, id } = article;
+  const { title, subtitle, content, category, image_url, video_url, is_breaking, created_date, id } = article;
 
   if (variant === "featured") {
     return (
@@ -47,7 +47,23 @@ export default function NewsCard({
       >
         <Link to={createPageUrl(`Article?id=${id}`)}>
           <div className="relative aspect-[16/9] md:aspect-[21/9]">
-            {image_url ? (
+            {video_url ? (
+              <>
+                <video
+                  src={video_url}
+                  className="w-full h-full object-cover"
+                  muted
+                  loop
+                  playsInline
+                  onMouseEnter={(e) => e.target.play()}
+                  onMouseLeave={(e) => e.target.pause()}
+                />
+                <div className="absolute top-3 left-3 bg-[#E31E24] text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+                  <Play size={12} fill="white" />
+                  וידאו
+                </div>
+              </>
+            ) : image_url ? (
               <img 
                 src={image_url} 
                 alt={title}
@@ -133,19 +149,39 @@ export default function NewsCard({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1 }}
-      className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300"
+      className="group bg-white dark:bg-gradient-to-br dark:from-gray-800 dark:to-gray-900 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-transparent dark:border-gray-700"
     >
       <Link to={createPageUrl(`Article?id=${id}`)}>
         <div className="relative aspect-video overflow-hidden">
-          {image_url ? (
-            <img 
-              src={image_url} 
-              alt={title}
-              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-            />
+          {video_url ? (
+            <>
+              <video
+                src={video_url}
+                className="w-full h-full object-cover"
+                muted
+                loop
+                playsInline
+                onMouseEnter={(e) => e.target.play()}
+                onMouseLeave={(e) => e.target.pause()}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+              <div className="absolute bottom-3 left-3 bg-[#E31E24] text-white px-2 py-1 rounded text-xs font-bold flex items-center gap-1">
+                <Play size={12} fill="white" />
+                וידאו
+              </div>
+            </>
+          ) : image_url ? (
+            <>
+              <img 
+                src={image_url} 
+                alt={title}
+                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            </>
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
-              <span className="text-gray-400 text-4xl font-bold">{categoryLabels[category]?.[0]}</span>
+            <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-600 flex items-center justify-center">
+              <span className="text-gray-400 dark:text-gray-500 text-4xl font-bold">{categoryLabels[category]?.[0]}</span>
             </div>
           )}
           
@@ -164,17 +200,17 @@ export default function NewsCard({
             {categoryLabels[category]}
           </Badge>
           
-          <h3 className="font-bold text-gray-900 group-hover:text-[#E31E24] transition-colors line-clamp-2 mb-2">
+          <h3 className="font-bold text-gray-900 dark:text-white group-hover:text-[#E31E24] dark:group-hover:text-[#E31E24] transition-colors line-clamp-2 mb-2">
             {title}
           </h3>
           
           {subtitle && (
-            <p className="text-gray-600 text-sm line-clamp-2 mb-3">
+            <p className="text-gray-600 dark:text-gray-300 text-sm line-clamp-2 mb-3">
               {subtitle}
             </p>
           )}
           
-          <div className="flex items-center gap-2 text-gray-500 text-xs">
+          <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 text-xs">
             <Clock size={12} />
             {moment(created_date).fromNow()}
           </div>
