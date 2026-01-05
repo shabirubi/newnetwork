@@ -155,6 +155,40 @@ Format as a dialogue with speaker names.`;
     <div className="relative w-full h-full overflow-hidden">
       {/* Studio Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-[#0a0a0a] via-[#1a1a1a] to-[#0a0a0a]">
+        {/* Logo Background - TV Studio Style */}
+        <div className="absolute inset-0 flex items-center justify-center opacity-15">
+          <motion.img
+            src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/user_68238671d18a6312a669413d/a20bbab0c_image.png"
+            alt="לוגו"
+            className="w-96 h-96 object-contain"
+            animate={{
+              scale: [1, 1.05, 1],
+              opacity: [0.15, 0.25, 0.15]
+            }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+        </div>
+
+        {/* Circular Logo Rings - TV Effect */}
+        <motion.div
+          className="absolute inset-0 flex items-center justify-center"
+          animate={{ rotate: 360 }}
+          transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+        >
+          <div className="w-[600px] h-[600px] rounded-full border-2 border-[#E31E24] opacity-10" />
+        </motion.div>
+        <motion.div
+          className="absolute inset-0 flex items-center justify-center"
+          animate={{ rotate: -360 }}
+          transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
+        >
+          <div className="w-[500px] h-[500px] rounded-full border border-[#E31E24] opacity-5" />
+        </motion.div>
+
         {/* Animated background elements */}
         <motion.div
           className="absolute inset-0 opacity-20"
@@ -189,6 +223,24 @@ Format as a dialogue with speaker names.`;
             ease: "linear"
           }}
         />
+
+        {/* Broadcast Lines Effect */}
+        {[...Array(5)].map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-[#E31E24] to-transparent"
+            style={{ top: `${20 + i * 15}%` }}
+            animate={{
+              opacity: [0, 0.3, 0],
+              scaleX: [0, 1, 0]
+            }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              delay: i * 0.3
+            }}
+          />
+        ))}
       </div>
 
       {/* Logo Watermark */}
@@ -233,20 +285,80 @@ Format as a dialogue with speaker names.`;
               />
             )}
 
-            {/* Anchor Image */}
-            <div className="w-64 h-80 md:w-72 md:h-96 rounded-lg overflow-hidden border-4 border-[#E31E24] shadow-2xl bg-gray-800">
+            {/* Anchor Image with Animations */}
+            <motion.div 
+              className="w-64 h-80 md:w-72 md:h-96 rounded-lg overflow-hidden border-4 border-[#E31E24] shadow-2xl bg-gray-800"
+              animate={currentSpeaker === "female" && isSpeaking ? {
+                scale: [1, 1.02, 1],
+                y: [0, -2, 0]
+              } : {
+                y: [0, -1, 0]
+              }}
+              transition={{
+                duration: currentSpeaker === "female" && isSpeaking ? 0.5 : 3,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            >
               {femaleImage ? (
-                <img 
+                <motion.img 
                   src={femaleImage}
                   alt={anchors.female.name}
                   className="w-full h-full object-cover"
+                  animate={currentSpeaker === "female" && isSpeaking ? {
+                    scale: [1, 1.05, 1.03, 1],
+                  } : {}}
+                  transition={{
+                    duration: 0.3,
+                    repeat: Infinity
+                  }}
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
                   <Loader className="w-8 h-8 text-[#E31E24] animate-spin" />
                 </div>
               )}
-            </div>
+              
+              {/* Lip Sync Overlay Effect */}
+              {currentSpeaker === "female" && isSpeaking && (
+                <>
+                  <motion.div
+                    className="absolute bottom-[35%] left-1/2 transform -translate-x-1/2 w-12 h-8 bg-gradient-to-b from-transparent via-white/10 to-transparent rounded-full"
+                    animate={{
+                      scaleY: [1, 1.3, 1.1, 1],
+                      opacity: [0.3, 0.6, 0.4, 0.3]
+                    }}
+                    transition={{
+                      duration: 0.25,
+                      repeat: Infinity
+                    }}
+                  />
+                  <motion.div
+                    className="absolute top-[25%] left-[45%] w-2 h-2 bg-white/30 rounded-full"
+                    animate={{
+                      y: [0, -1, 0],
+                      opacity: [0.3, 0.5, 0.3]
+                    }}
+                    transition={{
+                      duration: 0.4,
+                      repeat: Infinity
+                    }}
+                  />
+                  <motion.div
+                    className="absolute top-[25%] right-[45%] w-2 h-2 bg-white/30 rounded-full"
+                    animate={{
+                      y: [0, -1, 0],
+                      opacity: [0.3, 0.5, 0.3]
+                    }}
+                    transition={{
+                      duration: 0.4,
+                      repeat: Infinity,
+                      delay: 0.1
+                    }}
+                  />
+                </>
+              )}
+            </motion.div>
 
             {/* AI Badge */}
             <div className="absolute -top-2 -right-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">
@@ -312,20 +424,80 @@ Format as a dialogue with speaker names.`;
               />
             )}
 
-            {/* Anchor Image */}
-            <div className="w-64 h-80 md:w-72 md:h-96 rounded-lg overflow-hidden border-4 border-[#4A90E2] shadow-2xl bg-gray-800">
+            {/* Anchor Image with Animations */}
+            <motion.div 
+              className="w-64 h-80 md:w-72 md:h-96 rounded-lg overflow-hidden border-4 border-[#4A90E2] shadow-2xl bg-gray-800"
+              animate={currentSpeaker === "male" && isSpeaking ? {
+                scale: [1, 1.02, 1],
+                y: [0, -2, 0]
+              } : {
+                y: [0, -1, 0]
+              }}
+              transition={{
+                duration: currentSpeaker === "male" && isSpeaking ? 0.5 : 3,
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            >
               {maleImage ? (
-                <img 
+                <motion.img 
                   src={maleImage}
                   alt={anchors.male.name}
                   className="w-full h-full object-cover"
+                  animate={currentSpeaker === "male" && isSpeaking ? {
+                    scale: [1, 1.05, 1.03, 1],
+                  } : {}}
+                  transition={{
+                    duration: 0.3,
+                    repeat: Infinity
+                  }}
                 />
               ) : (
                 <div className="w-full h-full flex items-center justify-center">
                   <Loader className="w-8 h-8 text-[#4A90E2] animate-spin" />
                 </div>
               )}
-            </div>
+              
+              {/* Lip Sync Overlay Effect */}
+              {currentSpeaker === "male" && isSpeaking && (
+                <>
+                  <motion.div
+                    className="absolute bottom-[35%] left-1/2 transform -translate-x-1/2 w-12 h-8 bg-gradient-to-b from-transparent via-white/10 to-transparent rounded-full"
+                    animate={{
+                      scaleY: [1, 1.3, 1.1, 1],
+                      opacity: [0.3, 0.6, 0.4, 0.3]
+                    }}
+                    transition={{
+                      duration: 0.25,
+                      repeat: Infinity
+                    }}
+                  />
+                  <motion.div
+                    className="absolute top-[25%] left-[45%] w-2 h-2 bg-white/30 rounded-full"
+                    animate={{
+                      y: [0, -1, 0],
+                      opacity: [0.3, 0.5, 0.3]
+                    }}
+                    transition={{
+                      duration: 0.4,
+                      repeat: Infinity
+                    }}
+                  />
+                  <motion.div
+                    className="absolute top-[25%] right-[45%] w-2 h-2 bg-white/30 rounded-full"
+                    animate={{
+                      y: [0, -1, 0],
+                      opacity: [0.3, 0.5, 0.3]
+                    }}
+                    transition={{
+                      duration: 0.4,
+                      repeat: Infinity,
+                      delay: 0.1
+                    }}
+                  />
+                </>
+              )}
+            </motion.div>
 
             {/* AI Badge */}
             <div className="absolute -top-2 -right-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg flex items-center gap-1">
