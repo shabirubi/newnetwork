@@ -4,7 +4,7 @@ import { createPageUrl } from "./utils";
 import { 
   Menu, X, Radio, Newspaper, Shield, TrendingUp, 
   Vote, Cpu, Trophy, Clapperboard, Globe, Heart,
-  Clock, ChevronLeft, Users, Moon, Sun, Home,
+  Clock, ChevronLeft, Users, Moon, Sun, Home, Flame,
   Siren, AlertTriangle, MessageSquareWarning
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
