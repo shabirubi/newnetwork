@@ -32,14 +32,22 @@ export default function LivePlayer({
   thumbnailUrl = null,
   streamUrl = null
 }) {
-  const [isPlaying, setIsPlaying] = useState(true); // Auto-play
+  const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(80);
   const [showControls, setShowControls] = useState(true);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [viewerReactions, setViewerReactions] = useState(1234);
+  const [currentStreamUrl, setCurrentStreamUrl] = useState(streamUrl);
   const videoRef = useRef(null);
   const containerRef = useRef(null);
+  const hlsRef = useRef(null);
+
+  // Update stream URL when prop changes
+  useEffect(() => {
+    setCurrentStreamUrl(streamUrl);
+    setIsPlaying(true);
+  }, [streamUrl]);
 
   const togglePlay = () => {
     setIsPlaying(!isPlaying);
@@ -59,41 +67,53 @@ export default function LivePlayer({
     }
   };
 
-  // Setup HLS player
+  // Setup HLS player for .m3u8 streams
   useEffect(() => {
-    if (!isPlaying || !streamUrl || !videoRef.current) return;
+    if (!isPlaying || !currentStreamUrl || !currentStreamUrl.includes('.m3u8') || !videoRef.current) return;
 
     const video = videoRef.current;
     
-    // Check if URL is m3u8
-    if (streamUrl.includes('.m3u8')) {
-      // Check if browser natively supports HLS (Safari)
-      if (video.canPlayType('application/vnd.apple.mpegurl')) {
-        video.src = streamUrl;
-        video.play().catch(() => {});
-      } else {
-        // Use HLS.js for other browsers
-        loadHls().then((Hls) => {
-          if (Hls.isSupported()) {
-            const hls = new Hls({
-              enableWorker: true,
-              lowLatencyMode: true,
-            });
-            hls.loadSource(streamUrl);
-            hls.attachMedia(video);
-            hls.on(Hls.Events.MANIFEST_PARSED, () => {
-              video.play().catch(() => {});
-            });
-            return () => hls.destroy();
-          }
-        }).catch(() => {
-          // Fallback: try direct src
-          video.src = streamUrl;
-          video.play().catch(() => {});
-        });
-      }
+    // Cleanup previous HLS instance
+    if (hlsRef.current) {
+      hlsRef.current.destroy();
+      hlsRef.current = null;
     }
-  }, [isPlaying, streamUrl]);
+
+    // Check if browser natively supports HLS (Safari)
+    if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = currentStreamUrl;
+      video.play().catch(() => {});
+    } else {
+      // Use HLS.js for other browsers
+      loadHls().then((Hls) => {
+        if (Hls.isSupported()) {
+          const hls = new Hls({
+            enableWorker: true,
+            lowLatencyMode: true,
+            maxBufferLength: 30,
+            maxMaxBufferLength: 60,
+          });
+          hlsRef.current = hls;
+          hls.loadSource(currentStreamUrl);
+          hls.attachMedia(video);
+          hls.on(Hls.Events.MANIFEST_PARSED, () => {
+            video.play().catch(() => {});
+          });
+        }
+      }).catch(() => {
+        // Fallback: try direct src
+        video.src = currentStreamUrl;
+        video.play().catch(() => {});
+      });
+    }
+
+    return () => {
+      if (hlsRef.current) {
+        hlsRef.current.destroy();
+        hlsRef.current = null;
+      }
+    };
+  }, [isPlaying, currentStreamUrl]);
 
   return (
     <motion.div
@@ -173,7 +193,7 @@ export default function LivePlayer({
         )}
 
         {/* Live Stream when Playing */}
-        {isPlaying && streamUrl && streamUrl.includes('.m3u8') && (
+        {isPlaying && currentStreamUrl && currentStreamUrl.includes('.m3u8') && (
           <video
             ref={videoRef}
             className="absolute inset-0 w-full h-full bg-black object-contain"
@@ -183,23 +203,24 @@ export default function LivePlayer({
             controls={false}
           />
         )}
-        {isPlaying && streamUrl && !streamUrl.includes('.m3u8') && (
+        {isPlaying && currentStreamUrl && !currentStreamUrl.includes('.m3u8') && (
           <iframe
-            src={streamUrl}
+            key={currentStreamUrl}
+            src={currentStreamUrl}
             className="absolute inset-0 w-full h-full"
             allow="autoplay; fullscreen"
             allowFullScreen
             frameBorder="0"
           />
         )}
-        {isPlaying && !streamUrl && (
-          <iframe
-            src="https://ok.ru/videoembed/10508051226319?autoplay=1"
-            className="absolute inset-0 w-full h-full"
-            allow="autoplay; fullscreen"
-            allowFullScreen
-            frameBorder="0"
-          />
+        {isPlaying && !currentStreamUrl && (
+          <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800">
+            <div className="text-center text-white px-4">
+              <Radio className="w-16 h-16 mx-auto mb-4 text-[#E31E24] animate-pulse" />
+              <h3 className="text-xl font-bold mb-2">בחר ערוץ לצפייה</h3>
+              <p className="text-gray-400 text-sm">לחץ על בורר הערוצים למעלה</p>
+            </div>
+          </div>
         )}
       </div>
 
