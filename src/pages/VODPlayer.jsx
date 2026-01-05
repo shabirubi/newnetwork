@@ -168,11 +168,13 @@ export default function VODPlayer() {
             />
           ) : content.video_url ? (
             <iframe
+              key={content.video_url}
               src={content.video_url}
               className="w-full h-full"
               allow="autoplay; fullscreen; picture-in-picture"
               allowFullScreen
               frameBorder="0"
+              sandbox="allow-same-origin allow-scripts allow-presentation"
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800">
