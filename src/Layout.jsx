@@ -14,7 +14,8 @@ import WeatherWidget from "./components/header/WeatherWidget";
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/user_68238671d18a6312a669413d/a20bbab0c_image.png";
 
 const categories = [
-  { id: "breaking", label: "חדשות עכשיו", icon: Radio, href: "Home" },
+  { id: "home", label: "דף הבית", icon: Home, href: "Home" },
+  { id: "breaking", label: "חדשות עכשיו", icon: Radio, href: "Category?cat=breaking" },
   { id: "security", label: "ביטחון ומדיניות", icon: Shield, href: "Category?cat=security" },
   { id: "economy", label: "כלכלה ועסקים", icon: TrendingUp, href: "Category?cat=economy" },
   { id: "politics", label: "פוליטיקה", icon: Vote, href: "Category?cat=politics" },
