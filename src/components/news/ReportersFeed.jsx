@@ -59,17 +59,19 @@ const reporters = [
 
 export default function ReportersFeed() {
   return (
-    <div className="bg-white rounded-2xl shadow-lg overflow-hidden sticky top-6">
+    <div className="bg-white rounded-xl shadow-md overflow-hidden sticky top-6 border border-gray-200">
       {/* Header */}
-      <div className="bg-gradient-to-r from-[#E31E24] to-[#B91C1C] p-4">
-        <h2 className="text-white font-bold text-lg flex items-center gap-2">
-          <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
-          כל העדכונים
+      <div className="bg-white p-3 border-b border-gray-200 flex items-center justify-between">
+        <h2 className="font-bold text-base text-gray-900 flex items-center gap-2">
+          <div className="w-8 h-8 bg-[#E31E24] rounded flex items-center justify-center">
+            <span className="text-white text-xs">📰</span>
+          </div>
+          אנשי הכתבים
         </h2>
       </div>
 
       {/* Feed */}
-      <div className="max-h-[calc(100vh-200px)] overflow-y-auto">
+      <div className="max-h-[calc(100vh-200px)] overflow-y-auto bg-gray-50">
         {reporters.map((reporter, reporterIndex) => (
           <div key={reporter.id}>
             {reporter.articles.map((article, articleIndex) => (
