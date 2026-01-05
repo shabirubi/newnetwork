@@ -4,9 +4,12 @@ import { createPageUrl } from "./utils";
 import { 
   Menu, X, Radio, Newspaper, Shield, TrendingUp, 
   Vote, Cpu, Trophy, Clapperboard, Globe, Heart,
-  Clock, ChevronLeft, Users, Moon, Sun
+  Clock, ChevronLeft, Users, Moon, Sun, Home,
+  Siren, AlertTriangle, MessageSquareWarning
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import ClockWidget from "./components/header/ClockWidget";
+import WeatherWidget from "./components/header/WeatherWidget";
 
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/user_68238671d18a6312a669413d/a20bbab0c_image.png";
 
