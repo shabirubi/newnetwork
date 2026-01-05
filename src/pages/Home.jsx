@@ -10,6 +10,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 import LivePlayer from "../components/news/LivePlayer";
 import NewsCard from "../components/news/NewsCard";
+import ReportersFeed from "../components/news/ReportersFeed";
 
 export default function Home() {
   const { data: articles = [], isLoading } = useQuery({
@@ -45,7 +46,9 @@ export default function Home() {
   }
 
   return (
-    <div className="space-y-10">
+    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+      {/* Main Content */}
+      <div className="lg:col-span-9 space-y-10">
       {/* Hero Section - Live Stream + Featured News */}
       <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Live Stream */}
@@ -199,6 +202,12 @@ export default function Home() {
           </Button>
         </Link>
       </section>
+      </div>
+
+      {/* Right Sidebar - Reporters Feed */}
+      <aside className="lg:col-span-3 hidden lg:block">
+        <ReportersFeed />
+      </aside>
     </div>
   );
 }
