@@ -200,6 +200,7 @@ export default function LivePlayer({
             autoPlay
             playsInline
             muted={isMuted}
+            volume={volume / 100}
             controls={false}
           />
         )}
