@@ -50,9 +50,6 @@ export default function Home() {
 
   return (
     <div className="space-y-6">
-      {/* Live Stats */}
-      <LiveStats />
-
       {/* Hero Section - Extended Live Player */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-3 -mx-4 px-4">
         {/* Right Sidebar - Updates Feed */}
@@ -137,14 +134,17 @@ export default function Home() {
                 </div>
               </motion.div>
             </div>
-          </div>
-        </div>
+            </div>
+            </div>
 
-        {/* Left Sidebar - Reporters Feed */}
-        <aside className="lg:col-span-2 hidden lg:block">
-          <ReportersFeed />
-        </aside>
-      </section>
+            {/* Left Sidebar - Reporters Feed */}
+            <aside className="lg:col-span-2 hidden lg:block">
+            <ReportersFeed />
+            </aside>
+            </section>
+
+            {/* Live Stats */}
+            <LiveStats />
 
 
 
