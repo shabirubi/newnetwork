@@ -76,7 +76,7 @@ export default function Layout({ children }) {
       `}</style>
 
       {/* Top Bar with Clock and Weather */}
-      <div className="bg-gray-900 dark:bg-black text-white py-1.5 px-2 lg:px-4 border-b border-gray-800 hidden sm:block">
+      <div className="bg-gray-900 dark:bg-black text-white py-1.5 px-2 lg:px-4 border-b border-gray-800">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
             <div className="flex items-center gap-1.5 lg:gap-3">
               <img 
@@ -126,7 +126,7 @@ export default function Layout({ children }) {
       </div>
 
       {/* Breaking News Ticker */}
-      <div className="bg-[#E31E24] dark:bg-[#B91C1C] text-white py-2 overflow-hidden hidden sm:block">
+      <div className="bg-[#E31E24] dark:bg-[#B91C1C] text-white py-2 overflow-hidden">
         <div className="flex items-center">
           <span className="bg-black text-white px-4 py-1 font-bold text-sm shrink-0 mr-4">
             חדשות חמות
@@ -149,7 +149,7 @@ export default function Layout({ children }) {
       </div>
 
       {/* Header */}
-      <header className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50 transition-colors duration-300 border-b border-gray-200 dark:border-gray-700 hidden sm:block">
+      <header className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50 transition-colors duration-300 border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4">
           {/* Desktop Navigation */}
           <nav className="hidden sm:flex items-center justify-center gap-1 py-3">
