@@ -48,12 +48,12 @@ export default function LivePlayer({
       ref={containerRef}
       initial={{ opacity: 0, scale: 0.98 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="relative bg-black sm:rounded-b-lg overflow-hidden shadow-2xl group w-full"
+      className="relative bg-black sm:rounded-b-lg overflow-hidden shadow-2xl group fixed sm:relative inset-0 sm:inset-auto w-screen sm:w-auto h-screen sm:h-auto z-[100] sm:z-auto"
       onMouseEnter={() => setShowControls(true)}
       onMouseLeave={() => setShowControls(false)}
     >
       {/* Video Container */}
-      <div className="relative w-full h-screen sm:h-auto sm:aspect-video">
+      <div className="relative w-full h-full sm:aspect-video">
         {/* Placeholder/Thumbnail */}
         {!isPlaying && (
           <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
@@ -124,7 +124,8 @@ export default function LivePlayer({
         {isPlaying && (
           <iframe
             src="https://ok.ru/videoembed/10508051226319?autoplay=1"
-            className="absolute inset-0 w-full h-full"
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{ objectFit: 'cover' }}
             allow="autoplay; fullscreen"
             allowFullScreen
             frameBorder="0"
