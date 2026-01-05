@@ -54,15 +54,15 @@ export default function UpdatesFeed() {
 
               {/* Content */}
               <div>
-                <p className="text-[11px] text-gray-900 font-bold line-clamp-2 leading-tight mb-1">
+                <p className="text-[11px] text-gray-900 dark:text-white font-bold line-clamp-2 leading-tight mb-1">
                   {article.title}
                 </p>
                 {article.subtitle && (
-                  <p className="text-[9px] text-gray-600 line-clamp-1 mb-1">
+                  <p className="text-[9px] text-gray-600 dark:text-gray-400 line-clamp-1 mb-1">
                     {article.subtitle}
                   </p>
                 )}
-                <div className="flex items-center gap-1 text-[9px] text-gray-500">
+                <div className="flex items-center gap-1 text-[9px] text-gray-500 dark:text-gray-400">
                   <Clock size={9} />
                   {moment(article.created_date).fromNow()}
                 </div>

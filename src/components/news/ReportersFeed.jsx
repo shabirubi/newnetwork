@@ -143,7 +143,7 @@ export default function ReportersFeed() {
                     <p className="text-[11px] text-gray-900 dark:text-white font-bold line-clamp-2 leading-tight mb-0.5">
                       {article.title}
                     </p>
-                    <div className="flex items-center gap-1 text-[9px] text-gray-500">
+                    <div className="flex items-center gap-1 text-[9px] text-gray-500 dark:text-gray-400">
                       <Clock size={9} />
                       {article.time}
                     </div>
