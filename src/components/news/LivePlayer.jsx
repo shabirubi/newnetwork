@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
+import AIAnchors from "./AIAnchors";
 
 export default function LivePlayer({ 
   title = "שידור חי - הרשת החדשה",
@@ -107,20 +108,10 @@ export default function LivePlayer({
           </motion.button>
         )}
 
-        {/* Simulated Video Content when Playing */}
+        {/* AI Anchors when Playing */}
         {isPlaying && (
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center">
-            <div className="text-center">
-              <motion.div
-                animate={{ scale: [1, 1.2, 1] }}
-                transition={{ duration: 2, repeat: Infinity }}
-                className="w-16 h-16 mx-auto mb-4 rounded-full bg-[#E31E24]/20 flex items-center justify-center"
-              >
-                <Radio className="w-8 h-8 text-[#E31E24]" />
-              </motion.div>
-              <p className="text-white font-bold text-lg">שידור חי מתקיים כעת</p>
-              <p className="text-gray-400 text-sm mt-1">{title}</p>
-            </div>
+          <div className="absolute inset-0">
+            <AIAnchors currentSpeaker="female" isSpeaking={isPlaying} />
           </div>
         )}
       </div>

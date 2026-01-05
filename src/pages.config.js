@@ -3,6 +3,7 @@ import Live from './pages/Live';
 import Category from './pages/Category';
 import Schedule from './pages/Schedule';
 import Article from './pages/Article';
+import NewsAdmin from './pages/NewsAdmin';
 import __Layout from './Layout.jsx';
 
 
@@ -12,6 +13,7 @@ export const PAGES = {
     "Category": Category,
     "Schedule": Schedule,
     "Article": Article,
+    "NewsAdmin": NewsAdmin,
 }
 
 export const pagesConfig = {

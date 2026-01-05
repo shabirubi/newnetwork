@@ -119,16 +119,16 @@ export default function Layout({ children }) {
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, x: 100 }}
+            initial={{ opacity: 0, x: -100 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 100 }}
+            exit={{ opacity: 0, x: -100 }}
             className="fixed inset-0 z-40 lg:hidden"
           >
             <div 
               className="absolute inset-0 bg-black/50"
               onClick={() => setMobileMenuOpen(false)}
             />
-            <motion.nav className="absolute left-0 top-0 bottom-0 w-72 bg-white shadow-xl overflow-y-auto">
+            <motion.nav className="absolute right-0 top-0 bottom-0 w-72 bg-white shadow-xl overflow-y-auto">
               <div className="p-6">
                 <img 
                   src={LOGO_URL} 
