@@ -126,10 +126,10 @@ export default function Schedule() {
           <div className="w-12 h-12 rounded-full bg-[#E31E24] flex items-center justify-center">
             <Calendar className="w-6 h-6 text-white" />
           </div>
-          <h1 className="text-3xl md:text-4xl font-bold">לוח שידורים</h1>
+          <h1 className="text-3xl md:text-4xl font-bold dark:text-white">לוח שידורים</h1>
         </div>
-        <p className="text-gray-600 max-w-xl mx-auto">
-          לוח השידורים השבועי של הרשת החדשה - צפו בתוכניות שלנו לאורך כל היום
+        <p className="text-gray-600 dark:text-gray-400 max-w-xl mx-auto">
+          לוח השידורים השבועי של הרשת החדשה - בחרו יום לצפייה בתכנים
         </p>
       </motion.div>
 
