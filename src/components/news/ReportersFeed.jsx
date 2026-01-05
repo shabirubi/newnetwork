@@ -82,34 +82,30 @@ export default function ReportersFeed() {
               >
                 <Link 
                   to={createPageUrl("Home")}
-                  className="flex items-start gap-2 p-3"
+                  className="flex items-start gap-2 p-2.5"
                 >
                   {/* Reporter Image - always show */}
                   <div className="relative shrink-0">
                     <img 
                       src={reporter.image}
                       alt={reporter.name}
-                      className="w-10 h-10 rounded-full object-cover"
+                      className="w-9 h-9 rounded-full object-cover ring-2 ring-gray-200"
                     />
+                    {article.hasVideo && (
+                      <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-[#E31E24] rounded-full flex items-center justify-center">
+                        <Play className="w-2 h-2 text-white" fill="white" />
+                      </div>
+                    )}
                   </div>
 
                   {/* Content */}
                   <div className="flex-1 min-w-0">
-                    {/* Article with thumbnail if video */}
-                    <div className="flex items-start gap-2">
-                      {article.hasVideo && (
-                        <div className="w-14 h-14 rounded overflow-hidden bg-gray-900 flex items-center justify-center shrink-0">
-                          <Play className="w-5 h-5 text-white" fill="white" />
-                        </div>
-                      )}
-                      <div className="flex-1">
-                        <p className="text-xs text-gray-900 font-medium line-clamp-2 leading-tight mb-1">
-                          {article.title}
-                        </p>
-                        <div className="flex items-center gap-1 text-[10px] text-gray-500">
-                          {article.time}
-                        </div>
-                      </div>
+                    <p className="text-[11px] text-gray-900 font-bold line-clamp-2 leading-tight mb-0.5">
+                      {article.title}
+                    </p>
+                    <div className="flex items-center gap-1 text-[9px] text-gray-500">
+                      <Clock size={9} />
+                      {article.time}
                     </div>
                   </div>
                 </Link>

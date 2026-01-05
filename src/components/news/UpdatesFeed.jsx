@@ -36,35 +36,35 @@ export default function UpdatesFeed() {
           >
             <Link 
               to={createPageUrl(`Article?id=${article.id}`)}
-              className="block p-3"
+              className="block p-2.5"
             >
               {/* Image if available */}
               {article.image_url && (
-                <div className="w-full h-24 rounded overflow-hidden mb-2">
+                <div className="w-full h-20 rounded overflow-hidden mb-2 relative">
                   <img 
                     src={article.image_url}
                     alt={article.title}
                     className="w-full h-full object-cover"
                   />
+                  <div className="absolute top-1 right-1 bg-[#E31E24] text-white text-[8px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1">
+                    <Flame size={8} />
+                    LIVE
+                  </div>
                 </div>
               )}
 
               {/* Content */}
               <div>
-                <div className="flex items-center gap-2 mb-1">
-                  <AlertTriangle className="w-3 h-3 text-[#E31E24]" />
-                  <span className="text-[10px] text-[#E31E24] font-bold">חם</span>
-                </div>
-                <p className="text-xs text-gray-900 font-bold line-clamp-2 leading-tight mb-1">
+                <p className="text-[11px] text-gray-900 font-bold line-clamp-2 leading-tight mb-1">
                   {article.title}
                 </p>
                 {article.subtitle && (
-                  <p className="text-[10px] text-gray-600 line-clamp-1 mb-1">
+                  <p className="text-[9px] text-gray-600 line-clamp-1 mb-1">
                     {article.subtitle}
                   </p>
                 )}
-                <div className="flex items-center gap-1 text-[10px] text-gray-500">
-                  <Clock size={10} />
+                <div className="flex items-center gap-1 text-[9px] text-gray-500">
+                  <Clock size={9} />
                   {moment(article.created_date).fromNow()}
                 </div>
               </div>
