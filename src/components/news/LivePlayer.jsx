@@ -111,9 +111,9 @@ export default function LivePlayer({
         {/* Live Stream iframe when Playing */}
         {isPlaying && (
           <iframe
-            src="https://www.kan.org.il/live/tv.aspx?stationid=2"
+            src="https://www.youtube.com/embed/live_stream?channel=UCCkRwmztPEvut3gpsgmCmzw&autoplay=1&mute=0"
             className="absolute inset-0 w-full h-full"
-            allow="autoplay; fullscreen"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             frameBorder="0"
           />
