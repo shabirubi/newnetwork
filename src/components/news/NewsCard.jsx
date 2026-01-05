@@ -46,7 +46,7 @@ export default function NewsCard({
         transition={{ delay: index * 0.1 }}
         className="group relative overflow-hidden rounded-2xl bg-gray-900 shadow-xl"
       >
-        <Link to={createPageUrl(`Article?id=${id}`)}>
+        <Link to={createPageUrl(`Article?id=${id}`)} className="block active:scale-[0.99] transition-transform">
           <div className="relative aspect-[16/9] md:aspect-[21/9]">
             {video_url ? (
               <>
@@ -122,7 +122,7 @@ export default function NewsCard({
       >
         <Link 
           to={createPageUrl(`Article?id=${id}`)}
-          className="flex items-start gap-4 p-4 rounded-xl hover:bg-gray-100 transition-colors"
+          className="flex items-start gap-4 p-4 rounded-2xl active:bg-gray-100 dark:active:bg-gray-800 transition-colors active:scale-[0.98]"
         >
           <span className="text-3xl font-bold text-gray-200 group-hover:text-[#E31E24] transition-colors">
             {String(index + 1).padStart(2, '0')}
@@ -150,9 +150,9 @@ export default function NewsCard({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1 }}
-      className="group bg-white dark:bg-gradient-to-br dark:from-gray-800 dark:to-gray-900 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-all duration-300 border border-transparent dark:border-gray-700"
+      className="group bg-white dark:bg-gradient-to-br dark:from-gray-800 dark:to-gray-900 rounded-2xl overflow-hidden shadow-sm active:shadow-lg transition-all duration-300 border border-gray-200 dark:border-gray-700"
     >
-      <Link to={createPageUrl(`Article?id=${id}`)}>
+      <Link to={createPageUrl(`Article?id=${id}`)} className="block active:scale-[0.98] transition-transform">
         <div className="relative aspect-video overflow-hidden">
           {video_url ? (
             <>
@@ -196,12 +196,12 @@ export default function NewsCard({
           )}
         </div>
         
-        <div className="p-4">
-          <Badge className={`${categoryColors[category]} text-xs mb-2`}>
+        <div className="p-5">
+          <Badge className={`${categoryColors[category]} text-xs mb-3 rounded-full px-3 py-1`}>
             {categoryLabels[category]}
           </Badge>
           
-          <h3 className="font-bold text-gray-900 dark:text-white group-hover:text-[#E31E24] dark:group-hover:text-[#E31E24] transition-colors line-clamp-2 mb-2">
+          <h3 className="font-bold text-base text-gray-900 dark:text-white group-hover:text-[#E31E24] dark:group-hover:text-[#E31E24] transition-colors line-clamp-2 mb-2 leading-snug">
             {title}
           </h3>
           
