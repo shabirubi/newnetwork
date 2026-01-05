@@ -1,10 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "./utils";
 import { 
   Menu, X, Radio, Newspaper, Shield, TrendingUp, 
   Vote, Cpu, Trophy, Clapperboard, Globe, Heart,
-  Clock, ChevronLeft, Users
+  Clock, ChevronLeft, Users, Moon, Sun
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -24,9 +24,25 @@ const categories = [
 
 export default function Layout({ children }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('darkMode') === 'true';
+    }
+    return false;
+  });
+
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('darkMode', 'true');
+    } else {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('darkMode', 'false');
+    }
+  }, [darkMode]);
 
   return (
-    <div className="min-h-screen bg-gray-50" dir="rtl">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300" dir="rtl">
       <style>{`
         :root {
           --primary: #E31E24;
@@ -36,7 +52,7 @@ export default function Layout({ children }) {
       `}</style>
 
       {/* Breaking News Ticker */}
-      <div className="bg-[#E31E24] text-white py-2 overflow-hidden">
+      <div className="bg-[#E31E24] dark:bg-[#B91C1C] text-white py-2 overflow-hidden">
         <div className="flex items-center">
           <span className="bg-white text-[#E31E24] px-4 py-1 font-bold text-sm shrink-0 mr-4">
             חדשות חמות
@@ -59,7 +75,7 @@ export default function Layout({ children }) {
       </div>
 
       {/* Header */}
-      <header className="bg-white shadow-md sticky top-0 z-50">
+      <header className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-4">
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center justify-center gap-1 py-3">
@@ -79,33 +95,45 @@ export default function Layout({ children }) {
               <Link
                 key={cat.id}
                 to={createPageUrl(cat.href)}
-                className="flex items-center gap-1.5 px-3 py-2 text-gray-700 hover:text-[#E31E24] hover:bg-red-50 rounded-lg transition-all text-xs font-medium"
+                className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
               >
                 <cat.icon size={16} />
                 {cat.label}
               </Link>
-            ))}
-            <Link
-              to={createPageUrl("Schedule")}
-              className="flex items-center gap-1.5 px-3 py-2 text-gray-700 hover:text-[#E31E24] hover:bg-red-50 rounded-lg transition-all text-xs font-medium"
-            >
-              <Clock size={16} />
-              לוח שידורים
-            </Link>
-            <Link
-              to={createPageUrl("Home")}
-              className="flex items-center gap-1.5 px-3 py-2 text-gray-700 hover:text-[#E31E24] hover:bg-red-50 rounded-lg transition-all text-xs font-medium"
-            >
-              <Users size={16} />
-              אנשי השטח
-            </Link>
+              ))}
+              <Link
+                to={createPageUrl("Schedule")}
+                className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
+              >
+                <Clock size={16} />
+                לוח שידורים
+              </Link>
+              <Link
+                to={createPageUrl("Home")}
+                className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
+              >
+                <Users size={16} />
+                אנשי השטח
+              </Link>
+              <button
+                onClick={() => setDarkMode(!darkMode)}
+                className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
+              >
+                {darkMode ? <Sun size={16} /> : <Moon size={16} />}
+              </button>
           </nav>
 
           {/* Mobile Menu Button */}
-          <div className="lg:hidden flex items-center justify-between py-3 border-t border-gray-100">
+          <div className="lg:hidden flex items-center justify-between py-3 border-t border-gray-100 dark:border-gray-700">
+            <button
+              onClick={() => setDarkMode(!darkMode)}
+              className="p-2 text-gray-600 dark:text-gray-300 hover:text-[#E31E24] transition-colors"
+            >
+              {darkMode ? <Sun size={24} /> : <Moon size={24} />}
+            </button>
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 text-gray-600 hover:text-[#E31E24] transition-colors"
+              className="p-2 text-gray-600 dark:text-gray-300 hover:text-[#E31E24] transition-colors"
             >
               {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
             </button>
@@ -126,7 +154,7 @@ export default function Layout({ children }) {
               className="absolute inset-0 bg-black/50"
               onClick={() => setMobileMenuOpen(false)}
             />
-            <motion.nav className="absolute right-0 top-0 bottom-0 w-72 bg-white shadow-xl overflow-y-auto">
+            <motion.nav className="absolute right-0 top-0 bottom-0 w-72 bg-white dark:bg-gray-800 shadow-xl overflow-y-auto">
               <div className="p-6">
                 <img 
                   src={LOGO_URL} 
@@ -139,22 +167,22 @@ export default function Layout({ children }) {
                       key={cat.id}
                       to={createPageUrl(cat.href)}
                       onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:text-[#E31E24] hover:bg-red-50 rounded-xl transition-all"
-                    >
+                      className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-all"
+                      >
                       <cat.icon size={20} />
                       {cat.label}
                       <ChevronLeft size={16} className="mr-auto" />
-                    </Link>
-                  ))}
-                  <Link
-                    to={createPageUrl("Schedule")}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-3 px-4 py-3 text-gray-700 hover:text-[#E31E24] hover:bg-red-50 rounded-xl transition-all"
-                  >
-                    <Clock size={20} />
-                    לוח שידורים
-                    <ChevronLeft size={16} className="mr-auto" />
-                  </Link>
+                      </Link>
+                      ))}
+                      <Link
+                      to={createPageUrl("Schedule")}
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-all"
+                      >
+                      <Clock size={20} />
+                      לוח שידורים
+                      <ChevronLeft size={16} className="mr-auto" />
+                      </Link>
                 </div>
               </div>
             </motion.nav>
@@ -168,7 +196,7 @@ export default function Layout({ children }) {
       </main>
 
       {/* Footer */}
-      <footer className="bg-gray-900 text-white mt-12">
+      <footer className="bg-gray-900 dark:bg-black text-white mt-12">
         <div className="max-w-7xl mx-auto px-4 py-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>

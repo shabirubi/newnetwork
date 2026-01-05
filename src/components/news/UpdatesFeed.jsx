@@ -25,7 +25,7 @@ export default function UpdatesFeed() {
       </div>
 
       {/* Feed - No scroll, fixed height */}
-      <div className="bg-gray-50 h-[500px] overflow-hidden">
+      <div className="bg-gray-50 dark:bg-gray-900 h-[500px] overflow-hidden">
         {breakingNews.slice(0, 4).map((article, index) => (
           <motion.div
             key={article.id}
@@ -37,9 +37,9 @@ export default function UpdatesFeed() {
               repeat: Infinity,
               repeatType: "reverse",
               repeatDelay: 5
-            }}
-            className="bg-white border-b border-gray-100 hover:bg-gray-50 transition-colors"
-          >
+              }}
+              className="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+              >
             <Link 
               to={createPageUrl(`Article?id=${article.id}`)}
               className="block p-2.5"

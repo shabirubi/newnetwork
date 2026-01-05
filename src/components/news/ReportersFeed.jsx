@@ -100,9 +100,9 @@ const reporters = [
 
 export default function ReportersFeed() {
   return (
-    <div className="bg-white rounded-xl shadow-lg overflow-hidden sticky top-6 border border-gray-200">
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden sticky top-6 border border-gray-200 dark:border-gray-700">
       {/* Header */}
-      <div className="bg-gradient-to-br from-gray-900 to-gray-800 p-3">
+      <div className="bg-gradient-to-br from-gray-900 to-gray-800 dark:from-black dark:to-gray-900 p-3">
         <h2 className="font-bold text-xs text-white flex items-center gap-2">
           <span className="text-base">📡</span>
           אנשי השטח
@@ -110,7 +110,7 @@ export default function ReportersFeed() {
       </div>
 
       {/* Feed - No scroll, fixed height */}
-      <div className="bg-gray-50 h-[500px] overflow-hidden">
+      <div className="bg-gray-50 dark:bg-gray-900 h-[500px] overflow-hidden">
         {reporters.slice(0, 6).map((reporter, reporterIndex) => (
           <div key={reporter.id}>
             {reporter.articles.slice(0, 1).map((article, articleIndex) => (
@@ -125,8 +125,8 @@ export default function ReportersFeed() {
                   repeatType: "reverse",
                   repeatDelay: 5
                 }}
-                className="bg-white border-b border-gray-100 hover:bg-gray-50 transition-colors"
-              >
+                className="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                >
                 <Link 
                   to={createPageUrl("Home")}
                   className="flex items-start gap-2 p-2.5"
@@ -164,7 +164,7 @@ export default function ReportersFeed() {
 
                   {/* Content */}
                   <div className="flex-1 min-w-0">
-                    <p className="text-[11px] text-gray-900 font-bold line-clamp-2 leading-tight mb-0.5">
+                    <p className="text-[11px] text-gray-900 dark:text-white font-bold line-clamp-2 leading-tight mb-0.5">
                       {article.title}
                     </p>
                     <div className="flex items-center gap-1 text-[9px] text-gray-500">
@@ -187,7 +187,7 @@ export default function ReportersFeed() {
       {/* Footer */}
       <Link 
         to={createPageUrl("Home")}
-        className="block p-2 text-center bg-gradient-to-br from-gray-900 to-gray-800 hover:from-gray-800 hover:to-gray-700 transition-colors border-t border-gray-700"
+        className="block p-2 text-center bg-gradient-to-br from-gray-900 to-gray-800 dark:from-black dark:to-gray-900 hover:from-gray-800 hover:to-gray-700 transition-colors border-t border-gray-700"
       >
         <span className="text-white font-bold text-[10px]">לכל העדכונים →</span>
       </Link>

@@ -57,7 +57,7 @@ export default function Home() {
 
         {/* Center - Extended Live Player */}
         <div className="lg:col-span-8">
-          <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-t-lg p-3 flex items-center justify-between">
+          <div className="bg-gradient-to-r from-gray-900 to-gray-800 dark:from-black dark:to-gray-900 rounded-t-lg p-3 flex items-center justify-between">
             <div className="flex items-center gap-3">
               <div className="relative flex h-2.5 w-2.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E31E24] opacity-75"></span>
@@ -85,15 +85,15 @@ export default function Home() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.1 }}
-                className="bg-white rounded-lg p-4 shadow-md border border-gray-200 hover:shadow-lg transition-shadow"
-              >
+                className="bg-white dark:bg-gray-800 rounded-lg p-4 shadow-md border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-shadow"
+                >
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
                     <Radio className="w-5 h-5 text-[#E31E24]" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-sm text-gray-900">שידור 24/7</h3>
-                    <p className="text-xs text-gray-500">תמיד מעודכנים</p>
+                    <h3 className="font-bold text-sm text-gray-900 dark:text-white">שידור 24/7</h3>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">תמיד מעודכנים</p>
                   </div>
                 </div>
               </motion.div>
@@ -105,12 +105,12 @@ export default function Home() {
                 className="bg-white rounded-lg p-4 shadow-md border border-gray-200 hover:shadow-lg transition-shadow"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
-                    <Zap className="w-5 h-5 text-blue-600" />
+                  <div className="w-10 h-10 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                    <Zap className="w-5 h-5 text-blue-600 dark:text-blue-400" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-sm text-gray-900">עדכונים מהירים</h3>
-                    <p className="text-xs text-gray-500">בזמן אמת</p>
+                    <h3 className="font-bold text-sm text-gray-900 dark:text-white">עדכונים מהירים</h3>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">בזמן אמת</p>
                   </div>
                 </div>
               </motion.div>
@@ -122,12 +122,12 @@ export default function Home() {
                 className="bg-white rounded-lg p-4 shadow-md border border-gray-200 hover:shadow-lg transition-shadow"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                    <Target className="w-5 h-5 text-green-600" />
+                  <div className="w-10 h-10 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                    <Target className="w-5 h-5 text-green-600 dark:text-green-400" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-sm text-gray-900">כיסוי מקיף</h3>
-                    <p className="text-xs text-gray-500">מכל הזירות</p>
+                    <h3 className="font-bold text-sm text-gray-900 dark:text-white">כיסוי מקיף</h3>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">מכל הזירות</p>
                   </div>
                 </div>
               </motion.div>
@@ -144,7 +144,7 @@ export default function Home() {
 
 
       {/* Category Navigation Bar */}
-      <section className="bg-white rounded-xl shadow-md p-4 border border-gray-200">
+      <section className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 border border-gray-200 dark:border-gray-700">
         <div className="flex flex-wrap items-center justify-center gap-3">
           {[
             { label: "ביטחון", cat: "security", Icon: Shield, color: "hover:bg-orange-50 hover:text-orange-700" },
@@ -159,7 +159,7 @@ export default function Home() {
             <Link
               key={item.cat}
               to={createPageUrl(`Category?cat=${item.cat}`)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold text-gray-700 transition-all ${item.color}`}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold text-gray-700 dark:text-gray-200 transition-all ${item.color} dark:hover:bg-opacity-20`}
             >
               <item.Icon size={18} />
               {item.label}
@@ -173,7 +173,7 @@ export default function Home() {
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2">
             <Clock className="w-5 h-5 text-[#E31E24]" />
-            <h2 className="text-xl font-bold">חדשות אחרונות</h2>
+            <h2 className="text-xl font-bold dark:text-white">חדשות אחרונות</h2>
           </div>
         </div>
 
@@ -185,7 +185,7 @@ export default function Home() {
       </section>
 
       {/* Trending Section */}
-      <section className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl p-8 text-white">
+      <section className="bg-gradient-to-br from-gray-900 to-gray-800 dark:from-black dark:to-gray-900 rounded-2xl p-8 text-white">
         <div className="flex items-center gap-2 mb-6">
           <TrendingUp className="w-6 h-6 text-[#E31E24]" />
           <h2 className="text-2xl font-bold">הכי נצפה עכשיו</h2>
