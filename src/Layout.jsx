@@ -82,7 +82,7 @@ export default function Layout({ children }) {
               <img 
                 src={LOGO_URL} 
                 alt="הרשת החדשה" 
-                className="h-12 w-auto ml-3"
+                className="h-16 lg:h-20 w-auto ml-3"
               />
               <ClockWidget />
               <WeatherWidget />
