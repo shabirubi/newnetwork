@@ -110,9 +110,9 @@ export default function Schedule() {
   const currentHour = new Date().getHours();
   const isToday = selectedDay === todayId;
 
-  // Filter schedule by day or use default
+  // Filter schedule by day - use database or fallback to local schedules
   const daySchedule = schedule.filter(s => s.day_of_week === selectedDay);
-  const displaySchedule = daySchedule.length > 0 ? daySchedule : defaultSchedule;
+  const displaySchedule = daySchedule.length > 0 ? daySchedule : (schedulesByDay[selectedDay] || schedulesByDay.sunday);
 
   return (
     <div className="space-y-8">
