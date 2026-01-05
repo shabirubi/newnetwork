@@ -5,16 +5,17 @@ import { Radio, ChevronDown, Globe } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const countryLabels = {
-  israel: "ישראל 🇮🇱",
-  russia: "רוסיה 🇷🇺",
-  usa: "ארה\"ב 🇺🇸",
-  uk: "בריטניה 🇬🇧",
-  france: "צרפת 🇫🇷",
-  other: "אחר 🌍"
+  israel: { name: "ישראל", flag: "🇮🇱", color: "#0038b8" },
+  russia: { name: "רוסיה", flag: "🇷🇺", color: "#d52b1e" },
+  usa: { name: "ארה\"ב", flag: "🇺🇸", color: "#3c3b6e" },
+  uk: { name: "בריטניה", flag: "🇬🇧", color: "#012169" },
+  france: { name: "צרפת", flag: "🇫🇷", color: "#002395" },
+  other: { name: "אחר", flag: "🌍", color: "#6b7280" }
 };
 
 export default function ChannelSelector() {
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedCountry, setSelectedCountry] = useState(null);
   const [selectedChannel, setSelectedChannel] = useState(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('selectedChannel') || 'all';
@@ -40,10 +41,19 @@ export default function ChannelSelector() {
     setSelectedChannel(channelId);
     localStorage.setItem('selectedChannel', channelId);
     setIsOpen(false);
+    setSelectedCountry(null);
     
     // If 'all' is selected, pick the first channel for streaming
     const streamChannelId = channelId === 'all' && channels.length > 0 ? channels[0].id : channelId;
     window.dispatchEvent(new CustomEvent('channelChange', { detail: streamChannelId }));
+  };
+
+  const handleCountryClick = (country) => {
+    setSelectedCountry(selectedCountry === country ? null : country);
+  };
+
+  const handleBack = () => {
+    setSelectedCountry(null);
   };
 
   const currentChannel = channels.find(c => c.id === selectedChannel);
@@ -74,64 +84,104 @@ export default function ChannelSelector() {
               onClick={() => setIsOpen(false)}
             />
             <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -10 }}
-              className="absolute top-full left-0 mt-2 w-56 bg-white dark:bg-gray-800 rounded-xl shadow-xl border border-gray-200 dark:border-gray-700 z-[10000] overflow-hidden max-h-[70vh] overflow-y-auto"
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="absolute top-full left-0 mt-2 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 z-[10000] overflow-hidden"
+              style={{ width: selectedCountry ? '280px' : '340px' }}
             >
-              <button
-                onClick={() => handleSelect('all')}
-                className={`w-full flex items-center gap-2.5 px-3 py-2.5 active:bg-gray-100 dark:active:bg-gray-700 transition-colors ${
-                  selectedChannel === 'all' ? 'bg-red-50 dark:bg-red-900/20' : ''
-                }`}
-              >
-                <div className="w-7 h-7 rounded-full bg-[#E31E24] flex items-center justify-center">
-                  <Radio className="w-3.5 h-3.5 text-white" />
-                </div>
-                <span className="font-bold text-sm dark:text-white">כל הערוצים</span>
-              </button>
+              {!selectedCountry ? (
+                <>
+                  {/* All Channels Button */}
+                  <button
+                    onClick={() => handleSelect('all')}
+                    className={`w-full flex items-center gap-3 px-4 py-3 active:bg-gray-50 dark:active:bg-gray-700 transition-colors border-b border-gray-100 dark:border-gray-700 ${
+                      selectedChannel === 'all' ? 'bg-red-50 dark:bg-red-900/20' : ''
+                    }`}
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#E31E24] to-red-600 flex items-center justify-center shadow-md">
+                      <Radio className="w-5 h-5 text-white" />
+                    </div>
+                    <span className="font-bold text-base dark:text-white">כל הערוצים</span>
+                  </button>
 
-              <div className="border-t border-gray-200 dark:border-gray-700 my-1"></div>
-
-              {Object.entries(channelsByCountry).map(([country, countryChannels]) => (
-                <div key={country}>
-                  <div className="px-3 py-2 bg-gray-50 dark:bg-gray-900/50 sticky top-0">
-                    <div className="flex items-center gap-2">
-                      <Globe className="w-3 h-3 text-gray-500 dark:text-gray-400" />
-                      <span className="text-xs font-bold text-gray-700 dark:text-gray-300">
-                        {countryLabels[country] || country}
-                      </span>
-                      <span className="text-[10px] text-gray-500 dark:text-gray-400">
-                        ({countryChannels.length})
-                      </span>
+                  {/* Country Grid */}
+                  <div className="p-4">
+                    <div className="text-xs font-bold text-gray-500 dark:text-gray-400 mb-3 px-1">בחר מדינה</div>
+                    <div className="grid grid-cols-2 gap-3">
+                      {Object.entries(channelsByCountry).map(([country, countryChannels]) => {
+                        const countryInfo = countryLabels[country] || { name: country, flag: "🌍", color: "#6b7280" };
+                        return (
+                          <motion.button
+                            key={country}
+                            whileHover={{ scale: 1.03 }}
+                            whileTap={{ scale: 0.97 }}
+                            onClick={() => handleCountryClick(country)}
+                            className="relative overflow-hidden rounded-xl p-4 text-center active:opacity-90 transition-all shadow-md hover:shadow-lg"
+                            style={{ 
+                              background: `linear-gradient(135deg, ${countryInfo.color}15 0%, ${countryInfo.color}30 100%)`,
+                              borderWidth: '2px',
+                              borderStyle: 'solid',
+                              borderColor: countryInfo.color + '40'
+                            }}
+                          >
+                            <div className="text-4xl mb-2">{countryInfo.flag}</div>
+                            <div className="font-bold text-sm dark:text-white mb-0.5">{countryInfo.name}</div>
+                            <div className="text-xs text-gray-600 dark:text-gray-400">
+                              {countryChannels.length} ערוצים
+                            </div>
+                          </motion.button>
+                        );
+                      })}
                     </div>
                   </div>
-                  {countryChannels.map((channel) => (
+                </>
+              ) : (
+                <>
+                  {/* Back Button & Country Header */}
+                  <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 z-10">
                     <button
-                      key={channel.id}
-                      onClick={() => handleSelect(channel.id)}
-                      className={`w-full flex items-center gap-2.5 px-3 py-2.5 active:bg-gray-100 dark:active:bg-gray-700 transition-colors ${
-                        selectedChannel === channel.id ? 'bg-red-50 dark:bg-red-900/20' : ''
-                      }`}
+                      onClick={handleBack}
+                      className="w-full flex items-center gap-2 px-4 py-3 active:bg-gray-50 dark:active:bg-gray-700 transition-colors"
                     >
-                      <div 
-                        className="w-7 h-7 rounded-full flex items-center justify-center"
-                        style={{ backgroundColor: channel.color || '#E31E24' }}
-                      >
-                        <Radio className="w-3.5 h-3.5 text-white" />
-                      </div>
-                      <div className="text-right flex-1 min-w-0">
-                        <div className="font-bold text-sm dark:text-white truncate">{channel.name}</div>
-                        {channel.description && (
-                          <div className="text-[10px] text-gray-500 dark:text-gray-400 line-clamp-1">
-                            {channel.description}
-                          </div>
-                        )}
-                      </div>
+                      <ChevronDown className="w-4 h-4 rotate-90 dark:text-white" />
+                      <span className="text-2xl">{countryLabels[selectedCountry]?.flag}</span>
+                      <span className="font-bold dark:text-white">{countryLabels[selectedCountry]?.name}</span>
+                      <span className="text-xs text-gray-500 dark:text-gray-400 mr-auto">
+                        ({channelsByCountry[selectedCountry]?.length})
+                      </span>
                     </button>
-                  ))}
-                </div>
-              ))}
+                  </div>
+
+                  {/* Channels List */}
+                  <div className="max-h-[60vh] overflow-y-auto">
+                    {channelsByCountry[selectedCountry]?.map((channel) => (
+                      <button
+                        key={channel.id}
+                        onClick={() => handleSelect(channel.id)}
+                        className={`w-full flex items-center gap-3 px-4 py-3 active:bg-gray-100 dark:active:bg-gray-700 transition-colors border-b border-gray-100 dark:border-gray-700 ${
+                          selectedChannel === channel.id ? 'bg-red-50 dark:bg-red-900/20' : ''
+                        }`}
+                      >
+                        <div 
+                          className="w-10 h-10 rounded-xl flex items-center justify-center shadow-sm"
+                          style={{ backgroundColor: channel.color || '#E31E24' }}
+                        >
+                          <Radio className="w-4 h-4 text-white" />
+                        </div>
+                        <div className="text-right flex-1 min-w-0">
+                          <div className="font-bold text-sm dark:text-white truncate">{channel.name}</div>
+                          {channel.description && (
+                            <div className="text-xs text-gray-500 dark:text-gray-400 line-clamp-1">
+                              {channel.description}
+                            </div>
+                          )}
+                        </div>
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
             </motion.div>
           </>
         )}

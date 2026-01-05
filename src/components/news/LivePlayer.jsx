@@ -101,8 +101,16 @@ export default function LivePlayer({
           const hls = new Hls({
             debug: false,
             enableWorker: true,
-            lowLatencyMode: false,
-            backBufferLength: 90
+            lowLatencyMode: true,
+            backBufferLength: 90,
+            maxBufferLength: 10,
+            maxMaxBufferLength: 20,
+            maxBufferSize: 60 * 1000 * 1000,
+            maxBufferHole: 0.5,
+            highBufferWatchdogPeriod: 2,
+            nudgeMaxRetry: 3,
+            liveSyncDurationCount: 3,
+            liveMaxLatencyDurationCount: 5
           });
           hlsRef.current = hls;
           
