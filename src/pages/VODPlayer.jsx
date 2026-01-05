@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
@@ -9,6 +9,21 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
 import VODCard from "../components/vod/VODCard";
+
+// Load HLS.js from CDN
+const loadHls = () => {
+  return new Promise((resolve, reject) => {
+    if (window.Hls) {
+      resolve(window.Hls);
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/hls.js@latest';
+    script.onload = () => resolve(window.Hls);
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
+};
 
 const categoryLabels = {
   action: "אקשן",
@@ -27,6 +42,8 @@ export default function VODPlayer() {
   const urlParams = new URLSearchParams(window.location.search);
   const contentId = urlParams.get('id');
   const queryClient = useQueryClient();
+  const videoRef = useRef(null);
+  const hlsRef = useRef(null);
 
   const { data: content, isLoading } = useQuery({
     queryKey: ['vod-content', contentId],
@@ -56,6 +73,51 @@ export default function VODPlayer() {
       incrementViewsMutation.mutate();
     }
   }, [contentId]);
+
+  // Setup HLS player for .m3u8 streams
+  useEffect(() => {
+    if (!content?.video_url || !content.video_url.includes('.m3u8') || !videoRef.current) return;
+
+    const video = videoRef.current;
+    
+    // Cleanup previous HLS instance
+    if (hlsRef.current) {
+      hlsRef.current.destroy();
+      hlsRef.current = null;
+    }
+
+    // Check if browser natively supports HLS (Safari)
+    if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = content.video_url;
+      video.play().catch(() => {});
+    } else {
+      // Use HLS.js for other browsers
+      loadHls().then((Hls) => {
+        if (Hls.isSupported()) {
+          const hls = new Hls({
+            enableWorker: true,
+            lowLatencyMode: false,
+          });
+          hlsRef.current = hls;
+          hls.loadSource(content.video_url);
+          hls.attachMedia(video);
+          hls.on(Hls.Events.MANIFEST_PARSED, () => {
+            video.play().catch(() => {});
+          });
+        }
+      }).catch(() => {
+        video.src = content.video_url;
+        video.play().catch(() => {});
+      });
+    }
+
+    return () => {
+      if (hlsRef.current) {
+        hlsRef.current.destroy();
+        hlsRef.current = null;
+      }
+    };
+  }, [content?.video_url]);
 
   if (isLoading) {
     return (
@@ -96,7 +158,15 @@ export default function VODPlayer() {
         className="relative bg-black rounded-2xl overflow-hidden shadow-2xl"
       >
         <div className="w-full aspect-video">
-          {content.video_url ? (
+          {content.video_url && content.video_url.includes('.m3u8') ? (
+            <video
+              ref={videoRef}
+              className="w-full h-full"
+              controls
+              autoPlay
+              playsInline
+            />
+          ) : content.video_url ? (
             <iframe
               src={content.video_url}
               className="w-full h-full"
