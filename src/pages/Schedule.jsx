@@ -18,14 +18,18 @@ const daysOfWeek = [
   { id: "saturday", label: "שבת" }
 ];
 
-// Default schedule based on the documents
+// Professional daily schedule
 const defaultSchedule = [
-  { start_time: "09:00", end_time: "11:00", title: "חדשות עכשיו - מהדורת הבוקר", category: "news", description: "פיגוע/אירוע ביטחוני, החלטה דרמטית, אירוס חדש, מהפכה דיווחים של היום שהיה" },
-  { start_time: "11:00", end_time: "13:00", title: "פוליטיקה ודרמה", category: "politics", description: "מאבקי כח, אלימות/פשיעה, פרשות שחיתות, תיקים בתפקיד, סיפורים אנושיים קשים" },
-  { start_time: "13:00", end_time: "16:00", title: "כלכלה ועסקים", category: "economy", description: "עליית מחירים, קניות, בנקים, אוכל, השקעות ונכסים" },
-  { start_time: "16:00", end_time: "18:00", title: "ביטחון ומדיניות", category: "security", description: "צה\"ל, פיגועים, החלטות ממשלה, מתיחות ביטחונית, כנסת וחקיקה, הצמת מזה\"ת" },
-  { start_time: "18:00", end_time: "21:00", title: "רשת ותרבות", category: "entertainment", description: "בדיקת שמועות/פייק, ביקורות השקריים, טכנולוגיה ומדע" },
-  { start_time: "21:00", end_time: "23:00", title: "חדשות עכשיו - מהדורת הערב", category: "news", description: "סיכום היום בישראל ובעולם" }
+  { start_time: "06:00", end_time: "09:00", title: "חדשות הבוקר", category: "news", host: "רונית שקד ודני לוי", description: "פתיחת היום עם כל העדכונים החמים מישראל ומהעולם" },
+  { start_time: "09:00", end_time: "11:00", title: "מבט ביטחוני", category: "security", host: "רון חיימי", description: "ניתוח מעמיק של האירועים הביטחוניים והמדיניים" },
+  { start_time: "11:00", end_time: "13:00", title: "כלכלה בשידור חי", category: "economy", host: "שירה לוי", description: "בורסה, שווקים וכל מה שצריך לדעת על הכסף שלכם" },
+  { start_time: "13:00", end_time: "15:00", title: "מהדורת הצהריים", category: "news", host: "נועה כהן", description: "סיכום חצי היום עם הידיעות החשובות ביותר" },
+  { start_time: "15:00", end_time: "17:00", title: "פוליטיקה ללא צנזורה", category: "politics", host: "אור רביבו", description: "הזירה הפוליטית בחשיפה מלאה" },
+  { start_time: "17:00", end_time: "19:00", title: "חדשות אחר הצהריים", category: "news", host: "עדי מזרחי", description: "עדכונים שוטפים מכל הזירות" },
+  { start_time: "19:00", end_time: "21:00", title: "מהדורת הערב המרכזית", category: "news", host: "רונית שקד ודני לוי", description: "המהדורה המרכזית עם כל סיפורי היום" },
+  { start_time: "21:00", end_time: "23:00", title: "הסטודיו המרכזי", category: "special", host: "יניב בן דוד", description: "ניתוח מעמיק של האירועים המרכזיים" },
+  { start_time: "23:00", end_time: "01:00", title: "מהדורת הלילה", category: "news", host: "מיכל אבני", description: "סיכום היום והתכוננות למחר" },
+  { start_time: "01:00", end_time: "06:00", title: "שידורי לילה", category: "news", host: "שידור אוטומטי", description: "עדכונים שוטפים לאורך הלילה" }
 ];
 
 export default function Schedule() {
@@ -88,8 +92,8 @@ export default function Schedule() {
       </div>
 
       {/* Schedule List */}
-      <div className="max-w-3xl mx-auto">
-        <div className="bg-white rounded-2xl p-6 shadow-sm space-y-4">
+      <div className="max-w-5xl mx-auto">
+        <div className="grid gap-3">
           {displaySchedule.map((item, index) => {
             const startHour = parseInt(item.start_time.split(':')[0]);
             const endHour = item.end_time ? parseInt(item.end_time.split(':')[0]) : startHour + 2;
