@@ -79,6 +79,10 @@ export default function LivePlayer({
       hlsRef.current = null;
     }
 
+    // Set volume
+    video.volume = volume / 100;
+    video.muted = isMuted;
+
     // Check if browser natively supports HLS (Safari)
     if (video.canPlayType('application/vnd.apple.mpegurl')) {
       video.src = currentStreamUrl;
@@ -113,7 +117,7 @@ export default function LivePlayer({
         hlsRef.current = null;
       }
     };
-  }, [isPlaying, currentStreamUrl]);
+  }, [isPlaying, currentStreamUrl, volume, isMuted]);
 
   return (
     <motion.div
