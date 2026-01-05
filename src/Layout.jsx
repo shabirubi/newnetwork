@@ -79,16 +79,16 @@ export default function Layout({ children }) {
       <div className="bg-gray-900 dark:bg-black text-white py-1.5 px-2 lg:px-4 border-b border-gray-800 hidden sm:block">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
             <div className="flex items-center gap-1.5 lg:gap-3">
+              <img 
+                src={LOGO_URL} 
+                alt="הרשת החדשה" 
+                className="h-12 w-auto ml-3"
+              />
               <ClockWidget />
               <WeatherWidget />
               <ChannelSelector />
             </div>
             <div className="flex items-center gap-1 lg:gap-2">
-              <img 
-                src={LOGO_URL} 
-                alt="הרשת החדשה" 
-                className="h-8 w-auto"
-              />
               <button
                 onClick={() => setDarkMode(!darkMode)}
                 className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-800 dark:bg-gray-700 text-gray-200 active:scale-95 transition-transform"
@@ -151,26 +151,8 @@ export default function Layout({ children }) {
       {/* Header */}
       <header className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50 transition-colors duration-300 border-b border-gray-200 dark:border-gray-700 hidden sm:block">
         <div className="max-w-7xl mx-auto px-4">
-          {/* Mobile Header - Hidden on mobile, only on tablet+ */}
-          <div className="hidden sm:flex lg:hidden items-center justify-between py-3">
-            <div className="w-10" />
-
-            <img 
-              src={LOGO_URL} 
-              alt="הרשת החדשה" 
-              className="h-12 w-auto"
-            />
-
-            <div className="w-10" />
-          </div>
-
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center justify-center gap-1 py-3">
-            <img 
-              src={LOGO_URL} 
-              alt="הרשת החדשה" 
-              className="h-16 w-auto ml-3"
-            />
+          <nav className="hidden sm:flex items-center justify-center gap-1 py-3">
             <Link
               to={createPageUrl("Live")}
               className="flex items-center gap-1.5 px-3 py-2 text-white bg-[#E31E24] hover:bg-[#B91C1C] rounded-lg transition-all text-xs font-bold"
