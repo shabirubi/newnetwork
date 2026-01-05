@@ -50,14 +50,14 @@ export default function ChannelSelector() {
         {isOpen && (
           <>
             <div 
-              className="fixed inset-0 z-40"
+              className="fixed inset-0 z-[9999]"
               onClick={() => setIsOpen(false)}
             />
             <motion.div
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              className="absolute top-full left-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 z-50 overflow-hidden"
+              className="absolute top-full left-0 mt-2 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 z-[10000] overflow-hidden"
             >
               <button
                 onClick={() => handleSelect('all')}

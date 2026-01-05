@@ -95,6 +95,51 @@ const reporters = [
     articles: [
       { title: "עומס חריג בכבישים - כל מה שצריך לדעת", time: "00:15", hasVideo: true }
     ]
+  },
+  {
+    id: 11,
+    name: "גיא ברקאי",
+    role: "כתב צבאי",
+    image: "https://images.unsplash.com/photo-1463453091185-61582044d556?w=400&h=400&fit=crop",
+    articles: [
+      { title: "תרגיל רחב היקף בצה\"ל - דיווח בלעדי", time: "00:08", hasVideo: true }
+    ]
+  },
+  {
+    id: 12,
+    name: "לירון שטרית",
+    role: "כתבת משפטים",
+    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop",
+    articles: [
+      { title: "פסק דין היסטורי בבית המשפט העליון", time: "00:03", hasVideo: false }
+    ]
+  },
+  {
+    id: 13,
+    name: "אלון מזרחי",
+    role: "כתב חינוך",
+    image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop",
+    articles: [
+      { title: "רפורמה במערכת החינוך - הפרטים החדשים", time: "23:58", hasVideo: true }
+    ]
+  },
+  {
+    id: 14,
+    name: "טל ברוך",
+    role: "כתבת סביבה",
+    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop",
+    articles: [
+      { title: "משבר אקלים: דו\"ח חדש מדאיג", time: "23:45", hasVideo: false }
+    ]
+  },
+  {
+    id: 15,
+    name: "עידו לוי",
+    role: "כתב דת",
+    image: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=400&h=400&fit=crop",
+    articles: [
+      { title: "מתיחות בין דתיים לחילונים בעיר", time: "23:32", hasVideo: true }
+    ]
   }
 ];
 

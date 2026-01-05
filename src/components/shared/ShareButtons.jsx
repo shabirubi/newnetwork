@@ -88,9 +88,9 @@ export default function ShareButtons({ url, title, size = "default", showLabel =
             onClick={() => setShowMenu(false)}
           />
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: -10 }}
+            initial={{ opacity: 0, scale: 0.95, y: 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            className="absolute left-0 mt-2 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 p-4 z-[9999] w-72"
+            className="absolute left-0 bottom-full mb-2 bg-white dark:bg-gray-800 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 p-4 z-[9999] w-72"
           >
             <div className="flex items-center justify-between mb-3">
               <span className="font-bold text-sm dark:text-white">שתף ברשתות חברתיות</span>
