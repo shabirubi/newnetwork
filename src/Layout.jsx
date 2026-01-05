@@ -124,6 +124,13 @@ export default function Layout({ children }) {
                 <Users size={16} />
                 אנשי השטח
               </Link>
+              <Link
+                to={createPageUrl("NewsLoader")}
+                className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
+              >
+                <Globe size={16} />
+                טעינת חדשות
+              </Link>
               <button
                 onClick={() => setDarkMode(!darkMode)}
                 className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
