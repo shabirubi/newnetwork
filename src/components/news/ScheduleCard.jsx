@@ -26,74 +26,68 @@ export default function ScheduleCard({ schedule, isActive = false, index = 0 }) 
 
   return (
     <motion.div
-      initial={{ opacity: 0, x: -20 }}
-      animate={{ opacity: 1, x: 0 }}
-      transition={{ delay: index * 0.05 }}
-      className={`relative p-4 rounded-xl border-2 transition-all ${
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: index * 0.03 }}
+      className={`relative overflow-hidden rounded-xl transition-all ${
         isActive || is_live
-          ? "border-[#E31E24] bg-red-50"
-          : "border-transparent bg-white hover:border-gray-200"
+          ? "shadow-2xl scale-[1.02]"
+          : "shadow-md hover:shadow-lg"
       }`}
     >
-      {/* Live Indicator */}
-      {(isActive || is_live) && (
-        <div className="absolute top-4 left-4">
-          <Badge className="bg-[#E31E24] text-white flex items-center gap-1">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
-            </span>
-            עכשיו בשידור
-          </Badge>
-        </div>
-      )}
-
-      <div className="flex items-start gap-4">
-        {/* Time */}
-        <div className="text-center shrink-0">
-          <div className="text-2xl font-bold text-gray-900">{start_time}</div>
-          {end_time && (
-            <div className="text-sm text-gray-500">{end_time}</div>
-          )}
-        </div>
-
-        {/* Divider */}
-        <div className={`w-1 self-stretch rounded-full ${categoryColors[category]}`} />
-
-        {/* Content */}
-        <div className="flex-1">
-          <div className="flex items-center gap-2 mb-1">
-            <Badge variant="secondary" className="text-xs">
-              {categoryLabels[category]}
-            </Badge>
+      {/* Colored Side Bar */}
+      <div className={`absolute right-0 top-0 bottom-0 w-1.5 ${categoryColors[category]}`} />
+      
+      {/* Main Content */}
+      <div className={`bg-white p-5 ${isActive || is_live ? 'bg-gradient-to-l from-red-50' : ''}`}>
+        <div className="flex items-start gap-4">
+          {/* Time Badge */}
+          <div className={`shrink-0 flex flex-col items-center justify-center w-20 h-20 rounded-xl ${
+            isActive || is_live 
+              ? categoryColors[category] + ' text-white shadow-lg' 
+              : 'bg-gray-100 text-gray-700'
+          }`}>
+            <div className="text-xl font-bold">{start_time}</div>
+            {end_time && (
+              <div className="text-[10px] opacity-80">{end_time}</div>
+            )}
           </div>
-          
-          <h3 className="font-bold text-lg text-gray-900">{title}</h3>
-          
-          {description && (
-            <p className="text-gray-600 text-sm mt-1 line-clamp-2">{description}</p>
-          )}
-          
-          {host && (
-            <div className="flex items-center gap-2 mt-2 text-sm text-gray-500">
-              <User size={14} />
-              {host}
+
+          {/* Content */}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-2">
+              <span className={`text-xs font-bold px-2.5 py-1 rounded-full ${categoryColors[category]} text-white`}>
+                {categoryLabels[category]}
+              </span>
+              {(isActive || is_live) && (
+                <span className="flex items-center gap-1.5 text-xs font-bold text-[#E31E24] bg-red-50 px-2.5 py-1 rounded-full">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E31E24] opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#E31E24]"></span>
+                  </span>
+                  בשידור
+                </span>
+              )}
             </div>
-          )}
-        </div>
-
-        {/* Play Icon for active */}
-        {(isActive || is_live) && (
-          <div className="shrink-0">
-            <motion.div
-              animate={{ scale: [1, 1.2, 1] }}
-              transition={{ duration: 1.5, repeat: Infinity }}
-              className="w-10 h-10 rounded-full bg-[#E31E24] flex items-center justify-center"
-            >
-              <Radio size={20} className="text-white" />
-            </motion.div>
+            
+            <h3 className="font-bold text-xl mb-2 text-gray-900 line-clamp-1">
+              {title}
+            </h3>
+            
+            {description && (
+              <p className="text-sm text-gray-600 mb-2 line-clamp-2 leading-relaxed">
+                {description}
+              </p>
+            )}
+            
+            {host && (
+              <div className="flex items-center gap-2 text-sm">
+                <span className="text-gray-400">●</span>
+                <span className="text-gray-700 font-medium">{host}</span>
+              </div>
+            )}
           </div>
-        )}
+        </div>
       </div>
     </motion.div>
   );
