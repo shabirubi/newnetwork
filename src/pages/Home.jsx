@@ -2,7 +2,7 @@ import React from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { Radio, TrendingUp, Clock, ChevronLeft, Flame, Users } from "lucide-react";
+import { Radio, TrendingUp, Clock, ChevronLeft, Flame, Users, Zap, Target, Shield, DollarSign, Landmark, Cpu, Trophy, Clapperboard, Globe, Heart } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
 import { Button } from "@/components/ui/button";
@@ -89,7 +89,7 @@ export default function Home() {
               >
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
-                    <span className="text-xl">🔴</span>
+                    <Radio className="w-5 h-5 text-[#E31E24]" />
                   </div>
                   <div>
                     <h3 className="font-bold text-sm text-gray-900">שידור 24/7</h3>
@@ -106,7 +106,7 @@ export default function Home() {
               >
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
-                    <span className="text-xl">⚡</span>
+                    <Zap className="w-5 h-5 text-blue-600" />
                   </div>
                   <div>
                     <h3 className="font-bold text-sm text-gray-900">עדכונים מהירים</h3>
@@ -123,7 +123,7 @@ export default function Home() {
               >
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
-                    <span className="text-xl">🎯</span>
+                    <Target className="w-5 h-5 text-green-600" />
                   </div>
                   <div>
                     <h3 className="font-bold text-sm text-gray-900">כיסוי מקיף</h3>
@@ -147,21 +147,21 @@ export default function Home() {
       <section className="bg-white rounded-xl shadow-md p-4 border border-gray-200">
         <div className="flex flex-wrap items-center justify-center gap-3">
           {[
-            { label: "ביטחון", cat: "security", icon: "🛡️", color: "hover:bg-orange-50 hover:text-orange-700" },
-            { label: "כלכלה", cat: "economy", icon: "💰", color: "hover:bg-green-50 hover:text-green-700" },
-            { label: "פוליטיקה", cat: "politics", icon: "🏛️", color: "hover:bg-purple-50 hover:text-purple-700" },
-            { label: "טכנולוגיה", cat: "technology", icon: "💻", color: "hover:bg-blue-50 hover:text-blue-700" },
-            { label: "ספורט", cat: "sports", icon: "⚽", color: "hover:bg-emerald-50 hover:text-emerald-700" },
-            { label: "בידור", cat: "entertainment", icon: "🎬", color: "hover:bg-pink-50 hover:text-pink-700" },
-            { label: "עולם", cat: "world", icon: "🌍", color: "hover:bg-indigo-50 hover:text-indigo-700" },
-            { label: "בריאות", cat: "health", icon: "❤️", color: "hover:bg-red-50 hover:text-red-700" },
+            { label: "ביטחון", cat: "security", Icon: Shield, color: "hover:bg-orange-50 hover:text-orange-700" },
+            { label: "כלכלה", cat: "economy", Icon: DollarSign, color: "hover:bg-green-50 hover:text-green-700" },
+            { label: "פוליטיקה", cat: "politics", Icon: Landmark, color: "hover:bg-purple-50 hover:text-purple-700" },
+            { label: "טכנולוגיה", cat: "technology", Icon: Cpu, color: "hover:bg-blue-50 hover:text-blue-700" },
+            { label: "ספורט", cat: "sports", Icon: Trophy, color: "hover:bg-emerald-50 hover:text-emerald-700" },
+            { label: "בידור", cat: "entertainment", Icon: Clapperboard, color: "hover:bg-pink-50 hover:text-pink-700" },
+            { label: "עולם", cat: "world", Icon: Globe, color: "hover:bg-indigo-50 hover:text-indigo-700" },
+            { label: "בריאות", cat: "health", Icon: Heart, color: "hover:bg-red-50 hover:text-red-700" },
           ].map(item => (
             <Link
               key={item.cat}
               to={createPageUrl(`Category?cat=${item.cat}`)}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold text-gray-700 transition-all ${item.color}`}
             >
-              <span>{item.icon}</span>
+              <item.Icon size={18} />
               {item.label}
             </Link>
           ))}
