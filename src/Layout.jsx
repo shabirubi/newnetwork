@@ -205,7 +205,7 @@ export default function Layout({ children }) {
                 <img 
                   src={LOGO_URL} 
                   alt="הרשת החדשה" 
-                  className="h-12 w-auto mb-8"
+                  className="h-20 w-auto mb-8"
                 />
                 <div className="space-y-2">
                   {categories.map((cat) => (
