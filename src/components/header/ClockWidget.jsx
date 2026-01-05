@@ -30,12 +30,12 @@ export default function ClockWidget() {
     <motion.div 
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 dark:bg-gray-700 rounded-full"
+      className="flex items-center gap-1.5 px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-full"
     >
-      <Clock className="w-4 h-4 text-[#E31E24]" />
-      <div className="flex items-center gap-2 text-sm">
+      <Clock className="w-3 h-3 text-[#E31E24]" />
+      <div className="flex items-center gap-1.5 text-xs">
         <span className="font-bold text-gray-900 dark:text-white">{formatTime(time)}</span>
-        <span className="text-gray-500 dark:text-gray-400 text-xs">{formatDate(time)}</span>
+        <span className="hidden sm:inline text-gray-500 dark:text-gray-400 text-[10px]">{formatDate(time)}</span>
       </div>
     </motion.div>
   );

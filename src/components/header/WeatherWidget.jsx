@@ -43,11 +43,11 @@ export default function WeatherWidget() {
 
   const getWeatherIcon = (condition) => {
     const cond = condition?.toLowerCase() || "";
-    if (cond.includes("rain") || cond.includes("גשם")) return <CloudRain className="w-5 h-5 text-blue-400" />;
-    if (cond.includes("snow") || cond.includes("שלג")) return <CloudSnow className="w-5 h-5 text-blue-200" />;
-    if (cond.includes("cloud") || cond.includes("עננ")) return <Cloud className="w-5 h-5 text-gray-400" />;
-    if (cond.includes("wind") || cond.includes("רוח")) return <Wind className="w-5 h-5 text-gray-500" />;
-    return <Sun className="w-5 h-5 text-yellow-400" />;
+    if (cond.includes("rain") || cond.includes("גשם")) return <CloudRain className="w-3.5 h-3.5 text-blue-400" />;
+    if (cond.includes("snow") || cond.includes("שלג")) return <CloudSnow className="w-3.5 h-3.5 text-blue-200" />;
+    if (cond.includes("cloud") || cond.includes("עננ")) return <Cloud className="w-3.5 h-3.5 text-gray-400" />;
+    if (cond.includes("wind") || cond.includes("רוח")) return <Wind className="w-3.5 h-3.5 text-gray-500" />;
+    return <Sun className="w-3.5 h-3.5 text-yellow-400" />;
   };
 
   const getSeasonColor = (season) => {
@@ -57,9 +57,9 @@ export default function WeatherWidget() {
 
   if (loading) {
     return (
-      <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-100 dark:bg-gray-700 rounded-full animate-pulse">
-        <div className="w-5 h-5 bg-gray-300 dark:bg-gray-600 rounded-full" />
-        <div className="w-10 h-4 bg-gray-300 dark:bg-gray-600 rounded" />
+      <div className="flex items-center gap-1 px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-full animate-pulse">
+        <div className="w-3 h-3 bg-gray-300 dark:bg-gray-600 rounded-full" />
+        <div className="w-8 h-3 bg-gray-300 dark:bg-gray-600 rounded" />
       </div>
     );
   }
@@ -68,16 +68,15 @@ export default function WeatherWidget() {
     <motion.div 
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="flex items-center gap-2"
+      className="flex items-center gap-1"
     >
-      <div className={`flex items-center gap-2 px-3 py-1.5 rounded-full ${getSeasonColor(weather?.season)}`}>
+      <div className={`flex items-center gap-1 px-2 py-1 rounded-full ${getSeasonColor(weather?.season)}`}>
         {getWeatherIcon(weather?.condition)}
-        <div className="flex items-center gap-1">
-          <Thermometer className="w-3.5 h-3.5" />
-          <span className="font-bold text-sm">{weather?.temperature || 25}°</span>
+        <div className="flex items-center gap-0.5">
+          <span className="font-bold text-xs">{weather?.temperature || 25}°</span>
         </div>
-        <div className="flex items-center gap-1 text-xs opacity-80">
-          <Droplets className="w-3 h-3" />
+        <div className="hidden sm:flex items-center gap-0.5 text-[10px] opacity-80">
+          <Droplets className="w-2.5 h-2.5" />
           <span>{weather?.humidity || 50}%</span>
         </div>
       </div>

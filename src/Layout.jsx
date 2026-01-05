@@ -76,27 +76,39 @@ export default function Layout({ children }) {
       `}</style>
 
       {/* Top Bar with Clock and Weather */}
-      <div className="bg-gray-900 dark:bg-black text-white py-2 px-4 border-b border-gray-800">
+      <div className="bg-gray-900 dark:bg-black text-white py-1.5 px-2 lg:px-4 border-b border-gray-800">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-1.5 lg:gap-3">
               <ClockWidget />
               <WeatherWidget />
               <ChannelSelector />
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 lg:gap-2">
             <Link 
               to={createPageUrl("WarRoom")}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-red-600 hover:bg-red-700 rounded-full text-xs font-bold transition-colors"
+              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-red-600 hover:bg-red-700 rounded-full text-xs font-bold transition-colors"
             >
               <Siren size={14} className="animate-pulse" />
               חדר מלחמה
             </Link>
             <Link 
+              to={createPageUrl("WarRoom")}
+              className="flex sm:hidden items-center justify-center w-8 h-8 bg-red-600 active:bg-red-700 rounded-full transition-colors"
+            >
+              <Siren size={14} className="animate-pulse" />
+            </Link>
+            <Link 
               to={createPageUrl("PublicReports")}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-orange-500 hover:bg-orange-600 rounded-full text-xs font-bold transition-colors"
+              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-orange-500 hover:bg-orange-600 rounded-full text-xs font-bold transition-colors"
             >
               <MessageSquareWarning size={14} />
               דיווח מפגע
+            </Link>
+            <Link 
+              to={createPageUrl("PublicReports")}
+              className="flex sm:hidden items-center justify-center w-8 h-8 bg-orange-500 active:bg-orange-600 rounded-full transition-colors"
+            >
+              <MessageSquareWarning size={14} />
             </Link>
           </div>
         </div>
