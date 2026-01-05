@@ -27,8 +27,17 @@ export default function UpdatesFeed() {
       {/* Feed - No scroll, fixed height */}
       <div className="bg-gray-50 h-[500px] overflow-hidden">
         {breakingNews.slice(0, 4).map((article, index) => (
-          <div
+          <motion.div
             key={article.id}
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ 
+              duration: 0.5,
+              delay: index * 0.2,
+              repeat: Infinity,
+              repeatType: "reverse",
+              repeatDelay: 5
+            }}
             className="bg-white border-b border-gray-100 hover:bg-gray-50 transition-colors"
           >
             <Link 
@@ -38,15 +47,32 @@ export default function UpdatesFeed() {
               {/* Image if available */}
               {article.image_url && (
                 <div className="w-full h-20 rounded overflow-hidden mb-2 relative">
-                  <img 
+                  <motion.img 
                     src={article.image_url}
                     alt={article.title}
                     className="w-full h-full object-cover"
+                    animate={{ 
+                      scale: [1, 1.05, 1],
+                      boxShadow: [
+                        "0 0 0 0px rgba(227, 30, 36, 0)",
+                        "0 0 0 3px rgba(227, 30, 36, 0.3)",
+                        "0 0 0 0px rgba(227, 30, 36, 0)"
+                      ]
+                    }}
+                    transition={{ 
+                      duration: 2,
+                      repeat: Infinity,
+                      delay: index * 0.6
+                    }}
                   />
-                  <div className="absolute top-1 right-1 bg-[#E31E24] text-white text-[8px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1">
+                  <motion.div 
+                    className="absolute top-1 right-1 bg-[#E31E24] text-white text-[8px] font-bold px-1.5 py-0.5 rounded flex items-center gap-1"
+                    animate={{ scale: [1, 1.1, 1] }}
+                    transition={{ duration: 1, repeat: Infinity }}
+                  >
                     <Flame size={8} />
                     LIVE
-                  </div>
+                  </motion.div>
                 </div>
               )}
 
@@ -61,12 +87,17 @@ export default function UpdatesFeed() {
                   </p>
                 )}
                 <div className="flex items-center gap-1 text-[9px] text-gray-500">
-                  <Clock size={9} />
+                  <motion.div
+                    animate={{ opacity: [0.5, 1, 0.5] }}
+                    transition={{ duration: 1.5, repeat: Infinity }}
+                  >
+                    <Clock size={9} />
+                  </motion.div>
                   {moment(article.created_date).fromNow()}
                 </div>
               </div>
             </Link>
-          </div>
+          </motion.div>
         ))}
       </div>
 
