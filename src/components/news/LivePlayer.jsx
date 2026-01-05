@@ -53,7 +53,7 @@ export default function LivePlayer({
       onMouseLeave={() => setShowControls(false)}
     >
       {/* Video Container */}
-      <div className="relative aspect-video lg:aspect-[16/9]">
+      <div className="relative aspect-[9/16] sm:aspect-video">
         {/* Placeholder/Thumbnail */}
         {!isPlaying && (
           <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
@@ -76,18 +76,19 @@ export default function LivePlayer({
         )}
 
         {/* Viewer Count and Live Badge */}
-        <div className="absolute top-4 left-4 z-10 flex items-center gap-2">
+        <div className="absolute top-2 sm:top-4 left-2 sm:left-4 z-10 flex items-center gap-1.5">
           {viewerCount > 0 && (
-            <div className="flex items-center gap-2 bg-black/60 backdrop-blur-sm text-white px-3 py-1.5 rounded-full text-sm">
-              <Users size={16} />
-              {viewerCount.toLocaleString()} צופים
+            <div className="flex items-center gap-1 sm:gap-2 bg-black/60 backdrop-blur-sm text-white px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm">
+              <Users size={12} className="sm:w-4 sm:h-4" />
+              <span className="hidden sm:inline">{viewerCount.toLocaleString()} צופים</span>
+              <span className="sm:hidden">{(viewerCount / 1000).toFixed(1)}K</span>
             </div>
           )}
           {isLive && (
-            <div className="flex items-center gap-2 bg-[#E31E24] text-white px-3 py-1.5 rounded-full text-sm font-bold">
-              <span className="relative flex h-2 w-2">
+            <div className="flex items-center gap-1 sm:gap-2 bg-[#E31E24] text-white px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm font-bold">
+              <span className="relative flex h-1.5 w-1.5 sm:h-2 sm:w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 sm:h-2 sm:w-2 bg-white"></span>
               </span>
               LIVE
             </div>
@@ -110,11 +111,11 @@ export default function LivePlayer({
 
         {/* Logo Watermark */}
         {isPlaying && (
-          <div className="absolute top-4 right-4 z-10 opacity-50 pointer-events-none">
+          <div className="absolute top-2 sm:top-4 right-2 sm:right-4 z-10 opacity-30 sm:opacity-50 pointer-events-none">
             <img 
               src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/a44ef2558_212.png"
               alt="הרשת החדשה"
-              className="h-24 w-auto"
+              className="h-12 sm:h-20 lg:h-24 w-auto"
             />
           </div>
         )}
@@ -135,10 +136,10 @@ export default function LivePlayer({
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: showControls || !isPlaying ? 1 : 0, y: 0 }}
-        className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-4"
+        className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-2 sm:p-4"
       >
         {/* Progress Bar (simulated for live) */}
-        <div className="w-full h-1 bg-gray-700 rounded-full mb-4 overflow-hidden">
+        <div className="w-full h-0.5 sm:h-1 bg-gray-700 rounded-full mb-2 sm:mb-4 overflow-hidden">
           <motion.div 
             className="h-full bg-[#E31E24]"
             animate={{ width: isPlaying ? "100%" : "0%" }}
@@ -146,29 +147,29 @@ export default function LivePlayer({
           />
         </div>
 
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
+        <div className="flex items-center justify-between gap-1 sm:gap-0">
+          <div className="flex items-center gap-1 sm:gap-3">
             {/* Play/Pause */}
             <Button
               variant="ghost"
               size="icon"
               onClick={togglePlay}
-              className="text-white hover:bg-white/20"
+              className="text-white hover:bg-white/20 h-8 w-8 sm:h-10 sm:w-10"
             >
-              {isPlaying ? <Pause size={24} /> : <Play size={24} />}
+              {isPlaying ? <Pause size={18} className="sm:w-6 sm:h-6" /> : <Play size={18} className="sm:w-6 sm:h-6" />}
             </Button>
 
             {/* Volume */}
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1 sm:gap-2">
               <Button
                 variant="ghost"
                 size="icon"
                 onClick={toggleMute}
-                className="text-white hover:bg-white/20"
+                className="text-white hover:bg-white/20 h-8 w-8 sm:h-10 sm:w-10"
               >
-                {isMuted || volume === 0 ? <VolumeX size={20} /> : <Volume2 size={20} />}
+                {isMuted || volume === 0 ? <VolumeX size={16} className="sm:w-5 sm:h-5" /> : <Volume2 size={16} className="sm:w-5 sm:h-5" />}
               </Button>
-              <div className="w-24 hidden sm:block">
+              <div className="w-16 sm:w-24 hidden md:block">
                 <Slider
                   value={[isMuted ? 0 : volume]}
                   max={100}
@@ -183,16 +184,16 @@ export default function LivePlayer({
             </div>
 
             {/* Time/Live indicator */}
-            <span className="text-white text-sm font-medium hidden sm:inline">
+            <span className="text-white text-xs sm:text-sm font-medium hidden lg:inline">
               {isLive ? "● שידור חי" : "00:00 / 00:00"}
             </span>
           </div>
 
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2">
             {/* Reactions */}
             <button
               onClick={() => setViewerReactions(viewerReactions + 1)}
-              className="flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-full text-white text-xs font-medium transition-colors"
+              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-full text-white text-xs font-medium transition-colors"
             >
               <MessageCircle size={16} />
               {viewerReactions}
@@ -203,13 +204,13 @@ export default function LivePlayer({
               variant="ghost"
               size="icon"
               onClick={() => setIsBookmarked(!isBookmarked)}
-              className={`text-white hover:bg-white/20 ${isBookmarked ? 'text-yellow-400' : ''}`}
+              className={`text-white hover:bg-white/20 h-8 w-8 sm:h-10 sm:w-10 hidden sm:flex ${isBookmarked ? 'text-yellow-400' : ''}`}
             >
-              <Bookmark size={20} fill={isBookmarked ? 'currentColor' : 'none'} />
+              <Bookmark size={16} className="sm:w-5 sm:h-5" fill={isBookmarked ? 'currentColor' : 'none'} />
             </Button>
 
             {/* Share with menu */}
-            <div className="relative">
+            <div className="relative hidden sm:block">
               <ShareButtons 
                 url={window.location.href}
                 title={title}
@@ -222,9 +223,9 @@ export default function LivePlayer({
             <Button
               variant="ghost"
               size="icon"
-              className="text-white hover:bg-white/20"
+              className="text-white hover:bg-white/20 h-8 w-8 sm:h-10 sm:w-10 hidden md:flex"
             >
-              <Settings size={20} />
+              <Settings size={16} className="sm:w-5 sm:h-5" />
             </Button>
 
             {/* Fullscreen */}
@@ -232,9 +233,9 @@ export default function LivePlayer({
               variant="ghost"
               size="icon"
               onClick={toggleFullscreen}
-              className="text-white hover:bg-white/20"
+              className="text-white hover:bg-white/20 h-8 w-8 sm:h-10 sm:w-10"
             >
-              <Maximize size={20} />
+              <Maximize size={16} className="sm:w-5 sm:h-5" />
             </Button>
           </div>
         </div>

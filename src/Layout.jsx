@@ -83,7 +83,13 @@ export default function Layout({ children }) {
               <WeatherWidget />
               <ChannelSelector />
             </div>
-            <div className="flex items-center gap-1.5 lg:gap-2">
+            <div className="flex items-center gap-1 lg:gap-2">
+              <button
+                onClick={() => setDarkMode(!darkMode)}
+                className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-800 dark:bg-gray-700 text-gray-200 active:scale-95 transition-transform"
+              >
+                {darkMode ? <Sun size={14} /> : <Moon size={14} />}
+              </button>
             <Link 
               to={createPageUrl("WarRoom")}
               className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-red-600 hover:bg-red-700 rounded-full text-xs font-bold transition-colors"
@@ -142,12 +148,7 @@ export default function Layout({ children }) {
         <div className="max-w-7xl mx-auto px-4">
           {/* Mobile Header */}
           <div className="lg:hidden flex items-center justify-between py-3">
-            <button
-              onClick={() => setDarkMode(!darkMode)}
-              className="p-2.5 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 active:scale-95 transition-transform"
-            >
-              {darkMode ? <Sun size={20} /> : <Moon size={20} />}
-            </button>
+            <div className="w-10" />
 
             <img 
               src={LOGO_URL} 
@@ -155,12 +156,7 @@ export default function Layout({ children }) {
               className="h-12 w-auto"
             />
 
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2.5 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 active:scale-95 transition-transform"
-            >
-              {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-            </button>
+            <div className="w-10" />
           </div>
 
           {/* Desktop Navigation */}
