@@ -146,8 +146,8 @@ export default function Layout({ children }) {
       {/* Header */}
       <header className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50 transition-colors duration-300 border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4">
-          {/* Mobile Header */}
-          <div className="lg:hidden flex items-center justify-between py-3">
+          {/* Mobile Header - Hidden on mobile, only on tablet+ */}
+          <div className="hidden sm:flex lg:hidden items-center justify-between py-3">
             <div className="w-10" />
 
             <img 
@@ -320,7 +320,7 @@ export default function Layout({ children }) {
       </AnimatePresence>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 py-6 pb-24 lg:pb-6">
+      <main className="max-w-7xl mx-auto px-0 sm:px-4 py-0 sm:py-6 pb-24 lg:pb-6">
         {children}
       </main>
 
