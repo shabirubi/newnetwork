@@ -31,9 +31,10 @@ export default function Layout({ children }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(() => {
     if (typeof window !== 'undefined') {
-      return localStorage.getItem('darkMode') === 'true';
+      const saved = localStorage.getItem('darkMode');
+      return saved === null ? true : saved === 'true';
     }
-    return false;
+    return true;
   });
 
   useEffect(() => {
