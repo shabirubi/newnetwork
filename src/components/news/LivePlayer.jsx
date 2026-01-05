@@ -44,12 +44,12 @@ export default function LivePlayer({
       ref={containerRef}
       initial={{ opacity: 0, scale: 0.98 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="relative bg-black rounded-lg overflow-hidden shadow-2xl group"
+      className="relative bg-black rounded-b-lg overflow-hidden shadow-2xl group"
       onMouseEnter={() => setShowControls(true)}
       onMouseLeave={() => setShowControls(false)}
     >
       {/* Video Container */}
-      <div className="relative aspect-video">
+      <div className="relative aspect-video lg:aspect-[21/9]">
         {/* Placeholder/Thumbnail */}
         {!isPlaying && (
           <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">

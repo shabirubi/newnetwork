@@ -59,30 +59,23 @@ const reporters = [
 
 export default function ReportersFeed() {
   return (
-    <div className="bg-white rounded-xl shadow-md overflow-hidden sticky top-6 border border-gray-200">
+    <div className="bg-white rounded-xl shadow-lg overflow-hidden sticky top-6 border border-gray-200">
       {/* Header */}
-      <div className="bg-gradient-to-br from-gray-900 to-gray-800 p-3 border-b border-gray-700">
-        <h2 className="font-bold text-sm text-white flex items-center gap-2">
-          <span className="text-lg">👥</span>
+      <div className="bg-gradient-to-br from-gray-900 to-gray-800 p-3">
+        <h2 className="font-bold text-xs text-white flex items-center gap-2">
+          <span className="text-base">📡</span>
           אנשי השטח
         </h2>
       </div>
 
-      {/* Feed */}
-      <div className="max-h-[calc(100vh-180px)] overflow-y-auto bg-gray-50 scroll-smooth">
-        {reporters.map((reporter, reporterIndex) => (
+      {/* Feed - No scroll, fixed height */}
+      <div className="bg-gray-50 h-[500px] overflow-hidden">
+        {reporters.slice(0, 3).map((reporter, reporterIndex) => (
           <div key={reporter.id}>
-            {reporter.articles.map((article, articleIndex) => (
-              <motion.div
+            {reporter.articles.slice(0, 1).map((article, articleIndex) => (
+              <div
                 key={`${reporter.id}-${articleIndex}`}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ 
-                  duration: 0.3,
-                  ease: "easeOut",
-                  delay: (reporterIndex + articleIndex) * 0.08 
-                }}
-                className="bg-white border-b border-gray-100 hover:bg-gray-50 transition-all duration-200"
+                className="bg-white border-b border-gray-100 hover:bg-gray-50 transition-colors"
               >
                 <Link 
                   to={createPageUrl("Home")}
@@ -113,7 +106,7 @@ export default function ReportersFeed() {
                     </div>
                   </div>
                 </Link>
-              </motion.div>
+              </div>
             ))}
           </div>
         ))}

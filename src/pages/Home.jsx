@@ -48,26 +48,28 @@ export default function Home() {
 
   return (
     <div className="space-y-10">
-      {/* Hero Section - Full Width with Sidebars */}
-      <section className="grid grid-cols-1 lg:grid-cols-12 gap-3">
-        {/* Right Sidebar - Updates Feed */}
+      {/* Hero Section - Wide Live Player with Minimal Sidebars */}
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-3 -mx-4 px-4">
+        {/* Right Sidebar - Updates Feed (Narrower) */}
         <aside className="lg:col-span-2 hidden lg:block">
           <UpdatesFeed />
         </aside>
 
-        {/* Center - Large Live Player */}
+        {/* Center - Extra Large Live Player */}
         <div className="lg:col-span-8">
-          <div className="flex items-center justify-between mb-2">
-            <div className="flex items-center gap-2">
-              <div className="relative flex h-3 w-3">
+          <div className="bg-gradient-to-r from-gray-900 to-gray-800 rounded-t-lg p-3 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <div className="relative flex h-2.5 w-2.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E31E24] opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-[#E31E24]"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#E31E24]"></span>
               </div>
-              <h2 className="text-xl font-bold">שידור חי</h2>
+              <h2 className="text-white text-lg font-bold">שידור חי</h2>
             </div>
-            <div className="flex items-center gap-2 text-xs text-gray-600">
-              <Users size={16} />
-              <span className="font-bold">{activeLive?.viewer_count || 3456} צופים</span>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2 text-white/80 text-sm">
+                <Users size={16} />
+                <span className="font-bold text-white">{activeLive?.viewer_count || 3456}</span>
+              </div>
             </div>
           </div>
           <LivePlayer 
@@ -77,37 +79,37 @@ export default function Home() {
           />
         </div>
 
-        {/* Left Sidebar - Reporters Feed */}
+        {/* Left Sidebar - Reporters Feed (Narrower) */}
         <aside className="lg:col-span-2 hidden lg:block">
           <ReportersFeed />
         </aside>
       </section>
 
-      {/* Featured Article */}
-      {featuredArticle && (
-        <section>
-          <NewsCard article={featuredArticle} variant="featured" />
-        </section>
-      )}
 
-      {/* Category Quick Links */}
-      <section className="flex flex-wrap gap-3">
-        {[
-          { label: "ביטחון", cat: "security", color: "bg-orange-100 text-orange-700" },
-          { label: "כלכלה", cat: "economy", color: "bg-green-100 text-green-700" },
-          { label: "פוליטיקה", cat: "politics", color: "bg-purple-100 text-purple-700" },
-          { label: "טכנולוגיה", cat: "technology", color: "bg-blue-100 text-blue-700" },
-          { label: "ספורט", cat: "sports", color: "bg-emerald-100 text-emerald-700" },
-          { label: "בידור", cat: "entertainment", color: "bg-pink-100 text-pink-700" },
-        ].map(item => (
-          <Link
-            key={item.cat}
-            to={createPageUrl(`Category?cat=${item.cat}`)}
-            className={`${item.color} px-4 py-2 rounded-full text-sm font-medium hover:opacity-80 transition-opacity`}
-          >
-            {item.label}
-          </Link>
-        ))}
+
+      {/* Category Navigation Bar */}
+      <section className="bg-white rounded-xl shadow-md p-4 border border-gray-200">
+        <div className="flex flex-wrap items-center justify-center gap-3">
+          {[
+            { label: "ביטחון", cat: "security", icon: "🛡️", color: "hover:bg-orange-50 hover:text-orange-700" },
+            { label: "כלכלה", cat: "economy", icon: "💰", color: "hover:bg-green-50 hover:text-green-700" },
+            { label: "פוליטיקה", cat: "politics", icon: "🏛️", color: "hover:bg-purple-50 hover:text-purple-700" },
+            { label: "טכנולוגיה", cat: "technology", icon: "💻", color: "hover:bg-blue-50 hover:text-blue-700" },
+            { label: "ספורט", cat: "sports", icon: "⚽", color: "hover:bg-emerald-50 hover:text-emerald-700" },
+            { label: "בידור", cat: "entertainment", icon: "🎬", color: "hover:bg-pink-50 hover:text-pink-700" },
+            { label: "עולם", cat: "world", icon: "🌍", color: "hover:bg-indigo-50 hover:text-indigo-700" },
+            { label: "בריאות", cat: "health", icon: "❤️", color: "hover:bg-red-50 hover:text-red-700" },
+          ].map(item => (
+            <Link
+              key={item.cat}
+              to={createPageUrl(`Category?cat=${item.cat}`)}
+              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold text-gray-700 transition-all ${item.color}`}
+            >
+              <span>{item.icon}</span>
+              {item.label}
+            </Link>
+          ))}
+        </div>
       </section>
 
       {/* Latest News Grid */}

@@ -15,28 +15,21 @@ export default function UpdatesFeed() {
   });
 
   return (
-    <div className="bg-white rounded-xl shadow-md overflow-hidden sticky top-6 border border-gray-200">
+    <div className="bg-white rounded-xl shadow-lg overflow-hidden sticky top-6 border border-gray-200">
       {/* Header */}
-      <div className="bg-gradient-to-br from-[#E31E24] to-[#B91C1C] p-3 border-b border-red-700">
-        <h2 className="font-bold text-sm text-white flex items-center gap-2">
-          <Flame className="w-4 h-4 animate-pulse" />
-          חדשות חמות
+      <div className="bg-gradient-to-br from-[#E31E24] to-[#B91C1C] p-3">
+        <h2 className="font-bold text-xs text-white flex items-center gap-2">
+          <Flame className="w-3.5 h-3.5" />
+          עדכונים
         </h2>
       </div>
 
-      {/* Feed */}
-      <div className="max-h-[calc(100vh-180px)] overflow-y-auto bg-gray-50 scroll-smooth">
-        {breakingNews.map((article, index) => (
-          <motion.div
+      {/* Feed - No scroll, fixed height */}
+      <div className="bg-gray-50 h-[500px] overflow-hidden">
+        {breakingNews.slice(0, 4).map((article, index) => (
+          <div
             key={article.id}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ 
-              duration: 0.3,
-              ease: "easeOut",
-              delay: index * 0.08 
-            }}
-            className="bg-white border-b border-gray-100 hover:bg-gray-50 transition-all duration-200"
+            className="bg-white border-b border-gray-100 hover:bg-gray-50 transition-colors"
           >
             <Link 
               to={createPageUrl(`Article?id=${article.id}`)}
@@ -73,7 +66,7 @@ export default function UpdatesFeed() {
                 </div>
               </div>
             </Link>
-          </motion.div>
+          </div>
         ))}
       </div>
 
