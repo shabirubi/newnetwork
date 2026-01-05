@@ -6,7 +6,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
-import AIAnchors from "./AIAnchors";
+import TalkingAIAnchors from "./TalkingAIAnchors";
 
 export default function LivePlayer({ 
   title = "שידור חי - הרשת החדשה",
@@ -111,7 +111,7 @@ export default function LivePlayer({
         {/* AI Anchors when Playing */}
         {isPlaying && (
           <div className="absolute inset-0">
-            <AIAnchors currentSpeaker="female" isSpeaking={isPlaying} />
+            <TalkingAIAnchors isSpeaking={isPlaying} />
           </div>
         )}
       </div>

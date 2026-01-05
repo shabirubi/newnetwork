@@ -75,7 +75,7 @@ export default function Layout({ children }) {
               <img 
                 src={LOGO_URL} 
                 alt="הרשת החדשה" 
-                className="h-14 w-auto"
+                className="h-20 w-auto"
               />
             </Link>
 
@@ -122,7 +122,7 @@ export default function Layout({ children }) {
             initial={{ opacity: 0, x: -100 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -100 }}
-            className="fixed inset-0 z-40 lg:hidden"
+            className="fixed inset-0 z-[9999] lg:hidden"
           >
             <div 
               className="absolute inset-0 bg-black/50"
