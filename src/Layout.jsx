@@ -63,6 +63,11 @@ export default function Layout({ children }) {
         <div className="max-w-7xl mx-auto px-4">
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center justify-center gap-1 py-3">
+            <img 
+              src={LOGO_URL} 
+              alt="הרשת החדשה" 
+              className="h-8 w-auto ml-2"
+            />
             <Link
               to={createPageUrl("Live")}
               className="flex items-center gap-1.5 px-3 py-2 text-white bg-[#E31E24] hover:bg-[#B91C1C] rounded-lg transition-all text-xs font-bold"
