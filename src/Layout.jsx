@@ -84,6 +84,11 @@ export default function Layout({ children }) {
               <ChannelSelector />
             </div>
             <div className="flex items-center gap-1 lg:gap-2">
+              <img 
+                src={LOGO_URL} 
+                alt="הרשת החדשה" 
+                className="h-8 w-auto"
+              />
               <button
                 onClick={() => setDarkMode(!darkMode)}
                 className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-800 dark:bg-gray-700 text-gray-200 active:scale-95 transition-transform"
