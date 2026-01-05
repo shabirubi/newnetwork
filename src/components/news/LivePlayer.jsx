@@ -43,10 +43,12 @@ export default function LivePlayer({
   const containerRef = useRef(null);
   const hlsRef = useRef(null);
 
-  // Update stream URL when prop changes
+  // Update stream URL when prop changes - force play
   useEffect(() => {
-    setCurrentStreamUrl(streamUrl);
-    setIsPlaying(true);
+    if (streamUrl) {
+      setCurrentStreamUrl(streamUrl);
+      setIsPlaying(true);
+    }
   }, [streamUrl]);
 
   const togglePlay = () => {
@@ -79,9 +81,9 @@ export default function LivePlayer({
       hlsRef.current = null;
     }
 
-    if (!isPlaying) {
-      video.pause();
-      return;
+    // Always try to play when stream URL changes
+    if (!isPlaying && currentStreamUrl) {
+      return; // Don't setup if manually paused
     }
 
     // Set volume
