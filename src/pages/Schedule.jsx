@@ -136,24 +136,40 @@ export default function Schedule() {
       {/* Day Selector */}
       <div className="flex justify-center">
         <Tabs value={selectedDay} onValueChange={setSelectedDay}>
-          <TabsList className="bg-gray-100 p-1 rounded-full flex-wrap h-auto">
+          <TabsList className="bg-gray-100 dark:bg-gray-800 p-1.5 rounded-2xl flex-wrap h-auto gap-1">
             {daysOfWeek.map((day) => (
               <TabsTrigger
                 key={day.id}
                 value={day.id}
-                className={`rounded-full px-4 py-2 data-[state=active]:bg-[#E31E24] data-[state=active]:text-white ${
-                  day.id === todayId ? "font-bold" : ""
+                className={`rounded-xl px-5 py-2.5 transition-all duration-300 data-[state=active]:bg-[#E31E24] data-[state=active]:text-white data-[state=active]:shadow-lg dark:text-gray-300 ${
+                  day.id === todayId ? "font-bold ring-2 ring-[#E31E24]/30" : ""
                 }`}
               >
-                {day.label}
-                {day.id === todayId && (
-                  <span className="mr-1 text-xs">(היום)</span>
-                )}
+                <div className="flex flex-col items-center">
+                  <span>{day.label}</span>
+                  {day.id === todayId && (
+                    <span className="text-[10px] opacity-80">(היום)</span>
+                  )}
+                </div>
               </TabsTrigger>
             ))}
           </TabsList>
         </Tabs>
       </div>
+      
+      {/* Selected Day Indicator */}
+      <motion.div 
+        key={selectedDay}
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="text-center"
+      >
+        <span className="inline-flex items-center gap-2 px-4 py-2 bg-gray-100 dark:bg-gray-800 rounded-full text-sm text-gray-600 dark:text-gray-300">
+          <Calendar className="w-4 h-4" />
+          לוח שידורים ליום {daysOfWeek.find(d => d.id === selectedDay)?.label}
+          {selectedDay !== todayId && " (לא היום)"}
+        </span>
+      </motion.div>
 
       {/* Schedule List */}
       <div className="max-w-5xl mx-auto">
