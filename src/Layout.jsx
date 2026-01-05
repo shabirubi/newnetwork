@@ -54,7 +54,7 @@ export default function Layout({ children }) {
           --primary-dark: #B91C1C;
           --primary-light: #FEE2E2;
         }
-        
+
         /* Hide scrollbars */
         * {
           scrollbar-width: none;
@@ -62,6 +62,16 @@ export default function Layout({ children }) {
         }
         *::-webkit-scrollbar {
           display: none;
+        }
+
+        /* Mobile native feel */
+        @media (max-width: 1024px) {
+          body {
+            -webkit-tap-highlight-color: transparent;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            user-select: none;
+          }
         }
       `}</style>
 
@@ -116,8 +126,31 @@ export default function Layout({ children }) {
       </div>
 
       {/* Header */}
-      <header className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50 transition-colors duration-300">
+      <header className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50 transition-colors duration-300 border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4">
+          {/* Mobile Header */}
+          <div className="lg:hidden flex items-center justify-between py-3">
+            <button
+              onClick={() => setDarkMode(!darkMode)}
+              className="p-2.5 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 active:scale-95 transition-transform"
+            >
+              {darkMode ? <Sun size={20} /> : <Moon size={20} />}
+            </button>
+
+            <img 
+              src={LOGO_URL} 
+              alt="הרשת החדשה" 
+              className="h-12 w-auto"
+            />
+
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="p-2.5 rounded-xl bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200 active:scale-95 transition-transform"
+            >
+              {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          </div>
+
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center justify-center gap-1 py-3">
             <img 
@@ -176,69 +209,102 @@ export default function Layout({ children }) {
               >
                 {darkMode ? <Sun size={16} /> : <Moon size={16} />}
               </button>
-          </nav>
-
-          {/* Mobile Menu Button */}
-          <div className="lg:hidden flex items-center justify-between py-3 border-t border-gray-100 dark:border-gray-700">
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="p-2 text-gray-600 dark:text-gray-300 hover:text-[#E31E24] transition-colors"
-            >
-              {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
-            </button>
-            <button
-              onClick={() => setDarkMode(!darkMode)}
-              className="p-2 text-gray-600 dark:text-gray-300 hover:text-[#E31E24] transition-colors"
-            >
-              {darkMode ? <Sun size={24} /> : <Moon size={24} />}
-            </button>
-          </div>
+              </nav>
         </div>
       </header>
 
-      {/* Mobile Menu */}
+      {/* Native Mobile Drawer */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, x: -100 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -100 }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
             className="fixed inset-0 z-[9999] lg:hidden"
           >
             <div 
-              className="absolute inset-0 bg-black/50"
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
               onClick={() => setMobileMenuOpen(false)}
             />
-            <motion.nav className="absolute right-0 top-0 bottom-0 w-72 bg-white dark:bg-gray-800 shadow-xl overflow-y-auto">
-              <div className="p-6">
-                <img 
-                  src={LOGO_URL} 
-                  alt="הרשת החדשה" 
-                  className="h-20 w-auto mb-8"
-                />
-                <div className="space-y-2">
-                  {categories.map((cat) => (
-                    <Link
-                      key={cat.id}
-                      to={createPageUrl(cat.href)}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-all"
-                      >
-                      <cat.icon size={20} />
-                      {cat.label}
-                      <ChevronLeft size={16} className="mr-auto" />
-                      </Link>
-                      ))}
-                      <Link
-                      to={createPageUrl("Schedule")}
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-xl transition-all"
-                      >
-                      <Clock size={20} />
-                      לוח שידורים
-                      <ChevronLeft size={16} className="mr-auto" />
-                      </Link>
+            <motion.nav 
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="absolute right-0 top-0 bottom-0 w-[85vw] max-w-sm bg-white dark:bg-gray-800 shadow-2xl overflow-y-auto"
+            >
+              {/* Drawer Header */}
+              <div className="sticky top-0 bg-gradient-to-br from-[#E31E24] to-red-600 p-6 shadow-lg">
+                <div className="flex items-center justify-between mb-4">
+                  <img 
+                    src={LOGO_URL} 
+                    alt="הרשת החדשה" 
+                    className="h-16 w-auto"
+                  />
+                  <button
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="p-2 rounded-full bg-white/20 text-white active:scale-95 transition-transform"
+                  >
+                    <X size={24} />
+                  </button>
                 </div>
+                <p className="text-white/90 text-sm">תפריט ראשי</p>
+              </div>
+
+              {/* Live Button */}
+              <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+                <Link
+                  to={createPageUrl("Live")}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center justify-center gap-2 w-full py-4 bg-[#E31E24] text-white rounded-2xl font-bold shadow-lg active:scale-95 transition-transform"
+                >
+                  <Radio size={20} />
+                  שידור חי
+                </Link>
+              </div>
+
+              {/* Menu Items */}
+              <div className="p-4 space-y-1">
+                {categories.map((cat) => (
+                  <Link
+                    key={cat.id}
+                    to={createPageUrl(cat.href)}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center gap-4 px-4 py-4 text-gray-700 dark:text-gray-200 rounded-2xl active:bg-gray-100 dark:active:bg-gray-700 transition-colors"
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+                      <cat.icon size={20} />
+                    </div>
+                    <span className="flex-1 font-medium">{cat.label}</span>
+                    <ChevronLeft size={18} className="text-gray-400" />
+                  </Link>
+                ))}
+
+                <div className="border-t border-gray-200 dark:border-gray-700 my-4"></div>
+
+                <Link
+                  to={createPageUrl("Schedule")}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-4 px-4 py-4 text-gray-700 dark:text-gray-200 rounded-2xl active:bg-gray-100 dark:active:bg-gray-700 transition-colors"
+                >
+                  <div className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+                    <Clock size={20} />
+                  </div>
+                  <span className="flex-1 font-medium">לוח שידורים</span>
+                  <ChevronLeft size={18} className="text-gray-400" />
+                </Link>
+
+                <Link
+                  to={createPageUrl("Home")}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-4 px-4 py-4 text-gray-700 dark:text-gray-200 rounded-2xl active:bg-gray-100 dark:active:bg-gray-700 transition-colors"
+                >
+                  <div className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+                    <Users size={20} />
+                  </div>
+                  <span className="flex-1 font-medium">אנשי השטח</span>
+                  <ChevronLeft size={18} className="text-gray-400" />
+                </Link>
               </div>
             </motion.nav>
           </motion.div>
@@ -246,9 +312,54 @@ export default function Layout({ children }) {
       </AnimatePresence>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 py-6">
+      <main className="max-w-7xl mx-auto px-4 py-6 pb-24 lg:pb-6">
         {children}
       </main>
+
+      {/* Mobile Bottom Navigation */}
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 z-40 safe-area-inset-bottom">
+        <div className="grid grid-cols-5 gap-1 px-2 py-2">
+          <Link
+            to={createPageUrl("Home")}
+            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-gray-100 dark:active:bg-gray-700 transition-colors"
+          >
+            <Home size={22} className="text-gray-600 dark:text-gray-300 mb-1" />
+            <span className="text-[10px] font-medium text-gray-600 dark:text-gray-300">דף הבית</span>
+          </Link>
+
+          <Link
+            to={createPageUrl("Live")}
+            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-gray-100 dark:active:bg-gray-700 transition-colors"
+          >
+            <Radio size={22} className="text-[#E31E24] mb-1" />
+            <span className="text-[10px] font-medium text-[#E31E24]">שידור חי</span>
+          </Link>
+
+          <Link
+            to={createPageUrl("Category?cat=breaking")}
+            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-gray-100 dark:active:bg-gray-700 transition-colors"
+          >
+            <Flame size={22} className="text-gray-600 dark:text-gray-300 mb-1" />
+            <span className="text-[10px] font-medium text-gray-600 dark:text-gray-300">חמות</span>
+          </Link>
+
+          <Link
+            to={createPageUrl("Schedule")}
+            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-gray-100 dark:active:bg-gray-700 transition-colors"
+          >
+            <Clock size={22} className="text-gray-600 dark:text-gray-300 mb-1" />
+            <span className="text-[10px] font-medium text-gray-600 dark:text-gray-300">לוח</span>
+          </Link>
+
+          <button
+            onClick={() => setMobileMenuOpen(true)}
+            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-gray-100 dark:active:bg-gray-700 transition-colors"
+          >
+            <Menu size={22} className="text-gray-600 dark:text-gray-300 mb-1" />
+            <span className="text-[10px] font-medium text-gray-600 dark:text-gray-300">עוד</span>
+          </button>
+        </div>
+      </nav>
 
       {/* Footer */}
       <footer className="bg-gray-900 dark:bg-black text-white mt-12">

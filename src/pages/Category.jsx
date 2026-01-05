@@ -107,7 +107,7 @@ export default function Category() {
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className={`${config.color} rounded-2xl p-8 text-white`}
+        className={`${config.color} rounded-2xl p-6 lg:p-8 text-white shadow-lg`}
       >
         <div className="flex items-center gap-4 mb-4">
           <div className="w-14 h-14 rounded-full bg-white/20 flex items-center justify-center">
