@@ -49,6 +49,15 @@ export default function Layout({ children }) {
           --primary-dark: #B91C1C;
           --primary-light: #FEE2E2;
         }
+        
+        /* Hide scrollbars */
+        * {
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+        }
+        *::-webkit-scrollbar {
+          display: none;
+        }
       `}</style>
 
       {/* Breaking News Ticker */}
@@ -126,16 +135,16 @@ export default function Layout({ children }) {
           {/* Mobile Menu Button */}
           <div className="lg:hidden flex items-center justify-between py-3 border-t border-gray-100 dark:border-gray-700">
             <button
-              onClick={() => setDarkMode(!darkMode)}
-              className="p-2 text-gray-600 dark:text-gray-300 hover:text-[#E31E24] transition-colors"
-            >
-              {darkMode ? <Sun size={24} /> : <Moon size={24} />}
-            </button>
-            <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="p-2 text-gray-600 dark:text-gray-300 hover:text-[#E31E24] transition-colors"
             >
               {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
+            </button>
+            <button
+              onClick={() => setDarkMode(!darkMode)}
+              className="p-2 text-gray-600 dark:text-gray-300 hover:text-[#E31E24] transition-colors"
+            >
+              {darkMode ? <Sun size={24} /> : <Moon size={24} />}
             </button>
           </div>
         </div>
