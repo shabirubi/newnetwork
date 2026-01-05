@@ -10,7 +10,7 @@ export default function LiveStats() {
     const interval = setInterval(() => {
       setViewers(prev => prev + Math.floor(Math.random() * 20) - 5);
       setArticles(prev => prev + (Math.random() > 0.7 ? 1 : 0));
-    }, 3000);
+    }, 10000);
 
     return () => clearInterval(interval);
   }, []);

@@ -135,7 +135,7 @@ export default function Layout({ children }) {
             <motion.div
               className="flex whitespace-nowrap"
               animate={{ x: ["0%", "-50%"] }}
-              transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+              transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
             >
               <span className="mx-8">• פיגוע נסכל בגבול הצפון - צה"ל מדווח על ניטרול מחבלים</span>
               <span className="mx-8">• הבורסה בתל אביב פותחת במגמה חיובית</span>
