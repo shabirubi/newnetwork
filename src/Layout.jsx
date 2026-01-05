@@ -69,31 +69,17 @@ export default function Layout({ children }) {
             >
               {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
             </button>
-
-            {/* Logo */}
-            <Link to={createPageUrl("Home")} className="flex items-center">
-              <img 
-                src={LOGO_URL} 
-                alt="הרשת החדשה" 
-                className="h-20 w-auto"
-              />
-            </Link>
-
-            {/* Live Indicator */}
-            <Link 
-              to={createPageUrl("Live")}
-              className="flex items-center gap-2 bg-[#E31E24] text-white px-4 py-2 rounded-full hover:bg-[#B91C1C] transition-all"
-            >
-              <span className="relative flex h-3 w-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
-              </span>
-              <span className="font-bold text-sm">שידור חי</span>
-            </Link>
           </div>
 
           {/* Desktop Navigation */}
           <nav className="hidden lg:flex items-center justify-center gap-1 pb-3 border-t border-gray-100 pt-3">
+            <Link
+              to={createPageUrl("Live")}
+              className="flex items-center gap-1.5 px-3 py-2 text-white bg-[#E31E24] hover:bg-[#B91C1C] rounded-lg transition-all text-xs font-bold"
+            >
+              <Radio size={16} />
+              שידור חי
+            </Link>
             {categories.map((cat) => (
               <Link
                 key={cat.id}
