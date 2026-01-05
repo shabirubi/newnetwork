@@ -75,9 +75,15 @@ export default function LivePlayer({
           </div>
         )}
 
-        {/* Live Badge */}
-        {isLive && (
-          <div className="absolute top-4 right-4 z-10">
+        {/* Viewer Count and Live Badge */}
+        <div className="absolute top-4 left-4 z-10 flex items-center gap-2">
+          {viewerCount > 0 && (
+            <div className="flex items-center gap-2 bg-black/60 backdrop-blur-sm text-white px-3 py-1.5 rounded-full text-sm">
+              <Users size={16} />
+              {viewerCount.toLocaleString()} צופים
+            </div>
+          )}
+          {isLive && (
             <div className="flex items-center gap-2 bg-[#E31E24] text-white px-3 py-1.5 rounded-full text-sm font-bold">
               <span className="relative flex h-2 w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
@@ -85,18 +91,8 @@ export default function LivePlayer({
               </span>
               LIVE
             </div>
-          </div>
-        )}
-
-        {/* Viewer Count */}
-        {viewerCount > 0 && (
-          <div className="absolute top-4 left-4 z-10">
-            <div className="flex items-center gap-2 bg-black/60 backdrop-blur-sm text-white px-3 py-1.5 rounded-full text-sm">
-              <Users size={16} />
-              {viewerCount.toLocaleString()} צופים
-            </div>
-          </div>
-        )}
+          )}
+        </div>
 
         {/* Play Button Overlay */}
         {!isPlaying && (
@@ -118,7 +114,7 @@ export default function LivePlayer({
             <img 
               src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/a44ef2558_212.png"
               alt="הרשת החדשה"
-              className="h-16 w-auto"
+              className="h-24 w-auto"
             />
           </div>
         )}
