@@ -11,7 +11,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import ClockWidget from "./components/header/ClockWidget";
 import WeatherWidget from "./components/header/WeatherWidget";
 
-const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/241671ab7_image.png";
+const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/a44ef2558_212.png";
 
 const categories = [
   { id: "home", label: "דף הבית", icon: Home, href: "Home" },

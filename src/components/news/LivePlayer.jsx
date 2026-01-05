@@ -116,7 +116,7 @@ export default function LivePlayer({
         {isPlaying && (
           <div className="absolute top-4 right-4 z-10 opacity-50 pointer-events-none">
             <img 
-              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/241671ab7_image.png"
+              src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/a44ef2558_212.png"
               alt="הרשת החדשה"
               className="h-16 w-auto"
             />
