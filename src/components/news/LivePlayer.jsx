@@ -2,10 +2,12 @@ import React, { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import { 
   Play, Pause, Volume2, VolumeX, Maximize, 
-  Users, Radio, Settings, Share2
+  Users, Radio, Settings, Download, Bookmark, 
+  MessageCircle, Eye, Share2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
+import ShareButtons from "../shared/ShareButtons";
 
 
 export default function LivePlayer({ 
@@ -18,6 +20,8 @@ export default function LivePlayer({
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(80);
   const [showControls, setShowControls] = useState(true);
+  const [isBookmarked, setIsBookmarked] = useState(false);
+  const [viewerReactions, setViewerReactions] = useState(1234);
   const videoRef = useRef(null);
   const containerRef = useRef(null);
 
@@ -189,14 +193,34 @@ export default function LivePlayer({
           </div>
 
           <div className="flex items-center gap-2">
-            {/* Share */}
+            {/* Reactions */}
+            <button
+              onClick={() => setViewerReactions(viewerReactions + 1)}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-full text-white text-xs font-medium transition-colors"
+            >
+              <MessageCircle size={16} />
+              {viewerReactions}
+            </button>
+
+            {/* Bookmark */}
             <Button
               variant="ghost"
               size="icon"
-              className="text-white hover:bg-white/20"
+              onClick={() => setIsBookmarked(!isBookmarked)}
+              className={`text-white hover:bg-white/20 ${isBookmarked ? 'text-yellow-400' : ''}`}
             >
-              <Share2 size={20} />
+              <Bookmark size={20} fill={isBookmarked ? 'currentColor' : 'none'} />
             </Button>
+
+            {/* Share with menu */}
+            <div className="relative">
+              <ShareButtons 
+                url={window.location.href}
+                title={title}
+                size="small"
+                showLabel={false}
+              />
+            </div>
 
             {/* Settings */}
             <Button

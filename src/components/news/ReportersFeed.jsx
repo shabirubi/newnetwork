@@ -100,7 +100,7 @@ const reporters = [
 
 export default function ReportersFeed() {
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden sticky top-6 border border-gray-200 dark:border-gray-700">
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden sticky top-6">
       {/* Header */}
       <div className="bg-gradient-to-br from-gray-900 to-gray-800 dark:from-black dark:to-gray-900 p-3">
         <h2 className="font-bold text-xs text-white flex items-center gap-2">

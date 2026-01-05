@@ -15,7 +15,7 @@ export default function UpdatesFeed() {
   });
 
   return (
-    <div className="bg-white rounded-xl shadow-lg overflow-hidden sticky top-6 border border-gray-200">
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden sticky top-6">
       {/* Header */}
       <div className="bg-gradient-to-br from-[#E31E24] to-[#B91C1C] p-3">
         <h2 className="font-bold text-xs text-white flex items-center gap-2">
