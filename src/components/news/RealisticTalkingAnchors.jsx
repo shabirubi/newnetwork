@@ -40,13 +40,13 @@ export default function RealisticTalkingAnchors({ isSpeaking = false }) {
     initialData: []
   });
 
-  // Use real professional anchor images from Unsplash
+  // Use real professional anchor images from Unsplash - High Quality
   useEffect(() => {
-    // Female anchor - professional news reporter
-    setFemaleImage("https://images.unsplash.com/photo-1581092787765-e3feb951d987?w=800&q=80");
+    // Female anchor - professional Israeli news reporter with professional look
+    setFemaleImage("https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=1200&q=90&fit=crop&crop=face");
     
-    // Male anchor - professional news presenter
-    setMaleImage("https://images.unsplash.com/photo-1580171401298-4c2c0c44cc43?w=800&q=80");
+    // Male anchor - professional news presenter in suit
+    setMaleImage("https://images.unsplash.com/photo-1556157382-97eda2d62296?w=1200&q=90&fit=crop&crop=face");
     
     setLoadingImages(false);
   }, []);
