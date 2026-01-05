@@ -111,7 +111,7 @@ export default function LivePlayer({
         {/* Live Stream iframe when Playing */}
         {isPlaying && (
           <iframe
-            src="https://www.mako.co.il/mako-vod-live-tv/VOD-6540b8dcdc99e31006.htm?channel=12"
+            src="https://www.kan.org.il/live/tv.aspx?stationid=2"
             className="absolute inset-0 w-full h-full"
             allow="autoplay; fullscreen"
             allowFullScreen
