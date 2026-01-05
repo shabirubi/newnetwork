@@ -71,7 +71,7 @@ export default function Home() {
   return (
     <div className="space-y-6">
       {/* Hero Section - Extended Live Player */}
-      <section className="grid grid-cols-1 lg:grid-cols-12 gap-3 -mx-4 sm:mx-0 px-0 sm:px-4">
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-3 -mx-0 sm:mx-0 px-0 sm:px-4">
         {/* Right Sidebar - Updates Feed */}
         <aside className="lg:col-span-2 hidden lg:block">
           <UpdatesFeed />
@@ -79,7 +79,7 @@ export default function Home() {
 
         {/* Center - Extended Live Player */}
         <div className="lg:col-span-8">
-          <div className="bg-gradient-to-r from-gray-900 to-gray-800 dark:from-black dark:to-gray-900 sm:rounded-t-lg p-2 sm:p-3 flex items-center justify-between">
+          <div className="bg-gradient-to-r from-gray-900 to-gray-800 dark:from-black dark:to-gray-900 sm:rounded-t-lg p-2 sm:p-3 flex items-center justify-between hidden sm:flex">
             <div className="flex items-center gap-3">
               <div className="relative flex h-2.5 w-2.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E31E24] opacity-75"></span>
@@ -100,9 +100,9 @@ export default function Home() {
               isLive={!!activeLive?.is_active}
               viewerCount={activeLive?.viewer_count || 3456}
             />
-            
+
             {/* Features Below Player */}
-            <div className="grid grid-cols-3 gap-4 mt-4">
+            <div className="hidden sm:grid grid-cols-3 gap-4 mt-4">
               <motion.div 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -161,6 +161,11 @@ export default function Home() {
             <aside className="lg:col-span-2 hidden lg:block">
             <ReportersFeed />
             </aside>
+            </section>
+
+            {/* Mobile Only - Reporters Feed Below Player */}
+            <section className="sm:hidden px-4 mt-4">
+            <ReportersFeed />
             </section>
 
             {/* Live Stats */}

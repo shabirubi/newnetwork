@@ -140,23 +140,50 @@ const reporters = [
     articles: [
       { title: "מתיחות בין דתיים לחילונים בעיר", time: "23:32", hasVideo: true }
     ]
+  },
+  {
+    id: 16,
+    name: "מיכל שמיר",
+    role: "כתבת אוכל",
+    image: "https://images.unsplash.com/photo-1534751516642-a1af1ef26a56?w=400&h=400&fit=crop",
+    articles: [
+      { title: "מסעדות חדשות בתל אביב - המלצות השבוע", time: "23:15", hasVideo: true }
+    ]
+  },
+  {
+    id: 17,
+    name: "דני אלון",
+    role: "כתב מזג אוויר",
+    image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop",
+    articles: [
+      { title: "גל קור מגיע: ירידה של 10 מעלות", time: "22:58", hasVideo: false }
+    ]
+  },
+  {
+    id: 18,
+    name: "יעל כרמי",
+    role: "כתבת תרבות",
+    image: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=400&h=400&fit=crop",
+    articles: [
+      { title: "פסטיבל תרבות חדש בירושלים - כל הפרטים", time: "22:40", hasVideo: true }
+    ]
   }
-];
+  ];
 
 export default function ReportersFeed() {
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden sticky top-6">
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden lg:sticky lg:top-6">
       {/* Header */}
       <div className="bg-gradient-to-br from-gray-900 to-gray-800 dark:from-black dark:to-gray-900 p-3">
-        <h2 className="font-bold text-xs text-white flex items-center gap-2">
+        <h2 className="font-bold text-xs sm:text-sm text-white flex items-center gap-2">
           <span className="text-base">📡</span>
           אנשי השטח
         </h2>
       </div>
 
-      {/* Feed - No scroll, fixed height */}
-      <div className="bg-gray-50 dark:bg-gray-900 h-[500px] overflow-hidden">
-        {reporters.slice(0, 6).map((reporter, reporterIndex) => (
+      {/* Feed */}
+      <div className="bg-gray-50 dark:bg-gray-900 lg:h-[500px] lg:overflow-hidden">
+        {reporters.slice(0, 9).map((reporter, reporterIndex) => (
           <div key={reporter.id}>
             {reporter.articles.slice(0, 1).map((article, articleIndex) => (
               <div
