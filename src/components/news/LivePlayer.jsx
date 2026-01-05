@@ -121,8 +121,25 @@ export default function LivePlayer({
           </div>
         )}
 
-        {/* Live Stream iframe when Playing */}
-        {isPlaying && streamUrl && (
+        {/* Live Stream when Playing */}
+        {isPlaying && streamUrl && streamUrl.includes('.m3u') && (
+          <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800">
+            <div className="text-center text-white px-4">
+              <Radio className="w-16 h-16 mx-auto mb-4 text-[#E31E24] animate-pulse" />
+              <h3 className="text-xl font-bold mb-2">ערוץ השידור נטען...</h3>
+              <p className="text-gray-400 text-sm mb-4">הפעלת רשימת ערוצים</p>
+              <a 
+                href={streamUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block px-6 py-3 bg-[#E31E24] hover:bg-[#B91C1C] rounded-full font-bold transition-colors"
+              >
+                פתח ברשימת נגנים חיצונית
+              </a>
+            </div>
+          </div>
+        )}
+        {isPlaying && streamUrl && !streamUrl.includes('.m3u') && (
           <iframe
             src={streamUrl}
             className="absolute inset-0 w-full h-full"
