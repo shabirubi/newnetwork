@@ -11,6 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import LivePlayer from "../components/news/LivePlayer";
 import NewsCard from "../components/news/NewsCard";
 import ReportersFeed from "../components/news/ReportersFeed";
+import UpdatesFeed from "../components/news/UpdatesFeed";
 
 export default function Home() {
   const { data: articles = [], isLoading } = useQuery({
@@ -46,18 +47,22 @@ export default function Home() {
   }
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-      {/* Main Content */}
-      <div className="lg:col-span-9 space-y-10">
-      {/* Hero Section - Live Stream + Featured News */}
-      <section className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Live Stream */}
-        <div className="lg:col-span-2">
-          <div className="flex items-center gap-2 mb-4">
-            <div className="w-10 h-10 rounded-full bg-[#E31E24] flex items-center justify-center">
-              <Radio className="w-5 h-5 text-white" />
+    <div className="space-y-10">
+      {/* Hero Section - 3 Columns: Updates + Live Player + Reporters */}
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-4">
+        {/* Right Sidebar - Updates Feed */}
+        <aside className="lg:col-span-3 hidden lg:block">
+          <UpdatesFeed />
+        </aside>
+
+        {/* Center - Large Live Player */}
+        <div className="lg:col-span-6">
+          <div className="flex items-center gap-2 mb-3">
+            <div className="relative flex h-3 w-3">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E31E24] opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-[#E31E24]"></span>
             </div>
-            <h2 className="text-xl font-bold">שידור חי</h2>
+            <h2 className="text-2xl font-bold">שידור חי</h2>
           </div>
           <LivePlayer 
             title={activeLive?.title || "הרשת החדשה - שידור חי"}
@@ -66,44 +71,10 @@ export default function Home() {
           />
         </div>
 
-        {/* Breaking News Sidebar */}
-        <div className="bg-white rounded-2xl p-5 shadow-sm">
-          <div className="flex items-center justify-between mb-4">
-            <div className="flex items-center gap-2">
-              <Flame className="w-5 h-5 text-[#E31E24]" />
-              <h3 className="font-bold text-lg">חדשות חמות</h3>
-            </div>
-            <Link 
-              to={createPageUrl("Category?cat=breaking")}
-              className="text-[#E31E24] text-sm hover:underline flex items-center gap-1"
-            >
-              הכל
-              <ChevronLeft size={16} />
-            </Link>
-          </div>
-          
-          <div className="space-y-1">
-            {breakingNews.length > 0 ? (
-              breakingNews.slice(0, 5).map((article, index) => (
-                <NewsCard 
-                  key={article.id} 
-                  article={article} 
-                  variant="compact"
-                  index={index}
-                />
-              ))
-            ) : (
-              trendingNews.slice(0, 5).map((article, index) => (
-                <NewsCard 
-                  key={article.id} 
-                  article={article} 
-                  variant="compact"
-                  index={index}
-                />
-              ))
-            )}
-          </div>
-        </div>
+        {/* Left Sidebar - Reporters Feed */}
+        <aside className="lg:col-span-3 hidden lg:block">
+          <ReportersFeed />
+        </aside>
       </section>
 
       {/* Featured Article */}
@@ -202,12 +173,6 @@ export default function Home() {
           </Button>
         </Link>
       </section>
-      </div>
-
-      {/* Right Sidebar - Reporters Feed */}
-      <aside className="lg:col-span-3 hidden lg:block">
-        <ReportersFeed />
-      </aside>
     </div>
   );
 }

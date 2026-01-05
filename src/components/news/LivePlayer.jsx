@@ -108,12 +108,13 @@ export default function LivePlayer({
           </motion.button>
         )}
 
-        {/* AI Avatar iframe when Playing */}
+        {/* Live Stream iframe when Playing */}
         {isPlaying && (
           <iframe
-            src="https://tavus.daily.co/ccb393f722b9d43c"
+            src="https://www.mako.co.il/mako-vod-live-tv/VOD-6540b8dcdc99e31006.htm?channel=12"
             className="absolute inset-0 w-full h-full"
-            allow="camera; microphone; autoplay; display-capture"
+            allow="autoplay; fullscreen"
+            allowFullScreen
             frameBorder="0"
           />
         )}
