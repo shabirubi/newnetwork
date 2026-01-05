@@ -31,6 +31,12 @@ export default function Home() {
     return () => window.removeEventListener('channelChange', handleChannelChange);
   }, []);
 
+  const { data: channels = [] } = useQuery({
+    queryKey: ['channels'],
+    queryFn: () => base44.entities.NewsChannel.filter({ is_active: true }),
+    initialData: []
+  });
+
   const { data: articles = [], isLoading } = useQuery({
     queryKey: ['news-articles', selectedChannel],
     queryFn: () => {
@@ -54,6 +60,8 @@ export default function Home() {
   const trendingNews = [...articles].sort((a, b) => new Date(b.created_date) - new Date(a.created_date)).slice(0, 5);
 
   const activeLive = liveStream[0];
+  const currentChannel = channels.find(c => c.id === selectedChannel);
+  const channelStreamUrl = currentChannel?.stream_url;
 
   if (isLoading) {
     return (
@@ -96,9 +104,10 @@ export default function Home() {
           </div>
           <div className="relative">
             <LivePlayer 
-              title={activeLive?.title || "הרשת החדשה - שידור חי"}
+              title={currentChannel?.name || activeLive?.title || "הרשת החדשה - שידור חי"}
               isLive={!!activeLive?.is_active}
               viewerCount={activeLive?.viewer_count || 3456}
+              streamUrl={channelStreamUrl}
             />
 
             {/* Features Below Player */}

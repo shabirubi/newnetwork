@@ -14,7 +14,8 @@ export default function LivePlayer({
   title = "שידור חי - הרשת החדשה",
   viewerCount = 0,
   isLive = true,
-  thumbnailUrl = null
+  thumbnailUrl = null,
+  streamUrl = null
 }) {
   const [isPlaying, setIsPlaying] = useState(true); // Auto-play
   const [isMuted, setIsMuted] = useState(false);
@@ -121,7 +122,16 @@ export default function LivePlayer({
         )}
 
         {/* Live Stream iframe when Playing */}
-        {isPlaying && (
+        {isPlaying && streamUrl && (
+          <iframe
+            src={streamUrl}
+            className="absolute inset-0 w-full h-full"
+            allow="autoplay; fullscreen"
+            allowFullScreen
+            frameBorder="0"
+          />
+        )}
+        {isPlaying && !streamUrl && (
           <iframe
             src="https://ok.ru/videoembed/10508051226319?autoplay=1"
             className="absolute inset-0 w-full h-full"
