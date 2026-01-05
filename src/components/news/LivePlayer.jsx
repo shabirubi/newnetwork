@@ -9,6 +9,21 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import ShareButtons from "../shared/ShareButtons";
 
+// Load HLS.js from CDN
+const loadHls = () => {
+  return new Promise((resolve, reject) => {
+    if (window.Hls) {
+      resolve(window.Hls);
+      return;
+    }
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/hls.js@latest';
+    script.onload = () => resolve(window.Hls);
+    script.onerror = reject;
+    document.head.appendChild(script);
+  });
+};
+
 
 export default function LivePlayer({ 
   title = "שידור חי - הרשת החדשה",
@@ -43,6 +58,42 @@ export default function LivePlayer({
       }
     }
   };
+
+  // Setup HLS player
+  useEffect(() => {
+    if (!isPlaying || !streamUrl || !videoRef.current) return;
+
+    const video = videoRef.current;
+    
+    // Check if URL is m3u8
+    if (streamUrl.includes('.m3u8')) {
+      // Check if browser natively supports HLS (Safari)
+      if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        video.src = streamUrl;
+        video.play().catch(() => {});
+      } else {
+        // Use HLS.js for other browsers
+        loadHls().then((Hls) => {
+          if (Hls.isSupported()) {
+            const hls = new Hls({
+              enableWorker: true,
+              lowLatencyMode: true,
+            });
+            hls.loadSource(streamUrl);
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, () => {
+              video.play().catch(() => {});
+            });
+            return () => hls.destroy();
+          }
+        }).catch(() => {
+          // Fallback: try direct src
+          video.src = streamUrl;
+          video.play().catch(() => {});
+        });
+      }
+    }
+  }, [isPlaying, streamUrl]);
 
   return (
     <motion.div
@@ -122,9 +173,28 @@ export default function LivePlayer({
         )}
 
         {/* Live Stream when Playing */}
-        {isPlaying && (
+        {isPlaying && streamUrl && streamUrl.includes('.m3u8') && (
+          <video
+            ref={videoRef}
+            className="absolute inset-0 w-full h-full bg-black object-contain"
+            autoPlay
+            playsInline
+            muted={isMuted}
+            controls={false}
+          />
+        )}
+        {isPlaying && streamUrl && !streamUrl.includes('.m3u8') && (
           <iframe
-            src={streamUrl || "https://ok.ru/videoembed/10508051226319?autoplay=1"}
+            src={streamUrl}
+            className="absolute inset-0 w-full h-full"
+            allow="autoplay; fullscreen"
+            allowFullScreen
+            frameBorder="0"
+          />
+        )}
+        {isPlaying && !streamUrl && (
+          <iframe
+            src="https://ok.ru/videoembed/10508051226319?autoplay=1"
             className="absolute inset-0 w-full h-full"
             allow="autoplay; fullscreen"
             allowFullScreen
