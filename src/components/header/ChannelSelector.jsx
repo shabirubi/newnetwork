@@ -32,7 +32,7 @@ export default function ChannelSelector() {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-1.5 px-2.5 py-1.5 bg-white dark:bg-gray-800 rounded-lg shadow-sm active:shadow-md transition-all border border-gray-200 dark:border-gray-700"
+        className="flex items-center gap-1.5 px-2.5 py-1.5 bg-white dark:bg-gray-800 rounded-lg shadow-sm active:shadow-md active:scale-95 transition-all border border-gray-200 dark:border-gray-700 text-gray-900"
       >
         <div 
           className="w-4 h-4 rounded-full flex items-center justify-center"
@@ -43,7 +43,7 @@ export default function ChannelSelector() {
         <span className="text-xs font-bold dark:text-white truncate max-w-[80px] sm:max-w-none">
           {currentChannel?.name || 'כל הערוצים'}
         </span>
-        <ChevronDown className={`w-3 h-3 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        <ChevronDown className={`w-3 h-3 dark:text-white transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       <AnimatePresence>

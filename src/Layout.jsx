@@ -47,6 +47,13 @@ export default function Layout({ children }) {
     }
   }, [darkMode]);
 
+  // Apply dark mode on mount
+  useEffect(() => {
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+    }
+  }, []);
+
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300" dir="rtl">
       <style>{`
