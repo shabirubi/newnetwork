@@ -66,7 +66,7 @@ export default function Layout({ children }) {
             <img 
               src={LOGO_URL} 
               alt="הרשת החדשה" 
-              className="h-8 w-auto ml-2"
+              className="h-12 w-auto ml-3"
             />
             <Link
               to={createPageUrl("Live")}
