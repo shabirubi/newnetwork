@@ -18,19 +18,83 @@ const daysOfWeek = [
   { id: "saturday", label: "שבת" }
 ];
 
-// Professional daily schedule
-const defaultSchedule = [
-  { start_time: "06:00", end_time: "09:00", title: "חדשות הבוקר", category: "news", host: "רונית שקד ודני לוי", description: "פתיחת היום עם כל העדכונים החמים מישראל ומהעולם" },
-  { start_time: "09:00", end_time: "11:00", title: "מבט ביטחוני", category: "security", host: "רון חיימי", description: "ניתוח מעמיק של האירועים הביטחוניים והמדיניים" },
-  { start_time: "11:00", end_time: "13:00", title: "כלכלה בשידור חי", category: "economy", host: "שירה לוי", description: "בורסה, שווקים וכל מה שצריך לדעת על הכסף שלכם" },
-  { start_time: "13:00", end_time: "15:00", title: "מהדורת הצהריים", category: "news", host: "נועה כהן", description: "סיכום חצי היום עם הידיעות החשובות ביותר" },
-  { start_time: "15:00", end_time: "17:00", title: "פוליטיקה ללא צנזורה", category: "politics", host: "אור רביבו", description: "הזירה הפוליטית בחשיפה מלאה" },
-  { start_time: "17:00", end_time: "19:00", title: "חדשות אחר הצהריים", category: "news", host: "עדי מזרחי", description: "עדכונים שוטפים מכל הזירות" },
-  { start_time: "19:00", end_time: "21:00", title: "מהדורת הערב המרכזית", category: "news", host: "רונית שקד ודני לוי", description: "המהדורה המרכזית עם כל סיפורי היום" },
-  { start_time: "21:00", end_time: "23:00", title: "הסטודיו המרכזי", category: "special", host: "יניב בן דוד", description: "ניתוח מעמיק של האירועים המרכזיים" },
-  { start_time: "23:00", end_time: "01:00", title: "מהדורת הלילה", category: "news", host: "מיכל אבני", description: "סיכום היום והתכוננות למחר" },
-  { start_time: "01:00", end_time: "06:00", title: "שידורי לילה", category: "news", host: "שידור אוטומטי", description: "עדכונים שוטפים לאורך הלילה" }
-];
+// Professional daily schedules per day
+const schedulesByDay = {
+  sunday: [
+    { start_time: "06:00", end_time: "09:00", title: "חדשות הבוקר", category: "news", host: "רונית שקד ודני לוי", description: "פתיחת השבוע עם כל העדכונים החמים" },
+    { start_time: "09:00", end_time: "11:00", title: "מבט ביטחוני", category: "security", host: "רון חיימי", description: "סקירה ביטחונית שבועית" },
+    { start_time: "11:00", end_time: "13:00", title: "כלכלה בשידור חי", category: "economy", host: "שירה לוי", description: "פתיחת שבוע המסחר בבורסה" },
+    { start_time: "13:00", end_time: "15:00", title: "מהדורת הצהריים", category: "news", host: "נועה כהן", description: "סיכום חצי היום" },
+    { start_time: "15:00", end_time: "17:00", title: "פוליטיקה ללא צנזורה", category: "politics", host: "אור רביבו", description: "סקירת הזירה הפוליטית" },
+    { start_time: "17:00", end_time: "19:00", title: "חדשות אחר הצהריים", category: "news", host: "עדי מזרחי", description: "עדכונים שוטפים" },
+    { start_time: "19:00", end_time: "21:00", title: "מהדורת הערב המרכזית", category: "news", host: "רונית שקד ודני לוי", description: "המהדורה המרכזית" },
+    { start_time: "21:00", end_time: "23:00", title: "הסטודיו המרכזי", category: "special", host: "יניב בן דוד", description: "ניתוח מעמיק" },
+    { start_time: "23:00", end_time: "01:00", title: "מהדורת הלילה", category: "news", host: "מיכל אבני", description: "סיכום היום" },
+  ],
+  monday: [
+    { start_time: "06:00", end_time: "09:00", title: "חדשות הבוקר", category: "news", host: "רונית שקד", description: "כל העדכונים מהלילה והבוקר" },
+    { start_time: "09:00", end_time: "11:00", title: "טכנולוגיה וחדשנות", category: "technology", host: "תומר דוד", description: "החידושים הטכנולוגיים בעולם" },
+    { start_time: "11:00", end_time: "13:00", title: "בריאות בשידור חי", category: "special", host: "מיכל אבני", description: "מומחים עונים על שאלות בריאות" },
+    { start_time: "13:00", end_time: "15:00", title: "מהדורת הצהריים", category: "news", host: "נועה כהן", description: "עדכונים מהשטח" },
+    { start_time: "15:00", end_time: "17:00", title: "כלכלה יומית", category: "economy", host: "שירה לוי", description: "סיכום יום המסחר" },
+    { start_time: "17:00", end_time: "19:00", title: "חדשות אחר הצהריים", category: "news", host: "עדי מזרחי", description: "עדכונים שוטפים" },
+    { start_time: "19:00", end_time: "21:00", title: "מהדורת הערב המרכזית", category: "news", host: "דני לוי", description: "כל החדשות היומיות" },
+    { start_time: "21:00", end_time: "23:00", title: "ריאיון מיוחד", category: "special", host: "יניב בן דוד", description: "ראיון עומק עם אורח מיוחד" },
+    { start_time: "23:00", end_time: "01:00", title: "מהדורת הלילה", category: "news", host: "מיכל אבני", description: "סיכום היום" },
+  ],
+  tuesday: [
+    { start_time: "06:00", end_time: "09:00", title: "חדשות הבוקר", category: "news", host: "רונית שקד ודני לוי", description: "פתיחת הבוקר" },
+    { start_time: "09:00", end_time: "11:00", title: "מבט ביטחוני מורחב", category: "security", host: "רון חיימי", description: "ניתוח אירועי השבוע" },
+    { start_time: "11:00", end_time: "13:00", title: "ספורט בוקר", category: "sports", host: "יואב שמעון", description: "סיכום ספורט וסקירות" },
+    { start_time: "13:00", end_time: "15:00", title: "מהדורת הצהריים", category: "news", host: "נועה כהן", description: "עדכוני צהריים" },
+    { start_time: "15:00", end_time: "17:00", title: "עולם ומדינה", category: "politics", host: "רותם אלון", description: "חדשות מהעולם" },
+    { start_time: "17:00", end_time: "19:00", title: "חדשות אחר הצהריים", category: "news", host: "עדי מזרחי", description: "עדכונים שוטפים" },
+    { start_time: "19:00", end_time: "21:00", title: "מהדורת הערב המרכזית", category: "news", host: "רונית שקד ודני לוי", description: "המהדורה המרכזית" },
+    { start_time: "21:00", end_time: "23:00", title: "תחקיר מיוחד", category: "special", host: "אור רביבו", description: "חשיפות בלעדיות" },
+    { start_time: "23:00", end_time: "01:00", title: "מהדורת הלילה", category: "news", host: "מיכל אבני", description: "סיכום היום" },
+  ],
+  wednesday: [
+    { start_time: "06:00", end_time: "09:00", title: "חדשות הבוקר", category: "news", host: "רונית שקד", description: "בוקר חדשותי" },
+    { start_time: "09:00", end_time: "11:00", title: "כלכלה גלובלית", category: "economy", host: "שירה לוי", description: "שווקים עולמיים" },
+    { start_time: "11:00", end_time: "13:00", title: "טכנולוגיה ומדע", category: "technology", host: "תומר דוד", description: "חידושים מדעיים" },
+    { start_time: "13:00", end_time: "15:00", title: "מהדורת הצהריים", category: "news", host: "נועה כהן", description: "חדשות הצהריים" },
+    { start_time: "15:00", end_time: "17:00", title: "פאנל פוליטי", category: "politics", host: "אור רביבו", description: "דיון עם פוליטיקאים" },
+    { start_time: "17:00", end_time: "19:00", title: "חדשות אחר הצהריים", category: "news", host: "עדי מזרחי", description: "עדכונים שוטפים" },
+    { start_time: "19:00", end_time: "21:00", title: "מהדורת הערב המרכזית", category: "news", host: "דני לוי", description: "חדשות הערב" },
+    { start_time: "21:00", end_time: "23:00", title: "הסטודיו המרכזי", category: "special", host: "יניב בן דוד", description: "ניתוח השבוע" },
+    { start_time: "23:00", end_time: "01:00", title: "מהדורת הלילה", category: "news", host: "מיכל אבני", description: "סיכום היום" },
+  ],
+  thursday: [
+    { start_time: "06:00", end_time: "09:00", title: "חדשות הבוקר", category: "news", host: "רונית שקד ודני לוי", description: "פתיחת הבוקר" },
+    { start_time: "09:00", end_time: "11:00", title: "מבט ביטחוני", category: "security", host: "רון חיימי", description: "סקירה ביטחונית" },
+    { start_time: "11:00", end_time: "13:00", title: "ספורט ישראלי", category: "sports", host: "יואב שמעון", description: "לקראת סוף השבוע הספורטיבי" },
+    { start_time: "13:00", end_time: "15:00", title: "מהדורת הצהריים", category: "news", host: "נועה כהן", description: "עדכוני צהריים" },
+    { start_time: "15:00", end_time: "17:00", title: "כלכלה ושוק ההון", category: "economy", host: "שירה לוי", description: "סיכום שבועי" },
+    { start_time: "17:00", end_time: "19:00", title: "חדשות אחר הצהריים", category: "news", host: "עדי מזרחי", description: "עדכונים שוטפים" },
+    { start_time: "19:00", end_time: "21:00", title: "מהדורת הערב המרכזית", category: "news", host: "רונית שקד ודני לוי", description: "המהדורה המרכזית" },
+    { start_time: "21:00", end_time: "23:00", title: "סיכום שבועי", category: "special", host: "יניב בן דוד", description: "סקירת אירועי השבוע" },
+    { start_time: "23:00", end_time: "01:00", title: "מהדורת הלילה", category: "news", host: "מיכל אבני", description: "סיכום היום" },
+  ],
+  friday: [
+    { start_time: "06:00", end_time: "09:00", title: "חדשות הבוקר", category: "news", host: "רונית שקד", description: "בוקר יום שישי" },
+    { start_time: "09:00", end_time: "11:00", title: "מבט שבועי", category: "special", host: "יניב בן דוד", description: "סיכום השבוע" },
+    { start_time: "11:00", end_time: "13:00", title: "ספורט סוף שבוע", category: "sports", host: "יואב שמעון", description: "לקראת המשחקים" },
+    { start_time: "13:00", end_time: "15:00", title: "מהדורת הצהריים", category: "news", host: "נועה כהן", description: "חדשות לפני שבת" },
+    { start_time: "15:00", end_time: "17:00", title: "תרבות ובידור", category: "entertainment", host: "עדי מזרחי", description: "מה עושים בסופ\"ש" },
+    { start_time: "17:00", end_time: "19:00", title: "מהדורה מקוצרת", category: "news", host: "דני לוי", description: "עדכונים אחרונים" },
+    { start_time: "19:00", end_time: "22:00", title: "שידורי שבת", category: "special", host: "שידור אוטומטי", description: "תכנים מיוחדים" },
+  ],
+  saturday: [
+    { start_time: "08:00", end_time: "10:00", title: "בוקר שבת", category: "special", host: "שידור מוקלט", description: "תכנים מיוחדים לשבת" },
+    { start_time: "10:00", end_time: "12:00", title: "דוקומנטרי", category: "special", host: "", description: "סרט תיעודי מיוחד" },
+    { start_time: "12:00", end_time: "14:00", title: "ספורט בינלאומי", category: "sports", host: "יואב שמעון", description: "ליגות מובילות" },
+    { start_time: "14:00", end_time: "16:00", title: "סרטים", category: "entertainment", host: "", description: "קולנוע ישראלי" },
+    { start_time: "16:00", end_time: "18:00", title: "תרבות ואומנות", category: "entertainment", host: "עדי מזרחי", description: "אירועי תרבות" },
+    { start_time: "18:00", end_time: "20:00", title: "מוצ\"ש חדשות", category: "news", host: "נועה כהן", description: "חזרה לשגרה" },
+    { start_time: "20:00", end_time: "22:00", title: "מהדורת הערב", category: "news", host: "רונית שקד", description: "סיכום סוף השבוע" },
+    { start_time: "22:00", end_time: "00:00", title: "הסטודיו", category: "special", host: "יניב בן דוד", description: "הכנה לשבוע החדש" },
+  ],
+};
 
 export default function Schedule() {
   const today = new Date().getDay();
