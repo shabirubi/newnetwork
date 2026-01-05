@@ -108,16 +108,14 @@ export default function LivePlayer({
           </motion.button>
         )}
 
-        {/* Video Content when Playing */}
+        {/* AI Avatar iframe when Playing */}
         {isPlaying && (
-          <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
-            <div className="text-center">
-              <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-[#E31E24]/20 flex items-center justify-center">
-                <Radio className="w-12 h-12 text-[#E31E24] animate-pulse" />
-              </div>
-              <h3 className="text-white text-xl font-bold">{title}</h3>
-            </div>
-          </div>
+          <iframe
+            src="https://tavus.daily.co/ccb393f722b9d43c"
+            className="absolute inset-0 w-full h-full"
+            allow="camera; microphone; autoplay; display-capture"
+            frameBorder="0"
+          />
         )}
       </div>
 

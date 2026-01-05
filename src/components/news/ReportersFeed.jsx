@@ -78,51 +78,35 @@ export default function ReportersFeed() {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: (reporterIndex + articleIndex) * 0.1 }}
-                className="border-b border-gray-100 hover:bg-gray-50 transition-colors"
+                className="bg-white border-b border-gray-100 hover:bg-gray-50 transition-colors"
               >
                 <Link 
                   to={createPageUrl("Home")}
-                  className="flex items-start gap-3 p-4"
+                  className="flex items-start gap-2 p-3"
                 >
-                  {/* Reporter Image */}
+                  {/* Reporter Image - always show */}
                   <div className="relative shrink-0">
                     <img 
                       src={reporter.image}
                       alt={reporter.name}
-                      className="w-12 h-12 rounded-full object-cover border-2 border-[#E31E24]"
+                      className="w-10 h-10 rounded-full object-cover"
                     />
-                    {articleIndex === 0 && (
-                      <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-[#E31E24] rounded-full flex items-center justify-center">
-                        <span className="text-white text-[10px] font-bold">
-                          {reporter.articles.length}
-                        </span>
-                      </div>
-                    )}
                   </div>
 
                   {/* Content */}
                   <div className="flex-1 min-w-0">
-                    {/* Reporter info - only on first article */}
-                    {articleIndex === 0 && (
-                      <div className="mb-1">
-                        <p className="font-bold text-gray-900 text-sm">{reporter.name}</p>
-                        <p className="text-xs text-gray-500">{reporter.role}</p>
-                      </div>
-                    )}
-
-                    {/* Article */}
+                    {/* Article with thumbnail if video */}
                     <div className="flex items-start gap-2">
                       {article.hasVideo && (
-                        <div className="w-16 h-16 rounded-lg overflow-hidden bg-gray-900 flex items-center justify-center shrink-0">
-                          <Play className="w-6 h-6 text-white" fill="white" />
+                        <div className="w-14 h-14 rounded overflow-hidden bg-gray-900 flex items-center justify-center shrink-0">
+                          <Play className="w-5 h-5 text-white" fill="white" />
                         </div>
                       )}
                       <div className="flex-1">
-                        <p className="text-sm text-gray-900 font-medium line-clamp-2 leading-snug">
+                        <p className="text-xs text-gray-900 font-medium line-clamp-2 leading-tight mb-1">
                           {article.title}
                         </p>
-                        <div className="flex items-center gap-1 mt-1 text-xs text-gray-500">
-                          <Clock size={12} />
+                        <div className="flex items-center gap-1 text-[10px] text-gray-500">
                           {article.time}
                         </div>
                       </div>
@@ -138,9 +122,9 @@ export default function ReportersFeed() {
       {/* Footer */}
       <Link 
         to={createPageUrl("Home")}
-        className="block p-4 text-center bg-gray-50 hover:bg-gray-100 transition-colors border-t border-gray-200"
+        className="block p-3 text-center bg-white hover:bg-gray-50 transition-colors border-t border-gray-200"
       >
-        <span className="text-[#E31E24] font-bold text-sm">לכל העדכונים →</span>
+        <span className="text-[#E31E24] font-bold text-xs">לכל העדכונים</span>
       </Link>
     </div>
   );
