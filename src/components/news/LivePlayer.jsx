@@ -14,7 +14,7 @@ export default function LivePlayer({
   isLive = true,
   thumbnailUrl = null
 }) {
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true); // Auto-play
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(80);
   const [showControls, setShowControls] = useState(true);
@@ -44,12 +44,12 @@ export default function LivePlayer({
       ref={containerRef}
       initial={{ opacity: 0, scale: 0.98 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="relative bg-black rounded-2xl overflow-hidden shadow-2xl group"
+      className="relative bg-black rounded-xl overflow-hidden shadow-2xl group border-2 border-gray-800"
       onMouseEnter={() => setShowControls(true)}
       onMouseLeave={() => setShowControls(false)}
     >
       {/* Video Container */}
-      <div className="relative aspect-video">
+      <div className="relative aspect-video lg:aspect-[21/10]">
         {/* Placeholder/Thumbnail */}
         {!isPlaying && (
           <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">

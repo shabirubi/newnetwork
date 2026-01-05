@@ -17,17 +17,15 @@ export default function UpdatesFeed() {
   return (
     <div className="bg-white rounded-xl shadow-md overflow-hidden sticky top-6 border border-gray-200">
       {/* Header */}
-      <div className="bg-white p-3 border-b border-gray-200 flex items-center justify-between">
-        <h2 className="font-bold text-base text-gray-900 flex items-center gap-2">
-          <div className="w-8 h-8 bg-[#E31E24] rounded flex items-center justify-center">
-            <Flame className="w-4 h-4 text-white" />
-          </div>
+      <div className="bg-gradient-to-br from-[#E31E24] to-[#B91C1C] p-3 border-b border-red-700">
+        <h2 className="font-bold text-sm text-white flex items-center gap-2">
+          <Flame className="w-4 h-4 animate-pulse" />
           חדשות חמות
         </h2>
       </div>
 
       {/* Feed */}
-      <div className="max-h-[calc(100vh-200px)] overflow-y-auto bg-gray-50">
+      <div className="max-h-[calc(100vh-180px)] overflow-y-auto bg-gray-50">
         {breakingNews.map((article, index) => (
           <motion.div
             key={article.id}
@@ -78,9 +76,9 @@ export default function UpdatesFeed() {
       {/* Footer */}
       <Link 
         to={createPageUrl("Category?cat=breaking")}
-        className="block p-3 text-center bg-white hover:bg-gray-50 transition-colors border-t border-gray-200"
+        className="block p-2 text-center bg-gradient-to-br from-[#E31E24] to-[#B91C1C] hover:from-[#B91C1C] hover:to-[#991B1B] transition-colors border-t border-red-700"
       >
-        <span className="text-[#E31E24] font-bold text-xs">לכל החדשות החמות</span>
+        <span className="text-white font-bold text-[10px]">לכל החדשות החמות →</span>
       </Link>
     </div>
   );

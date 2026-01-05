@@ -61,17 +61,15 @@ export default function ReportersFeed() {
   return (
     <div className="bg-white rounded-xl shadow-md overflow-hidden sticky top-6 border border-gray-200">
       {/* Header */}
-      <div className="bg-white p-3 border-b border-gray-200 flex items-center justify-between">
-        <h2 className="font-bold text-base text-gray-900 flex items-center gap-2">
-          <div className="w-8 h-8 bg-[#E31E24] rounded flex items-center justify-center">
-            <span className="text-white text-xs">📰</span>
-          </div>
-          אנשי הכתבים
+      <div className="bg-gradient-to-br from-gray-900 to-gray-800 p-3 border-b border-gray-700">
+        <h2 className="font-bold text-sm text-white flex items-center gap-2">
+          <span className="text-lg">👥</span>
+          אנשי השטח
         </h2>
       </div>
 
       {/* Feed */}
-      <div className="max-h-[calc(100vh-200px)] overflow-y-auto bg-gray-50">
+      <div className="max-h-[calc(100vh-180px)] overflow-y-auto bg-gray-50">
         {reporters.map((reporter, reporterIndex) => (
           <div key={reporter.id}>
             {reporter.articles.map((article, articleIndex) => (
@@ -124,9 +122,9 @@ export default function ReportersFeed() {
       {/* Footer */}
       <Link 
         to={createPageUrl("Home")}
-        className="block p-3 text-center bg-white hover:bg-gray-50 transition-colors border-t border-gray-200"
+        className="block p-2 text-center bg-gradient-to-br from-gray-900 to-gray-800 hover:from-gray-800 hover:to-gray-700 transition-colors border-t border-gray-700"
       >
-        <span className="text-[#E31E24] font-bold text-xs">לכל העדכונים</span>
+        <span className="text-white font-bold text-[10px]">לכל העדכונים →</span>
       </Link>
     </div>
   );
