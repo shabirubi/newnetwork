@@ -3,10 +3,10 @@ import Category from './pages/Category';
 import Home from './pages/Home';
 import Live from './pages/Live';
 import NewsAdmin from './pages/NewsAdmin';
-import Schedule from './pages/Schedule';
 import NewsLoader from './pages/NewsLoader';
-import WarRoom from './pages/WarRoom';
 import PublicReports from './pages/PublicReports';
+import Schedule from './pages/Schedule';
+import WarRoom from './pages/WarRoom';
 import __Layout from './Layout.jsx';
 
 
@@ -16,10 +16,10 @@ export const PAGES = {
     "Home": Home,
     "Live": Live,
     "NewsAdmin": NewsAdmin,
-    "Schedule": Schedule,
     "NewsLoader": NewsLoader,
-    "WarRoom": WarRoom,
     "PublicReports": PublicReports,
+    "Schedule": Schedule,
+    "WarRoom": WarRoom,
 }
 
 export const pagesConfig = {
