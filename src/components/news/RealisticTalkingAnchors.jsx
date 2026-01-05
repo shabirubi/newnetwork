@@ -542,4 +542,60 @@ ${newsItems}
                   animate={{ height: ["8px", "16px", "8px"] }}
                   transition={{ duration: 0.4, repeat: Infinity, delay: 0.2 }}
                 />
-              </motion
+              </motion.div>
+            )}
+          </div>
+
+          {/* Name Tag */}
+          <motion.div
+            className="mt-8 text-center bg-gradient-to-r from-[#4A90E2] to-[#357ABD] px-6 py-3 rounded-full shadow-lg"
+            animate={{
+              scale: currentSpeaker === "male" ? [1, 1.05, 1] : 1
+            }}
+            transition={{ duration: 2, repeat: Infinity }}
+          >
+            <p className="text-white font-bold text-lg">{anchors.male.name}</p>
+            <p className="text-white/80 text-xs">{anchors.male.role}</p>
+          </motion.div>
+        </motion.div>
+      </div>
+
+      {/* Current Script Display (Subtitles) */}
+      {script.length > 0 && script[currentLineIndex] && (
+        <div className="absolute bottom-20 left-0 right-0 z-20 px-8">
+          <motion.div
+            key={currentLineIndex}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="max-w-4xl mx-auto bg-black/70 backdrop-blur-sm px-6 py-3 rounded-lg"
+          >
+            <p className="text-white text-center text-sm md:text-base">
+              {script[currentLineIndex]?.text || ""}
+            </p>
+          </motion.div>
+        </div>
+      )}
+
+      {/* News Ticker */}
+      <div className="absolute bottom-0 left-0 right-0 z-20 bg-gradient-to-r from-[#E31E24] to-[#B91C1C] py-3 overflow-hidden">
+        <div className="flex items-center">
+          <div className="bg-white text-[#E31E24] px-4 py-1 font-bold text-sm shrink-0 ml-4">
+            עכשיו בשידור
+          </div>
+          <motion.div
+            className="flex whitespace-nowrap text-white text-sm font-medium"
+            animate={{ x: ["0%", "-50%"] }}
+            transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+          >
+            <span className="mx-8">• שידור חי עם קריינות AI ודיבור בעברית</span>
+            <span className="mx-8">• תסריט יומי מבוסס חדשות אמיתיות</span>
+            <span className="mx-8">• טכנולוגיית Web Speech API</span>
+            <span className="mx-8">• {anchors.female.name} ו-{anchors.male.name} בשידור</span>
+            <span className="mx-8">• שידור חי עם קריינות AI ודיבור בעברית</span>
+          </motion.div>
+        </div>
+      </div>
+    </div>
+  );
+}
