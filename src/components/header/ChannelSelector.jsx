@@ -61,19 +61,14 @@ export default function ChannelSelector() {
   return (
     <>
       <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-1.5 px-2.5 py-1.5 bg-white/10 hover:bg-white/20 rounded-lg shadow-sm active:shadow-md active:scale-95 transition-all border border-white/10 text-white"
+        onClick={() => setIsOpen(true)}
+        className="flex items-center gap-1.5 px-3 py-2 bg-white/10 hover:bg-white/20 rounded-lg shadow-sm active:shadow-md active:scale-95 transition-all border border-white/20 text-white"
       >
-        <div 
-          className="w-4 h-4 rounded-full flex items-center justify-center"
-          style={{ backgroundColor: currentChannel?.color || '#E31E24' }}
-        >
-          <Radio className="w-2.5 h-2.5 text-white" />
-        </div>
-        <span className="text-xs font-bold text-white truncate max-w-[60px] sm:max-w-[80px]">
-          {currentChannel?.name || 'ערוצים'}
+        <Globe className="w-4 h-4 text-white" />
+        <span className="text-xs font-bold text-white hidden sm:inline">
+          {currentChannel?.name || 'ערוצי עולם'}
         </span>
-        <ChevronDown className={`w-3 h-3 text-white transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        <ChevronDown className="w-3.5 h-3.5 text-white" />
       </button>
 
       <AnimatePresence>
