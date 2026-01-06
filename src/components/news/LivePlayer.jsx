@@ -1,5 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
+import shaka from "shaka-player/dist/shaka-player.ui.js";
+import "shaka-player/dist/controls.css";
 import { 
   Play, Pause, Volume2, VolumeX, Maximize, 
   Users, Radio, Settings, Download, Bookmark, 
@@ -28,6 +30,7 @@ export default function LivePlayer({
   const [currentStreamUrl, setCurrentStreamUrl] = useState(streamUrl);
   const videoRef = useRef(null);
   const containerRef = useRef(null);
+  const playerRef = useRef(null);
 
   // Update stream URL when prop changes - force play
   useEffect(() => {
@@ -54,6 +57,62 @@ export default function LivePlayer({
       }
     }
   };
+
+  // Setup Shaka Player for streaming
+  useEffect(() => {
+    const isStreamUrl = currentStreamUrl && (currentStreamUrl.includes('.m3u8') || currentStreamUrl.includes('.mpd'));
+    
+    if (!isStreamUrl || !videoRef.current || !isPlaying) return;
+
+    const video = videoRef.current;
+    
+    // Cleanup previous player
+    if (playerRef.current) {
+      playerRef.current.destroy();
+      playerRef.current = null;
+    }
+
+    // Set volume
+    video.volume = volume / 100;
+    video.muted = isMuted;
+
+    // Install polyfills
+    shaka.polyfill.installAll();
+
+    if (!shaka.Player.isBrowserSupported()) {
+      console.log('Browser not supported');
+      return;
+    }
+
+    const player = new shaka.Player(video);
+    playerRef.current = player;
+
+    player.configure({
+      streaming: {
+        bufferingGoal: 10,
+        rebufferingGoal: 2,
+        bufferBehind: 30
+      }
+    });
+
+    player.addEventListener('error', (event) => {
+      console.log('Shaka Error:', event.detail);
+    });
+
+    player.load(currentStreamUrl).then(() => {
+      console.log('Stream loaded successfully');
+      video.play().catch(err => console.log('Play error:', err));
+    }).catch((error) => {
+      console.log('Load error:', error);
+    });
+
+    return () => {
+      if (playerRef.current) {
+        playerRef.current.destroy();
+        playerRef.current = null;
+      }
+    };
+  }, [isPlaying, currentStreamUrl, volume, isMuted]);
 
 
 
@@ -135,7 +194,17 @@ export default function LivePlayer({
         )}
 
         {/* Live Stream when Playing */}
-        {isPlaying && currentStreamUrl && (
+        {isPlaying && currentStreamUrl && (currentStreamUrl.includes('.m3u8') || currentStreamUrl.includes('.mpd')) && (
+          <video
+            ref={videoRef}
+            className="absolute inset-0 w-full h-full bg-black object-contain"
+            autoPlay
+            playsInline
+            muted={isMuted}
+            controls={false}
+          />
+        )}
+        {isPlaying && currentStreamUrl && !currentStreamUrl.includes('.m3u8') && !currentStreamUrl.includes('.mpd') && (
           <iframe
             key={currentStreamUrl}
             src={currentStreamUrl}
