@@ -9,103 +9,76 @@ import ReporterAudioPlayer from "./ReporterAudioPlayer";
 
 const REPORTERS = [
   {
-    id: 1,
-    name: "דן אבירם",
-    role: "כתב ביטחון",
-    image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop&crop=faces",
-    gender: "male",
-    categories: ["security", "breaking"],
-    specialty: "מומחה לענייני ביטחון וצבא"
-  },
-  {
     id: 2,
-    name: "יונתן כהן",
-    role: "כתב כלכלה",
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=faces",
-    gender: "male",
-    categories: ["economy", "finance"],
-    specialty: "מומחה לכלכלה ושווקים פיננסיים"
+    name: "מיכל כהן",
+    role: "כתבת כלכלה",
+    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/d42d26c91_generated_image.png",
+    gender: "female",
+    categories: ["economy","politics"],
+    specialty: "מומחית לכלכלה ושווקים"
   },
   {
     id: 3,
-    name: "אלון רוזנברג",
+    name: "יוסי לוי",
     role: "כתב פוליטי",
-    image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop&crop=faces",
+    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/56f1ff50f_generated_image.png",
     gender: "male",
-    categories: ["politics", "breaking"],
-    specialty: "מומחה לזירה הפוליטית"
+    categories: ["politics","breaking"],
+    specialty: "מומחה לפוליטיקה ישראלית"
   },
   {
     id: 4,
-    name: "שי מזרחי",
-    role: "כתב צבאי",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=faces",
-    gender: "male",
-    categories: ["security", "breaking"],
-    specialty: "כתב צבאי בכיר"
+    name: "שרה אברהם",
+    role: "כתבת חינוך וחברה",
+    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/73b8ce205_generated_image.png",
+    gender: "female",
+    categories: ["world","health"],
+    specialty: "מומחית לחינוך ונושאים חברתיים"
   },
   {
-id: 5,
-    name: "נועם גולדשטיין",
+    id: 5,
+    name: "דוד מזרחי",
     role: "כתב ספורט",
-    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&crop=faces",
+    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/e44a29a41_generated_image.png",
     gender: "male",
-    categories: ["sports", "entertainment"],
-    specialty: "כתב ספורט ראשי"
+    categories: ["sports","entertainment"],
+    specialty: "מומחה לספורט ישראלי ובינלאומי"
   },
   {
     id: 6,
-    name: "תומר לוי",
-    role: "כתב בידור",
-    image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop&crop=faces",
-    gender: "male",
-    categories: ["entertainment", "music"],
-    specialty: "כתב תרבות ובידור"
+    name: "נועה ברק",
+    role: "כתבת בידור ותרבות",
+    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/514cc4ea0_generated_image.png",
+    gender: "female",
+    categories: ["entertainment","world"],
+    specialty: "מומחית לבידור ותרבות"
   },
   {
     id: 7,
-    name: "רון ברמן",
+    name: "אלון גולן",
     role: "כתב טכנולוגיה",
-    image: "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=400&h=400&fit=crop&crop=faces",
+    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/aac994fbf_generated_image.png",
     gender: "male",
-    categories: ["technology", "economy"],
+    categories: ["technology","economy"],
     specialty: "מומחה לטכנולוגיה והייטק"
   },
   {
     id: 8,
-    name: "עידן שפירא",
-    role: "כתב בריאות",
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop&crop=faces",
-    gender: "male",
-    categories: ["health", "world"],
-    specialty: "כתב רפואה ובריאות"
+    name: "תמר רוזן",
+    role: "כתבת בריאות ומדע",
+    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/5fd3a4bac_generated_image.png",
+    gender: "female",
+    categories: ["health","world"],
+    specialty: "מומחית לבריאות ומדע"
   },
   {
     id: 9,
-    name: "גיל אורן",
-    role: "כתב חדשות העולם",
-    image: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=400&h=400&fit=crop&crop=faces",
+    name: "עומר אשכנזי",
+    role: "כתב זירה בינלאומית",
+    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/7b89fad3e_generated_image.png",
     gender: "male",
-    categories: ["world", "breaking"],
-    specialty: "כתב בכיר לזירה הבינלאומית"
-  },
-  {
-    id: 10,
-    name: "אורן כרמי",
-    role: "כתב אסטרולוגיה",
-    image: "https://images.unsplash.com/photo-1463453091185-61582044d556?w=400&h=400&fit=crop&crop=faces",
-    gender: "male",
-    categories: ["horoscope", "entertainment"],
-    specialty: "אסטרולוג ומומחה למזלות"
-  },
-  {
-    id: 11,
-    name: "ליאור דהן",
-    role: "כתב מוזיקה",
-    image: "https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?w=400&h=400&fit=crop&crop=faces",
-    gender: "male",
-    categories: ["music", "entertainment"],
-    specialty: "מבקר מוזיקה וכתב תרבות"
+    categories: ["world","breaking"],
+    specialty: "מומחה לזירה הבינלאומית"
   }
 ];
 
