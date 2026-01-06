@@ -219,13 +219,13 @@ export default function LivePlayer({
         {isPlaying && currentStreamUrl && !currentStreamUrl.includes('.m3u8') && !currentStreamUrl.includes('.mpd') && (
           <iframe
             key={currentStreamUrl}
-            src={
-              currentStreamUrl.includes('youtube.com/embed/')
-                ? `${currentStreamUrl}?autoplay=1&loop=1&mute=0&controls=1&playlist=${currentStreamUrl.split('/embed/')[1].split('?')[0]}`
-                : currentStreamUrl.includes('youtube.com') || currentStreamUrl.includes('youtu.be')
-                ? `https://www.youtube.com/embed/${currentStreamUrl.includes('watch?v=') ? currentStreamUrl.split('watch?v=')[1] : currentStreamUrl.split('youtu.be/')[1]}?autoplay=1&loop=1&mute=0&controls=1`
-                : currentStreamUrl
-            }
+            src={(() => {
+              if (currentStreamUrl.includes('youtube.com/embed/')) {
+                const videoId = currentStreamUrl.split('/embed/')[1].split('?')[0];
+                return `https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&mute=0&controls=1&playlist=${videoId}`;
+              }
+              return currentStreamUrl;
+            })()}
             className="absolute inset-0 w-full h-full"
             allow="autoplay; fullscreen; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
