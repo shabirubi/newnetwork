@@ -1,239 +1,206 @@
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../../utils";
-import { Play, Clock } from "lucide-react";
-import moment from "moment";
+import { base44 } from "@/api/base44Client";
+import { useQuery } from "@tanstack/react-query";
+import { motion, AnimatePresence } from "framer-motion";
+import { Video, TrendingUp } from "lucide-react";
 
-const reporters = [
+const REPORTERS = [
   {
     id: 1,
-    name: "נועה כהן",
-    role: "כתבת פוליטית",
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop",
-    articles: [
-      { title: "ראש הממשלה בהצהרה חריפה: 'לא נסוג צעד אחד'", time: "06:23", hasVideo: true }
-    ]
+    name: "רועי שרון",
+    role: "כתב ביטחון",
+    image: "https://api.dicebear.com/7.x/avataaars/svg?seed=security1&backgroundColor=b6e3f4",
+    categories: ["security", "breaking"]
   },
   {
     id: 2,
-    name: "רון חיימי",
-    role: "כתב ביטחון",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop",
-    articles: [
-      { title: "התקפה בגבול הצפון - צה\"ל בכוננות מירבית", time: "05:16", hasVideo: true }
-    ]
+    name: "מיכל כהן",
+    role: "כתבת כלכלה",
+    image: "https://api.dicebear.com/7.x/avataaars/svg?seed=economy1&backgroundColor=c0aede",
+    categories: ["economy", "politics"]
   },
   {
     id: 3,
-    name: "שירה לוי",
-    role: "כתבת כלכלה",
-    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop",
-    articles: [
-      { title: "עליית מחירים חדה - מה קורה בשוק?", time: "06:02", hasVideo: true }
-    ]
+    name: "יוסי לוי",
+    role: "כתב פוליטי",
+    image: "https://api.dicebear.com/7.x/avataaars/svg?seed=politics1&backgroundColor=ffd5dc",
+    categories: ["politics", "breaking"]
   },
   {
     id: 4,
-    name: "אור רביבו",
-    role: "כתב חקירות",
-    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop",
-    articles: [
-      { title: "חשד לשחיתות ברמות הגבוהות - פרטים בלעדיים", time: "02:41", hasVideo: false }
-    ]
+    name: "שרה אברהם",
+    role: "כתבת חינוך",
+    image: "https://api.dicebear.com/7.x/avataaars/svg?seed=education1&backgroundColor=ffeaa7",
+    categories: ["world", "health"]
   },
   {
     id: 5,
-    name: "עדי מזרחי",
-    role: "כתבת חדשות",
-    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop",
-    articles: [
-      { title: "אירוע דרמטי בתל אביב - פינוי דיירים", time: "02:01", hasVideo: true }
-    ]
+    name: "דוד מזרחי",
+    role: "כתב ספורט",
+    image: "https://api.dicebear.com/7.x/avataaars/svg?seed=sports1&backgroundColor=74b9ff",
+    categories: ["sports", "entertainment"]
   },
   {
     id: 6,
-    name: "יואב שמעון",
-    role: "כתב ספורט",
-    image: "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=400&h=400&fit=crop",
-    articles: [
-      { title: "ניצחון דרמטי: הפועל תל אביב מעלה למקום הראשון", time: "01:45", hasVideo: true }
-    ]
+    name: "נועה ברק",
+    role: "כתבת בידור",
+    image: "https://api.dicebear.com/7.x/avataaars/svg?seed=entertainment1&backgroundColor=fab1a0",
+    categories: ["entertainment", "world"]
   },
   {
     id: 7,
-    name: "מיכל אבני",
-    role: "כתבת בריאות",
-    image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=400&h=400&fit=crop",
-    articles: [
-      { title: "פריצת דרך רפואית: טיפול חדש לסרטן אושר", time: "01:20", hasVideo: false }
-    ]
+    name: "אלון גולן",
+    role: "כתב טכנולוגיה",
+    image: "https://api.dicebear.com/7.x/avataaars/svg?seed=tech1&backgroundColor=a29bfe",
+    categories: ["technology", "economy"]
   },
   {
     id: 8,
-    name: "תומר דוד",
-    role: "כתב טכנולוגיה",
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop",
-    articles: [
-      { title: "חברת הייטק ישראלית גייסה 100 מיליון דולר", time: "00:58", hasVideo: true }
-    ]
+    name: "תמר רוזן",
+    role: "כתבת בריאות",
+    image: "https://api.dicebear.com/7.x/avataaars/svg?seed=health1&backgroundColor=55efc4",
+    categories: ["health", "world"]
   },
   {
     id: 9,
-    name: "רותם אלון",
-    role: "כתבת עולם",
-    image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop",
-    articles: [
-      { title: "התפתחויות בארצות הברית - מה קורה בוושינגטון?", time: "00:32", hasVideo: false }
-    ]
-  },
-  {
-    id: 10,
-    name: "דניאל כץ",
-    role: "כתב תחבורה",
-    image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop",
-    articles: [
-      { title: "עומס חריג בכבישים - כל מה שצריך לדעת", time: "00:15", hasVideo: true }
-    ]
-  },
-  {
-    id: 11,
-    name: "גיא ברקאי",
-    role: "כתב צבאי",
-    image: "https://images.unsplash.com/photo-1463453091185-61582044d556?w=400&h=400&fit=crop",
-    articles: [
-      { title: "תרגיל רחב היקף בצה\"ל - דיווח בלעדי", time: "00:08", hasVideo: true }
-    ]
-  },
-  {
-    id: 12,
-    name: "לירון שטרית",
-    role: "כתבת משפטים",
-    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop",
-    articles: [
-      { title: "פסק דין היסטורי בבית המשפט העליון", time: "00:03", hasVideo: false }
-    ]
-  },
-  {
-    id: 13,
-    name: "אלון מזרחי",
-    role: "כתב חינוך",
-    image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop",
-    articles: [
-      { title: "רפורמה במערכת החינוך - הפרטים החדשים", time: "23:58", hasVideo: true }
-    ]
-  },
-  {
-    id: 14,
-    name: "טל ברוך",
-    role: "כתבת סביבה",
-    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop",
-    articles: [
-      { title: "משבר אקלים: דו\"ח חדש מדאיג", time: "23:45", hasVideo: false }
-    ]
-  },
-  {
-    id: 15,
-    name: "עידו לוי",
-    role: "כתב דת",
-    image: "https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=400&h=400&fit=crop",
-    articles: [
-      { title: "מתיחות בין דתיים לחילונים בעיר", time: "23:32", hasVideo: true }
-    ]
-  },
-  {
-    id: 16,
-    name: "מיכל שמיר",
-    role: "כתבת אוכל",
-    image: "https://images.unsplash.com/photo-1534751516642-a1af1ef26a56?w=400&h=400&fit=crop",
-    articles: [
-      { title: "מסעדות חדשות בתל אביב - המלצות השבוע", time: "23:15", hasVideo: true }
-    ]
-  },
-  {
-    id: 17,
-    name: "דני אלון",
-    role: "כתב מזג אוויר",
-    image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop",
-    articles: [
-      { title: "גל קור מגיע: ירידה של 10 מעלות", time: "22:58", hasVideo: false }
-    ]
-  },
-  {
-    id: 18,
-    name: "יעל כרמי",
-    role: "כתבת תרבות",
-    image: "https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?w=400&h=400&fit=crop",
-    articles: [
-      { title: "פסטיבל תרבות חדש בירושלים - כל הפרטים", time: "22:40", hasVideo: true }
-    ]
+    name: "עומר אשכנזי",
+    role: "כתב זירה בינלאומית",
+    image: "https://api.dicebear.com/7.x/avataaars/svg?seed=world1&backgroundColor=81ecec",
+    categories: ["world", "breaking"]
   }
-  ];
+];
 
 export default function ReportersFeed() {
+  const [reporterArticles, setReporterArticles] = useState([]);
+
+  const { data: allArticles = [] } = useQuery({
+    queryKey: ['reporter-articles'],
+    queryFn: () => base44.entities.NewsArticle.list('-created_date', 30),
+    refetchInterval: 120000,
+    initialData: []
+  });
+
+  useEffect(() => {
+    if (allArticles.length > 0) {
+      // Match articles to reporters based on category
+      const matched = REPORTERS.map(reporter => {
+        const article = allArticles.find(a => 
+          reporter.categories.includes(a.category)
+        );
+        
+        if (article) {
+          return {
+            reporter,
+            article,
+            time: new Date(article.created_date).toLocaleTimeString('he-IL', {
+              hour: '2-digit',
+              minute: '2-digit'
+            })
+          };
+        }
+        return null;
+      }).filter(Boolean);
+
+      setReporterArticles(matched.slice(0, 6));
+    }
+  }, [allArticles]);
+
+  if (reporterArticles.length === 0) {
+    return (
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sticky top-24 border border-gray-200 dark:border-gray-700">
+        <div className="flex items-center gap-2 mb-4 pb-3 border-b border-gray-200 dark:border-gray-700">
+          <Video className="w-5 h-5 text-[#E31E24]" />
+          <h2 className="font-bold text-base dark:text-white">אנשי השטח</h2>
+        </div>
+        <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-4">טוען דיווחים...</p>
+      </div>
+    );
+  }
+
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden lg:sticky lg:top-6">
-      {/* Header */}
-      <div className="bg-gradient-to-br from-gray-900 to-gray-800 dark:from-black dark:to-gray-900 p-3">
-        <h2 className="font-bold text-xs sm:text-sm text-white flex items-center gap-2">
-          <span className="text-base">📡</span>
-          אנשי השטח
-        </h2>
+    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sticky top-24 border border-gray-200 dark:border-gray-700">
+      <div className="flex items-center gap-2 mb-4 pb-3 border-b border-gray-200 dark:border-gray-700">
+        <Video className="w-5 h-5 text-[#E31E24]" />
+        <h2 className="font-bold text-base dark:text-white">אנשי השטח</h2>
+        <div className="mr-auto flex items-center gap-1">
+          <span className="relative flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E31E24] opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#E31E24]"></span>
+          </span>
+          <span className="text-[10px] text-[#E31E24] font-bold">LIVE</span>
+        </div>
       </div>
 
-      {/* Feed */}
-      <div className="bg-gray-50 dark:bg-gray-900 lg:h-[500px] lg:overflow-hidden">
-        {reporters.slice(0, 9).map((reporter, reporterIndex) => (
-          <div key={reporter.id}>
-            {reporter.articles.slice(0, 1).map((article, articleIndex) => (
-              <div
-                key={`${reporter.id}-${articleIndex}`}
-                className="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-                >
-                <Link 
-                  to={createPageUrl("Home")}
-                  className="flex items-start gap-2 p-2.5"
-                >
-                  {/* Reporter Image - always show */}
+      <div className="space-y-3 max-h-[600px] overflow-y-auto">
+        <AnimatePresence mode="popLayout">
+          {reporterArticles.map((item, index) => (
+            <motion.div
+              key={item.reporter.id}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ delay: index * 0.1 }}
+            >
+              <Link
+                to={createPageUrl(`Article?id=${item.article.id}`)}
+                className="block group"
+              >
+                <div className="flex gap-3 p-2 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg transition-all">
                   <div className="relative shrink-0">
-                    <img 
-                      src={reporter.image}
-                      alt={reporter.name}
-                      className="w-9 h-9 rounded-full object-cover ring-2 ring-gray-200"
+                    <img
+                      src={item.reporter.image}
+                      alt={item.reporter.name}
+                      className="w-12 h-12 rounded-full border-2 border-gray-200 dark:border-gray-600 group-hover:border-[#E31E24] transition-colors"
                     />
-                    {article.hasVideo && (
-                      <div 
-                        className="absolute -bottom-1 -right-1 w-4 h-4 bg-[#E31E24] rounded-full flex items-center justify-center"
-                      >
-                        <Play className="w-2 h-2 text-white" fill="white" />
+                    {item.article.video_url && (
+                      <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-[#E31E24] rounded-full flex items-center justify-center border-2 border-white dark:border-gray-800">
+                        <Video className="w-2.5 h-2.5 text-white" />
                       </div>
                     )}
                   </div>
-
-                  {/* Content */}
                   <div className="flex-1 min-w-0">
-                    <p className="text-[11px] text-gray-900 dark:text-white font-bold line-clamp-2 leading-tight mb-0.5">
-                      {article.title}
-                    </p>
-                    <div className="flex items-center gap-1 text-[9px] text-gray-500 dark:text-gray-400">
-                      <Clock size={9} />
-                      {article.time}
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-bold text-xs text-gray-900 dark:text-white">
+                          {item.reporter.name}
+                        </h3>
+                        <p className="text-[10px] text-gray-500 dark:text-gray-400">
+                          {item.reporter.role}
+                        </p>
+                      </div>
+                      <span className="text-[10px] text-gray-400 dark:text-gray-500 shrink-0">
+                        {item.time}
+                      </span>
                     </div>
+                    <p className="text-xs text-gray-700 dark:text-gray-300 line-clamp-2 mt-1.5 group-hover:text-[#E31E24] dark:group-hover:text-[#E31E24] transition-colors leading-snug">
+                      {item.article.title}
+                    </p>
+                    {item.article.is_breaking && (
+                      <div className="mt-2">
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-[#E31E24] text-white text-[9px] font-bold rounded-full">
+                          <TrendingUp className="w-2 h-2" />
+                          חדשות חמות
+                        </span>
+                      </div>
+                    )}
                   </div>
-                </Link>
-              </div>
-            ))}
-          </div>
-        ))}
+                </div>
+              </Link>
+            </motion.div>
+          ))}
+        </AnimatePresence>
       </div>
 
-      {/* Footer */}
-      <Link 
-        to={createPageUrl("Home")}
-        className="block p-2 text-center bg-gradient-to-br from-gray-900 to-gray-800 dark:from-black dark:to-gray-900 hover:from-gray-800 hover:to-gray-700 transition-colors border-t border-gray-700"
-      >
-        <span className="text-white font-bold text-[10px]">לכל העדכונים →</span>
-      </Link>
+      <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
+        <Link
+          to={createPageUrl("Home")}
+          className="block text-center text-xs font-bold text-[#E31E24] hover:text-[#B91C1C] transition-colors"
+        >
+          כל הכתבים ←
+        </Link>
+      </div>
     </div>
   );
 }
