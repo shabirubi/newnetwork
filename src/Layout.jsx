@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import NewsTicker from "./components/header/NewsTicker";
+import ReportersModal from "./components/reporter/ReportersModal";
 
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/a44ef2558_212.png";
 
@@ -31,6 +32,7 @@ const categories = [
 
 export default function Layout({ children }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [reportersModalOpen, setReportersModalOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('darkMode');
@@ -116,17 +118,22 @@ export default function Layout({ children }) {
             ease: "easeInOut"
           }}
           className="relative group cursor-pointer"
+          onClick={() => setReportersModalOpen(true)}
         >
           <div className="absolute inset-0 bg-[#E31E24] blur-2xl opacity-50 group-hover:opacity-70 transition-opacity rounded-full"></div>
-          <Link to={createPageUrl("Home")}>
-            <img 
-              src={LOGO_URL} 
-              alt="הרשת החדשה" 
-              className="h-24 w-auto relative z-10 drop-shadow-2xl hover:scale-110 transition-transform duration-300"
-            />
-          </Link>
+          <img 
+            src={LOGO_URL} 
+            alt="הרשת החדשה" 
+            className="h-24 w-auto relative z-10 drop-shadow-2xl hover:scale-110 transition-transform duration-300"
+          />
         </motion.div>
       </motion.div>
+
+      {/* Reporters Modal */}
+      <ReportersModal 
+        isOpen={reportersModalOpen} 
+        onClose={() => setReportersModalOpen(false)} 
+      />
 
       {/* Header */}
       <header className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50 transition-colors duration-300 border-b border-gray-200 dark:border-gray-700">
