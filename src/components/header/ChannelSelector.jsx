@@ -71,7 +71,7 @@ export default function ChannelSelector() {
           <Radio className="w-2.5 h-2.5 text-white" />
         </div>
         <span className="text-xs font-bold dark:text-white truncate max-w-[80px] sm:max-w-none">
-          {currentChannel?.name || 'כל הערוצים'}
+          {currentChannel?.name || 'ערוצים בעולם'}
         </span>
         <ChevronDown className={`w-3 h-3 dark:text-white transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
@@ -102,7 +102,7 @@ export default function ChannelSelector() {
                     <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#E31E24] to-red-600 flex items-center justify-center shadow-md">
                       <Radio className="w-5 h-5 text-white" />
                     </div>
-                    <span className="font-bold text-base dark:text-white">כל הערוצים</span>
+                    <span className="font-bold text-base dark:text-white">ערוצים בעולם</span>
                   </button>
 
                   {/* Country Grid */}
@@ -117,17 +117,16 @@ export default function ChannelSelector() {
                             whileHover={{ scale: 1.03 }}
                             whileTap={{ scale: 0.97 }}
                             onClick={() => handleCountryClick(country)}
-                            className="relative overflow-hidden rounded-xl p-4 text-center active:opacity-90 transition-all shadow-md hover:shadow-lg"
+                            className="relative overflow-hidden rounded-xl p-3 text-center active:opacity-90 transition-all shadow-md hover:shadow-lg bg-white dark:bg-gray-700"
                             style={{ 
-                              background: `linear-gradient(135deg, ${countryInfo.color}15 0%, ${countryInfo.color}30 100%)`,
                               borderWidth: '2px',
                               borderStyle: 'solid',
-                              borderColor: countryInfo.color + '40'
+                              borderColor: countryInfo.color
                             }}
                           >
-                            <div className="text-4xl mb-2">{countryInfo.flag}</div>
+                            <div className="text-5xl mb-1.5 drop-shadow-lg">{countryInfo.flag}</div>
                             <div className="font-bold text-sm dark:text-white mb-0.5">{countryInfo.name}</div>
-                            <div className="text-xs text-gray-600 dark:text-gray-400">
+                            <div className="text-xs font-semibold" style={{ color: countryInfo.color }}>
                               {countryChannels.length} ערוצים
                             </div>
                           </motion.button>
