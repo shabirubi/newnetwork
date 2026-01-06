@@ -1,6 +1,7 @@
 import Article from './pages/Article';
 import Category from './pages/Category';
 import ChannelsManager from './pages/ChannelsManager';
+import GenerateReporterImages from './pages/GenerateReporterImages';
 import Home from './pages/Home';
 import Live from './pages/Live';
 import NewsAdmin from './pages/NewsAdmin';
@@ -8,7 +9,7 @@ import NewsLoader from './pages/NewsLoader';
 import PublicReports from './pages/PublicReports';
 import Schedule from './pages/Schedule';
 import WarRoom from './pages/WarRoom';
-import GenerateReporterImages from './pages/GenerateReporterImages';
+import Archive from './pages/Archive';
 import __Layout from './Layout.jsx';
 
 
@@ -16,6 +17,7 @@ export const PAGES = {
     "Article": Article,
     "Category": Category,
     "ChannelsManager": ChannelsManager,
+    "GenerateReporterImages": GenerateReporterImages,
     "Home": Home,
     "Live": Live,
     "NewsAdmin": NewsAdmin,
@@ -23,7 +25,7 @@ export const PAGES = {
     "PublicReports": PublicReports,
     "Schedule": Schedule,
     "WarRoom": WarRoom,
-    "GenerateReporterImages": GenerateReporterImages,
+    "Archive": Archive,
 }
 
 export const pagesConfig = {

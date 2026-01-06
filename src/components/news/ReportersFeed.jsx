@@ -19,75 +19,93 @@ const REPORTERS = [
   },
   {
     id: 2,
-    name: "מיכל כהן",
-    role: "כתבת כלכלה",
-    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop&crop=faces",
-    gender: "female",
-    categories: ["economy", "politics"],
-    specialty: "מומחית לכלכלה ושווקים"
+    name: "ניר דבורי",
+    role: "כתב כלכלה",
+    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=faces",
+    gender: "male",
+    categories: ["economy", "finance"],
+    specialty: "מומחה לכלכלה ושווקים פיננסיים"
   },
   {
     id: 3,
-    name: "יוסי לוי",
+    name: "אמיר בוחבוט",
     role: "כתב פוליטי",
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=faces",
+    image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop&crop=faces",
     gender: "male",
     categories: ["politics", "breaking"],
-    specialty: "מומחה לפוליטיקה ישראלית"
+    specialty: "מומחה לזירה הפוליטית"
   },
   {
     id: 4,
-    name: "שרה אברהם",
-    role: "כתבת חינוך וחברה",
-    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop&crop=faces",
-    gender: "female",
-    categories: ["world", "health"],
-    specialty: "מומחית לחינוך ונושאים חברתיים"
-  },
-  {
-    id: 5,
-    name: "דוד מזרחי",
-    role: "כתב ספורט",
+    name: "גיא פינס",
+    role: "כתב צבאי",
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=faces",
     gender: "male",
+    categories: ["security", "breaking"],
+    specialty: "כתב צבאי בכיר"
+  },
+  {
+id: 5,
+    name: "אסף ליברמן",
+    role: "כתב ספורט",
+    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&crop=faces",
+    gender: "male",
     categories: ["sports", "entertainment"],
-    specialty: "מומחה לספורט ישראלי ובינלאומי"
+    specialty: "כתב ספורט ראשי"
   },
   {
     id: 6,
-    name: "נועה ברק",
-    role: "כתבת בידור ותרבות",
-    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop&crop=faces",
-    gender: "female",
-    categories: ["entertainment", "world"],
-    specialty: "מומחית לבידור ותרבות"
+    name: "ירון דקל",
+    role: "כתב בידור",
+    image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop&crop=faces",
+    gender: "male",
+    categories: ["entertainment", "music"],
+    specialty: "כתב תרבות ובידור"
   },
   {
     id: 7,
-    name: "אלון גולן",
+    name: "איתי אנגל",
     role: "כתב טכנולוגיה",
-    image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop&crop=faces",
+    image: "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=400&h=400&fit=crop&crop=faces",
     gender: "male",
     categories: ["technology", "economy"],
     specialty: "מומחה לטכנולוגיה והייטק"
   },
   {
     id: 8,
-    name: "תמר רוזן",
-    role: "כתבת בריאות ומדע",
-    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=faces",
-    gender: "female",
+    name: "עמית סגל",
+    role: "כתב בריאות",
+    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop&crop=faces",
+    gender: "male",
     categories: ["health", "world"],
-    specialty: "מומחית לבריאות ומדע"
+    specialty: "כתב רפואה ובריאות"
   },
   {
     id: 9,
-    name: "עומר אשכנזי",
-    role: "כתב זירה בינלאומית",
-    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&crop=faces",
+    name: "אייל ברקוביץ'",
+    role: "כתב חדשות העולם",
+    image: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=400&h=400&fit=crop&crop=faces",
     gender: "male",
     categories: ["world", "breaking"],
-    specialty: "מומחה לזירה הבינלאומית"
+    specialty: "כתב בכיר לזירה הבינלאומית"
+  },
+  {
+    id: 10,
+    name: "יובל קרני",
+    role: "כתב אסטרולוגיה",
+    image: "https://images.unsplash.com/photo-1463453091185-61582044d556?w=400&h=400&fit=crop&crop=faces",
+    gender: "male",
+    categories: ["horoscope", "entertainment"],
+    specialty: "אסטרולוג ומומחה למזלות"
+  },
+  {
+    id: 11,
+    name: "אורי גוטליב",
+    role: "כתב מוזיקה",
+    image: "https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?w=400&h=400&fit=crop&crop=faces",
+    gender: "male",
+    categories: ["music", "entertainment"],
+    specialty: "מבקר מוזיקה וכתב תרבות"
   }
 ];
 

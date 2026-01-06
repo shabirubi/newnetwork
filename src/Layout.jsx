@@ -23,7 +23,11 @@ const categories = [
   { id: "entertainment", label: "בידור ודרמה", icon: Clapperboard, href: "Category?cat=entertainment" },
   { id: "world", label: "חדשות עולם", icon: Globe, href: "Category?cat=world" },
   { id: "health", label: "בריאות", icon: Heart, href: "Category?cat=health" },
-];
+  ];
+
+  const additionalPages = [
+  { id: "archive", label: "ארכיון", icon: Clock, href: "Archive" }
+  ];
 
 export default function Layout({ children }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -173,6 +177,13 @@ export default function Layout({ children }) {
               >
                 <Radio size={16} />
                 ניהול ערוצים
+              </Link>
+              <Link
+                to={createPageUrl("Archive")}
+                className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
+              >
+                <Clock size={16} />
+                ארכיון
               </Link>
 
               <button
