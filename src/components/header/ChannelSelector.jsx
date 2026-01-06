@@ -5,12 +5,12 @@ import { Radio, ChevronDown, Globe } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const countryLabels = {
-  israel: { name: "ישראל", flag: "🇮🇱", color: "#0038b8" },
-  russia: { name: "רוסיה", flag: "🇷🇺", color: "#d52b1e" },
-  usa: { name: "ארה\"ב", flag: "🇺🇸", color: "#3c3b6e" },
-  uk: { name: "בריטניה", flag: "🇬🇧", color: "#012169" },
-  france: { name: "צרפת", flag: "🇫🇷", color: "#002395" },
-  other: { name: "אחר", flag: "🌍", color: "#6b7280" }
+  israel: { name: "ישראל", flagCode: "il", color: "#0038b8" },
+  russia: { name: "רוסיה", flagCode: "ru", color: "#d52b1e" },
+  usa: { name: "ארה\"ב", flagCode: "us", color: "#3c3b6e" },
+  uk: { name: "בריטניה", flagCode: "gb", color: "#012169" },
+  france: { name: "צרפת", flagCode: "fr", color: "#002395" },
+  other: { name: "אחר", flagCode: null, color: "#6b7280" }
 };
 
 export default function ChannelSelector() {
@@ -124,7 +124,15 @@ export default function ChannelSelector() {
                               borderColor: countryInfo.color
                             }}
                           >
-                            <div className="text-5xl mb-1.5 drop-shadow-lg">{countryInfo.flag}</div>
+                            {countryInfo.flagCode ? (
+                              <img 
+                                src={`https://flagcdn.com/h120/${countryInfo.flagCode}.png`}
+                                alt={countryInfo.name}
+                                className="w-16 h-12 mx-auto mb-1.5 object-cover rounded shadow-md"
+                              />
+                            ) : (
+                              <div className="text-4xl mb-1.5">🌍</div>
+                            )}
                             <div className="font-bold text-sm dark:text-white mb-0.5">{countryInfo.name}</div>
                             <div className="text-xs font-semibold" style={{ color: countryInfo.color }}>
                               {countryChannels.length} ערוצים
@@ -144,7 +152,15 @@ export default function ChannelSelector() {
                       className="w-full flex items-center gap-2 px-4 py-3 active:bg-gray-50 dark:active:bg-gray-700 transition-colors"
                     >
                       <ChevronDown className="w-4 h-4 rotate-90 dark:text-white" />
-                      <span className="text-2xl">{countryLabels[selectedCountry]?.flag}</span>
+                      {countryLabels[selectedCountry]?.flagCode ? (
+                        <img 
+                          src={`https://flagcdn.com/h40/${countryLabels[selectedCountry].flagCode}.png`}
+                          alt={countryLabels[selectedCountry].name}
+                          className="w-8 h-6 object-cover rounded"
+                        />
+                      ) : (
+                        <span className="text-2xl">🌍</span>
+                      )}
                       <span className="font-bold dark:text-white">{countryLabels[selectedCountry]?.name}</span>
                       <span className="text-xs text-gray-500 dark:text-gray-400 mr-auto">
                         ({channelsByCountry[selectedCountry]?.length})
