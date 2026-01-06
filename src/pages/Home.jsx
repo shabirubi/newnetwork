@@ -37,7 +37,7 @@ export default function Home() {
     initialData: []
   });
 
-  const defaultStreamUrl = "https://www.youtube.com/embed/2q9lcnXBicQ";
+  const defaultStreamUrl = "https://www.youtube.com/embed/7f6TVsLPUbQ";
 
   const { data: articles = [], isLoading } = useQuery({
     queryKey: ['news-articles', selectedChannel],
