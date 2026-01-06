@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
+import Hls from "hls.js";
 import { 
   Play, Pause, Volume2, VolumeX, Maximize, 
   Users, Radio, Settings, Download, Bookmark, 
@@ -28,6 +29,7 @@ export default function LivePlayer({
   const [currentStreamUrl, setCurrentStreamUrl] = useState(streamUrl);
   const videoRef = useRef(null);
   const containerRef = useRef(null);
+  const hlsRef = useRef(null);
 
   // Update stream URL when prop changes - force play
   useEffect(() => {
@@ -54,6 +56,65 @@ export default function LivePlayer({
       }
     }
   };
+
+  // Setup HLS.js for m3u8 streams
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || !currentStreamUrl || !isPlaying) return;
+
+    const isHLS = currentStreamUrl.includes('.m3u8');
+    if (!isHLS) return;
+
+    // Cleanup previous HLS instance
+    if (hlsRef.current) {
+      hlsRef.current.destroy();
+      hlsRef.current = null;
+    }
+
+    // Check if HLS is supported
+    if (Hls.isSupported()) {
+      const hls = new Hls({
+        enableWorker: true,
+        lowLatencyMode: true,
+        backBufferLength: 90
+      });
+      
+      hlsRef.current = hls;
+      hls.loadSource(currentStreamUrl);
+      hls.attachMedia(video);
+      
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        video.play().catch(err => console.log('Play failed:', err));
+      });
+
+      hls.on(Hls.Events.ERROR, (event, data) => {
+        console.log('HLS Error:', data.type, data.details);
+        if (data.fatal) {
+          switch(data.type) {
+            case Hls.ErrorTypes.NETWORK_ERROR:
+              hls.startLoad();
+              break;
+            case Hls.ErrorTypes.MEDIA_ERROR:
+              hls.recoverMediaError();
+              break;
+            default:
+              break;
+          }
+        }
+      });
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      // Native HLS support (Safari)
+      video.src = currentStreamUrl;
+      video.play().catch(err => console.log('Play failed:', err));
+    }
+
+    return () => {
+      if (hlsRef.current) {
+        hlsRef.current.destroy();
+        hlsRef.current = null;
+      }
+    };
+  }, [currentStreamUrl, isPlaying]);
 
   // Handle video element volume and mute
   useEffect(() => {
