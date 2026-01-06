@@ -6,58 +6,130 @@ import { motion } from "framer-motion";
 
 const REPORTER_PROMPTS = [
   {
-    id: 1,
-    name: "רועי שרון",
-    role: "כתב ביטחון",
-    prompt: "Professional young Israeli male news reporter in his late 20s, handsome, confident expression, short dark hair, clean-shaven, wearing elegant dark suit and tie, standing in professional newsroom, solid vibrant orange gradient background, cinematic lighting, photorealistic, high quality, 8K, professional headshot"
+    id: 10,
+    name: "אורי כהן",
+    role: "כתב פיננסים",
+    prompt: "Professional young Israeli male finance reporter in his early 30s, handsome, confident businesslike expression, short neat hair, wearing elegant gray suit and gold tie, standing in financial trading room, solid vibrant gold gradient background, cinematic lighting, photorealistic, high quality, 8K, professional headshot"
   },
   {
-    id: 2,
-    name: "מיכל כהן",
-    role: "כתבת כלכלה",
-    prompt: "Professional young Israeli female news reporter in her mid 20s, beautiful, elegant smile, long dark hair, wearing professional dark blue blazer, standing in modern studio, solid vibrant emerald green gradient background, cinematic lighting, photorealistic, high quality, 8K, professional headshot"
+    id: 11,
+    name: "רינה לוי",
+    role: "כתבת מזלות ואסטרולוגיה",
+    prompt: "Professional young Israeli female astrology reporter in her mid 20s, beautiful, mystical smile, long flowing hair, wearing elegant purple dress with star accessories, standing with mystical background, solid vibrant deep purple gradient background, cinematic lighting, photorealistic, high quality, 8K, professional headshot"
   },
   {
-    id: 3,
-    name: "יוסי לוי",
-    role: "כתב פוליטי",
-    prompt: "Professional young Israeli male political reporter in his early 30s, handsome, serious professional expression, short styled hair, wearing elegant navy suit and red tie, standing in parliament, solid vibrant deep blue gradient background, cinematic lighting, photorealistic, high quality, 8K, professional headshot"
+    id: 12,
+    name: "גל שטרן",
+    role: "כתב מוזיקה",
+    prompt: "Professional young Israeli male music reporter in his late 20s, handsome, artistic expression, styled messy hair, wearing trendy leather jacket, standing in music studio, solid vibrant electric blue gradient background, cinematic lighting, photorealistic, high quality, 8K, professional headshot"
   },
   {
-    id: 4,
-    name: "שרה אברהם",
-    role: "כתבת חינוך וחברה",
-    prompt: "Professional young Israeli female education reporter in her late 20s, beautiful, warm friendly smile, shoulder-length brown hair, wearing professional cream blazer, standing in modern studio, solid vibrant purple gradient background, cinematic lighting, photorealistic, high quality, 8K, professional headshot"
+    id: 13,
+    name: "מאיה דוד",
+    role: "כתבת אופנה וסגנון",
+    prompt: "Professional young Israeli female fashion reporter in her mid 20s, beautiful, elegant sophisticated smile, long styled hair, wearing haute couture designer outfit, standing in fashion runway, solid vibrant hot pink gradient background, cinematic lighting, photorealistic, high quality, 8K, professional headshot"
   },
   {
-    id: 5,
-    name: "דוד מזרחי",
-    role: "כתב ספורט",
-    prompt: "Professional young Israeli male sports reporter in his mid 20s, handsome athletic build, energetic smile, short hair, wearing casual sports jacket, standing in sports studio, solid vibrant red gradient background, cinematic lighting, photorealistic, high quality, 8K, professional headshot"
+    id: 14,
+    name: "ליאור אברהם",
+    role: "כתב רכב וטכנולוגיה",
+    prompt: "Professional young Israeli male automotive reporter in his late 20s, handsome, enthusiastic expression, short modern hair, wearing casual blazer, standing near luxury car, solid vibrant metallic silver gradient background, cinematic lighting, photorealistic, high quality, 8K, professional headshot"
   },
   {
-    id: 6,
-    name: "נועה ברק",
-    role: "כתבת בידור ותרבות",
-    prompt: "Professional young Israeli female entertainment reporter in her mid 20s, beautiful, bright cheerful smile, long wavy hair, wearing stylish pink blazer, standing in entertainment studio, solid vibrant magenta gradient background, cinematic lighting, photorealistic, high quality, 8K, professional headshot"
+    id: 15,
+    name: "שירה גרין",
+    role: "כתבת תיירות ונופש",
+    prompt: "Professional young Israeli female travel reporter in her mid 20s, beautiful, adventurous smile, long beach-waved hair, wearing casual elegant travel outfit, standing with exotic backdrop, solid vibrant turquoise gradient background, cinematic lighting, photorealistic, high quality, 8K, professional headshot"
   },
   {
-    id: 7,
-    name: "אלון גולן",
-    role: "כתב טכנולוגיה",
-    prompt: "Professional young Israeli male technology reporter in his late 20s, handsome, intelligent look, modern glasses, short neat hair, wearing smart casual tech blazer, standing in tech studio, solid vibrant cyan blue gradient background, cinematic lighting, photorealistic, high quality, 8K, professional headshot"
+    id: 16,
+    name: "יובל מרדכי",
+    role: "כתב סביבה ואקולוגיה",
+    prompt: "Professional young Israeli male environmental reporter in his early 30s, handsome, thoughtful caring expression, short natural hair, wearing earth-tone outdoor jacket, standing in nature setting, solid vibrant forest green gradient background, cinematic lighting, photorealistic, high quality, 8K, professional headshot"
   },
   {
-    id: 8,
-    name: "תמר רוזן",
-    role: "כתבת בריאות ומדע",
-    prompt: "Professional young Israeli female health reporter in her late 20s, beautiful, caring smile, long dark hair pulled back, wearing white medical coat over professional attire, standing in medical studio, solid vibrant teal gradient background, cinematic lighting, photorealistic, high quality, 8K, professional headshot"
+    id: 17,
+    name: "דנה ורד",
+    role: "כתבת אוכל ומסעדות",
+    prompt: "Professional young Israeli female culinary reporter in her late 20s, beautiful, warm joyful smile, styled hair, wearing elegant apron over chic outfit, standing in modern kitchen, solid vibrant coral orange gradient background, cinematic lighting, photorealistic, high quality, 8K, professional headshot"
   },
   {
-    id: 9,
-    name: "עומר אשכנזי",
-    role: "כתב זירה בינלאומית",
-    prompt: "Professional young Israeli male international news reporter in his early 30s, handsome, worldly expression, short styled hair, wearing elegant dark suit, standing with world backdrop, solid vibrant deep indigo gradient background, cinematic lighting, photorealistic, high quality, 8K, professional headshot"
+    id: 18,
+    name: "נדב פרץ",
+    role: "כתב קולנוע וקריקטורות",
+    prompt: "Professional young Israeli male film critic in his late 20s, handsome, intellectual expression, trendy glasses, styled hair, wearing casual blazer, standing in cinema, solid vibrant ruby red gradient background, cinematic lighting, photorealistic, high quality, 8K, professional headshot"
+  },
+  {
+    id: 19,
+    name: "עדי בן דוד",
+    role: "כתבת משפט ופלילים",
+    prompt: "Professional young Israeli female legal reporter in her early 30s, beautiful, serious professional expression, hair in elegant bun, wearing formal dark suit, standing in courthouse, solid vibrant dark navy gradient background, cinematic lighting, photorealistic, high quality, 8K, professional headshot"
+  },
+  {
+    id: 20,
+    name: "איתן רון",
+    role: "כתב נדל״ן ובנייה",
+    prompt: "Professional young Israeli male real estate reporter in his early 30s, handsome, confident business smile, short professional hair, wearing elegant gray suit, standing in modern building, solid vibrant steel blue gradient background, cinematic lighting, photorealistic, high quality, 8K, professional headshot"
+  },
+  {
+    id: 21,
+    name: "הילה זוהר",
+    role: "כתבת מדע וחלל",
+    prompt: "Professional young Israeli female science reporter in her mid 20s, beautiful, intelligent curious expression, neat professional hair, wearing modern blazer with space pin, standing in observatory, solid vibrant cosmic purple gradient background, cinematic lighting, photorealistic, high quality, 8K, professional headshot"
+  },
+  {
+    id: 22,
+    name: "רם שמיר",
+    role: "כתב צבא וכלי נשק",
+    prompt: "Professional young Israeli male military correspondent in his early 30s, handsome, serious tactical expression, short military-style hair, wearing tactical vest over shirt, standing in military base, solid vibrant olive green gradient background, cinematic lighting, photorealistic, high quality, 8K, professional headshot"
+  },
+  {
+    id: 23,
+    name: "שני אלון",
+    role: "כתבת דיגיטל ורשתות",
+    prompt: "Professional young Israeli female digital media reporter in her mid 20s, beautiful, tech-savvy smile, modern styled hair, wearing trendy tech outfit, standing in digital studio, solid vibrant neon pink gradient background, cinematic lighting, photorealistic, high quality, 8K, professional headshot"
+  },
+  {
+    id: 24,
+    name: "בן זוהר",
+    role: "כתב היסטוריה ומורשת",
+    prompt: "Professional young Israeli male history reporter in his late 20s, handsome, intellectual wise expression, classic styled hair, wearing vintage-style blazer, standing in historical site, solid vibrant sepia brown gradient background, cinematic lighting, photorealistic, high quality, 8K, professional headshot"
+  },
+  {
+    id: 25,
+    name: "טל גולדברג",
+    role: "כתבת חדשנות וסטארטאפים",
+    prompt: "Professional young Israeli female innovation reporter in her mid 20s, beautiful, energetic entrepreneurial smile, modern trendy hair, wearing startup casual-chic blazer, standing in tech hub, solid vibrant lime green gradient background, cinematic lighting, photorealistic, high quality, 8K, professional headshot"
+  },
+  {
+    id: 26,
+    name: "אדם לוין",
+    role: "כתב בלוקצ׳יין וקריפטו",
+    prompt: "Professional young Israeli male cryptocurrency reporter in his late 20s, handsome, futuristic tech expression, modern styled hair, wearing smart tech outfit, standing in fintech office, solid vibrant electric orange gradient background, cinematic lighting, photorealistic, high quality, 8K, professional headshot"
+  },
+  {
+    id: 27,
+    name: "מור שחר",
+    role: "כתבת משחקי מחשב",
+    prompt: "Professional young Israeli female gaming reporter in her mid 20s, beautiful, playful energetic smile, colorful styled hair, wearing gaming headset and casual gamer outfit, standing in gaming studio, solid vibrant neon green gradient background, cinematic lighting, photorealistic, high quality, 8K, professional headshot"
+  },
+  {
+    id: 28,
+    name: "נועם שגיא",
+    role: "כתב פסיכולוגיה ומשפחה",
+    prompt: "Professional young Israeli male psychology reporter in his early 30s, handsome, warm empathetic expression, professional neat hair, wearing casual blazer, standing in therapy office, solid vibrant soft sage green gradient background, cinematic lighting, photorealistic, high quality, 8K, professional headshot"
+  },
+  {
+    id: 29,
+    name: "ליה כהן",
+    role: "מגישה - ערוץ הילדים",
+    prompt: "Professional young Israeli female children's TV host in her mid 20s, beautiful, bright cheerful fun smile, colorful styled hair with accessories, wearing vibrant playful outfit, standing in colorful kids studio, solid vibrant rainbow gradient background, cinematic lighting, photorealistic, high quality, 8K, professional headshot"
+  },
+  {
+    id: 30,
+    name: "מיה פרידמן",
+    role: "מגישה - ערוץ הילדים",
+    prompt: "Professional young Israeli female children's entertainer in her mid 20s, beautiful, joyful animated expression, fun styled ponytail, wearing bright playful costume, standing in kids play area, solid vibrant yellow gradient background, cinematic lighting, photorealistic, high quality, 8K, professional headshot"
   }
 ];
 
@@ -134,14 +206,34 @@ ${generatedImages.filter(r => r.success).map((reporter, idx) => `  {
   const getCategories = (role) => {
     const categoryMap = {
       "כתב ביטחון": ["security", "breaking"],
-      "כתבת כלכלה": ["economy", "politics"],
+      "כתבת כלכלה": ["economy", "finance"],
       "כתב פוליטי": ["politics", "breaking"],
       "כתבת חינוך וחברה": ["world", "health"],
       "כתב ספורט": ["sports", "entertainment"],
-      "כתבת בידור ותרבות": ["entertainment", "world"],
+      "כתבת בידור ותרבות": ["entertainment", "music"],
       "כתב טכנולוגיה": ["technology", "economy"],
       "כתבת בריאות ומדע": ["health", "world"],
-      "כתב זירה בינלאומית": ["world", "breaking"]
+      "כתב זירה בינלאומית": ["world", "breaking"],
+      "כתב פיננסים": ["finance", "economy"],
+      "כתבת מזלות ואסטרולוגיה": ["horoscope", "entertainment"],
+      "כתב מוזיקה": ["music", "entertainment"],
+      "כתבת אופנה וסגנון": ["entertainment", "world"],
+      "כתב רכב וטכנולוגיה": ["technology", "economy"],
+      "כתבת תיירות ונופש": ["world", "entertainment"],
+      "כתב סביבה ואקולוגיה": ["health", "world"],
+      "כתבת אוכל ומסעדות": ["entertainment", "health"],
+      "כתב קולנוע וקריקטורות": ["entertainment", "world"],
+      "כתבת משפט ופלילים": ["breaking", "politics"],
+      "כתב נדל״ן ובנייה": ["economy", "finance"],
+      "כתבת מדע וחלל": ["technology", "world"],
+      "כתב צבא וכלי נשק": ["security", "breaking"],
+      "כתבת דיגיטל ורשתות": ["technology", "entertainment"],
+      "כתב היסטוריה ומורשת": ["world", "entertainment"],
+      "כתבת חדשנות וסטארטאפים": ["technology", "economy"],
+      "כתב בלוקצ׳יין וקריפטו": ["finance", "technology"],
+      "כתבת משחקי מחשב": ["entertainment", "technology"],
+      "כתב פסיכולוגיה ומשפחה": ["health", "world"],
+      "מגישה - ערוץ הילדים": ["entertainment"]
     };
     return categoryMap[role] || ["breaking"];
   };
@@ -156,7 +248,27 @@ ${generatedImages.filter(r => r.success).map((reporter, idx) => `  {
       "כתבת בידור ותרבות": "מומחית לבידור ותרבות",
       "כתב טכנולוגיה": "מומחה לטכנולוגיה והייטק",
       "כתבת בריאות ומדע": "מומחית לבריאות ומדע",
-      "כתב זירה בינלאומית": "מומחה לזירה הבינלאומית"
+      "כתב זירה בינלאומית": "מומחה לזירה הבינלאומית",
+      "כתב פיננסים": "מומחה לפיננסים והשקעות",
+      "כתבת מזלות ואסטרולוגיה": "אסטרולוגית ומומחית למזלות",
+      "כתב מוזיקה": "מבקר מוזיקה וכתב תרבות",
+      "כתבת אופנה וסגנון": "מומחית לאופנה ועיצוב",
+      "כתב רכב וטכנולוגיה": "מומחה לרכב וחדשנות",
+      "כתבת תיירות ונופש": "מומחית לתיירות וטיולים",
+      "כתב סביבה ואקולוגיה": "מומחה לסביבה ואקלים",
+      "כתבת אוכל ומסעדות": "מומחית לקולינריה ואוכל",
+      "כתב קולנוע וקריקטורות": "מבקר קולנוע ומומחה לסדרות",
+      "כתבת משפט ופלילים": "מומחית למשפט פלילי",
+      "כתב נדל״ן ובנייה": "מומחה לנדל״ן ושוק הדיור",
+      "כתבת מדע וחלל": "מומחית למדע וחקר החלל",
+      "כתב צבא וכלי נשק": "מומחה לכלי נשק וציוד צבאי",
+      "כתבת דיגיטל ורשתות": "מומחית לרשתות חברתיות ודיגיטל",
+      "כתב היסטוריה ומורשת": "מומחה להיסטוריה ותרבות",
+      "כתבת חדשנות וסטארטאפים": "מומחית לסטארטאפים וחדשנות",
+      "כתב בלוקצ׳יין וקריפטו": "מומחה למטבעות דיגיטליים",
+      "כתבת משחקי מחשב": "מומחית לגיימינג ומשחקים",
+      "כתב פסיכולוגיה ומשפחה": "פסיכולוג ומומחה לקשרי משפחה",
+      "מגישה - ערוץ הילדים": "מגישה לילדים ונוער"
     };
     return specialtyMap[role] || "";
   };
@@ -168,7 +280,7 @@ ${generatedImages.filter(r => r.success).map((reporter, idx) => `  {
           🎨 מחולל תמונות כתבים
         </h1>
         <p className="text-gray-600 dark:text-gray-400 mb-6">
-          לחץ על הכפתור למטה כדי ליצור תמונות AI לכל 9 הכתבים עם רקעים צבעוניים ייחודיים
+          לחץ על הכפתור למטה כדי ליצור תמונות AI ל-{REPORTER_PROMPTS.length} כתבים נוספים (כולל כוכבות ערוץ הילדים) עם רקעים צבעוניים ייחודיים
         </p>
 
         {!loading && generatedImages.length === 0 && (
