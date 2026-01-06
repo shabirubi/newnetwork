@@ -76,14 +76,21 @@ export default function Category() {
 
   const { data: articles = [], isLoading } = useQuery({
     queryKey: ['category-articles', cat],
-    queryFn: () => {
+    queryFn: async () => {
+      console.log(`📰 טוען ידיעות עבור קטגוריה: ${cat}`);
+      let result;
       if (cat === 'breaking') {
-        return base44.entities.NewsArticle.filter({ is_breaking: true }, '-created_date', 50);
+        result = await base44.entities.NewsArticle.filter({ is_breaking: true }, '-created_date', 50);
+      } else {
+        result = await base44.entities.NewsArticle.filter({ category: cat }, '-created_date', 50);
       }
-      return base44.entities.NewsArticle.filter({ category: cat }, '-created_date', 50);
+      console.log(`✅ נטענו ${result.length} ידיעות`);
+      return result;
     },
-    staleTime: 2 * 60 * 1000,
-    cacheTime: 10 * 60 * 1000,
+    staleTime: 0,
+    refetchInterval: 30000,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
     initialData: []
   });
 
