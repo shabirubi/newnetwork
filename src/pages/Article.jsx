@@ -44,19 +44,25 @@ export default function Article() {
   const urlParams = new URLSearchParams(window.location.search);
   const articleId = urlParams.get('id');
 
-  const { data: article, isLoading } = useQuery({
+  const { data: article, isLoading, error } = useQuery({
     queryKey: ['article', articleId],
     queryFn: async () => {
+      if (!articleId) return null;
       const articles = await base44.entities.NewsArticle.filter({ id: articleId });
+      if (!articles || articles.length === 0) return null;
       return articles[0];
     },
-    enabled: !!articleId
+    enabled: !!articleId,
+    staleTime: 5 * 60 * 1000,
+    cacheTime: 30 * 60 * 1000,
+    retry: 2
   });
 
   const { data: relatedArticles = [] } = useQuery({
     queryKey: ['related-articles', article?.category],
     queryFn: () => base44.entities.NewsArticle.filter({ category: article.category }, '-created_date', 4),
     enabled: !!article?.category,
+    staleTime: 5 * 60 * 1000,
     initialData: []
   });
 
@@ -66,7 +72,7 @@ export default function Article() {
 
   if (isLoading) {
     return (
-      <div className="max-w-4xl mx-auto space-y-6">
+      <div className="max-w-4xl mx-auto space-y-6 px-4">
         <Skeleton className="h-8 w-32" />
         <Skeleton className="h-12 w-full" />
         <Skeleton className="h-6 w-3/4" />
@@ -76,10 +82,24 @@ export default function Article() {
     );
   }
 
-  if (!article) {
+  if (!articleId) {
     return (
-      <div className="text-center py-20">
-        <h2 className="text-2xl font-bold text-gray-700 mb-4">הידיעה לא נמצאה</h2>
+      <div className="text-center py-20 px-4">
+        <h2 className="text-2xl font-bold text-gray-700 dark:text-gray-200 mb-4">לא צוין מזהה כתבה</h2>
+        <Link to={createPageUrl("Home")}>
+          <Button className="bg-[#E31E24] hover:bg-[#B91C1C]">
+            חזרה לדף הבית
+          </Button>
+        </Link>
+      </div>
+    );
+  }
+
+  if (!article && !isLoading) {
+    return (
+      <div className="text-center py-20 px-4">
+        <h2 className="text-2xl font-bold text-gray-700 dark:text-gray-200 mb-4">הכתבה לא נמצאה</h2>
+        <p className="text-gray-500 dark:text-gray-400 mb-6">ייתכן שהכתבה הוסרה או שהקישור שגוי</p>
         <Link to={createPageUrl("Home")}>
           <Button className="bg-[#E31E24] hover:bg-[#B91C1C]">
             חזרה לדף הבית
@@ -92,7 +112,7 @@ export default function Article() {
   const filteredRelated = relatedArticles.filter(a => a.id !== article.id).slice(0, 3);
 
   return (
-    <article className="max-w-4xl mx-auto">
+    <article className="max-w-4xl mx-auto px-4">
       {/* Breadcrumb */}
       <motion.nav
         initial={{ opacity: 0 }}

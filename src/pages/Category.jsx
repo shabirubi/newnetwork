@@ -82,6 +82,8 @@ export default function Category() {
       }
       return base44.entities.NewsArticle.filter({ category: cat }, '-created_date', 50);
     },
+    staleTime: 2 * 60 * 1000,
+    cacheTime: 10 * 60 * 1000,
     initialData: []
   });
 
