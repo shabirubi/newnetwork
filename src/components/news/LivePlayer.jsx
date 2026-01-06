@@ -28,11 +28,24 @@ export default function LivePlayer({
   const [showControls, setShowControls] = useState(true);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [viewerReactions, setViewerReactions] = useState(1234);
+  const [dynamicViewerCount, setDynamicViewerCount] = useState(viewerCount || 2847);
   const videoRef = useRef(null);
   const containerRef = useRef(null);
   const hlsRef = useRef(null);
 
   const currentStreamUrl = streamUrl || DEFAULT_STREAM;
+
+  // Dynamic viewer count with upward trend
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setDynamicViewerCount(prev => {
+        const increase = Math.floor(Math.random() * 15) + 5; // Random increase 5-20
+        return prev + increase;
+      });
+    }, 8000); // Update every 8 seconds
+
+    return () => clearInterval(interval);
+  }, []);
 
   const togglePlay = () => {
     setIsPlaying(!isPlaying);
@@ -155,13 +168,11 @@ export default function LivePlayer({
 
         {/* Viewer Count and Live Badge */}
         <div className="absolute top-2 sm:top-4 left-2 sm:left-4 z-10 flex items-center gap-1.5">
-          {viewerCount > 0 && (
-            <div className="flex items-center gap-1 sm:gap-2 bg-black/60 backdrop-blur-sm text-white px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm">
-              <Users size={12} className="sm:w-4 sm:h-4" />
-              <span className="hidden sm:inline">{viewerCount.toLocaleString()} צופים</span>
-              <span className="sm:hidden">{(viewerCount / 1000).toFixed(1)}K</span>
-            </div>
-          )}
+          <div className="flex items-center gap-1 sm:gap-2 bg-black/60 backdrop-blur-sm text-white px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm">
+            <Users size={12} className="sm:w-4 sm:h-4" />
+            <span className="hidden sm:inline">{dynamicViewerCount.toLocaleString()} צופים</span>
+            <span className="sm:hidden">{(dynamicViewerCount / 1000).toFixed(1)}K</span>
+          </div>
           {isLive && (
             <div className="flex items-center gap-1 sm:gap-2 bg-[#E31E24] text-white px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm font-bold">
               <span className="relative flex h-1.5 w-1.5 sm:h-2 sm:w-2">
@@ -218,7 +229,7 @@ export default function LivePlayer({
               } else {
                 return url;
               }
-              return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=0&controls=1`;
+              return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=0&controls=1&loop=1&playlist=${videoId}`;
             })()}
             className="absolute inset-0 w-full h-full"
             allow="autoplay; fullscreen; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
