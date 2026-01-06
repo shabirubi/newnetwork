@@ -85,17 +85,20 @@ export default function NewsTicker() {
           חדשות חמות
         </span>
         
-        <div className="ticker-wrapper overflow-hidden flex-1">
+        <Link 
+          to={createPageUrl("Category?cat=breaking")}
+          className="ticker-wrapper overflow-hidden flex-1 cursor-pointer hover:opacity-90 transition-opacity"
+        >
           <motion.div
             className="flex whitespace-nowrap text-sm"
             animate={{ x: ["0%", "-50%"] }}
-            transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
           >
             {[...news, ...news].map((item, index) => (
               <span key={index} className="mx-8">• {item}</span>
             ))}
           </motion.div>
-        </div>
+        </Link>
 
         <div className="flex items-center gap-2 shrink-0">
           <ClockWidget />
