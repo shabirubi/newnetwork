@@ -66,7 +66,7 @@ export default function NewsTicker({ darkMode, setDarkMode }) {
 
   if (loading || news.length === 0) {
     return (
-      <div className="bg-[#E31E24] dark:bg-[#B91C1C] text-white py-2 overflow-hidden">
+      <div className="bg-black dark:bg-gray-950 text-white py-2 overflow-hidden">
         <div className="flex items-center">
           <span className="bg-black text-white px-4 py-1 font-bold text-sm shrink-0 mr-4 flex items-center gap-2">
             <Flame className="w-4 h-4" />
@@ -80,7 +80,7 @@ export default function NewsTicker({ darkMode, setDarkMode }) {
   return (
     <div className="bg-[#E31E24] dark:bg-[#B91C1C] text-white py-2 overflow-hidden">
       <div className="flex items-center gap-1 sm:gap-3 px-2 lg:px-4">
-        <span className="bg-black text-white px-2 sm:px-3 py-1 sm:py-1.5 font-bold text-[10px] sm:text-xs shrink-0 flex items-center gap-1 sm:gap-1.5 rounded">
+        <span className="bg-[#E31E24] text-white px-2 sm:px-3 py-1 sm:py-1.5 font-bold text-[10px] sm:text-xs shrink-0 flex items-center gap-1 sm:gap-1.5 rounded">
           <Flame className="w-3 sm:w-3.5 h-3 sm:h-3.5 animate-pulse" />
           <span className="hidden xs:inline">חדשות חמות</span>
           <span className="xs:hidden">חם</span>
@@ -104,7 +104,7 @@ export default function NewsTicker({ darkMode, setDarkMode }) {
         <div className="flex items-center gap-1 shrink-0">
           <button
             onClick={() => setDarkMode(!darkMode)}
-            className="flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-black/40 hover:bg-black/60 text-white active:scale-95 transition-all"
+            className="flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-white/10 hover:bg-white/20 text-white active:scale-95 transition-all"
           >
             {darkMode ? <Sun size={12} className="sm:w-3.5 sm:h-3.5" /> : <Moon size={12} className="sm:w-3.5 sm:h-3.5" />}
           </button>
@@ -119,7 +119,7 @@ export default function NewsTicker({ darkMode, setDarkMode }) {
 
           <Link 
             to={createPageUrl("WarRoom")}
-            className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 bg-black/40 hover:bg-black/60 rounded-lg text-xs font-bold transition-colors"
+            className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 bg-white/10 hover:bg-white/20 rounded-lg text-xs font-bold transition-colors"
           >
             <Siren size={13} className="animate-pulse" />
             חדר מלחמה
@@ -127,7 +127,7 @@ export default function NewsTicker({ darkMode, setDarkMode }) {
 
           <Link 
             to={createPageUrl("PublicReports")}
-            className="hidden xl:flex items-center gap-1.5 px-2.5 py-1.5 bg-black/40 hover:bg-black/60 rounded-lg text-xs font-bold transition-colors"
+            className="hidden xl:flex items-center gap-1.5 px-2.5 py-1.5 bg-white/10 hover:bg-white/20 rounded-lg text-xs font-bold transition-colors"
           >
             <MessageSquareWarning size={13} />
             דיווח מפגע

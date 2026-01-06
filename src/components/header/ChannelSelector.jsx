@@ -62,7 +62,7 @@ export default function ChannelSelector() {
     <>
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-1.5 px-2.5 py-1.5 bg-black/40 hover:bg-black/60 rounded-lg shadow-sm active:shadow-md active:scale-95 transition-all border border-white/10 text-white"
+        className="flex items-center gap-1.5 px-2.5 py-1.5 bg-white/10 hover:bg-white/20 rounded-lg shadow-sm active:shadow-md active:scale-95 transition-all border border-white/10 text-white"
       >
         <div 
           className="w-4 h-4 rounded-full flex items-center justify-center"
