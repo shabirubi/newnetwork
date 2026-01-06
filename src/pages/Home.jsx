@@ -37,18 +37,7 @@ export default function Home() {
     initialData: []
   });
 
-  // Set default YouTube stream
   const defaultStreamUrl = "https://www.youtube.com/embed/2q9lcnXBicQ";
-
-  // Auto-select Channel 13 or first channel on load
-  React.useEffect(() => {
-    if (channels.length > 0 && !selectedChannel) {
-      const channel13 = channels.find(c => c.name.includes('13') || c.name.includes('ערוץ 13'));
-      const defaultChannel = channel13 || channels[0];
-      setSelectedChannel(defaultChannel.id);
-      localStorage.setItem('selectedChannel', defaultChannel.id);
-    }
-  }, [channels, selectedChannel]);
 
   const { data: articles = [], isLoading } = useQuery({
     queryKey: ['news-articles', selectedChannel],
@@ -74,7 +63,7 @@ export default function Home() {
 
   const activeLive = liveStream[0];
   const currentChannel = channels.find(c => c.id === selectedChannel);
-  const channelStreamUrl = currentChannel?.stream_url;
+  const channelStreamUrl = currentChannel?.stream_url || defaultStreamUrl;
 
   if (isLoading) {
     return (
@@ -120,7 +109,7 @@ export default function Home() {
               title={currentChannel?.name || activeLive?.title || "הרשת החדשה - שידור חי"}
               isLive={!!activeLive?.is_active}
               viewerCount={activeLive?.viewer_count || 3456}
-              streamUrl={channelStreamUrl || defaultStreamUrl}
+              streamUrl={channelStreamUrl}
             />
 
             {/* Features Below Player */}
