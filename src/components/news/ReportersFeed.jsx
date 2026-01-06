@@ -293,12 +293,22 @@ export default function ReportersFeed() {
     initialData: []
   });
 
+  const { data: dbReporters = [] } = useQuery({
+    queryKey: ['db-reporters'],
+    queryFn: () => base44.entities.Reporter.list('name'),
+    staleTime: 2 * 60 * 1000,
+    initialData: []
+  });
+
   useEffect(() => {
     if (allArticles.length > 0) {
+      // Use DB reporters if available, otherwise fall back to hardcoded
+      const reportersToUse = dbReporters.length > 0 ? dbReporters : REPORTERS;
+      
       // Match articles to reporters based on category
-      const matched = REPORTERS.map(reporter => {
+      const matched = reportersToUse.map(reporter => {
         const article = allArticles.find(a => 
-          reporter.categories.includes(a.category)
+          reporter.categories?.includes(a.category)
         );
         
         if (article) {
@@ -316,7 +326,7 @@ export default function ReportersFeed() {
 
       setReporterArticles(matched.slice(0, 6));
     }
-  }, [allArticles]);
+  }, [allArticles, dbReporters]);
 
   if (reporterArticles.length === 0) {
     return (

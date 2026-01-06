@@ -226,8 +226,17 @@ export default function Reporters() {
 
                 {/* Reporter Info */}
                 <div className="p-4">
+                  {/* Bio */}
+                  {reporter.bio && (
+                    <div className="mb-4 p-3 bg-gray-50 dark:bg-gray-700/50 rounded-lg border border-gray-200 dark:border-gray-600">
+                      <p className="text-xs text-gray-700 dark:text-gray-300 leading-relaxed">
+                        {reporter.bio}
+                      </p>
+                    </div>
+                  )}
+
                   {/* Specialty */}
-                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 mb-3 font-medium">
                     {reporter.specialty}
                   </p>
 
