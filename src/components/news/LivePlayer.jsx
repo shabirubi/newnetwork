@@ -13,12 +13,14 @@ import ShareButtons from "../shared/ShareButtons";
 
 
 
+const DEFAULT_STREAM = "https://www.youtube.com/embed/2q9lcnXBicQ";
+
 export default function LivePlayer({ 
   title = "שידור חי - הרשת החדשה",
   viewerCount = 0,
   isLive = true,
   thumbnailUrl = null,
-  streamUrl = null
+  streamUrl = DEFAULT_STREAM
 }) {
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(false);
@@ -26,17 +28,15 @@ export default function LivePlayer({
   const [showControls, setShowControls] = useState(true);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [viewerReactions, setViewerReactions] = useState(1234);
-  const [currentStreamUrl, setCurrentStreamUrl] = useState(streamUrl);
+  const [currentStreamUrl, setCurrentStreamUrl] = useState(streamUrl || DEFAULT_STREAM);
   const videoRef = useRef(null);
   const containerRef = useRef(null);
   const hlsRef = useRef(null);
 
   // Update stream URL when prop changes - force play
   useEffect(() => {
-    if (streamUrl) {
-      setCurrentStreamUrl(streamUrl);
-      setIsPlaying(true);
-    }
+    setCurrentStreamUrl(streamUrl || DEFAULT_STREAM);
+    setIsPlaying(true);
   }, [streamUrl]);
 
   const togglePlay = () => {
