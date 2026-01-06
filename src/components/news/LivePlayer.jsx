@@ -36,7 +36,7 @@ export default function LivePlayer({
 
   const videoPlaylist = [
     "7f6TVsLPUbQ",
-    "UAVHgNaPVwQ"
+    "hqb0D9gEEjU"
   ];
 
   const currentStreamUrl = streamUrl;
