@@ -29,9 +29,11 @@ export default function LivePlayer({
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [viewerReactions, setViewerReactions] = useState(1234);
   const [dynamicViewerCount, setDynamicViewerCount] = useState(viewerCount || 2847);
+  const [hasPlayedOnce, setHasPlayedOnce] = useState(false);
   const videoRef = useRef(null);
   const containerRef = useRef(null);
   const hlsRef = useRef(null);
+  const playerRef = useRef(null);
 
   const currentStreamUrl = streamUrl || DEFAULT_STREAM;
 
@@ -48,6 +50,60 @@ export default function LivePlayer({
 
     return () => clearInterval(interval);
   }, []);
+
+  // YouTube IFrame API for controlling playback
+  useEffect(() => {
+    const url = currentStreamUrl;
+    if (!url.includes('youtube.com') && !url.includes('youtu.be')) return;
+
+    // Load YouTube IFrame API
+    const tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    const firstScriptTag = document.getElementsByTagName('script')[0];
+    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+    window.onYouTubeIframeAPIReady = () => {
+      let videoId = '';
+      if (url.includes('youtube.com/embed/')) {
+        videoId = url.split('/embed/')[1].split('?')[0];
+      } else if (url.includes('youtu.be/')) {
+        videoId = url.split('youtu.be/')[1].split('?')[0];
+      } else if (url.includes('youtube.com/watch?v=')) {
+        videoId = url.split('watch?v=')[1].split('&')[0];
+      }
+
+      if (window.YT && window.YT.Player) {
+        playerRef.current = new window.YT.Player('youtube-player', {
+          videoId: videoId,
+          playerVars: {
+            autoplay: 1,
+            controls: 1,
+            loop: 1,
+            playlist: videoId
+          },
+          events: {
+            onStateChange: (event) => {
+              // When video ends (state 0)
+              if (event.data === 0 && !hasPlayedOnce) {
+                setHasPlayedOnce(true);
+                setIsMuted(true);
+                if (playerRef.current) {
+                  playerRef.current.mute();
+                  playerRef.current.playVideo();
+                }
+              }
+            }
+          }
+        });
+      }
+    };
+
+    return () => {
+      if (playerRef.current && playerRef.current.destroy) {
+        playerRef.current.destroy();
+      }
+    };
+  }, [currentStreamUrl, hasPlayedOnce]);
 
   const togglePlay = () => {
     setIsPlaying(!isPlaying);
@@ -213,31 +269,25 @@ export default function LivePlayer({
 
         {/* Stream iframe - for all non-HLS streams */}
         {isPlaying && !currentStreamUrl.includes('.m3u8') && !currentStreamUrl.includes('.mpd') && (
-          <iframe
-            src={(() => {
-              const url = currentStreamUrl;
-              
-              // Check if it's a YouTube URL
-              if (url.includes('youtube.com') || url.includes('youtu.be')) {
-                let videoId = '';
-                if (url.includes('youtube.com/embed/')) {
-                  videoId = url.split('/embed/')[1].split('?')[0];
-                } else if (url.includes('youtu.be/')) {
-                  videoId = url.split('youtu.be/')[1].split('?')[0];
-                } else if (url.includes('youtube.com/watch?v=')) {
-                  videoId = url.split('watch?v=')[1].split('&')[0];
-                }
-                return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=0&controls=1&loop=1&playlist=${videoId}`;
-              }
-              
-              // For all other URLs (like Channel 14), return as-is
-              return url;
-            })()}
-            className="absolute inset-0 w-full h-full"
-            allow="autoplay; fullscreen; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            title={title}
-          />
+          (() => {
+            const url = currentStreamUrl;
+            
+            // YouTube with API control
+            if (url.includes('youtube.com') || url.includes('youtu.be')) {
+              return <div id="youtube-player" className="absolute inset-0 w-full h-full" />;
+            }
+            
+            // For all other URLs (like Channel 14), regular iframe
+            return (
+              <iframe
+                src={url}
+                className="absolute inset-0 w-full h-full"
+                allow="autoplay; fullscreen; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                title={title}
+              />
+            );
+          })()
         )}
         
         {/* HLS Video Player */}
