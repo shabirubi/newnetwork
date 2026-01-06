@@ -13,7 +13,7 @@ import ShareButtons from "../shared/ShareButtons";
 
 
 
-const DEFAULT_STREAM = "https://www.c14.co.il/static/embeded/redge_player.html?live=1&autoplay=true";
+const DEFAULT_STREAM = "https://youtu.be/2q9lcnXBicQ";
 
 export default function LivePlayer({ 
   title = "שידור חי - הרשת החדשה",
