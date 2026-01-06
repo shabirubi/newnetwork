@@ -66,7 +66,7 @@ export default function ChannelSelector() {
           e.stopPropagation();
           setIsOpen(true);
         }}
-        className="flex items-center gap-1.5 px-3 py-2.5 bg-white/10 hover:bg-white/20 rounded-lg shadow-sm active:shadow-md active:scale-95 transition-all border border-white/20 text-white touch-manipulation relative z-[70]"
+        className="flex items-center gap-1.5 px-3 py-2.5 bg-white/10 hover:bg-white/20 rounded-lg shadow-sm active:shadow-md active:scale-95 transition-all border border-white/20 text-white touch-manipulation relative z-[9999]"
       >
         <Globe className="w-4 h-4 text-white" />
         <span className="text-xs font-bold text-white hidden sm:inline">
@@ -82,7 +82,8 @@ export default function ChannelSelector() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-[99999]"
+            className="fixed inset-0 z-[99999] touch-manipulation"
+            style={{ WebkitTapHighlightColor: 'transparent' }}
             onClick={(e) => {
               e.stopPropagation();
               setIsOpen(false);
@@ -96,7 +97,8 @@ export default function ChannelSelector() {
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 30, stiffness: 300 }}
               onClick={(e) => e.stopPropagation()}
-              className="absolute right-0 top-0 bottom-0 w-[85vw] max-w-sm bg-white dark:bg-gray-800 shadow-2xl overflow-y-auto"
+              className="absolute right-0 top-0 bottom-0 w-[85vw] max-w-sm bg-white dark:bg-gray-800 shadow-2xl overflow-y-auto touch-manipulation"
+              style={{ WebkitOverflowScrolling: 'touch' }}
             >
               {!selectedCountry ? (
                 <>
