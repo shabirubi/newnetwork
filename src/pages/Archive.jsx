@@ -24,7 +24,10 @@ const categoryLabels = {
 };
 
 export default function Archive() {
-  const [searchQuery, setSearchQuery] = useState("");
+  const urlParams = new URLSearchParams(window.location.search);
+  const initialSearch = urlParams.get('search') || "";
+  
+  const [searchQuery, setSearchQuery] = useState(initialSearch);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedDate, setSelectedDate] = useState("all");
 

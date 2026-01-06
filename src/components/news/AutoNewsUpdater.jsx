@@ -9,8 +9,10 @@ const NEWS_CATEGORIES = [
   { label: "פוליטיקה", query: "israel politics government today", videoSearch: false, category: "politics" },
   { label: "טכנולוגיה", query: "israel technology startups today", videoSearch: false, category: "technology" },
   { label: "ספורט", query: "israel sports football basketball today", videoSearch: true, category: "sports" },
-  { label: "בידור", query: "israel entertainment drama today", videoSearch: false, category: "entertainment" },
-  { label: "מוזיקה", query: "israel music songs albums artists today", videoSearch: true, category: "music" },
+  { label: "בידור ישראלי", query: "israel entertainment celebrities shows today", videoSearch: false, category: "entertainment" },
+  { label: "דרמות וסדרות", query: "israel tv series drama shows today", videoSearch: false, category: "entertainment" },
+  { label: "מוזיקה ישראלית", query: "israel music songs singers albums charts today", videoSearch: true, category: "music" },
+  { label: "קולנוע ותרבות", query: "israel cinema movies culture events today", videoSearch: false, category: "entertainment" },
   { label: "חדשות עולם", query: "world news international today", videoSearch: false, category: "world" },
   { label: "בריאות", query: "health medical news today", videoSearch: false, category: "health" },
   { label: "מזלות", query: "horoscope astrology zodiac daily predictions", videoSearch: false, category: "horoscope" }

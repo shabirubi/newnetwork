@@ -132,7 +132,8 @@ export default function Layout({ children }) {
       <header className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50 transition-colors duration-300 border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4">
           {/* Desktop Navigation */}
-          <nav className="hidden sm:flex items-center justify-center gap-1 py-3">
+          <nav className="hidden sm:flex items-center justify-between gap-1 py-3">
+            <div className="flex items-center gap-1">
             <Link
               to={createPageUrl("Live")}
               className="flex items-center gap-1.5 px-3 py-2 text-white bg-[#E31E24] hover:bg-[#B91C1C] rounded-lg transition-all text-xs font-bold"
@@ -192,6 +193,27 @@ export default function Layout({ children }) {
               >
                 {darkMode ? <Sun size={16} /> : <Moon size={16} />}
               </button>
+              </div>
+
+              {/* Search Box */}
+              <div className="relative">
+              <input
+                type="text"
+                placeholder="חיפוש כתבות..."
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && e.target.value.trim()) {
+                    window.location.href = createPageUrl(`Archive?search=${encodeURIComponent(e.target.value)}`);
+                  }
+                }}
+                className="w-64 px-4 py-2 pr-10 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-[#E31E24]"
+              />
+              <button className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="11" cy="11" r="8"/>
+                  <path d="m21 21-4.35-4.35"/>
+                </svg>
+              </button>
+              </div>
               </nav>
         </div>
       </header>
