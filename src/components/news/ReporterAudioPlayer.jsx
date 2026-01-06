@@ -21,16 +21,20 @@ export default function ReporterAudioPlayer({ reporter, article, onClose }) {
 
     try {
       // Create narration text with professional, dramatic structure
+      const genderText = reporter.gender === 'female' ? 'כתבת' : 'כתב';
+      const closingText = reporter.gender === 'female' ? 'נתראה בהמשך' : 'נתראה בהמשך';
+      
       const narrationPrompt = `
-צור קריינות חדשותית מקצועית, דרמטית וטבעית עבור כתב/ת חדשות.
+צור קריינות חדשותית מקצועית, דרמטית וטבעית עבור ${genderText} חדשות.
 
 הקריינות חייבת לכלול בדיוק את המבנה הזה:
 1. פתיחה: "שלום, אני ${reporter.name}, ${reporter.role} מחדשות הרשת החדשה"
-2. תוכן הכתבה: סיפור דרמטי ומעניין עם טון מתאים לנושא (20-30 שניות):
+2. תוכן הכתבה: סיפור דרמטי ומעניין עם טון מתאים לנושא (15-25 שניות):
    - אם הכתבה דרמטית/רצינית - השתמש בטון דרמטי עם הדגשות ורגש
-   - אם הכתבה קלה/הומוריסטית - השתמש בטון קליל וטבעי עם חיוך בקול
+   - אם הכתבה קלה/הומוריסטית - השתמש בטון קליל וטבעי
    - הוסף הפסקות דרמטיות במקומות מתאימים
-3. סיום: "נפגש בכתבה הבאה"
+   - דבר בלשון ${reporter.gender === 'female' ? 'נקבה' : 'זכר'}
+3. סיום: "${closingText}"
 
 פרטי הכתבה:
 כותרת: ${article.title}
@@ -38,11 +42,11 @@ ${article.subtitle ? `תת-כותרת: ${article.subtitle}` : ''}
 תוכן: ${article.content?.slice(0, 500) || article.title}
 
 חשוב מאוד:
+- דבר בלשון ${reporter.gender === 'female' ? 'נקבה' : 'זכר'} בכל הקריינות!
 - התאם את הטון למצב הרוח של הכתבה
 - אם זה נושא רציני - הוסף דרמה ומתח
 - אם זה נושא קליל - היה טבעי וקליל
-- השתמש בהפסקות (נקודות, פסיקים) ליצירת דרמה
-- הקריינות צריכה להישמע כמו כתב אמיתי בשטח
+- הקריינות צריכה להישמע כמו ${genderText} אמיתי/ת בשטח
 
 החזר רק את טקסט הקריינות המלא, ללא הסברים נוספים.
 `;
@@ -56,33 +60,57 @@ ${article.subtitle ? `תת-כותרת: ${article.subtitle}` : ''}
 
       // Use Web Speech API for Hebrew TTS
       if ('speechSynthesis' in window) {
+        // Load voices first
+        const loadVoices = () => {
+          const voices = window.speechSynthesis.getVoices();
+          return voices;
+        };
+        
+        // Wait for voices to load
+        let voices = loadVoices();
+        if (voices.length === 0) {
+          window.speechSynthesis.addEventListener('voiceschanged', () => {
+            voices = loadVoices();
+          });
+        }
+        
         const utterance = new SpeechSynthesisUtterance(result);
         utterance.lang = 'he-IL';
-        utterance.rate = 0.95;
+        utterance.rate = 0.92;
         
-        // Get all available voices
-        const voices = window.speechSynthesis.getVoices();
+        console.log('Reporter gender:', reporter.gender);
+        console.log('Available voices:', voices.map(v => `${v.name} (${v.lang})`));
         
-        // Set pitch and try to find appropriate voice based on gender
+        // Set pitch and voice based on gender
         if (reporter.gender === 'female') {
-          utterance.pitch = 1.2;
+          utterance.pitch = 1.3;
           // Try to find female Hebrew voice
           const femaleVoice = voices.find(voice => 
-            voice.lang.includes('he') && 
+            (voice.lang.includes('he') || voice.lang.includes('iw')) && 
             (voice.name.toLowerCase().includes('female') || 
              voice.name.toLowerCase().includes('zira') ||
+             voice.name.toLowerCase().includes('carmit') ||
              voice.name.toLowerCase().includes('hadar'))
-          ) || voices.find(voice => voice.lang.includes('he'));
-          if (femaleVoice) utterance.voice = femaleVoice;
+          ) || voices.find(voice => voice.lang.includes('he') || voice.lang.includes('iw'));
+          
+          if (femaleVoice) {
+            utterance.voice = femaleVoice;
+            console.log('Selected female voice:', femaleVoice.name);
+          }
         } else {
-          utterance.pitch = 0.85;
+          utterance.pitch = 0.8;
           // Try to find male Hebrew voice
           const maleVoice = voices.find(voice => 
-            voice.lang.includes('he') && 
+            (voice.lang.includes('he') || voice.lang.includes('iw')) && 
             (voice.name.toLowerCase().includes('male') || 
-             voice.name.toLowerCase().includes('asaf'))
-          ) || voices.find(voice => voice.lang.includes('he'));
-          if (maleVoice) utterance.voice = maleVoice;
+             voice.name.toLowerCase().includes('asaf') ||
+             voice.name.toLowerCase().includes('david'))
+          ) || voices.find(voice => voice.lang.includes('he') || voice.lang.includes('iw'));
+          
+          if (maleVoice) {
+            utterance.voice = maleVoice;
+            console.log('Selected male voice:', maleVoice.name);
+          }
         }
 
         utterance.onend = () => {
