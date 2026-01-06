@@ -10,7 +10,7 @@ import ReporterAudioPlayer from "./ReporterAudioPlayer";
 const REPORTERS = [
   {
     id: 1,
-    name: "רועי שרון",
+    name: "דן אבירם",
     role: "כתב ביטחון",
     image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop&crop=faces",
     gender: "male",
@@ -19,7 +19,7 @@ const REPORTERS = [
   },
   {
     id: 2,
-    name: "ניר דבורי",
+    name: "יונתן כהן",
     role: "כתב כלכלה",
     image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=faces",
     gender: "male",
@@ -28,7 +28,7 @@ const REPORTERS = [
   },
   {
     id: 3,
-    name: "אמיר בוחבוט",
+    name: "אלון רוזנברג",
     role: "כתב פוליטי",
     image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop&crop=faces",
     gender: "male",
@@ -37,7 +37,7 @@ const REPORTERS = [
   },
   {
     id: 4,
-    name: "גיא פינס",
+    name: "שי מזרחי",
     role: "כתב צבאי",
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=faces",
     gender: "male",
@@ -46,7 +46,7 @@ const REPORTERS = [
   },
   {
 id: 5,
-    name: "אסף ליברמן",
+    name: "נועם גולדשטיין",
     role: "כתב ספורט",
     image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&crop=faces",
     gender: "male",
@@ -55,7 +55,7 @@ id: 5,
   },
   {
     id: 6,
-    name: "ירון דקל",
+    name: "תומר לוי",
     role: "כתב בידור",
     image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop&crop=faces",
     gender: "male",
@@ -64,7 +64,7 @@ id: 5,
   },
   {
     id: 7,
-    name: "איתי אנגל",
+    name: "רון ברמן",
     role: "כתב טכנולוגיה",
     image: "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=400&h=400&fit=crop&crop=faces",
     gender: "male",
@@ -73,7 +73,7 @@ id: 5,
   },
   {
     id: 8,
-    name: "עמית סגל",
+    name: "עידן שפירא",
     role: "כתב בריאות",
     image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=400&fit=crop&crop=faces",
     gender: "male",
@@ -82,7 +82,7 @@ id: 5,
   },
   {
     id: 9,
-    name: "אייל ברקוביץ'",
+    name: "גיל אורן",
     role: "כתב חדשות העולם",
     image: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=400&h=400&fit=crop&crop=faces",
     gender: "male",
@@ -91,7 +91,7 @@ id: 5,
   },
   {
     id: 10,
-    name: "יובל קרני",
+    name: "אורן כרמי",
     role: "כתב אסטרולוגיה",
     image: "https://images.unsplash.com/photo-1463453091185-61582044d556?w=400&h=400&fit=crop&crop=faces",
     gender: "male",
@@ -100,7 +100,7 @@ id: 5,
   },
   {
     id: 11,
-    name: "אורי גוטליב",
+    name: "ליאור דהן",
     role: "כתב מוזיקה",
     image: "https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?w=400&h=400&fit=crop&crop=faces",
     gender: "male",
@@ -220,9 +220,11 @@ export default function ReportersFeed() {
                 </div>
 
                 {/* Article Content */}
-                <Link
-                  to={createPageUrl(`Article?id=${item.article.id}`)}
-                  className="block"
+                <button
+                  onClick={() => {
+                    window.location.href = createPageUrl(`Article?id=${item.article.id}`);
+                  }}
+                  className="block text-right w-full cursor-pointer"
                 >
                   <p className="text-xs text-gray-800 dark:text-gray-200 font-medium line-clamp-2 leading-snug group-hover:text-[#E31E24] dark:group-hover:text-[#E31E24] transition-colors mb-2">
                     {item.article.title}
@@ -230,9 +232,9 @@ export default function ReportersFeed() {
                   {item.article.subtitle && (
                     <p className="text-[10px] text-gray-600 dark:text-gray-400 line-clamp-1 mb-2">
                       {item.article.subtitle}
-                    </p>
-                  )}
-                </Link>
+                      </p>
+                      )}
+                      </button>
 
                 {/* Actions */}
                 <div className="flex items-center justify-between gap-2 pt-2 border-t border-gray-200 dark:border-gray-700">

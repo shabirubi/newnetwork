@@ -136,6 +136,10 @@ export default function Layout({ children }) {
             <div className="flex items-center gap-1">
             <Link
               to={createPageUrl("Live")}
+              onClick={(e) => {
+                e.preventDefault();
+                window.location.href = createPageUrl("Live");
+              }}
               className="flex items-center gap-1.5 px-3 py-2 text-white bg-[#E31E24] hover:bg-[#B91C1C] rounded-lg transition-all text-xs font-bold"
             >
               <Radio size={16} />
@@ -145,6 +149,10 @@ export default function Layout({ children }) {
               <Link
                 key={cat.id}
                 to={createPageUrl(cat.href)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.location.href = createPageUrl(cat.href);
+                }}
                 className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
               >
                 <cat.icon size={16} />
@@ -153,6 +161,10 @@ export default function Layout({ children }) {
               ))}
               <Link
                 to={createPageUrl("Schedule")}
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.location.href = createPageUrl("Schedule");
+                }}
                 className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
               >
                 <Clock size={16} />
@@ -160,6 +172,10 @@ export default function Layout({ children }) {
               </Link>
               <Link
                 to={createPageUrl("Home")}
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.location.href = createPageUrl("Home");
+                }}
                 className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
               >
                 <Users size={16} />
@@ -167,6 +183,10 @@ export default function Layout({ children }) {
               </Link>
               <Link
                 to={createPageUrl("NewsLoader")}
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.location.href = createPageUrl("NewsLoader");
+                }}
                 className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
               >
                 <Globe size={16} />
@@ -174,6 +194,10 @@ export default function Layout({ children }) {
               </Link>
               <Link
                 to={createPageUrl("ChannelsManager")}
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.location.href = createPageUrl("ChannelsManager");
+                }}
                 className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
               >
                 <Radio size={16} />
@@ -181,6 +205,10 @@ export default function Layout({ children }) {
               </Link>
               <Link
                 to={createPageUrl("Archive")}
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.location.href = createPageUrl("Archive");
+                }}
                 className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
               >
                 <Clock size={16} />
