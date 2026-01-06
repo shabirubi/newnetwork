@@ -130,6 +130,18 @@ const REPORTER_PROMPTS = [
     name: "מיה פרידמן",
     role: "מגישה - ערוץ הילדים",
     prompt: "Professional young Israeli female children's entertainer in her mid 20s, beautiful, joyful animated expression, fun styled ponytail, wearing bright playful costume, standing in kids play area, solid vibrant yellow gradient background, cinematic lighting, photorealistic, high quality, 8K, professional headshot"
+  },
+  {
+    id: 31,
+    name: "מוחמד חסן",
+    role: "כתב ערבי",
+    prompt: "Professional young Israeli Arab male news reporter in his early 30s, handsome, confident expression, short neat black hair, wearing elegant dark suit, standing in newsroom, solid vibrant emerald green gradient background, cinematic lighting, photorealistic, high quality, 8K, professional headshot"
+  },
+  {
+    id: 32,
+    name: "הרב יעקב כהן",
+    role: "כתב רבני",
+    prompt: "Professional young Israeli Jewish Orthodox male reporter in his early 30s, handsome, wise thoughtful expression, black kippah on head, short beard, wearing white shirt and dark vest, standing in synagogue setting, solid vibrant royal blue gradient background, cinematic lighting, photorealistic, high quality, 8K, professional headshot"
   }
 ];
 
@@ -233,7 +245,9 @@ ${generatedImages.filter(r => r.success).map((reporter, idx) => `  {
       "כתב בלוקצ׳יין וקריפטו": ["finance", "technology"],
       "כתבת משחקי מחשב": ["entertainment", "technology"],
       "כתב פסיכולוגיה ומשפחה": ["health", "world"],
-      "מגישה - ערוץ הילדים": ["entertainment"]
+      "מגישה - ערוץ הילדים": ["entertainment"],
+      "כתב ערבי": ["world", "politics", "breaking"],
+      "כתב רבני": ["world", "politics", "breaking"]
     };
     return categoryMap[role] || ["breaking"];
   };
@@ -268,7 +282,9 @@ ${generatedImages.filter(r => r.success).map((reporter, idx) => `  {
       "כתב בלוקצ׳יין וקריפטו": "מומחה למטבעות דיגיטליים",
       "כתבת משחקי מחשב": "מומחית לגיימינג ומשחקים",
       "כתב פסיכולוגיה ומשפחה": "פסיכולוג ומומחה לקשרי משפחה",
-      "מגישה - ערוץ הילדים": "מגישה לילדים ונוער"
+      "מגישה - ערוץ הילדים": "מגישה לילדים ונוער",
+      "כתב ערבי": "כתב המגזר הערבי והחברה הערבית בישראל",
+      "כתב רבני": "כתב עניינים רבניים ויהדות"
     };
     return specialtyMap[role] || "";
   };
