@@ -418,33 +418,33 @@ export default function ReportersFeed() {
                       </button>
 
                 {/* Actions */}
-                <div className="flex items-center justify-between gap-2 pt-2 border-t border-gray-200 dark:border-gray-700">
+                <div className="space-y-2 pt-2 border-t border-gray-200 dark:border-gray-700">
                   {item.article.is_breaking && (
                     <span className="inline-flex items-center gap-1 px-2 py-1 bg-[#E31E24] text-white text-[9px] font-bold rounded-full">
                       <TrendingUp className="w-2.5 h-2.5" />
                       חם
                     </span>
                   )}
-                  <div className="mr-auto flex items-center gap-2">
+                  <div className="grid grid-cols-2 gap-2">
                     <button
                       onClick={(e) => {
                         e.preventDefault();
                         setChatReporter(item);
                       }}
-                      className="flex items-center gap-1 px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white text-[9px] font-bold rounded-full shadow-md hover:shadow-lg transition-all"
+                      className="flex items-center justify-center gap-1 px-2 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-bold rounded-lg shadow-md hover:shadow-lg transition-all"
                     >
-                      <MessageCircle className="w-2.5 h-2.5" />
-                      צ׳אט
+                      <MessageCircle className="w-3 h-3" />
+                      צ׳אט עם הכתב
                     </button>
                     <button
                       onClick={(e) => {
                         e.preventDefault();
                         setSelectedReporter(item);
                       }}
-                      className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-[#E31E24] to-[#B91C1C] hover:from-[#B91C1C] hover:to-[#991B1B] text-white text-[10px] font-bold rounded-full shadow-md hover:shadow-lg transition-all"
+                      className="flex items-center justify-center gap-1 px-2 py-1.5 bg-gradient-to-r from-[#E31E24] to-[#B91C1C] hover:from-[#B91C1C] hover:to-[#991B1B] text-white text-[10px] font-bold rounded-lg shadow-md hover:shadow-lg transition-all"
                     >
-                      <Play className="w-2.5 h-2.5" fill="white" />
-                      שמע
+                      <Play className="w-3 h-3" fill="white" />
+                      שמע כתבה
                     </button>
                   </div>
                 </div>
