@@ -5,12 +5,15 @@ const NEWS_CATEGORIES = [
   { label: "חדשות חמות", query: "breaking news israel today", videoSearch: false, category: "breaking" },
   { label: "ביטחון", query: "israel security defense IDF today", videoSearch: true, category: "security" },
   { label: "כלכלה", query: "israel economy business today", videoSearch: false, category: "economy" },
+  { label: "פיננסים", query: "israel finance banking stocks investment today", videoSearch: false, category: "finance" },
   { label: "פוליטיקה", query: "israel politics government today", videoSearch: false, category: "politics" },
   { label: "טכנולוגיה", query: "israel technology startups today", videoSearch: false, category: "technology" },
   { label: "ספורט", query: "israel sports football basketball today", videoSearch: true, category: "sports" },
   { label: "בידור", query: "israel entertainment drama today", videoSearch: false, category: "entertainment" },
+  { label: "מוזיקה", query: "israel music songs albums artists today", videoSearch: true, category: "music" },
   { label: "חדשות עולם", query: "world news international today", videoSearch: false, category: "world" },
-  { label: "בריאות", query: "health medical news today", videoSearch: false, category: "health" }
+  { label: "בריאות", query: "health medical news today", videoSearch: false, category: "health" },
+  { label: "מזלות", query: "horoscope astrology zodiac daily predictions", videoSearch: false, category: "horoscope" }
 ];
 
 export default function AutoNewsUpdater() {
@@ -22,8 +25,8 @@ export default function AutoNewsUpdater() {
       const lastUpdateTime = localStorage.getItem('newsLastUpdate');
       const now = Date.now();
       
-      // Update immediately on first load, then every hour
-      if (!lastUpdateTime || now - parseInt(lastUpdateTime) > 3600000) {
+      // Update immediately on first load, then every 30 minutes
+      if (!lastUpdateTime || now - parseInt(lastUpdateTime) > 1800000) {
         await updateNews();
       }
     };
@@ -31,8 +34,8 @@ export default function AutoNewsUpdater() {
     // Run immediately on mount
     checkAndUpdate();
 
-    // Check every hour
-    const interval = setInterval(checkAndUpdate, 3600000);
+    // Check every 30 minutes
+    const interval = setInterval(checkAndUpdate, 1800000);
     return () => clearInterval(interval);
   }, []);
 
@@ -66,7 +69,7 @@ export default function AutoNewsUpdater() {
     console.log('🔄 עדכון אוטומטי של חדשות מתחיל...');
 
     try {
-      const numCategories = Math.floor(Math.random() * 3) + 4; // 4-6 קטגוריות
+      const numCategories = Math.floor(Math.random() * 4) + 5; // 5-8 קטגוריות
       const shuffled = [...NEWS_CATEGORIES].sort(() => Math.random() - 0.5);
       const selectedCategories = shuffled.slice(0, numCategories);
       
