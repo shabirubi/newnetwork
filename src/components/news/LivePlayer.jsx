@@ -35,14 +35,16 @@ export default function LivePlayer({
 
   const currentStreamUrl = streamUrl || DEFAULT_STREAM;
 
-  // Dynamic viewer count with upward trend
+  // Dynamic viewer count with realistic fluctuation
   useEffect(() => {
     const interval = setInterval(() => {
       setDynamicViewerCount(prev => {
-        const increase = Math.floor(Math.random() * 15) + 5; // Random increase 5-20
-        return prev + increase;
+        const change = Math.random() > 0.3 
+          ? Math.floor(Math.random() * 25) + 10  // Usually increase (10-35)
+          : Math.floor(Math.random() * 10) - 5;   // Sometimes decrease (-5 to +5)
+        return Math.max(1000, prev + change); // Never below 1000
       });
-    }, 8000); // Update every 8 seconds
+    }, 2500); // Update every 2.5 seconds
 
     return () => clearInterval(interval);
   }, []);
