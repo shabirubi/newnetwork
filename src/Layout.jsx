@@ -206,21 +206,20 @@ export default function Layout({ children }) {
               className="absolute right-0 top-0 bottom-0 w-[85vw] max-w-sm bg-white dark:bg-gray-800 shadow-2xl overflow-y-auto"
             >
               {/* Drawer Header */}
-              <div className="sticky top-0 bg-gradient-to-br from-[#E31E24] to-red-600 p-6 shadow-lg">
-                <div className="flex items-center justify-between mb-4">
+              <div className="sticky top-0 bg-gradient-to-br from-gray-900 to-gray-800 dark:from-black dark:to-gray-900 p-4 shadow-lg">
+                <div className="flex items-center justify-between">
                   <img 
                     src={LOGO_URL} 
                     alt="הרשת החדשה" 
-                    className="h-16 w-auto"
+                    className="h-12 w-auto"
                   />
                   <button
                     onClick={() => setMobileMenuOpen(false)}
-                    className="p-2 rounded-full bg-white/20 text-white active:scale-95 transition-transform"
+                    className="p-2 rounded-full bg-white/10 text-white active:scale-95 transition-transform"
                   >
-                    <X size={24} />
+                    <X size={22} />
                   </button>
                 </div>
-                <p className="text-white/90 text-sm">תפריט ראשי</p>
               </div>
 
               {/* Live Button */}
