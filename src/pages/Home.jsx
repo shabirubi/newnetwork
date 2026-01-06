@@ -16,7 +16,12 @@ import VideoHighlights from "../components/news/VideoHighlights";
 import LiveStats from "../components/news/LiveStats";
 
 export default function Home() {
-  const [selectedChannel, setSelectedChannel] = React.useState(null);
+  const [selectedChannel, setSelectedChannel] = React.useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('selectedChannel') || null;
+    }
+    return null;
+  });
 
   React.useEffect(() => {
     const handleChannelChange = (e) => {
@@ -28,14 +33,17 @@ export default function Home() {
 
   const { data: channels = [] } = useQuery({
     queryKey: ['channels'],
-    queryFn: () => base44.entities.NewsChannel.filter({ is_active: true }),
+    queryFn: () => base44.entities.NewsChannel.filter({ is_active: true }, 'name'),
     initialData: []
   });
 
-  // Auto-select first channel on load
+  // Auto-select Channel 13 or first channel on load
   React.useEffect(() => {
     if (channels.length > 0 && !selectedChannel) {
-      setSelectedChannel(channels[0].id);
+      const channel13 = channels.find(c => c.name.includes('13') || c.name.includes('ערוץ 13'));
+      const defaultChannel = channel13 || channels[0];
+      setSelectedChannel(defaultChannel.id);
+      localStorage.setItem('selectedChannel', defaultChannel.id);
     }
   }, [channels, selectedChannel]);
 
