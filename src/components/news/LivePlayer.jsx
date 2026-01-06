@@ -20,7 +20,7 @@ export default function LivePlayer({
   viewerCount = 0,
   isLive = true,
   thumbnailUrl = null,
-  streamUrl = DEFAULT_STREAM
+  streamUrl
 }) {
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(false);
@@ -28,16 +28,11 @@ export default function LivePlayer({
   const [showControls, setShowControls] = useState(true);
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [viewerReactions, setViewerReactions] = useState(1234);
-  const [currentStreamUrl, setCurrentStreamUrl] = useState(streamUrl || DEFAULT_STREAM);
   const videoRef = useRef(null);
   const containerRef = useRef(null);
   const hlsRef = useRef(null);
 
-  // Update stream URL when prop changes - force play
-  useEffect(() => {
-    setCurrentStreamUrl(streamUrl || DEFAULT_STREAM);
-    setIsPlaying(true);
-  }, [streamUrl]);
+  const currentStreamUrl = streamUrl || DEFAULT_STREAM;
 
   const togglePlay = () => {
     setIsPlaying(!isPlaying);
@@ -60,9 +55,9 @@ export default function LivePlayer({
   // Setup HLS.js for m3u8 streams
   useEffect(() => {
     const video = videoRef.current;
-    if (!video || !currentStreamUrl || !isPlaying) return;
+    if (!video || !isPlaying) return;
 
-    const isHLS = currentStreamUrl.includes('.m3u8');
+    const isHLS = currentStreamUrl?.includes('.m3u8');
     if (!isHLS) return;
 
     // Cleanup previous HLS instance
@@ -238,15 +233,7 @@ export default function LivePlayer({
             frameBorder="0"
           />
         )}
-        {isPlaying && !currentStreamUrl && (
-          <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-900 to-gray-800">
-            <div className="text-center text-white px-4">
-              <Radio className="w-16 h-16 mx-auto mb-4 text-[#E31E24] animate-pulse" />
-              <h3 className="text-xl font-bold mb-2">בחר ערוץ לצפייה</h3>
-              <p className="text-gray-400 text-sm">לחץ על בורר הערוצים למעלה</p>
-            </div>
-          </div>
-        )}
+
       </div>
 
       {/* Controls Bar */}
