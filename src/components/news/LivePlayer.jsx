@@ -198,39 +198,45 @@ export default function LivePlayer({
           </div>
         )}
 
-        {/* Live Stream when Playing */}
-        {isPlaying && currentStreamUrl && (currentStreamUrl.includes('.m3u8') || currentStreamUrl.includes('.mpd')) && (
+        {/* YouTube/iframe Stream */}
+        {isPlaying && (
+          <iframe
+            src={(() => {
+              const url = currentStreamUrl;
+              // Handle HLS/DASH - skip iframe for these
+              if (url.includes('.m3u8') || url.includes('.mpd')) {
+                return null;
+              }
+              
+              let videoId = '';
+              if (url.includes('youtube.com/embed/')) {
+                videoId = url.split('/embed/')[1].split('?')[0];
+              } else if (url.includes('youtu.be/')) {
+                videoId = url.split('youtu.be/')[1].split('?')[0];
+              } else if (url.includes('youtube.com/watch?v=')) {
+                videoId = url.split('watch?v=')[1].split('&')[0];
+              } else {
+                return url;
+              }
+              return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=0&controls=1`;
+            })()}
+            className="absolute inset-0 w-full h-full"
+            allow="autoplay; fullscreen; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            title={title}
+          />
+        )}
+        
+        {/* HLS Video Player */}
+        {isPlaying && (currentStreamUrl.includes('.m3u8') || currentStreamUrl.includes('.mpd')) && (
           <video
             ref={videoRef}
-            key={currentStreamUrl}
             src={currentStreamUrl}
             className="absolute inset-0 w-full h-full bg-black object-contain"
             autoPlay
             playsInline
             muted={isMuted}
             controls={false}
-          />
-        )}
-        {isPlaying && currentStreamUrl && !currentStreamUrl.includes('.m3u8') && !currentStreamUrl.includes('.mpd') && (
-          <iframe
-            key={currentStreamUrl}
-            src={(() => {
-              let videoId = '';
-              if (currentStreamUrl.includes('youtube.com/embed/')) {
-                videoId = currentStreamUrl.split('/embed/')[1].split('?')[0];
-              } else if (currentStreamUrl.includes('youtu.be/')) {
-                videoId = currentStreamUrl.split('youtu.be/')[1].split('?')[0];
-              } else if (currentStreamUrl.includes('youtube.com/watch?v=')) {
-                videoId = currentStreamUrl.split('watch?v=')[1].split('&')[0];
-              } else {
-                return currentStreamUrl;
-              }
-              return `https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&mute=0&controls=1&playlist=${videoId}`;
-            })()}
-            className="absolute inset-0 w-full h-full"
-            allow="autoplay; fullscreen; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            frameBorder="0"
           />
         )}
 
