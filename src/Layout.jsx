@@ -11,6 +11,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import ClockWidget from "./components/header/ClockWidget";
 import WeatherWidget from "./components/header/WeatherWidget";
 import ChannelSelector from "./components/header/ChannelSelector";
+import NewsTicker from "./components/header/NewsTicker";
 
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/a44ef2558_212.png";
 
@@ -135,27 +136,7 @@ export default function Layout({ children }) {
       </div>
 
       {/* Breaking News Ticker */}
-      <div className="bg-[#E31E24] dark:bg-[#B91C1C] text-white py-2 overflow-hidden">
-        <div className="flex items-center">
-          <span className="bg-black text-white px-4 py-1 font-bold text-sm shrink-0 mr-4">
-            חדשות חמות
-          </span>
-          <div className="ticker-wrapper overflow-hidden flex-1">
-            <motion.div
-              className="flex whitespace-nowrap"
-              animate={{ x: ["0%", "-50%"] }}
-              transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
-            >
-              <span className="mx-8">• פיגוע נסכל בגבול הצפון - צה"ל מדווח על ניטרול מחבלים</span>
-              <span className="mx-8">• הבורסה בתל אביב פותחת במגמה חיובית</span>
-              <span className="mx-8">• ראש הממשלה ייפגש היום עם נשיא ארה"ב</span>
-              <span className="mx-8">• מזג אוויר: גל חום כבד צפוי בסוף השבוע</span>
-              <span className="mx-8">• פיגוע נסכל בגבול הצפון - צה"ל מדווח על ניטרול מחבלים</span>
-              <span className="mx-8">• הבורסה בתל אביב פותחת במגמה חיובית</span>
-            </motion.div>
-          </div>
-        </div>
-      </div>
+      <NewsTicker />
 
       {/* Header */}
       <header className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50 transition-colors duration-300 border-b border-gray-200 dark:border-gray-700">

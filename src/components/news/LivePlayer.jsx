@@ -209,27 +209,27 @@ export default function LivePlayer({
           </div>
         )}
 
-        {/* YouTube/iframe Stream */}
-        {isPlaying && (
+        {/* Stream iframe - for all non-HLS streams */}
+        {isPlaying && !currentStreamUrl.includes('.m3u8') && !currentStreamUrl.includes('.mpd') && (
           <iframe
             src={(() => {
               const url = currentStreamUrl;
-              // Handle HLS/DASH - skip iframe for these
-              if (url.includes('.m3u8') || url.includes('.mpd')) {
-                return null;
+              
+              // Check if it's a YouTube URL
+              if (url.includes('youtube.com') || url.includes('youtu.be')) {
+                let videoId = '';
+                if (url.includes('youtube.com/embed/')) {
+                  videoId = url.split('/embed/')[1].split('?')[0];
+                } else if (url.includes('youtu.be/')) {
+                  videoId = url.split('youtu.be/')[1].split('?')[0];
+                } else if (url.includes('youtube.com/watch?v=')) {
+                  videoId = url.split('watch?v=')[1].split('&')[0];
+                }
+                return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=0&controls=1&loop=1&playlist=${videoId}`;
               }
               
-              let videoId = '';
-              if (url.includes('youtube.com/embed/')) {
-                videoId = url.split('/embed/')[1].split('?')[0];
-              } else if (url.includes('youtu.be/')) {
-                videoId = url.split('youtu.be/')[1].split('?')[0];
-              } else if (url.includes('youtube.com/watch?v=')) {
-                videoId = url.split('watch?v=')[1].split('&')[0];
-              } else {
-                return url;
-              }
-              return `https://www.youtube.com/embed/${videoId}?autoplay=1&mute=0&controls=1&loop=1&playlist=${videoId}`;
+              // For all other URLs (like Channel 14), return as-is
+              return url;
             })()}
             className="absolute inset-0 w-full h-full"
             allow="autoplay; fullscreen; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
