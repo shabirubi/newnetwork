@@ -29,7 +29,6 @@ export default function LivePlayer({
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [viewerReactions, setViewerReactions] = useState(1234);
   const [dynamicViewerCount, setDynamicViewerCount] = useState(viewerCount || 2847);
-  const [hasPlayedOnce, setHasPlayedOnce] = useState(false);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const videoRef = useRef(null);
   const containerRef = useRef(null);
@@ -37,11 +36,11 @@ export default function LivePlayer({
   const playerRef = useRef(null);
 
   const videoPlaylist = [
-    "https://www.youtube.com/embed/7f6TVsLPUbQ",
-    "https://youtube.com/shorts/UAVHgNaPVwQ"
+    "7f6TVsLPUbQ",
+    "UAVHgNaPVwQ"
   ];
 
-  const currentStreamUrl = streamUrl || videoPlaylist[currentVideoIndex];
+  const currentStreamUrl = streamUrl;
 
   // Dynamic viewer count with realistic fluctuation
   useEffect(() => {
@@ -58,57 +57,57 @@ export default function LivePlayer({
   }, []);
 
   // YouTube IFrame API for controlling playback
-  useEffect(() => {
-    const url = currentStreamUrl;
-    if (!url.includes('youtube.com') && !url.includes('youtu.be')) return;
+    useEffect(() => {
+      if (currentStreamUrl) return; // If custom stream URL provided, skip YouTube API
 
-    // Load YouTube IFrame API
-    const tag = document.createElement('script');
-    tag.src = 'https://www.youtube.com/iframe_api';
-    const firstScriptTag = document.getElementsByTagName('script')[0];
-    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
-    window.onYouTubeIframeAPIReady = () => {
-      let videoId = '';
-      if (url.includes('youtube.com/embed/')) {
-        videoId = url.split('/embed/')[1].split('?')[0];
-      } else if (url.includes('youtu.be/')) {
-        videoId = url.split('youtu.be/')[1].split('?')[0];
-      } else if (url.includes('youtube.com/watch?v=')) {
-        videoId = url.split('watch?v=')[1].split('&')[0];
+      // Load YouTube IFrame API
+      if (!window.YT) {
+        const tag = document.createElement('script');
+        tag.src = 'https://www.youtube.com/iframe_api';
+        const firstScriptTag = document.getElementsByTagName('script')[0];
+        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
       }
 
-      if (window.YT && window.YT.Player) {
-        playerRef.current = new window.YT.Player('youtube-player', {
-          videoId: videoId,
-          playerVars: {
-            autoplay: 1,
-            controls: 1,
-            loop: 1,
-            playlist: videoId
-          },
-          events: {
-            onStateChange: (event) => {
-              // When video ends (state 0)
-              if (event.data === 0) {
-                // Move to next video in playlist
-                setCurrentVideoIndex((prevIndex) => {
-                  const nextIndex = (prevIndex + 1) % videoPlaylist.length;
-                  return nextIndex;
-                });
+      const initPlayer = () => {
+        if (window.YT && window.YT.Player) {
+          if (playerRef.current && playerRef.current.destroy) {
+            playerRef.current.destroy();
+          }
+
+          playerRef.current = new window.YT.Player('youtube-player', {
+            videoId: videoPlaylist[currentVideoIndex],
+            playerVars: {
+              autoplay: 1,
+              controls: 1,
+              rel: 0,
+              modestbranding: 1
+            },
+            events: {
+              onStateChange: (event) => {
+                // When video ends (state 0)
+                if (event.data === 0) {
+                  const nextIndex = (currentVideoIndex + 1) % videoPlaylist.length;
+                  setCurrentVideoIndex(nextIndex);
+                }
               }
             }
-          }
-        });
-      }
-    };
+          });
+        }
+      };
 
-    return () => {
-      if (playerRef.current && playerRef.current.destroy) {
-        playerRef.current.destroy();
+      if (window.YT && window.YT.Player) {
+        initPlayer();
+      } else {
+        window.onYouTubeIframeAPIReady = initPlayer;
       }
-    };
-    }, [currentStreamUrl]);
+
+      return () => {
+        if (playerRef.current && playerRef.current.destroy) {
+          playerRef.current.destroy();
+          playerRef.current = null;
+        }
+      };
+    }, [currentVideoIndex, currentStreamUrl]);
 
   const togglePlay = () => {
     setIsPlaying(!isPlaying);
@@ -273,27 +272,28 @@ export default function LivePlayer({
         )}
 
         {/* Stream iframe - for all non-HLS streams */}
-        {isPlaying && !currentStreamUrl.includes('.m3u8') && !currentStreamUrl.includes('.mpd') && (
+        {isPlaying && (
           (() => {
-            const url = currentStreamUrl;
-
-            // YouTube with API control
-            if (url.includes('youtube.com') || url.includes('youtu.be')) {
+            // YouTube with API control (default)
+            if (!currentStreamUrl) {
               return <div id="youtube-player" className="absolute inset-0 w-full h-full" />;
             }
 
-            // For all other URLs (like Channel 14), regular iframe
-            return (
-              <iframe
-                src={url}
-                className="absolute inset-0 w-full h-full"
-                allow="autoplay; fullscreen; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowFullScreen
-                referrerPolicy="no-referrer-when-downgrade"
-                sandbox="allow-scripts allow-same-origin allow-presentation allow-forms"
-                title={title}
-              />
-            );
+            // For custom stream URLs (like Channel 14)
+            if (!currentStreamUrl.includes('.m3u8') && !currentStreamUrl.includes('.mpd')) {
+              return (
+                <iframe
+                  src={currentStreamUrl}
+                  className="absolute inset-0 w-full h-full"
+                  allow="autoplay; fullscreen; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                  referrerPolicy="no-referrer-when-downgrade"
+                  sandbox="allow-scripts allow-same-origin allow-presentation allow-forms"
+                  title={title}
+                />
+              );
+            }
+            return null;
           })()
         )}
         
