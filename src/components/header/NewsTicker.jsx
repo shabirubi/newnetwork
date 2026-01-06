@@ -3,12 +3,12 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "../../utils";
 import { base44 } from "@/api/base44Client";
 import { motion } from "framer-motion";
-import { Flame, Siren, MessageSquareWarning } from "lucide-react";
+import { Flame, Siren, MessageSquareWarning, Moon, Sun } from "lucide-react";
 import ClockWidget from "./ClockWidget";
 import WeatherWidget from "./WeatherWidget";
 import ChannelSelector from "./ChannelSelector";
 
-export default function NewsTicker() {
+export default function NewsTicker({ darkMode, setDarkMode }) {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -101,6 +101,13 @@ export default function NewsTicker() {
         </Link>
 
         <div className="flex items-center gap-2 shrink-0">
+          <button
+            onClick={() => setDarkMode(!darkMode)}
+            className="flex items-center justify-center w-8 h-8 rounded-lg bg-black/40 hover:bg-black/60 text-white active:scale-95 transition-all"
+          >
+            {darkMode ? <Sun size={14} /> : <Moon size={14} />}
+          </button>
+          
           <ClockWidget />
           <WeatherWidget />
           <ChannelSelector />

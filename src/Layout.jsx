@@ -81,25 +81,38 @@ export default function Layout({ children }) {
         }
       `}</style>
 
-      {/* Top Bar with Logo */}
-      <div className="bg-gray-900 dark:bg-black text-white py-1.5 px-2 lg:px-4 border-b border-gray-800">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <img 
-            src={LOGO_URL} 
-            alt="הרשת החדשה" 
-            className="h-16 lg:h-20 w-auto"
-          />
-          <button
-            onClick={() => setDarkMode(!darkMode)}
-            className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-800 dark:bg-gray-700 text-gray-200 active:scale-95 transition-transform"
-          >
-            {darkMode ? <Sun size={14} /> : <Moon size={14} />}
-          </button>
-        </div>
-      </div>
-
       {/* Breaking News Ticker */}
-      <NewsTicker />
+      <NewsTicker darkMode={darkMode} setDarkMode={setDarkMode} />
+
+      {/* Floating Logo */}
+      <motion.div
+        initial={{ opacity: 0, x: 100 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="fixed left-6 top-1/2 -translate-y-1/2 z-50 hidden lg:block"
+      >
+        <motion.div
+          animate={{ 
+            y: [0, -10, 0],
+            rotate: [0, 2, 0, -2, 0]
+          }}
+          transition={{ 
+            duration: 4, 
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+          className="relative group cursor-pointer"
+        >
+          <div className="absolute inset-0 bg-[#E31E24] blur-2xl opacity-50 group-hover:opacity-70 transition-opacity rounded-full"></div>
+          <Link to={createPageUrl("Home")}>
+            <img 
+              src={LOGO_URL} 
+              alt="הרשת החדשה" 
+              className="h-24 w-auto relative z-10 drop-shadow-2xl hover:scale-110 transition-transform duration-300"
+            />
+          </Link>
+        </motion.div>
+      </motion.div>
 
       {/* Header */}
       <header className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50 transition-colors duration-300 border-b border-gray-200 dark:border-gray-700">
