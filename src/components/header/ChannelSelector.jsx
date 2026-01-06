@@ -82,7 +82,7 @@ export default function ChannelSelector() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[9999]"
+            className="fixed inset-0 z-[99999]"
           >
             <div 
               className="absolute inset-0 bg-black/60 backdrop-blur-sm"
@@ -96,7 +96,7 @@ export default function ChannelSelector() {
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="absolute right-0 top-0 bottom-0 w-[85vw] max-w-sm bg-white dark:bg-gray-800 shadow-2xl overflow-y-auto z-10"
+              className="absolute right-0 top-0 bottom-0 w-[85vw] max-w-sm bg-white dark:bg-gray-800 shadow-2xl overflow-y-auto"
             >
               {!selectedCountry ? (
                 <>

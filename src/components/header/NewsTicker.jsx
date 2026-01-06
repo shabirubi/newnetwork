@@ -66,7 +66,7 @@ export default function NewsTicker({ darkMode, setDarkMode }) {
 
   if (loading || news.length === 0) {
     return (
-      <div className="bg-black dark:bg-gray-950 text-white py-2 overflow-hidden">
+      <div className="bg-black dark:bg-gray-950 text-white py-2 overflow-hidden relative">
         <div className="flex items-center">
           <span className="bg-black text-white px-4 py-1 font-bold text-sm shrink-0 mr-4 flex items-center gap-2">
             <Flame className="w-4 h-4" />
@@ -78,7 +78,7 @@ export default function NewsTicker({ darkMode, setDarkMode }) {
   }
 
   return (
-    <div className="bg-[#E31E24] dark:bg-[#B91C1C] text-white py-2 overflow-hidden">
+    <div className="bg-black dark:bg-gray-950 text-white py-2 overflow-hidden relative">
       <div className="flex items-center gap-1 sm:gap-3 px-2 lg:px-4">
         <span className="bg-[#E31E24] text-white px-2 sm:px-3 py-1 sm:py-1.5 font-bold text-[10px] sm:text-xs shrink-0 flex items-center gap-1 sm:gap-1.5 rounded">
           <Flame className="w-3 sm:w-3.5 h-3 sm:h-3.5 animate-pulse" />
