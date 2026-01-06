@@ -34,11 +34,6 @@ export default function LivePlayer({
   const hlsRef = useRef(null);
   const playerRef = useRef(null);
 
-  const videoPlaylist = [
-    "7f6TVsLPUbQ",
-    "hqb0D9gEEjU"
-  ];
-
   const currentStreamUrl = streamUrl;
 
   // Dynamic viewer count with realistic fluctuation
@@ -59,6 +54,8 @@ export default function LivePlayer({
     useEffect(() => {
       if (currentStreamUrl) return; // If custom stream URL provided, skip YouTube API
 
+      const playlist = ["7f6TVsLPUbQ", "hqb0D9gEEjU"];
+
       // Load YouTube IFrame API
       if (!window.YT) {
         const tag = document.createElement('script');
@@ -70,24 +67,17 @@ export default function LivePlayer({
       const initPlayer = () => {
         if (window.YT && window.YT.Player && !playerRef.current) {
           playerRef.current = new window.YT.Player('youtube-player', {
-            videoId: videoPlaylist[0],
+            videoId: playlist[0],
             playerVars: {
               autoplay: 1,
               controls: 1,
               rel: 0,
-              modestbranding: 1
+              modestbranding: 1,
+              playlist: playlist.slice(1).join(',')
             },
             events: {
               onStateChange: (event) => {
-                // When video ends (state 0)
-                if (event.data === 0) {
-                  // Get current video and find next
-                  const currentId = event.target.getVideoData().video_id;
-                  const currentIdx = videoPlaylist.indexOf(currentId);
-                  const nextIdx = (currentIdx + 1) % videoPlaylist.length;
-                  // Load next video
-                  event.target.loadVideoById(videoPlaylist[nextIdx]);
-                }
+                console.log('Player state:', event.data, 'Current video:', event.target.getVideoData().video_id);
               }
             }
           });
