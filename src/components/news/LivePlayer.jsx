@@ -30,12 +30,18 @@ export default function LivePlayer({
   const [viewerReactions, setViewerReactions] = useState(1234);
   const [dynamicViewerCount, setDynamicViewerCount] = useState(viewerCount || 2847);
   const [hasPlayedOnce, setHasPlayedOnce] = useState(false);
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const videoRef = useRef(null);
   const containerRef = useRef(null);
   const hlsRef = useRef(null);
   const playerRef = useRef(null);
 
-  const currentStreamUrl = streamUrl || DEFAULT_STREAM;
+  const videoPlaylist = [
+    "https://www.youtube.com/embed/7f6TVsLPUbQ",
+    "https://youtube.com/shorts/UAVHgNaPVwQ"
+  ];
+
+  const currentStreamUrl = streamUrl || videoPlaylist[currentVideoIndex];
 
   // Dynamic viewer count with realistic fluctuation
   useEffect(() => {
@@ -84,13 +90,12 @@ export default function LivePlayer({
           events: {
             onStateChange: (event) => {
               // When video ends (state 0)
-              if (event.data === 0 && !hasPlayedOnce) {
-                setHasPlayedOnce(true);
-                setIsMuted(true);
-                if (playerRef.current) {
-                  playerRef.current.mute();
-                  playerRef.current.playVideo();
-                }
+              if (event.data === 0) {
+                // Move to next video in playlist
+                setCurrentVideoIndex((prevIndex) => {
+                  const nextIndex = (prevIndex + 1) % videoPlaylist.length;
+                  return nextIndex;
+                });
               }
             }
           }
@@ -103,7 +108,7 @@ export default function LivePlayer({
         playerRef.current.destroy();
       }
     };
-  }, [currentStreamUrl, hasPlayedOnce]);
+    }, [currentStreamUrl]);
 
   const togglePlay = () => {
     setIsPlaying(!isPlaying);
