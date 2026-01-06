@@ -105,39 +105,34 @@ export default function ChannelSelector() {
                     <span className="font-bold text-base dark:text-white">ערוצים בעולם</span>
                   </button>
 
-                  {/* Country Grid */}
-                  <div className="p-4">
-                   <div className="text-xs font-bold text-gray-500 dark:text-gray-400 mb-3 px-1">בחר מדינה</div>
-                   <div className="grid grid-cols-2 gap-3 max-h-[60vh] overflow-y-auto">
+                  {/* Country List */}
+                  <div className="max-h-[60vh] overflow-y-auto">
+                   <div className="text-xs font-bold text-gray-500 dark:text-gray-400 mb-2 px-4 pt-3">בחר מדינה</div>
+                   <div className="space-y-1 px-2 pb-2">
                      {Object.entries(channelsByCountry).map(([country, countryChannels]) => {
                        const countryInfo = countryLabels[country] || { name: country, flag: "🌍", color: "#6b7280" };
                        return (
-                         <motion.button
+                         <button
                            key={country}
-                           whileHover={{ scale: 1.03 }}
-                           whileTap={{ scale: 0.97 }}
                            onClick={() => handleCountryClick(country)}
-                           className="relative overflow-hidden rounded-xl p-3 text-center active:opacity-90 transition-all shadow-md hover:shadow-lg bg-white dark:bg-gray-700"
-                           style={{ 
-                             borderWidth: '2px',
-                             borderStyle: 'solid',
-                             borderColor: countryInfo.color
-                           }}
+                           className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg active:bg-gray-100 dark:active:bg-gray-700 transition-colors hover:bg-gray-50 dark:hover:bg-gray-700/50"
                          >
                            {countryInfo.flagCode ? (
                              <img 
-                               src={`https://flagcdn.com/h120/${countryInfo.flagCode}.png`}
+                               src={`https://flagcdn.com/h40/${countryInfo.flagCode}.png`}
                                alt={countryInfo.name}
-                               className="w-16 h-12 mx-auto mb-1.5 object-cover rounded shadow-md"
+                               className="w-8 h-6 object-cover rounded shadow-sm"
                              />
                            ) : (
-                             <div className="text-4xl mb-1.5">🌍</div>
+                             <div className="text-xl">🌍</div>
                            )}
-                           <div className="font-bold text-sm dark:text-white mb-0.5">{countryInfo.name}</div>
-                           <div className="text-xs font-semibold" style={{ color: countryInfo.color }}>
-                             {countryChannels.length} ערוצים
+                           <div className="flex-1 text-right">
+                             <div className="font-bold text-sm dark:text-white">{countryInfo.name}</div>
                            </div>
-                         </motion.button>
+                           <div className="text-xs text-gray-500 dark:text-gray-400 font-medium">
+                             {countryChannels.length}
+                           </div>
+                         </button>
                        );
                      })}
                    </div>
