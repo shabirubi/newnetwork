@@ -35,8 +35,13 @@ export default function Reporters() {
 
   const { data: reporters = [], isLoading } = useQuery({
     queryKey: ['reporters'],
-    queryFn: () => base44.entities.Reporter.filter({ is_active: true }, 'name'),
-    staleTime: 5 * 60 * 1000,
+    queryFn: async () => {
+      const result = await base44.entities.Reporter.list('name');
+      console.log('📰 Loaded reporters:', result);
+      return result;
+    },
+    staleTime: 0,
+    refetchOnMount: true,
     initialData: []
   });
 
