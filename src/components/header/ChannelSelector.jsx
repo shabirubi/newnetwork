@@ -107,40 +107,40 @@ export default function ChannelSelector() {
 
                   {/* Country Grid */}
                   <div className="p-4">
-                    <div className="text-xs font-bold text-gray-500 dark:text-gray-400 mb-3 px-1">בחר מדינה</div>
-                    <div className="grid grid-cols-2 gap-3">
-                      {Object.entries(channelsByCountry).map(([country, countryChannels]) => {
-                        const countryInfo = countryLabels[country] || { name: country, flag: "🌍", color: "#6b7280" };
-                        return (
-                          <motion.button
-                            key={country}
-                            whileHover={{ scale: 1.03 }}
-                            whileTap={{ scale: 0.97 }}
-                            onClick={() => handleCountryClick(country)}
-                            className="relative overflow-hidden rounded-xl p-3 text-center active:opacity-90 transition-all shadow-md hover:shadow-lg bg-white dark:bg-gray-700"
-                            style={{ 
-                              borderWidth: '2px',
-                              borderStyle: 'solid',
-                              borderColor: countryInfo.color
-                            }}
-                          >
-                            {countryInfo.flagCode ? (
-                              <img 
-                                src={`https://flagcdn.com/h120/${countryInfo.flagCode}.png`}
-                                alt={countryInfo.name}
-                                className="w-16 h-12 mx-auto mb-1.5 object-cover rounded shadow-md"
-                              />
-                            ) : (
-                              <div className="text-4xl mb-1.5">🌍</div>
-                            )}
-                            <div className="font-bold text-sm dark:text-white mb-0.5">{countryInfo.name}</div>
-                            <div className="text-xs font-semibold" style={{ color: countryInfo.color }}>
-                              {countryChannels.length} ערוצים
-                            </div>
-                          </motion.button>
-                        );
-                      })}
-                    </div>
+                   <div className="text-xs font-bold text-gray-500 dark:text-gray-400 mb-3 px-1">בחר מדינה</div>
+                   <div className="grid grid-cols-2 gap-3 max-h-[60vh] overflow-y-auto">
+                     {Object.entries(channelsByCountry).map(([country, countryChannels]) => {
+                       const countryInfo = countryLabels[country] || { name: country, flag: "🌍", color: "#6b7280" };
+                       return (
+                         <motion.button
+                           key={country}
+                           whileHover={{ scale: 1.03 }}
+                           whileTap={{ scale: 0.97 }}
+                           onClick={() => handleCountryClick(country)}
+                           className="relative overflow-hidden rounded-xl p-3 text-center active:opacity-90 transition-all shadow-md hover:shadow-lg bg-white dark:bg-gray-700"
+                           style={{ 
+                             borderWidth: '2px',
+                             borderStyle: 'solid',
+                             borderColor: countryInfo.color
+                           }}
+                         >
+                           {countryInfo.flagCode ? (
+                             <img 
+                               src={`https://flagcdn.com/h120/${countryInfo.flagCode}.png`}
+                               alt={countryInfo.name}
+                               className="w-16 h-12 mx-auto mb-1.5 object-cover rounded shadow-md"
+                             />
+                           ) : (
+                             <div className="text-4xl mb-1.5">🌍</div>
+                           )}
+                           <div className="font-bold text-sm dark:text-white mb-0.5">{countryInfo.name}</div>
+                           <div className="text-xs font-semibold" style={{ color: countryInfo.color }}>
+                             {countryChannels.length} ערוצים
+                           </div>
+                         </motion.button>
+                       );
+                     })}
+                   </div>
                   </div>
                 </>
               ) : (
