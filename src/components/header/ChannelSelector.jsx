@@ -62,7 +62,7 @@ export default function ChannelSelector() {
     <div className="relative">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-1.5 px-2.5 py-1.5 bg-white dark:bg-gray-800 rounded-lg shadow-sm active:shadow-md active:scale-95 transition-all border border-gray-200 dark:border-gray-700 text-gray-900"
+        className="flex items-center gap-1.5 px-2.5 py-1.5 bg-black/40 hover:bg-black/60 rounded-lg shadow-sm active:shadow-md active:scale-95 transition-all border border-white/10 text-white"
       >
         <div 
           className="w-4 h-4 rounded-full flex items-center justify-center"
@@ -70,24 +70,24 @@ export default function ChannelSelector() {
         >
           <Radio className="w-2.5 h-2.5 text-white" />
         </div>
-        <span className="text-xs font-bold dark:text-white truncate max-w-[80px] sm:max-w-none">
+        <span className="text-xs font-bold text-white truncate max-w-[80px] sm:max-w-none">
           {currentChannel?.name || 'ערוצים בעולם'}
         </span>
-        <ChevronDown className={`w-3 h-3 dark:text-white transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+        <ChevronDown className={`w-3 h-3 text-white transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       <AnimatePresence>
         {isOpen && (
           <>
             <div 
-              className="fixed inset-0 z-[9999]"
+              className="fixed inset-0 z-[9998]"
               onClick={() => setIsOpen(false)}
             />
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="absolute top-full left-0 mt-2 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 z-[10000] overflow-hidden"
+              initial={{ opacity: 0, scale: 0.95, y: -10 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: -10 }}
+              className="absolute top-full left-0 mt-2 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 z-[9999] overflow-hidden"
               style={{ width: selectedCountry ? '280px' : '340px' }}
             >
               {!selectedCountry ? (
