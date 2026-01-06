@@ -20,13 +20,16 @@ export default function ReporterAudioPlayer({ reporter, article, onClose }) {
     setIsPlaying(true);
 
     try {
-      // Create narration text with professional structure
+      // Create narration text with professional, dramatic structure
       const narrationPrompt = `
-צור קריינות חדשותית מקצועית ודינמית עבור כתב/ת חדשות.
+צור קריינות חדשותית מקצועית, דרמטית וטבעית עבור כתב/ת חדשות.
 
 הקריינות חייבת לכלול בדיוק את המבנה הזה:
 1. פתיחה: "שלום, אני ${reporter.name}, ${reporter.role} מחדשות הרשת החדשה"
-2. תוכן הכתבה: סיפור קצר ומעניין של הכתבה (20-30 שניות)
+2. תוכן הכתבה: סיפור דרמטי ומעניין עם טון מתאים לנושא (20-30 שניות):
+   - אם הכתבה דרמטית/רצינית - השתמש בטון דרמטי עם הדגשות ורגש
+   - אם הכתבה קלה/הומוריסטית - השתמש בטון קליל וטבעי עם חיוך בקול
+   - הוסף הפסקות דרמטיות במקומות מתאימים
 3. סיום: "נפגש בכתבה הבאה"
 
 פרטי הכתבה:
@@ -34,8 +37,14 @@ export default function ReporterAudioPlayer({ reporter, article, onClose }) {
 ${article.subtitle ? `תת-כותרת: ${article.subtitle}` : ''}
 תוכן: ${article.content?.slice(0, 500) || article.title}
 
+חשוב מאוד:
+- התאם את הטון למצב הרוח של הכתבה
+- אם זה נושא רציני - הוסף דרמה ומתח
+- אם זה נושא קליל - היה טבעי וקליל
+- השתמש בהפסקות (נקודות, פסיקים) ליצירת דרמה
+- הקריינות צריכה להישמע כמו כתב אמיתי בשטח
+
 החזר רק את טקסט הקריינות המלא, ללא הסברים נוספים.
-הקריינות צריכה להישמע טבעית ומקצועית כמו בחדשות אמיתיות.
 `;
 
       const result = await base44.integrations.Core.InvokeLLM({
