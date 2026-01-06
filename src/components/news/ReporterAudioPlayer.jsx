@@ -20,17 +20,22 @@ export default function ReporterAudioPlayer({ reporter, article, onClose }) {
     setIsPlaying(true);
 
     try {
-      // Create narration text
+      // Create narration text with professional structure
       const narrationPrompt = `
-את/ה ${reporter.name}, ${reporter.role} מהרשת החדשה.
-צור קריינות חדשותית מקצועית ודינמית של הכתבה הבאה בסגנון כתב חדשות מנוסה.
-הקריינות צריכה להיות קצרה (30-45 שניות), ענייניתית ומעניינה.
+צור קריינות חדשותית מקצועית ודינמית עבור כתב/ת חדשות.
 
+הקריינות חייבת לכלול בדיוק את המבנה הזה:
+1. פתיחה: "שלום, אני ${reporter.name}, ${reporter.role} מחדשות הרשת החדשה"
+2. תוכן הכתבה: סיפור קצר ומעניין של הכתבה (20-30 שניות)
+3. סיום: "נפגש בכתבה הבאה"
+
+פרטי הכתבה:
 כותרת: ${article.title}
 ${article.subtitle ? `תת-כותרת: ${article.subtitle}` : ''}
 תוכן: ${article.content?.slice(0, 500) || article.title}
 
-החזר רק את טקסט הקריינות, ללא הסברים נוספים.
+החזר רק את טקסט הקריינות המלא, ללא הסברים נוספים.
+הקריינות צריכה להישמע טבעית ומקצועית כמו בחדשות אמיתיות.
 `;
 
       const result = await base44.integrations.Core.InvokeLLM({
