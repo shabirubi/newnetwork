@@ -79,17 +79,27 @@ export default function Layout({ children }) {
             user-select: none;
           }
         }
+
+        @keyframes slideRight {
+          0% { transform: translateX(-100%); }
+          100% { transform: translateX(100vw); }
+        }
       `}</style>
+
+      {/* Animated Red Line */}
+      <div className="fixed top-0 left-0 right-0 h-1 bg-transparent overflow-hidden z-[60] pointer-events-none">
+        <div className="absolute top-0 h-full w-32 bg-gradient-to-r from-transparent via-[#E31E24] to-transparent animate-[slideRight_3s_ease-in-out_infinite]"></div>
+      </div>
 
       {/* Breaking News Ticker */}
       <NewsTicker darkMode={darkMode} setDarkMode={setDarkMode} />
 
       {/* Floating Logo */}
       <motion.div
-        initial={{ opacity: 0, x: 100 }}
+        initial={{ opacity: 0, x: -100 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.8, ease: "easeOut" }}
-        className="fixed left-6 top-1/2 -translate-y-1/2 z-50 hidden lg:block"
+        className="fixed right-6 top-1/2 -translate-y-1/2 z-50 hidden lg:block"
       >
         <motion.div
           animate={{ 
