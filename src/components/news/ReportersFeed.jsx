@@ -9,19 +9,28 @@ import ReporterAudioPlayer from "./ReporterAudioPlayer";
 
 const REPORTERS = [
   {
+    id: 1,
+    name: "רועי שרון",
+    role: "כתב ביטחון",
+    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/26f097184_generated_image.png",
+    gender: "male",
+    categories: ["security","breaking"],
+    specialty: "מומחה לענייני ביטחון וצבא"
+  },
+  {
     id: 2,
     name: "מיכל כהן",
     role: "כתבת כלכלה",
-    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/d42d26c91_generated_image.png",
+    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/6c84f0201_generated_image.png",
     gender: "female",
-    categories: ["economy","politics"],
+    categories: ["economy","finance"],
     specialty: "מומחית לכלכלה ושווקים"
   },
   {
     id: 3,
     name: "יוסי לוי",
     role: "כתב פוליטי",
-    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/56f1ff50f_generated_image.png",
+    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/8ac23d253_generated_image.png",
     gender: "male",
     categories: ["politics","breaking"],
     specialty: "מומחה לפוליטיקה ישראלית"
@@ -30,7 +39,7 @@ const REPORTERS = [
     id: 4,
     name: "שרה אברהם",
     role: "כתבת חינוך וחברה",
-    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/73b8ce205_generated_image.png",
+    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/30f0cc10f_generated_image.png",
     gender: "female",
     categories: ["world","health"],
     specialty: "מומחית לחינוך ונושאים חברתיים"
@@ -39,7 +48,7 @@ const REPORTERS = [
     id: 5,
     name: "דוד מזרחי",
     role: "כתב ספורט",
-    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/e44a29a41_generated_image.png",
+    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/30c86ade3_generated_image.png",
     gender: "male",
     categories: ["sports","entertainment"],
     specialty: "מומחה לספורט ישראלי ובינלאומי"
@@ -48,16 +57,16 @@ const REPORTERS = [
     id: 6,
     name: "נועה ברק",
     role: "כתבת בידור ותרבות",
-    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/514cc4ea0_generated_image.png",
+    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/4d16cfb0a_generated_image.png",
     gender: "female",
-    categories: ["entertainment","world"],
+    categories: ["entertainment","music"],
     specialty: "מומחית לבידור ותרבות"
   },
   {
     id: 7,
     name: "אלון גולן",
     role: "כתב טכנולוגיה",
-    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/aac994fbf_generated_image.png",
+    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/7ef4add9c_generated_image.png",
     gender: "male",
     categories: ["technology","economy"],
     specialty: "מומחה לטכנולוגיה והייטק"
@@ -66,7 +75,7 @@ const REPORTERS = [
     id: 8,
     name: "תמר רוזן",
     role: "כתבת בריאות ומדע",
-    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/5fd3a4bac_generated_image.png",
+    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c02dcd63b_generated_image.png",
     gender: "female",
     categories: ["health","world"],
     specialty: "מומחית לבריאות ומדע"
@@ -75,10 +84,199 @@ const REPORTERS = [
     id: 9,
     name: "עומר אשכנזי",
     role: "כתב זירה בינלאומית",
-    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/7b89fad3e_generated_image.png",
+    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/e21d6485a_generated_image.png",
     gender: "male",
     categories: ["world","breaking"],
     specialty: "מומחה לזירה הבינלאומית"
+  },
+  {
+    id: 10,
+    name: "אורי כהן",
+    role: "כתב פיננסים",
+    image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop&crop=faces",
+    gender: "male",
+    categories: ["finance","economy"],
+    specialty: "מומחה לפיננסים והשקעות"
+  },
+  {
+    id: 11,
+    name: "רינה לוי",
+    role: "כתבת מזלות ואסטרולוגיה",
+    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop&crop=faces",
+    gender: "female",
+    categories: ["horoscope","entertainment"],
+    specialty: "אסטרולוגית ומומחית למזלות"
+  },
+  {
+    id: 12,
+    name: "גל שטרן",
+    role: "כתב מוזיקה",
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=faces",
+    gender: "male",
+    categories: ["music","entertainment"],
+    specialty: "מבקר מוזיקה וכתב תרבות"
+  },
+  {
+    id: 13,
+    name: "מאיה דוד",
+    role: "כתבת אופנה וסגנון",
+    image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=400&h=400&fit=crop&crop=faces",
+    gender: "female",
+    categories: ["entertainment","world"],
+    specialty: "מומחית לאופנה ועיצוב"
+  },
+  {
+    id: 14,
+    name: "ליאור אברהם",
+    role: "כתב רכב וטכנולוגיה",
+    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&crop=faces",
+    gender: "male",
+    categories: ["technology","economy"],
+    specialty: "מומחה לרכב וחדשנות"
+  },
+  {
+    id: 15,
+    name: "שירה גרין",
+    role: "כתבת תיירות ונופש",
+    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=faces",
+    gender: "female",
+    categories: ["world","entertainment"],
+    specialty: "מומחית לתיירות וטיולים"
+  },
+  {
+    id: 16,
+    name: "יובל מרדכי",
+    role: "כתב סביבה ואקולוגיה",
+    image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=400&fit=crop&crop=faces",
+    gender: "male",
+    categories: ["health","world"],
+    specialty: "מומחה לסביבה ואקלים"
+  },
+  {
+    id: 17,
+    name: "דנה ורד",
+    role: "כתבת אוכל ומסעדות",
+    image: "https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?w=400&h=400&fit=crop&crop=faces",
+    gender: "female",
+    categories: ["entertainment","health"],
+    specialty: "מומחית לקולינריה ואוכל"
+  },
+  {
+    id: 18,
+    name: "נדב פרץ",
+    role: "כתב קולנוע וקריקטורות",
+    image: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?w=400&h=400&fit=crop&crop=faces",
+    gender: "male",
+    categories: ["entertainment","world"],
+    specialty: "מבקר קולנוע ומומחה לסדרות"
+  },
+  {
+    id: 19,
+    name: "עדי בן דוד",
+    role: "כתבת משפט ופלילים",
+    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop&crop=faces",
+    gender: "female",
+    categories: ["breaking","politics"],
+    specialty: "מומחית למשפט פלילי"
+  },
+  {
+    id: 20,
+    name: "איתן רון",
+    role: "כתב נדל״ן ובנייה",
+    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=faces",
+    gender: "male",
+    categories: ["economy","finance"],
+    specialty: "מומחה לנדל״ן ושוק הדיור"
+  },
+  {
+    id: 21,
+    name: "הילה זוהר",
+    role: "כתבת מדע וחלל",
+    image: "https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=400&h=400&fit=crop&crop=faces",
+    gender: "female",
+    categories: ["technology","world"],
+    specialty: "מומחית למדע וחקר החלל"
+  },
+  {
+    id: 22,
+    name: "רם שמיר",
+    role: "כתב צבא וכלי נשק",
+    image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop&crop=faces",
+    gender: "male",
+    categories: ["security","breaking"],
+    specialty: "מומחה לכלי נשק וציוד צבאי"
+  },
+  {
+    id: 23,
+    name: "שני אלון",
+    role: "כתבת דיגיטל ורשתות",
+    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop&crop=faces",
+    gender: "female",
+    categories: ["technology","entertainment"],
+    specialty: "מומחית לרשתות חברתיות ודיגיטל"
+  },
+  {
+    id: 24,
+    name: "בן זוהר",
+    role: "כתב היסטוריה ומורשת",
+    image: "https://images.unsplash.com/photo-1463453091185-61582044d556?w=400&h=400&fit=crop&crop=faces",
+    gender: "male",
+    categories: ["world","entertainment"],
+    specialty: "מומחה להיסטוריה ותרבות"
+  },
+  {
+    id: 25,
+    name: "טל גולדברג",
+    role: "כתבת חדשנות וסטארטאפים",
+    image: "https://images.unsplash.com/photo-1507101105822-7472b28e22ac?w=400&h=400&fit=crop&crop=faces",
+    gender: "female",
+    categories: ["technology","economy"],
+    specialty: "מומחית לסטארטאפים וחדשנות"
+  },
+  {
+    id: 26,
+    name: "אדם לוין",
+    role: "כתב בלוקצ׳יין וקריפטו",
+    image: "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=400&h=400&fit=crop&crop=faces",
+    gender: "male",
+    categories: ["finance","technology"],
+    specialty: "מומחה למטבעות דיגיטליים"
+  },
+  {
+    id: 27,
+    name: "מור שחר",
+    role: "כתבת משחקי מחשב",
+    image: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=400&h=400&fit=crop&crop=faces",
+    gender: "female",
+    categories: ["entertainment","technology"],
+    specialty: "מומחית לגיימינג ומשחקים"
+  },
+  {
+    id: 28,
+    name: "נועם שגיא",
+    role: "כתב פסיכולוגיה ומשפחה",
+    image: "https://images.unsplash.com/photo-1489980557514-251d61e3eeb6?w=400&h=400&fit=crop&crop=faces",
+    gender: "male",
+    categories: ["health","world"],
+    specialty: "פסיכולוג ומומחה לקשרי משפחה"
+  },
+  {
+    id: 29,
+    name: "ליה כהן",
+    role: "מגישה - ערוץ הילדים",
+    image: "https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=400&h=400&fit=crop&crop=faces",
+    gender: "female",
+    categories: ["entertainment"],
+    specialty: "מגישה לילדים ונוער"
+  },
+  {
+    id: 30,
+    name: "מיה פרידמן",
+    role: "מגישה - ערוץ הילדים",
+    image: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=400&h=400&fit=crop&crop=faces",
+    gender: "female",
+    categories: ["entertainment"],
+    specialty: "מגישה ושחקנית ילדים"
   }
 ];
 
