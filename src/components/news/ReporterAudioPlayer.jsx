@@ -59,13 +59,30 @@ ${article.subtitle ? `תת-כותרת: ${article.subtitle}` : ''}
         const utterance = new SpeechSynthesisUtterance(result);
         utterance.lang = 'he-IL';
         utterance.rate = 0.95;
-        utterance.pitch = reporter.gender === 'female' ? 1.1 : 0.9;
         
-        // Try to find Hebrew voice
+        // Get all available voices
         const voices = window.speechSynthesis.getVoices();
-        const hebrewVoice = voices.find(voice => voice.lang.includes('he')) || voices[0];
-        if (hebrewVoice) {
-          utterance.voice = hebrewVoice;
+        
+        // Set pitch and try to find appropriate voice based on gender
+        if (reporter.gender === 'female') {
+          utterance.pitch = 1.2;
+          // Try to find female Hebrew voice
+          const femaleVoice = voices.find(voice => 
+            voice.lang.includes('he') && 
+            (voice.name.toLowerCase().includes('female') || 
+             voice.name.toLowerCase().includes('zira') ||
+             voice.name.toLowerCase().includes('hadar'))
+          ) || voices.find(voice => voice.lang.includes('he'));
+          if (femaleVoice) utterance.voice = femaleVoice;
+        } else {
+          utterance.pitch = 0.85;
+          // Try to find male Hebrew voice
+          const maleVoice = voices.find(voice => 
+            voice.lang.includes('he') && 
+            (voice.name.toLowerCase().includes('male') || 
+             voice.name.toLowerCase().includes('asaf'))
+          ) || voices.find(voice => voice.lang.includes('he'));
+          if (maleVoice) utterance.voice = maleVoice;
         }
 
         utterance.onend = () => {
