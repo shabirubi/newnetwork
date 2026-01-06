@@ -173,15 +173,15 @@ export default function ChannelSelector() {
               ) : (
                 <>
                   {/* Back Button & Country Header */}
-                  <div className="sticky top-0 bg-gradient-to-br from-[#E31E24] to-red-600 p-6 shadow-lg z-10">
+                  <div className="sticky top-0 bg-gradient-to-br from-gray-900 to-gray-800 dark:from-black dark:to-gray-900 p-4 shadow-lg z-10">
                     <button
                       onClick={handleBack}
-                      className="w-full flex items-center gap-3 mb-2 active:scale-95 transition-transform"
+                      className="w-full flex items-center gap-3 active:scale-95 transition-transform"
                     >
-                      <div className="p-2 rounded-full bg-white/20">
-                        <ChevronDown className="w-5 h-5 rotate-90 text-white" />
+                      <div className="p-2 rounded-full bg-white/10">
+                        <ChevronDown className="w-4 h-4 rotate-90 text-white" />
                       </div>
-                      <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center overflow-hidden">
+                      <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center overflow-hidden">
                         {countryLabels[selectedCountry]?.flagCode ? (
                           <img 
                             src={`https://flagcdn.com/h40/${countryLabels[selectedCountry].flagCode}.png`}
@@ -189,12 +189,12 @@ export default function ChannelSelector() {
                             className="w-full h-full object-cover"
                           />
                         ) : (
-                          <span className="text-2xl">🌍</span>
+                          <span className="text-xl">🌍</span>
                         )}
                       </div>
                       <div className="text-right flex-1">
-                        <span className="font-bold text-xl text-white block">{countryLabels[selectedCountry]?.name}</span>
-                        <span className="text-sm text-white/80">
+                        <span className="font-bold text-lg text-white block">{countryLabels[selectedCountry]?.name}</span>
+                        <span className="text-xs text-white/60">
                           {channelsByCountry[selectedCountry]?.length} ערוצים
                         </span>
                       </div>
