@@ -99,8 +99,10 @@ export default function NewsTicker({ darkMode, setDarkMode }) {
           <span className="xs:hidden">חם</span>
         </span>
 
-        <Link 
-          to={createPageUrl("Category?cat=breaking")}
+        <button 
+          onClick={() => {
+            window.location.href = createPageUrl("Category?cat=breaking");
+          }}
           className="ticker-wrapper overflow-hidden flex-1 cursor-pointer hover:opacity-90 transition-opacity min-w-0 relative z-10"
         >
           <motion.div
@@ -112,7 +114,7 @@ export default function NewsTicker({ darkMode, setDarkMode }) {
               <span key={index} className="mx-4 sm:mx-8">• {item}</span>
             ))}
           </motion.div>
-        </Link>
+        </button>
 
         <div className="flex items-center gap-1 sm:gap-2 shrink-0 relative z-[60]">
           <button
@@ -136,21 +138,25 @@ export default function NewsTicker({ darkMode, setDarkMode }) {
             <ChannelSelector />
           </div>
 
-          <Link 
-            to={createPageUrl("WarRoom")}
+          <button 
+            onClick={() => {
+              window.location.href = createPageUrl("WarRoom");
+            }}
             className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 bg-white/10 hover:bg-white/20 rounded-lg text-xs font-bold transition-colors"
           >
             <Siren size={13} className="animate-pulse" />
             חדר מלחמה
-          </Link>
+          </button>
 
-          <Link 
-            to={createPageUrl("PublicReports")}
+          <button 
+            onClick={() => {
+              window.location.href = createPageUrl("PublicReports");
+            }}
             className="hidden xl:flex items-center gap-1.5 px-2.5 py-1.5 bg-white/10 hover:bg-white/20 rounded-lg text-xs font-bold transition-colors"
           >
             <MessageSquareWarning size={13} />
             דיווח מפגע
-          </Link>
+          </button>
         </div>
       </div>
     </div>
