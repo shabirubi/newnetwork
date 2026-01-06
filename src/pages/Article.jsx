@@ -14,6 +14,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import moment from "moment";
 
 import NewsCard from "../components/news/NewsCard";
+import CommentsSection from "../components/article/CommentsSection";
 
 const categoryLabels = {
   breaking: "חדשות חמות",
@@ -214,10 +215,15 @@ export default function Article() {
         </div>
       )}
 
+      {/* Comments Section */}
+      <div className="border-t pt-8 mb-12">
+        <CommentsSection articleId={article.id} />
+      </div>
+
       {/* Related Articles */}
       {filteredRelated.length > 0 && (
         <section className="border-t pt-8">
-          <h2 className="text-2xl font-bold mb-6">ידיעות נוספות</h2>
+          <h2 className="text-2xl font-bold mb-6 dark:text-white">ידיעות נוספות</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {filteredRelated.map((relatedArticle, index) => (
               <NewsCard 
