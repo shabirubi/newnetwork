@@ -96,15 +96,15 @@ export default function ChannelSelector() {
               {!selectedCountry ? (
                 <>
                   {/* Drawer Header */}
-                  <div className="sticky top-0 bg-gradient-to-br from-[#E31E24] to-red-600 p-6 shadow-lg z-10">
-                    <div className="flex items-center justify-between mb-2">
+                  <div className="sticky top-0 bg-gradient-to-br from-gray-900 to-gray-800 dark:from-black dark:to-gray-900 p-4 shadow-lg z-10">
+                    <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
-                          <Globe className="w-6 h-6 text-white" />
+                        <div className="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
+                          <Globe className="w-5 h-5 text-white" />
                         </div>
                         <div>
-                          <h2 className="text-xl font-bold text-white">ערוצים בעולם</h2>
-                          <p className="text-white/80 text-sm">בחר ערוץ לצפייה</p>
+                          <h2 className="text-lg font-bold text-white">ערוצי עולם</h2>
+                          <p className="text-white/60 text-xs">בחר ערוץ חדשות</p>
                         </div>
                       </div>
                       <button
@@ -112,9 +112,9 @@ export default function ChannelSelector() {
                           setIsOpen(false);
                           setSelectedCountry(null);
                         }}
-                        className="p-2 rounded-full bg-white/20 text-white active:scale-95 transition-transform"
+                        className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white active:scale-95 transition-all"
                       >
-                        <ChevronDown className="w-6 h-6 rotate-90" />
+                        <ChevronDown className="w-5 h-5 rotate-90" />
                       </button>
                     </div>
                   </div>
