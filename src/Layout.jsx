@@ -8,9 +8,6 @@ import {
   Siren, AlertTriangle, MessageSquareWarning, Film
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import ClockWidget from "./components/header/ClockWidget";
-import WeatherWidget from "./components/header/WeatherWidget";
-import ChannelSelector from "./components/header/ChannelSelector";
 import NewsTicker from "./components/header/NewsTicker";
 
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/a44ef2558_212.png";
@@ -84,54 +81,20 @@ export default function Layout({ children }) {
         }
       `}</style>
 
-      {/* Top Bar with Clock and Weather */}
+      {/* Top Bar with Logo */}
       <div className="bg-gray-900 dark:bg-black text-white py-1.5 px-2 lg:px-4 border-b border-gray-800">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-            <div className="flex items-center gap-1.5 lg:gap-3">
-              <img 
-                src={LOGO_URL} 
-                alt="הרשת החדשה" 
-                className="h-16 lg:h-20 w-auto ml-3"
-              />
-              <ClockWidget />
-              <WeatherWidget />
-              <ChannelSelector />
-
-            </div>
-            <div className="flex items-center gap-1 lg:gap-2">
-              <button
-                onClick={() => setDarkMode(!darkMode)}
-                className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-800 dark:bg-gray-700 text-gray-200 active:scale-95 transition-transform"
-              >
-                {darkMode ? <Sun size={14} /> : <Moon size={14} />}
-              </button>
-            <Link 
-              to={createPageUrl("WarRoom")}
-              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-red-600 hover:bg-red-700 rounded-full text-xs font-bold transition-colors"
-            >
-              <Siren size={14} className="animate-pulse" />
-              חדר מלחמה
-            </Link>
-            <Link 
-              to={createPageUrl("WarRoom")}
-              className="flex sm:hidden items-center justify-center w-8 h-8 bg-red-600 active:bg-red-700 rounded-full transition-colors"
-            >
-              <Siren size={14} className="animate-pulse" />
-            </Link>
-            <Link 
-              to={createPageUrl("PublicReports")}
-              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-orange-500 hover:bg-orange-600 rounded-full text-xs font-bold transition-colors"
-            >
-              <MessageSquareWarning size={14} />
-              דיווח מפגע
-            </Link>
-            <Link 
-              to={createPageUrl("PublicReports")}
-              className="flex sm:hidden items-center justify-center w-8 h-8 bg-orange-500 active:bg-orange-600 rounded-full transition-colors"
-            >
-              <MessageSquareWarning size={14} />
-            </Link>
-          </div>
+          <img 
+            src={LOGO_URL} 
+            alt="הרשת החדשה" 
+            className="h-16 lg:h-20 w-auto"
+          />
+          <button
+            onClick={() => setDarkMode(!darkMode)}
+            className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-800 dark:bg-gray-700 text-gray-200 active:scale-95 transition-transform"
+          >
+            {darkMode ? <Sun size={14} /> : <Moon size={14} />}
+          </button>
         </div>
       </div>
 
