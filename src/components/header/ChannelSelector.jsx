@@ -83,7 +83,8 @@ export default function ChannelSelector() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
             className="fixed inset-0 z-[99999]"
-            onClick={() => {
+            onClick={(e) => {
+              e.stopPropagation();
               setIsOpen(false);
               setSelectedCountry(null);
             }}
@@ -112,7 +113,8 @@ export default function ChannelSelector() {
                         </div>
                       </div>
                       <button
-                        onClick={() => {
+                        onClick={(e) => {
+                          e.stopPropagation();
                           setIsOpen(false);
                           setSelectedCountry(null);
                         }}
