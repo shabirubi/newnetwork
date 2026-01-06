@@ -101,12 +101,12 @@ export default function NewsTicker({ darkMode, setDarkMode }) {
           </motion.div>
         </Link>
 
-        <div className="flex items-center gap-1 shrink-0">
+        <div className="flex items-center gap-1 sm:gap-2 shrink-0 relative z-50">
           <button
             onClick={() => setDarkMode(!darkMode)}
-            className="flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-white/10 hover:bg-white/20 text-white active:scale-95 transition-all"
+            className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-white/10 hover:bg-white/20 text-white active:scale-95 transition-all touch-manipulation"
           >
-            {darkMode ? <Sun size={12} className="sm:w-3.5 sm:h-3.5" /> : <Moon size={12} className="sm:w-3.5 sm:h-3.5" />}
+            {darkMode ? <Sun size={14} className="sm:w-4 sm:h-4" /> : <Moon size={14} className="sm:w-4 sm:h-4" />}
           </button>
 
           <div className="hidden sm:block">
@@ -115,7 +115,9 @@ export default function NewsTicker({ darkMode, setDarkMode }) {
           <div className="hidden md:block">
             <WeatherWidget />
           </div>
-          <ChannelSelector />
+          <div className="relative z-50">
+            <ChannelSelector />
+          </div>
 
           <Link 
             to={createPageUrl("WarRoom")}
