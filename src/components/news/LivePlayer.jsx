@@ -1,7 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
-import shaka from "shaka-player/dist/shaka-player.ui.js";
-import "shaka-player/dist/controls.css";
 import { 
   Play, Pause, Volume2, VolumeX, Maximize, 
   Users, Radio, Settings, Download, Bookmark, 
@@ -30,7 +28,6 @@ export default function LivePlayer({
   const [currentStreamUrl, setCurrentStreamUrl] = useState(streamUrl);
   const videoRef = useRef(null);
   const containerRef = useRef(null);
-  const playerRef = useRef(null);
 
   // Update stream URL when prop changes - force play
   useEffect(() => {
@@ -58,61 +55,13 @@ export default function LivePlayer({
     }
   };
 
-  // Setup Shaka Player for streaming
+  // Handle video element volume and mute
   useEffect(() => {
-    const isStreamUrl = currentStreamUrl && (currentStreamUrl.includes('.m3u8') || currentStreamUrl.includes('.mpd'));
-    
-    if (!isStreamUrl || !videoRef.current || !isPlaying) return;
-
-    const video = videoRef.current;
-    
-    // Cleanup previous player
-    if (playerRef.current) {
-      playerRef.current.destroy();
-      playerRef.current = null;
+    if (videoRef.current) {
+      videoRef.current.volume = volume / 100;
+      videoRef.current.muted = isMuted;
     }
-
-    // Set volume
-    video.volume = volume / 100;
-    video.muted = isMuted;
-
-    // Install polyfills
-    shaka.polyfill.installAll();
-
-    if (!shaka.Player.isBrowserSupported()) {
-      console.log('Browser not supported');
-      return;
-    }
-
-    const player = new shaka.Player(video);
-    playerRef.current = player;
-
-    player.configure({
-      streaming: {
-        bufferingGoal: 10,
-        rebufferingGoal: 2,
-        bufferBehind: 30
-      }
-    });
-
-    player.addEventListener('error', (event) => {
-      console.error('Shaka Error:', event.detail);
-    });
-
-    player.load(currentStreamUrl).then(() => {
-      console.log('Stream loaded successfully:', currentStreamUrl);
-      video.play().catch(err => console.error('Play error:', err));
-    }).catch((error) => {
-      console.error('Load error for', currentStreamUrl, ':', error);
-    });
-
-    return () => {
-      if (playerRef.current) {
-        playerRef.current.destroy();
-        playerRef.current = null;
-      }
-    };
-  }, [isPlaying, currentStreamUrl, volume, isMuted]);
+  }, [volume, isMuted]);
 
 
 
@@ -197,6 +146,8 @@ export default function LivePlayer({
         {isPlaying && currentStreamUrl && (currentStreamUrl.includes('.m3u8') || currentStreamUrl.includes('.mpd')) && (
           <video
             ref={videoRef}
+            key={currentStreamUrl}
+            src={currentStreamUrl}
             className="absolute inset-0 w-full h-full bg-black object-contain"
             autoPlay
             playsInline
