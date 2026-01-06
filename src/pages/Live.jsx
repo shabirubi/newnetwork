@@ -42,6 +42,7 @@ export default function Live() {
     initialData: []
   });
 
+  const defaultStreamUrl = "https://www.youtube.com/embed/2q9lcnXBicQ";
   const activeLive = liveStream[0];
   const currentChannel = channels.find(c => c.id === selectedChannel);
   const channelStreamUrl = currentChannel?.stream_url;
@@ -82,7 +83,7 @@ export default function Live() {
           title={currentChannel?.name || activeLive?.title || "הרשת החדשה - שידור חי"}
           isLive={true}
           viewerCount={activeLive?.viewer_count || 2847}
-          streamUrl={channelStreamUrl}
+          streamUrl={channelStreamUrl || defaultStreamUrl}
         />
         
         {/* Live Info Bar */}

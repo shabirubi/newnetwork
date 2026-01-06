@@ -219,9 +219,13 @@ export default function LivePlayer({
         {isPlaying && currentStreamUrl && !currentStreamUrl.includes('.m3u8') && !currentStreamUrl.includes('.mpd') && (
           <iframe
             key={currentStreamUrl}
-            src={currentStreamUrl}
+            src={
+              currentStreamUrl.includes('youtube.com') || currentStreamUrl.includes('youtu.be')
+                ? `${currentStreamUrl}${currentStreamUrl.includes('?') ? '&' : '?'}autoplay=1&loop=1&muted=0&controls=1&playlist=${currentStreamUrl.split('/').pop().split('?')[0]}`
+                : currentStreamUrl
+            }
             className="absolute inset-0 w-full h-full"
-            allow="autoplay; fullscreen"
+            allow="autoplay; fullscreen; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             frameBorder="0"
           />

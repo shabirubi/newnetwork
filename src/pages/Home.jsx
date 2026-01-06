@@ -37,6 +37,9 @@ export default function Home() {
     initialData: []
   });
 
+  // Set default YouTube stream
+  const defaultStreamUrl = "https://www.youtube.com/embed/2q9lcnXBicQ";
+
   // Auto-select Channel 13 or first channel on load
   React.useEffect(() => {
     if (channels.length > 0 && !selectedChannel) {
@@ -117,7 +120,7 @@ export default function Home() {
               title={currentChannel?.name || activeLive?.title || "הרשת החדשה - שידור חי"}
               isLive={!!activeLive?.is_active}
               viewerCount={activeLive?.viewer_count || 3456}
-              streamUrl={channelStreamUrl}
+              streamUrl={channelStreamUrl || defaultStreamUrl}
             />
 
             {/* Features Below Player */}
