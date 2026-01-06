@@ -49,7 +49,7 @@ export default function ChannelSelector() {
   };
 
   const handleCountryClick = (country) => {
-    setSelectedCountry(selectedCountry === country ? null : country);
+    setSelectedCountry(country);
   };
 
   const handleBack = () => {
