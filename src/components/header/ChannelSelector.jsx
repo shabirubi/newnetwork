@@ -59,7 +59,7 @@ export default function ChannelSelector() {
   const currentChannel = channels.find(c => c.id === selectedChannel);
 
   return (
-    <div className="relative">
+    <>
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="flex items-center gap-1.5 px-2.5 py-1.5 bg-black/40 hover:bg-black/60 rounded-lg shadow-sm active:shadow-md active:scale-95 transition-all border border-white/10 text-white"
@@ -70,68 +70,105 @@ export default function ChannelSelector() {
         >
           <Radio className="w-2.5 h-2.5 text-white" />
         </div>
-        <span className="text-xs font-bold text-white truncate max-w-[80px] sm:max-w-none">
-          {currentChannel?.name || 'ערוצים בעולם'}
+        <span className="text-xs font-bold text-white truncate max-w-[60px] sm:max-w-[80px]">
+          {currentChannel?.name || 'ערוצים'}
         </span>
         <ChevronDown className={`w-3 h-3 text-white transition-transform ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
       <AnimatePresence>
         {isOpen && (
-          <>
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[9999]"
+          >
             <div 
-              className="fixed inset-0 z-[9998]"
-              onClick={() => setIsOpen(false)}
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+              onClick={() => {
+                setIsOpen(false);
+                setSelectedCountry(null);
+              }}
             />
             <motion.div
-              initial={{ opacity: 0, scale: 0.95, y: -10 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95, y: -10 }}
-              className="absolute top-full left-0 mt-2 bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 z-[9999] overflow-hidden"
-              style={{ width: selectedCountry ? '280px' : '340px' }}
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="absolute right-0 top-0 bottom-0 w-[85vw] max-w-sm bg-white dark:bg-gray-800 shadow-2xl overflow-y-auto z-10"
             >
               {!selectedCountry ? (
                 <>
-                  {/* All Channels Button */}
-                  <button
-                    onClick={() => handleSelect('all')}
-                    className={`w-full flex items-center gap-3 px-4 py-3 active:bg-gray-50 dark:active:bg-gray-700 transition-colors border-b border-gray-100 dark:border-gray-700 ${
-                      selectedChannel === 'all' ? 'bg-red-50 dark:bg-red-900/20' : ''
-                    }`}
-                  >
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-[#E31E24] to-red-600 flex items-center justify-center shadow-md">
-                      <Radio className="w-5 h-5 text-white" />
+                  {/* Drawer Header */}
+                  <div className="sticky top-0 bg-gradient-to-br from-[#E31E24] to-red-600 p-6 shadow-lg z-10">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center">
+                          <Globe className="w-6 h-6 text-white" />
+                        </div>
+                        <div>
+                          <h2 className="text-xl font-bold text-white">ערוצים בעולם</h2>
+                          <p className="text-white/80 text-sm">בחר ערוץ לצפייה</p>
+                        </div>
+                      </div>
+                      <button
+                        onClick={() => {
+                          setIsOpen(false);
+                          setSelectedCountry(null);
+                        }}
+                        className="p-2 rounded-full bg-white/20 text-white active:scale-95 transition-transform"
+                      >
+                        <ChevronDown className="w-6 h-6 rotate-90" />
+                      </button>
                     </div>
-                    <span className="font-bold text-base dark:text-white">ערוצים בעולם</span>
-                  </button>
+                  </div>
+
+                  {/* All Channels Button */}
+                  <div className="p-4 border-b border-gray-200 dark:border-gray-700">
+                    <button
+                      onClick={() => handleSelect('all')}
+                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl active:scale-95 transition-all ${
+                        selectedChannel === 'all' ? 'bg-red-50 dark:bg-red-900/20 shadow-md' : 'bg-gray-50 dark:bg-gray-700/50'
+                      }`}
+                    >
+                      <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#E31E24] to-red-600 flex items-center justify-center shadow-md">
+                        <Radio className="w-6 h-6 text-white" />
+                      </div>
+                      <span className="font-bold text-base dark:text-white">כל הערוצים</span>
+                    </button>
+                  </div>
 
                   {/* Country List */}
-                  <div className="max-h-[60vh] overflow-y-auto">
-                   <div className="text-xs font-bold text-gray-500 dark:text-gray-400 mb-2 px-4 pt-3">בחר מדינה</div>
-                   <div className="space-y-1 px-2 pb-2">
+                  <div className="p-4">
+                   <div className="text-xs font-bold text-gray-500 dark:text-gray-400 mb-3 px-2">בחר לפי מדינה</div>
+                   <div className="space-y-2">
                      {Object.entries(channelsByCountry).map(([country, countryChannels]) => {
                        const countryInfo = countryLabels[country] || { name: country, flag: "🌍", color: "#6b7280" };
                        return (
                          <button
                            key={country}
                            onClick={() => handleCountryClick(country)}
-                           className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg active:bg-gray-100 dark:active:bg-gray-700 transition-colors hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                           className="w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl active:scale-95 bg-gray-50 dark:bg-gray-700/50 hover:bg-gray-100 dark:hover:bg-gray-700 transition-all shadow-sm"
                          >
-                           {countryInfo.flagCode ? (
-                             <img 
-                               src={`https://flagcdn.com/h40/${countryInfo.flagCode}.png`}
-                               alt={countryInfo.name}
-                               className="w-8 h-6 object-cover rounded shadow-sm"
-                             />
-                           ) : (
-                             <div className="text-xl">🌍</div>
-                           )}
+                           <div className="w-12 h-12 rounded-xl bg-white dark:bg-gray-800 flex items-center justify-center shadow-sm overflow-hidden">
+                             {countryInfo.flagCode ? (
+                               <img 
+                                 src={`https://flagcdn.com/h40/${countryInfo.flagCode}.png`}
+                                 alt={countryInfo.name}
+                                 className="w-full h-full object-cover"
+                               />
+                             ) : (
+                               <div className="text-2xl">🌍</div>
+                             )}
+                           </div>
                            <div className="flex-1 text-right">
-                             <div className="font-bold text-sm dark:text-white">{countryInfo.name}</div>
+                             <div className="font-bold text-base dark:text-white">{countryInfo.name}</div>
+                             <div className="text-xs text-gray-500 dark:text-gray-400">
+                               {countryChannels.length} ערוצים
+                             </div>
                            </div>
-                           <div className="text-xs text-gray-500 dark:text-gray-400 font-medium">
-                             {countryChannels.length}
-                           </div>
+                           <ChevronDown className="w-5 h-5 -rotate-90 text-gray-400" />
                          </button>
                        );
                      })}
@@ -141,46 +178,54 @@ export default function ChannelSelector() {
               ) : (
                 <>
                   {/* Back Button & Country Header */}
-                  <div className="sticky top-0 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 z-10">
+                  <div className="sticky top-0 bg-gradient-to-br from-[#E31E24] to-red-600 p-6 shadow-lg z-10">
                     <button
                       onClick={handleBack}
-                      className="w-full flex items-center gap-2 px-4 py-3 active:bg-gray-50 dark:active:bg-gray-700 transition-colors"
+                      className="w-full flex items-center gap-3 mb-2 active:scale-95 transition-transform"
                     >
-                      <ChevronDown className="w-4 h-4 rotate-90 dark:text-white" />
-                      {countryLabels[selectedCountry]?.flagCode ? (
-                        <img 
-                          src={`https://flagcdn.com/h40/${countryLabels[selectedCountry].flagCode}.png`}
-                          alt={countryLabels[selectedCountry].name}
-                          className="w-8 h-6 object-cover rounded"
-                        />
-                      ) : (
-                        <span className="text-2xl">🌍</span>
-                      )}
-                      <span className="font-bold dark:text-white">{countryLabels[selectedCountry]?.name}</span>
-                      <span className="text-xs text-gray-500 dark:text-gray-400 mr-auto">
-                        ({channelsByCountry[selectedCountry]?.length})
-                      </span>
+                      <div className="p-2 rounded-full bg-white/20">
+                        <ChevronDown className="w-5 h-5 rotate-90 text-white" />
+                      </div>
+                      <div className="w-12 h-12 rounded-xl bg-white/20 flex items-center justify-center overflow-hidden">
+                        {countryLabels[selectedCountry]?.flagCode ? (
+                          <img 
+                            src={`https://flagcdn.com/h40/${countryLabels[selectedCountry].flagCode}.png`}
+                            alt={countryLabels[selectedCountry].name}
+                            className="w-full h-full object-cover"
+                          />
+                        ) : (
+                          <span className="text-2xl">🌍</span>
+                        )}
+                      </div>
+                      <div className="text-right flex-1">
+                        <span className="font-bold text-xl text-white block">{countryLabels[selectedCountry]?.name}</span>
+                        <span className="text-sm text-white/80">
+                          {channelsByCountry[selectedCountry]?.length} ערוצים
+                        </span>
+                      </div>
                     </button>
                   </div>
 
                   {/* Channels List */}
-                  <div className="max-h-[60vh] overflow-y-auto">
+                  <div className="p-4 space-y-2">
                     {channelsByCountry[selectedCountry]?.map((channel) => (
                       <button
                         key={channel.id}
                         onClick={() => handleSelect(channel.id)}
-                        className={`w-full flex items-center gap-3 px-4 py-3 active:bg-gray-100 dark:active:bg-gray-700 transition-colors border-b border-gray-100 dark:border-gray-700 ${
-                          selectedChannel === channel.id ? 'bg-red-50 dark:bg-red-900/20' : ''
+                        className={`w-full flex items-center gap-3 px-4 py-3.5 rounded-2xl active:scale-95 transition-all ${
+                          selectedChannel === channel.id 
+                            ? 'bg-red-50 dark:bg-red-900/20 shadow-md border-2 border-[#E31E24]' 
+                            : 'bg-gray-50 dark:bg-gray-700/50 border-2 border-transparent'
                         }`}
                       >
                         <div 
-                          className="w-10 h-10 rounded-xl flex items-center justify-center shadow-sm"
+                          className="w-12 h-12 rounded-xl flex items-center justify-center shadow-sm"
                           style={{ backgroundColor: channel.color || '#E31E24' }}
                         >
-                          <Radio className="w-4 h-4 text-white" />
+                          <Radio className="w-5 h-5 text-white" />
                         </div>
                         <div className="text-right flex-1 min-w-0">
-                          <div className="font-bold text-sm dark:text-white truncate">{channel.name}</div>
+                          <div className="font-bold text-base dark:text-white truncate">{channel.name}</div>
                           {channel.description && (
                             <div className="text-xs text-gray-500 dark:text-gray-400 line-clamp-1">
                               {channel.description}
@@ -193,9 +238,9 @@ export default function ChannelSelector() {
                 </>
               )}
             </motion.div>
-          </>
+          </motion.div>
         )}
       </AnimatePresence>
-    </div>
+    </>
   );
 }
