@@ -70,8 +70,15 @@ export default function LivePlayer({
 
       const initPlayer = () => {
         if (window.YT && window.YT.Player) {
+          const container = document.getElementById('youtube-player');
+          if (!container) return;
+          
+          // Clear existing iframe if any
+          container.innerHTML = '';
+          
           if (playerRef.current && playerRef.current.destroy) {
             playerRef.current.destroy();
+            playerRef.current = null;
           }
 
           playerRef.current = new window.YT.Player('youtube-player', {
@@ -80,12 +87,18 @@ export default function LivePlayer({
               autoplay: 1,
               controls: 1,
               rel: 0,
-              modestbranding: 1
+              modestbranding: 1,
+              enablejsapi: 1
             },
             events: {
+              onReady: (event) => {
+                event.target.playVideo();
+              },
               onStateChange: (event) => {
+                console.log('Video state:', event.data);
                 // When video ends (state 0)
                 if (event.data === 0) {
+                  console.log('Video ended, moving to next');
                   const nextIndex = (currentVideoIndex + 1) % videoPlaylist.length;
                   setCurrentVideoIndex(nextIndex);
                 }
