@@ -6,8 +6,9 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
 import { 
   Users, Mic, TrendingUp, ChevronLeft, Play,
-  Filter, Search
+  Filter, Search, MessageCircle
 } from "lucide-react";
+import ReporterChatModal from "../components/reporter/ReporterChatModal";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -30,6 +31,7 @@ const categoryLabels = {
 export default function Reporters() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
+  const [chatReporter, setChatReporter] = useState(null);
 
   const { data: reporters = [], isLoading } = useQuery({
     queryKey: ['reporters'],
@@ -75,6 +77,13 @@ export default function Reporters() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8" dir="rtl">
+      {chatReporter && (
+        <ReporterChatModal
+          reporter={chatReporter.reporter}
+          article={chatReporter.article}
+          onClose={() => setChatReporter(null)}
+        />
+      )}
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
@@ -257,21 +266,28 @@ export default function Reporters() {
                     </p>
                   )}
 
-                  {/* View Profile Button */}
-                  <button
-                    onClick={() => {
-                      // Filter articles by this reporter
-                      const reporterArticles = allArticles.filter(article =>
-                        reporter.categories?.includes(article.category)
-                      );
-                      // You can navigate to a dedicated reporter page or show a modal
-                      alert(`${reporter.name} - ${reporterArticles.length} ידיעות`);
-                    }}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-[#E31E24] to-[#B91C1C] hover:from-[#B91C1C] hover:to-[#991B1B] text-white text-sm font-bold rounded-lg transition-all"
-                  >
-                    כל הידיעות
-                    <ChevronLeft className="w-4 h-4" />
-                  </button>
+                  {/* Action Buttons */}
+                  <div className="grid grid-cols-2 gap-2">
+                    <button
+                      onClick={() => setChatReporter({ reporter, article: latestArticle })}
+                      className="flex items-center justify-center gap-2 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-lg transition-all"
+                    >
+                      <MessageCircle className="w-4 h-4" />
+                      צ׳אט
+                    </button>
+                    <button
+                      onClick={() => {
+                        const reporterArticles = allArticles.filter(article =>
+                          reporter.categories?.includes(article.category)
+                        );
+                        alert(`${reporter.name} - ${reporterArticles.length} ידיעות`);
+                      }}
+                      className="flex items-center justify-center gap-2 px-3 py-2 bg-gradient-to-r from-[#E31E24] to-[#B91C1C] hover:from-[#B91C1C] hover:to-[#991B1B] text-white text-sm font-bold rounded-lg transition-all"
+                    >
+                      <ChevronLeft className="w-4 h-4" />
+                      ידיעות
+                    </button>
+                  </div>
                 </div>
               </motion.div>
             );

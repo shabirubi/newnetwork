@@ -4,8 +4,9 @@ import { createPageUrl } from "../../utils";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
-import { Video, TrendingUp, Mic, Play } from "lucide-react";
+import { Video, TrendingUp, Mic, Play, MessageCircle } from "lucide-react";
 import ReporterAudioPlayer from "./ReporterAudioPlayer";
+import ReporterChatModal from "../reporter/ReporterChatModal";
 
 const REPORTERS = [
   {
@@ -283,6 +284,7 @@ const REPORTERS = [
 export default function ReportersFeed() {
   const [reporterArticles, setReporterArticles] = useState([]);
   const [selectedReporter, setSelectedReporter] = useState(null);
+  const [chatReporter, setChatReporter] = useState(null);
 
   const { data: allArticles = [] } = useQuery({
     queryKey: ['reporter-articles'],
@@ -335,6 +337,14 @@ export default function ReportersFeed() {
           reporter={selectedReporter.reporter}
           article={selectedReporter.article}
           onClose={() => setSelectedReporter(null)}
+        />
+      )}
+      
+      {chatReporter && (
+        <ReporterChatModal
+          reporter={chatReporter.reporter}
+          article={chatReporter.article}
+          onClose={() => setChatReporter(null)}
         />
       )}
       
@@ -415,16 +425,28 @@ export default function ReportersFeed() {
                       חם
                     </span>
                   )}
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      setSelectedReporter(item);
-                    }}
-                    className="mr-auto flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-[#E31E24] to-[#B91C1C] hover:from-[#B91C1C] hover:to-[#991B1B] text-white text-[10px] font-bold rounded-full shadow-md hover:shadow-lg transition-all"
-                  >
-                    <Play className="w-2.5 h-2.5" fill="white" />
-                    שמע כתבה
-                  </button>
+                  <div className="mr-auto flex items-center gap-2">
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setChatReporter(item);
+                      }}
+                      className="flex items-center gap-1 px-2 py-1 bg-blue-600 hover:bg-blue-700 text-white text-[9px] font-bold rounded-full shadow-md hover:shadow-lg transition-all"
+                    >
+                      <MessageCircle className="w-2.5 h-2.5" />
+                      צ׳אט
+                    </button>
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        setSelectedReporter(item);
+                      }}
+                      className="flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-[#E31E24] to-[#B91C1C] hover:from-[#B91C1C] hover:to-[#991B1B] text-white text-[10px] font-bold rounded-full shadow-md hover:shadow-lg transition-all"
+                    >
+                      <Play className="w-2.5 h-2.5" fill="white" />
+                      שמע
+                    </button>
+                  </div>
                 </div>
               </div>
             </motion.div>
