@@ -66,50 +66,67 @@ ${article.subtitle ? `תת-כותרת: ${article.subtitle}` : ''}
           return voices;
         };
         
-        // Wait for voices to load
-        let voices = loadVoices();
-        if (voices.length === 0) {
-          window.speechSynthesis.addEventListener('voiceschanged', () => {
-            voices = loadVoices();
+        // Wait for voices to load properly
+        const setupVoices = () => {
+          return new Promise((resolve) => {
+            let voices = window.speechSynthesis.getVoices();
+            if (voices.length > 0) {
+              resolve(voices);
+            } else {
+              window.speechSynthesis.addEventListener('voiceschanged', () => {
+                voices = window.speechSynthesis.getVoices();
+                resolve(voices);
+              });
+            }
           });
-        }
+        };
+        
+        const voices = await setupVoices();
         
         const utterance = new SpeechSynthesisUtterance(result);
         utterance.lang = 'he-IL';
         utterance.rate = 0.92;
         
-        console.log('Reporter gender:', reporter.gender);
-        console.log('Available voices:', voices.map(v => `${v.name} (${v.lang})`));
+        console.log('🎤 Reporter:', reporter.name, '| Gender:', reporter.gender);
+        console.log('🔊 Available voices:', voices.map(v => `${v.name} (${v.lang})`));
         
-        // Set pitch and voice based on gender
+        // Set pitch and voice based on gender - VERY DIFFERENT VALUES
         if (reporter.gender === 'female') {
-          utterance.pitch = 1.3;
-          // Try to find female Hebrew voice
+          utterance.pitch = 1.8; // Much higher for female
+          utterance.rate = 0.95;
+          
+          // Try multiple female voice patterns
           const femaleVoice = voices.find(voice => 
             (voice.lang.includes('he') || voice.lang.includes('iw')) && 
             (voice.name.toLowerCase().includes('female') || 
+             voice.name.toLowerCase().includes('woman') ||
              voice.name.toLowerCase().includes('zira') ||
              voice.name.toLowerCase().includes('carmit') ||
-             voice.name.toLowerCase().includes('hadar'))
-          ) || voices.find(voice => voice.lang.includes('he') || voice.lang.includes('iw'));
+             voice.name.toLowerCase().includes('hadar') ||
+             voice.name.includes('Microsoft') && voice.name.includes('He'))
+          );
           
           if (femaleVoice) {
             utterance.voice = femaleVoice;
-            console.log('Selected female voice:', femaleVoice.name);
+            console.log('✅ Selected FEMALE voice:', femaleVoice.name);
+          } else {
+            console.warn('⚠️ No female Hebrew voice found, using high pitch');
           }
         } else {
-          utterance.pitch = 0.8;
-          // Try to find male Hebrew voice
+          utterance.pitch = 0.7; // Lower for male
+          utterance.rate = 0.90;
+          
           const maleVoice = voices.find(voice => 
             (voice.lang.includes('he') || voice.lang.includes('iw')) && 
             (voice.name.toLowerCase().includes('male') || 
+             voice.name.toLowerCase().includes('man') ||
              voice.name.toLowerCase().includes('asaf') ||
              voice.name.toLowerCase().includes('david'))
-          ) || voices.find(voice => voice.lang.includes('he') || voice.lang.includes('iw'));
+          );
           
           if (maleVoice) {
             utterance.voice = maleVoice;
-            console.log('Selected male voice:', maleVoice.name);
+            console.log('✅ Selected MALE voice:', maleVoice.name);
           }
         }
 
