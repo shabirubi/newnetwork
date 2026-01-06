@@ -95,13 +95,7 @@ export default function Layout({ children }) {
               <ClockWidget />
               <WeatherWidget />
               <ChannelSelector />
-              <Link 
-                to={createPageUrl("VOD")}
-                className="flex items-center gap-1.5 px-3 py-1.5 bg-purple-600 hover:bg-purple-700 rounded-lg text-xs font-bold text-white transition-colors"
-              >
-                <Film size={14} />
-                <span className="hidden sm:inline">VOD</span>
-              </Link>
+
             </div>
             <div className="flex items-center gap-1 lg:gap-2">
               <button
@@ -213,13 +207,7 @@ export default function Layout({ children }) {
                 <Radio size={16} />
                 ניהול ערוצים
               </Link>
-              <Link
-                to={createPageUrl("VOD")}
-                className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
-              >
-                <Film size={16} />
-                VOD
-              </Link>
+
               <button
                 onClick={() => setDarkMode(!darkMode)}
                 className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
@@ -323,17 +311,7 @@ export default function Layout({ children }) {
                   <ChevronLeft size={18} className="text-gray-400" />
                 </Link>
 
-                <Link
-                  to={createPageUrl("VOD")}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-4 px-4 py-4 text-gray-700 dark:text-gray-200 rounded-2xl active:bg-gray-100 dark:active:bg-gray-700 transition-colors"
-                >
-                  <div className="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center">
-                    <Film size={20} className="text-purple-600 dark:text-purple-400" />
-                  </div>
-                  <span className="flex-1 font-medium">ספריית VOD</span>
-                  <ChevronLeft size={18} className="text-gray-400" />
-                </Link>
+
                 </div>
             </motion.nav>
           </motion.div>
@@ -364,13 +342,7 @@ export default function Layout({ children }) {
             <span className="text-[10px] font-medium text-[#E31E24]">חי</span>
           </Link>
 
-          <Link
-            to={createPageUrl("VOD")}
-            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-gray-100 dark:active:bg-gray-700 transition-colors"
-          >
-            <Film size={22} className="text-purple-600 dark:text-purple-400 mb-1" />
-            <span className="text-[10px] font-medium text-purple-600 dark:text-purple-400">VOD</span>
-          </Link>
+
 
           <Link
             to={createPageUrl("Category?cat=breaking")}
