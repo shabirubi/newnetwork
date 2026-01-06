@@ -220,8 +220,10 @@ export default function LivePlayer({
           <iframe
             key={currentStreamUrl}
             src={
-              currentStreamUrl.includes('youtube.com') || currentStreamUrl.includes('youtu.be')
-                ? `${currentStreamUrl}${currentStreamUrl.includes('?') ? '&' : '?'}autoplay=1&loop=1&muted=0&controls=1&playlist=${currentStreamUrl.split('/').pop().split('?')[0]}`
+              currentStreamUrl.includes('youtube.com/embed/')
+                ? `${currentStreamUrl}?autoplay=1&loop=1&mute=0&controls=1&playlist=${currentStreamUrl.split('/embed/')[1].split('?')[0]}`
+                : currentStreamUrl.includes('youtube.com') || currentStreamUrl.includes('youtu.be')
+                ? `https://www.youtube.com/embed/${currentStreamUrl.includes('watch?v=') ? currentStreamUrl.split('watch?v=')[1] : currentStreamUrl.split('youtu.be/')[1]}?autoplay=1&loop=1&mute=0&controls=1`
                 : currentStreamUrl
             }
             className="absolute inset-0 w-full h-full"
