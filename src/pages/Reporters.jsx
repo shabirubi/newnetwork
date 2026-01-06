@@ -41,7 +41,9 @@ export default function Reporters() {
       return result;
     },
     staleTime: 0,
+    refetchInterval: 30000,
     refetchOnMount: true,
+    refetchOnWindowFocus: true,
     initialData: []
   });
 
