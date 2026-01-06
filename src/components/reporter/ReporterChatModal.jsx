@@ -239,19 +239,45 @@ ${conversationHistory ? `היסטוריית השיחה:\n${conversationHistory}\
 
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'he-IL';
-    utterance.rate = 0.95;
     
-    // Adjust voice based on gender
+    // Get unique voice per reporter
+    const getReporterVoiceIndex = (name) => {
+      let hash = 0;
+      for (let i = 0; i < name.length; i++) {
+        hash = ((hash << 5) - hash) + name.charCodeAt(i);
+        hash = hash & hash;
+      }
+      return Math.abs(hash);
+    };
+    
+    const reporterIndex = getReporterVoiceIndex(reporter.name);
+    
     const voices = window.speechSynthesis.getVoices();
-    const hebrewVoice = voices.find(v => v.lang === 'he-IL' || v.lang.startsWith('he'));
-    if (hebrewVoice) {
-      utterance.voice = hebrewVoice;
-    }
-
+    
     if (reporter.gender === 'female') {
-      utterance.pitch = 1.2;
+      const femalePitches = [1.7, 1.8, 1.9, 1.75, 1.85];
+      utterance.pitch = femalePitches[reporterIndex % femalePitches.length];
+      utterance.rate = 0.93 + (reporterIndex % 3) * 0.02;
+      
+      const femaleVoices = voices.filter(v => 
+        (v.lang.includes('he') || v.lang.includes('iw')) && 
+        (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('woman'))
+      );
+      if (femaleVoices.length > 0) {
+        utterance.voice = femaleVoices[reporterIndex % femaleVoices.length];
+      }
     } else {
-      utterance.pitch = 0.9;
+      const malePitches = [0.6, 0.7, 0.75, 0.65, 0.8];
+      utterance.pitch = malePitches[reporterIndex % malePitches.length];
+      utterance.rate = 0.88 + (reporterIndex % 3) * 0.02;
+      
+      const maleVoices = voices.filter(v => 
+        (v.lang.includes('he') || v.lang.includes('iw')) && 
+        (v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('man'))
+      );
+      if (maleVoices.length > 0) {
+        utterance.voice = maleVoices[reporterIndex % maleVoices.length];
+      }
     }
 
     utterance.onend = () => setPlayingMessageId(null);
