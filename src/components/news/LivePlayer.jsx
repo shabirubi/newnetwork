@@ -96,14 +96,14 @@ export default function LivePlayer({
     });
 
     player.addEventListener('error', (event) => {
-      console.log('Shaka Error:', event.detail);
+      console.error('Shaka Error:', event.detail);
     });
 
     player.load(currentStreamUrl).then(() => {
-      console.log('Stream loaded successfully');
-      video.play().catch(err => console.log('Play error:', err));
+      console.log('Stream loaded successfully:', currentStreamUrl);
+      video.play().catch(err => console.error('Play error:', err));
     }).catch((error) => {
-      console.log('Load error:', error);
+      console.error('Load error for', currentStreamUrl, ':', error);
     });
 
     return () => {
