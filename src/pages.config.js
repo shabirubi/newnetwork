@@ -10,6 +10,7 @@ import PublicReports from './pages/PublicReports';
 import Schedule from './pages/Schedule';
 import WarRoom from './pages/WarRoom';
 import Archive from './pages/Archive';
+import Reporters from './pages/Reporters';
 import __Layout from './Layout.jsx';
 
 
@@ -26,6 +27,7 @@ export const PAGES = {
     "Schedule": Schedule,
     "WarRoom": WarRoom,
     "Archive": Archive,
+    "Reporters": Reporters,
 }
 
 export const pagesConfig = {

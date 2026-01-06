@@ -171,10 +171,10 @@ export default function Layout({ children }) {
                 לוח שידורים
               </Link>
               <Link
-                to={createPageUrl("Home")}
+                to={createPageUrl("Reporters")}
                 onClick={(e) => {
                   e.preventDefault();
-                  window.location.href = createPageUrl("Home");
+                  window.location.href = createPageUrl("Reporters");
                 }}
                 className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
               >
@@ -327,7 +327,7 @@ export default function Layout({ children }) {
                 </Link>
 
                 <Link
-                  to={createPageUrl("Home")}
+                  to={createPageUrl("Reporters")}
                   onClick={() => setMobileMenuOpen(false)}
                   className="flex items-center gap-4 px-4 py-4 text-gray-700 dark:text-gray-200 rounded-2xl active:bg-gray-100 dark:active:bg-gray-700 transition-colors"
                 >

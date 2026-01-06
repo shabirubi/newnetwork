@@ -434,7 +434,7 @@ export default function ReportersFeed() {
 
       <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
         <Link
-          to={createPageUrl("Home")}
+          to={createPageUrl("Reporters")}
           className="block text-center text-xs font-bold text-[#E31E24] hover:text-[#B91C1C] transition-colors"
         >
           כל הכתבים ←
