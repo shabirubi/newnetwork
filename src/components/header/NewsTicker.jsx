@@ -79,50 +79,55 @@ export default function NewsTicker({ darkMode, setDarkMode }) {
 
   return (
     <div className="bg-[#E31E24] dark:bg-[#B91C1C] text-white py-2 overflow-hidden">
-      <div className="flex items-center gap-3 px-2 lg:px-4">
-        <span className="bg-black text-white px-3 py-1.5 font-bold text-xs shrink-0 flex items-center gap-1.5 rounded">
-          <Flame className="w-3.5 h-3.5 animate-pulse" />
-          חדשות חמות
+      <div className="flex items-center gap-1 sm:gap-3 px-2 lg:px-4">
+        <span className="bg-black text-white px-2 sm:px-3 py-1 sm:py-1.5 font-bold text-[10px] sm:text-xs shrink-0 flex items-center gap-1 sm:gap-1.5 rounded">
+          <Flame className="w-3 sm:w-3.5 h-3 sm:h-3.5 animate-pulse" />
+          <span className="hidden xs:inline">חדשות חמות</span>
+          <span className="xs:hidden">חם</span>
         </span>
-        
+
         <Link 
           to={createPageUrl("Category?cat=breaking")}
-          className="ticker-wrapper overflow-hidden flex-1 cursor-pointer hover:opacity-90 transition-opacity"
+          className="ticker-wrapper overflow-hidden flex-1 cursor-pointer hover:opacity-90 transition-opacity min-w-0"
         >
           <motion.div
-            className="flex whitespace-nowrap text-sm"
+            className="flex whitespace-nowrap text-[11px] sm:text-sm"
             animate={{ x: ["0%", "-50%"] }}
             transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
           >
             {[...news, ...news].map((item, index) => (
-              <span key={index} className="mx-8">• {item}</span>
+              <span key={index} className="mx-4 sm:mx-8">• {item}</span>
             ))}
           </motion.div>
         </Link>
 
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-1 shrink-0">
           <button
             onClick={() => setDarkMode(!darkMode)}
-            className="flex items-center justify-center w-8 h-8 rounded-lg bg-black/40 hover:bg-black/60 text-white active:scale-95 transition-all"
+            className="flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-black/40 hover:bg-black/60 text-white active:scale-95 transition-all"
           >
-            {darkMode ? <Sun size={14} /> : <Moon size={14} />}
+            {darkMode ? <Sun size={12} className="sm:w-3.5 sm:h-3.5" /> : <Moon size={12} className="sm:w-3.5 sm:h-3.5" />}
           </button>
-          
-          <ClockWidget />
-          <WeatherWidget />
+
+          <div className="hidden sm:block">
+            <ClockWidget />
+          </div>
+          <div className="hidden md:block">
+            <WeatherWidget />
+          </div>
           <ChannelSelector />
-          
+
           <Link 
             to={createPageUrl("WarRoom")}
-            className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 bg-black/40 hover:bg-black/60 rounded-lg text-xs font-bold transition-colors"
+            className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 bg-black/40 hover:bg-black/60 rounded-lg text-xs font-bold transition-colors"
           >
             <Siren size={13} className="animate-pulse" />
             חדר מלחמה
           </Link>
-          
+
           <Link 
             to={createPageUrl("PublicReports")}
-            className="hidden sm:flex items-center gap-1.5 px-2.5 py-1.5 bg-black/40 hover:bg-black/60 rounded-lg text-xs font-bold transition-colors"
+            className="hidden xl:flex items-center gap-1.5 px-2.5 py-1.5 bg-black/40 hover:bg-black/60 rounded-lg text-xs font-bold transition-colors"
           >
             <MessageSquareWarning size={13} />
             דיווח מפגע
