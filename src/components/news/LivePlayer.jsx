@@ -9,20 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import ShareButtons from "../shared/ShareButtons";
 
-// Load HLS.js from CDN
-const loadHls = () => {
-  return new Promise((resolve, reject) => {
-    if (window.Hls) {
-      resolve(window.Hls);
-      return;
-    }
-    const script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/hls.js@latest';
-    script.onload = () => resolve(window.Hls);
-    script.onerror = reject;
-    document.head.appendChild(script);
-  });
-};
+
 
 
 export default function LivePlayer({ 
@@ -41,7 +28,6 @@ export default function LivePlayer({
   const [currentStreamUrl, setCurrentStreamUrl] = useState(streamUrl);
   const videoRef = useRef(null);
   const containerRef = useRef(null);
-  const hlsRef = useRef(null);
 
   // Update stream URL when prop changes - force play
   useEffect(() => {
@@ -69,93 +55,7 @@ export default function LivePlayer({
     }
   };
 
-  // Setup HLS player for .m3u8 streams
-  useEffect(() => {
-    if (!currentStreamUrl || !currentStreamUrl.includes('.m3u8') || !videoRef.current) return;
 
-    const video = videoRef.current;
-    
-    // Cleanup previous HLS instance
-    if (hlsRef.current) {
-      hlsRef.current.destroy();
-      hlsRef.current = null;
-    }
-
-    // Always try to play when stream URL changes
-    if (!isPlaying && currentStreamUrl) {
-      return; // Don't setup if manually paused
-    }
-
-    // Set volume
-    video.volume = volume / 100;
-    video.muted = isMuted;
-
-    // Check if browser natively supports HLS (Safari)
-    if (video.canPlayType('application/vnd.apple.mpegurl')) {
-      video.src = currentStreamUrl;
-      video.play().catch(err => console.log('Play error:', err));
-    } else {
-      // Use HLS.js for other browsers
-      loadHls().then((Hls) => {
-        if (Hls.isSupported()) {
-          const hls = new Hls({
-            debug: false,
-            enableWorker: true,
-            lowLatencyMode: true,
-            backBufferLength: 90,
-            maxBufferLength: 10,
-            maxMaxBufferLength: 20,
-            maxBufferSize: 60 * 1000 * 1000,
-            maxBufferHole: 0.5,
-            highBufferWatchdogPeriod: 2,
-            nudgeMaxRetry: 3,
-            liveSyncDurationCount: 3,
-            liveMaxLatencyDurationCount: 5
-          });
-          hlsRef.current = hls;
-          
-          hls.on(Hls.Events.ERROR, (event, data) => {
-            console.log('HLS Error:', data);
-            if (data.fatal) {
-              switch (data.type) {
-                case Hls.ErrorTypes.NETWORK_ERROR:
-                  console.log('Network error, trying to recover...');
-                  hls.startLoad();
-                  break;
-                case Hls.ErrorTypes.MEDIA_ERROR:
-                  console.log('Media error, trying to recover...');
-                  hls.recoverMediaError();
-                  break;
-                default:
-                  console.log('Fatal error, destroying HLS...');
-                  hls.destroy();
-                  break;
-              }
-            }
-          });
-
-          hls.loadSource(currentStreamUrl);
-          hls.attachMedia(video);
-          
-          hls.on(Hls.Events.MANIFEST_PARSED, () => {
-            console.log('Stream loaded successfully');
-            video.play().catch(err => console.log('Play error:', err));
-          });
-        }
-      }).catch(err => {
-        console.log('HLS.js load error:', err);
-        video.src = currentStreamUrl;
-        video.play().catch(err => console.log('Fallback play error:', err));
-      });
-    }
-
-    return () => {
-      if (hlsRef.current) {
-        hlsRef.current.destroy();
-        hlsRef.current = null;
-      }
-    };
-  }, [isPlaying, currentStreamUrl, volume, isMuted]);
 
   return (
     <motion.div
@@ -235,18 +135,7 @@ export default function LivePlayer({
         )}
 
         {/* Live Stream when Playing */}
-        {isPlaying && currentStreamUrl && currentStreamUrl.includes('.m3u8') && (
-          <video
-            ref={videoRef}
-            className="absolute inset-0 w-full h-full bg-black object-contain"
-            autoPlay
-            playsInline
-            muted={isMuted}
-            volume={volume / 100}
-            controls={false}
-          />
-        )}
-        {isPlaying && currentStreamUrl && !currentStreamUrl.includes('.m3u8') && (
+        {isPlaying && currentStreamUrl && (
           <iframe
             key={currentStreamUrl}
             src={currentStreamUrl}
