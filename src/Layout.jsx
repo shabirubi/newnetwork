@@ -291,39 +291,37 @@ export default function Layout({ children }) {
 
       {/* Mobile Bottom Navigation */}
       <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 z-40 safe-area-inset-bottom">
-        <div className="grid grid-cols-5 gap-1 px-2 py-2">
+        <div className="grid grid-cols-4 gap-1 px-2 py-2">
           <Link
             to={createPageUrl("Home")}
             className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-gray-100 dark:active:bg-gray-700 transition-colors"
           >
-            <Home size={22} className="text-gray-600 dark:text-gray-300 mb-1" />
-            <span className="text-[10px] font-medium text-gray-600 dark:text-gray-300">בית</span>
+            <Home size={24} className="text-gray-600 dark:text-gray-300 mb-1" />
+            <span className="text-[11px] font-medium text-gray-600 dark:text-gray-300">בית</span>
           </Link>
 
           <Link
             to={createPageUrl("Live")}
             className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-gray-100 dark:active:bg-gray-700 transition-colors"
           >
-            <Radio size={22} className="text-[#E31E24] mb-1" />
-            <span className="text-[10px] font-medium text-[#E31E24]">חי</span>
+            <Radio size={24} className="text-[#E31E24] mb-1" />
+            <span className="text-[11px] font-medium text-[#E31E24]">חי</span>
           </Link>
-
-
 
           <Link
             to={createPageUrl("Category?cat=breaking")}
             className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-gray-100 dark:active:bg-gray-700 transition-colors"
           >
-            <Flame size={22} className="text-gray-600 dark:text-gray-300 mb-1" />
-            <span className="text-[10px] font-medium text-gray-600 dark:text-gray-300">חמות</span>
+            <Flame size={24} className="text-gray-600 dark:text-gray-300 mb-1" />
+            <span className="text-[11px] font-medium text-gray-600 dark:text-gray-300">חמות</span>
           </Link>
 
           <button
             onClick={() => setMobileMenuOpen(true)}
             className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-gray-100 dark:active:bg-gray-700 transition-colors"
           >
-            <Menu size={22} className="text-gray-600 dark:text-gray-300 mb-1" />
-            <span className="text-[10px] font-medium text-gray-600 dark:text-gray-300">עוד</span>
+            <Menu size={24} className="text-gray-600 dark:text-gray-300 mb-1" />
+            <span className="text-[11px] font-medium text-gray-600 dark:text-gray-300">עוד</span>
           </button>
         </div>
       </nav>

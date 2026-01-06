@@ -271,19 +271,21 @@ export default function LivePlayer({
         {isPlaying && !currentStreamUrl.includes('.m3u8') && !currentStreamUrl.includes('.mpd') && (
           (() => {
             const url = currentStreamUrl;
-            
+
             // YouTube with API control
             if (url.includes('youtube.com') || url.includes('youtu.be')) {
               return <div id="youtube-player" className="absolute inset-0 w-full h-full" />;
             }
-            
+
             // For all other URLs (like Channel 14), regular iframe
             return (
               <iframe
                 src={url}
                 className="absolute inset-0 w-full h-full"
-                allow="autoplay; fullscreen; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allow="autoplay; fullscreen; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowFullScreen
+                referrerPolicy="no-referrer-when-downgrade"
+                sandbox="allow-scripts allow-same-origin allow-presentation allow-forms"
                 title={title}
               />
             );
