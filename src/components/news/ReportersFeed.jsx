@@ -4,76 +4,96 @@ import { createPageUrl } from "../../utils";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
-import { Video, TrendingUp } from "lucide-react";
+import { Video, TrendingUp, Mic, Play } from "lucide-react";
+import ReporterAudioPlayer from "./ReporterAudioPlayer";
 
 const REPORTERS = [
   {
     id: 1,
     name: "רועי שרון",
     role: "כתב ביטחון",
-    image: "https://api.dicebear.com/7.x/avataaars/svg?seed=security1&backgroundColor=b6e3f4",
-    categories: ["security", "breaking"]
+    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/reporter1_male.jpg",
+    gender: "male",
+    categories: ["security", "breaking"],
+    specialty: "מומחה לענייני ביטחון וצבא"
   },
   {
     id: 2,
     name: "מיכל כהן",
     role: "כתבת כלכלה",
-    image: "https://api.dicebear.com/7.x/avataaars/svg?seed=economy1&backgroundColor=c0aede",
-    categories: ["economy", "politics"]
+    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/reporter2_female.jpg",
+    gender: "female",
+    categories: ["economy", "politics"],
+    specialty: "מומחית לכלכלה ושווקים"
   },
   {
     id: 3,
     name: "יוסי לוי",
     role: "כתב פוליטי",
-    image: "https://api.dicebear.com/7.x/avataaars/svg?seed=politics1&backgroundColor=ffd5dc",
-    categories: ["politics", "breaking"]
+    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/reporter3_male.jpg",
+    gender: "male",
+    categories: ["politics", "breaking"],
+    specialty: "מומחה לפוליטיקה ישראלית"
   },
   {
     id: 4,
     name: "שרה אברהם",
-    role: "כתבת חינוך",
-    image: "https://api.dicebear.com/7.x/avataaars/svg?seed=education1&backgroundColor=ffeaa7",
-    categories: ["world", "health"]
+    role: "כתבת חינוך וחברה",
+    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/reporter4_female.jpg",
+    gender: "female",
+    categories: ["world", "health"],
+    specialty: "מומחית לחינוך ונושאים חברתיים"
   },
   {
     id: 5,
     name: "דוד מזרחי",
     role: "כתב ספורט",
-    image: "https://api.dicebear.com/7.x/avataaars/svg?seed=sports1&backgroundColor=74b9ff",
-    categories: ["sports", "entertainment"]
+    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/reporter5_male.jpg",
+    gender: "male",
+    categories: ["sports", "entertainment"],
+    specialty: "מומחה לספורט ישראלי ובינלאומי"
   },
   {
     id: 6,
     name: "נועה ברק",
-    role: "כתבת בידור",
-    image: "https://api.dicebear.com/7.x/avataaars/svg?seed=entertainment1&backgroundColor=fab1a0",
-    categories: ["entertainment", "world"]
+    role: "כתבת בידור ותרבות",
+    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/reporter6_female.jpg",
+    gender: "female",
+    categories: ["entertainment", "world"],
+    specialty: "מומחית לבידור ותרבות"
   },
   {
     id: 7,
     name: "אלון גולן",
     role: "כתב טכנולוגיה",
-    image: "https://api.dicebear.com/7.x/avataaars/svg?seed=tech1&backgroundColor=a29bfe",
-    categories: ["technology", "economy"]
+    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/reporter7_male.jpg",
+    gender: "male",
+    categories: ["technology", "economy"],
+    specialty: "מומחה לטכנולוגיה והייטק"
   },
   {
     id: 8,
     name: "תמר רוזן",
-    role: "כתבת בריאות",
-    image: "https://api.dicebear.com/7.x/avataaars/svg?seed=health1&backgroundColor=55efc4",
-    categories: ["health", "world"]
+    role: "כתבת בריאות ומדע",
+    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/reporter8_female.jpg",
+    gender: "female",
+    categories: ["health", "world"],
+    specialty: "מומחית לבריאות ומדע"
   },
   {
     id: 9,
     name: "עומר אשכנזי",
     role: "כתב זירה בינלאומית",
-    image: "https://api.dicebear.com/7.x/avataaars/svg?seed=world1&backgroundColor=81ecec",
-    categories: ["world", "breaking"]
+    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/reporter9_male.jpg",
+    gender: "male",
+    categories: ["world", "breaking"],
+    specialty: "מומחה לזירה הבינלאומית"
   }
 ];
 
 export default function ReportersFeed() {
   const [reporterArticles, setReporterArticles] = useState([]);
+  const [selectedReporter, setSelectedReporter] = useState(null);
 
   const { data: allArticles = [] } = useQuery({
     queryKey: ['reporter-articles'],
@@ -120,7 +140,16 @@ export default function ReportersFeed() {
   }
 
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sticky top-24 border border-gray-200 dark:border-gray-700">
+    <>
+      {selectedReporter && (
+        <ReporterAudioPlayer
+          reporter={selectedReporter.reporter}
+          article={selectedReporter.article}
+          onClose={() => setSelectedReporter(null)}
+        />
+      )}
+      
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sticky top-24 border border-gray-200 dark:border-gray-700">
       <div className="flex items-center gap-2 mb-4 pb-3 border-b border-gray-200 dark:border-gray-700">
         <Video className="w-5 h-5 text-[#E31E24]" />
         <h2 className="font-bold text-base dark:text-white">אנשי השטח</h2>
@@ -142,52 +171,71 @@ export default function ReportersFeed() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -20 }}
               transition={{ delay: index * 0.1 }}
+              className="group"
             >
-              <Link
-                to={createPageUrl(`Article?id=${item.article.id}`)}
-                className="block group"
-              >
-                <div className="flex gap-3 p-2 hover:bg-gray-50 dark:hover:bg-gray-700/50 rounded-lg transition-all">
+              <div className="relative bg-gradient-to-br from-gray-50 to-white dark:from-gray-700/30 dark:to-gray-800/30 rounded-xl p-3 hover:shadow-lg transition-all border border-gray-100 dark:border-gray-700 hover:border-[#E31E24] dark:hover:border-[#E31E24]">
+                {/* Reporter Header */}
+                <div className="flex items-center gap-3 mb-3">
                   <div className="relative shrink-0">
-                    <img
-                      src={item.reporter.image}
-                      alt={item.reporter.name}
-                      className="w-12 h-12 rounded-full border-2 border-gray-200 dark:border-gray-600 group-hover:border-[#E31E24] transition-colors"
-                    />
-                    {item.article.video_url && (
-                      <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-[#E31E24] rounded-full flex items-center justify-center border-2 border-white dark:border-gray-800">
-                        <Video className="w-2.5 h-2.5 text-white" />
-                      </div>
-                    )}
+                    <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-gray-200 dark:border-gray-600 group-hover:border-[#E31E24] transition-colors shadow-md">
+                      <img
+                        src={item.reporter.image}
+                        alt={item.reporter.name}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-gradient-to-br from-[#E31E24] to-[#B91C1C] rounded-full flex items-center justify-center border-2 border-white dark:border-gray-800 shadow-lg">
+                      <Mic className="w-3 h-3 text-white" />
+                    </div>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="flex-1 min-w-0">
-                        <h3 className="font-bold text-xs text-gray-900 dark:text-white">
-                          {item.reporter.name}
-                        </h3>
-                        <p className="text-[10px] text-gray-500 dark:text-gray-400">
-                          {item.reporter.role}
-                        </p>
-                      </div>
-                      <span className="text-[10px] text-gray-400 dark:text-gray-500 shrink-0">
-                        {item.time}
-                      </span>
-                    </div>
-                    <p className="text-xs text-gray-700 dark:text-gray-300 line-clamp-2 mt-1.5 group-hover:text-[#E31E24] dark:group-hover:text-[#E31E24] transition-colors leading-snug">
-                      {item.article.title}
+                    <h3 className="font-bold text-sm text-gray-900 dark:text-white">
+                      {item.reporter.name}
+                    </h3>
+                    <p className="text-[10px] text-gray-600 dark:text-gray-400 font-medium">
+                      {item.reporter.role}
                     </p>
-                    {item.article.is_breaking && (
-                      <div className="mt-2">
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 bg-[#E31E24] text-white text-[9px] font-bold rounded-full">
-                          <TrendingUp className="w-2 h-2" />
-                          חדשות חמות
-                        </span>
-                      </div>
-                    )}
+                    <span className="text-[9px] text-[#E31E24] font-bold">
+                      {item.time}
+                    </span>
                   </div>
                 </div>
-              </Link>
+
+                {/* Article Content */}
+                <Link
+                  to={createPageUrl(`Article?id=${item.article.id}`)}
+                  className="block"
+                >
+                  <p className="text-xs text-gray-800 dark:text-gray-200 font-medium line-clamp-2 leading-snug group-hover:text-[#E31E24] dark:group-hover:text-[#E31E24] transition-colors mb-2">
+                    {item.article.title}
+                  </p>
+                  {item.article.subtitle && (
+                    <p className="text-[10px] text-gray-600 dark:text-gray-400 line-clamp-1 mb-2">
+                      {item.article.subtitle}
+                    </p>
+                  )}
+                </Link>
+
+                {/* Actions */}
+                <div className="flex items-center justify-between gap-2 pt-2 border-t border-gray-200 dark:border-gray-700">
+                  {item.article.is_breaking && (
+                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-[#E31E24] text-white text-[9px] font-bold rounded-full">
+                      <TrendingUp className="w-2.5 h-2.5" />
+                      חם
+                    </span>
+                  )}
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setSelectedReporter(item);
+                    }}
+                    className="mr-auto flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-[#E31E24] to-[#B91C1C] hover:from-[#B91C1C] hover:to-[#991B1B] text-white text-[10px] font-bold rounded-full shadow-md hover:shadow-lg transition-all"
+                  >
+                    <Play className="w-2.5 h-2.5" fill="white" />
+                    שמע כתבה
+                  </button>
+                </div>
+              </div>
             </motion.div>
           ))}
         </AnimatePresence>
@@ -201,6 +249,7 @@ export default function ReportersFeed() {
           כל הכתבים ←
         </Link>
       </div>
-    </div>
+      </div>
+    </>
   );
 }
