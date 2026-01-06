@@ -59,17 +59,18 @@ export default function ReporterChatModal({ reporter, article, onClose }) {
 
   // Get reporter response using LLM
   const getReporterResponse = async (userMessage) => {
-    const context = article ? `
+    try {
+      const context = article ? `
 כתבה: ${article.title}
 ${article.subtitle || ""}
 ${article.content?.substring(0, 500)}...
-    ` : "";
+      ` : "";
 
-    const conversationHistory = messages.slice(-5).map(m => 
-      `${m.sender_type === 'user' ? 'משתמש' : reporter.name}: ${m.message}`
-    ).join('\n');
+      const conversationHistory = messages.slice(-5).map(m => 
+        `${m.sender_type === 'user' ? 'משתמש' : reporter.name}: ${m.message}`
+      ).join('\n');
 
-    const prompt = `אתה ${reporter.name}, ${reporter.role} ב"הרשת החדשה".
+      const prompt = `אתה ${reporter.name}, ${reporter.role} ב"הרשת החדשה".
 התמחות שלך: ${reporter.specialty}
 
 ${context ? `אתה מדבר על הכתבה הבאה:\n${context}` : ''}
@@ -78,16 +79,24 @@ ${conversationHistory ? `היסטוריית השיחה:\n${conversationHistory}\
 
 המשתמש שאל: "${userMessage}"
 
-ענה בצורה מקצועית, קצרה וממוקדת (עד 3 משפטים), כמו כתב בשטח.
+ענה בצורה מקצועית, קצרה וממוקדת (2-3 משפטים), כמו כתב בשטח.
 אם זה קשור לכתבה - התייחס לפרטים הספציפיים.
-`;
+תמיד תענה בעברית.`;
 
-    const result = await base44.integrations.Core.InvokeLLM({
-      prompt,
-      add_context_from_internet: false
-    });
+      console.log('🤖 שולח פרומפט ל-LLM:', prompt);
 
-    return result;
+      const result = await base44.integrations.Core.InvokeLLM({
+        prompt: prompt,
+        add_context_from_internet: false
+      });
+
+      console.log('✅ תשובה מ-LLM:', result);
+
+      return typeof result === 'string' ? result : result?.response || result?.text || 'סליחה, לא הצלחתי להכין תשובה';
+    } catch (error) {
+      console.error('❌ שגיאה בקבלת תשובה מהכתב:', error);
+      return `סליחה, יש לי בעיה טכנית כרגע. בוא ננסה שוב בעוד רגע.`;
+    }
   };
 
   const handleSendMessage = async () => {
@@ -98,35 +107,44 @@ ${conversationHistory ? `היסטוריית השיחה:\n${conversationHistory}\
     setIsProcessing(true);
 
     try {
+      console.log('📤 שולח הודעה מהמשתמש:', userMessage);
+
       // Send user message
-      await sendMessageMutation.mutateAsync({
-        reporter_id: reporter.id,
+      const userMsg = await sendMessageMutation.mutateAsync({
+        reporter_id: String(reporter.id),
         reporter_name: reporter.name,
-        article_id: article?.id || "",
+        article_id: article?.id ? String(article.id) : "",
         user_email: currentUser.email,
-        user_name: currentUser.full_name,
+        user_name: currentUser.full_name || "אורח",
         message: userMessage,
         sender_type: "user",
         is_voice: false
       });
 
+      console.log('✅ הודעת משתמש נשמרה:', userMsg);
+
       // Get reporter response
+      console.log('🤔 מבקש תשובה מהכתב...');
       const response = await getReporterResponse(userMessage);
+      console.log('💬 תשובת הכתב:', response);
 
       // Send reporter response
-      await sendMessageMutation.mutateAsync({
-        reporter_id: reporter.id,
+      const reporterMsg = await sendMessageMutation.mutateAsync({
+        reporter_id: String(reporter.id),
         reporter_name: reporter.name,
-        article_id: article?.id || "",
+        article_id: article?.id ? String(article.id) : "",
         message: response,
         sender_type: "reporter",
         is_voice: false,
         response_text: response
       });
 
+      console.log('✅ תשובת הכתב נשמרה:', reporterMsg);
+      toast.success("הכתב הגיב!");
+
     } catch (err) {
-      console.error("Error sending message:", err);
-      toast.error("שגיאה בשליחת ההודעה");
+      console.error("❌ שגיאה בשליחת ההודעה:", err);
+      toast.error(`שגיאה: ${err.message || 'לא ניתן לשלוח הודעה'}`);
     } finally {
       setIsProcessing(false);
     }
