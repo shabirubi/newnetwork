@@ -220,11 +220,17 @@ export default function LivePlayer({
           <iframe
             key={currentStreamUrl}
             src={(() => {
+              let videoId = '';
               if (currentStreamUrl.includes('youtube.com/embed/')) {
-                const videoId = currentStreamUrl.split('/embed/')[1].split('?')[0];
-                return `https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&mute=0&controls=1&playlist=${videoId}`;
+                videoId = currentStreamUrl.split('/embed/')[1].split('?')[0];
+              } else if (currentStreamUrl.includes('youtu.be/')) {
+                videoId = currentStreamUrl.split('youtu.be/')[1].split('?')[0];
+              } else if (currentStreamUrl.includes('youtube.com/watch?v=')) {
+                videoId = currentStreamUrl.split('watch?v=')[1].split('&')[0];
+              } else {
+                return currentStreamUrl;
               }
-              return currentStreamUrl;
+              return `https://www.youtube.com/embed/${videoId}?autoplay=1&loop=1&mute=0&controls=1&playlist=${videoId}`;
             })()}
             className="absolute inset-0 w-full h-full"
             allow="autoplay; fullscreen; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
