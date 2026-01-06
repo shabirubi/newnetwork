@@ -87,8 +87,8 @@ export default function Layout({ children }) {
       `}</style>
 
       {/* Animated Red Line */}
-      <div className="fixed top-0 left-0 right-0 h-1 bg-transparent overflow-hidden z-[60] pointer-events-none">
-        <div className="absolute top-0 h-full w-32 bg-gradient-to-r from-transparent via-[#E31E24] to-transparent animate-[slideRight_3s_ease-in-out_infinite]"></div>
+      <div className="fixed top-0 left-0 right-0 h-1.5 bg-transparent overflow-hidden z-[60] pointer-events-none">
+        <div className="absolute top-0 h-full w-32 bg-[#E31E24] animate-[slideRight_3s_ease-in-out_infinite]"></div>
       </div>
 
       {/* Breaking News Ticker */}
