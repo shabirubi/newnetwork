@@ -78,9 +78,9 @@ export default function NewsTicker({ darkMode, setDarkMode }) {
   }
 
   return (
-    <div className="bg-black dark:bg-gray-950 text-white py-2 overflow-hidden relative">
+    <div className="bg-black dark:bg-gray-950 text-white py-2 overflow-hidden relative z-40">
       <div className="flex items-center gap-1 sm:gap-3 px-2 lg:px-4">
-        <span className="bg-[#E31E24] text-white px-2 sm:px-3 py-1 sm:py-1.5 font-bold text-[10px] sm:text-xs shrink-0 flex items-center gap-1 sm:gap-1.5 rounded">
+        <span className="bg-[#E31E24] text-white px-2 sm:px-3 py-1 sm:py-1.5 font-bold text-[10px] sm:text-xs shrink-0 flex items-center gap-1 sm:gap-1.5 rounded relative z-10">
           <Flame className="w-3 sm:w-3.5 h-3 sm:h-3.5 animate-pulse" />
           <span className="hidden xs:inline">חדשות חמות</span>
           <span className="xs:hidden">חם</span>
@@ -88,10 +88,10 @@ export default function NewsTicker({ darkMode, setDarkMode }) {
 
         <Link 
           to={createPageUrl("Category?cat=breaking")}
-          className="ticker-wrapper overflow-hidden flex-1 cursor-pointer hover:opacity-90 transition-opacity min-w-0"
+          className="ticker-wrapper overflow-hidden flex-1 cursor-pointer hover:opacity-90 transition-opacity min-w-0 relative z-10"
         >
           <motion.div
-            className="flex whitespace-nowrap text-[11px] sm:text-sm"
+            className="flex whitespace-nowrap text-[11px] sm:text-sm pointer-events-none"
             animate={{ x: ["0%", "-50%"] }}
             transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
           >
@@ -101,12 +101,16 @@ export default function NewsTicker({ darkMode, setDarkMode }) {
           </motion.div>
         </Link>
 
-        <div className="flex items-center gap-1 sm:gap-2 shrink-0 relative z-50">
+        <div className="flex items-center gap-1 sm:gap-2 shrink-0 relative z-[60]">
           <button
-            onClick={() => setDarkMode(!darkMode)}
-            className="flex items-center justify-center w-8 h-8 sm:w-9 sm:h-9 rounded-lg bg-white/10 hover:bg-white/20 text-white active:scale-95 transition-all touch-manipulation"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setDarkMode(!darkMode);
+            }}
+            className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-white/10 hover:bg-white/20 text-white active:scale-95 transition-all touch-manipulation relative z-[70]"
           >
-            {darkMode ? <Sun size={14} className="sm:w-4 sm:h-4" /> : <Moon size={14} className="sm:w-4 sm:h-4" />}
+            {darkMode ? <Sun size={16} className="sm:w-5 sm:h-5" /> : <Moon size={16} className="sm:w-5 sm:h-5" />}
           </button>
 
           <div className="hidden sm:block">
@@ -115,7 +119,7 @@ export default function NewsTicker({ darkMode, setDarkMode }) {
           <div className="hidden md:block">
             <WeatherWidget />
           </div>
-          <div className="relative z-50">
+          <div className="relative z-[70]">
             <ChannelSelector />
           </div>
 
