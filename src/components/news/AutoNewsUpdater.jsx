@@ -15,68 +15,92 @@ const NEWS_CATEGORIES = [
 
 export default function AutoNewsUpdater() {
   const [isUpdating, setIsUpdating] = useState(false);
-  const [lastUpdate, setLastUpdate] = useState(null);
+  const [newArticles, setNewArticles] = useState([]);
 
   useEffect(() => {
     const checkAndUpdate = async () => {
-      // Get last update time from localStorage
       const lastUpdateTime = localStorage.getItem('newsLastUpdate');
       const now = Date.now();
       
-      // If never updated or more than 1 hour passed
+      // Update immediately on first load, then every hour
       if (!lastUpdateTime || now - parseInt(lastUpdateTime) > 3600000) {
         await updateNews();
       }
-      
-      setLastUpdate(lastUpdateTime ? new Date(parseInt(lastUpdateTime)) : null);
     };
 
+    // Run immediately on mount
     checkAndUpdate();
 
-    // Check every 10 minutes if we need to update
-    const interval = setInterval(checkAndUpdate, 600000);
+    // Check every hour
+    const interval = setInterval(checkAndUpdate, 3600000);
     return () => clearInterval(interval);
   }, []);
+
+  // Show notification for new articles on mobile
+  useEffect(() => {
+    if (newArticles.length > 0 && window.innerWidth <= 768) {
+      const notification = document.createElement('div');
+      notification.innerHTML = `
+        <div style="position: fixed; top: 80px; left: 50%; transform: translateX(-50%); z-index: 9999; background: linear-gradient(135deg, #E31E24 0%, #B91C1C 100%); color: white; padding: 12px 24px; border-radius: 12px; box-shadow: 0 8px 32px rgba(227, 30, 36, 0.4); animation: slideDown 0.5s ease-out; font-weight: bold; text-align: center; min-width: 280px;">
+          <div style="display: flex; align-items: center; gap: 8px; justify-content: center;">
+            <span style="font-size: 20px;">🔥</span>
+            <span>${newArticles.length} חדשות חדשות!</span>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.style.animation = 'slideUp 0.5s ease-out';
+        setTimeout(() => notification.remove(), 500);
+      }, 4000);
+      
+      setNewArticles([]);
+    }
+  }, [newArticles]);
 
   const updateNews = async () => {
     if (isUpdating) return;
     
     setIsUpdating(true);
-    console.log('🔄 Starting automatic news update...');
+    console.log('🔄 עדכון אוטומטי של חדשות מתחיל...');
 
     try {
-      // Randomly select 3-5 categories to update
-      const numCategories = Math.floor(Math.random() * 3) + 3; // 3-5
+      const numCategories = Math.floor(Math.random() * 3) + 4; // 4-6 קטגוריות
       const shuffled = [...NEWS_CATEGORIES].sort(() => Math.random() - 0.5);
       const selectedCategories = shuffled.slice(0, numCategories);
+      
+      const allNewArticles = [];
 
       for (const category of selectedCategories) {
         try {
           const articles = await fetchNewsForCategory(category);
           
           if (articles && articles.length > 0) {
-            // Add to database
             for (const article of articles) {
               try {
                 await base44.entities.NewsArticle.create(article);
+                allNewArticles.push(article);
               } catch (err) {
-                console.log('Article already exists or error:', err.message);
+                console.log('Article exists:', err.message);
               }
             }
-            console.log(`✅ Updated ${articles.length} articles for ${category.label}`);
+            console.log(`✅ ${articles.length} ידיעות חדשות - ${category.label}`);
           }
         } catch (error) {
-          console.error(`Error updating ${category.label}:`, error);
+          console.error(`שגיאה ב-${category.label}:`, error);
         }
 
-        // Small delay between categories
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        await new Promise(resolve => setTimeout(resolve, 1500));
       }
 
-      // Update timestamp
       localStorage.setItem('newsLastUpdate', Date.now().toString());
-      setLastUpdate(new Date());
-      console.log('✅ Automatic news update completed');
+      setNewArticles(allNewArticles);
+      
+      // Trigger refresh for NewsTicker
+      window.dispatchEvent(new CustomEvent('newsUpdated'));
+      
+      console.log(`✅ ${allNewArticles.length} חדשות חדשות נוספו!`);
 
     } catch (error) {
       console.error('Error in auto update:', error);
@@ -160,6 +184,18 @@ export default function AutoNewsUpdater() {
     }
   };
 
-  // This component doesn't render anything visible
-  return null;
+  return (
+    <>
+      <style>{`
+        @keyframes slideDown {
+          from { opacity: 0; transform: translate(-50%, -100%); }
+          to { opacity: 1; transform: translate(-50%, 0); }
+        }
+        @keyframes slideUp {
+          from { opacity: 1; transform: translate(-50%, 0); }
+          to { opacity: 0; transform: translate(-50%, -100%); }
+        }
+      `}</style>
+    </>
+  );
 }

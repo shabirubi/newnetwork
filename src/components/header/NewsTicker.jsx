@@ -14,8 +14,21 @@ export default function NewsTicker({ darkMode, setDarkMode }) {
 
   useEffect(() => {
     loadBreakingNews();
-    const interval = setInterval(loadBreakingNews, 120000); // Update every 2 minutes
-    return () => clearInterval(interval);
+    
+    // Refresh every 2 minutes
+    const interval = setInterval(loadBreakingNews, 120000);
+    
+    // Listen for news updates from AutoNewsUpdater
+    const handleNewsUpdate = () => {
+      console.log('🔄 NewsTicker מתעדכן עם חדשות חדשות');
+      loadBreakingNews();
+    };
+    window.addEventListener('newsUpdated', handleNewsUpdate);
+    
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('newsUpdated', handleNewsUpdate);
+    };
   }, []);
 
   const loadBreakingNews = async () => {
