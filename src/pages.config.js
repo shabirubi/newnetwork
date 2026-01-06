@@ -8,6 +8,7 @@ import NewsLoader from './pages/NewsLoader';
 import PublicReports from './pages/PublicReports';
 import Schedule from './pages/Schedule';
 import WarRoom from './pages/WarRoom';
+import GenerateReporterImages from './pages/GenerateReporterImages';
 import __Layout from './Layout.jsx';
 
 
@@ -22,6 +23,7 @@ export const PAGES = {
     "PublicReports": PublicReports,
     "Schedule": Schedule,
     "WarRoom": WarRoom,
+    "GenerateReporterImages": GenerateReporterImages,
 }
 
 export const pagesConfig = {
