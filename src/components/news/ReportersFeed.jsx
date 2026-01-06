@@ -12,7 +12,7 @@ const REPORTERS = [
     id: 1,
     name: "רועי שרון",
     role: "כתב ביטחון",
-    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/reporter1_male.jpg",
+    image: "https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400&h=400&fit=crop&crop=faces",
     gender: "male",
     categories: ["security", "breaking"],
     specialty: "מומחה לענייני ביטחון וצבא"
@@ -21,7 +21,7 @@ const REPORTERS = [
     id: 2,
     name: "מיכל כהן",
     role: "כתבת כלכלה",
-    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/reporter2_female.jpg",
+    image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=400&h=400&fit=crop&crop=faces",
     gender: "female",
     categories: ["economy", "politics"],
     specialty: "מומחית לכלכלה ושווקים"
@@ -30,7 +30,7 @@ const REPORTERS = [
     id: 3,
     name: "יוסי לוי",
     role: "כתב פוליטי",
-    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/reporter3_male.jpg",
+    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=faces",
     gender: "male",
     categories: ["politics", "breaking"],
     specialty: "מומחה לפוליטיקה ישראלית"
@@ -39,7 +39,7 @@ const REPORTERS = [
     id: 4,
     name: "שרה אברהם",
     role: "כתבת חינוך וחברה",
-    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/reporter4_female.jpg",
+    image: "https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop&crop=faces",
     gender: "female",
     categories: ["world", "health"],
     specialty: "מומחית לחינוך ונושאים חברתיים"
@@ -48,7 +48,7 @@ const REPORTERS = [
     id: 5,
     name: "דוד מזרחי",
     role: "כתב ספורט",
-    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/reporter5_male.jpg",
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=faces",
     gender: "male",
     categories: ["sports", "entertainment"],
     specialty: "מומחה לספורט ישראלי ובינלאומי"
@@ -57,7 +57,7 @@ const REPORTERS = [
     id: 6,
     name: "נועה ברק",
     role: "כתבת בידור ותרבות",
-    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/reporter6_female.jpg",
+    image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=400&h=400&fit=crop&crop=faces",
     gender: "female",
     categories: ["entertainment", "world"],
     specialty: "מומחית לבידור ותרבות"
@@ -66,7 +66,7 @@ const REPORTERS = [
     id: 7,
     name: "אלון גולן",
     role: "כתב טכנולוגיה",
-    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/reporter7_male.jpg",
+    image: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=400&h=400&fit=crop&crop=faces",
     gender: "male",
     categories: ["technology", "economy"],
     specialty: "מומחה לטכנולוגיה והייטק"
@@ -75,7 +75,7 @@ const REPORTERS = [
     id: 8,
     name: "תמר רוזן",
     role: "כתבת בריאות ומדע",
-    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/reporter8_female.jpg",
+    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=faces",
     gender: "female",
     categories: ["health", "world"],
     specialty: "מומחית לבריאות ומדע"
@@ -84,7 +84,7 @@ const REPORTERS = [
     id: 9,
     name: "עומר אשכנזי",
     role: "כתב זירה בינלאומית",
-    image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/reporter9_male.jpg",
+    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=400&h=400&fit=crop&crop=faces",
     gender: "male",
     categories: ["world", "breaking"],
     specialty: "מומחה לזירה הבינלאומית"
