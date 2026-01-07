@@ -39,7 +39,7 @@ export default function Home() {
     initialData: []
   });
 
-  const defaultStreamUrl = "youtube";
+  const defaultStreamUrl = "https://ok.ru/video/10508051226319";
 
   const { data: articles = [], isLoading } = useQuery({
     queryKey: ['news-articles', selectedChannel],

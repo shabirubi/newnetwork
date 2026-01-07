@@ -42,7 +42,7 @@ export default function Live() {
     initialData: []
   });
 
-  const defaultStreamUrl = "youtube";
+  const defaultStreamUrl = "https://ok.ru/video/10508051226319";
   const activeLive = liveStream[0];
   const currentChannel = channels.find(c => c.id === selectedChannel);
   const channelStreamUrl = currentChannel?.stream_url || (selectedChannel === 'all' ? defaultStreamUrl : null);
