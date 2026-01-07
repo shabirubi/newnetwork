@@ -6,6 +6,7 @@ import {
   Users, Radio, Settings, Download, Bookmark, 
   MessageCircle, Eye, Share2
 } from "lucide-react";
+import { AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import ShareButtons from "../shared/ShareButtons";
@@ -23,7 +24,8 @@ export default function LivePlayer({
   thumbnailUrl = null,
   streamUrl
 }) {
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [showPromo, setShowPromo] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(80);
   const [showControls, setShowControls] = useState(true);
@@ -34,6 +36,15 @@ export default function LivePlayer({
   const containerRef = useRef(null);
   const hlsRef = useRef(null);
   const playerRef = useRef(null);
+
+  // Promo animation
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowPromo(false);
+      setIsPlaying(true);
+    }, 3500);
+    return () => clearTimeout(timer);
+  }, []);
 
   const currentStreamUrl = streamUrl;
 
@@ -195,6 +206,61 @@ export default function LivePlayer({
       onMouseEnter={() => setShowControls(true)}
       onMouseLeave={() => setShowControls(false)}
     >
+      {/* Promo Animation */}
+      <AnimatePresence>
+        {showPromo && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+            className="absolute inset-0 z-50 bg-gradient-to-br from-gray-900 via-black to-[#E31E24]/20 flex items-center justify-center"
+          >
+            <motion.div
+              initial={{ scale: 0.8, opacity: 0, rotateY: -30 }}
+              animate={{ 
+                scale: [0.8, 1.2, 1],
+                opacity: [0, 1, 1],
+                rotateY: [-30, 10, 0]
+              }}
+              transition={{ duration: 2, ease: "easeOut" }}
+              className="relative"
+            >
+              <motion.div
+                animate={{ 
+                  boxShadow: [
+                    "0 0 40px rgba(227, 30, 36, 0.3)",
+                    "0 0 80px rgba(227, 30, 36, 0.6)",
+                    "0 0 40px rgba(227, 30, 36, 0.3)"
+                  ]
+                }}
+                transition={{ duration: 2, repeat: Infinity }}
+                className="w-48 h-48 sm:w-64 sm:h-64 rounded-full bg-black/50 backdrop-blur-xl flex items-center justify-center"
+              >
+                <img 
+                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/a44ef2558_212.png"
+                  alt="הרשת החדשה"
+                  className="w-40 h-40 sm:w-56 sm:h-56 object-contain drop-shadow-2xl"
+                />
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.5, duration: 0.8 }}
+                className="absolute -bottom-16 left-1/2 -translate-x-1/2 text-center whitespace-nowrap"
+              >
+                <div className="text-white text-2xl sm:text-3xl font-bold tracking-wider">
+                  הרשת החדשה
+                </div>
+                <div className="text-[#E31E24] text-sm sm:text-base font-medium mt-1">
+                  מהפכה תקשורתית
+                </div>
+              </motion.div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Video Container */}
       <div className="relative w-full aspect-[9/16] sm:aspect-video">
         {/* Placeholder/Thumbnail */}
