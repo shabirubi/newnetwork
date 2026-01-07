@@ -36,14 +36,19 @@ export default function ReporterChatModal({ reporter, article, onClose }) {
   // Fetch chat messages
   const { data: messages = [] } = useQuery({
     queryKey: ['reporter-chat', reporter.id, article?.id],
-    queryFn: () => base44.entities.ReporterChat.filter(
-      { 
-        reporter_id: reporter.id,
-        article_id: article?.id || ""
-      },
-      'created_date'
-    ),
-    refetchInterval: 5000,
+    queryFn: async () => {
+      const filter = article?.id 
+        ? { reporter_id: String(reporter.id), article_id: String(article.id) }
+        : { reporter_id: String(reporter.id) };
+      
+      console.log('🔍 מחפש הודעות עם פילטר:', filter);
+      const result = await base44.entities.ReporterChat.filter(filter, 'created_date', 100);
+      console.log('📨 הודעות שנמצאו:', result);
+      return result;
+    },
+    refetchInterval: 2000,
+    staleTime: 0,
+    refetchOnMount: true,
     initialData: []
   });
 
@@ -169,17 +174,21 @@ ${isRequestingSummary ? `
       console.log('📤 שולח הודעה מהמשתמש:', userMessage);
 
       // Send user message
-      const userMsg = await sendMessageMutation.mutateAsync({
+      const userMsgData = {
         reporter_id: String(reporter.id),
         reporter_name: reporter.name,
-        article_id: article?.id ? String(article.id) : "",
         user_email: currentUser.email,
         user_name: currentUser.full_name || "אורח",
         message: userMessage,
         sender_type: "user",
         is_voice: false
-      });
-
+      };
+      
+      if (article?.id) {
+        userMsgData.article_id = String(article.id);
+      }
+      
+      const userMsg = await sendMessageMutation.mutateAsync(userMsgData);
       console.log('✅ הודעת משתמש נשמרה:', userMsg);
 
       // Get reporter response
@@ -188,16 +197,20 @@ ${isRequestingSummary ? `
       console.log('💬 תשובת הכתב:', response);
 
       // Send reporter response
-      const reporterMsg = await sendMessageMutation.mutateAsync({
+      const reporterMsgData = {
         reporter_id: String(reporter.id),
         reporter_name: reporter.name,
-        article_id: article?.id ? String(article.id) : "",
         message: response,
         sender_type: "reporter",
         is_voice: false,
         response_text: response
-      });
-
+      };
+      
+      if (article?.id) {
+        reporterMsgData.article_id = String(article.id);
+      }
+      
+      const reporterMsg = await sendMessageMutation.mutateAsync(reporterMsgData);
       console.log('✅ תשובת הכתב נשמרה:', reporterMsg);
       toast.success("הכתב הגיב!");
 
