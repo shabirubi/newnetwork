@@ -39,7 +39,7 @@ export default function Home() {
     initialData: []
   });
 
-  const defaultStreamUrl = "https://www.kan.org.il/live/tv.aspx?stationid=2";
+  const defaultStreamUrl = "https://www.youtube.com/embed/7f6TVsLPUbQ?autoplay=1&playsinline=1";
 
   const { data: articles = [], isLoading } = useQuery({
     queryKey: ['news-articles', selectedChannel],

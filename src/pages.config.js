@@ -8,10 +8,10 @@ import Live from './pages/Live';
 import NewsAdmin from './pages/NewsAdmin';
 import NewsLoader from './pages/NewsLoader';
 import PublicReports from './pages/PublicReports';
-import ReporterQA from './pages/ReporterQA';
 import Reporters from './pages/Reporters';
 import Schedule from './pages/Schedule';
 import WarRoom from './pages/WarRoom';
+import ReporterQA from './pages/ReporterQA';
 import __Layout from './Layout.jsx';
 
 
@@ -26,10 +26,10 @@ export const PAGES = {
     "NewsAdmin": NewsAdmin,
     "NewsLoader": NewsLoader,
     "PublicReports": PublicReports,
-    "ReporterQA": ReporterQA,
     "Reporters": Reporters,
     "Schedule": Schedule,
     "WarRoom": WarRoom,
+    "ReporterQA": ReporterQA,
 }
 
 export const pagesConfig = {
