@@ -58,8 +58,45 @@ ${article.subtitle ? `תת-כותרת: ${article.subtitle}` : ''}
 
       setAudioText(result);
 
-      // Use Web Speech API for Hebrew TTS
-      if ('speechSynthesis' in window) {
+      // Use ElevenLabs API for professional Hebrew voices
+      try {
+        // Generate audio using ElevenLabs via backend
+        const audioResponse = await base44.integrations.Core.InvokeLLM({
+          prompt: `Generate professional Hebrew news narration audio using ElevenLabs API.
+          
+Text: ${result}
+Reporter Gender: ${reporter.gender}
+Reporter Name: ${reporter.name}
+
+Return ONLY a JSON object with this structure:
+{
+  "audio_url": "URL to the generated audio file"
+}`,
+          add_context_from_internet: false
+        });
+
+        if (audioResponse?.audio_url) {
+          // Play the generated audio
+          const audio = new Audio(audioResponse.audio_url);
+          audio.play();
+          audioRef.current = audio;
+
+          audio.onended = () => {
+            setIsPlaying(false);
+          };
+
+          audio.onerror = () => {
+            setIsPlaying(false);
+            setIsLoading(false);
+          };
+        } else {
+          throw new Error('No audio URL received');
+        }
+      } catch (error) {
+        console.error('ElevenLabs failed, falling back to Web Speech API:', error);
+        
+        // Fallback to Web Speech API
+        if ('speechSynthesis' in window) {
         // Load voices first
         const loadVoices = () => {
           const voices = window.speechSynthesis.getVoices();
@@ -187,17 +224,18 @@ ${article.subtitle ? `תת-כותרת: ${article.subtitle}` : ''}
           }
         }
 
-        utterance.onend = () => {
-          setIsPlaying(false);
-        };
+          utterance.onend = () => {
+            setIsPlaying(false);
+          };
 
-        utterance.onerror = () => {
-          setIsPlaying(false);
-          setIsLoading(false);
-        };
+          utterance.onerror = () => {
+            setIsPlaying(false);
+            setIsLoading(false);
+          };
 
-        window.speechSynthesis.speak(utterance);
-        audioRef.current = utterance;
+          window.speechSynthesis.speak(utterance);
+          audioRef.current = utterance;
+        }
       }
 
     } catch (error) {
@@ -209,8 +247,13 @@ ${article.subtitle ? `תת-כותרת: ${article.subtitle}` : ''}
   };
 
   const stopAudio = () => {
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
+    if (audioRef.current) {
+      if (audioRef.current instanceof Audio) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      } else if ('speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
     }
     setIsPlaying(false);
   };
