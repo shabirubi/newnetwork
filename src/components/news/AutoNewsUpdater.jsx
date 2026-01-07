@@ -127,14 +127,22 @@ export default function AutoNewsUpdater() {
 
   const fetchNewsForCategory = async (category) => {
     try {
-      const today = new Date().toLocaleDateString('he-IL');
+      const now = new Date();
+      const currentDate = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
+      const currentTime = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
       
-      const prompt = `תן לי 4 כותרות חדשות מהיום (${today}) בנושא: ${category.label}.
-      
-אני צריך חדשות אמיתיות ומעודכנות מהיום האחרון בלבד.
-אם זה קטגוריה של רכילות/בידור - תן לי סיפורים מעניינים ודרמטיים על סלבריטאים.
-אם זה שוק הון/נדל"ן - תן לי נתונים כלכליים ואנליזות מקצועיות.
-החזר JSON array עם 4 articles בפורמט הבא:
+      const prompt = `CRITICAL: התאריך היום הוא 7 בינואר 2026 (07/01/2026) והשעה ${currentTime}.
+
+תן לי 4 כותרות חדשות אמיתיות מהיום 07/01/2026 בנושא: ${category.label}.
+
+חשוב מאוד:
+- חדשות מהיום 7 בינואר 2026 בלבד - לא מ-2025 ולא מתאריכים ישנים
+- חפש חדשות שפורסמו ב-24 השעות האחרונות (7.1.2026)
+- אם זה קטגוריית רכילות/בידור - סיפורים דרמטיים על סלבריטאים מהיום
+- אם זה שוק הון/נדל"ן - נתונים כלכליים מהיום 7.1.2026
+- וודא שכל הידיעות מתייחסות לאירועים של 2026 ולא 2025
+
+החזר JSON array עם 4 articles:
 [{
   "title": "כותרת קצרה ומדויקת",
   "subtitle": "כותרת משנה",
@@ -143,7 +151,7 @@ export default function AutoNewsUpdater() {
   "is_featured": false
 }]
 
-התמקד בחדשות אמיתיות ומעניינות. ללא המצאות.`;
+חדשות אמיתיות מ-7.1.2026 בלבד!`;
 
       const result = await base44.integrations.Core.InvokeLLM({
         prompt,
