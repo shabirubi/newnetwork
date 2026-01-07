@@ -60,24 +60,15 @@ ${article.subtitle ? `תת-כותרת: ${article.subtitle}` : ''}
 
       // Use ElevenLabs API for professional Hebrew voices
       try {
-        // Generate audio using ElevenLabs via backend
-        const audioResponse = await base44.integrations.Core.InvokeLLM({
-          prompt: `Generate professional Hebrew news narration audio using ElevenLabs API.
-          
-Text: ${result}
-Reporter Gender: ${reporter.gender}
-Reporter Name: ${reporter.name}
-
-Return ONLY a JSON object with this structure:
-{
-  "audio_url": "URL to the generated audio file"
-}`,
-          add_context_from_internet: false
+        const voiceResult = await base44.functions.generateReporterVoice({
+          text: result,
+          gender: reporter.gender,
+          reporter_name: reporter.name
         });
 
-        if (audioResponse?.audio_url) {
+        if (voiceResult?.audio_data) {
           // Play the generated audio
-          const audio = new Audio(audioResponse.audio_url);
+          const audio = new Audio(voiceResult.audio_data);
           audio.play();
           audioRef.current = audio;
 
@@ -90,7 +81,7 @@ Return ONLY a JSON object with this structure:
             setIsLoading(false);
           };
         } else {
-          throw new Error('No audio URL received');
+          throw new Error('No audio data received');
         }
       } catch (error) {
         console.error('ElevenLabs failed, falling back to Web Speech API:', error);
