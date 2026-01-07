@@ -2,7 +2,7 @@ import React from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { Radio, TrendingUp, Clock, ChevronLeft, Flame, Users, Zap, Target, Shield, DollarSign, Landmark, Cpu, Trophy, Clapperboard, Globe, Heart } from "lucide-react";
+import { Radio, TrendingUp, Clock, ChevronLeft, Flame, Zap, Target, Shield, DollarSign, Landmark, Cpu, Trophy, Clapperboard, Globe, Heart } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
 import { Button } from "@/components/ui/button";
@@ -15,6 +15,7 @@ import UpdatesFeed from "../components/news/UpdatesFeed";
 import VideoHighlights from "../components/news/VideoHighlights";
 import LiveStats from "../components/news/LiveStats";
 import AutoNewsUpdater from "../components/news/AutoNewsUpdater";
+import CurrencyStrip from "../components/header/CurrencyStrip";
 
 export default function Home() {
   const [selectedChannel, setSelectedChannel] = React.useState(() => {
@@ -102,12 +103,7 @@ export default function Home() {
               </div>
               <h2 className="text-white text-lg font-bold">שידור חי</h2>
             </div>
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-2 text-white/80 text-sm">
-                <Users size={16} />
-                <span className="font-bold text-white">{activeLive?.viewer_count || 3456}</span>
-              </div>
-            </div>
+            <CurrencyStrip activeLive={activeLive} />
           </div>
           <div className="relative">
             <LivePlayer 
