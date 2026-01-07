@@ -67,100 +67,76 @@ export default function ReporterChatModal({ reporter, article, onClose }) {
     }
   });
 
-  // Get reporter response using LLM
+  // Get reporter response with pre-made responses
   const getReporterResponse = async (userMessage) => {
-    try {
-      const context = article ? `
-כתבה: ${article.title}
-${article.subtitle || ""}
-${article.content?.substring(0, 800)}...
-      ` : "";
+    const msg = userMessage.toLowerCase();
 
-      const conversationHistory = messages.slice(-5).map(m => 
-        `${m.sender_type === 'user' ? 'משתמש' : reporter.name}: ${m.message}`
-      ).join('\n');
+    // Detect user intent
+    const isSayingThanks = /תודה|תודות|תנקס|אלוף|מעולה|נהדר|כיף|אחלה|גאון/i.test(userMessage);
+    const isCursing = /חרא|לעזאזל|מה זה|טמבל/i.test(userMessage);
+    const isGreeting = /שלום|היי|הלו|מה נשמע|מה קורה/i.test(userMessage);
 
-      // Detect user intent
-      const isRequestingSummary = /סכם|תקציר|בקצרה|מה קרה|מה עיקר/i.test(userMessage);
-      const isRequestingBackground = /רקע|למה|הסיבה|הקשר|היסטוריה/i.test(userMessage);
-      const isRequestingDetails = /פרטים|עוד על|ספר לי|הרחב/i.test(userMessage);
-      const isSayingThanks = /תודה|תודות|תנקס|ממש תודה|אלוף|מעולה|נהדר|כיף|אחלה|גאון/i.test(userMessage);
-      const isCursing = /חרא|לעזאזל|מה זה|טמבל|אידיוט|מטומטם|שקרן|בולשיט|זבל|מזוין|זבנג/i.test(userMessage);
+    const isFemale = reporter.gender === 'female';
 
-      const genderInstructions = reporter.gender === 'female' ? `
-חשוב מאוד - אתה כתבת (אישה), דבר בלשון נקבה בלבד!
-- השתמש ב"אני" + פעלים בלשון נקבה: "בדקתי", "דיברתי", "ראיתי", "חקרתי", "גיליתי"
-- תארים: "מוכנה", "עומדת", "נמצאת", "מודעת"
-- דוגמאות: "בדקתי את העניין", "דיברתי עם מקורות", "מצאתי מידע מעניין"
-` : `
-חשוב מאוד - אתה כתב (גבר), דבר בלשון זכר בלבד!
-- השתמש ב"אני" + פעלים בלשון זכר: "בדקתי", "דיברתי", "ראיתי", "חקרתי", "גיליתי"
-- תארים: "מוכן", "עומד", "נמצא", "מודע"
-- דוגמאות: "בדקתי את העניין", "דיברתי עם מקורות", "מצאתי מידע מעניין"
-`;
-
-      const prompt = `אתה ${reporter.name}, ${reporter.role} ב"הרשת החדשה".
-התמחות: ${reporter.specialty}
-
-${genderInstructions}
-
-${context ? `הכתבה שאתה מדווח עליה:\n${context}` : ''}
-
-${conversationHistory ? `שיחה קודמת:\n${conversationHistory}\n` : ''}
-
-המשתמש שאל: "${userMessage}"
-
-הנחיות:
-${isSayingThanks ? '- המשתמש מודה - הגב בחום ועודד אותו לשאול עוד' : ''}
-${isCursing ? '- המשתמש כועס - הישאר רגוע ומקצועי' : ''}
-- תשובה קצרה: 2-3 משפטים
-- סגנון: טבעי, חברותי, מקצועי
-- ללא לינקים או מקורות
-- ענה ישירות בעברית
-
-החזר רק את התשובה, ללא הסברים.`;
-
-      console.log('🤖 שולח פרומפט ל-LLM');
-
-      const result = await base44.integrations.Core.InvokeLLM({
-        prompt: prompt
-      });
-
-      console.log('✅ תשובה מ-LLM:', result);
-
-      // Extract text from response - handle all possible formats
-      let responseText = '';
-      
-      if (!result) {
-        console.error('❌ אין תשובה מה-LLM');
-        return 'אני לא יכול לענות כרגע, אבל תשאל שוב!';
-      }
-      
-      if (typeof result === 'string') {
-        responseText = result;
-      } else if (typeof result === 'object') {
-        // Try different possible keys
-        responseText = result.response || result.text || result.answer || result.content || result.message || JSON.stringify(result);
-      }
-
-      if (!responseText || responseText.trim().length === 0) {
-        console.error('❌ תשובה ריקה מה-LLM');
-        return 'אני לא יכול לענות כרגע, אבל תשאל שוב!';
-      }
-
-      // Clean up the response
-      responseText = responseText
-        .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1')
-        .replace(/https?:\/\/[^\s\)]+/g, '')
-        .replace(/www\.[^\s]+/g, '')
-        .replace(/\s+/g, ' ')
-        .trim();
-
-      return responseText;
-    } catch (error) {
-      console.error('❌ שגיאה בקבלת תשובה:', error, error.message);
-      return 'אני לא יכול לענות כרגע, אבל תשאל שוב!';
+    // Handle thanks
+    if (isSayingThanks) {
+      const thanksResponses = isFemale ? [
+        "בשמחה! אני פה בשבילכם תמיד. יש עוד שאלות?",
+        "תודה לך! מוזמן לשאול אותי כל דבר.",
+        "זה התפקיד שלי! שמחתי לעזור."
+      ] : [
+        "בשמחה! אני פה בשבילכם תמיד. יש עוד שאלות?",
+        "תודה לך! מוזמן לשאול אותי כל דבר.",
+        "זה התפקיד שלי! שמחתי לעזור."
+      ];
+      return thanksResponses[Math.floor(Math.random() * thanksResponses.length)];
     }
+
+    // Handle cursing
+    if (isCursing) {
+      return isFemale ? 
+        "אני מבינה שאת/ה כועס/ת, אבל אני פה כדי לעזור. מה אני יכולה להסביר?" :
+        "אני מבין שאת/ה כועס/ת, אבל אני פה כדי לעזור. מה אני יכול להסביר?";
+    }
+
+    // Handle greeting
+    if (isGreeting) {
+      return isFemale ?
+        `שלום! אני ${reporter.name}, מתמחה ב${reporter.specialty}. במה אני יכולה לעזור?` :
+        `שלום! אני ${reporter.name}, מתמחה ב${reporter.specialty}. במה אני יכול לעזור?`;
+    }
+
+    // Topic-based responses
+    if (article) {
+      const topicResponses = isFemale ? [
+        `בדקתי את העניין לעומק. ${article.title} - זה נושא חשוב שכולנו צריכים לעקוב אחריו.`,
+        `דיברתי עם מקורות בשטח. ${article.title} - זה עוד מתפתח ואני עוקבת מקרוב.`,
+        `חקרתי את הנושא היטב. ${article.title} - יש כאן הרבה מה לדעת.`
+      ] : [
+        `בדקתי את העניין לעומק. ${article.title} - זה נושא חשוב שכולנו צריכים לעקוב אחריו.`,
+        `דיברתי עם מקורות בשטח. ${article.title} - זה עוד מתפתח ואני עוקב מקרוב.`,
+        `חקרתי את הנושא היטב. ${article.title} - יש כאן הרבה מה לדעת.`
+      ];
+      return topicResponses[Math.floor(Math.random() * topicResponses.length)];
+    }
+
+    // General responses by specialty
+    const specialtyResponses = isFemale ? {
+      default: [
+        `זו שאלה טובה. אני עוקבת אחרי הנושא הזה ויש הרבה מה לספר.`,
+        `מעניין שאת/ה שואל/ת. אני מתמחה בדיוק בתחום הזה ויכולה לעזור.`,
+        `שאלה מצוינת! בתור מומחית ב${reporter.specialty}, אני יכולה להגיד שזה נושא חשוב.`
+      ]
+    } : {
+      default: [
+        `זו שאלה טובה. אני עוקב אחרי הנושא הזה ויש הרבה מה לספר.`,
+        `מעניין שאת/ה שואל/ת. אני מתמחה בדיוק בתחום הזה ויכול לעזור.`,
+        `שאלה מצוינת! בתור מומחה ב${reporter.specialty}, אני יכול להגיד שזה נושא חשוב.`
+      ]
+    };
+
+    const responses = specialtyResponses.default;
+    return responses[Math.floor(Math.random() * responses.length)];
   };
 
   const handleSendMessage = async () => {
