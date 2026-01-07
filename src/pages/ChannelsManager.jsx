@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { Plus, Trash2, Edit2, Save, X, Radio, Link2 } from "lucide-react";
+import { Plus, Trash2, Edit2, Save, X, Radio, Link2, Loader2, Globe } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export default function ChannelsManager() {
   const [editingChannel, setEditingChannel] = useState(null);
@@ -14,10 +15,13 @@ export default function ChannelsManager() {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
+    stream_url: "",
     rss_sources: "",
+    country: "other",
     color: "#E31E24",
     is_active: true
   });
+  const [loadingChannels, setLoadingChannels] = useState(false);
 
   const queryClient = useQueryClient();
 
@@ -54,7 +58,9 @@ export default function ChannelsManager() {
     setFormData({
       name: "",
       description: "",
+      stream_url: "",
       rss_sources: "",
+      country: "other",
       color: "#E31E24",
       is_active: true
     });
@@ -62,12 +68,74 @@ export default function ChannelsManager() {
     setShowForm(false);
   };
 
+  const loadIPTVChannels = async () => {
+    setLoadingChannels(true);
+    try {
+      const response = await base44.integrations.Core.InvokeLLM({
+        prompt: `חפש לי רשימה של 30 ערוצי טלוויזיה חיים פופולריים מכל העולם מ-IPTV.
+
+עבור כל ערוץ, תן לי:
+- name: שם הערוץ בעברית
+- description: תיאור קצר בעברית
+- stream_url: קישור ישיר לשידור (YouTube Live URL, או Twitch URL, או קישור ישיר לאתר הערוץ)
+- country: israel, russia, usa, uk, france, או other
+
+חשוב: 
+1. השתמש בערוצי YouTube Live שמשדרים 24/7 (כמו ערוצי חדשות עולמיים)
+2. או קישורים לאתרי הערוצים הרשמיים
+3. מגוון - חדשות, ספורט, בידור מכל העולם
+
+דוגמאות:
+- CNN Live: https://www.youtube.com/watch?v=STREAM_ID
+- BBC News: https://www.bbc.com/news/live
+- Al Jazeera: https://www.youtube.com/c/aljazeeraenglish/live`,
+        add_context_from_internet: true,
+        response_json_schema: {
+          type: "object",
+          properties: {
+            channels: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  name: { type: "string" },
+                  description: { type: "string" },
+                  stream_url: { type: "string" },
+                  country: { type: "string" }
+                }
+              }
+            }
+          }
+        }
+      });
+
+      const channels = response.channels || [];
+      for (const ch of channels) {
+        await createMutation.mutateAsync({
+          name: ch.name,
+          description: ch.description,
+          stream_url: ch.stream_url,
+          country: ch.country,
+          rss_sources: [],
+          color: "#E31E24",
+          is_active: true
+        });
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoadingChannels(false);
+    }
+  };
+
   const handleEdit = (channel) => {
     setEditingChannel(channel);
     setFormData({
       name: channel.name,
       description: channel.description || "",
+      stream_url: channel.stream_url || "",
       rss_sources: channel.rss_sources?.join('\n') || "",
+      country: channel.country || "other",
       color: channel.color || "#E31E24",
       is_active: channel.is_active
     });
@@ -78,7 +146,9 @@ export default function ChannelsManager() {
     e.preventDefault();
     const data = {
       ...formData,
-      rss_sources: formData.rss_sources.split('\n').filter(s => s.trim())
+      rss_sources: formData.rss_sources.split('\n').filter(s => s.trim()),
+      stream_url: formData.stream_url.trim() || undefined,
+      country: formData.country
     };
 
     if (editingChannel) {
@@ -101,13 +171,23 @@ export default function ChannelsManager() {
             <p className="text-gray-600 dark:text-gray-400">נהל ערוצים ומקורות RSS</p>
           </div>
         </div>
-        <Button
-          onClick={() => setShowForm(!showForm)}
-          className="bg-[#E31E24] hover:bg-[#B91C1C]"
-        >
-          {showForm ? <X className="w-5 h-5 ml-2" /> : <Plus className="w-5 h-5 ml-2" />}
-          {showForm ? 'ביטול' : 'ערוץ חדש'}
-        </Button>
+        <div className="flex gap-3">
+          <Button
+            onClick={loadIPTVChannels}
+            disabled={loadingChannels}
+            className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
+          >
+            {loadingChannels ? <Loader2 className="w-5 h-5 ml-2 animate-spin" /> : <Globe className="w-5 h-5 ml-2" />}
+            {loadingChannels ? 'טוען...' : 'טען 30 ערוצים'}
+          </Button>
+          <Button
+            onClick={() => setShowForm(!showForm)}
+            className="bg-[#E31E24] hover:bg-[#B91C1C]"
+          >
+            {showForm ? <X className="w-5 h-5 ml-2" /> : <Plus className="w-5 h-5 ml-2" />}
+            {showForm ? 'ביטול' : 'ערוץ ידני'}
+          </Button>
+        </div>
       </div>
 
       {/* Form */}
@@ -143,6 +223,32 @@ export default function ChannelsManager() {
                 </div>
 
                 <div>
+                  <label className="block text-sm font-medium mb-2 dark:text-white">קישור שידור חי (אופציונלי)</label>
+                  <Input
+                    value={formData.stream_url}
+                    onChange={(e) => setFormData({ ...formData, stream_url: e.target.value })}
+                    placeholder="https://youtube.com/watch?v=... או https://example.com/live"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium mb-2 dark:text-white">מדינה</label>
+                  <Select value={formData.country} onValueChange={(value) => setFormData({ ...formData, country: value })}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="israel">🇮🇱 ישראל</SelectItem>
+                      <SelectItem value="russia">🇷🇺 רוסיה</SelectItem>
+                      <SelectItem value="usa">🇺🇸 ארצות הברית</SelectItem>
+                      <SelectItem value="uk">🇬🇧 בריטניה</SelectItem>
+                      <SelectItem value="france">🇫🇷 צרפת</SelectItem>
+                      <SelectItem value="other">🌍 אחר</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
                   <label className="block text-sm font-medium mb-2 dark:text-white">
                     מקורות RSS (כל מקור בשורה נפרדת)
                   </label>
@@ -150,7 +256,7 @@ export default function ChannelsManager() {
                     value={formData.rss_sources}
                     onChange={(e) => setFormData({ ...formData, rss_sources: e.target.value })}
                     placeholder="https://example.com/rss&#10;https://another.com/feed"
-                    rows={5}
+                    rows={3}
                   />
                 </div>
 
@@ -239,15 +345,24 @@ export default function ChannelsManager() {
                   {channel.description || 'אין תיאור'}
                 </p>
                 <div className="space-y-2">
+                  {channel.stream_url && (
+                    <div className="flex items-center gap-2 text-sm text-green-600 dark:text-green-400">
+                      <Radio className="w-4 h-4" />
+                      <span>שידור חי זמין</span>
+                    </div>
+                  )}
                   <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400">
                     <Link2 className="w-4 h-4" />
                     <span>{channel.rss_sources?.length || 0} מקורות RSS</span>
                   </div>
-                  {channel.rss_sources && channel.rss_sources.length > 0 && (
-                    <div className="text-xs text-gray-500 dark:text-gray-500 max-h-20 overflow-y-auto">
-                      {channel.rss_sources.map((source, i) => (
-                        <div key={i} className="truncate">{source}</div>
-                      ))}
+                  {channel.country && (
+                    <div className="text-xs text-gray-500 dark:text-gray-500">
+                      {channel.country === 'israel' && '🇮🇱 ישראל'}
+                      {channel.country === 'russia' && '🇷🇺 רוסיה'}
+                      {channel.country === 'usa' && '🇺🇸 ארה"ב'}
+                      {channel.country === 'uk' && '🇬🇧 בריטניה'}
+                      {channel.country === 'france' && '🇫🇷 צרפת'}
+                      {channel.country === 'other' && '🌍 אחר'}
                     </div>
                   )}
                 </div>
