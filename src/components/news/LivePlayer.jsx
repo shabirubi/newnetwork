@@ -294,6 +294,31 @@ change = אחוז השינוי היומי (מספר חיובי או שלילי)
             <Users size={12} className="sm:w-4 sm:h-4" />
             <span className="hidden sm:inline">{dynamicViewerCount.toLocaleString()} צופים</span>
             <span className="sm:hidden">{(dynamicViewerCount / 1000).toFixed(1)}K</span>
+            
+            {/* Currency Rates Ticker */}
+            {!loadingRates && currencyRates.length > 0 && (
+              <>
+                <span className="hidden lg:inline text-white/40 mx-1">|</span>
+                <div className="hidden lg:flex items-center overflow-hidden max-w-xs">
+                  <motion.div
+                    animate={{ x: ["0%", "-50%"] }}
+                    transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+                    className="flex items-center gap-3"
+                    style={{ width: "200%" }}
+                  >
+                    {[...currencyRates, ...currencyRates].map((currency, index) => (
+                      <div key={index} className="flex items-center gap-1 text-white whitespace-nowrap text-xs">
+                        <span className="font-bold">{currency.code}</span>
+                        <span className="font-bold">₪{currency.rate.toLocaleString('he-IL', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                        <span className={`font-bold text-[10px] ${currency.change >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                          {currency.change >= 0 ? '▲' : '▼'}{Math.abs(currency.change).toFixed(1)}%
+                        </span>
+                      </div>
+                    ))}
+                  </motion.div>
+                </div>
+              </>
+            )}
           </div>
           {isLive && (
             <div className="flex items-center gap-1 sm:gap-2 bg-[#E31E24] text-white px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm font-bold">
@@ -302,28 +327,6 @@ change = אחוז השינוי היומי (מספר חיובי או שלילי)
                 <span className="relative inline-flex rounded-full h-1.5 w-1.5 sm:h-2 sm:w-2 bg-white"></span>
               </span>
               LIVE
-            </div>
-          )}
-          
-          {/* Currency Rates Ticker */}
-          {!loadingRates && currencyRates.length > 0 && (
-            <div className="hidden lg:flex items-center gap-2 bg-black/60 backdrop-blur-sm text-white px-3 py-1.5 rounded-full overflow-hidden max-w-md">
-              <motion.div
-                animate={{ x: ["0%", "-50%"] }}
-                transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-                className="flex items-center gap-3"
-                style={{ width: "200%" }}
-              >
-                {[...currencyRates, ...currencyRates].map((currency, index) => (
-                  <div key={index} className="flex items-center gap-1.5 text-white whitespace-nowrap text-xs">
-                    <span className="font-bold">{currency.code}</span>
-                    <span className="font-bold">₪{currency.rate.toLocaleString('he-IL', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-                    <span className={`font-bold ${currency.change >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                      {currency.change >= 0 ? '▲' : '▼'}{Math.abs(currency.change).toFixed(1)}%
-                    </span>
-                  </div>
-                ))}
-              </motion.div>
             </div>
           )}
         </div>
