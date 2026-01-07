@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
 import Hls from "hls.js";
+import shaka from "shaka-player";
 import { 
   Play, Pause, Volume2, VolumeX, Maximize, 
   Users, Radio, Settings, Download, Bookmark, 
@@ -35,6 +36,7 @@ export default function LivePlayer({
   const videoRef = useRef(null);
   const containerRef = useRef(null);
   const hlsRef = useRef(null);
+  const shakaRef = useRef(null);
   const playerRef = useRef(null);
 
   const currentStreamUrl = streamUrl || DEFAULT_STREAM;
@@ -130,61 +132,112 @@ export default function LivePlayer({
     }
   };
 
-  // Setup HLS.js for m3u8 streams
+  // Universal Stream Player - supports HLS (.m3u8) and DASH (.mpd)
   useEffect(() => {
     const video = videoRef.current;
     if (!video || !isPlaying || currentStreamUrl === "youtube") return;
 
     const isHLS = currentStreamUrl?.includes('.m3u8');
-    if (!isHLS) return;
+    const isDASH = currentStreamUrl?.includes('.mpd');
+    const isHTTP = currentStreamUrl?.startsWith('http://skylogic') || currentStreamUrl?.includes('newkso.ru');
+    
+    if (!isHLS && !isDASH && !isHTTP) return;
 
-    // Cleanup previous HLS instance
+    // Cleanup previous instances
     if (hlsRef.current) {
       hlsRef.current.destroy();
       hlsRef.current = null;
     }
+    if (shakaRef.current) {
+      shakaRef.current.destroy();
+      shakaRef.current = null;
+    }
 
-    // Check if HLS is supported
-    if (Hls.isSupported()) {
-      const hls = new Hls({
-        enableWorker: true,
-        lowLatencyMode: true,
-        backBufferLength: 90
-      });
-      
-      hlsRef.current = hls;
-      hls.loadSource(currentStreamUrl);
-      hls.attachMedia(video);
-      
-      hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        video.play().catch(err => console.log('Play failed:', err));
-      });
+    // DASH Player using Shaka
+    if (isDASH) {
+      if (shaka.Player.isBrowserSupported()) {
+        const player = new shaka.Player(video);
+        shakaRef.current = player;
 
-      hls.on(Hls.Events.ERROR, (event, data) => {
-        console.log('HLS Error:', data.type, data.details);
-        if (data.fatal) {
-          switch(data.type) {
-            case Hls.ErrorTypes.NETWORK_ERROR:
-              hls.startLoad();
-              break;
-            case Hls.ErrorTypes.MEDIA_ERROR:
-              hls.recoverMediaError();
-              break;
-            default:
-              break;
+        player.configure({
+          streaming: {
+            bufferingGoal: 30,
+            rebufferingGoal: 15,
+            bufferBehind: 30
           }
-        }
-      });
-    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-      // Native HLS support (Safari)
-      video.src = currentStreamUrl;
-      video.play().catch(err => console.log('Play failed:', err));
+        });
+
+        player.load(currentStreamUrl).then(() => {
+          video.play().catch(err => console.log('DASH play failed:', err));
+        }).catch(err => {
+          console.error('DASH load error:', err);
+        });
+
+        player.addEventListener('error', (event) => {
+          console.error('DASH player error:', event.detail);
+        });
+      }
+    }
+    // HLS Player
+    else if (isHLS || isHTTP) {
+      if (Hls.isSupported()) {
+        const hls = new Hls({
+          enableWorker: true,
+          lowLatencyMode: true,
+          backBufferLength: 90,
+          maxBufferLength: 30,
+          maxMaxBufferLength: 600,
+          manifestLoadingTimeOut: 20000,
+          manifestLoadingMaxRetry: 4,
+          levelLoadingTimeOut: 20000,
+          levelLoadingMaxRetry: 4,
+          xhrSetup: function(xhr, url) {
+            xhr.withCredentials = false;
+          }
+        });
+        
+        hlsRef.current = hls;
+        hls.loadSource(currentStreamUrl);
+        hls.attachMedia(video);
+        
+        hls.on(Hls.Events.MANIFEST_PARSED, () => {
+          video.play().catch(err => console.log('HLS play failed:', err));
+        });
+
+        hls.on(Hls.Events.ERROR, (event, data) => {
+          console.log('HLS Error:', data.type, data.details);
+          if (data.fatal) {
+            switch(data.type) {
+              case Hls.ErrorTypes.NETWORK_ERROR:
+                console.log('Network error, trying to recover...');
+                hls.startLoad();
+                break;
+              case Hls.ErrorTypes.MEDIA_ERROR:
+                console.log('Media error, trying to recover...');
+                hls.recoverMediaError();
+                break;
+              default:
+                console.log('Fatal error, destroying player...');
+                hls.destroy();
+                break;
+            }
+          }
+        });
+      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+        // Native HLS support (Safari)
+        video.src = currentStreamUrl;
+        video.play().catch(err => console.log('Native HLS play failed:', err));
+      }
     }
 
     return () => {
       if (hlsRef.current) {
         hlsRef.current.destroy();
         hlsRef.current = null;
+      }
+      if (shakaRef.current) {
+        shakaRef.current.destroy();
+        shakaRef.current = null;
       }
     };
   }, [currentStreamUrl, isPlaying]);
