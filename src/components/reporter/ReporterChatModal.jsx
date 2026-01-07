@@ -239,8 +239,8 @@ ${conversationHistory ? `היסטוריית השיחה:\n${conversationHistory}\
 
     const utterance = new SpeechSynthesisUtterance(text);
     utterance.lang = 'he-IL';
+    utterance.volume = 1.0;
     
-    // Get unique voice per reporter
     const getReporterVoiceIndex = (name) => {
       let hash = 0;
       for (let i = 0; i < name.length; i++) {
@@ -251,33 +251,41 @@ ${conversationHistory ? `היסטוריית השיחה:\n${conversationHistory}\
     };
     
     const reporterIndex = getReporterVoiceIndex(reporter.name);
-    
     const voices = window.speechSynthesis.getVoices();
     
+    console.log('🎙️ צ\'אט - קולות זמינים:', voices.filter(v => v.lang.includes('he')).map(v => v.name));
+    console.log('👤 כתב:', reporter.name, '| מין:', reporter.gender);
+    
     if (reporter.gender === 'female') {
-      const femalePitches = [1.7, 1.8, 1.9, 1.75, 1.85];
+      // EXTREME high pitch for females
+      const femalePitches = [2.0, 2.1, 2.2, 1.95, 2.05];
       utterance.pitch = femalePitches[reporterIndex % femalePitches.length];
-      utterance.rate = 0.93 + (reporterIndex % 3) * 0.02;
+      utterance.rate = 1.05 + (reporterIndex % 3) * 0.02;
       
       const femaleVoices = voices.filter(v => 
         (v.lang.includes('he') || v.lang.includes('iw')) && 
-        (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('woman'))
+        (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('woman') ||
+         v.name.toLowerCase().includes('hadar') || v.name.toLowerCase().includes('carmit'))
       );
       if (femaleVoices.length > 0) {
         utterance.voice = femaleVoices[reporterIndex % femaleVoices.length];
       }
+      console.log('✅ נקבה - Pitch:', utterance.pitch, '| Rate:', utterance.rate);
     } else {
-      const malePitches = [0.6, 0.7, 0.75, 0.65, 0.8];
+      // EXTREME low pitch for males
+      const malePitches = [0.5, 0.55, 0.6, 0.48, 0.52];
       utterance.pitch = malePitches[reporterIndex % malePitches.length];
-      utterance.rate = 0.88 + (reporterIndex % 3) * 0.02;
+      utterance.rate = 0.85 + (reporterIndex % 3) * 0.02;
       
       const maleVoices = voices.filter(v => 
         (v.lang.includes('he') || v.lang.includes('iw')) && 
-        (v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('man'))
+        (v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('man') ||
+         v.name.toLowerCase().includes('asaf') || v.name.toLowerCase().includes('david'))
       );
       if (maleVoices.length > 0) {
         utterance.voice = maleVoices[reporterIndex % maleVoices.length];
       }
+      console.log('✅ זכר - Pitch:', utterance.pitch, '| Rate:', utterance.rate);
     }
 
     utterance.onend = () => setPlayingMessageId(null);

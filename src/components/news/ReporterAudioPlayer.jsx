@@ -130,18 +130,19 @@ ${article.subtitle ? `תת-כותרת: ${article.subtitle}` : ''}
         
         const reporterIndex = getReporterVoiceIndex(reporter.name);
         
-        // Professional voice selection with clear gender distinction
+        // EXTREME pitch difference for clear gender distinction
         const hebrewVoices = voices.filter(voice => 
           voice.lang.includes('he') || voice.lang.includes('iw') || voice.lang === 'he-IL'
         );
         
-        console.log('🎙️ All available Hebrew voices:', hebrewVoices.map(v => `${v.name} (${v.lang})`));
+        console.log('🎙️ קולות עברית זמינים:', hebrewVoices.map(v => `${v.name} (${v.lang}, local:${v.localService})`));
+        console.log('👤 כתב:', reporter.name, '| מין:', reporter.gender);
         
         if (reporter.gender === 'female') {
-          // FEMALE: Higher pitch range (1.5-1.9) for clear feminine voice
-          const femalePitches = [1.6, 1.7, 1.8, 1.65, 1.75, 1.85];
+          // FEMALE: VERY HIGH pitch (1.9-2.2) + FASTER rate
+          const femalePitches = [2.0, 2.1, 2.2, 1.95, 2.05, 2.15];
           utterance.pitch = femalePitches[reporterIndex % femalePitches.length];
-          utterance.rate = 0.97 + (reporterIndex % 4) * 0.015; // Slightly faster, more energetic
+          utterance.rate = 1.05 + (reporterIndex % 4) * 0.02; // Much faster
           
           // Strict female voice filtering
           const femaleVoices = hebrewVoices.filter(voice => {
@@ -172,10 +173,10 @@ ${article.subtitle ? `תת-כותרת: ${article.subtitle}` : ''}
             console.warn('⚠️ NO female voice found! Using fallback with HIGH pitch:', utterance.pitch);
           }
         } else {
-          // MALE: Lower pitch range (0.65-0.9) for clear masculine voice
-          const malePitches = [0.7, 0.75, 0.8, 0.72, 0.78, 0.85];
+          // MALE: VERY LOW pitch (0.4-0.6) + SLOWER rate
+          const malePitches = [0.5, 0.55, 0.6, 0.48, 0.52, 0.58];
           utterance.pitch = malePitches[reporterIndex % malePitches.length];
-          utterance.rate = 0.93 + (reporterIndex % 4) * 0.015; // Professional pace
+          utterance.rate = 0.85 + (reporterIndex % 4) * 0.02; // Much slower
           
           // Strict male voice filtering
           const maleVoices = hebrewVoices.filter(voice => {
