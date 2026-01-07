@@ -74,7 +74,23 @@ export default function ReporterChatModal({ reporter, article, onClose }) {
 
     // Quick responses for specific cases
     const isSayingThanks = /תודה|תודות|תנקס|אלוף|מעולה|נהדר|כיף|אחלה|גאון/i.test(userMessage);
-    const isGreeting = /שלום|היי|הלו|מה נשמע|מה קורה/i.test(userMessage);
+    const isGreeting = /^(שלום|היי|הלו|מה נשמע|מה קורה)$/i.test(userMessage.trim());
+    const isSayingGoodbye = /להתראות|ביי|בוקר טוב|לילה טוב|שיהיה לך|תודה ושלום|יאללה ביי|חג שמח|סוף שבוע טוב/i.test(userMessage);
+
+    if (isSayingGoodbye) {
+      const goodbyeResponses = isFemale ? [
+        "להתראות! תישאר/י מעודכן/ת ותחזור/י בכל שאלה. אני פה בשבילך! 👋",
+        "ביי ביי! היה כיף לדבר איתך. אל תהסס/י לחזור מתי שתרצה! 💙",
+        "שיהיה לך יום מדהים! אני תמיד כאן אם תצטרך משהו. בהצלחה! ✨",
+        "תודה שדיברנו! תחזור/י בכל עת - אני פה 24/7. להתראות! 🌟"
+      ] : [
+        "להתראות! תישאר/י מעודכן/ת ותחזור/י בכל שאלה. אני פה בשבילך! 👋",
+        "ביי ביי! היה כיף לדבר איתך. אל תהסס/י לחזור מתי שתרצה! 💙",
+        "שיהיה לך יום מדהים! אני תמיד כאן אם תצטרך משהו. בהצלחה! ✨",
+        "תודה שדיברנו! תחזור/י בכל עת - אני פה 24/7. להתראות! 🌟"
+      ];
+      return goodbyeResponses[Math.floor(Math.random() * goodbyeResponses.length)];
+    }
 
     if (isSayingThanks) {
       return isFemale ? 
