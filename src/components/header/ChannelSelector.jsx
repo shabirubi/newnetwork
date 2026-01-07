@@ -42,6 +42,7 @@ export default function ChannelSelector() {
     localStorage.setItem('selectedChannel', channelId);
     setIsOpen(false);
     setSelectedCountry(null);
+    window.dispatchEvent(new CustomEvent('channelMenuClosed'));
     
     // If 'all' is selected, pick the first channel for streaming
     const streamChannelId = channelId === 'all' && channels.length > 0 ? channels[0].id : channelId;
@@ -65,6 +66,7 @@ export default function ChannelSelector() {
           e.preventDefault();
           e.stopPropagation();
           setIsOpen(true);
+          window.dispatchEvent(new CustomEvent('channelMenuOpened'));
         }}
         className="flex items-center gap-1.5 px-3 py-2.5 bg-white/10 hover:bg-white/20 rounded-lg shadow-sm active:shadow-md active:scale-95 transition-all border border-white/20 text-white touch-manipulation relative z-[9999]"
       >
@@ -88,6 +90,7 @@ export default function ChannelSelector() {
               e.stopPropagation();
               setIsOpen(false);
               setSelectedCountry(null);
+              window.dispatchEvent(new CustomEvent('channelMenuClosed'));
             }}
           >
             <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
@@ -119,6 +122,7 @@ export default function ChannelSelector() {
                           e.stopPropagation();
                           setIsOpen(false);
                           setSelectedCountry(null);
+                          window.dispatchEvent(new CustomEvent('channelMenuClosed'));
                         }}
                         className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white active:scale-95 transition-all"
                       >

@@ -34,6 +34,7 @@ const categories = [
 export default function Layout({ children }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [reportersModalOpen, setReportersModalOpen] = useState(false);
+  const [channelMenuOpen, setChannelMenuOpen] = useState(false);
   const [darkMode, setDarkMode] = useState(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('darkMode');
@@ -51,6 +52,19 @@ export default function Layout({ children }) {
       localStorage.setItem('darkMode', 'false');
     }
   }, [darkMode]);
+
+  useEffect(() => {
+    const handleChannelMenuOpened = () => setChannelMenuOpen(true);
+    const handleChannelMenuClosed = () => setChannelMenuOpen(false);
+    
+    window.addEventListener('channelMenuOpened', handleChannelMenuOpened);
+    window.addEventListener('channelMenuClosed', handleChannelMenuClosed);
+    
+    return () => {
+      window.removeEventListener('channelMenuOpened', handleChannelMenuOpened);
+      window.removeEventListener('channelMenuClosed', handleChannelMenuClosed);
+    };
+  }, []);
 
   // Apply dark mode on mount
   useEffect(() => {
@@ -99,10 +113,10 @@ export default function Layout({ children }) {
       </div>
 
       {/* Breaking News Ticker */}
-      <NewsTicker darkMode={darkMode} setDarkMode={setDarkMode} />
+      {!channelMenuOpen && <NewsTicker darkMode={darkMode} setDarkMode={setDarkMode} />}
 
       {/* Currency Ticker - Separate Strip */}
-      <CurrencyTicker />
+      {!channelMenuOpen && <CurrencyTicker />}
 
       {/* Floating Logo */}
       <motion.div
@@ -140,7 +154,7 @@ export default function Layout({ children }) {
       />
 
       {/* Header */}
-      <header className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50 transition-colors duration-300 border-b border-gray-200 dark:border-gray-700">
+      {!channelMenuOpen && <header className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50 transition-colors duration-300 border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4">
           {/* Desktop Navigation */}
           <nav className="hidden sm:flex items-center justify-between gap-1 py-3">
@@ -254,8 +268,8 @@ export default function Layout({ children }) {
               </button>
               </div>
               </nav>
-        </div>
-      </header>
+              </div>
+              </header>}
 
       {/* Native Mobile Drawer */}
       <AnimatePresence>
