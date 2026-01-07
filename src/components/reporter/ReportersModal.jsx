@@ -96,14 +96,14 @@ export default function ReportersModal({ isOpen, onClose }) {
                 </p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 gap-3">
                 {reporters.map((reporter, index) => (
                   <motion.div
                     key={reporter.id}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: index * 0.03 }}
-                    className="group bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 rounded-xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 border border-gray-200 dark:border-gray-700 hover:border-[#E31E24] dark:hover:border-[#E31E24]"
+                    transition={{ delay: index * 0.02 }}
+                    className="group bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 border border-gray-200 dark:border-gray-700 hover:border-[#E31E24] dark:hover:border-[#E31E24]"
                   >
                     {/* Image */}
                     <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800">
@@ -112,52 +112,44 @@ export default function ReportersModal({ isOpen, onClose }) {
                         alt={reporter.name}
                         className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
                       />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
                       
                       {/* Live Badge */}
-                      <div className="absolute top-2 right-2">
-                        <div className="flex items-center gap-1 px-2 py-1 bg-[#E31E24] text-white text-[9px] font-bold rounded-full">
-                          <span className="relative flex h-1.5 w-1.5">
+                      <div className="absolute top-1.5 right-1.5">
+                        <div className="flex items-center gap-0.5 px-1.5 py-0.5 bg-[#E31E24] text-white text-[8px] font-bold rounded-full">
+                          <span className="relative flex h-1 w-1">
                             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-white"></span>
+                            <span className="relative inline-flex rounded-full h-1 w-1 bg-white"></span>
                           </span>
                           LIVE
                         </div>
                       </div>
 
                       {/* Name Overlay */}
-                      <div className="absolute bottom-0 left-0 right-0 p-3">
-                        <h3 className="text-white font-bold text-sm leading-tight">
+                      <div className="absolute bottom-0 left-0 right-0 p-2">
+                        <h3 className="text-white font-bold text-xs leading-tight">
                           {reporter.name}
                         </h3>
-                        <p className="text-white/90 text-xs">
+                        <p className="text-white/90 text-[10px]">
                           {reporter.role}
                         </p>
                       </div>
                     </div>
 
                     {/* Info */}
-                    <div className="p-3">
-                      {/* Specialty */}
-                      <div className="flex items-start gap-2 mb-2">
-                        <Star className="w-3 h-3 text-[#E31E24] shrink-0 mt-0.5" />
-                        <p className="text-xs text-gray-700 dark:text-gray-300 leading-snug">
-                          {reporter.specialty}
-                        </p>
-                      </div>
-
+                    <div className="p-2">
                       {/* Categories */}
                       <div className="flex flex-wrap gap-1">
                         {reporter.categories?.slice(0, 2).map(cat => (
                           <span
                             key={cat}
-                            className="px-2 py-0.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-[9px] font-bold rounded-full"
+                            className="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-[8px] font-bold rounded-full"
                           >
                             {categoryLabels[cat] || cat}
                           </span>
                         ))}
                         {reporter.categories?.length > 2 && (
-                          <span className="px-2 py-0.5 bg-[#E31E24] text-white text-[9px] font-bold rounded-full">
+                          <span className="px-1.5 py-0.5 bg-[#E31E24] text-white text-[8px] font-bold rounded-full">
                             +{reporter.categories.length - 2}
                           </span>
                         )}
