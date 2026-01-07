@@ -75,35 +75,32 @@ change = אחוז השינוי היומי (מספר חיובי או שלילי)
   }, []);
 
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex items-center justify-between gap-4 flex-1">
+      {!loadingRates && currencyRates.length > 0 && (
+        <div className="hidden lg:flex items-center overflow-hidden max-w-md mx-auto">
+          <motion.div
+            animate={{ x: ["0%", "-50%"] }}
+            transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
+            className="flex items-center gap-3"
+            style={{ width: "200%" }}
+          >
+            {[...currencyRates, ...currencyRates].map((currency, index) => (
+              <div key={index} className="flex items-center gap-1 text-white whitespace-nowrap text-xs">
+                <span className="font-bold">{currency.code}</span>
+                <span className="font-bold">₪{currency.rate.toLocaleString('he-IL', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                <span className={`font-bold text-[10px] ${currency.change >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                  {currency.change >= 0 ? '▲' : '▼'}{Math.abs(currency.change).toFixed(1)}%
+                </span>
+              </div>
+            ))}
+          </motion.div>
+        </div>
+      )}
+      
       <div className="flex items-center gap-2 text-white/80 text-sm">
         <Users size={16} />
         <span className="font-bold text-white">{activeLive?.viewer_count || 3456}</span>
       </div>
-      
-      {!loadingRates && currencyRates.length > 0 && (
-        <>
-          <span className="text-white/40">|</span>
-          <div className="hidden lg:flex items-center overflow-hidden max-w-md">
-            <motion.div
-              animate={{ x: ["0%", "-50%"] }}
-              transition={{ duration: 25, repeat: Infinity, ease: "linear" }}
-              className="flex items-center gap-3"
-              style={{ width: "200%" }}
-            >
-              {[...currencyRates, ...currencyRates].map((currency, index) => (
-                <div key={index} className="flex items-center gap-1 text-white whitespace-nowrap text-xs">
-                  <span className="font-bold">{currency.code}</span>
-                  <span className="font-bold">₪{currency.rate.toLocaleString('he-IL', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-                  <span className={`font-bold text-[10px] ${currency.change >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                    {currency.change >= 0 ? '▲' : '▼'}{Math.abs(currency.change).toFixed(1)}%
-                  </span>
-                </div>
-              ))}
-            </motion.div>
-          </div>
-        </>
-      )}
     </div>
   );
 }
