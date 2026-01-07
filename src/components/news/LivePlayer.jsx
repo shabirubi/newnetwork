@@ -134,17 +134,6 @@ export default function LivePlayer({
   // Universal Player - mpegts.js for TS/FLV, video.js for HLS/DASH
   useEffect(() => {
     if (!videoRef.current || currentStreamUrl === "youtube" || !isPlaying) {
-      // Cleanup any existing player
-      if (playerRef.current) {
-        try {
-          if (typeof playerRef.current.dispose === 'function' && !playerRef.current.isDisposed?.()) {
-            playerRef.current.dispose();
-          } else if (typeof playerRef.current.destroy === 'function') {
-            playerRef.current.destroy();
-          }
-        } catch (e) {}
-        playerRef.current = null;
-      }
       return;
     }
 
@@ -161,13 +150,9 @@ export default function LivePlayer({
 
     // HLS M3U8 Streaming with video.js (optimized for live TV)
     if (isHLS) {
-      // Cleanup any previous player first
-      if (playerRef.current) {
-        try {
-          if (typeof playerRef.current.dispose === 'function') playerRef.current.dispose();
-          else if (typeof playerRef.current.destroy === 'function') playerRef.current.destroy();
-        } catch (e) {}
-        playerRef.current = null;
+      // Check if video.js is already initialized on this element
+      if (videoRef.current.player) {
+        return;
       }
 
       const player = videojs(videoRef.current, {
@@ -251,13 +236,9 @@ export default function LivePlayer({
 
     // Use mpegts.js for raw MPEG-TS and FLV
     if ((isTS || isFLV) && mpegts.isSupported()) {
-      // Cleanup any previous player first
+      // Skip if player already attached
       if (playerRef.current) {
-        try {
-          if (typeof playerRef.current.dispose === 'function') playerRef.current.dispose();
-          else if (typeof playerRef.current.destroy === 'function') playerRef.current.destroy();
-        } catch (e) {}
-        playerRef.current = null;
+        return;
       }
 
       const player = mpegts.createPlayer({
@@ -312,13 +293,9 @@ export default function LivePlayer({
 
     // DASH and MP4
     if (isDASH || isMP4) {
-      // Cleanup any previous player first
-      if (playerRef.current) {
-        try {
-          if (typeof playerRef.current.dispose === 'function') playerRef.current.dispose();
-          else if (typeof playerRef.current.destroy === 'function') playerRef.current.destroy();
-        } catch (e) {}
-        playerRef.current = null;
+      // Check if video.js is already initialized on this element
+      if (videoRef.current.player) {
+        return;
       }
 
       const player = videojs(videoRef.current, {
