@@ -6,9 +6,10 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
 import { 
   Users, Mic, TrendingUp, ChevronLeft, Play,
-  Filter, Search, MessageCircle
+  Filter, Search, MessageCircle, MessageCircleQuestion
 } from "lucide-react";
 import ReporterChatModal from "../components/reporter/ReporterChatModal";
+import AskReporterModal from "../components/reporter/AskReporterModal";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -32,6 +33,7 @@ export default function Reporters() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [chatReporter, setChatReporter] = useState(null);
+  const [askReporter, setAskReporter] = useState(null);
 
   const { data: reporters = [], isLoading } = useQuery({
     queryKey: ['reporters'],
@@ -89,6 +91,13 @@ export default function Reporters() {
           reporter={chatReporter.reporter}
           article={chatReporter.article}
           onClose={() => setChatReporter(null)}
+        />
+      )}
+      {askReporter && (
+        <AskReporterModal
+          reporter={askReporter}
+          isOpen={!!askReporter}
+          onClose={() => setAskReporter(null)}
         />
       )}
       {/* Header */}
@@ -283,25 +292,29 @@ export default function Reporters() {
                   )}
 
                   {/* Action Buttons */}
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-3 gap-2">
+                    <button
+                      onClick={() => setAskReporter(reporter)}
+                      className="flex items-center justify-center gap-1 px-2 py-2 bg-gradient-to-r from-[#E31E24] to-[#B91C1C] hover:from-[#B91C1C] hover:to-[#991B1B] text-white text-xs font-bold rounded-lg transition-all"
+                    >
+                      <MessageCircleQuestion className="w-3.5 h-3.5" />
+                      שאל
+                    </button>
                     <button
                       onClick={() => setChatReporter({ reporter, article: latestArticle })}
-                      className="flex items-center justify-center gap-2 px-3 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-lg transition-all"
+                      className="flex items-center justify-center gap-1 px-2 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg transition-all"
                     >
-                      <MessageCircle className="w-4 h-4" />
+                      <MessageCircle className="w-3.5 h-3.5" />
                       צ׳אט
                     </button>
                     <button
                       onClick={() => {
-                        const reporterArticles = allArticles.filter(article =>
-                          reporter.categories?.includes(article.category)
-                        );
-                        alert(`${reporter.name} - ${reporterArticles.length} ידיעות`);
+                        window.location.href = createPageUrl('ReporterQA');
                       }}
-                      className="flex items-center justify-center gap-2 px-3 py-2 bg-gradient-to-r from-[#E31E24] to-[#B91C1C] hover:from-[#B91C1C] hover:to-[#991B1B] text-white text-sm font-bold rounded-lg transition-all"
+                      className="flex items-center justify-center gap-1 px-2 py-2 bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold rounded-lg transition-all"
                     >
-                      <ChevronLeft className="w-4 h-4" />
-                      ידיעות
+                      <ChevronLeft className="w-3.5 h-3.5" />
+                      שו״ת
                     </button>
                   </div>
                 </div>
