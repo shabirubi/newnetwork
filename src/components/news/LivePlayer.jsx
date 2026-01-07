@@ -215,11 +215,12 @@ export default function LivePlayer({
       });
 
       return () => {
-        if (playerRef.current) {
+        if (playerRef.current && !playerRef.current.isDisposed()) {
           try {
+            playerRef.current.pause();
             playerRef.current.dispose();
           } catch (e) {
-            console.log('Dispose error:', e);
+            // Silently ignore cleanup errors
           }
           playerRef.current = null;
         }
@@ -264,12 +265,14 @@ export default function LivePlayer({
       return () => {
         if (playerRef.current) {
           try {
-            playerRef.current.pause();
-            playerRef.current.unload();
-            playerRef.current.detachMediaElement();
+            if (videoRef.current) {
+              playerRef.current.pause();
+              playerRef.current.unload();
+              playerRef.current.detachMediaElement();
+            }
             playerRef.current.destroy();
           } catch (e) {
-            console.log('Cleanup error:', e);
+            // Silently ignore cleanup errors
           }
           playerRef.current = null;
         }
@@ -307,11 +310,12 @@ export default function LivePlayer({
       });
 
       return () => {
-        if (playerRef.current) {
+        if (playerRef.current && !playerRef.current.isDisposed()) {
           try {
+            playerRef.current.pause();
             playerRef.current.dispose();
           } catch (e) {
-            console.log('Dispose error:', e);
+            // Silently ignore cleanup errors
           }
           playerRef.current = null;
         }
