@@ -140,13 +140,93 @@ export default function LivePlayer({
       return;
     }
 
-    const isTS = currentStreamUrl?.includes('.ts') || currentStreamUrl?.includes('mpegts') || currentStreamUrl?.includes('/live/');
+    const isTS = currentStreamUrl?.includes('.ts') && !currentStreamUrl?.includes('.m3u8');
     const isFLV = currentStreamUrl?.includes('.flv');
     const isHLS = currentStreamUrl?.includes('.m3u8');
     const isDASH = currentStreamUrl?.includes('.mpd');
     const isMP4 = currentStreamUrl?.includes('.mp4');
 
-    // Use mpegts.js for MPEG-TS and FLV (better for live TV)
+    // HLS M3U8 Streaming with video.js (optimized for live TV)
+    if (isHLS) {
+      const player = videojs(videoRef.current, {
+        controls: false,
+        autoplay: true,
+        preload: 'auto',
+        liveui: true,
+        html5: {
+          vhs: {
+            withCredentials: false,
+            overrideNative: true,
+            enableLowInitialPlaylist: true,
+            smoothQualityChange: true,
+            fastQualityChange: true,
+            handlePartialData: true,
+            bandwidth: 4194304,
+            experimentalBufferBasedABR: true,
+            experimentalLLHLS: true
+          },
+          nativeAudioTracks: false,
+          nativeVideoTracks: false
+        },
+        liveTracker: {
+          trackingThreshold: 0,
+          liveTolerance: 3
+        }
+      });
+
+      playerRef.current = player;
+
+      // Set M3U8 source
+      player.src({
+        src: currentStreamUrl,
+        type: 'application/x-mpegURL'
+      });
+
+      // Advanced error handling for HLS
+      player.on('error', function() {
+        const error = player.error();
+        console.log('HLS Error:', error);
+        
+        if (error) {
+          // Network errors - auto retry
+          if (error.code === 2 || error.code === 4) {
+            console.log('Network error, retrying HLS stream...');
+            setTimeout(() => {
+              player.src({ src: currentStreamUrl, type: 'application/x-mpegURL' });
+              player.play();
+            }, 3000);
+          }
+        }
+      });
+
+      // Monitor buffering
+      player.on('waiting', () => {
+        console.log('HLS buffering...');
+      });
+
+      player.on('playing', () => {
+        console.log('HLS playing');
+      });
+
+      player.ready(function() {
+        this.play().catch(err => {
+          console.log('HLS autoplay blocked:', err);
+        });
+      });
+
+      return () => {
+        if (playerRef.current) {
+          try {
+            playerRef.current.dispose();
+          } catch (e) {
+            console.log('Dispose error:', e);
+          }
+          playerRef.current = null;
+        }
+      };
+    }
+
+    // Use mpegts.js for raw MPEG-TS and FLV
     if ((isTS || isFLV) && mpegts.isSupported()) {
       const player = mpegts.createPlayer({
         type: isFLV ? 'flv' : 'mpegts',
@@ -159,24 +239,25 @@ export default function LivePlayer({
         stashInitialSize: 128,
         liveBufferLatencyChasing: true,
         liveBufferLatencyMaxLatency: 3,
-        liveBufferLatencyMinRemain: 0.3
+        liveBufferLatencyMinRemain: 0.3,
+        autoCleanupSourceBuffer: true
       });
 
       player.attachMediaElement(videoRef.current);
       player.load();
-      player.play().catch(err => console.log('Play error:', err));
+      player.play().catch(err => console.log('mpegts.js play error:', err));
 
       playerRef.current = player;
 
       player.on(mpegts.Events.ERROR, (errType, errDetail) => {
         console.log('mpegts.js error:', errType, errDetail);
-        // Auto-retry on network errors
+        
         if (errType === mpegts.ErrorTypes.NETWORK_ERROR) {
           setTimeout(() => {
             player.unload();
             player.load();
             player.play();
-          }, 2000);
+          }, 3000);
         }
       });
 
@@ -195,19 +276,17 @@ export default function LivePlayer({
       };
     }
 
-    // Use video.js for HLS/DASH/MP4
-    if (isHLS || isDASH || isMP4) {
+    // DASH and MP4
+    if (isDASH || isMP4) {
       const player = videojs(videoRef.current, {
         controls: false,
         autoplay: true,
         preload: 'auto',
-        liveui: true,
+        liveui: isDASH,
         html5: {
           vhs: {
             withCredentials: false,
-            overrideNative: true,
-            enableLowInitialPlaylist: true,
-            smoothQualityChange: true
+            overrideNative: true
           }
         }
       });
@@ -216,11 +295,11 @@ export default function LivePlayer({
 
       player.src({
         src: currentStreamUrl,
-        type: isDASH ? 'application/dash+xml' : isHLS ? 'application/x-mpegURL' : 'video/mp4'
+        type: isDASH ? 'application/dash+xml' : 'video/mp4'
       });
 
       player.on('error', () => {
-        console.log('Video.js error:', player.error());
+        console.log('Player error:', player.error());
       });
 
       player.ready(function() {
