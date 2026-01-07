@@ -289,53 +289,51 @@ change = אחוז השינוי היומי (מספר חיובי או שלילי)
         )}
 
         {/* Top Bar: Viewer Count, Live Badge, and Currency Rates */}
-        <div className="absolute top-2 sm:top-4 left-0 right-0 z-10 flex flex-col gap-2">
-          {/* First Row: Viewer Count and Live Badge */}
-          <div className="flex items-center gap-1.5 px-2 sm:px-4">
-            <div className="flex items-center gap-1 sm:gap-2 bg-black/60 backdrop-blur-sm text-white px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm">
+        <div className="absolute top-2 sm:top-4 left-2 sm:left-4 right-2 sm:right-4 z-10">
+          <div className="flex items-center gap-2 sm:gap-3 bg-black/60 backdrop-blur-sm text-white px-2 sm:px-3 py-1 sm:py-1.5 rounded-full">
+            {/* Viewer Count */}
+            <div className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm">
               <Users size={12} className="sm:w-4 sm:h-4" />
-              <span className="hidden sm:inline">{dynamicViewerCount.toLocaleString()} צופים</span>
+              <span className="hidden sm:inline">{dynamicViewerCount.toLocaleString()}</span>
               <span className="sm:hidden">{(dynamicViewerCount / 1000).toFixed(1)}K</span>
             </div>
+
+            {/* Live Badge */}
             {isLive && (
-              <div className="flex items-center gap-1 sm:gap-2 bg-[#E31E24] text-white px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm font-bold">
+              <div className="flex items-center gap-1 sm:gap-2 bg-[#E31E24] text-white px-2 sm:px-3 py-1 rounded-full text-xs sm:text-sm font-bold">
                 <span className="relative flex h-1.5 w-1.5 sm:h-2 sm:w-2">
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-1.5 w-1.5 sm:h-2 sm:w-2 bg-white"></span>
                 </span>
-                LIVE
+                <span className="hidden sm:inline">LIVE</span>
               </div>
             )}
-          </div>
 
-          {/* Second Row: Currency Rates Ticker */}
-          <div className="bg-black/60 backdrop-blur-sm border-y border-white/10">
-            {loadingRates ? (
-              <div className="flex items-center justify-center py-1.5">
-                <div className="animate-pulse text-white/60 text-xs">טוען שערים...</div>
-              </div>
-            ) : (
-              <div className="overflow-hidden">
-                <motion.div
-                  animate={{ x: ["0%", "-50%"] }}
-                  transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
-                  className="flex items-center gap-4 sm:gap-6 py-1.5 px-4"
-                  style={{ width: "200%" }}
-                >
-                  {[...currencyRates, ...currencyRates].map((currency, index) => (
-                    <div key={index} className="flex items-center gap-1.5 sm:gap-2 text-white whitespace-nowrap">
-                      <span className="font-bold text-xs sm:text-sm">{currency.code}</span>
-                      <span className="text-[10px] sm:text-xs opacity-70 hidden sm:inline">{currency.name}</span>
-                      <span className="font-bold text-xs sm:text-sm">₪{currency.rate.toLocaleString('he-IL', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-                      <span className={`text-[10px] sm:text-xs font-bold flex items-center gap-0.5 ${currency.change >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                        {currency.change >= 0 ? '▲' : '▼'}
-                        {Math.abs(currency.change).toFixed(2)}%
-                      </span>
-                    </div>
-                  ))}
-                </motion.div>
-              </div>
-            )}
+            {/* Currency Rates Ticker */}
+            <div className="hidden sm:block flex-1 border-r border-white/20 pr-3">
+              {loadingRates ? (
+                <div className="animate-pulse text-white/60 text-xs">טוען...</div>
+              ) : (
+                <div className="overflow-hidden">
+                  <motion.div
+                    animate={{ x: ["0%", "-50%"] }}
+                    transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                    className="flex items-center gap-4"
+                    style={{ width: "200%" }}
+                  >
+                    {[...currencyRates, ...currencyRates].map((currency, index) => (
+                      <div key={index} className="flex items-center gap-1.5 text-white whitespace-nowrap text-xs">
+                        <span className="font-bold">{currency.code}</span>
+                        <span className="font-bold">₪{currency.rate.toLocaleString('he-IL', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                        <span className={`font-bold ${currency.change >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                          {currency.change >= 0 ? '▲' : '▼'}{Math.abs(currency.change).toFixed(1)}%
+                        </span>
+                      </div>
+                    ))}
+                  </motion.div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
