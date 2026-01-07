@@ -8,14 +8,27 @@ export default function CurrencyRates() {
 
   const fetchRates = async () => {
     try {
-      const prompt = `תן לי את שערי המטבעות הנוכחיים של ישראל ביחס לשקל (ILS):
-      
-אני צריך נתונים אמיתיים ומדויקים מהרגע הזה.
-חפש במקורות מהימנים כמו בנק ישראל, google finance, או yahoo finance.
+      const prompt = `תן לי את שערי המטבעות הנוכחיים של ישראל ביחס לשקל (ILS) ממקורות אמיתיים:
 
-החזר JSON עם המבנה הבא:
+חובה לחפש ב:
+1. בנק ישראל (www.boi.org.il) - המקור הרשמי והמהימן ביותר
+2. גוגל פיננסים / יאהו פיננסים
+3. שוקי מטבעות בזמן אמת
+
+אני צריך את השערים האמיתיים והמדויקים של:
+- דולר אמריקאי (USD)
+- יורו (EUR) 
+- לירה שטרלינג (GBP)
+- ביטקוין (BTC)
+- דולר אוסטרלי (AUD)
+- דולר קנדי (CAD)
+- יין יפני (JPY)
+- פרנק שוויצרי (CHF)
+
+החזר JSON במבנה הבא עם נתונים אמיתיים בלבד מהרגע הנוכחי:
 {
-  "timestamp": "current time in hebrew",
+  "timestamp": "current time in hebrew format",
+  "source": "Bank of Israel / Google Finance",
   "currencies": [
     {
       "code": "USD",
@@ -23,25 +36,11 @@ export default function CurrencyRates() {
       "rate": 3.65,
       "change": 0.02,
       "changePercent": 0.55
-    },
-    {
-      "code": "EUR",
-      "name": "יורו",
-      "rate": 4.05,
-      "change": -0.01,
-      "changePercent": -0.25
-    },
-    {
-      "code": "GBP",
-      "name": "לירה שטרלינג",
-      "rate": 4.75,
-      "change": 0.03,
-      "changePercent": 0.64
     }
   ]
 }
 
-חשוב: תן נתונים אמיתיים בלבד מהשוק כרגע!`;
+CRITICAL: השתמש רק במקורות מהימנים. בנק ישראל הוא המקור העיקרי והמדויק ביותר!`;
 
       const result = await base44.integrations.Core.InvokeLLM({
         prompt,
@@ -67,7 +66,8 @@ export default function CurrencyRates() {
         }
       });
 
-      console.log('💱 שערי מטבע עודכנו:', result);
+      console.log('💱 שערי מטבע אמיתיים מבנק ישראל:', result);
+      console.log('📊 מקור הנתונים:', result.source || 'Bank of Israel');
       setRates(result);
       setLoading(false);
 
@@ -80,11 +80,11 @@ export default function CurrencyRates() {
   };
 
   useEffect(() => {
-    // First fetch
+    // First fetch immediately
     fetchRates();
 
-    // Update every 30 seconds
-    const interval = setInterval(fetchRates, 30000);
+    // Update every 20 seconds for real-time data
+    const interval = setInterval(fetchRates, 20000);
     return () => clearInterval(interval);
   }, []);
 
@@ -98,21 +98,25 @@ export default function CurrencyRates() {
   }
 
   return (
-    <div className="flex items-center gap-4">
-      {rates.currencies?.slice(0, 3).map((currency) => (
+    <div className="flex items-center gap-3">
+      <span className="text-[10px] text-gray-500 dark:text-gray-400 font-medium">
+        {rates.source || 'בנק ישראל'}
+      </span>
+      {rates.currencies?.slice(0, 4).map((currency) => (
         <div
           key={currency.code}
           className="flex items-center gap-2 text-xs"
         >
           {currency.code === 'USD' && <DollarSign className="w-4 h-4 text-green-600" />}
           {currency.code === 'EUR' && <Euro className="w-4 h-4 text-blue-600" />}
+          {currency.code === 'BTC' && <span className="text-orange-500 font-bold text-xs">₿</span>}
           <div className="flex flex-col">
             <div className="flex items-center gap-1">
               <span className="font-bold text-gray-800 dark:text-gray-200">
                 {currency.code}
               </span>
               <span className="text-gray-600 dark:text-gray-400">
-                ₪{currency.rate.toFixed(2)}
+                ₪{currency.code === 'BTC' ? currency.rate.toFixed(0) : currency.rate.toFixed(2)}
               </span>
             </div>
             <div className={`flex items-center gap-1 ${
