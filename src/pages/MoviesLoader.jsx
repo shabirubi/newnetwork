@@ -20,9 +20,11 @@ export default function MoviesLoader() {
   const loadMoviesFromArchive = async () => {
     setLoading(true);
     setResults([]);
+    toast.info("מתחיל לטעון סרטים מ-Archive.org...");
 
     try {
       // Search for classic movies on Archive.org
+      toast.info("מחפש סרטים קלאסיים...");
       const response = await base44.integrations.Core.InvokeLLM({
         prompt: `חפש לי רשימה של 20 סרטים קלאסיים פופולריים מ-Archive.org (Internet Archive) שזמינים לצפייה חינם.
         
@@ -71,9 +73,18 @@ export default function MoviesLoader() {
       });
 
       const movies = response.movies || [];
+      
+      if (!movies.length) {
+        toast.error("לא נמצאו סרטים");
+        setLoading(false);
+        return;
+      }
+      
+      toast.success(`נמצאו ${movies.length} סרטים! מתחיל להעלות...`);
       const loadResults = [];
 
       for (const movie of movies) {
+        toast.info(`מעלה: ${movie.title_hebrew}...`);
         try {
           const thumbnail = `https://archive.org/services/img/${movie.archive_id}`;
           
@@ -104,10 +115,11 @@ export default function MoviesLoader() {
       }
 
       setResults(loadResults);
-      toast.success(`נטענו ${loadResults.filter(r => r.status === 'success').length} סרטים בהצלחה!`);
+      const successCount = loadResults.filter(r => r.status === 'success').length;
+      toast.success(`✅ נטענו ${successCount} סרטים בהצלחה!`);
     } catch (err) {
       console.error("Error loading movies:", err);
-      toast.error("שגיאה בטעינת הסרטים");
+      toast.error(`שגיאה בטעינת הסרטים: ${err.message}`);
     } finally {
       setLoading(false);
     }
