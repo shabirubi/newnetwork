@@ -14,7 +14,8 @@ import { base44 } from "@/api/base44Client";
 
 
 
-const DEFAULT_STREAM = "https://youtu.be/2q9lcnXBicQ";
+const DEFAULT_STREAM = "https://www.kan.org.il/live/tv.aspx?stationid=2";
+const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/a44ef2558_212.png";
 
 export default function LivePlayer({ 
   title = "שידור חי - הרשת החדשה",
@@ -23,7 +24,8 @@ export default function LivePlayer({
   thumbnailUrl = null,
   streamUrl
 }) {
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [showPromo, setShowPromo] = useState(true);
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(80);
   const [showControls, setShowControls] = useState(true);
@@ -35,7 +37,18 @@ export default function LivePlayer({
   const hlsRef = useRef(null);
   const playerRef = useRef(null);
 
-  const currentStreamUrl = streamUrl;
+  const currentStreamUrl = streamUrl || DEFAULT_STREAM;
+
+  // Promo animation effect
+  useEffect(() => {
+    if (showPromo) {
+      const timer = setTimeout(() => {
+        setShowPromo(false);
+        setIsPlaying(true);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [showPromo]);
 
   // Dynamic viewer count with realistic fluctuation
   useEffect(() => {
@@ -197,8 +210,38 @@ export default function LivePlayer({
     >
       {/* Video Container */}
       <div className="relative w-full aspect-[9/16] sm:aspect-video">
+        {/* Logo Promo Animation */}
+        {showPromo && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900 flex items-center justify-center z-50"
+          >
+            <motion.div
+              animate={{
+                scale: [1, 1.05, 1],
+                rotate: [0, 2, -2, 0],
+              }}
+              transition={{
+                duration: 2,
+                repeat: 1,
+                ease: "easeInOut"
+              }}
+              className="relative"
+            >
+              <div className="absolute inset-0 bg-[#E31E24] blur-3xl opacity-60 animate-pulse" />
+              <img 
+                src={LOGO_URL}
+                alt="הרשת החדשה"
+                className="relative h-32 sm:h-48 w-auto drop-shadow-2xl"
+              />
+            </motion.div>
+          </motion.div>
+        )}
+
         {/* Placeholder/Thumbnail */}
-        {!isPlaying && (
+        {!isPlaying && !showPromo && (
           <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
             {thumbnailUrl ? (
               <img 
@@ -232,7 +275,7 @@ export default function LivePlayer({
         )}
 
         {/* Play Button Overlay */}
-        {!isPlaying && (
+        {!isPlaying && !showPromo && (
           <motion.button
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
@@ -257,15 +300,10 @@ export default function LivePlayer({
         )}
 
         {/* Stream iframe - for all non-HLS streams */}
-        {isPlaying && (
+        {isPlaying && !showPromo && (
           (() => {
-            // YouTube with API control (default)
-            if (!currentStreamUrl) {
-              return <div id="youtube-player" className="absolute inset-0 w-full h-full" />;
-            }
-
-            // For custom stream URLs (like Channel 14)
-            if (!currentStreamUrl.includes('.m3u8') && !currentStreamUrl.includes('.mpd')) {
+            // For custom stream URLs (Kan 11 or other channels)
+            if (currentStreamUrl && !currentStreamUrl.includes('.m3u8') && !currentStreamUrl.includes('.mpd')) {
               return (
                 <iframe
                   src={currentStreamUrl}
@@ -283,7 +321,7 @@ export default function LivePlayer({
         )}
         
         {/* HLS Video Player */}
-        {isPlaying && (currentStreamUrl.includes('.m3u8') || currentStreamUrl.includes('.mpd')) && (
+        {isPlaying && !showPromo && (currentStreamUrl?.includes('.m3u8') || currentStreamUrl?.includes('.mpd')) && (
           <video
             ref={videoRef}
             src={currentStreamUrl}
