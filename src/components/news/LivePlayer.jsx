@@ -24,8 +24,8 @@ export default function LivePlayer({
   thumbnailUrl = null,
   streamUrl
 }) {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [showPromo, setShowPromo] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [showPromo, setShowPromo] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(80);
   const [showControls, setShowControls] = useState(true);
