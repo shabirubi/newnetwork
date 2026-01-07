@@ -133,7 +133,20 @@ export default function LivePlayer({
 
   // Universal Player - mpegts.js for TS/FLV, video.js for HLS/DASH
   useEffect(() => {
-    if (!videoRef.current || currentStreamUrl === "youtube" || !isPlaying) return;
+    if (!videoRef.current || currentStreamUrl === "youtube" || !isPlaying) {
+      // Cleanup any existing player
+      if (playerRef.current) {
+        try {
+          if (typeof playerRef.current.dispose === 'function' && !playerRef.current.isDisposed?.()) {
+            playerRef.current.dispose();
+          } else if (typeof playerRef.current.destroy === 'function') {
+            playerRef.current.destroy();
+          }
+        } catch (e) {}
+        playerRef.current = null;
+      }
+      return;
+    }
 
     // Skip for embedded players
     if (currentStreamUrl?.includes('ok.ru') || currentStreamUrl?.includes('youtube.com') || currentStreamUrl?.includes('youtu.be')) {
@@ -148,6 +161,15 @@ export default function LivePlayer({
 
     // HLS M3U8 Streaming with video.js (optimized for live TV)
     if (isHLS) {
+      // Cleanup any previous player first
+      if (playerRef.current) {
+        try {
+          if (typeof playerRef.current.dispose === 'function') playerRef.current.dispose();
+          else if (typeof playerRef.current.destroy === 'function') playerRef.current.destroy();
+        } catch (e) {}
+        playerRef.current = null;
+      }
+
       const player = videojs(videoRef.current, {
         controls: false,
         autoplay: true,
@@ -229,6 +251,15 @@ export default function LivePlayer({
 
     // Use mpegts.js for raw MPEG-TS and FLV
     if ((isTS || isFLV) && mpegts.isSupported()) {
+      // Cleanup any previous player first
+      if (playerRef.current) {
+        try {
+          if (typeof playerRef.current.dispose === 'function') playerRef.current.dispose();
+          else if (typeof playerRef.current.destroy === 'function') playerRef.current.destroy();
+        } catch (e) {}
+        playerRef.current = null;
+      }
+
       const player = mpegts.createPlayer({
         type: isFLV ? 'flv' : 'mpegts',
         url: currentStreamUrl,
@@ -281,6 +312,15 @@ export default function LivePlayer({
 
     // DASH and MP4
     if (isDASH || isMP4) {
+      // Cleanup any previous player first
+      if (playerRef.current) {
+        try {
+          if (typeof playerRef.current.dispose === 'function') playerRef.current.dispose();
+          else if (typeof playerRef.current.destroy === 'function') playerRef.current.destroy();
+        } catch (e) {}
+        playerRef.current = null;
+      }
+
       const player = videojs(videoRef.current, {
         controls: false,
         autoplay: true,
