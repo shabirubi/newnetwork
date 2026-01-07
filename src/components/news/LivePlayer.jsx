@@ -14,7 +14,7 @@ import { base44 } from "@/api/base44Client";
 
 
 
-const DEFAULT_STREAM = "https://www.kan.org.il/live/tv.aspx?stationid=2";
+const DEFAULT_STREAM = "https://kanliveps-i.akamaihd.net/hls/live/2024680/2024680/playlist.m3u8";
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/a44ef2558_212.png";
 
 export default function LivePlayer({ 

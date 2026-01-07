@@ -39,7 +39,7 @@ export default function Home() {
     initialData: []
   });
 
-  const defaultStreamUrl = "https://www.kan.org.il/live/tv.aspx?stationid=2";
+  const defaultStreamUrl = "https://kanliveps-i.akamaihd.net/hls/live/2024680/2024680/playlist.m3u8";
 
   const { data: articles = [], isLoading } = useQuery({
     queryKey: ['news-articles', selectedChannel],
