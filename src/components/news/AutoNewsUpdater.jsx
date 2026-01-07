@@ -190,12 +190,14 @@ export default function AutoNewsUpdater() {
             return {
               ...article,
               category: category.category,
-              image_url
+              image_url,
+              source: "הרשת החדשה"
             };
           } catch (error) {
             return {
               ...article,
-              category: category.category
+              category: category.category,
+              source: "הרשת החדשה"
             };
           }
         })
