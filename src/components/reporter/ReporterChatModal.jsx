@@ -435,7 +435,12 @@ ${isRequestingSummary ? `
                       <span>הודעה קולית</span>
                     </div>
                   )}
-                  <p className="text-sm leading-relaxed">{msg.message}</p>
+                  <p className="text-sm leading-relaxed">
+                    {msg.sender_type === 'reporter' 
+                      ? msg.message.replace(/https?:\/\/[^\s]+/g, '')
+                      : msg.message
+                    }
+                  </p>
                   
                   {msg.sender_type === 'reporter' && (
                     <button
