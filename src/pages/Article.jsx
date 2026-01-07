@@ -165,9 +165,6 @@ export default function Article() {
               <Clock size={16} />
               {moment(article.created_date).format('DD/MM/YYYY HH:mm')}
             </span>
-            {article.source && (
-              <span>מקור: {article.source}</span>
-            )}
           </div>
 
           {/* Share Buttons */}
