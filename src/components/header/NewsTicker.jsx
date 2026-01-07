@@ -11,6 +11,7 @@ import ChannelSelector from "./ChannelSelector";
 export default function NewsTicker({ darkMode, setDarkMode }) {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currencies, setCurrencies] = useState([]);
 
   useEffect(() => {
     loadBreakingNews();
