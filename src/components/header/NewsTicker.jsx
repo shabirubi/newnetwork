@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "../../utils";
 import { base44 } from "@/api/base44Client";
 import { motion } from "framer-motion";
-import { Flame, Siren, MessageSquareWarning, Moon, Sun, TrendingUp, TrendingDown } from "lucide-react";
+import { Flame, Siren, MessageSquareWarning, Moon, Sun, TrendingUp, TrendingDown, DollarSign, Euro } from "lucide-react";
 import ClockWidget from "./ClockWidget";
 import WeatherWidget from "./WeatherWidget";
 import ChannelSelector from "./ChannelSelector";
@@ -12,12 +12,16 @@ import ChannelSelector from "./ChannelSelector";
 export default function NewsTicker({ darkMode, setDarkMode }) {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currencies, setCurrencies] = useState([]);
 
   useEffect(() => {
     loadBreakingNews();
+    fetchCurrencyRates();
     
-    // Refresh every 2 minutes
-    const interval = setInterval(loadBreakingNews, 120000);
+    // Refresh news every 2 minutes
+    const newsInterval = setInterval(loadBreakingNews, 120000);
+    // Refresh currency every 20 seconds
+    const currencyInterval = setInterval(fetchCurrencyRates, 20000);
     
     // Listen for news updates from AutoNewsUpdater
     const handleNewsUpdate = () => {
@@ -28,10 +32,70 @@ export default function NewsTicker({ darkMode, setDarkMode }) {
     window.addEventListener('newsUpdated', handleNewsUpdate);
     
     return () => {
-      clearInterval(interval);
+      clearInterval(newsInterval);
+      clearInterval(currencyInterval);
       window.removeEventListener('newsUpdated', handleNewsUpdate);
     };
   }, []);
+
+  const fetchCurrencyRates = async () => {
+    try {
+      const prompt = `תן לי את שערי המטבעות הנוכחיים של ישראל ביחס לשקל (ILS) ממקורות אמיתיים:
+
+חובה לחפש ב:
+1. בנק ישראל (www.boi.org.il) - המקור הרשמי והמהימן ביותר
+2. גוגל פיננסים / יאהו פיננסים
+3. שוקי מטבעות בזמן אמת
+
+אני צריך את השערים האמיתיים והמדויקים של 4 המטבעות הבאים בלבד:
+- דולר אמריקאי (USD)
+- יורו (EUR)
+- לירה שטרלינג (GBP)
+- ביטקוין (BTC)
+
+החזר JSON במבנה הבא עם נתונים אמיתיים בלבד מהרגע הנוכחי:
+{
+  "currencies": [
+    {
+      "code": "USD",
+      "name": "דולר",
+      "rate": 3.65,
+      "changePercent": 0.55
+    }
+  ]
+}
+
+CRITICAL: השתמש רק במקורות מהימנים. בנק ישראל הוא המקור העיקרי והמדויק ביותר!`;
+
+      const result = await base44.integrations.Core.InvokeLLM({
+        prompt,
+        add_context_from_internet: true,
+        response_json_schema: {
+          type: "object",
+          properties: {
+            currencies: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  code: { type: "string" },
+                  name: { type: "string" },
+                  rate: { type: "number" },
+                  changePercent: { type: "number" }
+                }
+              }
+            }
+          }
+        }
+      });
+
+      if (result?.currencies) {
+        setCurrencies(result.currencies.slice(0, 4));
+      }
+    } catch (error) {
+      console.error('Error fetching currency rates:', error);
+    }
+  };
 
   const loadBreakingNews = async () => {
     try {
@@ -110,10 +174,25 @@ export default function NewsTicker({ darkMode, setDarkMode }) {
           <motion.div
             className="flex whitespace-nowrap text-[11px] sm:text-sm pointer-events-none items-center"
             animate={{ x: ["0%", "-50%"] }}
-            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+            transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
           >
             {[...news, ...news].map((item, index) => (
               <span key={`news-${index}`} className="mx-4 sm:mx-8">• {item}</span>
+            ))}
+            {currencies.length > 0 && [...currencies, ...currencies].map((currency, index) => (
+              <span key={`currency-${index}`} className="mx-4 sm:mx-8 flex items-center gap-1.5 bg-white/10 px-2 py-0.5 rounded">
+                {currency.code === 'USD' && <DollarSign className="w-3 h-3 text-green-400" />}
+                {currency.code === 'EUR' && <Euro className="w-3 h-3 text-blue-400" />}
+                {currency.code === 'BTC' && <span className="text-orange-400 font-bold text-xs">₿</span>}
+                {currency.code === 'GBP' && <span className="text-blue-300 font-bold text-xs">£</span>}
+                <span className="font-bold">{currency.name}</span>
+                <span className="text-yellow-300">
+                  ₪{currency.code === 'BTC' ? currency.rate.toFixed(0) : currency.rate.toFixed(2)}
+                </span>
+                <span className={`font-bold text-[10px] ${currency.changePercent >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                  {currency.changePercent >= 0 ? '▲' : '▼'}{Math.abs(currency.changePercent).toFixed(2)}%
+                </span>
+              </span>
             ))}
           </motion.div>
         </button>

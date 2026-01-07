@@ -9,7 +9,6 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import NewsTicker from "./components/header/NewsTicker";
-import CurrencyTicker from "./components/header/CurrencyTicker";
 import ReportersModal from "./components/reporter/ReportersModal";
 
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/a44ef2558_212.png";
@@ -114,9 +113,6 @@ export default function Layout({ children }) {
 
       {/* Breaking News Ticker */}
       {!channelMenuOpen && <NewsTicker darkMode={darkMode} setDarkMode={setDarkMode} />}
-
-      {/* Currency Ticker - Separate Strip */}
-      {!channelMenuOpen && <CurrencyTicker />}
 
       {/* Floating Logo */}
       <motion.div
