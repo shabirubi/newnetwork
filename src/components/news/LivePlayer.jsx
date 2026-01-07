@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
-import Hls from "hls.js";
-import shaka from "shaka-player";
+import videojs from "video.js";
+import "video.js/dist/video-js.css";
 import { 
   Play, Pause, Volume2, VolumeX, Maximize, 
   Users, Radio, Settings, Download, Bookmark, 
@@ -35,8 +35,6 @@ export default function LivePlayer({
   const [dynamicViewerCount, setDynamicViewerCount] = useState(viewerCount || 2847);
   const videoRef = useRef(null);
   const containerRef = useRef(null);
-  const hlsRef = useRef(null);
-  const shakaRef = useRef(null);
   const playerRef = useRef(null);
 
   const currentStreamUrl = streamUrl || DEFAULT_STREAM;
@@ -132,112 +130,62 @@ export default function LivePlayer({
     }
   };
 
-  // Universal Stream Player - supports HLS (.m3u8) and DASH (.mpd)
+  // Video.js Universal Player - supports ALL formats (HLS, DASH, MP4, TS, etc.)
   useEffect(() => {
-    const video = videoRef.current;
-    if (!video || !isPlaying || currentStreamUrl === "youtube") return;
+    if (!videoRef.current || currentStreamUrl === "youtube" || !isPlaying) return;
 
-    const isHLS = currentStreamUrl?.includes('.m3u8');
-    const isDASH = currentStreamUrl?.includes('.mpd');
-    const isHTTP = currentStreamUrl?.startsWith('http://skylogic') || currentStreamUrl?.includes('newkso.ru');
-    
-    if (!isHLS && !isDASH && !isHTTP) return;
-
-    // Cleanup previous instances
-    if (hlsRef.current) {
-      hlsRef.current.destroy();
-      hlsRef.current = null;
-    }
-    if (shakaRef.current) {
-      shakaRef.current.destroy();
-      shakaRef.current = null;
+    // Skip for embedded players (OK.ru, iframes)
+    if (currentStreamUrl?.includes('ok.ru') || (!currentStreamUrl?.includes('.m3u8') && !currentStreamUrl?.includes('.mpd') && !currentStreamUrl?.includes('.ts') && !currentStreamUrl?.includes('.mp4'))) {
+      return;
     }
 
-    // DASH Player using Shaka
-    if (isDASH) {
-      if (shaka.Player.isBrowserSupported()) {
-        const player = new shaka.Player(video);
-        shakaRef.current = player;
-
-        player.configure({
-          streaming: {
-            bufferingGoal: 30,
-            rebufferingGoal: 15,
-            bufferBehind: 30
-          }
-        });
-
-        player.load(currentStreamUrl).then(() => {
-          video.play().catch(err => console.log('DASH play failed:', err));
-        }).catch(err => {
-          console.error('DASH load error:', err);
-        });
-
-        player.addEventListener('error', (event) => {
-          console.error('DASH player error:', event.detail);
-        });
+    // Initialize Video.js player
+    const player = videojs(videoRef.current, {
+      controls: false,
+      autoplay: true,
+      preload: 'auto',
+      fluid: false,
+      fill: true,
+      responsive: true,
+      liveui: true,
+      html5: {
+        vhs: {
+          withCredentials: false,
+          overrideNative: true,
+          enableLowInitialPlaylist: true,
+          smoothQualityChange: true,
+          fastQualityChange: true
+        },
+        nativeAudioTracks: false,
+        nativeVideoTracks: false
       }
-    }
-    // HLS Player
-    else if (isHLS || isHTTP) {
-      if (Hls.isSupported()) {
-        const hls = new Hls({
-          enableWorker: true,
-          lowLatencyMode: true,
-          backBufferLength: 90,
-          maxBufferLength: 30,
-          maxMaxBufferLength: 600,
-          manifestLoadingTimeOut: 20000,
-          manifestLoadingMaxRetry: 4,
-          levelLoadingTimeOut: 20000,
-          levelLoadingMaxRetry: 4,
-          xhrSetup: function(xhr, url) {
-            xhr.withCredentials = false;
-          }
-        });
-        
-        hlsRef.current = hls;
-        hls.loadSource(currentStreamUrl);
-        hls.attachMedia(video);
-        
-        hls.on(Hls.Events.MANIFEST_PARSED, () => {
-          video.play().catch(err => console.log('HLS play failed:', err));
-        });
+    });
 
-        hls.on(Hls.Events.ERROR, (event, data) => {
-          console.log('HLS Error:', data.type, data.details);
-          if (data.fatal) {
-            switch(data.type) {
-              case Hls.ErrorTypes.NETWORK_ERROR:
-                console.log('Network error, trying to recover...');
-                hls.startLoad();
-                break;
-              case Hls.ErrorTypes.MEDIA_ERROR:
-                console.log('Media error, trying to recover...');
-                hls.recoverMediaError();
-                break;
-              default:
-                console.log('Fatal error, destroying player...');
-                hls.destroy();
-                break;
-            }
-          }
-        });
-      } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
-        // Native HLS support (Safari)
-        video.src = currentStreamUrl;
-        video.play().catch(err => console.log('Native HLS play failed:', err));
-      }
-    }
+    playerRef.current = player;
+
+    // Set source
+    player.src({
+      src: currentStreamUrl,
+      type: currentStreamUrl.includes('.mpd') ? 'application/dash+xml' : 
+            currentStreamUrl.includes('.m3u8') ? 'application/x-mpegURL' :
+            currentStreamUrl.includes('.ts') ? 'video/MP2T' :
+            'video/mp4'
+    });
+
+    // Error handling
+    player.on('error', function(e) {
+      console.log('Video.js Error:', player.error());
+    });
+
+    // Try to play
+    player.ready(function() {
+      this.play().catch(err => console.log('Play failed:', err));
+    });
 
     return () => {
-      if (hlsRef.current) {
-        hlsRef.current.destroy();
-        hlsRef.current = null;
-      }
-      if (shakaRef.current) {
-        shakaRef.current.destroy();
-        shakaRef.current = null;
+      if (playerRef.current) {
+        playerRef.current.dispose();
+        playerRef.current = null;
       }
     };
   }, [currentStreamUrl, isPlaying]);
@@ -385,16 +333,13 @@ export default function LivePlayer({
           />
         )}
         
-        {/* HLS Video Player */}
-        {isPlaying && !showPromo && (currentStreamUrl?.includes('.m3u8') || currentStreamUrl?.includes('.mpd')) && (
+        {/* Universal Video Player - supports all formats */}
+        {isPlaying && !showPromo && (currentStreamUrl?.includes('.m3u8') || currentStreamUrl?.includes('.mpd') || currentStreamUrl?.includes('.ts') || currentStreamUrl?.includes('.mp4')) && (
           <video
             ref={videoRef}
-            src={currentStreamUrl}
-            className="absolute inset-0 w-full h-full bg-black object-contain"
-            autoPlay
+            className="video-js vjs-default-skin vjs-big-play-centered absolute inset-0 w-full h-full bg-black"
             playsInline
             muted={isMuted}
-            controls={false}
           />
         )}
 
