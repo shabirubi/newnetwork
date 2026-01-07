@@ -37,12 +37,17 @@ export default function ReporterChatModal({ reporter, article, onClose }) {
   const { data: messages = [] } = useQuery({
     queryKey: ['reporter-chat', reporter.id, article?.id],
     queryFn: async () => {
-      const filter = article?.id 
-        ? { reporter_id: String(reporter.id), article_id: String(article.id) }
-        : { reporter_id: String(reporter.id) };
+      // Filter by reporter_id only - article_id is not reliable
+      const filter = { reporter_id: String(reporter.id) };
       
       console.log('🔍 מחפש הודעות עם פילטר:', filter);
-      const result = await base44.entities.ReporterChat.filter(filter, 'created_date', 100);
+      let result = await base44.entities.ReporterChat.filter(filter, 'created_date', 100);
+      
+      // If article exists, filter client-side
+      if (article?.id) {
+        result = result.filter(msg => msg.article_id === String(article.id));
+      }
+      
       console.log('📨 הודעות שנמצאו:', result);
       return result;
     },

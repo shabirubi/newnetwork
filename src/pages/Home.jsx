@@ -20,9 +20,9 @@ import CurrencyStrip from "../components/header/CurrencyStrip";
 export default function Home() {
   const [selectedChannel, setSelectedChannel] = React.useState(() => {
     if (typeof window !== 'undefined') {
-      return localStorage.getItem('selectedChannel') || null;
+      return localStorage.getItem('selectedChannel') || 'all';
     }
-    return null;
+    return 'all';
   });
 
   React.useEffect(() => {
@@ -39,7 +39,7 @@ export default function Home() {
     initialData: []
   });
 
-  const defaultStreamUrl = "https://www.youtube.com/embed/7f6TVsLPUbQ?autoplay=1&playsinline=1";
+  const defaultStreamUrl = "https://www.kan.org.il/live/tv.aspx?stationid=2";
 
   const { data: articles = [], isLoading } = useQuery({
     queryKey: ['news-articles', selectedChannel],
@@ -67,7 +67,7 @@ export default function Home() {
   const trendingNews = [...articles].sort((a, b) => new Date(b.created_date) - new Date(a.created_date)).slice(0, 5);
 
   const activeLive = liveStream[0];
-  const currentChannel = channels.find(c => c.id === selectedChannel);
+  const currentChannel = selectedChannel !== 'all' && selectedChannel ? channels.find(c => c.id === selectedChannel) : null;
   const channelStreamUrl = currentChannel?.stream_url || defaultStreamUrl;
 
   if (isLoading) {
