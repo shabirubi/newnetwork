@@ -15,6 +15,7 @@ import UpdatesFeed from "../components/news/UpdatesFeed";
 import VideoHighlights from "../components/news/VideoHighlights";
 import LiveStats from "../components/news/LiveStats";
 import AutoNewsUpdater from "../components/news/AutoNewsUpdater";
+import AutoChannelsUpdater from "../components/news/AutoChannelsUpdater";
 import CurrencyStrip from "../components/header/CurrencyStrip";
 
 export default function Home() {
@@ -86,6 +87,7 @@ export default function Home() {
   return (
     <div className="space-y-0 sm:space-y-6">
       <AutoNewsUpdater />
+      <AutoChannelsUpdater />
       {/* Hero Section - Extended Live Player */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-0 sm:gap-3 -mx-0 sm:mx-0 px-0 sm:px-4">
         {/* Right Sidebar - Updates Feed */}

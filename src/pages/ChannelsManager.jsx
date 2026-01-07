@@ -72,23 +72,29 @@ export default function ChannelsManager() {
     setLoadingChannels(true);
     try {
       const response = await base44.integrations.Core.InvokeLLM({
-        prompt: `חפש לי רשימה של 30 ערוצי טלוויזיה חיים פופולריים מכל העולם מ-IPTV.
+        prompt: `אני צריך רשימה של 50 ערוצי טלוויזיה חיים ואמיתיים מכל העולם.
 
-עבור כל ערוץ, תן לי:
-- name: שם הערוץ בעברית
-- description: תיאור קצר בעברית
-- stream_url: קישור ישיר לשידור (YouTube Live URL, או Twitch URL, או קישור ישיר לאתר הערוץ)
+חפש ברשת את המקורות הבאים:
+1. ספריית GitHub: iptv-org/iptv (יש שם אלפי ערוצים מעודכנים)
+2. רשימות M3U מעודכנות מ-2026
+3. ערוצי YouTube Live שמשדרים 24/7
+4. ערוצים מ-IPTV providers
+
+עבור כל ערוץ תן לי:
+- name: שם הערוץ (בעברית אם אפשר)
+- description: תיאור קצר
+- stream_url: קישור ישיר לשידור (m3u8, mpd, או YouTube/Twitch)
 - country: israel, russia, usa, uk, france, או other
 
-חשוב: 
-1. השתמש בערוצי YouTube Live שמשדרים 24/7 (כמו ערוצי חדשות עולמיים)
-2. או קישורים לאתרי הערוצים הרשמיים
-3. מגוון - חדשות, ספורט, בידור מכל העולם
+חשוב מאוד:
+- השתמש בקישורי .m3u8 או .mpd אמיתיים מהספרייה iptv-org
+- ערוצי חדשות, ספורט, בידור ממדינות שונות
+- ודא שהקישורים עובדים (מהמאגר המעודכן)
 
 דוגמאות:
-- CNN Live: https://www.youtube.com/watch?v=STREAM_ID
-- BBC News: https://www.bbc.com/news/live
-- Al Jazeera: https://www.youtube.com/c/aljazeeraenglish/live`,
+- ערוצים מישראל: כאן 11, ערוץ 12, ערוץ 13
+- ערוצים בינלאומיים: CNN, BBC, France 24, RT, Al Jazeera
+- מספריית iptv-org שים לב לערוצים הפופולריים ביותר`,
         add_context_from_internet: true,
         response_json_schema: {
           type: "object",
@@ -178,7 +184,7 @@ export default function ChannelsManager() {
             className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700"
           >
             {loadingChannels ? <Loader2 className="w-5 h-5 ml-2 animate-spin" /> : <Globe className="w-5 h-5 ml-2" />}
-            {loadingChannels ? 'טוען...' : 'טען 30 ערוצים'}
+            {loadingChannels ? 'טוען...' : 'טען 50 ערוצים חיים'}
           </Button>
           <Button
             onClick={() => setShowForm(!showForm)}
