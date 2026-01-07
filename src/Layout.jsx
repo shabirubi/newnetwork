@@ -16,6 +16,7 @@ const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/pub
 const categories = [
   { id: "home", label: "דף הבית", icon: Home, href: "Home" },
   { id: "breaking", label: "חדשות עכשיו", icon: Radio, href: "Category?cat=breaking" },
+  { id: "channels", label: "ערוצי טלוויזיה", icon: Cpu, href: "Channels" },
   { id: "security", label: "ביטחון ומדיניות", icon: Shield, href: "Category?cat=security" },
   { id: "economy", label: "כלכלה ועסקים", icon: TrendingUp, href: "Category?cat=economy" },
   { id: "politics", label: "פוליטיקה", icon: Vote, href: "Category?cat=politics" },
@@ -24,7 +25,6 @@ const categories = [
   { id: "entertainment", label: "בידור ודרמה", icon: Clapperboard, href: "Category?cat=entertainment" },
   { id: "world", label: "חדשות עולם", icon: Globe, href: "Category?cat=world" },
   { id: "health", label: "בריאות", icon: Heart, href: "Category?cat=health" },
-  { id: "movies", label: "סרטים קלאסיים", icon: Film, href: "Movies" },
   ];
 
   const additionalPages = [

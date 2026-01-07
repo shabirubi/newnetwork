@@ -15,6 +15,9 @@ import ReporterQA from './pages/ReporterQA';
 import Reporters from './pages/Reporters';
 import Schedule from './pages/Schedule';
 import WarRoom from './pages/WarRoom';
+import Channels from './pages/Channels';
+import ChannelsLoader from './pages/ChannelsLoader';
+import ChannelPlayer from './pages/ChannelPlayer';
 import __Layout from './Layout.jsx';
 
 
@@ -36,6 +39,9 @@ export const PAGES = {
     "Reporters": Reporters,
     "Schedule": Schedule,
     "WarRoom": WarRoom,
+    "Channels": Channels,
+    "ChannelsLoader": ChannelsLoader,
+    "ChannelPlayer": ChannelPlayer,
 }
 
 export const pagesConfig = {
