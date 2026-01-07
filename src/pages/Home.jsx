@@ -67,8 +67,8 @@ export default function Home() {
   const trendingNews = [...articles].sort((a, b) => new Date(b.created_date) - new Date(a.created_date)).slice(0, 5);
 
   const activeLive = liveStream[0];
-  const currentChannel = selectedChannel !== 'all' && selectedChannel ? channels.find(c => c.id === selectedChannel) : null;
-  const channelStreamUrl = currentChannel?.stream_url || defaultStreamUrl;
+  const currentChannel = channels.find(c => c.id === selectedChannel);
+  const channelStreamUrl = currentChannel?.stream_url || (selectedChannel === 'all' ? defaultStreamUrl : null);
 
   if (isLoading) {
     return (
