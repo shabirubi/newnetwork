@@ -130,16 +130,30 @@ export default function LivePlayer({
     }
   };
 
-  // Video.js Universal Player - supports ALL formats (HLS, DASH, MP4, TS, etc.)
+  // Video.js Universal Player - supports ALL formats like VLC
   useEffect(() => {
     if (!videoRef.current || currentStreamUrl === "youtube" || !isPlaying) return;
 
-    // Skip for embedded players (OK.ru, iframes)
-    if (currentStreamUrl?.includes('ok.ru') || (!currentStreamUrl?.includes('.m3u8') && !currentStreamUrl?.includes('.mpd') && !currentStreamUrl?.includes('.ts') && !currentStreamUrl?.includes('.mp4'))) {
+    // Skip for embedded players (OK.ru, YouTube, other iframes)
+    if (currentStreamUrl?.includes('ok.ru') || currentStreamUrl?.includes('youtube.com') || currentStreamUrl?.includes('youtu.be')) {
       return;
     }
 
-    // Initialize Video.js player
+    // Check if it's a streamable format
+    const isStreamable = currentStreamUrl?.includes('.m3u8') || 
+                        currentStreamUrl?.includes('.mpd') || 
+                        currentStreamUrl?.includes('.ts') || 
+                        currentStreamUrl?.includes('.mp4') ||
+                        currentStreamUrl?.includes('.mkv') ||
+                        currentStreamUrl?.includes('.avi') ||
+                        currentStreamUrl?.includes('.flv') ||
+                        currentStreamUrl?.includes('.webm') ||
+                        currentStreamUrl?.includes('/live/') ||
+                        currentStreamUrl?.includes('/stream/');
+
+    if (!isStreamable) return;
+
+    // Initialize Video.js player with VLC-like capabilities
     const player = videojs(videoRef.current, {
       controls: false,
       autoplay: true,
@@ -148,43 +162,67 @@ export default function LivePlayer({
       fill: true,
       responsive: true,
       liveui: true,
+      techOrder: ['html5'],
       html5: {
         vhs: {
           withCredentials: false,
           overrideNative: true,
           enableLowInitialPlaylist: true,
           smoothQualityChange: true,
-          fastQualityChange: true
+          fastQualityChange: true,
+          handlePartialData: true,
+          bandwidth: 4194304,
+          experimentalBufferBasedABR: true
         },
         nativeAudioTracks: false,
-        nativeVideoTracks: false
+        nativeVideoTracks: false,
+        nativeTextTracks: false
       }
     });
 
     playerRef.current = player;
 
+    // Detect stream type
+    let mimeType = 'video/mp4';
+    if (currentStreamUrl.includes('.mpd')) mimeType = 'application/dash+xml';
+    else if (currentStreamUrl.includes('.m3u8')) mimeType = 'application/x-mpegURL';
+    else if (currentStreamUrl.includes('.ts')) mimeType = 'video/MP2T';
+    else if (currentStreamUrl.includes('.mkv')) mimeType = 'video/x-matroska';
+    else if (currentStreamUrl.includes('.webm')) mimeType = 'video/webm';
+    else if (currentStreamUrl.includes('.flv')) mimeType = 'video/x-flv';
+
     // Set source
     player.src({
       src: currentStreamUrl,
-      type: currentStreamUrl.includes('.mpd') ? 'application/dash+xml' : 
-            currentStreamUrl.includes('.m3u8') ? 'application/x-mpegURL' :
-            currentStreamUrl.includes('.ts') ? 'video/MP2T' :
-            'video/mp4'
+      type: mimeType
     });
 
-    // Error handling
+    // Enhanced error handling with auto-recovery
     player.on('error', function(e) {
-      console.log('Video.js Error:', player.error());
+      const error = player.error();
+      console.log('Stream Error:', error);
+      
+      // Try to recover from network errors
+      if (error && error.code === 2) {
+        console.log('Network error, retrying...');
+        setTimeout(() => {
+          player.src({ src: currentStreamUrl, type: mimeType });
+        }, 2000);
+      }
     });
 
-    // Try to play
+    // Auto-play when ready
     player.ready(function() {
-      this.play().catch(err => console.log('Play failed:', err));
+      this.play().catch(err => console.log('Autoplay blocked:', err));
     });
 
     return () => {
       if (playerRef.current) {
-        playerRef.current.dispose();
+        try {
+          playerRef.current.dispose();
+        } catch (e) {
+          console.log('Dispose error:', e);
+        }
         playerRef.current = null;
       }
     };
@@ -312,8 +350,18 @@ export default function LivePlayer({
           />
         )}
 
-        {/* Stream iframe - for other channels */}
-        {isPlaying && !showPromo && currentStreamUrl && !currentStreamUrl.includes('ok.ru') && !currentStreamUrl.includes('.m3u8') && !currentStreamUrl.includes('.mpd') && currentStreamUrl !== "youtube" && (
+        {/* Stream iframe - for non-streamable URLs */}
+        {isPlaying && !showPromo && currentStreamUrl && 
+         !currentStreamUrl.includes('ok.ru') && 
+         !currentStreamUrl.includes('.m3u8') && 
+         !currentStreamUrl.includes('.mpd') && 
+         !currentStreamUrl.includes('.ts') &&
+         !currentStreamUrl.includes('.mp4') &&
+         !currentStreamUrl.includes('.mkv') &&
+         !currentStreamUrl.includes('.webm') &&
+         !currentStreamUrl.includes('/live/') &&
+         !currentStreamUrl.includes('/stream/') &&
+         currentStreamUrl !== "youtube" && (
           <iframe
             src={currentStreamUrl}
             className="absolute inset-0 w-full h-full"
@@ -333,8 +381,18 @@ export default function LivePlayer({
           />
         )}
         
-        {/* Universal Video Player - supports all formats */}
-        {isPlaying && !showPromo && (currentStreamUrl?.includes('.m3u8') || currentStreamUrl?.includes('.mpd') || currentStreamUrl?.includes('.ts') || currentStreamUrl?.includes('.mp4')) && (
+        {/* Universal Video Player - supports all formats like VLC */}
+        {isPlaying && !showPromo && (
+          currentStreamUrl?.includes('.m3u8') || 
+          currentStreamUrl?.includes('.mpd') || 
+          currentStreamUrl?.includes('.ts') || 
+          currentStreamUrl?.includes('.mp4') ||
+          currentStreamUrl?.includes('.mkv') ||
+          currentStreamUrl?.includes('.webm') ||
+          currentStreamUrl?.includes('.flv') ||
+          currentStreamUrl?.includes('/live/') ||
+          currentStreamUrl?.includes('/stream/')
+        ) && (
           <video
             ref={videoRef}
             className="video-js vjs-default-skin vjs-big-play-centered absolute inset-0 w-full h-full bg-black"
