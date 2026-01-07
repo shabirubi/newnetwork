@@ -3,10 +3,11 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "../../utils";
 import { base44 } from "@/api/base44Client";
 import { motion } from "framer-motion";
-import { Flame, Siren, MessageSquareWarning, Moon, Sun } from "lucide-react";
+import { Flame, Siren, MessageSquareWarning, Moon, Sun, TrendingUp, TrendingDown } from "lucide-react";
 import ClockWidget from "./ClockWidget";
 import WeatherWidget from "./WeatherWidget";
 import ChannelSelector from "./ChannelSelector";
+import CurrencyRates from "./CurrencyRates";
 
 export default function NewsTicker({ darkMode, setDarkMode }) {
   const [news, setNews] = useState([]);
@@ -24,11 +25,21 @@ export default function NewsTicker({ darkMode, setDarkMode }) {
       console.log('🔄 NewsTicker מתעדכן עם חדשות חדשות');
       loadBreakingNews();
     };
+    
+    // Listen for currency updates
+    const handleCurrencyUpdate = (event) => {
+      if (event.detail?.currencies) {
+        setCurrencies(event.detail.currencies);
+      }
+    };
+    
     window.addEventListener('newsUpdated', handleNewsUpdate);
+    window.addEventListener('currencyUpdated', handleCurrencyUpdate);
     
     return () => {
       clearInterval(interval);
       window.removeEventListener('newsUpdated', handleNewsUpdate);
+      window.removeEventListener('currencyUpdated', handleCurrencyUpdate);
     };
   }, []);
 
@@ -107,12 +118,21 @@ export default function NewsTicker({ darkMode, setDarkMode }) {
           className="ticker-wrapper overflow-hidden flex-1 cursor-pointer hover:opacity-90 transition-opacity min-w-0 relative z-10"
         >
           <motion.div
-            className="flex whitespace-nowrap text-[11px] sm:text-sm pointer-events-none"
+            className="flex whitespace-nowrap text-[11px] sm:text-sm pointer-events-none items-center"
             animate={{ x: ["0%", "-50%"] }}
-            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+            transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
           >
             {[...news, ...news].map((item, index) => (
-              <span key={index} className="mx-4 sm:mx-8">• {item}</span>
+              <span key={`news-${index}`} className="mx-4 sm:mx-8">• {item}</span>
+            ))}
+            {currencies.length > 0 && currencies.map((currency, index) => (
+              <span key={`curr-${index}`} className="mx-4 sm:mx-8 flex items-center gap-2 bg-white/10 px-2 py-1 rounded">
+                <span className="font-bold">{currency.code}</span>
+                <span>₪{currency.rate.toFixed(2)}</span>
+                <span className={currency.change >= 0 ? 'text-green-400' : 'text-red-400'}>
+                  {currency.change >= 0 ? '▲' : '▼'} {Math.abs(currency.changePercent).toFixed(2)}%
+                </span>
+              </span>
             ))}
           </motion.div>
         </button>
@@ -134,6 +154,9 @@ export default function NewsTicker({ darkMode, setDarkMode }) {
           </div>
           <div className="hidden md:block">
             <WeatherWidget />
+          </div>
+          <div className="hidden lg:block">
+            <CurrencyRates />
           </div>
           <div className="relative z-[70]">
             <ChannelSelector />
