@@ -130,12 +130,26 @@ ${isRequestingSummary ? `
 
       const result = await base44.integrations.Core.InvokeLLM({
         prompt: prompt,
-        add_context_from_internet: false
+        add_context_from_internet: true
       });
 
       console.log('✅ תשובה מ-LLM:', result);
 
-      return typeof result === 'string' ? result : result?.response || result?.text || 'סליחה, לא הצלחתי להכין תשובה';
+      // Extract text from response
+      let responseText = '';
+      if (typeof result === 'string') {
+        responseText = result;
+      } else if (result?.response) {
+        responseText = result.response;
+      } else if (result?.text) {
+        responseText = result.text;
+      } else if (result?.answer) {
+        responseText = result.answer;
+      } else {
+        responseText = 'סליחה, לא הצלחתי להכין תשובה';
+      }
+
+      return responseText.trim();
     } catch (error) {
       console.error('❌ שגיאה בקבלת תשובה מהכתב:', error);
       return reporter.gender === 'female' ? 
