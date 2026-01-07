@@ -299,25 +299,37 @@ export default function LivePlayer({
           </div>
         )}
 
-        {/* Stream iframe - for all non-HLS streams */}
-        {isPlaying && !showPromo && (
-          (() => {
-            // For custom stream URLs (Kan 11 or other channels)
-            if (currentStreamUrl && !currentStreamUrl.includes('.m3u8') && !currentStreamUrl.includes('.mpd')) {
-              return (
-                <iframe
-                  src={currentStreamUrl}
-                  className="absolute inset-0 w-full h-full"
-                  allow="autoplay; fullscreen; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                  allowFullScreen
-                  referrerPolicy="no-referrer-when-downgrade"
-                  sandbox="allow-scripts allow-same-origin allow-presentation allow-forms"
-                  title={title}
-                />
-              );
-            }
-            return null;
-          })()
+        {/* OK.ru Embed Player */}
+        {isPlaying && !showPromo && currentStreamUrl?.includes('ok.ru') && (
+          <iframe
+            src={`https://ok.ru/videoembed/${currentStreamUrl.split('/video/')[1]}`}
+            className="absolute inset-0 w-full h-full"
+            allow="autoplay; fullscreen; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            frameBorder="0"
+            title={title}
+          />
+        )}
+
+        {/* Stream iframe - for other channels */}
+        {isPlaying && !showPromo && currentStreamUrl && !currentStreamUrl.includes('ok.ru') && !currentStreamUrl.includes('.m3u8') && !currentStreamUrl.includes('.mpd') && currentStreamUrl !== "youtube" && (
+          <iframe
+            src={currentStreamUrl}
+            className="absolute inset-0 w-full h-full"
+            allow="autoplay; fullscreen; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            allowFullScreen
+            referrerPolicy="no-referrer-when-downgrade"
+            sandbox="allow-scripts allow-same-origin allow-presentation allow-forms"
+            title={title}
+          />
+        )}
+
+        {/* YouTube Player */}
+        {isPlaying && !showPromo && currentStreamUrl === "youtube" && (
+          <div 
+            id="youtube-player"
+            className="absolute inset-0 w-full h-full bg-black"
+          />
         )}
         
         {/* HLS Video Player */}
