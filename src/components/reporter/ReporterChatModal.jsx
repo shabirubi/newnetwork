@@ -63,27 +63,70 @@ export default function ReporterChatModal({ reporter, article, onClose }) {
       const context = article ? `
 כתבה: ${article.title}
 ${article.subtitle || ""}
-${article.content?.substring(0, 500)}...
+${article.content?.substring(0, 800)}...
       ` : "";
 
       const conversationHistory = messages.slice(-5).map(m => 
         `${m.sender_type === 'user' ? 'משתמש' : reporter.name}: ${m.message}`
       ).join('\n');
 
+      // Detect user intent
+      const isRequestingSummary = /סכם|תקציר|בקצרה|מה קרה|מה עיקר/i.test(userMessage);
+      const isRequestingBackground = /רקע|למה|הסיבה|הקשר|היסטוריה/i.test(userMessage);
+      const isRequestingDetails = /פרטים|עוד על|ספר לי|הרחב/i.test(userMessage);
+
+      const genderInstructions = reporter.gender === 'female' ? `
+חשוב מאוד - אתה כתבת (אישה), דבר בלשון נקבה בלבד!
+- השתמש ב"אני" + פעלים בלשון נקבה: "בדקתי", "דיברתי", "ראיתי", "חקרתי", "גיליתי"
+- תארים: "מוכנה", "עומדת", "נמצאת", "מודעת"
+- דוגמאות: "בדקתי את העניין", "דיברתי עם מקורות", "מצאתי מידע מעניין"
+` : `
+חשוב מאוד - אתה כתב (גבר), דבר בלשון זכר בלבד!
+- השתמש ב"אני" + פעלים בלשון זכר: "בדקתי", "דיברתי", "ראיתי", "חקרתי", "גיליתי"
+- תארים: "מוכן", "עומד", "נמצא", "מודע"
+- דוגמאות: "בדקתי את העניין", "דיברתי עם מקורות", "מצאתי מידע מעניין"
+`;
+
       const prompt = `אתה ${reporter.name}, ${reporter.role} ב"הרשת החדשה".
 התמחות שלך: ${reporter.specialty}
 
-${context ? `אתה מדבר על הכתבה הבאה:\n${context}` : ''}
+${genderInstructions}
 
-${conversationHistory ? `היסטוריית השיחה:\n${conversationHistory}\n` : ''}
+${context ? `הכתבה שאתה מדווח עליה:\n${context}` : ''}
+
+${conversationHistory ? `שיחה קודמת:\n${conversationHistory}\n` : ''}
 
 המשתמש שאל: "${userMessage}"
 
-ענה בצורה מקצועית, קצרה וממוקדת (2-3 משפטים), כמו כתב בשטח.
-אם זה קשור לכתבה - התייחס לפרטים הספציפיים.
-תמיד תענה בעברית.`;
+הנחיות תשובה:
+${isRequestingSummary ? `
+- המשתמש מבקש סיכום - תן סיכום קצר ומדויק של עיקרי הכתבה (3-4 משפטים)
+- התמקד בעובדות המרכזיות והמשמעות שלהן
+` : isRequestingBackground ? `
+- המשתמש מבקש הקשר ורקע - הסבר את ההיסטוריה והסיבות מאחורי האירוע
+- חבר את הכתבה לאירועים קודמים או למגמות רחבות יותר
+- השתמש בידע מקצועי שלך בתחום ${reporter.specialty}
+` : isRequestingDetails ? `
+- המשתמש רוצה פרטים נוספים - הרחב על נקודות ספציפיות מהכתבה
+- שתף תובנות מקצועיות או מידע שלא הופיע בכתבה
+- אם יש לך מידע נוסף רלוונטי - שתף אותו
+` : `
+- ענה בצורה מקצועית וממוקדת (2-3 משפטים)
+- אם השאלה קשורה לכתבה - התייחס לפרטים ספציפיים
+- אם השאלה כללית בתחומך - השתמש במומחיות שלך
+`}
 
-      console.log('🤖 שולח פרומפט ל-LLM:', prompt);
+סגנון תשובה:
+- דבר כמו ${reporter.gender === 'female' ? 'כתבת' : 'כתב'} מקצועי/ת בשטח
+- השתמש במונחים מקצועיים רלוונטיים לתחום
+- היה אמין/ה אבל נגיש/ה
+- אם אתה לא יודע/ת משהו - תגיד זאת בכנות
+
+אם התשובה שלך כוללת מידע חדש או מעניין - סיים בשאלה המשך רלוונטית למשתמש.
+
+החזר רק את התשובה בעברית, ללא הסברים נוספים.`;
+
+      console.log('🤖 שולח פרומפט מתקדם ל-LLM');
 
       const result = await base44.integrations.Core.InvokeLLM({
         prompt: prompt,
@@ -95,7 +138,9 @@ ${conversationHistory ? `היסטוריית השיחה:\n${conversationHistory}\
       return typeof result === 'string' ? result : result?.response || result?.text || 'סליחה, לא הצלחתי להכין תשובה';
     } catch (error) {
       console.error('❌ שגיאה בקבלת תשובה מהכתב:', error);
-      return `סליחה, יש לי בעיה טכנית כרגע. בוא ננסה שוב בעוד רגע.`;
+      return reporter.gender === 'female' ? 
+        'סליחה, יש לי בעיה טכנית כרגע. בואי ננסה שוב בעוד רגע.' :
+        'סליחה, יש לי בעיה טכנית כרגע. בוא ננסה שוב בעוד רגע.';
     }
   };
 
