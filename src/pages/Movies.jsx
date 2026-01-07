@@ -6,6 +6,7 @@ import { Film, Play, Clock, Star, Search, Filter } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 
@@ -101,8 +102,14 @@ export default function Movies() {
       {filteredMovies.length === 0 ? (
         <div className="text-center py-20">
           <Film className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-          <h3 className="text-xl font-bold text-gray-400 mb-2">לא נמצאו סרטים</h3>
-          <p className="text-gray-500">נסה לשנות את הפילטרים או החיפוש</p>
+          <h3 className="text-xl font-bold text-gray-400 mb-2">אין עדיין סרטים במערכת</h3>
+          <p className="text-gray-500 mb-6">טען סרטים קלאסיים מ-Archive.org</p>
+          <Link to={createPageUrl("MoviesLoader")}>
+            <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
+              <Film className="w-5 h-5 mr-2" />
+              טען סרטים עכשיו
+            </Button>
+          </Link>
         </div>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 md:gap-6">

@@ -5,6 +5,9 @@ import ChannelsManager from './pages/ChannelsManager';
 import GenerateReporterImages from './pages/GenerateReporterImages';
 import Home from './pages/Home';
 import Live from './pages/Live';
+import MoviePlayer from './pages/MoviePlayer';
+import Movies from './pages/Movies';
+import MoviesLoader from './pages/MoviesLoader';
 import NewsAdmin from './pages/NewsAdmin';
 import NewsLoader from './pages/NewsLoader';
 import PublicReports from './pages/PublicReports';
@@ -12,9 +15,6 @@ import ReporterQA from './pages/ReporterQA';
 import Reporters from './pages/Reporters';
 import Schedule from './pages/Schedule';
 import WarRoom from './pages/WarRoom';
-import Movies from './pages/Movies';
-import MoviePlayer from './pages/MoviePlayer';
-import MoviesLoader from './pages/MoviesLoader';
 import __Layout from './Layout.jsx';
 
 
@@ -26,6 +26,9 @@ export const PAGES = {
     "GenerateReporterImages": GenerateReporterImages,
     "Home": Home,
     "Live": Live,
+    "MoviePlayer": MoviePlayer,
+    "Movies": Movies,
+    "MoviesLoader": MoviesLoader,
     "NewsAdmin": NewsAdmin,
     "NewsLoader": NewsLoader,
     "PublicReports": PublicReports,
@@ -33,9 +36,6 @@ export const PAGES = {
     "Reporters": Reporters,
     "Schedule": Schedule,
     "WarRoom": WarRoom,
-    "Movies": Movies,
-    "MoviePlayer": MoviePlayer,
-    "MoviesLoader": MoviesLoader,
 }
 
 export const pagesConfig = {
