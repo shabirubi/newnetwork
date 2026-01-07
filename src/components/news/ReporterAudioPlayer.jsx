@@ -85,7 +85,7 @@ ${article.subtitle ? `תת-כותרת: ${article.subtitle}` : ''}
         
         const utterance = new SpeechSynthesisUtterance(result);
         utterance.lang = 'he-IL';
-        utterance.rate = 0.92;
+        utterance.volume = 1.0;
         
         console.log('🎤 Reporter:', reporter.name, '| Gender:', reporter.gender);
         console.log('🔊 Available voices:', voices.map(v => `${v.name} (${v.lang})`));
@@ -102,78 +102,88 @@ ${article.subtitle ? `תת-כותרת: ${article.subtitle}` : ''}
         
         const reporterIndex = getReporterVoiceIndex(reporter.name);
         
-        // Enhanced voice selection with better gender matching
+        // Professional voice selection with clear gender distinction
         const hebrewVoices = voices.filter(voice => 
           voice.lang.includes('he') || voice.lang.includes('iw') || voice.lang === 'he-IL'
         );
         
+        console.log('🎙️ All available Hebrew voices:', hebrewVoices.map(v => `${v.name} (${v.lang})`));
+        
         if (reporter.gender === 'female') {
-          // More accurate female pitch range
-          const femalePitches = [1.55, 1.65, 1.75, 1.6, 1.7, 1.8];
+          // FEMALE: Higher pitch range (1.5-1.9) for clear feminine voice
+          const femalePitches = [1.6, 1.7, 1.8, 1.65, 1.75, 1.85];
           utterance.pitch = femalePitches[reporterIndex % femalePitches.length];
-          utterance.rate = 0.95 + (reporterIndex % 3) * 0.02;
+          utterance.rate = 0.97 + (reporterIndex % 4) * 0.015; // Slightly faster, more energetic
           
-          // Priority-based female voice selection
+          // Strict female voice filtering
           const femaleVoices = hebrewVoices.filter(voice => {
             const name = voice.name.toLowerCase();
-            // High priority: explicit female names
-            if (name.includes('female') || name.includes('woman') || 
-                name.includes('zira') || name.includes('carmit') || 
-                name.includes('hadar') || name.includes('hila')) {
-              return true;
-            }
-            // Medium priority: Microsoft Hebrew voices (check gender in metadata)
-            if (voice.name.includes('Microsoft') && voice.lang.includes('he')) {
-              return true;
-            }
-            return false;
+            // ONLY select voices that are explicitly female
+            return (
+              name.includes('female') || 
+              name.includes('woman') || 
+              name.includes('zira') || 
+              name.includes('carmit') || 
+              name.includes('hadar') || 
+              name.includes('hila') ||
+              name.includes('אישה') ||
+              (voice.name.includes('Microsoft') && voice.name.includes('Hadar'))
+            );
           });
           
           if (femaleVoices.length > 0) {
             const selectedVoice = femaleVoices[reporterIndex % femaleVoices.length];
             utterance.voice = selectedVoice;
-            console.log('✅ FEMALE:', reporter.name, '| Voice:', selectedVoice.name, '| Pitch:', utterance.pitch);
+            console.log('✅ FEMALE:', reporter.name, '| Voice:', selectedVoice.name, '| Pitch:', utterance.pitch, '| Rate:', utterance.rate);
           } else {
-            // Fallback to any Hebrew voice with high pitch
+            // Strong fallback with VERY high pitch for female
+            utterance.pitch = 1.85;
             if (hebrewVoices.length > 0) {
               utterance.voice = hebrewVoices[0];
-              console.warn('⚠️ Using fallback Hebrew voice with high pitch for female');
             }
+            console.warn('⚠️ NO female voice found! Using fallback with HIGH pitch:', utterance.pitch);
           }
         } else {
-          // More accurate male pitch range  
-          const malePitches = [0.75, 0.8, 0.85, 0.78, 0.82, 0.88];
+          // MALE: Lower pitch range (0.65-0.9) for clear masculine voice
+          const malePitches = [0.7, 0.75, 0.8, 0.72, 0.78, 0.85];
           utterance.pitch = malePitches[reporterIndex % malePitches.length];
-          utterance.rate = 0.92 + (reporterIndex % 3) * 0.02;
+          utterance.rate = 0.93 + (reporterIndex % 4) * 0.015; // Professional pace
           
-          // Priority-based male voice selection
+          // Strict male voice filtering
           const maleVoices = hebrewVoices.filter(voice => {
             const name = voice.name.toLowerCase();
-            // High priority: explicit male names
-            if (name.includes('male') && !name.includes('female') ||
-                name.includes('man') && !name.includes('woman') ||
-                name.includes('asaf') || name.includes('david') ||
-                name.includes('moshe') || name.includes('yair')) {
-              return true;
-            }
-            // Medium priority: Check if it's not explicitly female
-            if (voice.name.includes('Microsoft') && voice.lang.includes('he') &&
-                !name.includes('female') && !name.includes('woman')) {
-              return true;
-            }
-            return false;
+            // ONLY select voices that are explicitly male OR not explicitly female
+            return (
+              (name.includes('male') && !name.includes('female')) ||
+              (name.includes('man') && !name.includes('woman')) ||
+              name.includes('asaf') || 
+              name.includes('david') ||
+              name.includes('moshe') || 
+              name.includes('yair') ||
+              name.includes('גבר') ||
+              (voice.name.includes('Microsoft') && voice.name.includes('Asaf'))
+            );
           });
           
-          if (maleVoices.length > 0) {
-            const selectedVoice = maleVoices[reporterIndex % maleVoices.length];
+          // If no explicit male voices, use any Hebrew voice that's NOT female
+          const nonFemaleVoices = maleVoices.length > 0 ? maleVoices : hebrewVoices.filter(voice => {
+            const name = voice.name.toLowerCase();
+            return !name.includes('female') && !name.includes('woman') && 
+                   !name.includes('zira') && !name.includes('carmit') &&
+                   !name.includes('hadar') && !name.includes('hila');
+          });
+          
+          if (nonFemaleVoices.length > 0) {
+            const selectedVoice = nonFemaleVoices[reporterIndex % nonFemaleVoices.length];
             utterance.voice = selectedVoice;
-            console.log('✅ MALE:', reporter.name, '| Voice:', selectedVoice.name, '| Pitch:', utterance.pitch);
+            console.log('✅ MALE:', reporter.name, '| Voice:', selectedVoice.name, '| Pitch:', utterance.pitch, '| Rate:', utterance.rate);
           } else {
-            // Fallback to any Hebrew voice with low pitch
+            // Strong fallback with VERY low pitch for male
+            utterance.pitch = 0.65;
             if (hebrewVoices.length > 0) {
               utterance.voice = hebrewVoices[0];
-              console.warn('⚠️ Using fallback Hebrew voice with low pitch for male');
             }
+            console.warn('⚠️ NO male voice found! Using fallback with LOW pitch:', utterance.pitch);
           }
         }
 
