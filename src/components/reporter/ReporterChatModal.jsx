@@ -161,6 +161,14 @@ ${isRequestingSummary ? `
         responseText = 'סליחה, לא הצלחתי להכין תשובה';
       }
 
+      // Remove all links, URLs, and source references
+      responseText = responseText
+        .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1') // Remove markdown links [text](url)
+        .replace(/https?:\/\/[^\s\)]+/g, '') // Remove URLs
+        .replace(/www\.[^\s]+/g, '') // Remove www addresses
+        .replace(/\([^\)]*\.(co\.il|com|org|net)[^\)]*\)/g, '') // Remove parentheses with domains
+        .replace(/\s+/g, ' '); // Clean up multiple spaces
+
       return responseText.trim();
     } catch (error) {
       console.error('❌ שגיאה בקבלת תשובה מהכתב:', error);
