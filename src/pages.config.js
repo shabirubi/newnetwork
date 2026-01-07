@@ -3,15 +3,15 @@ import Article from './pages/Article';
 import Category from './pages/Category';
 import ChannelsManager from './pages/ChannelsManager';
 import GenerateReporterImages from './pages/GenerateReporterImages';
-import Home from './pages/Home';
 import Live from './pages/Live';
 import NewsAdmin from './pages/NewsAdmin';
 import NewsLoader from './pages/NewsLoader';
 import PublicReports from './pages/PublicReports';
+import ReporterQA from './pages/ReporterQA';
 import Reporters from './pages/Reporters';
 import Schedule from './pages/Schedule';
 import WarRoom from './pages/WarRoom';
-import ReporterQA from './pages/ReporterQA';
+import Home from './pages/Home';
 import __Layout from './Layout.jsx';
 
 
@@ -21,15 +21,15 @@ export const PAGES = {
     "Category": Category,
     "ChannelsManager": ChannelsManager,
     "GenerateReporterImages": GenerateReporterImages,
-    "Home": Home,
     "Live": Live,
     "NewsAdmin": NewsAdmin,
     "NewsLoader": NewsLoader,
     "PublicReports": PublicReports,
+    "ReporterQA": ReporterQA,
     "Reporters": Reporters,
     "Schedule": Schedule,
     "WarRoom": WarRoom,
-    "ReporterQA": ReporterQA,
+    "Home": Home,
 }
 
 export const pagesConfig = {
