@@ -123,34 +123,38 @@ ${isCursing ? `המשתמש כועס - הישאר רגוע ומקצועי, הס�
 
       console.log('✅ תשובה מ-LLM:', result);
 
-      // Extract text from response
+      // Extract text from response - handle all possible formats
       let responseText = '';
+      
+      if (!result) {
+        console.error('❌ אין תשובה מה-LLM');
+        return 'אני לא יכול לענות כרגע, אבל תשאל שוב!';
+      }
+      
       if (typeof result === 'string') {
         responseText = result;
-      } else if (result?.response) {
-        responseText = result.response;
-      } else if (result?.text) {
-        responseText = result.text;
-      } else if (result?.answer) {
-        responseText = result.answer;
-      } else {
-        responseText = 'סליחה, לא הצלחתי להכין תשובה';
+      } else if (typeof result === 'object') {
+        // Try different possible keys
+        responseText = result.response || result.text || result.answer || result.content || result.message || JSON.stringify(result);
       }
 
-      // Remove all links, URLs, and source references
-      responseText = responseText
-        .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1') // Remove markdown links [text](url)
-        .replace(/https?:\/\/[^\s\)]+/g, '') // Remove URLs
-        .replace(/www\.[^\s]+/g, '') // Remove www addresses
-        .replace(/\([^\)]*\.(co\.il|com|org|net)[^\)]*\)/g, '') // Remove parentheses with domains
-        .replace(/\s+/g, ' '); // Clean up multiple spaces
+      if (!responseText || responseText.trim().length === 0) {
+        console.error('❌ תשובה ריקה מה-LLM');
+        return 'אני לא יכול לענות כרגע, אבל תשאל שוב!';
+      }
 
-      return responseText.trim();
+      // Clean up the response
+      responseText = responseText
+        .replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1')
+        .replace(/https?:\/\/[^\s\)]+/g, '')
+        .replace(/www\.[^\s]+/g, '')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+      return responseText;
     } catch (error) {
-      console.error('❌ שגיאה בקבלת תשובה מהכתב:', error);
-      return reporter.gender === 'female' ? 
-        'סליחה, יש לי בעיה טכנית כרגע. בואי ננסה שוב בעוד רגע.' :
-        'סליחה, יש לי בעיה טכנית כרגע. בוא ננסה שוב בעוד רגע.';
+      console.error('❌ שגיאה בקבלת תשובה:', error, error.message);
+      return 'אני לא יכול לענות כרגע, אבל תשאל שוב!';
     }
   };
 
