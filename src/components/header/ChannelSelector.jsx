@@ -138,8 +138,25 @@ export default function ChannelSelector() {
                       </div>
                     </div>
 
-                    {/* All Channels */}
+                    {/* Load Channels Button */}
                     <div className="p-3 border-b border-gray-200 dark:border-gray-700">
+                      <Link
+                        to={createPageUrl("ChannelsManager")}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setIsOpen(false);
+                        }}
+                        className="w-full flex items-center gap-2.5 px-3 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 active:scale-95 transition-all shadow-lg mb-3"
+                      >
+                        <div className="w-9 h-9 rounded-lg bg-white/20 flex items-center justify-center">
+                          <Settings className="w-5 h-5 text-white" />
+                        </div>
+                        <div className="text-right flex-1">
+                          <div className="font-bold text-sm text-white">טען ערוצים חדשים</div>
+                          <div className="text-[11px] text-white/70">הוסף 30 ערוצים מכל העולם</div>
+                        </div>
+                      </Link>
+
                       <button
                         onClick={() => handleSelect('all')}
                         className={`w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl active:scale-95 transition-all ${
