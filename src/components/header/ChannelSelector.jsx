@@ -84,7 +84,7 @@ export default function ChannelSelector() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            className="fixed inset-0 z-[999999] touch-manipulation"
+            className="fixed inset-0 z-[9999] touch-manipulation"
             style={{ WebkitTapHighlightColor: 'transparent' }}
             onClick={(e) => {
               e.stopPropagation();
