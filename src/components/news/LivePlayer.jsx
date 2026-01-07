@@ -222,10 +222,12 @@ export default function LivePlayer({
       });
 
       return () => {
-        if (playerRef.current && !playerRef.current.isDisposed()) {
+        if (playerRef.current) {
           try {
-            playerRef.current.pause();
-            playerRef.current.dispose();
+            if (!playerRef.current.isDisposed?.()) {
+              playerRef.current.pause();
+              playerRef.current.dispose();
+            }
           } catch (e) {
             // Silently ignore cleanup errors
           }
@@ -327,10 +329,12 @@ export default function LivePlayer({
       });
 
       return () => {
-        if (playerRef.current && !playerRef.current.isDisposed()) {
+        if (playerRef.current) {
           try {
-            playerRef.current.pause();
-            playerRef.current.dispose();
+            if (!playerRef.current.isDisposed?.()) {
+              playerRef.current.pause();
+              playerRef.current.dispose();
+            }
           } catch (e) {
             // Silently ignore cleanup errors
           }
