@@ -14,6 +14,7 @@ import Schedule from './pages/Schedule';
 import WarRoom from './pages/WarRoom';
 import Movies from './pages/Movies';
 import MoviePlayer from './pages/MoviePlayer';
+import MoviesLoader from './pages/MoviesLoader';
 import __Layout from './Layout.jsx';
 
 
@@ -34,6 +35,7 @@ export const PAGES = {
     "WarRoom": WarRoom,
     "Movies": Movies,
     "MoviePlayer": MoviePlayer,
+    "MoviesLoader": MoviesLoader,
 }
 
 export const pagesConfig = {
