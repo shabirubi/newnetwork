@@ -4,11 +4,12 @@ import Hls from "hls.js";
 import { 
   Play, Pause, Volume2, VolumeX, Maximize, 
   Users, Radio, Settings, Download, Bookmark, 
-  MessageCircle, Eye, Share2
+  MessageCircle, Eye, Share2, DollarSign, TrendingUp
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import ShareButtons from "../shared/ShareButtons";
+import { base44 } from "@/api/base44Client";
 
 
 
@@ -29,12 +30,82 @@ export default function LivePlayer({
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [viewerReactions, setViewerReactions] = useState(1234);
   const [dynamicViewerCount, setDynamicViewerCount] = useState(viewerCount || 2847);
+  const [currencyRates, setCurrencyRates] = useState([]);
+  const [loadingRates, setLoadingRates] = useState(true);
   const videoRef = useRef(null);
   const containerRef = useRef(null);
   const hlsRef = useRef(null);
   const playerRef = useRef(null);
 
   const currentStreamUrl = streamUrl;
+
+  // Fetch currency rates
+  useEffect(() => {
+    const fetchCurrencyRates = async () => {
+      try {
+        const prompt = `תן לי את שערי המטבעות החיים המעודכנים ביותר לשקל ישראלי (ILS).
+אני צריך JSON מדויק עם המבנה הבא:
+{
+  "currencies": [
+    {"code": "USD", "name": "דולר", "rate": <number>, "change": <number>},
+    {"code": "EUR", "name": "יורו", "rate": <number>, "change": <number>},
+    {"code": "GBP", "name": "פאונד", "rate": <number>, "change": <number>},
+    {"code": "BTC", "name": "ביטקוין", "rate": <number>, "change": <number>}
+  ]
+}
+rate = כמה שקלים שווה יחידה אחת של המטבע
+change = אחוז השינוי היומי (מספר חיובי או שלילי)
+תוודא שהנתונים מדויקים ועדכניים מהאינטרנט!`;
+
+        const result = await base44.integrations.Core.InvokeLLM({
+          prompt,
+          add_context_from_internet: true,
+          response_json_schema: {
+            type: "object",
+            properties: {
+              currencies: {
+                type: "array",
+                items: {
+                  type: "object",
+                  properties: {
+                    code: { type: "string" },
+                    name: { type: "string" },
+                    rate: { type: "number" },
+                    change: { type: "number" }
+                  }
+                }
+              }
+            }
+          }
+        });
+
+        if (result?.currencies) {
+          setCurrencyRates(result.currencies);
+        } else {
+          setCurrencyRates([
+            { code: "USD", name: "דולר", rate: 3.65, change: -0.2 },
+            { code: "EUR", name: "יורו", rate: 4.02, change: 0.1 },
+            { code: "GBP", name: "פאונד", rate: 4.65, change: 0.3 },
+            { code: "BTC", name: "ביטקוין", rate: 350000, change: 2.5 }
+          ]);
+        }
+      } catch (error) {
+        console.error('Failed to fetch currency rates:', error);
+        setCurrencyRates([
+          { code: "USD", name: "דולר", rate: 3.65, change: -0.2 },
+          { code: "EUR", name: "יורו", rate: 4.02, change: 0.1 },
+          { code: "GBP", name: "פאונד", rate: 4.65, change: 0.3 },
+          { code: "BTC", name: "ביטקוין", rate: 350000, change: 2.5 }
+        ]);
+      } finally {
+        setLoadingRates(false);
+      }
+    };
+
+    fetchCurrencyRates();
+    const interval = setInterval(fetchCurrencyRates, 20000);
+    return () => clearInterval(interval);
+  }, []);
 
   // Dynamic viewer count with realistic fluctuation
   useEffect(() => {
@@ -231,6 +302,36 @@ export default function LivePlayer({
                 <span className="relative inline-flex rounded-full h-1.5 w-1.5 sm:h-2 sm:w-2 bg-white"></span>
               </span>
               LIVE
+            </div>
+          )}
+        </div>
+
+        {/* Currency Rates Ticker */}
+        <div className="absolute bottom-16 sm:bottom-20 left-0 right-0 z-10 bg-black/60 backdrop-blur-sm border-t border-white/10">
+          {loadingRates ? (
+            <div className="flex items-center justify-center py-2">
+              <div className="animate-pulse text-white/60 text-xs">טוען שערים...</div>
+            </div>
+          ) : (
+            <div className="overflow-hidden">
+              <motion.div
+                animate={{ x: ["0%", "-50%"] }}
+                transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+                className="flex items-center gap-6 py-2 px-4"
+                style={{ width: "200%" }}
+              >
+                {[...currencyRates, ...currencyRates].map((currency, index) => (
+                  <div key={index} className="flex items-center gap-2 text-white whitespace-nowrap">
+                    <span className="font-bold text-sm">{currency.code}</span>
+                    <span className="text-xs opacity-70">{currency.name}</span>
+                    <span className="font-bold">₪{currency.rate.toLocaleString('he-IL', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                    <span className={`text-xs font-bold flex items-center gap-0.5 ${currency.change >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                      {currency.change >= 0 ? '▲' : '▼'}
+                      {Math.abs(currency.change).toFixed(2)}%
+                    </span>
+                  </div>
+                ))}
+              </motion.div>
             </div>
           )}
         </div>
