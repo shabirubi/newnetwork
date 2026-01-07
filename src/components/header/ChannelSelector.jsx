@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
-import { Radio, ChevronDown, Globe } from "lucide-react";
+import { Radio, ChevronDown, Globe, Settings } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "../../utils";
 
 const countryLabels = {
   israel: { name: "ישראל", flagCode: "il", color: "#0038b8" },
@@ -112,15 +114,27 @@ export default function ChannelSelector() {
                           </div>
                           <h3 className="text-base font-bold text-white">ערוצי עולם</h3>
                         </div>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setIsOpen(false);
-                          }}
-                          className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white active:scale-95 transition-all"
-                        >
-                          <ChevronDown className="w-4 h-4" />
-                        </button>
+                        <div className="flex items-center gap-2">
+                          <Link
+                            to={createPageUrl("ChannelsManager")}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setIsOpen(false);
+                            }}
+                            className="p-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white active:scale-95 transition-all"
+                          >
+                            <Settings className="w-4 h-4" />
+                          </Link>
+                          <button
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              setIsOpen(false);
+                            }}
+                            className="p-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white active:scale-95 transition-all"
+                          >
+                            <ChevronDown className="w-4 h-4" />
+                          </button>
+                        </div>
                       </div>
                     </div>
 
