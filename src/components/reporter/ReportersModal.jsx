@@ -22,9 +22,14 @@ const categoryLabels = {
 export default function ReportersModal({ isOpen, onClose }) {
   const { data: reporters = [], isLoading } = useQuery({
     queryKey: ['reporters-modal'],
-    queryFn: () => base44.entities.Reporter.list('name'),
+    queryFn: async () => {
+      const result = await base44.entities.Reporter.list('name');
+      console.log('📰 Loaded reporters in modal:', result);
+      return result;
+    },
     enabled: isOpen,
-    staleTime: 2 * 60 * 1000,
+    staleTime: 0,
+    refetchOnMount: true,
     initialData: []
   });
 
