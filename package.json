@@ -81,7 +81,8 @@
     "hls.js": "^1.4.12",
     "video.js": "^8.10.0",
     "videojs-contrib-dash": "^5.1.1",
-    "videojs-contrib-hls": "^5.15.0"
+    "videojs-contrib-hls": "^5.15.0",
+    "mpegts.js": "^1.7.3"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",
