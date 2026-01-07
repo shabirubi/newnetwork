@@ -39,7 +39,7 @@ export default function Home() {
     initialData: []
   });
 
-  const defaultStreamUrl = "https://kanliveps-i.akamaihd.net/hls/live/2024680/2024680/playlist.m3u8";
+  const defaultStreamUrl = "youtube";
 
   const { data: articles = [], isLoading } = useQuery({
     queryKey: ['news-articles', selectedChannel],

@@ -14,7 +14,7 @@ import { base44 } from "@/api/base44Client";
 
 
 
-const DEFAULT_STREAM = "https://kanliveps-i.akamaihd.net/hls/live/2024680/2024680/playlist.m3u8";
+const DEFAULT_STREAM = "youtube";
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/a44ef2558_212.png";
 
 export default function LivePlayer({ 
@@ -66,7 +66,7 @@ export default function LivePlayer({
 
   // YouTube IFrame API for controlling playback
     useEffect(() => {
-      if (currentStreamUrl) return; // If custom stream URL provided, skip YouTube API
+      if (currentStreamUrl !== "youtube" || !isPlaying) return; // Only load for default YouTube stream
 
       const playlist = ["7f6TVsLPUbQ", "hqb0D9gEEjU"];
 
@@ -110,7 +110,7 @@ export default function LivePlayer({
           playerRef.current = null;
         }
       };
-    }, [currentStreamUrl]);
+    }, [currentStreamUrl, isPlaying]);
 
   const togglePlay = () => {
     setIsPlaying(!isPlaying);
@@ -133,7 +133,7 @@ export default function LivePlayer({
   // Setup HLS.js for m3u8 streams
   useEffect(() => {
     const video = videoRef.current;
-    if (!video || !isPlaying) return;
+    if (!video || !isPlaying || currentStreamUrl === "youtube") return;
 
     const isHLS = currentStreamUrl?.includes('.m3u8');
     if (!isHLS) return;

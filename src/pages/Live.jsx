@@ -42,7 +42,7 @@ export default function Live() {
     initialData: []
   });
 
-  const defaultStreamUrl = "https://kanliveps-i.akamaihd.net/hls/live/2024680/2024680/playlist.m3u8";
+  const defaultStreamUrl = "youtube";
   const activeLive = liveStream[0];
   const currentChannel = channels.find(c => c.id === selectedChannel);
   const channelStreamUrl = currentChannel?.stream_url || (selectedChannel === 'all' ? defaultStreamUrl : null);
