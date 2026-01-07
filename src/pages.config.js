@@ -12,6 +12,8 @@ import ReporterQA from './pages/ReporterQA';
 import Reporters from './pages/Reporters';
 import Schedule from './pages/Schedule';
 import WarRoom from './pages/WarRoom';
+import Movies from './pages/Movies';
+import MoviePlayer from './pages/MoviePlayer';
 import __Layout from './Layout.jsx';
 
 
@@ -30,6 +32,8 @@ export const PAGES = {
     "Reporters": Reporters,
     "Schedule": Schedule,
     "WarRoom": WarRoom,
+    "Movies": Movies,
+    "MoviePlayer": MoviePlayer,
 }
 
 export const pagesConfig = {

@@ -24,6 +24,7 @@ const categories = [
   { id: "entertainment", label: "בידור ודרמה", icon: Clapperboard, href: "Category?cat=entertainment" },
   { id: "world", label: "חדשות עולם", icon: Globe, href: "Category?cat=world" },
   { id: "health", label: "בריאות", icon: Heart, href: "Category?cat=health" },
+  { id: "movies", label: "סרטים קלאסיים", icon: Film, href: "Movies" },
   ];
 
   const additionalPages = [
