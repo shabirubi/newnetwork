@@ -5,17 +5,28 @@ const NEWS_CATEGORIES = [
   { label: "חדשות חמות", query: "breaking news israel today", videoSearch: false, category: "breaking" },
   { label: "ביטחון", query: "israel security defense IDF today", videoSearch: true, category: "security" },
   { label: "כלכלה", query: "israel economy business today", videoSearch: false, category: "economy" },
-  { label: "פיננסים", query: "israel finance banking stocks investment today", videoSearch: false, category: "finance" },
+  { label: "שוק ההון", query: "israel stock market tel aviv exchange shares today", videoSearch: false, category: "finance" },
+  { label: "פיננסים והשקעות", query: "israel finance banking investment funds today", videoSearch: false, category: "finance" },
+  { label: "נדל\"ן ודיור", query: "israel real estate housing property prices today", videoSearch: false, category: "economy" },
   { label: "פוליטיקה", query: "israel politics government today", videoSearch: false, category: "politics" },
   { label: "טכנולוגיה", query: "israel technology startups today", videoSearch: false, category: "technology" },
+  { label: "הייטק וחדשנות", query: "israel tech innovation AI cyber startups today", videoSearch: false, category: "technology" },
   { label: "ספורט", query: "israel sports football basketball today", videoSearch: true, category: "sports" },
-  { label: "בידור ישראלי", query: "israel entertainment celebrities shows today", videoSearch: false, category: "entertainment" },
+  { label: "ספורט עולמי", query: "world sports champions league premier league NBA today", videoSearch: true, category: "sports" },
+  { label: "בידור ורכילות", query: "israel entertainment celebrities gossip scandals today", videoSearch: false, category: "entertainment" },
   { label: "דרמות וסדרות", query: "israel tv series drama shows today", videoSearch: false, category: "entertainment" },
   { label: "מוזיקה ישראלית", query: "israel music songs singers albums charts today", videoSearch: true, category: "music" },
   { label: "קולנוע ותרבות", query: "israel cinema movies culture events today", videoSearch: false, category: "entertainment" },
+  { label: "רכילות סלבריטאים", query: "israel celebrities gossip rumors relationships scandals", videoSearch: false, category: "entertainment" },
+  { label: "אופנה וסגנון", query: "israel fashion style beauty trends today", videoSearch: false, category: "entertainment" },
   { label: "חדשות עולם", query: "world news international today", videoSearch: false, category: "world" },
   { label: "בריאות", query: "health medical news today", videoSearch: false, category: "health" },
-  { label: "מזלות", query: "horoscope astrology zodiac daily predictions", videoSearch: false, category: "horoscope" }
+  { label: "תזונה ותרופות", query: "nutrition diet supplements medicine health today", videoSearch: false, category: "health" },
+  { label: "משפט ופלילים", query: "israel crime law court police justice today", videoSearch: false, category: "breaking" },
+  { label: "חינוך והורות", query: "israel education parenting schools children today", videoSearch: false, category: "world" },
+  { label: "מזלות", query: "horoscope astrology zodiac daily predictions", videoSearch: false, category: "horoscope" },
+  { label: "טיולים ותיירות", query: "israel travel tourism destinations trips today", videoSearch: false, category: "world" },
+  { label: "אוכל ומסעדות", query: "israel food restaurants culinary cooking today", videoSearch: false, category: "entertainment" }
 ];
 
 export default function AutoNewsUpdater() {
@@ -71,7 +82,7 @@ export default function AutoNewsUpdater() {
     console.log('🔄 עדכון אוטומטי של חדשות מתחיל...');
 
     try {
-      const numCategories = Math.floor(Math.random() * 4) + 5; // 5-8 קטגוריות
+      const numCategories = Math.floor(Math.random() * 6) + 8; // 8-13 קטגוריות
       const shuffled = [...NEWS_CATEGORIES].sort(() => Math.random() - 0.5);
       const selectedCategories = shuffled.slice(0, numCategories);
       
@@ -118,10 +129,12 @@ export default function AutoNewsUpdater() {
     try {
       const today = new Date().toLocaleDateString('he-IL');
       
-      const prompt = `תן לי 3 כותרות חדשות מהיום (${today}) בנושא: ${category.label}.
+      const prompt = `תן לי 4 כותרות חדשות מהיום (${today}) בנושא: ${category.label}.
       
 אני צריך חדשות אמיתיות ומעודכנות מהיום האחרון בלבד.
-החזר JSON array עם 3 articles בפורמט הבא:
+אם זה קטגוריה של רכילות/בידור - תן לי סיפורים מעניינים ודרמטיים על סלבריטאים.
+אם זה שוק הון/נדל"ן - תן לי נתונים כלכליים ואנליזות מקצועיות.
+החזר JSON array עם 4 articles בפורמט הבא:
 [{
   "title": "כותרת קצרה ומדויקת",
   "subtitle": "כותרת משנה",
