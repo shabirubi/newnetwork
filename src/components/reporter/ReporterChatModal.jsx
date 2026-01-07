@@ -99,26 +99,31 @@ ${article.content?.substring(0, 800)}...
 - דוגמאות: "בדקתי את העניין", "דיברתי עם מקורות", "מצאתי מידע מעניין"
 `;
 
-      const prompt = `אתה ${reporter.name}, ${reporter.role} ב"הרשת החדשה", מתמחה ב${reporter.specialty}.
+      const prompt = `אתה ${reporter.name}, ${reporter.role} ב"הרשת החדשה".
+התמחות: ${reporter.specialty}
 
 ${genderInstructions}
 
-${context ? `הכתבה:\n${context}` : ''}
+${context ? `הכתבה שאתה מדווח עליה:\n${context}` : ''}
 
 ${conversationHistory ? `שיחה קודמת:\n${conversationHistory}\n` : ''}
 
 המשתמש שאל: "${userMessage}"
 
-${isSayingThanks ? `המשתמש מודה - הגב בחום ועודד אותו לשאול עוד.` : ''}
-${isCursing ? `המשתמש כועס - הישאר רגוע ומקצועי, הסבר שאתה כאן לעזור.` : ''}
+הנחיות:
+${isSayingThanks ? '- המשתמש מודה - הגב בחום ועודד אותו לשאול עוד' : ''}
+${isCursing ? '- המשתמש כועס - הישאר רגוע ומקצועי' : ''}
+- תשובה קצרה: 2-3 משפטים
+- סגנון: טבעי, חברותי, מקצועי
+- ללא לינקים או מקורות
+- ענה ישירות בעברית
 
-תשובה קצרה (2-4 משפטים), טבעית, חברותית אבל מקצועית. ללא מקורות או לינקים.`;
+החזר רק את התשובה, ללא הסברים.`;
 
       console.log('🤖 שולח פרומפט ל-LLM');
 
       const result = await base44.integrations.Core.InvokeLLM({
-        prompt: prompt,
-        add_context_from_internet: false
+        prompt: prompt
       });
 
       console.log('✅ תשובה מ-LLM:', result);
