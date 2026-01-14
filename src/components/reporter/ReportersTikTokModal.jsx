@@ -3,7 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  X, ChevronUp, ChevronDown, MessageCircle, 
+  X, MessageCircle, 
   Video, Send, Mic, Phone, PhoneOff, Volume2, VolumeX
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -16,6 +16,11 @@ export default function ReportersTikTokModal({ isOpen, onClose }) {
   const [showVideo, setShowVideo] = useState(false);
   const [message, setMessage] = useState("");
   const [isMuted, setIsMuted] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [isTyping, setIsTyping] = useState(false);
+  const [videoConnected, setVideoConnected] = useState(false);
+  const containerRef = useRef(null);
+  const startY = useRef(0);
   const queryClient = useQueryClient();
 
   const { data: reporters = [] } = useQuery({
@@ -36,7 +41,10 @@ export default function ReportersTikTokModal({ isOpen, onClose }) {
   });
 
   const createChatMutation = useMutation({
-    mutationFn: (data) => base44.entities.ReporterChat.create(data),
+    mutationFn: async (data) => {
+      await base44.entities.ReporterChat.create(data);
+      return data;
+    },
     onSuccess: () => {
       queryClient.invalidateQueries(['reporter-chats']);
       setMessage("");
@@ -50,6 +58,8 @@ export default function ReportersTikTokModal({ isOpen, onClose }) {
       setCurrentIndex(currentIndex + 1);
       setShowChat(false);
       setShowVideo(false);
+      setMessages([]);
+      setVideoConnected(false);
     }
   };
 
@@ -58,20 +68,93 @@ export default function ReportersTikTokModal({ isOpen, onClose }) {
       setCurrentIndex(currentIndex - 1);
       setShowChat(false);
       setShowVideo(false);
+      setMessages([]);
+      setVideoConnected(false);
     }
   };
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (!message.trim() || !currentReporter) return;
 
-    createChatMutation.mutate({
-      reporter_id: currentReporter.id,
-      reporter_name: currentReporter.name,
-      user_email: userInfo?.email || "guest@example.com",
-      user_name: userInfo?.full_name || "אורח",
-      message: message,
-      sender_type: "user"
-    });
+    const userMsg = {
+      id: Date.now(),
+      text: message,
+      sender: "user",
+      timestamp: new Date()
+    };
+
+    setMessages(prev => [...prev, userMsg]);
+    const currentMessage = message;
+    setMessage("");
+    setIsTyping(true);
+
+    try {
+      await createChatMutation.mutateAsync({
+        reporter_id: currentReporter.id,
+        reporter_name: currentReporter.name,
+        user_email: userInfo?.email || "guest@example.com",
+        user_name: userInfo?.full_name || "אורח",
+        message: currentMessage,
+        sender_type: "user"
+      });
+
+      const response = await base44.integrations.Core.InvokeLLM({
+        prompt: `אתה ${currentReporter.name}, ${currentReporter.role}. 
+התמחות שלך: ${currentReporter.specialty}.
+המשתמש שלח: "${currentMessage}"
+
+תענה בצורה מקצועית, ענייניה וידידותית כ${currentReporter.name}. 
+השב בעברית, בקצרה (2-3 משפטים), ובסגנון של כתב חדשות מנוסה.`,
+        add_context_from_internet: false
+      });
+
+      const aiMsg = {
+        id: Date.now() + 1,
+        text: response,
+        sender: "reporter",
+        timestamp: new Date()
+      };
+
+      setMessages(prev => [...prev, aiMsg]);
+
+      await base44.entities.ReporterChat.create({
+        reporter_id: currentReporter.id,
+        reporter_name: currentReporter.name,
+        user_email: userInfo?.email || "guest@example.com",
+        user_name: userInfo?.full_name || "אורח",
+        message: response,
+        sender_type: "reporter",
+        response_text: response
+      });
+
+    } catch (error) {
+      console.error("Chat error:", error);
+    } finally {
+      setIsTyping(false);
+    }
+  };
+
+  const handleStartVideo = async () => {
+    setVideoConnected(true);
+    
+    try {
+      const greeting = await base44.integrations.Core.InvokeLLM({
+        prompt: `אתה ${currentReporter.name}, ${currentReporter.role}, בשיחת וידאו.
+צור ברכה קצרה ומקצועית למשתמש שרק התחבר לשיחת וידאו איתך (1-2 משפטים).`,
+        add_context_from_internet: false
+      });
+
+      const videoMsg = {
+        id: Date.now(),
+        text: `🎥 ${greeting}`,
+        sender: "reporter",
+        timestamp: new Date()
+      };
+
+      setMessages(prev => [...prev, videoMsg]);
+    } catch (error) {
+      console.error("Video greeting error:", error);
+    }
   };
 
   useEffect(() => {
@@ -79,26 +162,69 @@ export default function ReportersTikTokModal({ isOpen, onClose }) {
       setCurrentIndex(0);
       setShowChat(false);
       setShowVideo(false);
+      setMessages([]);
+      setVideoConnected(false);
+    } else if (currentReporter) {
+      const welcomeMsg = {
+        id: Date.now(),
+        text: `שלום! אני ${currentReporter.name}, ${currentReporter.role}. איך אוכל לעזור לך?`,
+        sender: "reporter",
+        timestamp: new Date()
+      };
+      setMessages([welcomeMsg]);
     }
-  }, [isOpen]);
+  }, [isOpen, currentReporter?.id]);
 
-  // Keyboard navigation
+  // Touch scroll navigation
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isOpen || !containerRef.current) return;
 
-    const handleKeyDown = (e) => {
-      if (e.key === "ArrowUp") {
-        e.preventDefault();
-        handlePrev();
-      } else if (e.key === "ArrowDown") {
-        e.preventDefault();
-        handleNext();
+    const handleTouchStart = (e) => {
+      if (showChat || showVideo) return;
+      startY.current = e.touches[0].clientY;
+    };
+
+    const handleTouchEnd = (e) => {
+      if (showChat || showVideo) return;
+      const endY = e.changedTouches[0].clientY;
+      const diff = startY.current - endY;
+
+      if (Math.abs(diff) > 50) {
+        if (diff > 0) {
+          handleNext();
+        } else {
+          handlePrev();
+        }
       }
     };
 
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, currentIndex, reporters.length]);
+    const container = containerRef.current;
+    container.addEventListener('touchstart', handleTouchStart);
+    container.addEventListener('touchend', handleTouchEnd);
+
+    return () => {
+      container.removeEventListener('touchstart', handleTouchStart);
+      container.removeEventListener('touchend', handleTouchEnd);
+    };
+  }, [isOpen, currentIndex, reporters.length, showChat, showVideo]);
+
+  // Mouse wheel navigation
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleWheel = (e) => {
+      if (showChat || showVideo) return;
+      
+      if (e.deltaY > 30) {
+        handleNext();
+      } else if (e.deltaY < -30) {
+        handlePrev();
+      }
+    };
+
+    window.addEventListener('wheel', handleWheel, { passive: true });
+    return () => window.removeEventListener('wheel', handleWheel);
+  }, [isOpen, currentIndex, reporters.length, showChat, showVideo]);
 
   if (!isOpen) return null;
 
@@ -119,33 +245,9 @@ export default function ReportersTikTokModal({ isOpen, onClose }) {
           <X size={20} />
         </button>
 
-        {/* Navigation Arrows */}
-        {currentIndex > 0 && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              handlePrev();
-            }}
-            className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 -mt-20 z-[10000] w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 flex items-center justify-center text-white transition-all"
-          >
-            <ChevronUp size={24} />
-          </button>
-        )}
-
-        {currentIndex < reporters.length - 1 && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              handleNext();
-            }}
-            className="absolute top-1/2 -translate-y-1/2 left-1/2 -translate-x-1/2 mt-20 z-[10000] w-12 h-12 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 flex items-center justify-center text-white transition-all"
-          >
-            <ChevronDown size={24} />
-          </button>
-        )}
-
         {/* Reporter Card Container */}
         <div 
+          ref={containerRef}
           className="relative w-full max-w-md h-[80vh] sm:h-[90vh]"
           onClick={(e) => e.stopPropagation()}
         >
@@ -260,11 +362,33 @@ export default function ReportersTikTokModal({ isOpen, onClose }) {
 
                         {/* Chat Messages */}
                         <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                          <div className="flex justify-start">
-                            <div className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-sm rounded-2xl rounded-tr-sm px-4 py-3 max-w-[80%]">
-                              <p className="text-white text-sm">שלום! איך אני יכול/ה לעזור לך?</p>
+                          {messages.map((msg) => (
+                            <div
+                              key={msg.id}
+                              className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                            >
+                              <div
+                                className={`px-4 py-3 max-w-[80%] ${
+                                  msg.sender === 'user'
+                                    ? 'bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl rounded-bl-sm'
+                                    : 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-sm rounded-2xl rounded-tr-sm'
+                                }`}
+                              >
+                                <p className="text-white text-sm">{msg.text}</p>
+                              </div>
                             </div>
-                          </div>
+                          ))}
+                          {isTyping && (
+                            <div className="flex justify-start">
+                              <div className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-sm rounded-2xl rounded-tr-sm px-4 py-3">
+                                <div className="flex gap-1">
+                                  <span className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
+                                  <span className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
+                                  <span className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                                </div>
+                              </div>
+                            </div>
+                          )}
                         </div>
 
                         {/* Chat Input */}
@@ -313,15 +437,42 @@ export default function ReportersTikTokModal({ isOpen, onClose }) {
                     >
                       <div className="relative w-full h-full">
                         {/* Video Feed */}
-                        <div className="absolute inset-0 flex items-center justify-center">
-                          <div className="text-center space-y-4">
-                            <div className="w-32 h-32 mx-auto rounded-full bg-gradient-to-br from-purple-500 via-pink-500 to-red-500 flex items-center justify-center animate-pulse">
-                              <Video className="w-16 h-16 text-white" />
+                        {!videoConnected ? (
+                          <div className="absolute inset-0 flex items-center justify-center">
+                            <div className="text-center space-y-4">
+                              <div className="w-32 h-32 mx-auto rounded-full bg-gradient-to-br from-purple-500 via-pink-500 to-red-500 flex items-center justify-center animate-pulse">
+                                <Video className="w-16 h-16 text-white" />
+                              </div>
+                              <p className="text-white text-xl font-bold">מתחבר/ת ל{currentReporter.name}...</p>
+                              <Button
+                                onClick={handleStartVideo}
+                                className="bg-gradient-to-r from-green-500 to-emerald-500 hover:from-green-600 hover:to-emerald-600 px-8 py-3 rounded-full"
+                              >
+                                התחל שיחה
+                              </Button>
                             </div>
-                            <p className="text-white text-xl font-bold">מתחבר/ת ל{currentReporter.name}...</p>
-                            <p className="text-white/60">הצלצול מתחיל</p>
                           </div>
-                        </div>
+                        ) : (
+                          <div className="absolute inset-0">
+                            <img
+                              src={currentReporter.image}
+                              alt={currentReporter.name}
+                              className="w-full h-full object-cover"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                            <div className="absolute top-4 left-4 bg-gradient-to-r from-green-500 to-emerald-500 px-4 py-2 rounded-full text-white text-sm font-bold flex items-center gap-2">
+                              <span className="relative flex h-2 w-2">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-white" />
+                              </span>
+                              מחובר
+                            </div>
+                            <div className="absolute bottom-24 left-0 right-0 px-6">
+                              <p className="text-white text-xl font-bold text-center">{currentReporter.name}</p>
+                              <p className="text-white/80 text-center">{currentReporter.role}</p>
+                            </div>
+                          </div>
+                        )}
 
                         {/* Video Controls */}
                         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-30 flex gap-4">
