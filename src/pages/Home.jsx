@@ -416,30 +416,13 @@ export default function Home() {
                     )}
 
                     {/* Action Buttons */}
-                    <div className="flex items-center gap-3 flex-wrap">
+                    <div className="flex items-center gap-3">
                       <Link
                         to={createPageUrl(`Article?id=${articles[currentFeedIndex].id}`)}
-                        className="flex-1 min-w-[120px] py-4 rounded-2xl bg-white text-black font-bold text-center hover:bg-gray-100 transition-colors"
+                        className="flex-1 py-4 rounded-2xl bg-white text-black font-bold text-center hover:bg-gray-100 transition-colors"
                       >
                         קרא עוד
                       </Link>
-                      <Button
-                        onClick={handleCreateVideo}
-                        disabled={creatingVideo}
-                        className="py-4 px-6 bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white font-bold rounded-2xl flex items-center gap-2"
-                      >
-                        {creatingVideo ? (
-                          <>
-                            <Loader2 className="w-5 h-5 animate-spin" />
-                            יוצר...
-                          </>
-                        ) : (
-                          <>
-                            <Film className="w-5 h-5" />
-                            יצור וידאו
-                          </>
-                        )}
-                      </Button>
                       <button className="p-4 rounded-2xl bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors">
                         <Share2 className="w-6 h-6 text-white" />
                       </button>
