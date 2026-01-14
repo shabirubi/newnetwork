@@ -623,19 +623,7 @@ export default function ReportersTikTokModal({ isOpen, onClose }) {
             )}
           </AnimatePresence>
 
-          {/* Progress Indicator */}
-          <div className="absolute top-4 right-4 z-[10000] flex flex-col gap-1">
-            {reporters.map((_, idx) => (
-              <div
-                key={idx}
-                className={`h-1 rounded-full transition-all ${
-                  idx === currentIndex 
-                    ? 'w-8 bg-white' 
-                    : 'w-4 bg-white/40'
-                }`}
-              />
-            ))}
-          </div>
+
         </div>
       </motion.div>
     </AnimatePresence>
