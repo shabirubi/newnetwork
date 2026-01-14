@@ -184,106 +184,53 @@ CRITICAL: השתמש רק במקורות מהימנים. בנק ישראל הו�
   }
 
   return (
-    <div className="bg-black dark:bg-gray-950 text-white py-2 overflow-hidden relative z-40">
-      <div className="flex items-center gap-1 sm:gap-3 px-2 lg:px-4">
-        <button
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            const bottomNav = document.querySelector('nav.lg\\:hidden');
-            if (bottomNav) {
-              const menuBtn = bottomNav.querySelector('button:last-child');
-              if (menuBtn) menuBtn.click();
-            }
-          }}
-          className="flex flex-col gap-1 justify-center items-center w-8 h-8 shrink-0 group"
-        >
-          <span className="w-5 h-0.5 bg-white transition-all group-hover:w-6"></span>
-          <span className="w-5 h-0.5 bg-white transition-all group-hover:w-6"></span>
-          <span className="w-5 h-0.5 bg-white transition-all group-hover:w-6"></span>
-        </button>
-
-        <span className="bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 text-white px-2 sm:px-3 py-1 sm:py-1.5 font-bold text-[10px] sm:text-xs shrink-0 flex items-center gap-1 sm:gap-1.5 rounded relative z-10 shadow-lg shadow-orange-500/50">
-          <Flame className="w-3 sm:w-3.5 h-3 sm:h-3.5 animate-pulse" />
-          <span className="hidden xs:inline">חדשות חמות</span>
-          <span className="xs:hidden">חם</span>
+    <div className="fixed top-16 left-4 w-auto max-w-xs bg-black/80 dark:bg-gray-950/80 backdrop-blur-md text-white py-2 px-3 overflow-hidden z-40 rounded-xl border border-white/10 shadow-2xl">
+      <div className="flex flex-col gap-2">
+        <span className="bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 text-white px-2 py-1 font-bold text-[10px] flex items-center gap-1 rounded shadow-lg shadow-orange-500/50">
+          <Flame className="w-3 h-3 animate-pulse" />
+          <span>חדשות חמות</span>
         </span>
 
-        <button 
+        <div 
           onClick={() => {
             window.location.href = createPageUrl("Category?cat=breaking");
           }}
-          className="ticker-wrapper overflow-hidden flex-1 cursor-pointer hover:opacity-90 transition-opacity min-w-0 relative z-10"
+          className="overflow-hidden cursor-pointer hover:opacity-90 transition-opacity"
         >
           <motion.div
-            className="flex whitespace-nowrap text-[11px] sm:text-sm pointer-events-none items-center"
-            animate={{ x: ["0%", "-50%"] }}
-            transition={{ duration: 35, repeat: Infinity, ease: "linear" }}
+            className="flex flex-col gap-1.5 whitespace-nowrap text-[10px] pointer-events-none"
+            animate={{ y: ["0%", "-50%"] }}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
           >
             {[...news, ...news].map((item, index) => (
-              <span key={`news-${index}`} className="mx-4 sm:mx-8">• {item}</span>
-            ))}
-            {currencies.length > 0 && [...currencies, ...currencies].map((currency, index) => (
-              <span key={`currency-${index}`} className="mx-4 sm:mx-8 inline-flex items-center gap-1.5 bg-white/10 px-2.5 py-1 rounded-lg">
-                {currency.code === 'USD' && <DollarSign className="w-3.5 h-3.5 text-green-400" />}
-                {currency.code === 'EUR' && <Euro className="w-3.5 h-3.5 text-blue-400" />}
-                {currency.code === 'BTC' && <span className="text-orange-400 font-bold text-xs">₿</span>}
-                {currency.code === 'GBP' && <span className="text-blue-300 font-bold text-xs">£</span>}
-                <span className="font-bold text-white">{currency.name}</span>
-                <span className="text-yellow-300 font-bold">
-                  ₪{currency.code === 'BTC' ? currency.rate.toFixed(0) : currency.rate.toFixed(2)}
-                </span>
-                <span className={`font-bold text-[10px] ${currency.changePercent >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                  {currency.changePercent >= 0 ? '▲' : '▼'}{Math.abs(currency.changePercent).toFixed(2)}%
-                </span>
-              </span>
+              <div key={`news-${index}`} className="text-white/90">• {item}</div>
             ))}
           </motion.div>
-        </button>
-
-        <div className="flex items-center gap-1 sm:gap-2 shrink-0 relative z-[60]">
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setDarkMode(!darkMode);
-            }}
-            className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-white/10 hover:bg-white/20 text-white active:scale-95 transition-all touch-manipulation relative z-[70]"
-          >
-            {darkMode ? <Sun size={16} className="sm:w-5 sm:h-5" /> : <Moon size={16} className="sm:w-5 sm:h-5" />}
-          </button>
-
-          <div className="hidden sm:block">
-            <ClockWidget />
-          </div>
-          <div className="hidden md:block">
-            <WeatherWidget />
-          </div>
-
-          <div className="relative z-[70]">
-            <ChannelSelector />
-          </div>
-
-          <button 
-            onClick={() => {
-              window.location.href = createPageUrl("WarRoom");
-            }}
-            className="hidden lg:flex items-center gap-1.5 px-2.5 py-1.5 bg-white/10 hover:bg-white/20 rounded-lg text-xs font-bold transition-colors"
-          >
-            <Siren size={13} className="animate-pulse" />
-            חדר מלחמה
-          </button>
-
-          <button 
-            onClick={() => {
-              window.location.href = createPageUrl("PublicReports");
-            }}
-            className="hidden xl:flex items-center gap-1.5 px-2.5 py-1.5 bg-white/10 hover:bg-white/20 rounded-lg text-xs font-bold transition-colors"
-          >
-            <MessageSquareWarning size={13} />
-            דיווח מפגע
-          </button>
         </div>
+
+        {currencies.length > 0 && (
+          <div className="border-t border-white/10 pt-2 mt-2 space-y-1">
+            {currencies.map((currency, index) => (
+              <div key={`currency-${index}`} className="flex items-center justify-between text-[9px] bg-white/5 px-2 py-1 rounded">
+                <span className="flex items-center gap-1">
+                  {currency.code === 'USD' && <DollarSign className="w-2.5 h-2.5 text-green-400" />}
+                  {currency.code === 'EUR' && <Euro className="w-2.5 h-2.5 text-blue-400" />}
+                  {currency.code === 'BTC' && <span className="text-orange-400 font-bold text-[8px]">₿</span>}
+                  {currency.code === 'GBP' && <span className="text-blue-300 font-bold text-[8px]">£</span>}
+                  <span className="font-bold text-white">{currency.name}</span>
+                </span>
+                <span className="flex items-center gap-1">
+                  <span className="text-yellow-300 font-bold">
+                    ₪{currency.code === 'BTC' ? currency.rate.toFixed(0) : currency.rate.toFixed(2)}
+                  </span>
+                  <span className={`font-bold ${currency.changePercent >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                    {currency.changePercent >= 0 ? '▲' : '▼'}{Math.abs(currency.changePercent).toFixed(1)}%
+                  </span>
+                </span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </div>
   );
