@@ -91,28 +91,49 @@ export default function Home() {
       <AutoNewsUpdater />
       <AutoChannelsUpdater />
       {/* Hero Section - Full Width Live Player */}
-      <section className="-mx-0 sm:-mx-4 px-0">
+      <section className="px-0">
         {/* Center - Full Width Live Player */}
-        <div>
-          <div className="bg-gradient-to-r from-gray-900 to-gray-800 dark:from-black dark:to-gray-900 sm:rounded-t-lg p-2 sm:p-4 flex items-center justify-between hidden sm:flex">
-            <div className="flex items-center gap-3">
+        <div className="sm:mx-4 sm:mb-6">
+          <div className="bg-gradient-to-r from-gray-900 to-gray-800 dark:from-black dark:to-gray-900 sm:rounded-t-[15px] p-2 sm:p-4 flex items-center justify-between">
+            <div className="flex items-center gap-3 flex-1">
               <div className="relative flex h-3 w-3">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E31E24] opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-3 w-3 bg-[#E31E24]"></span>
               </div>
               <h2 className="text-white text-xl font-bold">שידור חי - מערכת שליטה</h2>
             </div>
-            <CurrencyStrip activeLive={activeLive} />
+            
+            {/* Search Box */}
+            <div className="relative hidden sm:block ml-4">
+              <input
+                type="text"
+                placeholder="חיפוש..."
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && e.target.value.trim()) {
+                    window.location.href = createPageUrl(`Archive?search=${encodeURIComponent(e.target.value)}`);
+                  }
+                }}
+                className="w-64 px-4 py-2 pr-10 rounded-lg border border-gray-600 bg-gray-700 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#E31E24] placeholder-gray-400"
+              />
+              <button className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="11" cy="11" r="8"/>
+                  <path d="m21 21-4.35-4.35"/>
+                </svg>
+              </button>
+            </div>
+
+            <div className="hidden lg:block">
+              <CurrencyStrip activeLive={activeLive} />
+            </div>
           </div>
-          <div className="relative">
+          <div className="relative sm:rounded-b-[15px] overflow-hidden">
             <LivePlayer 
               title={currentChannel?.name || activeLive?.title || "הרשת החדשה - שידור חי"}
               isLive={!!activeLive?.is_active}
               viewerCount={activeLive?.viewer_count || 3456}
               streamUrl={channelStreamUrl}
             />
-
-
           </div>
         </div>
       </section>
