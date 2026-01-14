@@ -14,25 +14,22 @@ import ReportersModal from "./components/reporter/ReportersModal";
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/a44ef2558_212.png";
 
 const categories = [
-  { id: "home", label: "דף הבית", icon: Home, href: "Home" },
-  { id: "breaking", label: "חדשות עכשיו", icon: Radio, href: "Category?cat=breaking" },
-  { id: "security", label: "ביטחון ומדיניות", icon: Shield, href: "Category?cat=security" },
-  { id: "economy", label: "כלכלה ועסקים", icon: TrendingUp, href: "Category?cat=economy" },
-  { id: "politics", label: "פוליטיקה", icon: Vote, href: "Category?cat=politics" },
-  { id: "technology", label: "טכנולוגיה", icon: Cpu, href: "Category?cat=technology" },
-  { id: "sports", label: "ספורט", icon: Trophy, href: "Category?cat=sports" },
-  { id: "entertainment", label: "בידור ודרמה", icon: Clapperboard, href: "Category?cat=entertainment" },
-  { id: "world", label: "חדשות עולם", icon: Globe, href: "Category?cat=world" },
-  { id: "health", label: "בריאות", icon: Heart, href: "Category?cat=health" },
-  ];
-
-  const additionalPages = [
-  { id: "archive", label: "ארכיון", icon: Clock, href: "Archive" }
+  { id: "home", label: "בית", href: "Home" },
+  { id: "breaking", label: "עכשיו", href: "Category?cat=breaking" },
+  { id: "security", label: "ביטחון", href: "Category?cat=security" },
+  { id: "economy", label: "כלכלה", href: "Category?cat=economy" },
+  { id: "politics", label: "פוליטיקה", href: "Category?cat=politics" },
+  { id: "technology", label: "טכנולוגיה", href: "Category?cat=technology" },
+  { id: "sports", label: "ספורט", href: "Category?cat=sports" },
+  { id: "entertainment", label: "בידור", href: "Category?cat=entertainment" },
+  { id: "world", label: "עולם", href: "Category?cat=world" },
+  { id: "health", label: "בריאות", href: "Category?cat=health" },
   ];
 
 export default function Layout({ children }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [reportersModalOpen, setReportersModalOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
   const [darkMode, setDarkMode] = useState(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('darkMode');
@@ -139,130 +136,59 @@ export default function Layout({ children }) {
       <header className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50 transition-colors duration-300 border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4">
           {/* Desktop Navigation */}
-          <nav className="hidden sm:flex items-center justify-between gap-1 py-3">
-            <div className="flex items-center gap-1">
-            <Link
-              to={createPageUrl("Live")}
-              onClick={(e) => {
-                e.preventDefault();
-                window.location.href = createPageUrl("Live");
-              }}
-              className="flex items-center gap-1.5 px-3 py-2 text-white bg-[#E31E24] hover:bg-[#B91C1C] rounded-lg transition-all text-xs font-bold"
+          <nav className="hidden sm:flex items-center justify-between gap-2 py-3">
+            {/* Toggle Sidebar Button */}
+            <button
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-all"
             >
-              <Radio size={16} />
-              שידור חי
-            </Link>
-            {categories.map((cat) => (
-              <Link
-                key={cat.id}
-                to={createPageUrl(cat.href)}
-                onClick={(e) => {
-                  e.preventDefault();
-                  window.location.href = createPageUrl(cat.href);
-                }}
-                className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
-              >
-                <cat.icon size={16} />
-                {cat.label}
-              </Link>
-              ))}
-              <Link
-                to={createPageUrl("Schedule")}
-                onClick={(e) => {
-                  e.preventDefault();
-                  window.location.href = createPageUrl("Schedule");
-                }}
-                className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
-              >
-                <Clock size={16} />
-                לוח שידורים
-              </Link>
-              <Link
-                to={createPageUrl("Reporters")}
-                onClick={(e) => {
-                  e.preventDefault();
-                  window.location.href = createPageUrl("Reporters");
-                }}
-                className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
-              >
-                <Users size={16} />
-                אנשי השטח
-              </Link>
-              <Link
-                to={createPageUrl("NewsLoader")}
-                onClick={(e) => {
-                  e.preventDefault();
-                  window.location.href = createPageUrl("NewsLoader");
-                }}
-                className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
-              >
-                <Globe size={16} />
-                טעינת חדשות
-              </Link>
-              <Link
-                to={createPageUrl("ChannelsManager")}
-                onClick={(e) => {
-                  e.preventDefault();
-                  window.location.href = createPageUrl("ChannelsManager");
-                }}
-                className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
-              >
-                <Radio size={16} />
-                ניהול ערוצים
-              </Link>
-              <Link
-                to={createPageUrl("Archive")}
-                onClick={(e) => {
-                  e.preventDefault();
-                  window.location.href = createPageUrl("Archive");
-                }}
-                className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
-              >
-                <Clock size={16} />
-                ארכיון
-              </Link>
-              <Link
-                to={createPageUrl("Movies")}
-                onClick={(e) => {
-                  e.preventDefault();
-                  window.location.href = createPageUrl("Movies");
-                }}
-                className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
-              >
-                <Film size={16} />
-                סרטים קלאסיים
-              </Link>
-              <Link
-                to={createPageUrl("ReporterQA")}
-                onClick={(e) => {
-                  e.preventDefault();
-                  window.location.href = createPageUrl("ReporterQA");
-                }}
-                className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
-              >
-                <MessageSquareWarning size={16} />
-                שאלות ותשובות
-              </Link>
+              <Menu size={20} className="text-gray-700 dark:text-gray-200" />
+            </button>
 
+            {/* Main Navigation */}
+            <div className="flex items-center gap-1 flex-1">
+              <Link
+                to={createPageUrl("Live")}
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.location.href = createPageUrl("Live");
+                }}
+                className="px-4 py-2 text-white bg-[#E31E24] hover:bg-[#B91C1C] rounded-lg transition-all text-sm font-bold whitespace-nowrap"
+              >
+                שידור חי
+              </Link>
+              {categories.map((cat) => (
+                <Link
+                  key={cat.id}
+                  to={createPageUrl(cat.href)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.location.href = createPageUrl(cat.href);
+                  }}
+                  className="px-4 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-sm font-medium whitespace-nowrap"
+                >
+                  {cat.label}
+                </Link>
+              ))}
               <button
                 onClick={() => setDarkMode(!darkMode)}
-                className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
+                className="p-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all"
               >
-                {darkMode ? <Sun size={16} /> : <Moon size={16} />}
+                {darkMode ? <Sun size={18} /> : <Moon size={18} />}
               </button>
-              </div>
+            </div>
 
-              {/* Search Box */}
-              <div className="relative">
+            {/* Search Box */}
+            <div className="relative">
               <input
                 type="text"
-                placeholder="חיפוש כתבות..."
+                placeholder="חיפוש..."
                 onKeyDown={(e) => {
                   if (e.key === 'Enter' && e.target.value.trim()) {
                     window.location.href = createPageUrl(`Archive?search=${encodeURIComponent(e.target.value)}`);
                   }
                 }}
-                className="w-64 px-4 py-2 pr-10 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-[#E31E24]"
+                className="w-48 px-4 py-2 pr-10 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-[#E31E24]"
               />
               <button className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -270,10 +196,111 @@ export default function Layout({ children }) {
                   <path d="m21 21-4.35-4.35"/>
                 </svg>
               </button>
-              </div>
-              </nav>
-              </div>
-              </header>
+            </div>
+          </nav>
+        </div>
+      </header>
+
+      {/* Collapsible Right Sidebar */}
+      <AnimatePresence>
+        {sidebarOpen && (
+          <motion.div
+            initial={{ x: "100%" }}
+            animate={{ x: 0 }}
+            exit={{ x: "100%" }}
+            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+            className="fixed left-0 top-16 bottom-0 w-64 bg-white dark:bg-gray-800 shadow-2xl z-40 overflow-y-auto border-l border-gray-200 dark:border-gray-700 hidden sm:block"
+          >
+            <div className="p-4 space-y-2">
+              <h3 className="text-sm font-bold text-gray-500 dark:text-gray-400 mb-4">תפריט נוסף</h3>
+
+              <Link
+                to={createPageUrl("Schedule")}
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.location.href = createPageUrl("Schedule");
+                }}
+                className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all"
+              >
+                <Clock size={20} />
+                <span className="font-medium">לוח שידורים</span>
+              </Link>
+
+              <Link
+                to={createPageUrl("Reporters")}
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.location.href = createPageUrl("Reporters");
+                }}
+                className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all"
+              >
+                <Users size={20} />
+                <span className="font-medium">אנשי השטח</span>
+              </Link>
+
+              <Link
+                to={createPageUrl("NewsLoader")}
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.location.href = createPageUrl("NewsLoader");
+                }}
+                className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all"
+              >
+                <Globe size={20} />
+                <span className="font-medium">טעינת חדשות</span>
+              </Link>
+
+              <Link
+                to={createPageUrl("ChannelsManager")}
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.location.href = createPageUrl("ChannelsManager");
+                }}
+                className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all"
+              >
+                <Radio size={20} />
+                <span className="font-medium">ניהול ערוצים</span>
+              </Link>
+
+              <Link
+                to={createPageUrl("Archive")}
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.location.href = createPageUrl("Archive");
+                }}
+                className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all"
+              >
+                <Clock size={20} />
+                <span className="font-medium">ארכיון</span>
+              </Link>
+
+              <Link
+                to={createPageUrl("Movies")}
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.location.href = createPageUrl("Movies");
+                }}
+                className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all"
+              >
+                <Film size={20} />
+                <span className="font-medium">סרטים קלאסיים</span>
+              </Link>
+
+              <Link
+                to={createPageUrl("ReporterQA")}
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.location.href = createPageUrl("ReporterQA");
+                }}
+                className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all"
+              >
+                <MessageSquareWarning size={20} />
+                <span className="font-medium">שאלות ותשובות</span>
+              </Link>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Native Mobile Drawer */}
       <AnimatePresence>
@@ -375,7 +402,7 @@ export default function Layout({ children }) {
       </AnimatePresence>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-0 sm:px-4 py-0 sm:py-6 pb-16 sm:pb-24 lg:pb-6">
+      <main className={`max-w-7xl mx-auto px-0 sm:px-4 py-0 sm:py-6 pb-16 sm:pb-24 lg:pb-6 transition-all duration-300 ${sidebarOpen ? 'sm:ml-0 lg:ml-64' : ''}`}>
         {children}
       </main>
 
