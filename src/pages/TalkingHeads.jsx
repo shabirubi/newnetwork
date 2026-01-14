@@ -1,13 +1,47 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { Film, Play, Eye } from "lucide-react";
+import { Film, Play, Eye, Loader2 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import TalkingHeadPlayer from "../components/news/TalkingHeadPlayer";
+import { Button } from "@/components/ui/button";
 
 export default function TalkingHeads() {
   const [selectedVideo, setSelectedVideo] = useState(null);
+  const [generatingVideo, setGeneratingVideo] = useState(false);
+
+  const generateRoseVideo = async () => {
+    setGeneratingVideo(true);
+    try {
+      const response = await base44.functions.createTalkingHeadVideo({
+        text: "שלום, אני כתב הרשת החדשה. רוז ביזאם הפכה לאחת משכנתות הרשת הוויראליות של השנה עם מיליוני צפיות בTikTok. התוכן המצחיק והקורעת של רוז הביא לה תהילה ברשתות החברתיות. כל הקהל מעקב אחריה ותוקפי הרשת התפקדו לעקוב אחר הפרסומים שלה היומיומיים.",
+      });
+
+      if (response.success) {
+        // שמור בדאטהבייס
+        await base44.entities.TalkingHeadVideo.create({
+          article_id: "rose_bizaam_viral",
+          reporter_name: "כתב הרשת החדשה",
+          video_url: response.video_url,
+          talk_id: response.talk_id,
+          status: "completed",
+          duration: response.duration,
+          presentation_text: "רוז ביזאם - הילדה הווירלית של הרשת",
+          views: 0,
+          is_featured: true,
+        });
+
+        // רענן את הדיטה
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error("שגיאה:", error);
+      alert("שגיאה ביצירת הוידאו: " + error.message);
+    } finally {
+      setGeneratingVideo(false);
+    }
+  };
 
   const { data: talkingHeads = [], isLoading } = useQuery({
     queryKey: ['talking-heads'],
@@ -53,16 +87,34 @@ export default function TalkingHeads() {
         animate={{ opacity: 1, y: 0 }}
         className="bg-gradient-to-r from-red-500 via-orange-500 to-pink-500 rounded-2xl p-6 text-white shadow-lg"
       >
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
-            <Film className="w-6 h-6" />
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
+              <Film className="w-6 h-6" />
+            </div>
+            <div>
+              <h1 className="text-2xl md:text-3xl font-bold">כתבים מדברים</h1>
+              <p className="text-white/80 text-sm">כתבים תקשורתיים AI עם קולות אמיתיים</p>
+            </div>
           </div>
-          <div>
-            <h1 className="text-2xl md:text-3xl font-bold">כתבים מדברים</h1>
-            <p className="text-white/80 text-sm">כתבים תקשורתיים AI עם קולות אמיתיים</p>
-          </div>
-          <div className="ml-auto text-xs bg-white/20 px-4 py-2 rounded-full">
-            {talkingHeads.length} וידאוים
+          <div className="flex flex-col items-end gap-2">
+            <div className="text-xs bg-white/20 px-4 py-2 rounded-full">
+              {talkingHeads.length} וידאוים
+            </div>
+            <Button
+              onClick={generateRoseVideo}
+              disabled={generatingVideo}
+              className="bg-white/20 hover:bg-white/30 text-white"
+            >
+              {generatingVideo ? (
+                <>
+                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                  יוצר...
+                </>
+              ) : (
+                "יצור וידאו רוז"
+              )}
+            </Button>
           </div>
         </div>
       </motion.div>
