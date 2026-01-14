@@ -8,9 +8,9 @@ import {
   Siren, AlertTriangle, MessageSquareWarning, Film, MessageCircle
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import NewsTicker from "./components/header/NewsTicker";
 import ReportersModal from "./components/reporter/ReportersModal";
 import ReportersTikTokModal from "./components/reporter/ReportersTikTokModal";
+import ReportersCarousel from "./components/reporter/ReportersCarousel";
 
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/a6c94b22a_image.png";
 
@@ -111,8 +111,12 @@ export default function Layout({ children, currentPageName }) {
       {/* Animated Rainbow Line */}
       <div className="fixed top-0 left-0 right-0 h-2 bg-gradient-to-r from-red-500 via-orange-500 via-yellow-500 via-green-500 via-blue-500 via-indigo-500 to-purple-500 bg-[length:200%_200%] animate-[rainbow-flow_5s_ease_infinite] z-[60] pointer-events-none shadow-lg"></div>
 
-      {/* Breaking News Ticker */}
-      <NewsTicker darkMode={darkMode} setDarkMode={setDarkMode} />
+      {/* Reporters Carousel */}
+      <ReportersCarousel 
+        onReporterClick={(reporter) => {
+          setReportersTikTokOpen(true);
+        }}
+      />
 
       {/* Reporters Modal */}
       <ReportersModal 
