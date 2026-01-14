@@ -262,11 +262,11 @@ export default function Home() {
               </AnimatePresence>
 
               {/* Center Info */}
-              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 text-center pointer-events-none">
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 text-center pointer-events-auto">
                 <motion.div
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
-                  className="bg-black/40 backdrop-blur-md rounded-2xl px-8 py-4"
+                  className="bg-black/40 backdrop-blur-md rounded-2xl px-8 py-6 space-y-4"
                 >
                   <h1 className="text-white text-2xl sm:text-4xl font-bold mb-2">
                     {currentChannel?.name || "הרשת החדשה"}
@@ -275,6 +275,23 @@ export default function Home() {
                     <Eye className="w-4 h-4" />
                     <span className="text-sm">{activeLive?.viewer_count?.toLocaleString() || '3,456'} צופים</span>
                   </div>
+                  <Button
+                    onClick={handleCreateVideo}
+                    disabled={creatingVideo}
+                    className="bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white font-bold px-8 py-3 rounded-xl mt-4"
+                  >
+                    {creatingVideo ? (
+                      <>
+                        <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                        יוצר...
+                      </>
+                    ) : (
+                      <>
+                        <Film className="w-4 h-4 mr-2" />
+                        יצור וידאו
+                      </>
+                    )}
+                  </Button>
                 </motion.div>
               </div>
 
