@@ -331,7 +331,7 @@ export default function Layout({ children, currentPageName }) {
                   <img 
                     src={LOGO_URL} 
                     alt="הרשת החדשה" 
-                    className="h-12 w-auto"
+                    className="h-16 w-auto"
                   />
                   <button
                     onClick={() => setMobileMenuOpen(false)}
@@ -461,7 +461,7 @@ export default function Layout({ children, currentPageName }) {
               <img 
                 src={LOGO_URL} 
                 alt="הרשת החדשה" 
-                className="h-16 w-auto mb-4"
+                className="h-24 w-auto mb-4"
               />
               <p className="text-gray-400 text-sm">
                 ערוץ חדשות דיגיטלי מבוסס AI עם בקרה אנושית, המייצר תוכן דיגיטלי במהירות ובאיכות.
