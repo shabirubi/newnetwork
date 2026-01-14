@@ -52,26 +52,23 @@ export default function ReportersCarousel({ onReporterClick }) {
   ) || articles[0];
 
   const slideVariants = {
-    enter: (direction) => ({
-      y: direction > 0 ? 50 : -50,
-      opacity: 0,
-      scale: 0.8
-    }),
+    enter: {
+      y: -100,
+      opacity: 0
+    },
     center: {
       y: 0,
-      opacity: 1,
-      scale: 1
+      opacity: 1
     },
-    exit: (direction) => ({
-      y: direction < 0 ? 50 : -50,
-      opacity: 0,
-      scale: 0.8
-    })
+    exit: {
+      y: 100,
+      opacity: 0
+    }
   };
 
   return (
     <div className="fixed top-2 left-0 bottom-20 sm:bottom-6 w-auto max-w-xs z-20">
-      <div className="bg-gradient-to-b from-gray-900 to-black rounded-xl border border-red-500/30 shadow-2xl overflow-hidden h-full flex flex-col">
+      <div className="h-full flex flex-col">
         {/* Header Badge */}
         <div className="bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 px-3 py-1 flex items-center gap-2 justify-center">
           <Flame className="w-3 h-3 text-white animate-pulse" />
@@ -83,14 +80,13 @@ export default function ReportersCarousel({ onReporterClick }) {
           <AnimatePresence initial={false} custom={direction} mode="wait">
             <motion.div
               key={currentIndex}
-              custom={direction}
               variants={slideVariants}
               initial="enter"
               animate="center"
               exit="exit"
               transition={{
-                duration: 0.4,
-                ease: [0.25, 0.1, 0.25, 1]
+                duration: 0.5,
+                ease: "easeInOut"
               }}
               className="flex flex-col items-center gap-2 px-3"
             >
