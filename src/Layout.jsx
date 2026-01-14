@@ -133,7 +133,7 @@ export default function Layout({ children, currentPageName }) {
       {/* Floating Reporters Chat Button */}
       <button
         onClick={() => setReportersTikTokOpen(true)}
-        className="fixed left-6 bottom-24 sm:bottom-32 z-50 w-14 h-14 bg-gradient-to-br from-purple-500 via-pink-500 to-red-500 hover:from-purple-600 hover:via-pink-600 hover:to-red-600 rounded-full shadow-2xl shadow-purple-500/50 flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95 bg-[length:200%_200%] animate-[rainbow-flow_4s_ease_infinite]"
+        className="fixed right-6 bottom-24 sm:bottom-32 z-50 w-14 h-14 bg-gradient-to-br from-purple-500 via-pink-500 to-red-500 hover:from-purple-600 hover:via-pink-600 hover:to-red-600 rounded-full shadow-2xl shadow-purple-500/50 flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95 bg-[length:200%_200%] animate-[rainbow-flow_4s_ease_infinite]"
       >
         <MessageCircle className="w-6 h-6" />
       </button>
