@@ -6,12 +6,13 @@ import {
   Radio, Play, Pause, Volume2, VolumeX, Maximize, 
   ChevronDown, Search, Menu, X, Flame, 
   Shield, TrendingUp, Globe, Heart, Share2,
-  MessageCircle, Bookmark, Eye, Settings
+  MessageCircle, Bookmark, Eye, Settings, Film, Loader2
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
 import AutoNewsUpdater from "../components/news/AutoNewsUpdater";
 import AutoChannelsUpdater from "../components/news/AutoChannelsUpdater";
+import { Button } from "@/components/ui/button";
 
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/a6c94b22a_image.png";
 
@@ -24,6 +25,7 @@ export default function Home() {
   const [volume, setVolume] = useState(80);
   const [showControls, setShowControls] = useState(true);
   const [currentFeedIndex, setCurrentFeedIndex] = useState(0);
+  const [creatingVideo, setCreatingVideo] = useState(false);
   const [selectedChannel, setSelectedChannel] = useState(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('selectedChannel') || 'all';
@@ -79,6 +81,37 @@ export default function Home() {
     entertainment: 'from-pink-500 via-fuchsia-500 to-purple-500',
     world: 'from-indigo-500 via-blue-500 to-cyan-500',
     health: 'from-teal-500 via-cyan-500 to-blue-500'
+  };
+
+  const handleCreateVideo = async () => {
+    if (!articles[currentFeedIndex]) return;
+    
+    setCreatingVideo(true);
+    try {
+      const article = articles[currentFeedIndex];
+      const text = `${article.title}. ${article.subtitle || ''} ${article.content || ''}`.substring(0, 1000);
+      
+      const result = await base44.functions.generateDIDVideo({ text });
+
+      await base44.entities.TalkingHeadVideo.create({
+        article_id: article.id,
+        reporter_name: "כתב הרשת החדשה",
+        video_url: result.video_url,
+        talk_id: result.talk_id,
+        status: "completed",
+        duration: 30,
+        presentation_text: article.title,
+        views: 0,
+        is_featured: true,
+      });
+
+      alert("וידאו נוצר בהצלחה!");
+    } catch (error) {
+      console.error("שגיאה:", error);
+      alert("שגיאה ביצירת הוידאו");
+    } finally {
+      setCreatingVideo(false);
+    }
   };
 
   return (
@@ -383,13 +416,30 @@ export default function Home() {
                     )}
 
                     {/* Action Buttons */}
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 flex-wrap">
                       <Link
                         to={createPageUrl(`Article?id=${articles[currentFeedIndex].id}`)}
-                        className="flex-1 py-4 rounded-2xl bg-white text-black font-bold text-center hover:bg-gray-100 transition-colors"
+                        className="flex-1 min-w-[120px] py-4 rounded-2xl bg-white text-black font-bold text-center hover:bg-gray-100 transition-colors"
                       >
                         קרא עוד
                       </Link>
+                      <Button
+                        onClick={handleCreateVideo}
+                        disabled={creatingVideo}
+                        className="py-4 px-6 bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white font-bold rounded-2xl flex items-center gap-2"
+                      >
+                        {creatingVideo ? (
+                          <>
+                            <Loader2 className="w-5 h-5 animate-spin" />
+                            יוצר...
+                          </>
+                        ) : (
+                          <>
+                            <Film className="w-5 h-5" />
+                            יצור וידאו
+                          </>
+                        )}
+                      </Button>
                       <button className="p-4 rounded-2xl bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors">
                         <Share2 className="w-6 h-6 text-white" />
                       </button>
