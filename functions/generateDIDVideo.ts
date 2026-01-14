@@ -28,11 +28,33 @@ export default async function generateDIDVideo(data) {
       throw new Error(result.error || `D-ID API error: ${response.status}`);
     }
 
+    const talkId = result.id;
+    let done = false;
+    let videoResult = result;
+    
+    // Poll until video is ready
+    while (!done) {
+      const statusResponse = await fetch(`https://api.d-id.com/talks/${talkId}`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Basic ${DID_API_KEY}`,
+        },
+      });
+      
+      videoResult = await statusResponse.json();
+      
+      if (videoResult.status === 'done') {
+        done = true;
+      } else {
+        await new Promise(resolve => setTimeout(resolve, 2000));
+      }
+    }
+
     return {
       success: true,
-      video_url: result.result_url,
-      talk_id: result.id,
-      status: result.status,
+      video_url: videoResult.result_url,
+      talk_id: talkId,
+      status: videoResult.status,
     };
   } catch (error) {
     console.error('D-ID Video Error:', error);
