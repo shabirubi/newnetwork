@@ -24,12 +24,22 @@ export default function ReportersTikTokModal({ isOpen, onClose }) {
   const [mediaRecorder, setMediaRecorder] = useState(null);
   const [typingText, setTypingText] = useState("");
   const [currentTypingMsg, setCurrentTypingMsg] = useState(null);
+  const [userVideoStream, setUserVideoStream] = useState(null);
+  const [capturedImage, setCapturedImage] = useState(null);
   const audioRef = useRef(null);
   const recordingChunks = useRef([]);
   const containerRef = useRef(null);
   const startY = useRef(0);
   const messagesEndRef = useRef(null);
+  const videoRef = useRef(null);
+  const canvasRef = useRef(null);
   const queryClient = useQueryClient();
+
+  const { data: latestArticles = [] } = useQuery({
+    queryKey: ['latest-articles-chat'],
+    queryFn: () => base44.entities.NewsArticle.list('-created_date', 5),
+    initialData: []
+  });
 
   const { data: reporters = [] } = useQuery({
     queryKey: ['reporters'],
@@ -106,13 +116,27 @@ export default function ReportersTikTokModal({ isOpen, onClose }) {
         sender_type: "user"
       });
 
+      // Get relevant articles for context
+      const relevantArticles = latestArticles.filter(article => 
+        currentReporter.categories?.includes(article.category)
+      ).slice(0, 2);
+
+      let articlesContext = '';
+      if (relevantArticles.length > 0) {
+        articlesContext = '\n\nכתבות אחרונות שלי:\n' + 
+          relevantArticles.map(a => `- ${a.title}: ${a.subtitle || ''}`).join('\n');
+      }
+
       const response = await base44.integrations.Core.InvokeLLM({
         prompt: `אתה ${currentReporter.name}, ${currentReporter.role}. 
-התמחות שלך: ${currentReporter.specialty}.
+התמחות שלך: ${currentReporter.specialty}.${articlesContext}
 המשתמש שלח: "${currentMessage}"
 
-תענה בצורה מקצועית, ענייניה וידידותית כ${currentReporter.name}. 
-השב בעברית, בקצרה (2-3 משפטים), ובסגנון של כתב חדשות מנוסה.`,
+תענה בצורה מקצועית, חמה ואינטראקטיבית כ${currentReporter.name}:
+1. תגיב להודעת המשתמש בצורה אישית
+2. אם רלוונטי, תקשר את זה לכתבה שלך
+3. תשאל שאלה מעניינת שתמשיך את השיחה
+4. השב בעברית, בקצרה (3-4 משפטים), בסגנון של כתב חדשות מנוסה שמתעניין באמת.`,
         add_context_from_internet: false
       });
 
@@ -186,45 +210,91 @@ export default function ReportersTikTokModal({ isOpen, onClose }) {
   };
 
   const handleStartVideo = async () => {
-    setVideoConnected(true);
-    
     try {
-      const greeting = await base44.integrations.Core.InvokeLLM({
-        prompt: `אתה ${currentReporter.name}, ${currentReporter.role}, בשיחת וידאו.
-צור ברכה קצרה ומקצועית למשתמש שרק התחבר לשיחת וידאו איתך (1-2 משפטים).`,
-        add_context_from_internet: false
+      // Start user's camera
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        video: { facingMode: 'user', width: 1280, height: 720 }, 
+        audio: true 
       });
-
-      // Generate voice for video greeting
-      let audioUrl = null;
-      try {
-        const voiceResult = await base44.functions.generateReporterVoice({
-          text: greeting,
-          gender: currentReporter.gender,
-          reporter_name: currentReporter.name
-        });
-        audioUrl = voiceResult.audio_data;
-        
-        // Auto-play greeting
-        if (audioUrl) {
-          const audio = new Audio(audioUrl);
-          audio.play();
-        }
-      } catch (error) {
-        console.error("Voice generation error:", error);
+      setUserVideoStream(stream);
+      
+      if (videoRef.current) {
+        videoRef.current.srcObject = stream;
       }
 
-      const videoMsg = {
-        id: Date.now(),
-        text: `🎥 ${greeting}`,
-        sender: "reporter",
-        timestamp: new Date(),
-        audioUrl: audioUrl
-      };
+      // Wait a moment for camera to stabilize
+      await new Promise(resolve => setTimeout(resolve, 1000));
 
-      setMessages(prev => [...prev, videoMsg]);
+      // Capture image from video
+      const canvas = canvasRef.current;
+      const video = videoRef.current;
+      if (canvas && video) {
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(video, 0, 0);
+        const imageData = canvas.toDataURL('image/jpeg', 0.8);
+        setCapturedImage(imageData);
+
+        // Upload image
+        const uploadResult = await base44.integrations.Core.UploadFile({
+          file: imageData
+        });
+
+        // Analyze user appearance with AI
+        const analysisPrompt = `אתה ${currentReporter.name}, ${currentReporter.role}.
+אתה בשיחת וידאו עם צופה. תסתכל על התמונה ותנתח:
+- צבע שיער (שחור, חום, בלונד, אפור, קרח וכו')
+- צבע עיניים (אם ניתן לראות)
+- סגנון לבוש (חולצה, חליפה, קז'ואל וכו')
+- כל פרט בולט אחר
+
+צור ברכה חמה ואישית (2-3 משפטים) שמזכירה מה אתה רואה ושואלת איך הצופה מרגיש היום.
+דוגמה: "שלום! אני רואה שאתה לבוש חולצה כחולה יפה היום. איך אתה מרגיש? יש משהו ספציפי שתרצה לדבר עליו?"`;
+
+        const greeting = await base44.integrations.Core.InvokeLLM({
+          prompt: analysisPrompt,
+          file_urls: [uploadResult.file_url],
+          add_context_from_internet: false
+        });
+
+        // Generate voice
+        let audioUrl = null;
+        try {
+          const voiceResult = await base44.functions.generateReporterVoice({
+            text: greeting,
+            gender: currentReporter.gender,
+            reporter_name: currentReporter.name
+          });
+          audioUrl = voiceResult.audio_data;
+          
+          if (audioUrl) {
+            const audio = new Audio(audioUrl);
+            audio.play();
+          }
+        } catch (error) {
+          console.error("Voice generation error:", error);
+        }
+
+        const videoMsg = {
+          id: Date.now(),
+          text: greeting,
+          sender: "reporter",
+          timestamp: new Date(),
+          audioUrl: audioUrl
+        };
+
+        setMessages(prev => [...prev, videoMsg]);
+      }
+
+      setVideoConnected(true);
     } catch (error) {
-      console.error("Video greeting error:", error);
+      console.error("Video start error:", error);
+      if (error.name === 'NotAllowedError') {
+        alert('גישה למצלמה נדחתה. אנא אפשר הרשאות מצלמה בהגדרות הדפדפן.');
+      } else {
+        alert('שגיאה בהפעלת המצלמה: ' + error.message);
+      }
     }
   };
 
@@ -429,9 +499,38 @@ export default function ReportersTikTokModal({ isOpen, onClose }) {
         audioRef.current.pause();
         audioRef.current = null;
       }
+      // Stop video stream
+      if (userVideoStream) {
+        userVideoStream.getTracks().forEach(track => track.stop());
+        setUserVideoStream(null);
+      }
     } else if (currentReporter) {
       const generateWelcome = async () => {
-        const welcomeText = `שלום! אני ${currentReporter.name}, ${currentReporter.role}. איך אוכל לעזור לך?`;
+        // Get reporter's categories articles
+        const relevantArticles = latestArticles.filter(article => 
+          currentReporter.categories?.includes(article.category)
+        ).slice(0, 3);
+
+        let articlesContext = '';
+        if (relevantArticles.length > 0) {
+          articlesContext = '\n\nכתבות אחרונות שכתבתי:\n' + 
+            relevantArticles.map(a => `- ${a.title}`).join('\n');
+        }
+
+        const welcomePrompt = `אתה ${currentReporter.name}, ${currentReporter.role}.
+התמחות שלך: ${currentReporter.specialty}.${articlesContext}
+
+צור ברכה חמה ואינטראקטיבית (3-4 משפטים) שכוללת:
+1. הצגה קצרה שלך
+2. שאלה מעניינת שמובילה את המשתמש לדבר על אחת הכתבות שלך
+3. הצעה לעזרה או מידע נוסף
+
+דוגמה: "שלום! אני ${currentReporter.name}, ${currentReporter.role}. ראיתי שכתבתי היום על [נושא]. מה דעתך על זה? יש משהו ספציפי שמעניין אותך בנושא?"`;
+
+        const welcomeText = await base44.integrations.Core.InvokeLLM({
+          prompt: welcomePrompt,
+          add_context_from_internet: false
+        });
         
         let audioUrl = null;
         try {
@@ -906,25 +1005,42 @@ export default function ReportersTikTokModal({ isOpen, onClose }) {
                             <motion.div
                               initial={{ opacity: 0 }}
                               animate={{ opacity: 1 }}
-                              className="absolute inset-0"
+                              className="absolute inset-0 grid grid-cols-2 gap-1"
                             >
-                              <img
-                                src={currentReporter.image}
-                                alt={currentReporter.name}
-                                className="w-full h-full object-cover"
-                              />
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
-                              
-                              {/* Reporter Info Overlay */}
-                              <div className="absolute bottom-24 left-0 right-0 text-center">
-                                <motion.div
-                                  initial={{ y: 20, opacity: 0 }}
-                                  animate={{ y: 0, opacity: 1 }}
-                                  transition={{ delay: 0.3 }}
-                                >
-                                  <h3 className="text-white text-3xl font-bold mb-2">{currentReporter.name}</h3>
-                                  <p className="text-white/80 text-lg">{currentReporter.role}</p>
-                                </motion.div>
+                              {/* User's Video (PiP style) */}
+                              <div className="col-span-2 row-span-2 relative">
+                                <img
+                                  src={currentReporter.image}
+                                  alt={currentReporter.name}
+                                  className="w-full h-full object-cover"
+                                />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                                
+                                {/* User Camera in corner */}
+                                <div className="absolute top-4 right-4 w-32 h-40 rounded-xl overflow-hidden border-2 border-white/30 shadow-xl">
+                                  <video
+                                    ref={videoRef}
+                                    autoPlay
+                                    playsInline
+                                    muted
+                                    className="w-full h-full object-cover"
+                                  />
+                                </div>
+                                
+                                {/* Hidden canvas for capturing */}
+                                <canvas ref={canvasRef} className="hidden" />
+                                
+                                {/* Reporter Info Overlay */}
+                                <div className="absolute bottom-24 left-0 right-0 text-center">
+                                  <motion.div
+                                    initial={{ y: 20, opacity: 0 }}
+                                    animate={{ y: 0, opacity: 1 }}
+                                    transition={{ delay: 0.3 }}
+                                  >
+                                    <h3 className="text-white text-3xl font-bold mb-2">{currentReporter.name}</h3>
+                                    <p className="text-white/80 text-lg">{currentReporter.role}</p>
+                                  </motion.div>
+                                </div>
                               </div>
                             </motion.div>
                           )}
