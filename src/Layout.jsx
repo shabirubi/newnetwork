@@ -29,7 +29,7 @@ const categories = [
 export default function Layout({ children }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [reportersModalOpen, setReportersModalOpen] = useState(false);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [sidebarExpanded, setSidebarExpanded] = useState(false);
   const [darkMode, setDarkMode] = useState(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('darkMode');
@@ -137,14 +137,6 @@ export default function Layout({ children }) {
         <div className="max-w-7xl mx-auto px-4">
           {/* Desktop Navigation */}
           <nav className="hidden sm:flex items-center justify-between gap-2 py-3">
-            {/* Toggle Sidebar Button */}
-            <button
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-all"
-            >
-              <Menu size={20} className="text-gray-700 dark:text-gray-200" />
-            </button>
-
             {/* Main Navigation */}
             <div className="flex items-center gap-1 flex-1">
               <Link
@@ -201,106 +193,125 @@ export default function Layout({ children }) {
         </div>
       </header>
 
-      {/* Collapsible Right Sidebar */}
-      <AnimatePresence>
-        {sidebarOpen && (
-          <motion.div
-            initial={{ x: "100%" }}
-            animate={{ x: 0 }}
-            exit={{ x: "100%" }}
-            transition={{ type: "spring", damping: 25, stiffness: 200 }}
-            className="fixed left-0 top-16 bottom-0 w-64 bg-white dark:bg-gray-800 shadow-2xl z-40 overflow-y-auto border-l border-gray-200 dark:border-gray-700 hidden sm:block"
+      {/* Right Sidebar with Icons */}
+      <motion.div
+        initial={false}
+        animate={{ width: sidebarExpanded ? 240 : 70 }}
+        transition={{ duration: 0.3, ease: "easeInOut" }}
+        onMouseEnter={() => setSidebarExpanded(true)}
+        onMouseLeave={() => setSidebarExpanded(false)}
+        className="fixed right-0 top-16 bottom-0 bg-white dark:bg-gray-800 shadow-2xl z-40 overflow-y-auto border-l border-gray-200 dark:border-gray-700 hidden sm:block"
+      >
+        <div className="py-4 space-y-1">
+          <Link
+            to={createPageUrl("Live")}
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = createPageUrl("Live");
+            }}
+            className="flex items-center gap-3 px-4 py-3 text-white bg-[#E31E24] hover:bg-[#B91C1C] mx-2 rounded-lg transition-all"
           >
-            <div className="p-4 space-y-2">
-              <h3 className="text-sm font-bold text-gray-500 dark:text-gray-400 mb-4">תפריט נוסף</h3>
+            <Radio size={22} className="flex-shrink-0" />
+            {sidebarExpanded && <span className="font-medium whitespace-nowrap">שידור חי</span>}
+          </Link>
 
-              <Link
-                to={createPageUrl("Schedule")}
-                onClick={(e) => {
-                  e.preventDefault();
-                  window.location.href = createPageUrl("Schedule");
-                }}
-                className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all"
-              >
-                <Clock size={20} />
-                <span className="font-medium">לוח שידורים</span>
-              </Link>
+          <Link
+            to={createPageUrl("Home")}
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = createPageUrl("Home");
+            }}
+            className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 mx-2 rounded-lg transition-all"
+          >
+            <Home size={22} className="flex-shrink-0" />
+            {sidebarExpanded && <span className="font-medium whitespace-nowrap">דף הבית</span>}
+          </Link>
 
-              <Link
-                to={createPageUrl("Reporters")}
-                onClick={(e) => {
-                  e.preventDefault();
-                  window.location.href = createPageUrl("Reporters");
-                }}
-                className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all"
-              >
-                <Users size={20} />
-                <span className="font-medium">אנשי השטח</span>
-              </Link>
+          <Link
+            to={createPageUrl("Schedule")}
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = createPageUrl("Schedule");
+            }}
+            className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 mx-2 rounded-lg transition-all"
+          >
+            <Clock size={22} className="flex-shrink-0" />
+            {sidebarExpanded && <span className="font-medium whitespace-nowrap">לוח שידורים</span>}
+          </Link>
 
-              <Link
-                to={createPageUrl("NewsLoader")}
-                onClick={(e) => {
-                  e.preventDefault();
-                  window.location.href = createPageUrl("NewsLoader");
-                }}
-                className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all"
-              >
-                <Globe size={20} />
-                <span className="font-medium">טעינת חדשות</span>
-              </Link>
+          <Link
+            to={createPageUrl("Reporters")}
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = createPageUrl("Reporters");
+            }}
+            className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 mx-2 rounded-lg transition-all"
+          >
+            <Users size={22} className="flex-shrink-0" />
+            {sidebarExpanded && <span className="font-medium whitespace-nowrap">אנשי השטח</span>}
+          </Link>
 
-              <Link
-                to={createPageUrl("ChannelsManager")}
-                onClick={(e) => {
-                  e.preventDefault();
-                  window.location.href = createPageUrl("ChannelsManager");
-                }}
-                className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all"
-              >
-                <Radio size={20} />
-                <span className="font-medium">ניהול ערוצים</span>
-              </Link>
+          <Link
+            to={createPageUrl("Archive")}
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = createPageUrl("Archive");
+            }}
+            className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 mx-2 rounded-lg transition-all"
+          >
+            <Clock size={22} className="flex-shrink-0" />
+            {sidebarExpanded && <span className="font-medium whitespace-nowrap">ארכיון</span>}
+          </Link>
 
-              <Link
-                to={createPageUrl("Archive")}
-                onClick={(e) => {
-                  e.preventDefault();
-                  window.location.href = createPageUrl("Archive");
-                }}
-                className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all"
-              >
-                <Clock size={20} />
-                <span className="font-medium">ארכיון</span>
-              </Link>
+          <Link
+            to={createPageUrl("Movies")}
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = createPageUrl("Movies");
+            }}
+            className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 mx-2 rounded-lg transition-all"
+          >
+            <Film size={22} className="flex-shrink-0" />
+            {sidebarExpanded && <span className="font-medium whitespace-nowrap">סרטים</span>}
+          </Link>
 
-              <Link
-                to={createPageUrl("Movies")}
-                onClick={(e) => {
-                  e.preventDefault();
-                  window.location.href = createPageUrl("Movies");
-                }}
-                className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all"
-              >
-                <Film size={20} />
-                <span className="font-medium">סרטים קלאסיים</span>
-              </Link>
+          <Link
+            to={createPageUrl("NewsLoader")}
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = createPageUrl("NewsLoader");
+            }}
+            className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 mx-2 rounded-lg transition-all"
+          >
+            <Globe size={22} className="flex-shrink-0" />
+            {sidebarExpanded && <span className="font-medium whitespace-nowrap">טעינת חדשות</span>}
+          </Link>
 
-              <Link
-                to={createPageUrl("ReporterQA")}
-                onClick={(e) => {
-                  e.preventDefault();
-                  window.location.href = createPageUrl("ReporterQA");
-                }}
-                className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all"
-              >
-                <MessageSquareWarning size={20} />
-                <span className="font-medium">שאלות ותשובות</span>
-              </Link>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+          <Link
+            to={createPageUrl("ChannelsManager")}
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = createPageUrl("ChannelsManager");
+            }}
+            className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 mx-2 rounded-lg transition-all"
+          >
+            <Radio size={22} className="flex-shrink-0" />
+            {sidebarExpanded && <span className="font-medium whitespace-nowrap">ניהול ערוצים</span>}
+          </Link>
+
+          <Link
+            to={createPageUrl("ReporterQA")}
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = createPageUrl("ReporterQA");
+            }}
+            className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 mx-2 rounded-lg transition-all"
+          >
+            <MessageSquareWarning size={22} className="flex-shrink-0" />
+            {sidebarExpanded && <span className="font-medium whitespace-nowrap">שאלות ותשובות</span>}
+          </Link>
+        </div>
+      </motion.div>
 
       {/* Native Mobile Drawer */}
       <AnimatePresence>
@@ -402,7 +413,7 @@ export default function Layout({ children }) {
       </AnimatePresence>
 
       {/* Main Content */}
-      <main className={`max-w-7xl mx-auto px-0 sm:px-4 py-0 sm:py-6 pb-16 sm:pb-24 lg:pb-6 transition-all duration-300 ${sidebarOpen ? 'sm:ml-0 lg:ml-64' : ''}`}>
+      <main className="max-w-7xl mx-auto px-0 sm:px-4 sm:pr-20 py-0 sm:py-6 pb-16 sm:pb-24 lg:pb-6 transition-all duration-300">
         {children}
       </main>
 
