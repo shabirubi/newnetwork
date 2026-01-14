@@ -57,7 +57,8 @@ export default async function generateDIDVideo(data) {
       status: videoResult.status,
     };
   } catch (error) {
-    console.error('D-ID Video Error:', error);
-    throw new Error(error.message);
+    console.error('D-ID Video Error:', error.message);
+    console.error('Full error:', error);
+    throw new Error(`D-ID Error: ${error.message}`);
   }
 }
