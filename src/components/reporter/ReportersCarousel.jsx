@@ -69,14 +69,8 @@ export default function ReportersCarousel({ onReporterClick }) {
   return (
     <div className="fixed top-1/2 -translate-y-1/2 left-0 w-auto max-w-xs z-20">
       <div className="flex flex-col">
-        {/* Header Badge */}
-        <div className="bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 px-3 py-1 flex items-center gap-2 justify-center">
-          <Flame className="w-3 h-3 text-white animate-pulse" />
-          <span className="text-white text-xs font-bold">כתבים בשטח</span>
-        </div>
-
         {/* Reporter Card */}
-        <div className="flex-1 overflow-hidden py-3">
+        <div className="overflow-hidden">
           <AnimatePresence initial={false} custom={direction} mode="wait">
             <motion.div
               key={currentIndex}
@@ -148,42 +142,6 @@ export default function ReportersCarousel({ onReporterClick }) {
               </div>
             </motion.div>
           </AnimatePresence>
-        </div>
-
-        {/* Navigation & Progress */}
-        <div className="border-t border-white/10 p-2">
-          <div className="flex items-center justify-between mb-2">
-            <button
-              onClick={prevReporter}
-              className="p-1 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
-            >
-              <ChevronRight className="w-3 h-3 text-white" />
-            </button>
-            
-            <div className="flex gap-1">
-              {reporters.slice(0, 5).map((_, idx) => (
-                <div
-                  key={idx}
-                  className={`h-1 rounded-full transition-all ${
-                    idx === currentIndex % 5
-                      ? 'w-4 bg-red-500'
-                      : 'w-1 bg-white/30'
-                  }`}
-                />
-              ))}
-            </div>
-
-            <button
-              onClick={nextReporter}
-              className="p-1 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
-            >
-              <ChevronLeft className="w-3 h-3 text-white" />
-            </button>
-          </div>
-          
-          <div className="text-center text-[9px] text-white/60">
-            {currentIndex + 1} / {reporters.length}
-          </div>
         </div>
       </div>
     </div>
