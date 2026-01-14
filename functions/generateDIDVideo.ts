@@ -1,17 +1,12 @@
 export default async function generateDIDVideo(data) {
   const { text } = data;
-  const DID_API_KEY = process.env.DID_API_KEY || 'c2V5b3JsYXlsYUBnbWFpbC5jb206MUJNeVNPcmtGRHFHbGtnak1xb3NR';
-
-  if (!DID_API_KEY) {
-    throw new Error('DID_API_KEY not configured');
-  }
+  const auth = process.env.DID_API_KEY || 'c2V5b3JsYXlsYUBnbWFpbC5jb206MUJNeVNPcmtGRHFHbGtnak1xb3NR';
 
   try {
-    // Create a new talk/video
-    const createResponse = await fetch('https://api.d-id.com/talks', {
+    const response = await fetch('https://api.d-id.com/talks', {
       method: 'POST',
       headers: {
-        'Authorization': `Basic ${DID_API_KEY}`,
+        'Authorization': `Basic ${auth}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -23,25 +18,22 @@ export default async function generateDIDVideo(data) {
           fluent: true,
           pad_audio: true,
         },
-        source_url: 'https://d-id-public-bucket.s3.amazonaws.com/or-头像.jpg',
+        source_url: 'https://d-id-public-bucket.s3.amazonaws.com/avatars/Ava.jpg',
       }),
     });
 
-    if (!createResponse.ok) {
-      const error = await createResponse.json();
-      throw new Error(error.detail || 'Failed to create video');
+    if (!response.ok) {
+      throw new Error(`D-ID API error: ${response.status}`);
     }
 
-    const result = await createResponse.json();
-    
+    const result = await response.json();
     return {
       success: true,
-      video_url: result.result_url || result.video_url,
+      video_url: result.result_url,
       talk_id: result.id,
-      status: result.status || 'processing',
-      duration: result.duration || 0,
+      status: result.status,
     };
   } catch (error) {
-    throw new Error(`D-ID API Error: ${error.message}`);
+    throw new Error(error.message);
   }
 }
