@@ -129,16 +129,16 @@ export default function Home() {
 
                 <div className="flex items-center gap-2">
                   <button
-                    onClick={() => setShowSidebar(!showSidebar)}
-                    className="p-2 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors"
-                  >
-                    <Menu className="w-6 h-6 text-white" />
-                  </button>
-                  <button
                     onClick={() => setShowMenu(!showMenu)}
                     className="p-2 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors"
                   >
                     <Search className="w-6 h-6 text-white" />
+                  </button>
+                  <button
+                    onClick={() => setShowSidebar(!showSidebar)}
+                    className="p-2 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors"
+                  >
+                    <Menu className="w-6 h-6 text-white" />
                   </button>
                 </div>
               </div>
