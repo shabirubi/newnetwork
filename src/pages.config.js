@@ -13,6 +13,7 @@ import Reporters from './pages/Reporters';
 import Schedule from './pages/Schedule';
 import TalkingHeads from './pages/TalkingHeads';
 import WarRoom from './pages/WarRoom';
+import GenerateTalkingHead from './pages/GenerateTalkingHead';
 import __Layout from './Layout.jsx';
 
 
@@ -32,6 +33,7 @@ export const PAGES = {
     "Schedule": Schedule,
     "TalkingHeads": TalkingHeads,
     "WarRoom": WarRoom,
+    "GenerateTalkingHead": GenerateTalkingHead,
 }
 
 export const pagesConfig = {
