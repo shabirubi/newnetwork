@@ -14,26 +14,28 @@ export default function TalkingHeads() {
   const generateRoseVideo = async () => {
     setGeneratingVideo(true);
     try {
-      // יצור וידאו placeholder עם LLM
-      const scriptText = "שלום, אני כתב הרשת החדשה. רוז ביזאם הפכה לאחת משכנתות הרשת הוויראליות של השנה עם מיליוני צפיות בTikTok. התוכן המצחיק והקורעת של רוז הביא לה תהילה ברשתות החברתיות.";
+      const scriptText = "שלום, אני כתב הרשת החדשה. רוז ביזאם הפכה לאחת משכנתות הרשת הוויראליות של השנה עם מיליוני צפיות בטיקטוק. התוכן המצחיק והקורעת של רוז הביא לה תהילה ברשתות החברתיות והיא הפכה לסטאר בינלאומי.";
       
-      // יצור סרטון placeholder (שימוש בוידאו ממקור חיצוני)
-      const placeholderVideoUrl = "https://commondatastorage.googleapis.com/gtv-videos-library/sample/ForBiggerBlazes.mp4";
-      
-      await base44.entities.TalkingHeadVideo.create({
-        article_id: "rose_bizaam_viral",
-        reporter_name: "כתב הרשת החדשה",
-        video_url: placeholderVideoUrl,
-        talk_id: "rose_" + Date.now(),
-        status: "completed",
-        duration: 15,
-        presentation_text: "רוז ביזאם - הילדה הווירלית של הרשת",
-        views: 0,
-        is_featured: true,
+      // קרא לפונקציית backend כדי ליצור וידאו D-ID אמיתי
+      const response = await base44.functions.generateDIDVideo({
+        text: scriptText
       });
 
-      // רענן את הדיטה
-      window.location.reload();
+      if (response.success) {
+        await base44.entities.TalkingHeadVideo.create({
+          article_id: "rose_bizaam_viral",
+          reporter_name: "כתב הרשת החדשה",
+          video_url: response.video_url,
+          talk_id: response.talk_id,
+          status: response.status || "completed",
+          duration: response.duration,
+          presentation_text: "רוז ביזאם - הילדה הווירלית של הרשת",
+          views: 0,
+          is_featured: true,
+        });
+
+        window.location.reload();
+      }
     } catch (error) {
       console.error("שגיאה:", error);
       alert("שגיאה ביצירת הוידאו: " + error.message);
