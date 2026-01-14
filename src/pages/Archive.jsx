@@ -177,9 +177,31 @@ export default function Archive() {
         </div>
 
         <div className="mt-4 text-sm text-gray-600 dark:text-gray-400">
-          נמצאו {filteredArticles.length} כתבות
-        </div>
-      </div>
+                  נמצאו {filteredArticles.length} כתבות
+                </div>
+              </div>
+
+              {/* Rose Bizaam Audio Player */}
+              {audioUrl && (
+                <div className="mt-4 p-4 bg-gradient-to-r from-pink-500/20 to-purple-500/20 rounded-lg border border-pink-500/30">
+                  <div className="flex items-center gap-4">
+                    <div className="flex-1">
+                      <h3 className="font-bold text-white mb-2">כתבה: רוז ביזאם 🎤</h3>
+                      <audio 
+                        src={audioUrl} 
+                        controls 
+                        className="w-full"
+                      />
+                    </div>
+                    <button
+                      onClick={() => setAudioUrl(null)}
+                      className="text-gray-400 hover:text-white transition-colors"
+                    >
+                      ✕
+                    </button>
+                  </div>
+                </div>
+              )}
 
       {/* Create Video Button */}
       {filteredArticles.length > 0 && (
