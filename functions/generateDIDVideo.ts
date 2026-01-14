@@ -3,11 +3,10 @@ export default async function generateDIDVideo(data) {
   const DID_API_KEY = 'c2V5b3JsYXlsYUBnbWFpbC5jb206qkNB7jwoi4z_0QU-HIqdi';
 
   try {
-    const credentials = Buffer.from(DID_API_KEY).toString('base64');
     const response = await fetch('https://api.d-id.com/talks', {
       method: 'POST',
       headers: {
-        'Authorization': `Basic ${credentials}`,
+        'Authorization': `Basic ${DID_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
