@@ -116,17 +116,6 @@ export default function Home() {
 
               {/* Top Bar */}
               <div className="absolute top-0 left-0 right-0 z-20 p-4 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <img src={LOGO_URL} alt="לוגו" className="h-12 w-auto" />
-                  <div className="flex items-center gap-2 bg-gradient-to-r from-red-500 via-orange-500 to-pink-500 px-3 py-1.5 rounded-full shadow-lg shadow-red-500/50 bg-[length:200%_200%] animate-[rainbow-flow_3s_ease_infinite]">
-                    <span className="relative flex h-2 w-2">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
-                      <span className="relative inline-flex rounded-full h-2 w-2 bg-white" />
-                    </span>
-                    <span className="text-white text-sm font-bold">LIVE</span>
-                  </div>
-                </div>
-
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => setShowMenu(!showMenu)}
@@ -140,6 +129,17 @@ export default function Home() {
                   >
                     <Menu className="w-6 h-6 text-white" />
                   </button>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2 bg-gradient-to-r from-red-500 via-orange-500 to-pink-500 px-3 py-1.5 rounded-full shadow-lg shadow-red-500/50 bg-[length:200%_200%] animate-[rainbow-flow_3s_ease_infinite]">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-white" />
+                    </span>
+                    <span className="text-white text-sm font-bold">LIVE</span>
+                  </div>
+                  <img src={LOGO_URL} alt="לוגו" className="h-12 w-auto" />
                 </div>
               </div>
 
