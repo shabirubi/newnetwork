@@ -18,7 +18,7 @@ export default async function generateDIDVideo(data) {
           fluent: true,
           pad_audio: true,
         },
-        source_url: 'https://d-id-public-bucket.s3.amazonaws.com/avatars/Ava.jpg',
+        source_url: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop',
       }),
     });
 
