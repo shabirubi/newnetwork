@@ -220,7 +220,7 @@ export default function Archive() {
 
       {/* Create Video Button */}
       {filteredArticles.length > 0 && (
-        <div className="flex justify-center">
+        <div className="flex justify-center gap-4 flex-wrap">
           <Button
             onClick={handleCreateRandomVideo}
             disabled={creatingVideo}
@@ -235,6 +235,22 @@ export default function Archive() {
               <>
                 <Film className="w-6 h-6 mr-2" />
                 יצור וידאו מכתבה אקראית
+              </>
+            )}
+          </Button>
+          <Button
+            onClick={handleCreateRoseAudio}
+            disabled={generatingAudio}
+            className="bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500 hover:from-purple-600 hover:via-pink-600 hover:to-rose-600 text-white font-bold px-8 py-6 rounded-2xl text-lg shadow-2xl"
+          >
+            {generatingAudio ? (
+              <>
+                <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                יוצר קול...
+              </>
+            ) : (
+              <>
+                🎤 רוז ביזאם 40 שניות
               </>
             )}
           </Button>
