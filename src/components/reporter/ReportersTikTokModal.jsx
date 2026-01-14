@@ -328,6 +328,13 @@ export default function ReportersTikTokModal({ isOpen, onClose }) {
     }
   };
 
+  // Auto-scroll to bottom when new messages arrive
+  useEffect(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages, typingText]);
+
   const startRecording = async () => {
     try {
       // Request microphone permission explicitly
