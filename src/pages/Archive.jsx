@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { Search, Calendar, Filter, Archive as ArchiveIcon } from "lucide-react";
+import { Search, Calendar, Filter, Archive as ArchiveIcon, Film, Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 import NewsCard from "../components/news/NewsCard";
 import moment from "moment";
 
@@ -30,6 +31,7 @@ export default function Archive() {
   const [searchQuery, setSearchQuery] = useState(initialSearch);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedDate, setSelectedDate] = useState("all");
+  const [creatingVideo, setCreatingVideo] = useState(false);
 
   const { data: allArticles = [], isLoading } = useQuery({
     queryKey: ['archive-articles'],
@@ -72,6 +74,37 @@ export default function Archive() {
     acc[date].push(article);
     return acc;
   }, {});
+
+  const handleCreateRandomVideo = async () => {
+    if (filteredArticles.length === 0) return;
+    
+    setCreatingVideo(true);
+    try {
+      const randomArticle = filteredArticles[Math.floor(Math.random() * filteredArticles.length)];
+      const text = `${randomArticle.title}. ${randomArticle.subtitle || ''} ${randomArticle.content || ''}`.substring(0, 1000);
+      
+      const result = await base44.functions.generateDIDVideo({ text });
+
+      await base44.entities.TalkingHeadVideo.create({
+        article_id: randomArticle.id,
+        reporter_name: "כתב הרשת החדשה",
+        video_url: result.video_url,
+        talk_id: result.talk_id,
+        status: "completed",
+        duration: 30,
+        presentation_text: randomArticle.title,
+        views: 0,
+        is_featured: false,
+      });
+
+      alert("וידאו נוצר בהצלחה!");
+    } catch (error) {
+      console.error("שגיאה:", error);
+      alert("שגיאה ביצירת הוידאו");
+    } finally {
+      setCreatingVideo(false);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -147,6 +180,29 @@ export default function Archive() {
           נמצאו {filteredArticles.length} כתבות
         </div>
       </div>
+
+      {/* Create Video Button */}
+      {filteredArticles.length > 0 && (
+        <div className="flex justify-center">
+          <Button
+            onClick={handleCreateRandomVideo}
+            disabled={creatingVideo}
+            className="bg-gradient-to-r from-red-500 via-orange-500 to-pink-500 hover:from-red-600 hover:via-orange-600 hover:to-pink-600 text-white font-bold px-8 py-6 rounded-2xl text-lg shadow-2xl"
+          >
+            {creatingVideo ? (
+              <>
+                <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                יוצר וידאו...
+              </>
+            ) : (
+              <>
+                <Film className="w-6 h-6 mr-2" />
+                יצור וידאו מכתבה אקראית
+              </>
+            )}
+          </Button>
+        </div>
+      )}
 
       {/* Articles by Date */}
       {Object.keys(articlesByDate).length === 0 ? (
