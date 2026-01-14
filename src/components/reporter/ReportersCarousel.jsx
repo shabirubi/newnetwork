@@ -53,22 +53,25 @@ export default function ReportersCarousel({ onReporterClick }) {
 
   const slideVariants = {
     enter: (direction) => ({
-      x: direction > 0 ? 300 : -300,
-      opacity: 0
+      y: direction > 0 ? 50 : -50,
+      opacity: 0,
+      scale: 0.8
     }),
     center: {
-      x: 0,
-      opacity: 1
+      y: 0,
+      opacity: 1,
+      scale: 1
     },
     exit: (direction) => ({
-      x: direction < 0 ? 300 : -300,
-      opacity: 0
+      y: direction < 0 ? 50 : -50,
+      opacity: 0,
+      scale: 0.8
     })
   };
 
   return (
-    <div className="fixed top-2 left-0 bottom-20 sm:bottom-6 w-auto max-w-xs z-30">
-      <div className="bg-black/80 backdrop-blur-md rounded-xl border border-white/10 shadow-2xl overflow-hidden h-full flex flex-col">
+    <div className="fixed top-2 left-0 bottom-20 sm:bottom-6 w-auto max-w-xs z-20">
+      <div className="bg-gradient-to-b from-gray-900 to-black rounded-xl border border-red-500/30 shadow-2xl overflow-hidden h-full flex flex-col">
         {/* Header Badge */}
         <div className="bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 px-3 py-1 flex items-center gap-2 justify-center">
           <Flame className="w-3 h-3 text-white animate-pulse" />
@@ -86,8 +89,8 @@ export default function ReportersCarousel({ onReporterClick }) {
               animate="center"
               exit="exit"
               transition={{
-                x: { type: "spring", stiffness: 300, damping: 30 },
-                opacity: { duration: 0.2 }
+                duration: 0.4,
+                ease: [0.25, 0.1, 0.25, 1]
               }}
               className="flex flex-col items-center gap-2 px-3"
             >
