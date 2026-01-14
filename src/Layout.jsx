@@ -103,15 +103,16 @@ export default function Layout({ children }) {
         onClose={() => setReportersModalOpen(false)} 
       />
 
-      {/* Right Sidebar with Icons */}
-      <motion.div
-        initial={false}
-        animate={{ width: sidebarExpanded ? 280 : 70 }}
-        transition={{ duration: 0.3, ease: "easeInOut" }}
-        onMouseEnter={() => setSidebarExpanded(true)}
-        onMouseLeave={() => setSidebarExpanded(false)}
-        className="fixed right-0 top-0 bottom-0 bg-white dark:bg-gray-800 shadow-2xl z-40 overflow-y-auto border-l border-gray-200 dark:border-gray-700 hidden sm:block"
-      >
+      {/* Right Sidebar with Icons - Hidden on Home page */}
+      {currentPageName !== 'Home' && (
+        <motion.div
+          initial={false}
+          animate={{ width: sidebarExpanded ? 280 : 70 }}
+          transition={{ duration: 0.3, ease: "easeInOut" }}
+          onMouseEnter={() => setSidebarExpanded(true)}
+          onMouseLeave={() => setSidebarExpanded(false)}
+          className="fixed right-0 top-0 bottom-0 bg-white dark:bg-gray-800 shadow-2xl z-40 overflow-y-auto border-l border-gray-200 dark:border-gray-700 hidden sm:block"
+        >
         <div className="py-4 space-y-1">
           <Link
             to={createPageUrl("Live")}
@@ -250,6 +251,7 @@ export default function Layout({ children }) {
           </button>
           </div>
           </motion.div>
+          )}
 
       {/* Native Mobile Drawer */}
       <AnimatePresence>
@@ -351,7 +353,7 @@ export default function Layout({ children }) {
       </AnimatePresence>
 
       {/* Main Content */}
-      <main className="px-0 sm:pr-20 py-0 pb-16 sm:pb-6 transition-all duration-300">
+      <main className={`px-0 py-0 pb-16 sm:pb-6 transition-all duration-300 ${currentPageName !== 'Home' ? 'sm:pr-20' : ''}`}>
         {children}
       </main>
 
