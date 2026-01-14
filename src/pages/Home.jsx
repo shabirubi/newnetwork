@@ -84,11 +84,11 @@ export default function Home() {
   };
 
   const handleCreateVideo = async () => {
-    if (!articles[currentFeedIndex]) return;
+    if (articles.length === 0) return;
     
     setCreatingVideo(true);
     try {
-      const article = articles[currentFeedIndex];
+      const article = articles[0];
       const text = `${article.title}. ${article.subtitle || ''} ${article.content || ''}`.substring(0, 1000);
       
       const result = await base44.functions.generateDIDVideo({ text });
