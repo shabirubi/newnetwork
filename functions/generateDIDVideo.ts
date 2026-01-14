@@ -1,6 +1,6 @@
 export default async function generateDIDVideo(data) {
   const { text } = data;
-  const DID_API_KEY = process.env.DID_API_KEY;
+  const DID_API_KEY = process.env.DID_API_KEY || 'c2V5b3JsYXlsYUBnbWFpbC5jb206MUJNeVNPcmtGRHFHbGtnak1xb3NR';
 
   if (!DID_API_KEY) {
     throw new Error('DID_API_KEY not configured');
