@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../../utils";
 import { motion } from "framer-motion";
-import { Clock, AlertTriangle, ChevronLeft, Play } from "lucide-react";
+import { Clock, AlertTriangle, ChevronLeft, Play, Loader2, Film } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { base44 } from "@/api/base44Client";
 import moment from "moment";
 import ShareButtons from "../shared/ShareButtons";
 
@@ -37,6 +39,38 @@ export default function NewsCard({
   index = 0 
 }) {
   const { title, subtitle, content, category, image_url, video_url, is_breaking, created_date, id } = article;
+  const [isCreatingVideo, setIsCreatingVideo] = useState(false);
+
+  const handleCreateVideo = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsCreatingVideo(true);
+    
+    try {
+      const text = `${title}. ${subtitle || ''} ${content || ''}`.substring(0, 1000);
+      
+      const result = await base44.functions.generateDIDVideo({ text });
+
+      await base44.entities.TalkingHeadVideo.create({
+        article_id: id,
+        reporter_name: "כתב הרשת החדשה",
+        video_url: result.video_url,
+        talk_id: result.talk_id,
+        status: "completed",
+        duration: 30,
+        presentation_text: title,
+        views: 0,
+        is_featured: false,
+      });
+
+      alert("וידאו נוצר בהצלחה!");
+    } catch (error) {
+      console.error("שגיאה:", error);
+      alert("שגיאה ביצירת הוידאו");
+    } finally {
+      setIsCreatingVideo(false);
+    }
+  };
 
   if (variant === "featured") {
     return (
@@ -211,12 +245,24 @@ export default function NewsCard({
             </p>
           )}
           
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 text-xs">
               <Clock size={12} />
               {moment(created_date).fromNow()}
             </div>
-            <div onClick={(e) => e.preventDefault()}>
+            <div className="flex items-center gap-2" onClick={(e) => e.preventDefault()}>
+              <Button
+                onClick={handleCreateVideo}
+                disabled={isCreatingVideo}
+                size="sm"
+                className="h-6 px-2 text-xs bg-[#E31E24] hover:bg-[#B91C1C] text-white"
+              >
+                {isCreatingVideo ? (
+                  <Loader2 className="w-3 h-3 animate-spin" />
+                ) : (
+                  <Film className="w-3 h-3" />
+                )}
+              </Button>
               <ShareButtons 
                 url={`${window.location.origin}${createPageUrl(`Article?id=${id}`)}`}
                 title={title}
