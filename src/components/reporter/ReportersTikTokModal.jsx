@@ -653,10 +653,10 @@ export default function ReportersTikTokModal({ isOpen, onClose }) {
                                   className={`px-5 py-3 shadow-xl ${
                                     msg.sender === 'user'
                                       ? 'bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 rounded-3xl rounded-br-sm shadow-blue-500/50'
-                                      : 'bg-gradient-to-r from-purple-600/40 via-pink-600/40 to-red-600/40 backdrop-blur-md rounded-3xl rounded-tl-sm border border-white/10 shadow-purple-500/50'
+                                      : 'bg-gradient-to-r from-purple-700 via-pink-700 to-red-700 backdrop-blur-md rounded-3xl rounded-tl-sm border border-white/20 shadow-purple-500/50'
                                   }`}
                                 >
-                                  <p className="text-white text-sm leading-relaxed font-medium">{msg.text}</p>
+                                  <p className="text-white text-base leading-relaxed font-medium drop-shadow-lg">{msg.text}</p>
                                 </motion.div>
                                 {msg.sender === 'reporter' && msg.audioUrl && (
                                   <motion.button
@@ -706,26 +706,26 @@ export default function ReportersTikTokModal({ isOpen, onClose }) {
                                   />
                                   <span className="text-purple-300 text-xs font-bold">{currentReporter.name} כותב/ת...</span>
                                 </div>
-                                <div className="bg-gradient-to-r from-purple-600/40 via-pink-600/40 to-red-600/40 backdrop-blur-md rounded-3xl rounded-tl-sm px-5 py-4 border border-white/10 shadow-xl shadow-purple-500/50">
+                                <div className="bg-gradient-to-r from-purple-700 via-pink-700 to-red-700 backdrop-blur-md rounded-3xl rounded-tl-sm px-5 py-4 border border-white/20 shadow-xl shadow-purple-500/50">
                                   <div className="flex items-center gap-2">
                                     <div className="flex gap-1">
                                       <motion.span
                                         animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }}
                                         transition={{ duration: 1, repeat: Infinity, delay: 0 }}
-                                        className="w-2 h-2 bg-purple-300 rounded-full"
+                                        className="w-2 h-2 bg-white rounded-full"
                                       />
                                       <motion.span
                                         animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }}
                                         transition={{ duration: 1, repeat: Infinity, delay: 0.2 }}
-                                        className="w-2 h-2 bg-pink-300 rounded-full"
+                                        className="w-2 h-2 bg-white rounded-full"
                                       />
                                       <motion.span
                                         animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }}
                                         transition={{ duration: 1, repeat: Infinity, delay: 0.4 }}
-                                        className="w-2 h-2 bg-red-300 rounded-full"
+                                        className="w-2 h-2 bg-white rounded-full"
                                       />
                                     </div>
-                                    <span className="text-white/60 text-xs">מקליד/ה...</span>
+                                    <span className="text-white text-sm font-medium drop-shadow-lg">מקליד/ה...</span>
                                   </div>
                                 </div>
                               </div>
