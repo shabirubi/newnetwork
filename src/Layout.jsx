@@ -135,41 +135,8 @@ export default function Layout({ children }) {
       {/* Header */}
       <header className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50 transition-colors duration-300 border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4">
-          {/* Desktop Navigation */}
-          <nav className="hidden sm:flex items-center justify-between gap-2 py-3">
-            {/* Main Navigation */}
-            <div className="flex items-center gap-1 flex-1">
-              <Link
-                to={createPageUrl("Live")}
-                onClick={(e) => {
-                  e.preventDefault();
-                  window.location.href = createPageUrl("Live");
-                }}
-                className="px-4 py-2 text-white bg-[#E31E24] hover:bg-[#B91C1C] rounded-lg transition-all text-sm font-bold whitespace-nowrap"
-              >
-                שידור חי
-              </Link>
-              {categories.map((cat) => (
-                <Link
-                  key={cat.id}
-                  to={createPageUrl(cat.href)}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    window.location.href = createPageUrl(cat.href);
-                  }}
-                  className="px-4 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-sm font-medium whitespace-nowrap"
-                >
-                  {cat.label}
-                </Link>
-              ))}
-              <button
-                onClick={() => setDarkMode(!darkMode)}
-                className="p-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all"
-              >
-                {darkMode ? <Sun size={18} /> : <Moon size={18} />}
-              </button>
-            </div>
-
+          {/* Desktop Navigation - Minimal */}
+          <nav className="hidden sm:flex items-center justify-end gap-2 py-3">
             {/* Search Box */}
             <div className="relative">
               <input
@@ -196,7 +163,7 @@ export default function Layout({ children }) {
       {/* Right Sidebar with Icons */}
       <motion.div
         initial={false}
-        animate={{ width: sidebarExpanded ? 240 : 70 }}
+        animate={{ width: sidebarExpanded ? 280 : 70 }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
         onMouseEnter={() => setSidebarExpanded(true)}
         onMouseLeave={() => setSidebarExpanded(false)}
@@ -226,6 +193,24 @@ export default function Layout({ children }) {
             <Home size={22} className="flex-shrink-0" />
             {sidebarExpanded && <span className="font-medium whitespace-nowrap">דף הבית</span>}
           </Link>
+
+          {/* Categories */}
+          {categories.map((cat) => (
+            <Link
+              key={cat.id}
+              to={createPageUrl(cat.href)}
+              onClick={(e) => {
+                e.preventDefault();
+                window.location.href = createPageUrl(cat.href);
+              }}
+              className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 mx-2 rounded-lg transition-all"
+            >
+              <cat.icon size={22} className="flex-shrink-0" />
+              {sidebarExpanded && <span className="font-medium whitespace-nowrap">{cat.label}</span>}
+            </Link>
+          ))}
+
+          <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
 
           <Link
             to={createPageUrl("Schedule")}
@@ -310,8 +295,18 @@ export default function Layout({ children }) {
             <MessageSquareWarning size={22} className="flex-shrink-0" />
             {sidebarExpanded && <span className="font-medium whitespace-nowrap">שאלות ותשובות</span>}
           </Link>
-        </div>
-      </motion.div>
+
+          <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
+
+          <button
+            onClick={() => setDarkMode(!darkMode)}
+            className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 mx-2 rounded-lg transition-all w-full"
+          >
+            {darkMode ? <Sun size={22} className="flex-shrink-0" /> : <Moon size={22} className="flex-shrink-0" />}
+            {sidebarExpanded && <span className="font-medium whitespace-nowrap">{darkMode ? 'מצב יום' : 'מצב לילה'}</span>}
+          </button>
+          </div>
+          </motion.div>
 
       {/* Native Mobile Drawer */}
       <AnimatePresence>

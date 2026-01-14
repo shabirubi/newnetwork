@@ -364,7 +364,49 @@ export default function LivePlayer({
       onMouseLeave={() => setShowControls(false)}
     >
       {/* Video Container */}
-      <div className="relative w-full aspect-[9/16] sm:aspect-video">
+      <div className="relative w-full aspect-[9/16] sm:aspect-[21/9]">
+        {/* Video System Overlay Elements */}
+        <div className="absolute top-4 left-4 z-20 flex flex-col gap-2">
+          <div className="bg-black/60 backdrop-blur-sm px-3 py-2 rounded-lg border border-red-500/30">
+            <div className="flex items-center gap-2 text-white text-xs font-mono">
+              <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+              <span>REC</span>
+              <span className="text-red-500 font-bold">●</span>
+            </div>
+          </div>
+          <div className="bg-black/60 backdrop-blur-sm px-3 py-2 rounded-lg border border-white/20">
+            <div className="text-white text-xs font-mono">
+              <div>CAM 1 - MAIN</div>
+              <div className="text-[10px] text-gray-400 mt-1">{new Date().toLocaleTimeString('he-IL')}</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom System Bar */}
+        <div className="absolute bottom-20 left-4 right-4 z-20 hidden sm:flex items-center gap-2">
+          <div className="flex-1 bg-black/60 backdrop-blur-sm px-4 py-2 rounded-lg border border-white/20">
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 bg-gradient-to-br from-red-500 to-red-700 rounded flex items-center justify-center">
+                  <Eye className="w-4 h-4 text-white" />
+                </div>
+                <div className="text-white text-xs">
+                  <div className="font-bold">{viewerCount?.toLocaleString() || '3,456'}</div>
+                  <div className="text-[10px] text-gray-400">צופים</div>
+                </div>
+              </div>
+              <div className="h-6 w-px bg-white/20"></div>
+              <div className="flex-1 text-white text-xs font-mono">
+                <div className="text-[10px] text-gray-400 mb-1">STREAM STATUS</div>
+                <div className="flex items-center gap-2">
+                  <span className="text-green-400">●</span>
+                  <span>LIVE - HIGH QUALITY</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
         {/* Logo Promo Animation */}
         {showPromo && (
           <motion.div
