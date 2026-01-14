@@ -359,7 +359,7 @@ export default function LivePlayer({
       ref={containerRef}
       initial={{ opacity: 0, scale: 0.98 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="relative bg-black sm:rounded-b-lg overflow-hidden shadow-2xl group"
+      className="relative bg-black overflow-hidden shadow-2xl group"
       onMouseEnter={() => setShowControls(true)}
       onMouseLeave={() => setShowControls(false)}
     >

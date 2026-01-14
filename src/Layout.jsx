@@ -97,68 +97,11 @@ export default function Layout({ children }) {
       {/* Breaking News Ticker */}
       <NewsTicker darkMode={darkMode} setDarkMode={setDarkMode} />
 
-      {/* Floating Logo */}
-      <motion.div
-        initial={{ opacity: 0, x: -100 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        className="fixed right-6 top-1/2 -translate-y-1/2 z-50 hidden lg:block"
-      >
-        <motion.div
-          animate={{ 
-            y: [0, -10, 0],
-            rotate: [0, 2, 0, -2, 0]
-          }}
-          transition={{ 
-            duration: 4, 
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-          className="relative group cursor-pointer"
-          onClick={() => setReportersModalOpen(true)}
-        >
-          <div className="absolute inset-0 bg-[#E31E24] blur-2xl opacity-50 group-hover:opacity-70 transition-opacity rounded-full"></div>
-          <img 
-            src={LOGO_URL} 
-            alt="הרשת החדשה" 
-            className="h-24 w-auto relative z-10 drop-shadow-2xl hover:scale-110 transition-transform duration-300"
-          />
-        </motion.div>
-      </motion.div>
-
       {/* Reporters Modal */}
       <ReportersModal 
         isOpen={reportersModalOpen} 
         onClose={() => setReportersModalOpen(false)} 
       />
-
-      {/* Header */}
-      <header className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50 transition-colors duration-300 border-b border-gray-200 dark:border-gray-700">
-        <div className="max-w-7xl mx-auto px-4">
-          {/* Desktop Navigation - Minimal */}
-          <nav className="hidden sm:flex items-center justify-end gap-2 py-3">
-            {/* Search Box */}
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="חיפוש..."
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter' && e.target.value.trim()) {
-                    window.location.href = createPageUrl(`Archive?search=${encodeURIComponent(e.target.value)}`);
-                  }
-                }}
-                className="w-48 px-4 py-2 pr-10 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-[#E31E24]"
-              />
-              <button className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <circle cx="11" cy="11" r="8"/>
-                  <path d="m21 21-4.35-4.35"/>
-                </svg>
-              </button>
-            </div>
-          </nav>
-        </div>
-      </header>
 
       {/* Right Sidebar with Icons */}
       <motion.div
@@ -167,7 +110,7 @@ export default function Layout({ children }) {
         transition={{ duration: 0.3, ease: "easeInOut" }}
         onMouseEnter={() => setSidebarExpanded(true)}
         onMouseLeave={() => setSidebarExpanded(false)}
-        className="fixed right-0 top-16 bottom-0 bg-white dark:bg-gray-800 shadow-2xl z-40 overflow-y-auto border-l border-gray-200 dark:border-gray-700 hidden sm:block"
+        className="fixed right-0 top-0 bottom-0 bg-white dark:bg-gray-800 shadow-2xl z-40 overflow-y-auto border-l border-gray-200 dark:border-gray-700 hidden sm:block"
       >
         <div className="py-4 space-y-1">
           <Link
@@ -408,7 +351,7 @@ export default function Layout({ children }) {
       </AnimatePresence>
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-0 sm:px-4 sm:pr-20 py-0 sm:py-6 pb-16 sm:pb-24 lg:pb-6 transition-all duration-300">
+      <main className="px-0 sm:pr-20 py-0 pb-16 sm:pb-6 transition-all duration-300">
         {children}
       </main>
 
