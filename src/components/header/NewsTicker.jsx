@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "../../utils";
 import { base44 } from "@/api/base44Client";
 import { motion } from "framer-motion";
-import { Flame, Siren, MessageSquareWarning, Moon, Sun, TrendingUp, TrendingDown, DollarSign, Euro } from "lucide-react";
+import { Flame, Siren, MessageSquareWarning, Moon, Sun, TrendingUp, TrendingDown, DollarSign, Euro, Menu } from "lucide-react";
 import ClockWidget from "./ClockWidget";
 import WeatherWidget from "./WeatherWidget";
 import ChannelSelector from "./ChannelSelector";
@@ -225,6 +225,28 @@ CRITICAL: השתמש רק במקורות מהימנים. בנק ישראל הו�
         </button>
 
         <div className="flex items-center gap-1 sm:gap-2 shrink-0 relative z-[60]">
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              // Toggle sidebar visibility
+              const sidebar = document.querySelector('.sidebar-toggle-target');
+              if (sidebar) {
+                const isHidden = sidebar.classList.contains('hidden');
+                if (isHidden) {
+                  sidebar.classList.remove('hidden');
+                  setTimeout(() => sidebar.classList.add('sidebar-visible'), 10);
+                } else {
+                  sidebar.classList.remove('sidebar-visible');
+                  setTimeout(() => sidebar.classList.add('hidden'), 300);
+                }
+              }
+            }}
+            className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20 hover:from-purple-500/30 hover:to-pink-500/30 border border-white/10 text-white active:scale-95 transition-all touch-manipulation relative z-[70]"
+          >
+            <Menu size={16} className="sm:w-5 sm:h-5" />
+          </button>
+
           <button
             onClick={(e) => {
               e.preventDefault();

@@ -64,6 +64,14 @@ export default function Layout({ children, currentPageName }) {
           --primary-light: #FEE2E2;
         }
 
+        .sidebar-toggle-target {
+          transform: translateX(100%);
+        }
+
+        .sidebar-toggle-target.sidebar-visible {
+          transform: translateX(0);
+        }
+
         /* Hide scrollbars */
         * {
           scrollbar-width: none;
@@ -111,7 +119,10 @@ export default function Layout({ children, currentPageName }) {
           transition={{ duration: 0.3, ease: "easeInOut" }}
           onMouseEnter={() => setSidebarExpanded(true)}
           onMouseLeave={() => setSidebarExpanded(false)}
-          className="fixed right-0 top-0 bottom-0 bg-white dark:bg-gray-800 shadow-2xl z-40 overflow-y-auto border-l border-gray-200 dark:border-gray-700 hidden sm:block"
+          className="sidebar-toggle-target fixed right-0 top-0 bottom-0 bg-black/90 backdrop-blur-xl shadow-2xl z-40 overflow-y-auto border-l border-white/10 hidden sm:block transition-all duration-300"
+          style={{
+            transform: 'translateX(0)',
+          }}
         >
         <div className="py-4 space-y-1">
           <Link
@@ -120,7 +131,7 @@ export default function Layout({ children, currentPageName }) {
               e.preventDefault();
               window.location.href = createPageUrl("Live");
             }}
-            className="flex items-center gap-3 px-4 py-3 text-white bg-[#E31E24] hover:bg-[#B91C1C] mx-2 rounded-lg transition-all"
+            className="flex items-center gap-3 px-4 py-3 text-white bg-gradient-to-br from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 mx-2 rounded-lg transition-all shadow-lg shadow-red-500/20"
           >
             <Radio size={22} className="flex-shrink-0" />
             {sidebarExpanded && <span className="font-medium whitespace-nowrap">שידור חי</span>}
@@ -139,20 +150,34 @@ export default function Layout({ children, currentPageName }) {
           </Link>
 
           {/* Categories */}
-          {categories.map((cat) => (
-            <Link
-              key={cat.id}
-              to={createPageUrl(cat.href)}
-              onClick={(e) => {
-                e.preventDefault();
-                window.location.href = createPageUrl(cat.href);
-              }}
-              className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 mx-2 rounded-lg transition-all"
-            >
-              <cat.icon size={22} className="flex-shrink-0" />
-              {sidebarExpanded && <span className="font-medium whitespace-nowrap">{cat.label}</span>}
-            </Link>
-          ))}
+          {categories.map((cat, idx) => {
+            const rainbowColors = [
+              'text-red-500',
+              'text-orange-500', 
+              'text-yellow-500',
+              'text-green-500',
+              'text-blue-500',
+              'text-indigo-500',
+              'text-purple-500',
+              'text-pink-500',
+              'text-rose-500',
+              'text-cyan-500'
+            ];
+            return (
+              <Link
+                key={cat.id}
+                to={createPageUrl(cat.href)}
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.location.href = createPageUrl(cat.href);
+                }}
+                className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 mx-2 rounded-lg transition-all group"
+              >
+                <cat.icon size={22} className={`flex-shrink-0 ${rainbowColors[idx % rainbowColors.length]} group-hover:scale-110 transition-transform`} />
+                {sidebarExpanded && <span className="font-medium whitespace-nowrap">{cat.label}</span>}
+              </Link>
+            );
+          })}
 
           <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
 
@@ -162,9 +187,9 @@ export default function Layout({ children, currentPageName }) {
               e.preventDefault();
               window.location.href = createPageUrl("Schedule");
             }}
-            className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 mx-2 rounded-lg transition-all"
+            className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 mx-2 rounded-lg transition-all group"
           >
-            <Clock size={22} className="flex-shrink-0" />
+            <Clock size={22} className="flex-shrink-0 text-cyan-500 group-hover:scale-110 transition-transform" />
             {sidebarExpanded && <span className="font-medium whitespace-nowrap">לוח שידורים</span>}
           </Link>
 
@@ -174,9 +199,9 @@ export default function Layout({ children, currentPageName }) {
               e.preventDefault();
               window.location.href = createPageUrl("Reporters");
             }}
-            className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 mx-2 rounded-lg transition-all"
+            className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 mx-2 rounded-lg transition-all group"
           >
-            <Users size={22} className="flex-shrink-0" />
+            <Users size={22} className="flex-shrink-0 text-emerald-500 group-hover:scale-110 transition-transform" />
             {sidebarExpanded && <span className="font-medium whitespace-nowrap">אנשי השטח</span>}
           </Link>
 
@@ -186,9 +211,9 @@ export default function Layout({ children, currentPageName }) {
               e.preventDefault();
               window.location.href = createPageUrl("Archive");
             }}
-            className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 mx-2 rounded-lg transition-all"
+            className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 mx-2 rounded-lg transition-all group"
           >
-            <Clock size={22} className="flex-shrink-0" />
+            <Clock size={22} className="flex-shrink-0 text-amber-500 group-hover:scale-110 transition-transform" />
             {sidebarExpanded && <span className="font-medium whitespace-nowrap">ארכיון</span>}
           </Link>
 
@@ -198,9 +223,9 @@ export default function Layout({ children, currentPageName }) {
               e.preventDefault();
               window.location.href = createPageUrl("Movies");
             }}
-            className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 mx-2 rounded-lg transition-all"
+            className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 mx-2 rounded-lg transition-all group"
           >
-            <Film size={22} className="flex-shrink-0" />
+            <Film size={22} className="flex-shrink-0 text-fuchsia-500 group-hover:scale-110 transition-transform" />
             {sidebarExpanded && <span className="font-medium whitespace-nowrap">סרטים</span>}
           </Link>
 
@@ -210,9 +235,9 @@ export default function Layout({ children, currentPageName }) {
               e.preventDefault();
               window.location.href = createPageUrl("NewsLoader");
             }}
-            className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 mx-2 rounded-lg transition-all"
+            className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 mx-2 rounded-lg transition-all group"
           >
-            <Globe size={22} className="flex-shrink-0" />
+            <Globe size={22} className="flex-shrink-0 text-sky-500 group-hover:scale-110 transition-transform" />
             {sidebarExpanded && <span className="font-medium whitespace-nowrap">טעינת חדשות</span>}
           </Link>
 
@@ -222,9 +247,9 @@ export default function Layout({ children, currentPageName }) {
               e.preventDefault();
               window.location.href = createPageUrl("ChannelsManager");
             }}
-            className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 mx-2 rounded-lg transition-all"
+            className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 mx-2 rounded-lg transition-all group"
           >
-            <Radio size={22} className="flex-shrink-0" />
+            <Radio size={22} className="flex-shrink-0 text-violet-500 group-hover:scale-110 transition-transform" />
             {sidebarExpanded && <span className="font-medium whitespace-nowrap">ניהול ערוצים</span>}
           </Link>
 
@@ -234,9 +259,9 @@ export default function Layout({ children, currentPageName }) {
               e.preventDefault();
               window.location.href = createPageUrl("ReporterQA");
             }}
-            className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 mx-2 rounded-lg transition-all"
+            className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 mx-2 rounded-lg transition-all group"
           >
-            <MessageSquareWarning size={22} className="flex-shrink-0" />
+            <MessageSquareWarning size={22} className="flex-shrink-0 text-lime-500 group-hover:scale-110 transition-transform" />
             {sidebarExpanded && <span className="font-medium whitespace-nowrap">שאלות ותשובות</span>}
           </Link>
 
