@@ -5,11 +5,12 @@ import {
   Menu, X, Radio, Newspaper, Shield, TrendingUp, 
   Vote, Cpu, Trophy, Clapperboard, Globe, Heart,
   Clock, ChevronLeft, Users, Moon, Sun, Home, Flame,
-  Siren, AlertTriangle, MessageSquareWarning, Film
+  Siren, AlertTriangle, MessageSquareWarning, Film, MessageCircle
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import NewsTicker from "./components/header/NewsTicker";
 import ReportersModal from "./components/reporter/ReportersModal";
+import ReportersTikTokModal from "./components/reporter/ReportersTikTokModal";
 
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/a6c94b22a_image.png";
 
@@ -29,6 +30,7 @@ const categories = [
 export default function Layout({ children, currentPageName }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [reportersModalOpen, setReportersModalOpen] = useState(false);
+  const [reportersTikTokOpen, setReportersTikTokOpen] = useState(false);
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
   const [darkMode, setDarkMode] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -118,12 +120,18 @@ export default function Layout({ children, currentPageName }) {
         onClose={() => setReportersModalOpen(false)} 
       />
 
-      {/* Floating Reporters Button */}
+      {/* Reporters TikTok Modal */}
+      <ReportersTikTokModal 
+        isOpen={reportersTikTokOpen} 
+        onClose={() => setReportersTikTokOpen(false)} 
+      />
+
+      {/* Floating Reporters Chat Button */}
       <button
-        onClick={() => setReportersModalOpen(true)}
+        onClick={() => setReportersTikTokOpen(true)}
         className="fixed left-6 bottom-24 sm:bottom-32 z-50 w-14 h-14 bg-gradient-to-br from-purple-500 via-pink-500 to-red-500 hover:from-purple-600 hover:via-pink-600 hover:to-red-600 rounded-full shadow-2xl shadow-purple-500/50 flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95 bg-[length:200%_200%] animate-[rainbow-flow_4s_ease_infinite]"
       >
-        <Users className="w-6 h-6" />
+        <MessageCircle className="w-6 h-6" />
       </button>
 
       {/* Right Sidebar with Icons - Hidden on Home page */}
