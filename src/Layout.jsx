@@ -14,16 +14,16 @@ import ReportersModal from "./components/reporter/ReportersModal";
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/a44ef2558_212.png";
 
 const categories = [
-  { id: "home", label: "בית", href: "Home" },
-  { id: "breaking", label: "עכשיו", href: "Category?cat=breaking" },
-  { id: "security", label: "ביטחון", href: "Category?cat=security" },
-  { id: "economy", label: "כלכלה", href: "Category?cat=economy" },
-  { id: "politics", label: "פוליטיקה", href: "Category?cat=politics" },
-  { id: "technology", label: "טכנולוגיה", href: "Category?cat=technology" },
-  { id: "sports", label: "ספורט", href: "Category?cat=sports" },
-  { id: "entertainment", label: "בידור", href: "Category?cat=entertainment" },
-  { id: "world", label: "עולם", href: "Category?cat=world" },
-  { id: "health", label: "בריאות", href: "Category?cat=health" },
+  { id: "home", label: "בית", href: "Home", icon: Home },
+  { id: "breaking", label: "עכשיו", href: "Category?cat=breaking", icon: Flame },
+  { id: "security", label: "ביטחון", href: "Category?cat=security", icon: Shield },
+  { id: "economy", label: "כלכלה", href: "Category?cat=economy", icon: TrendingUp },
+  { id: "politics", label: "פוליטיקה", href: "Category?cat=politics", icon: Vote },
+  { id: "technology", label: "טכנולוגיה", href: "Category?cat=technology", icon: Cpu },
+  { id: "sports", label: "ספורט", href: "Category?cat=sports", icon: Trophy },
+  { id: "entertainment", label: "בידור", href: "Category?cat=entertainment", icon: Clapperboard },
+  { id: "world", label: "עולם", href: "Category?cat=world", icon: Globe },
+  { id: "health", label: "בריאות", href: "Category?cat=health", icon: Heart },
   ];
 
 export default function Layout({ children }) {
