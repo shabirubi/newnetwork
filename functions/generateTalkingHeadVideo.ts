@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const DID_API_KEY = 'c2V5b3JsYXlsYUBnbWFpbC5jb20:j6SPaPlz9t0lxMNV661m7';
+const DID_API_KEY = 'c2V5b3JsYXlsYUBnbWFpbC5jb20:lcR_jsVWiAMdctYjJVqme';
 const DID_API_URL = 'https://api.d-id.com/talks';
 const PRESENTER_ID = 'default'; // ID של הכתב - אפשר לשנות לכתבים שונים
 
