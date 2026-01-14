@@ -4,7 +4,7 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   X, MessageCircle, 
-  Video, Send, Mic, Phone, PhoneOff, Volume2, VolumeX
+  Video, Send, Mic, Phone, PhoneOff, Volume2, VolumeX, Play
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,6 +19,8 @@ export default function ReportersTikTokModal({ isOpen, onClose }) {
   const [messages, setMessages] = useState([]);
   const [isTyping, setIsTyping] = useState(false);
   const [videoConnected, setVideoConnected] = useState(false);
+  const [playingAudio, setPlayingAudio] = useState(null);
+  const audioRef = useRef(null);
   const containerRef = useRef(null);
   const startY = useRef(0);
   const queryClient = useQueryClient();
@@ -108,11 +110,25 @@ export default function ReportersTikTokModal({ isOpen, onClose }) {
         add_context_from_internet: false
       });
 
+      // Generate voice for the response
+      let audioUrl = null;
+      try {
+        const voiceResult = await base44.functions.generateReporterVoice({
+          text: response,
+          gender: currentReporter.gender,
+          reporter_name: currentReporter.name
+        });
+        audioUrl = voiceResult.audio_data;
+      } catch (error) {
+        console.error("Voice generation error:", error);
+      }
+
       const aiMsg = {
         id: Date.now() + 1,
         text: response,
         sender: "reporter",
-        timestamp: new Date()
+        timestamp: new Date(),
+        audioUrl: audioUrl
       };
 
       setMessages(prev => [...prev, aiMsg]);
@@ -144,16 +160,66 @@ export default function ReportersTikTokModal({ isOpen, onClose }) {
         add_context_from_internet: false
       });
 
+      // Generate voice for video greeting
+      let audioUrl = null;
+      try {
+        const voiceResult = await base44.functions.generateReporterVoice({
+          text: greeting,
+          gender: currentReporter.gender,
+          reporter_name: currentReporter.name
+        });
+        audioUrl = voiceResult.audio_data;
+        
+        // Auto-play greeting
+        if (audioUrl) {
+          const audio = new Audio(audioUrl);
+          audio.play();
+        }
+      } catch (error) {
+        console.error("Voice generation error:", error);
+      }
+
       const videoMsg = {
         id: Date.now(),
         text: `🎥 ${greeting}`,
         sender: "reporter",
-        timestamp: new Date()
+        timestamp: new Date(),
+        audioUrl: audioUrl
       };
 
       setMessages(prev => [...prev, videoMsg]);
     } catch (error) {
       console.error("Video greeting error:", error);
+    }
+  };
+
+  const playAudio = (audioUrl, messageId) => {
+    if (!audioUrl) return;
+    
+    if (playingAudio === messageId) {
+      // Stop playing
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+      setPlayingAudio(null);
+    } else {
+      // Stop previous audio if playing
+      if (audioRef.current) {
+        audioRef.current.pause();
+      }
+      
+      // Play new audio
+      const audio = new Audio(audioUrl);
+      audioRef.current = audio;
+      setPlayingAudio(messageId);
+      
+      audio.onended = () => {
+        setPlayingAudio(null);
+        audioRef.current = null;
+      };
+      
+      audio.play();
     }
   };
 
@@ -164,14 +230,38 @@ export default function ReportersTikTokModal({ isOpen, onClose }) {
       setShowVideo(false);
       setMessages([]);
       setVideoConnected(false);
+      setPlayingAudio(null);
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
     } else if (currentReporter) {
-      const welcomeMsg = {
-        id: Date.now(),
-        text: `שלום! אני ${currentReporter.name}, ${currentReporter.role}. איך אוכל לעזור לך?`,
-        sender: "reporter",
-        timestamp: new Date()
+      const generateWelcome = async () => {
+        const welcomeText = `שלום! אני ${currentReporter.name}, ${currentReporter.role}. איך אוכל לעזור לך?`;
+        
+        let audioUrl = null;
+        try {
+          const voiceResult = await base44.functions.generateReporterVoice({
+            text: welcomeText,
+            gender: currentReporter.gender,
+            reporter_name: currentReporter.name
+          });
+          audioUrl = voiceResult.audio_data;
+        } catch (error) {
+          console.error("Welcome voice error:", error);
+        }
+
+        const welcomeMsg = {
+          id: Date.now(),
+          text: welcomeText,
+          sender: "reporter",
+          timestamp: new Date(),
+          audioUrl: audioUrl
+        };
+        setMessages([welcomeMsg]);
       };
-      setMessages([welcomeMsg]);
+      
+      generateWelcome();
     }
   }, [isOpen, currentReporter?.id]);
 
@@ -367,14 +457,38 @@ export default function ReportersTikTokModal({ isOpen, onClose }) {
                               key={msg.id}
                               className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                             >
-                              <div
-                                className={`px-4 py-3 max-w-[80%] ${
-                                  msg.sender === 'user'
-                                    ? 'bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl rounded-bl-sm'
-                                    : 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-sm rounded-2xl rounded-tr-sm'
-                                }`}
-                              >
-                                <p className="text-white text-sm">{msg.text}</p>
+                              <div className="flex flex-col gap-2 max-w-[80%]">
+                                <div
+                                  className={`px-4 py-3 ${
+                                    msg.sender === 'user'
+                                      ? 'bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl rounded-bl-sm'
+                                      : 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-sm rounded-2xl rounded-tr-sm'
+                                  }`}
+                                >
+                                  <p className="text-white text-sm">{msg.text}</p>
+                                </div>
+                                {msg.sender === 'reporter' && msg.audioUrl && (
+                                  <button
+                                    onClick={() => playAudio(msg.audioUrl, msg.id)}
+                                    className={`flex items-center gap-2 px-3 py-2 rounded-full text-xs font-bold transition-all ${
+                                      playingAudio === msg.id
+                                        ? 'bg-red-500 hover:bg-red-600 text-white'
+                                        : 'bg-white/10 hover:bg-white/20 text-white'
+                                    }`}
+                                  >
+                                    {playingAudio === msg.id ? (
+                                      <>
+                                        <VolumeX className="w-3 h-3" />
+                                        הפסק
+                                      </>
+                                    ) : (
+                                      <>
+                                        <Play className="w-3 h-3" />
+                                        שמע בקול
+                                      </>
+                                    )}
+                                  </button>
+                                )}
                               </div>
                             </div>
                           ))}
