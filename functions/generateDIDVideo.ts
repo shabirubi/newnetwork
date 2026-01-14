@@ -1,12 +1,12 @@
 export default async function generateDIDVideo(data) {
   const { text } = data;
-  const auth = process.env.DID_API_KEY;
+  const DID_API_KEY = 'aHJAZTEwYWJmZGYwZjFmYjg6ZjkzZWNiYWRmMjY1MjcwNDQxNGY0MjIxY2Q4ZjhkOWY=';
 
   try {
     const response = await fetch('https://api.d-id.com/talks', {
       method: 'POST',
       headers: {
-        'Authorization': `Basic ${auth}`,
+        'Authorization': `Basic ${DID_API_KEY}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
@@ -22,11 +22,12 @@ export default async function generateDIDVideo(data) {
       }),
     });
 
+    const result = await response.json();
+    
     if (!response.ok) {
-      throw new Error(`D-ID API error: ${response.status}`);
+      throw new Error(result.error || `D-ID API error: ${response.status}`);
     }
 
-    const result = await response.json();
     return {
       success: true,
       video_url: result.result_url,
@@ -34,6 +35,7 @@ export default async function generateDIDVideo(data) {
       status: result.status,
     };
   } catch (error) {
+    console.error('D-ID Video Error:', error);
     throw new Error(error.message);
   }
 }
