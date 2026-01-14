@@ -186,6 +186,23 @@ CRITICAL: השתמש רק במקורות מהימנים. בנק ישראל הו�
   return (
     <div className="bg-black dark:bg-gray-950 text-white py-2 overflow-hidden relative z-40">
       <div className="flex items-center gap-1 sm:gap-3 px-2 lg:px-4">
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const bottomNav = document.querySelector('nav.lg\\:hidden');
+            if (bottomNav) {
+              const menuBtn = bottomNav.querySelector('button:last-child');
+              if (menuBtn) menuBtn.click();
+            }
+          }}
+          className="flex flex-col gap-1 justify-center items-center w-8 h-8 shrink-0 group"
+        >
+          <span className="w-5 h-0.5 bg-white transition-all group-hover:w-6"></span>
+          <span className="w-5 h-0.5 bg-white transition-all group-hover:w-6"></span>
+          <span className="w-5 h-0.5 bg-white transition-all group-hover:w-6"></span>
+        </button>
+
         <span className="bg-[#E31E24] text-white px-2 sm:px-3 py-1 sm:py-1.5 font-bold text-[10px] sm:text-xs shrink-0 flex items-center gap-1 sm:gap-1.5 rounded relative z-10">
           <Flame className="w-3 sm:w-3.5 h-3 sm:h-3.5 animate-pulse" />
           <span className="hidden xs:inline">חדשות חמות</span>
@@ -225,28 +242,6 @@ CRITICAL: השתמש רק במקורות מהימנים. בנק ישראל הו�
         </button>
 
         <div className="flex items-center gap-1 sm:gap-2 shrink-0 relative z-[60]">
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              // Toggle sidebar visibility
-              const sidebar = document.querySelector('.sidebar-toggle-target');
-              if (sidebar) {
-                const isHidden = sidebar.classList.contains('hidden');
-                if (isHidden) {
-                  sidebar.classList.remove('hidden');
-                  setTimeout(() => sidebar.classList.add('sidebar-visible'), 10);
-                } else {
-                  sidebar.classList.remove('sidebar-visible');
-                  setTimeout(() => sidebar.classList.add('hidden'), 300);
-                }
-              }
-            }}
-            className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-gradient-to-br from-purple-500/20 to-pink-500/20 hover:from-purple-500/30 hover:to-pink-500/30 border border-white/10 text-white active:scale-95 transition-all touch-manipulation relative z-[70]"
-          >
-            <Menu size={16} className="sm:w-5 sm:h-5" />
-          </button>
-
           <button
             onClick={(e) => {
               e.preventDefault();

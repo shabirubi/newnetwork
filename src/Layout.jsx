@@ -111,6 +111,14 @@ export default function Layout({ children, currentPageName }) {
         onClose={() => setReportersModalOpen(false)} 
       />
 
+      {/* Floating Reporters Button */}
+      <button
+        onClick={() => setReportersModalOpen(true)}
+        className="fixed left-6 bottom-24 sm:bottom-32 z-50 w-14 h-14 bg-gradient-to-br from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 rounded-full shadow-2xl flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95"
+      >
+        <Users className="w-6 h-6" />
+      </button>
+
       {/* Right Sidebar with Icons - Hidden on Home page */}
       {currentPageName !== 'Home' && (
         <motion.div
