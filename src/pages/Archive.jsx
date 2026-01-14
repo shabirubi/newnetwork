@@ -278,6 +278,23 @@ export default function Archive() {
             </>
           )}
         </Button>
+        <Button
+          onClick={handleReadArticle}
+          disabled={generatingAudio || filteredArticles.length === 0}
+          className="bg-gradient-to-r from-blue-500 via-cyan-500 to-teal-500 hover:from-blue-600 hover:via-cyan-600 hover:to-teal-600 text-white font-bold px-8 py-6 rounded-2xl text-lg shadow-2xl"
+        >
+          {generatingAudio ? (
+            <>
+              <Loader2 className="w-5 h-5 animate-spin mr-2" />
+              משמיע...
+            </>
+          ) : (
+            <>
+              <Volume2 className="w-6 h-6 mr-2" />
+              האזן לכתבה
+            </>
+          )}
+        </Button>
       </div>
 
       {/* Articles by Date */}
