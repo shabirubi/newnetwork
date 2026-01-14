@@ -20,7 +20,10 @@ export default function ReportersTikTokModal({ isOpen, onClose }) {
   const [isTyping, setIsTyping] = useState(false);
   const [videoConnected, setVideoConnected] = useState(false);
   const [playingAudio, setPlayingAudio] = useState(null);
+  const [isRecording, setIsRecording] = useState(false);
+  const [mediaRecorder, setMediaRecorder] = useState(null);
   const audioRef = useRef(null);
+  const recordingChunks = useRef([]);
   const containerRef = useRef(null);
   const startY = useRef(0);
   const queryClient = useQueryClient();
@@ -220,6 +223,147 @@ export default function ReportersTikTokModal({ isOpen, onClose }) {
       };
       
       audio.play();
+    }
+  };
+
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const recorder = new MediaRecorder(stream);
+      recordingChunks.current = [];
+
+      recorder.ondataavailable = (e) => {
+        if (e.data.size > 0) {
+          recordingChunks.current.push(e.data);
+        }
+      };
+
+      recorder.onstop = async () => {
+        const audioBlob = new Blob(recordingChunks.current, { type: 'audio/webm' });
+        await handleVoiceMessage(audioBlob);
+        stream.getTracks().forEach(track => track.stop());
+      };
+
+      recorder.start();
+      setMediaRecorder(recorder);
+      setIsRecording(true);
+    } catch (error) {
+      console.error('Error accessing microphone:', error);
+      alert('לא ניתן לגשת למיקרופון. אנא בדוק הרשאות.');
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorder && isRecording) {
+      mediaRecorder.stop();
+      setIsRecording(false);
+      setMediaRecorder(null);
+    }
+  };
+
+  const handleVoiceMessage = async (audioBlob) => {
+    if (!currentReporter) return;
+
+    setIsTyping(true);
+
+    try {
+      // Convert audio blob to base64
+      const reader = new FileReader();
+      reader.readAsDataURL(audioBlob);
+      
+      reader.onloadend = async () => {
+        const base64Audio = reader.result;
+
+        // Upload audio file
+        const uploadResult = await base44.integrations.Core.UploadFile({
+          file: base64Audio
+        });
+
+        // Transcribe audio using LLM
+        const transcription = await base44.integrations.Core.InvokeLLM({
+          prompt: `תמלל את ההודעה הקולית הזו לעברית. החזר רק את הטקסט המדובר, ללא הסברים נוספים.`,
+          file_urls: [uploadResult.file_url]
+        });
+
+        // Add user message
+        const userMsg = {
+          id: Date.now(),
+          text: transcription,
+          sender: "user",
+          timestamp: new Date(),
+          isVoice: true
+        };
+        setMessages(prev => [...prev, userMsg]);
+
+        // Save to database
+        await createChatMutation.mutateAsync({
+          reporter_id: currentReporter.id,
+          reporter_name: currentReporter.name,
+          user_email: userInfo?.email || "guest@example.com",
+          user_name: userInfo?.full_name || "אורח",
+          message: transcription,
+          sender_type: "user",
+          is_voice: true,
+          voice_url: uploadResult.file_url
+        });
+
+        // Get AI response
+        const response = await base44.integrations.Core.InvokeLLM({
+          prompt: `אתה ${currentReporter.name}, ${currentReporter.role}. 
+התמחות שלך: ${currentReporter.specialty}.
+המשתמש שאל בהודעה קולית: "${transcription}"
+
+תענה בצורה מקצועית, ענייניה וידידותית כ${currentReporter.name}. 
+השב בעברית, בקצרה (2-3 משפטים), ובסגנון של כתב חדשות מנוסה.`,
+          add_context_from_internet: false
+        });
+
+        // Generate voice for response
+        let audioUrl = null;
+        try {
+          const voiceResult = await base44.functions.generateReporterVoice({
+            text: response,
+            gender: currentReporter.gender,
+            reporter_name: currentReporter.name
+          });
+          audioUrl = voiceResult.audio_data;
+
+          // Auto-play the response
+          if (audioUrl) {
+            const audio = new Audio(audioUrl);
+            audio.play();
+          }
+        } catch (error) {
+          console.error("Voice generation error:", error);
+        }
+
+        const aiMsg = {
+          id: Date.now() + 1,
+          text: response,
+          sender: "reporter",
+          timestamp: new Date(),
+          audioUrl: audioUrl
+        };
+
+        setMessages(prev => [...prev, aiMsg]);
+
+        // Save reporter response
+        await base44.entities.ReporterChat.create({
+          reporter_id: currentReporter.id,
+          reporter_name: currentReporter.name,
+          user_email: userInfo?.email || "guest@example.com",
+          user_name: userInfo?.full_name || "אורח",
+          message: response,
+          sender_type: "reporter",
+          response_text: response
+        });
+
+      };
+    } catch (error) {
+      console.error("Voice message error:", error);
+      alert('שגיאה בעיבוד ההודעה הקולית. נסה שוב.');
+    } finally {
+      setIsTyping(false);
     }
   };
 
@@ -528,10 +672,17 @@ export default function ReportersTikTokModal({ isOpen, onClose }) {
                                 className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 p-3"
                               >
                                 <Send size={20} />
-                              </Button>
-                              <Button className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 p-3">
+                                </Button>
+                                <Button 
+                                onClick={isRecording ? stopRecording : startRecording}
+                                className={`p-3 ${
+                                  isRecording 
+                                    ? 'bg-red-500 hover:bg-red-600 animate-pulse' 
+                                    : 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600'
+                                }`}
+                                >
                                 <Mic size={20} />
-                              </Button>
+                                </Button>
                             </div>
                           </div>
                         </div>
