@@ -18,6 +18,7 @@ const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/pub
 export default function Home() {
   const [currentView, setCurrentView] = useState('player'); // 'player' or 'feed'
   const [showMenu, setShowMenu] = useState(false);
+  const [showSidebar, setShowSidebar] = useState(false);
   const [isPlaying, setIsPlaying] = useState(true);
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(80);
@@ -126,69 +127,104 @@ export default function Home() {
                   </div>
                 </div>
 
-                <button
-                  onClick={() => setShowMenu(!showMenu)}
-                  className="p-2 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors"
-                >
-                  <Menu className="w-6 h-6 text-white" />
-                </button>
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setShowSidebar(!showSidebar)}
+                    className="p-2 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors"
+                  >
+                    <Menu className="w-6 h-6 text-white" />
+                  </button>
+                  <button
+                    onClick={() => setShowMenu(!showMenu)}
+                    className="p-2 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 transition-colors"
+                  >
+                    <Search className="w-6 h-6 text-white" />
+                  </button>
+                </div>
               </div>
 
-              {/* Floating Menu */}
+              {/* Sidebar Navigation */}
+              <AnimatePresence>
+                {showSidebar && (
+                  <>
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="absolute inset-0 bg-black/60 backdrop-blur-sm z-30"
+                      onClick={() => setShowSidebar(false)}
+                    />
+                    <motion.div
+                      initial={{ opacity: 0, x: 300 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: 300 }}
+                      className="absolute top-0 right-0 bottom-0 w-80 bg-black/90 backdrop-blur-xl z-40 p-6 overflow-y-auto border-l border-white/10"
+                    >
+                      <button
+                        onClick={() => setShowSidebar(false)}
+                        className="absolute top-4 left-4 p-2 rounded-full bg-white/10 hover:bg-white/20"
+                      >
+                        <X className="w-5 h-5 text-white" />
+                      </button>
+
+                      <div className="mt-12 space-y-2">
+                        {[
+                          { label: "חדשות חמות", cat: "breaking", icon: Flame, color: "text-red-500" },
+                          { label: "ביטחון", cat: "security", icon: Shield, color: "text-orange-500" },
+                          { label: "כלכלה", cat: "economy", icon: TrendingUp, color: "text-green-500" },
+                          { label: "עולם", cat: "world", icon: Globe, color: "text-blue-500" },
+                          { label: "בריאות", cat: "health", icon: Heart, color: "text-pink-500" }
+                        ].map(item => (
+                          <Link
+                            key={item.cat}
+                            to={createPageUrl(`Category?cat=${item.cat}`)}
+                            onClick={() => setShowSidebar(false)}
+                            className="flex items-center gap-3 p-3 rounded-xl bg-white/5 hover:bg-white/10 transition-all group"
+                          >
+                            <item.icon className={`w-6 h-6 ${item.color} group-hover:scale-110 transition-transform`} />
+                            <span className="text-white font-medium">{item.label}</span>
+                          </Link>
+                        ))}
+                      </div>
+                    </motion.div>
+                  </>
+                )}
+              </AnimatePresence>
+
+              {/* Search Menu */}
               <AnimatePresence>
                 {showMenu && (
-                  <motion.div
-                    initial={{ opacity: 0, x: 300 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    exit={{ opacity: 0, x: 300 }}
-                    className="absolute top-0 right-0 bottom-0 w-80 bg-gradient-to-br from-gray-900 to-black z-30 p-6 overflow-y-auto"
-                  >
-                    <button
+                  <>
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="absolute inset-0 bg-black/60 backdrop-blur-sm z-30"
                       onClick={() => setShowMenu(false)}
-                      className="absolute top-4 left-4 p-2 rounded-full bg-white/10 hover:bg-white/20"
+                    />
+                    <motion.div
+                      initial={{ opacity: 0, scale: 0.9, y: -20 }}
+                      animate={{ opacity: 1, scale: 1, y: 0 }}
+                      exit={{ opacity: 0, scale: 0.9, y: -20 }}
+                      className="absolute top-20 left-1/2 -translate-x-1/2 w-[90%] max-w-2xl bg-black/90 backdrop-blur-xl z-40 p-6 rounded-2xl border border-white/10"
                     >
-                      <X className="w-5 h-5 text-white" />
-                    </button>
-
-                    <div className="mt-12 space-y-6">
-                      <div>
-                        <h3 className="text-white text-xl font-bold mb-4">קטגוריות</h3>
-                        <div className="space-y-2">
-                          {[
-                            { label: "חדשות חמות", cat: "breaking", icon: Flame },
-                            { label: "ביטחון", cat: "security", icon: Shield },
-                            { label: "כלכלה", cat: "economy", icon: TrendingUp },
-                            { label: "עולם", cat: "world", icon: Globe },
-                            { label: "בריאות", cat: "health", icon: Heart }
-                          ].map(item => (
-                            <Link
-                              key={item.cat}
-                              to={createPageUrl(`Category?cat=${item.cat}`)}
-                              className="flex items-center gap-3 p-3 rounded-lg bg-white/5 hover:bg-white/10 transition-colors"
-                            >
-                              <item.icon className="w-5 h-5 text-[#E31E24]" />
-                              <span className="text-white font-medium">{item.label}</span>
-                            </Link>
-                          ))}
-                        </div>
+                      <div className="relative">
+                        <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+                        <input
+                          type="text"
+                          placeholder="חפש חדשות, קטגוריות..."
+                          className="w-full bg-white/10 text-white placeholder-gray-400 rounded-xl px-12 py-4 text-lg focus:outline-none focus:ring-2 focus:ring-[#E31E24]"
+                          autoFocus
+                        />
+                        <button
+                          onClick={() => setShowMenu(false)}
+                          className="absolute left-4 top-1/2 -translate-y-1/2 p-1 rounded-full bg-white/10 hover:bg-white/20"
+                        >
+                          <X className="w-4 h-4 text-white" />
+                        </button>
                       </div>
-
-                      <div>
-                        <h3 className="text-white text-xl font-bold mb-4">דפים</h3>
-                        <div className="space-y-2">
-                          <Link to={createPageUrl("Schedule")} className="block p-3 rounded-lg bg-white/5 hover:bg-white/10 text-white">
-                            לוח שידורים
-                          </Link>
-                          <Link to={createPageUrl("Reporters")} className="block p-3 rounded-lg bg-white/5 hover:bg-white/10 text-white">
-                            אנשי השטח
-                          </Link>
-                          <Link to={createPageUrl("Archive")} className="block p-3 rounded-lg bg-white/5 hover:bg-white/10 text-white">
-                            ארכיון
-                          </Link>
-                        </div>
-                      </div>
-                    </div>
-                  </motion.div>
+                    </motion.div>
+                  </>
                 )}
               </AnimatePresence>
 
