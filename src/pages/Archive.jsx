@@ -78,35 +78,48 @@ export default function Archive() {
   }, {});
 
   const handleCreateRandomVideo = async () => {
-    if (filteredArticles.length === 0) return;
-    
-    setCreatingVideo(true);
-    try {
-      const randomArticle = filteredArticles[Math.floor(Math.random() * filteredArticles.length)];
-      const text = `${randomArticle.title}. ${randomArticle.subtitle || ''} ${randomArticle.content || ''}`.substring(0, 1000);
-      
-      const result = await base44.functions.generateDIDVideo({ text });
+      if (filteredArticles.length === 0) return;
 
-      await base44.entities.TalkingHeadVideo.create({
-        article_id: randomArticle.id,
-        reporter_name: "כתב הרשת החדשה",
-        video_url: result.video_url,
-        talk_id: result.talk_id,
-        status: "completed",
-        duration: 30,
-        presentation_text: randomArticle.title,
-        views: 0,
-        is_featured: false,
-      });
+      setCreatingVideo(true);
+      try {
+        const randomArticle = filteredArticles[Math.floor(Math.random() * filteredArticles.length)];
+        const text = `${randomArticle.title}. ${randomArticle.subtitle || ''} ${randomArticle.content || ''}`.substring(0, 1000);
 
-      alert("וידאו נוצר בהצלחה!");
-    } catch (error) {
-      console.error("שגיאה:", error);
-      alert("שגיאה ביצירת הוידאו");
-    } finally {
-      setCreatingVideo(false);
-    }
-  };
+        const result = await base44.functions.generateDIDVideo({ text });
+
+        await base44.entities.TalkingHeadVideo.create({
+          article_id: randomArticle.id,
+          reporter_name: "כתב הרשת החדשה",
+          video_url: result.video_url,
+          talk_id: result.talk_id,
+          status: "completed",
+          duration: 30,
+          presentation_text: randomArticle.title,
+          views: 0,
+          is_featured: false,
+        });
+
+        alert("וידאו נוצר בהצלחה!");
+      } catch (error) {
+        console.error("שגיאה:", error);
+        alert("שגיאה ביצירת הוידאו");
+      } finally {
+        setCreatingVideo(false);
+      }
+    };
+
+    const handleCreateRoseAudio = async () => {
+      setGeneratingAudio(true);
+      try {
+        const result = await base44.functions.generateRoseBizaamAudio({});
+        setAudioUrl(result.audio_url);
+      } catch (error) {
+        console.error("שגיאה:", error);
+        alert("שגיאה ביצירת קול");
+      } finally {
+        setGeneratingAudio(false);
+      }
+    };
 
   return (
     <div className="space-y-6">
