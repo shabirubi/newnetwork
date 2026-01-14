@@ -1,6 +1,6 @@
 export default async function generateDIDVideo(data) {
   const { text } = data;
-  const auth = process.env.DID_API_KEY || 'c2V5b3JsYXlsYUBnbWFpbC5jb206MUJNeVNPcmtGRHFHbGtnak1xb3NR';
+  const auth = process.env.DID_API_KEY;
 
   try {
     const response = await fetch('https://api.d-id.com/talks', {
