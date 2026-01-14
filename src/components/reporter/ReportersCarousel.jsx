@@ -67,8 +67,8 @@ export default function ReportersCarousel({ onReporterClick }) {
   };
 
   return (
-    <div className="fixed top-2 left-0 bottom-20 sm:bottom-6 w-auto max-w-xs z-20">
-      <div className="h-full flex flex-col">
+    <div className="fixed top-1/2 -translate-y-1/2 left-0 w-auto max-w-xs z-20">
+      <div className="flex flex-col">
         {/* Header Badge */}
         <div className="bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 px-3 py-1 flex items-center gap-2 justify-center">
           <Flame className="w-3 h-3 text-white animate-pulse" />
