@@ -26,7 +26,7 @@ const categories = [
   { id: "health", label: "בריאות", href: "Category?cat=health", icon: Heart },
   ];
 
-export default function Layout({ children }) {
+export default function Layout({ children, currentPageName }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [reportersModalOpen, setReportersModalOpen] = useState(false);
   const [sidebarExpanded, setSidebarExpanded] = useState(false);
