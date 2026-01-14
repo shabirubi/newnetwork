@@ -121,6 +121,31 @@ export default function Archive() {
       }
     };
 
+    const handleReadArticle = async () => {
+      if (filteredArticles.length === 0) return;
+      
+      setGeneratingAudio(true);
+      try {
+        const randomArticle = filteredArticles[Math.floor(Math.random() * filteredArticles.length)];
+        const text = `${randomArticle.title}. ${randomArticle.subtitle || ''} ${randomArticle.content || ''}`.substring(0, 500);
+        
+        const result = await base44.integrations.Core.InvokeLLM({
+          prompt: `Convert this Hebrew text to speech and return a URL. Text: ${text}`,
+          add_context_from_internet: false
+        });
+        
+        // Using text-to-speech via browser API as fallback
+        const utterance = new SpeechSynthesisUtterance(text);
+        utterance.lang = 'he-IL';
+        speechSynthesis.speak(utterance);
+      } catch (error) {
+        console.error("שגיאה:", error);
+        alert("שגיאה בהשמעת הכתבה");
+      } finally {
+        setGeneratingAudio(false);
+      }
+    };
+
   return (
     <div className="space-y-6">
       {/* Header */}
