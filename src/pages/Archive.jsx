@@ -32,6 +32,8 @@ export default function Archive() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedDate, setSelectedDate] = useState("all");
   const [creatingVideo, setCreatingVideo] = useState(false);
+  const [audioUrl, setAudioUrl] = useState(null);
+  const [generatingAudio, setGeneratingAudio] = useState(false);
 
   const { data: allArticles = [], isLoading } = useQuery({
     queryKey: ['archive-articles'],
