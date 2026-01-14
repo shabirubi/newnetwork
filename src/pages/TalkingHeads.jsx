@@ -14,13 +14,15 @@ export default function TalkingHeads() {
   const generateRoseVideo = async () => {
     setGeneratingVideo(true);
     try {
-      const videoUrl = 'https://videos.pexels.com/video-files/3132271/3132271-sd_640_360_30fps.mp4';
-      
+      const result = await base44.functions.generateDIDVideo({
+        text: "שלום, אני כתב הרשת החדשה. רוז ביזאם הפכה לאחת מהילדות הווירליות המשעשעות ביותר בעידן הדיגיטלי."
+      });
+
       await base44.entities.TalkingHeadVideo.create({
         article_id: "rose_bizaam_viral",
         reporter_name: "כתב הרשת החדשה",
-        video_url: videoUrl,
-        talk_id: "demo_" + Date.now(),
+        video_url: result.video_url,
+        talk_id: result.talk_id,
         status: "completed",
         duration: 30,
         presentation_text: "רוז ביזאם - הילדה הווירלית של הרשת",
