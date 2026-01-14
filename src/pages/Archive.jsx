@@ -39,14 +39,16 @@ export default function Archive() {
 
   // Filter articles
   const filteredArticles = allArticles.filter(article => {
+    if (!article) return false;
+    
     const matchesSearch = searchQuery === "" || 
-      article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      article.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       article.content?.toLowerCase().includes(searchQuery.toLowerCase());
     
     const matchesCategory = selectedCategory === "all" || article.category === selectedCategory;
     
     let matchesDate = true;
-    if (selectedDate !== "all") {
+    if (selectedDate !== "all" && article.created_date) {
       const articleDate = moment(article.created_date);
       const now = moment();
       
@@ -64,6 +66,7 @@ export default function Archive() {
 
   // Group by date
   const articlesByDate = filteredArticles.reduce((acc, article) => {
+    if (!article?.created_date) return acc;
     const date = moment(article.created_date).format('DD/MM/YYYY');
     if (!acc[date]) acc[date] = [];
     acc[date].push(article);
