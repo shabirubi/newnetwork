@@ -67,139 +67,123 @@ export default function ReportersCarousel({ onReporterClick }) {
   };
 
   return (
-    <div className="fixed top-2 left-0 right-0 sm:left-4 sm:right-4 z-30 px-2 sm:px-0">
-      <div className="max-w-4xl mx-auto">
-        <div className="bg-black/90 backdrop-blur-xl rounded-2xl border border-white/10 shadow-2xl overflow-hidden">
-          <div className="relative">
-            {/* Background Image */}
-            {reporterArticle?.image_url && (
-              <div className="absolute inset-0 opacity-20">
-                <img 
-                  src={reporterArticle.image_url} 
-                  alt=""
-                  className="w-full h-full object-cover blur-sm"
-                />
-              </div>
-            )}
+    <div className="fixed top-2 left-0 bottom-20 sm:bottom-6 w-auto max-w-xs z-30">
+      <div className="bg-black/80 backdrop-blur-md rounded-xl border border-white/10 shadow-2xl overflow-hidden h-full flex flex-col">
+        {/* Header Badge */}
+        <div className="bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 px-3 py-1 flex items-center gap-2 justify-center">
+          <Flame className="w-3 h-3 text-white animate-pulse" />
+          <span className="text-white text-xs font-bold">כתבים בשטח</span>
+        </div>
 
-            {/* Content */}
-            <div className="relative p-4 sm:p-6">
-          {/* Header Badge */}
-          <div className="bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 px-3 py-1 flex items-center gap-2 justify-center">
-            <Flame className="w-3 h-3 text-white animate-pulse" />
-            <span className="text-white text-xs font-bold">כתבים בשטח</span>
-          </div>
-
-          {/* Reporter Card */}
-          <div className="flex-1 overflow-hidden py-3">
-            <AnimatePresence initial={false} custom={direction} mode="wait">
-              <motion.div
-                key={currentIndex}
-                custom={direction}
-                variants={slideVariants}
-                initial="enter"
-                animate="center"
-                exit="exit"
-                transition={{
-                  x: { type: "spring", stiffness: 300, damping: 30 },
-                  opacity: { duration: 0.2 }
-                }}
-                className="flex flex-col items-center gap-2 px-3"
-              >
-                {/* Reporter Avatar */}
-                <div className="relative">
-                  <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-red-500 ring-2 ring-red-500/30">
-                    <img
-                      src={currentReporter.image}
-                      alt={currentReporter.name}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                  <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center border-2 border-black">
-                    <span className="relative flex h-2 w-2">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
-                      <span className="relative inline-flex rounded-full h-2 w-2 bg-white" />
-                    </span>
-                  </div>
-                </div>
-
-                {/* Reporter Info */}
-                <div className="text-center">
-                  <h3 className="text-white font-bold text-sm mb-0.5">
-                    {currentReporter.name}
-                  </h3>
-                  <p className="text-gray-300 text-[10px] mb-2 line-clamp-1">
-                    {currentReporter.specialty}
-                  </p>
-                  {reporterArticle && (
-                    <p className="text-yellow-400 text-[10px] line-clamp-3 text-right">
-                      🔥 {reporterArticle.title}
-                    </p>
-                  )}
-                </div>
-
-                {/* Action Buttons */}
-                <div className="flex flex-col gap-1.5 w-full mt-2">
-                  <button
-                    onClick={() => onReporterClick(currentReporter)}
-                    className="flex items-center justify-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white rounded-lg transition-all shadow-lg shadow-red-500/30 text-xs font-bold"
-                  >
-                    <Video className="w-3 h-3" />
-                    שיחת וידאו
-                  </button>
-                  <button
-                    onClick={() => onReporterClick(currentReporter)}
-                    className="flex items-center justify-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all text-xs font-bold"
-                  >
-                    <MessageCircle className="w-3 h-3" />
-                    צ'אט
-                  </button>
-                  <button
-                    onClick={() => onReporterClick(currentReporter)}
-                    className="flex items-center justify-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all text-xs font-bold"
-                  >
-                    <Phone className="w-3 h-3" />
-                    שיחה קולית
-                  </button>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-
-          {/* Navigation & Progress */}
-          <div className="border-t border-white/10 p-2">
-            <div className="flex items-center justify-between mb-2">
-              <button
-                onClick={prevReporter}
-                className="p-1 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
-              >
-                <ChevronRight className="w-3 h-3 text-white" />
-              </button>
-              
-              <div className="flex gap-1">
-                {reporters.slice(0, 5).map((_, idx) => (
-                  <div
-                    key={idx}
-                    className={`h-1 rounded-full transition-all ${
-                      idx === currentIndex % 5
-                        ? 'w-4 bg-red-500'
-                        : 'w-1 bg-white/30'
-                    }`}
+        {/* Reporter Card */}
+        <div className="flex-1 overflow-hidden py-3">
+          <AnimatePresence initial={false} custom={direction} mode="wait">
+            <motion.div
+              key={currentIndex}
+              custom={direction}
+              variants={slideVariants}
+              initial="enter"
+              animate="center"
+              exit="exit"
+              transition={{
+                x: { type: "spring", stiffness: 300, damping: 30 },
+                opacity: { duration: 0.2 }
+              }}
+              className="flex flex-col items-center gap-2 px-3"
+            >
+              {/* Reporter Avatar */}
+              <div className="relative">
+                <div className="w-16 h-16 rounded-full overflow-hidden border-2 border-red-500 ring-2 ring-red-500/30">
+                  <img
+                    src={currentReporter.image}
+                    alt={currentReporter.name}
+                    className="w-full h-full object-cover"
                   />
-                ))}
+                </div>
+                <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-gradient-to-r from-red-500 to-orange-500 rounded-full flex items-center justify-center border-2 border-black">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-white" />
+                  </span>
+                </div>
               </div>
 
-              <button
-                onClick={nextReporter}
-                className="p-1 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
-              >
-                <ChevronLeft className="w-3 h-3 text-white" />
-              </button>
-            </div>
+              {/* Reporter Info */}
+              <div className="text-center">
+                <h3 className="text-white font-bold text-sm mb-0.5">
+                  {currentReporter.name}
+                </h3>
+                <p className="text-gray-300 text-[10px] mb-2 line-clamp-1">
+                  {currentReporter.specialty}
+                </p>
+                {reporterArticle && (
+                  <p className="text-yellow-400 text-[10px] line-clamp-3 text-right">
+                    🔥 {reporterArticle.title}
+                  </p>
+                )}
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-col gap-1.5 w-full mt-2">
+                <button
+                  onClick={() => onReporterClick(currentReporter)}
+                  className="flex items-center justify-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white rounded-lg transition-all shadow-lg shadow-red-500/30 text-xs font-bold"
+                >
+                  <Video className="w-3 h-3" />
+                  שיחת וידאו
+                </button>
+                <button
+                  onClick={() => onReporterClick(currentReporter)}
+                  className="flex items-center justify-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all text-xs font-bold"
+                >
+                  <MessageCircle className="w-3 h-3" />
+                  צ'אט
+                </button>
+                <button
+                  onClick={() => onReporterClick(currentReporter)}
+                  className="flex items-center justify-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/20 text-white rounded-lg transition-all text-xs font-bold"
+                >
+                  <Phone className="w-3 h-3" />
+                  שיחה קולית
+                </button>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+        </div>
+
+        {/* Navigation & Progress */}
+        <div className="border-t border-white/10 p-2">
+          <div className="flex items-center justify-between mb-2">
+            <button
+              onClick={prevReporter}
+              className="p-1 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+            >
+              <ChevronRight className="w-3 h-3 text-white" />
+            </button>
             
-            <div className="text-center text-[9px] text-white/60">
-              {currentIndex + 1} / {reporters.length}
+            <div className="flex gap-1">
+              {reporters.slice(0, 5).map((_, idx) => (
+                <div
+                  key={idx}
+                  className={`h-1 rounded-full transition-all ${
+                    idx === currentIndex % 5
+                      ? 'w-4 bg-red-500'
+                      : 'w-1 bg-white/30'
+                  }`}
+                />
+              ))}
             </div>
+
+            <button
+              onClick={nextReporter}
+              className="p-1 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
+            >
+              <ChevronLeft className="w-3 h-3 text-white" />
+            </button>
+          </div>
+          
+          <div className="text-center text-[9px] text-white/60">
+            {currentIndex + 1} / {reporters.length}
           </div>
         </div>
       </div>
