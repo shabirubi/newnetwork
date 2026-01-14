@@ -13,7 +13,7 @@ import { createPageUrl } from "../utils";
 import AutoNewsUpdater from "../components/news/AutoNewsUpdater";
 import AutoChannelsUpdater from "../components/news/AutoChannelsUpdater";
 
-const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/a44ef2558_212.png";
+const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/a6c94b22a_image.png";
 
 export default function Home() {
   const [currentView, setCurrentView] = useState('player'); // 'player' or 'feed'
@@ -70,15 +70,15 @@ export default function Home() {
   }, [currentView, currentFeedIndex, articles.length]);
 
   const categoryColors = {
-    breaking: 'from-red-500 to-red-700',
-    security: 'from-orange-500 to-orange-700',
-    economy: 'from-green-500 to-green-700',
-    politics: 'from-purple-500 to-purple-700',
-    technology: 'from-blue-500 to-blue-700',
-    sports: 'from-emerald-500 to-emerald-700',
-    entertainment: 'from-pink-500 to-pink-700',
-    world: 'from-indigo-500 to-indigo-700',
-    health: 'from-teal-500 to-teal-700'
+    breaking: 'from-red-500 via-orange-500 to-pink-500',
+    security: 'from-orange-500 via-red-500 to-yellow-500',
+    economy: 'from-green-500 via-emerald-500 to-teal-500',
+    politics: 'from-purple-500 via-pink-500 to-red-500',
+    technology: 'from-blue-500 via-cyan-500 to-indigo-500',
+    sports: 'from-emerald-500 via-green-500 to-lime-500',
+    entertainment: 'from-pink-500 via-fuchsia-500 to-purple-500',
+    world: 'from-indigo-500 via-blue-500 to-cyan-500',
+    health: 'from-teal-500 via-cyan-500 to-blue-500'
   };
 
   return (
@@ -118,7 +118,7 @@ export default function Home() {
               <div className="absolute top-0 left-0 right-0 z-20 p-4 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <img src={LOGO_URL} alt="לוגו" className="h-12 w-auto" />
-                  <div className="flex items-center gap-2 bg-[#E31E24] px-3 py-1.5 rounded-full">
+                  <div className="flex items-center gap-2 bg-gradient-to-r from-red-500 via-orange-500 to-pink-500 px-3 py-1.5 rounded-full shadow-lg shadow-red-500/50 bg-[length:200%_200%] animate-[rainbow-flow_3s_ease_infinite]">
                     <span className="relative flex h-2 w-2">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
                       <span className="relative inline-flex rounded-full h-2 w-2 bg-white" />
@@ -294,9 +294,9 @@ export default function Home() {
                 {/* Switch to Feed Button */}
                 <button
                   onClick={() => setCurrentView('feed')}
-                  className="w-full py-4 rounded-2xl bg-gradient-to-r from-[#E31E24] to-red-600 text-white font-bold text-lg shadow-2xl hover:shadow-red-500/50 transition-all flex items-center justify-center gap-3"
+                  className="w-full py-4 rounded-2xl bg-gradient-to-r from-red-500 via-orange-500 via-yellow-500 to-pink-500 text-white font-bold text-lg shadow-2xl hover:shadow-pink-500/50 transition-all flex items-center justify-center gap-3 bg-[length:200%_200%] animate-[rainbow-flow_5s_ease_infinite]"
                 >
-                  <Flame className="w-6 h-6" />
+                  <Flame className="w-6 h-6 animate-pulse" />
                   חדשות מתפרצות
                   <ChevronDown className="w-5 h-5" />
                 </button>
@@ -347,8 +347,8 @@ export default function Home() {
                       <X className="w-6 h-6 text-white" />
                     </button>
 
-                    <div className="flex items-center gap-2 bg-[#E31E24] px-4 py-2 rounded-full">
-                      <Flame className="w-4 h-4 text-white" />
+                    <div className="flex items-center gap-2 bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 px-4 py-2 rounded-full shadow-lg shadow-orange-500/50 bg-[length:200%_200%] animate-[rainbow-flow_3s_ease_infinite]">
+                      <Flame className="w-4 h-4 text-white animate-pulse" />
                       <span className="text-white text-sm font-bold">חדש</span>
                     </div>
                   </div>

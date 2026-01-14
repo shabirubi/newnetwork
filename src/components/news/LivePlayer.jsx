@@ -17,7 +17,7 @@ import { base44 } from "@/api/base44Client";
 
 
 const DEFAULT_STREAM = "https://ok.ru/video/10508051226319";
-const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/a44ef2558_212.png";
+const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/a6c94b22a_image.png";
 
 export default function LivePlayer({ 
   title = "שידור חי - הרשת החדשה",
@@ -461,7 +461,7 @@ export default function LivePlayer({
         {/* Live Badge */}
         {isLive && (
           <div className="absolute top-2 sm:top-4 left-2 sm:left-4 z-10">
-            <div className="flex items-center gap-1 sm:gap-2 bg-[#E31E24] text-white px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm font-bold">
+            <div className="flex items-center gap-1 sm:gap-2 bg-gradient-to-r from-red-500 via-orange-500 to-pink-500 text-white px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm font-bold shadow-lg shadow-red-500/50 bg-[length:200%_200%] animate-[rainbow-flow_3s_ease_infinite]">
               <span className="relative flex h-1.5 w-1.5 sm:h-2 sm:w-2">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-1.5 w-1.5 sm:h-2 sm:w-2 bg-white"></span>

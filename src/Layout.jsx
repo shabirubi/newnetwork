@@ -11,7 +11,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import NewsTicker from "./components/header/NewsTicker";
 import ReportersModal from "./components/reporter/ReportersModal";
 
-const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/a44ef2558_212.png";
+const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/a6c94b22a_image.png";
 
 const categories = [
   { id: "home", label: "בית", href: "Home", icon: Home },
@@ -62,6 +62,10 @@ export default function Layout({ children, currentPageName }) {
           --primary: #E31E24;
           --primary-dark: #B91C1C;
           --primary-light: #FEE2E2;
+          --gradient-rainbow: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%);
+          --gradient-fire: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 25%, #c44569 50%, #556270 75%, #4ecdc4 100%);
+          --gradient-ocean: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
+          --gradient-sunset: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
         }
 
         .sidebar-toggle-target {
@@ -95,12 +99,15 @@ export default function Layout({ children, currentPageName }) {
           0% { transform: translateX(-100vw); }
           100% { transform: translateX(100vw); }
         }
+
+        @keyframes rainbow-flow {
+          0%, 100% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+        }
       `}</style>
 
-      {/* Animated Red Line */}
-      <div className="fixed top-0 left-0 right-0 h-1.5 bg-transparent overflow-hidden z-[60] pointer-events-none">
-        <div className="absolute top-0 h-full w-32 bg-[#E31E24] animate-[slideRight_3s_ease-in-out_infinite]"></div>
-      </div>
+      {/* Animated Rainbow Line */}
+      <div className="fixed top-0 left-0 right-0 h-2 bg-gradient-to-r from-red-500 via-orange-500 via-yellow-500 via-green-500 via-blue-500 via-indigo-500 to-purple-500 bg-[length:200%_200%] animate-[rainbow-flow_5s_ease_infinite] z-[60] pointer-events-none shadow-lg"></div>
 
       {/* Breaking News Ticker */}
       <NewsTicker darkMode={darkMode} setDarkMode={setDarkMode} />
@@ -114,7 +121,7 @@ export default function Layout({ children, currentPageName }) {
       {/* Floating Reporters Button */}
       <button
         onClick={() => setReportersModalOpen(true)}
-        className="fixed left-6 bottom-24 sm:bottom-32 z-50 w-14 h-14 bg-gradient-to-br from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 rounded-full shadow-2xl flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95"
+        className="fixed left-6 bottom-24 sm:bottom-32 z-50 w-14 h-14 bg-gradient-to-br from-purple-500 via-pink-500 to-red-500 hover:from-purple-600 hover:via-pink-600 hover:to-red-600 rounded-full shadow-2xl shadow-purple-500/50 flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95 bg-[length:200%_200%] animate-[rainbow-flow_4s_ease_infinite]"
       >
         <Users className="w-6 h-6" />
       </button>
@@ -139,9 +146,9 @@ export default function Layout({ children, currentPageName }) {
               e.preventDefault();
               window.location.href = createPageUrl("Live");
             }}
-            className="flex items-center gap-3 px-4 py-3 text-white bg-gradient-to-br from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 mx-2 rounded-lg transition-all shadow-lg shadow-red-500/20"
+            className="flex items-center gap-3 px-4 py-3 text-white bg-gradient-to-r from-red-500 via-orange-500 to-pink-500 hover:from-red-600 hover:via-orange-600 hover:to-pink-600 mx-2 rounded-lg transition-all shadow-lg shadow-pink-500/30 bg-[length:200%_200%] animate-[rainbow-flow_3s_ease_infinite]"
           >
-            <Radio size={22} className="flex-shrink-0" />
+            <Radio size={22} className="flex-shrink-0 animate-pulse" />
             {sidebarExpanded && <span className="font-medium whitespace-nowrap">שידור חי</span>}
           </Link>
 
@@ -409,8 +416,11 @@ export default function Layout({ children, currentPageName }) {
             to={createPageUrl("Live")}
             className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-gray-100 dark:active:bg-gray-700 transition-colors touch-manipulation"
           >
-            <Radio size={28} className="text-[#E31E24] mb-1" strokeWidth={2.5} />
-            <span className="text-[11px] font-bold text-[#E31E24]">חי</span>
+            <div className="relative">
+              <Radio size={28} className="text-red-500 mb-1" strokeWidth={2.5} />
+              <span className="absolute top-0 right-0 w-2 h-2 bg-gradient-to-r from-red-500 to-orange-500 rounded-full animate-pulse"></span>
+            </div>
+            <span className="text-[11px] font-bold bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent">חי</span>
           </Link>
 
           <Link
@@ -469,12 +479,12 @@ export default function Layout({ children, currentPageName }) {
                 הצטרפו למהפכה התקשורתית פורצת הדרך
               </p>
               <Link 
-                to={createPageUrl("Live")}
-                className="inline-flex items-center gap-2 bg-[#E31E24] text-white px-6 py-3 rounded-full hover:bg-[#B91C1C] transition-all"
-              >
-                <Radio size={18} />
-                צפו בשידור חי
-              </Link>
+                  to={createPageUrl("Live")}
+                  className="inline-flex items-center gap-2 bg-gradient-to-r from-red-500 via-orange-500 to-pink-500 text-white px-6 py-3 rounded-full hover:from-red-600 hover:via-orange-600 hover:to-pink-600 transition-all shadow-lg shadow-pink-500/50 bg-[length:200%_200%] animate-[rainbow-flow_4s_ease_infinite]"
+                >
+                  <Radio size={18} />
+                  צפו בשידור חי
+                </Link>
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500 text-sm">
