@@ -292,6 +292,18 @@ export default function Layout({ children, currentPageName }) {
             {sidebarExpanded && <span className="font-medium whitespace-nowrap">שאלות ותשובות</span>}
           </Link>
 
+          <Link
+            to={createPageUrl("TalkingHeads")}
+            onClick={(e) => {
+              e.preventDefault();
+              window.location.href = createPageUrl("TalkingHeads");
+            }}
+            className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 mx-2 rounded-lg transition-all group"
+          >
+            <Film size={22} className="flex-shrink-0 text-cyan-500 group-hover:scale-110 transition-transform" />
+            {sidebarExpanded && <span className="font-medium whitespace-nowrap">כתבים מדברים</span>}
+          </Link>
+
           <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
 
           <button
