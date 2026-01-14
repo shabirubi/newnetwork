@@ -228,8 +228,19 @@ export default function ReportersTikTokModal({ isOpen, onClose }) {
 
   const startRecording = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const recorder = new MediaRecorder(stream);
+      // Request microphone permission explicitly
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          sampleRate: 44100
+        } 
+      });
+      
+      const recorder = new MediaRecorder(stream, {
+        mimeType: MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/mp4'
+      });
+      
       recordingChunks.current = [];
 
       recorder.ondataavailable = (e) => {
@@ -239,7 +250,8 @@ export default function ReportersTikTokModal({ isOpen, onClose }) {
       };
 
       recorder.onstop = async () => {
-        const audioBlob = new Blob(recordingChunks.current, { type: 'audio/webm' });
+        const mimeType = MediaRecorder.isTypeSupported('audio/webm') ? 'audio/webm' : 'audio/mp4';
+        const audioBlob = new Blob(recordingChunks.current, { type: mimeType });
         await handleVoiceMessage(audioBlob);
         stream.getTracks().forEach(track => track.stop());
       };
@@ -249,7 +261,13 @@ export default function ReportersTikTokModal({ isOpen, onClose }) {
       setIsRecording(true);
     } catch (error) {
       console.error('Error accessing microphone:', error);
-      alert('לא ניתן לגשת למיקרופון. אנא בדוק הרשאות.');
+      if (error.name === 'NotAllowedError') {
+        alert('גישה למיקרופון נדחתה. אנא אפשר הרשאות מיקרופון בהגדרות הדפדפן.');
+      } else if (error.name === 'NotFoundError') {
+        alert('לא נמצא מיקרופון במכשיר.');
+      } else {
+        alert('שגיאה בגישה למיקרופון: ' + error.message);
+      }
     }
   };
 
@@ -570,121 +588,207 @@ export default function ReportersTikTokModal({ isOpen, onClose }) {
                       animate={{ x: 0 }}
                       exit={{ x: "100%" }}
                       transition={{ type: "spring", damping: 25 }}
-                      className="absolute inset-0 bg-black/95 backdrop-blur-xl z-20"
+                      className="absolute inset-0 bg-gradient-to-br from-purple-900/95 via-black/95 to-blue-900/95 backdrop-blur-xl z-20"
                     >
-                      <div className="flex flex-col h-full">
+                      <div className="flex flex-col h-full relative overflow-hidden">
+                        {/* Animated Background */}
+                        <div className="absolute inset-0 opacity-10">
+                          <div className="absolute top-0 left-0 w-96 h-96 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full blur-3xl animate-pulse" />
+                          <div className="absolute bottom-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-500 to-cyan-500 rounded-full blur-3xl animate-pulse" style={{ animationDelay: '1s' }} />
+                        </div>
+
                         {/* Chat Header */}
-                        <div className="p-4 border-b border-white/10 flex items-center justify-between">
+                        <div className="relative p-4 bg-gradient-to-r from-purple-600/30 via-pink-600/30 to-blue-600/30 backdrop-blur-sm border-b border-white/10 flex items-center justify-between">
                           <div className="flex items-center gap-3">
-                            <img
-                              src={currentReporter.image}
-                              alt={currentReporter.name}
-                              className="w-12 h-12 rounded-full object-cover"
-                            />
+                            <div className="relative">
+                              <img
+                                src={currentReporter.image}
+                                alt={currentReporter.name}
+                                className="w-14 h-14 rounded-full object-cover ring-2 ring-purple-500/50"
+                              />
+                              <span className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-black animate-pulse" />
+                            </div>
                             <div>
-                              <h3 className="text-white font-bold">{currentReporter.name}</h3>
-                              <p className="text-white/60 text-sm">פעיל/ה כעת</p>
+                              <h3 className="text-white font-bold text-lg">{currentReporter.name}</h3>
+                              <div className="flex items-center gap-2">
+                                <span className="relative flex h-2 w-2">
+                                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
+                                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
+                                </span>
+                                <p className="text-green-400 text-sm font-medium">מחובר/ת כעת</p>
+                              </div>
                             </div>
                           </div>
                           <button
                             onClick={() => setShowChat(false)}
-                            className="w-8 h-8 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center"
+                            className="w-10 h-10 rounded-full bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 flex items-center justify-center shadow-lg shadow-red-500/50 transition-all hover:scale-110"
                           >
-                            <X size={18} className="text-white" />
+                            <X size={20} className="text-white" />
                           </button>
                         </div>
 
                         {/* Chat Messages */}
-                        <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                          {messages.map((msg) => (
-                            <div
+                        <div className="relative flex-1 overflow-y-auto p-6 space-y-6">
+                          {messages.map((msg, idx) => (
+                            <motion.div
                               key={msg.id}
+                              initial={{ opacity: 0, y: 20, scale: 0.95 }}
+                              animate={{ opacity: 1, y: 0, scale: 1 }}
+                              transition={{ delay: idx * 0.1 }}
                               className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                             >
-                              <div className="flex flex-col gap-2 max-w-[80%]">
-                                <div
-                                  className={`px-4 py-3 ${
+                              <div className="flex flex-col gap-2 max-w-[85%]">
+                                {msg.sender === 'reporter' && (
+                                  <div className="flex items-center gap-2 mb-1">
+                                    <img
+                                      src={currentReporter.image}
+                                      alt={currentReporter.name}
+                                      className="w-6 h-6 rounded-full ring-2 ring-purple-500/50"
+                                    />
+                                    <span className="text-purple-300 text-xs font-bold">{currentReporter.name}</span>
+                                  </div>
+                                )}
+                                <motion.div
+                                  whileHover={{ scale: 1.02 }}
+                                  className={`px-5 py-3 shadow-xl ${
                                     msg.sender === 'user'
-                                      ? 'bg-gradient-to-r from-blue-500 to-cyan-500 rounded-2xl rounded-bl-sm'
-                                      : 'bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-sm rounded-2xl rounded-tr-sm'
+                                      ? 'bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-600 rounded-3xl rounded-br-sm shadow-blue-500/50'
+                                      : 'bg-gradient-to-r from-purple-600/40 via-pink-600/40 to-red-600/40 backdrop-blur-md rounded-3xl rounded-tl-sm border border-white/10 shadow-purple-500/50'
                                   }`}
                                 >
-                                  <p className="text-white text-sm">{msg.text}</p>
-                                </div>
+                                  <p className="text-white text-sm leading-relaxed font-medium">{msg.text}</p>
+                                </motion.div>
                                 {msg.sender === 'reporter' && msg.audioUrl && (
-                                  <button
+                                  <motion.button
+                                    whileHover={{ scale: 1.05 }}
+                                    whileTap={{ scale: 0.95 }}
                                     onClick={() => playAudio(msg.audioUrl, msg.id)}
-                                    className={`flex items-center gap-2 px-3 py-2 rounded-full text-xs font-bold transition-all ${
+                                    className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold transition-all shadow-lg ${
                                       playingAudio === msg.id
-                                        ? 'bg-red-500 hover:bg-red-600 text-white'
-                                        : 'bg-white/10 hover:bg-white/20 text-white'
+                                        ? 'bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white shadow-red-500/50 animate-pulse'
+                                        : 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white shadow-purple-500/50'
                                     }`}
                                   >
                                     {playingAudio === msg.id ? (
                                       <>
-                                        <VolumeX className="w-3 h-3" />
-                                        הפסק
+                                        <VolumeX className="w-4 h-4" />
+                                        מנגן...
                                       </>
                                     ) : (
                                       <>
-                                        <Play className="w-3 h-3" />
-                                        שמע בקול
+                                        <Volume2 className="w-4 h-4" />
+                                        שמע תשובה
                                       </>
                                     )}
-                                  </button>
+                                  </motion.button>
+                                )}
+                                {msg.isVoice && msg.sender === 'user' && (
+                                  <div className="flex items-center gap-2 px-3 py-1 bg-blue-500/20 rounded-full w-fit">
+                                    <Mic className="w-3 h-3 text-blue-300" />
+                                    <span className="text-blue-300 text-xs font-medium">הודעה קולית</span>
+                                  </div>
                                 )}
                               </div>
-                            </div>
+                            </motion.div>
                           ))}
                           {isTyping && (
-                            <div className="flex justify-start">
-                              <div className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 backdrop-blur-sm rounded-2xl rounded-tr-sm px-4 py-3">
-                                <div className="flex gap-1">
-                                  <span className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
-                                  <span className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
-                                  <span className="w-2 h-2 bg-white rounded-full animate-bounce" style={{ animationDelay: '300ms' }} />
+                            <motion.div
+                              initial={{ opacity: 0, y: 20 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              className="flex justify-start"
+                            >
+                              <div className="flex flex-col gap-2 max-w-[85%]">
+                                <div className="flex items-center gap-2 mb-1">
+                                  <img
+                                    src={currentReporter.image}
+                                    alt={currentReporter.name}
+                                    className="w-6 h-6 rounded-full ring-2 ring-purple-500/50"
+                                  />
+                                  <span className="text-purple-300 text-xs font-bold">{currentReporter.name} כותב/ת...</span>
+                                </div>
+                                <div className="bg-gradient-to-r from-purple-600/40 via-pink-600/40 to-red-600/40 backdrop-blur-md rounded-3xl rounded-tl-sm px-5 py-4 border border-white/10 shadow-xl shadow-purple-500/50">
+                                  <div className="flex items-center gap-2">
+                                    <div className="flex gap-1">
+                                      <motion.span
+                                        animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }}
+                                        transition={{ duration: 1, repeat: Infinity, delay: 0 }}
+                                        className="w-2 h-2 bg-purple-300 rounded-full"
+                                      />
+                                      <motion.span
+                                        animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }}
+                                        transition={{ duration: 1, repeat: Infinity, delay: 0.2 }}
+                                        className="w-2 h-2 bg-pink-300 rounded-full"
+                                      />
+                                      <motion.span
+                                        animate={{ scale: [1, 1.2, 1], opacity: [0.5, 1, 0.5] }}
+                                        transition={{ duration: 1, repeat: Infinity, delay: 0.4 }}
+                                        className="w-2 h-2 bg-red-300 rounded-full"
+                                      />
+                                    </div>
+                                    <span className="text-white/60 text-xs">מקליד/ה...</span>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
+                            </motion.div>
                           )}
                         </div>
 
                         {/* Chat Input */}
-                        <div className="p-4 border-t border-white/10">
-                          <div className="flex gap-2">
-                            <Textarea
-                              value={message}
-                              onChange={(e) => setMessage(e.target.value)}
-                              placeholder="כתוב/כתבי הודעה..."
-                              className="flex-1 bg-white/10 border-white/20 text-white placeholder:text-white/40 resize-none"
-                              rows={2}
-                              onKeyDown={(e) => {
-                                if (e.key === 'Enter' && !e.shiftKey) {
-                                  e.preventDefault();
-                                  handleSendMessage();
-                                }
-                              }}
-                            />
+                        <div className="relative p-4 bg-gradient-to-r from-purple-900/50 via-black/50 to-blue-900/50 backdrop-blur-md border-t border-white/10">
+                          <div className="flex gap-3">
+                            <div className="flex-1 relative">
+                              <Textarea
+                                value={message}
+                                onChange={(e) => setMessage(e.target.value)}
+                                placeholder="הקלד/י הודעה או הקלט קולית..."
+                                className="w-full bg-gradient-to-r from-white/10 to-white/5 border-2 border-purple-500/30 focus:border-purple-500 text-white placeholder:text-white/50 resize-none rounded-2xl px-4 py-3 pr-12 backdrop-blur-sm shadow-lg focus:shadow-purple-500/50 transition-all"
+                                rows={2}
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Enter' && !e.shiftKey) {
+                                    e.preventDefault();
+                                    handleSendMessage();
+                                  }
+                                }}
+                              />
+                              {isRecording && (
+                                <motion.div
+                                  animate={{ scale: [1, 1.1, 1] }}
+                                  transition={{ duration: 0.8, repeat: Infinity }}
+                                  className="absolute top-3 left-3 flex items-center gap-2 bg-red-500 px-3 py-1 rounded-full"
+                                >
+                                  <span className="relative flex h-2 w-2">
+                                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75" />
+                                    <span className="relative inline-flex rounded-full h-2 w-2 bg-white" />
+                                  </span>
+                                  <span className="text-white text-xs font-bold">מקליט...</span>
+                                </motion.div>
+                              )}
+                            </div>
                             <div className="flex flex-col gap-2">
-                              <Button
+                              <motion.button
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
                                 onClick={handleSendMessage}
                                 disabled={!message.trim()}
-                                className="bg-gradient-to-r from-blue-500 to-cyan-500 hover:from-blue-600 hover:to-cyan-600 p-3"
+                                className="bg-gradient-to-r from-blue-500 via-cyan-500 to-teal-500 hover:from-blue-600 hover:via-cyan-600 hover:to-teal-600 disabled:opacity-50 disabled:cursor-not-allowed p-3 rounded-xl shadow-lg shadow-cyan-500/50 transition-all"
                               >
-                                <Send size={20} />
-                                </Button>
-                                <Button 
+                                <Send size={22} className="text-white" />
+                              </motion.button>
+                              <motion.button
+                                whileHover={{ scale: 1.05 }}
+                                whileTap={{ scale: 0.95 }}
                                 onClick={isRecording ? stopRecording : startRecording}
-                                className={`p-3 ${
+                                className={`p-3 rounded-xl shadow-lg transition-all ${
                                   isRecording 
-                                    ? 'bg-red-500 hover:bg-red-600 animate-pulse' 
-                                    : 'bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600'
+                                    ? 'bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 shadow-red-500/50 animate-pulse' 
+                                    : 'bg-gradient-to-r from-purple-500 via-pink-500 to-red-500 hover:from-purple-600 hover:via-pink-600 hover:to-red-600 shadow-purple-500/50'
                                 }`}
-                                >
-                                <Mic size={20} />
-                                </Button>
+                              >
+                                <Mic size={22} className="text-white" />
+                              </motion.button>
                             </div>
                           </div>
+                          <p className="text-center text-white/40 text-xs mt-2">לחץ על המיקרופון להקלטה קולית • Enter לשליחה</p>
                         </div>
                       </div>
                     </motion.div>
