@@ -406,7 +406,7 @@ export default function LivePlayer({
             </div>
           </div>
         </div>
-      </div>
+
         {/* Logo Promo Animation */}
         {showPromo && (
           <motion.div
