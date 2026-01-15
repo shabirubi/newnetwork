@@ -377,17 +377,6 @@ export default function ReportersFeed() {
       )}
       
       <div className="sticky top-24">
-      <div className="flex items-center gap-2 mb-4">
-        <Video className="w-6 h-6 text-[#E31E24]" />
-        <h2 className="font-bold text-xl dark:text-white">אנשי השטח</h2>
-        <div className="mr-auto flex items-center gap-1.5">
-          <span className="relative flex h-2.5 w-2.5">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E31E24] opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#E31E24]"></span>
-          </span>
-          <span className="text-xs text-[#E31E24] font-bold">LIVE</span>
-        </div>
-      </div>
 
       <div className="space-y-6 max-h-[800px] overflow-y-auto pr-2">
         <AnimatePresence mode="popLayout">
