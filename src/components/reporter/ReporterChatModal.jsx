@@ -204,7 +204,6 @@ export default function ReporterChatModal({ reporter, article, onClose }) {
 
   const playVoiceResponse = async (text, messageId) => {
     if (playingMessageId === messageId) {
-      // Stop current playback
       const audioElements = document.querySelectorAll('audio');
       audioElements.forEach(audio => audio.pause());
       setPlayingMessageId(null);
@@ -214,15 +213,65 @@ export default function ReporterChatModal({ reporter, article, onClose }) {
     setPlayingMessageId(messageId);
     
     try {
-      // Call backend function to generate voice securely
-      const result = await base44.functions.generateReporterVoice({
-        text: text,
-        reporterName: reporter.name,
-        reporterGender: reporter.gender
+      // Hash function for consistent voice selection
+      const getVoiceId = (name, gender) => {
+        let hash = 0;
+        for (let i = 0; i < name.length; i++) {
+          hash = ((hash << 5) - hash) + name.charCodeAt(i);
+          hash = hash & hash;
+        }
+        
+        const maleVoices = [
+          'pNInz6obpgDQGcFmaJgB', // Adam
+          'yoZ06aMxZJJ28mfd3POQ', // Sam
+          'Yko7PKHZNXotIFUBG7I9', // Daniel
+          '21m00Tcm4TlvDq8ikWAM', // Josh
+          'N2lVS1w4EtoT3dr4eOWO'  // Callum
+        ];
+        
+        const femaleVoices = [
+          'EXAVITQu4vr4xnSDxMaL', // Sarah
+          'MF3mGyEYCl7XYWbV9V6O', // Elli
+          'XrExE9yKIg1WjnnlVkGX', // Matilda
+          'oWAxZDx7w5VEj9dCyTzz', // Grace
+          'iP95p4xoKVk53GoZ742B'  // Lily
+        ];
+        
+        const voices = gender === 'female' ? femaleVoices : maleVoices;
+        return voices[Math.abs(hash) % voices.length];
+      };
+      
+      const voiceId = getVoiceId(reporter.name, reporter.gender);
+      
+      console.log('🎙️ Generating voice for:', reporter.name, '| Gender:', reporter.gender, '| VoiceID:', voiceId);
+      
+      // Direct ElevenLabs API call
+      const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'audio/mpeg',
+          'Content-Type': 'application/json',
+          'xi-api-key': 'sk_e807be3a5a3c738c9593c95023f7bb78791d3aaa5a000ec0'
+        },
+        body: JSON.stringify({
+          text: text,
+          model_id: 'eleven_multilingual_v2',
+          voice_settings: {
+            stability: 0.5,
+            similarity_boost: 0.75,
+            style: 0.0,
+            use_speaker_boost: true
+          }
+        })
       });
 
-      // Convert base64 to blob
-      const audioBlob = base64ToBlob(result.audioBase64, result.mimeType);
+      if (!response.ok) {
+        const errorData = await response.text();
+        console.error('ElevenLabs API error:', response.status, errorData);
+        throw new Error(`API returned ${response.status}`);
+      }
+
+      const audioBlob = await response.blob();
       const audioUrl = URL.createObjectURL(audioBlob);
       const audio = new Audio(audioUrl);
       
@@ -231,24 +280,21 @@ export default function ReporterChatModal({ reporter, article, onClose }) {
         URL.revokeObjectURL(audioUrl);
       };
       
+      audio.onerror = (e) => {
+        console.error('Audio playback error:', e);
+        setPlayingMessageId(null);
+        URL.revokeObjectURL(audioUrl);
+        toast.error('שגיאה בהשמעת הקול');
+      };
+      
+      console.log('✅ Playing audio...');
       await audio.play();
       
     } catch (err) {
-      console.error('Error playing voice:', err);
+      console.error('❌ Voice generation error:', err);
       toast.error('שגיאה בהשמעת קול');
       setPlayingMessageId(null);
     }
-  };
-
-  // Helper function to convert base64 to blob
-  const base64ToBlob = (base64, mimeType) => {
-    const byteCharacters = atob(base64);
-    const byteNumbers = new Array(byteCharacters.length);
-    for (let i = 0; i < byteCharacters.length; i++) {
-      byteNumbers[i] = byteCharacters.charCodeAt(i);
-    }
-    const byteArray = new Uint8Array(byteNumbers);
-    return new Blob([byteArray], { type: mimeType });
   };
 
   useEffect(() => {
