@@ -10,6 +10,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import NewsTicker from "./components/header/NewsTicker";
 import ReportersModal from "./components/reporter/ReportersModal";
+import AIAnnouncer from "./components/news/AIAnnouncer";
 
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/a44ef2558_212.png";
 
@@ -134,6 +135,9 @@ export default function Layout({ children }) {
         isOpen={reportersModalOpen} 
         onClose={() => setReportersModalOpen(false)} 
       />
+
+      {/* AI Announcer */}
+      <AIAnnouncer />
 
       {/* Header */}
       <header className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50 transition-colors duration-300 border-b border-gray-200 dark:border-gray-700">
