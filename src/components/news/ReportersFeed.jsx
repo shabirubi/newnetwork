@@ -400,7 +400,7 @@ export default function ReportersFeed() {
               transition={{ delay: index * 0.1 }}
               className="group"
             >
-              <div className="relative bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all border-2 border-gray-200 dark:border-gray-700 hover:border-[#E31E24] dark:hover:border-[#E31E24] min-w-[500px]">
+              <div className="relative bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all border-2 border-gray-200 dark:border-gray-700 hover:border-[#E31E24] dark:hover:border-[#E31E24]">
                 {/* Compact Horizontal Layout */}
                 <div className="flex items-stretch">
                   {/* Right Side - Reporter Image & Live Indicator */}
