@@ -17,6 +17,7 @@ import LiveStats from "../components/news/LiveStats";
 import AutoNewsUpdater from "../components/news/AutoNewsUpdater";
 import AutoChannelsUpdater from "../components/news/AutoChannelsUpdater";
 import CurrencyStrip from "../components/header/CurrencyStrip";
+import TikTokNewsFeed from "../components/news/TikTokNewsFeed";
 
 export default function Home() {
   const [selectedChannel, setSelectedChannel] = React.useState(() => {
@@ -176,6 +177,9 @@ export default function Home() {
             <ReportersFeed />
             </aside>
             </section>
+
+            {/* TikTok Style News Feed */}
+            <TikTokNewsFeed />
 
             {/* Mobile Only - Reporters Feed Below Player */}
             <section className="sm:hidden px-4 py-4">
