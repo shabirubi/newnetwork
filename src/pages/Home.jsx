@@ -98,18 +98,18 @@ export default function Home() {
       );
 
       return (
-      <div className="space-y-0 sm:space-y-6 bg-black min-h-screen">
+      <div className="space-y-0 sm:space-y-6 bg-black min-h-screen pb-20 lg:pb-6">
       <AutoNewsUpdater />
       <AutoChannelsUpdater />
       {/* Hero Section - Extended Live Player */}
-      <section className="grid grid-cols-1 lg:grid-cols-12 gap-0 sm:gap-4 -mx-0 sm:mx-0 px-0 sm:px-4">
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-0 sm:gap-6 -mx-0 sm:mx-0 px-0 sm:px-4">
         {/* Right Sidebar - Updates Feed */}
-        <aside className="lg:col-span-2 hidden lg:block">
+        <aside className="lg:col-span-3 hidden lg:block">
           <UpdatesFeed />
         </aside>
 
         {/* Center - Extended Live Player */}
-        <div className="lg:col-span-8">
+        <div className="lg:col-span-6">
           <div className="bg-gradient-to-r from-gray-900 to-gray-800 dark:from-black dark:to-gray-900 sm:rounded-t-lg p-2 sm:p-3 flex items-center justify-between hidden sm:flex">
             <div className="flex items-center gap-3">
               <div className="relative flex h-2.5 w-2.5">
@@ -185,7 +185,7 @@ export default function Home() {
             </div>
 
             {/* Left Sidebar - Reporters Feed */}
-            <aside className="lg:col-span-2 hidden lg:block">
+            <aside className="lg:col-span-3 hidden lg:block">
               <ReportersFeed />
             </aside>
             </section>
@@ -229,7 +229,7 @@ export default function Home() {
       <VideoHighlights />
 
       {/* Latest News Grid */}
-      <section className="px-4">
+      <section className="px-4 mt-8">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-2">
             <Clock className="w-5 h-5 text-[#E31E24]" />
@@ -237,7 +237,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {regularNews.map((article, index) => (
             <NewsCard key={article.id} article={article} index={index} />
           ))}
