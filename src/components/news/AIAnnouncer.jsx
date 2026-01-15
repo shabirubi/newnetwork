@@ -29,32 +29,60 @@ export default function AIAnnouncer() {
     try {
       const textToSpeak = `דיווח עדכני מהרשת החדשה: ${article.title}${article.subtitle ? '. ' + article.subtitle : ''}`;
       
-      // Use browser's Web Speech API for Hebrew
-      const utterance = new SpeechSynthesisUtterance(textToSpeak);
-      utterance.lang = 'he-IL';
-      utterance.rate = 1;
-      utterance.pitch = 1;
-      utterance.volume = 1;
+      // Try ElevenLabs first
+      const audioUrl = await generateElevenLabsAudio(textToSpeak);
+      
+      if (audioUrl) {
+        const audioElement = new Audio(audioUrl);
+        audioElement.onended = () => {
+          setIsSpeaking(false);
+          setTimeout(() => {
+            setCurrentArticleIndex(prev => (prev + 1) % articles.length);
+          }, 1000);
+        };
+        audioElement.play();
+      } else {
+        // Fallback to Web Speech API
+        const utterance = new SpeechSynthesisUtterance(textToSpeak);
+        utterance.lang = 'he-IL';
+        utterance.rate = 1;
 
-      utterance.onend = () => {
-        setIsSpeaking(false);
-        setTimeout(() => {
-          setCurrentArticleIndex(prev => (prev + 1) % articles.length);
-        }, 1000);
-      };
+        utterance.onend = () => {
+          setIsSpeaking(false);
+          setTimeout(() => {
+            setCurrentArticleIndex(prev => (prev + 1) % articles.length);
+          }, 1000);
+        };
 
-      utterance.onerror = () => {
-        setIsSpeaking(false);
-        setIsPlaying(false);
-      };
-
-      window.speechSynthesis.cancel();
-      window.speechSynthesis.speak(utterance);
+        window.speechSynthesis.cancel();
+        window.speechSynthesis.speak(utterance);
+      }
     } catch (error) {
       console.error('Error generating speech:', error);
       setIsPlaying(false);
       setIsSpeaking(false);
     }
+  };
+
+  const generateElevenLabsAudio = async (text) => {
+    try {
+      const response = await fetch('/api/generate-speech', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          text: text,
+          voice_id: 'nPczCjzI2devNBz1zQrH'
+        })
+      });
+
+      if (response.ok) {
+        const audioBlob = await response.blob();
+        return URL.createObjectURL(audioBlob);
+      }
+    } catch (error) {
+      console.error('ElevenLabs error:', error);
+    }
+    return null;
   };
 
   const handleStop = () => {
