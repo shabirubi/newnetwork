@@ -7,10 +7,11 @@ import { Button } from "@/components/ui/button";
 
 export default function AIAnnouncer() {
   const [isOpen, setIsOpen] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [isSpeaking, setIsSpeaking] = useState(false);
-  const [currentArticleIndex, setCurrentArticleIndex] = useState(0);
-  const audio = React.useRef(null);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [isSpeaking, setIsSpeaking] = useState(false);
+    const [currentArticleIndex, setCurrentArticleIndex] = useState(0);
+    const audio = React.useRef(null);
+    const shouldContinuePlaying = React.useRef(false);
 
   const { data: articles = [] } = useQuery({
     queryKey: ['announcer-articles'],
@@ -19,11 +20,10 @@ export default function AIAnnouncer() {
     initialData: []
   });
 
-  const handlePlayArticle = async () => {
-    if (articles.length === 0) return;
+  const playArticle = async (index) => {
+    if (articles.length === 0 || !shouldContinuePlaying.current) return;
     
-    const article = articles[currentArticleIndex];
-    setIsPlaying(true);
+    const article = articles[index];
     setIsSpeaking(true);
 
     try {
@@ -36,9 +36,7 @@ export default function AIAnnouncer() {
         const audioElement = new Audio(audioUrl);
         audioElement.onended = () => {
           setIsSpeaking(false);
-          setTimeout(() => {
-            setCurrentArticleIndex(prev => (prev + 1) % articles.length);
-          }, 1000);
+          setCurrentArticleIndex(prev => (prev + 1) % articles.length);
         };
         audioElement.play();
       } else {
@@ -49,9 +47,7 @@ export default function AIAnnouncer() {
 
         utterance.onend = () => {
           setIsSpeaking(false);
-          setTimeout(() => {
-            setCurrentArticleIndex(prev => (prev + 1) % articles.length);
-          }, 1000);
+          setCurrentArticleIndex(prev => (prev + 1) % articles.length);
         };
 
         window.speechSynthesis.cancel();
@@ -59,9 +55,16 @@ export default function AIAnnouncer() {
       }
     } catch (error) {
       console.error('Error generating speech:', error);
-      setIsPlaying(false);
       setIsSpeaking(false);
     }
+  };
+
+  const handlePlayArticle = async () => {
+    if (articles.length === 0) return;
+    
+    shouldContinuePlaying.current = true;
+    setIsPlaying(true);
+    playArticle(currentArticleIndex);
   };
 
   const generateElevenLabsAudio = async (text) => {
@@ -86,11 +89,18 @@ export default function AIAnnouncer() {
   };
 
   const handleStop = () => {
+    shouldContinuePlaying.current = false;
     window.speechSynthesis.cancel();
     setIsPlaying(false);
     setIsSpeaking(false);
     setCurrentArticleIndex(0);
   };
+
+  React.useEffect(() => {
+    if (shouldContinuePlaying.current && !isSpeaking) {
+      playArticle(currentArticleIndex);
+    }
+  }, [currentArticleIndex, isSpeaking, articles]);
 
   if (articles.length === 0) return null;
 
