@@ -87,9 +87,9 @@ change = אחוז השינוי היומי (מספר חיובי או שלילי)
             {[...currencyRates, ...currencyRates].map((currency, index) => (
               <div key={index} className="flex items-center gap-1 text-white whitespace-nowrap text-xs">
                 <span className="font-bold">{currency.code}</span>
-                <span className="font-bold">₪{currency.rate.toLocaleString('he-IL', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
-                <span className={`font-bold text-[10px] ${currency.change >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                  {currency.change >= 0 ? '▲' : '▼'}{Math.abs(currency.change).toFixed(1)}%
+                <span className="font-bold">₪{(currency.rate || 0).toLocaleString('he-IL', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                <span className={`font-bold text-[10px] ${(currency.change || 0) >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                  {(currency.change || 0) >= 0 ? '▲' : '▼'}{Math.abs(currency.change || 0).toFixed(1)}%
                 </span>
               </div>
             ))}
