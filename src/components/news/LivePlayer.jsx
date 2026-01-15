@@ -107,7 +107,11 @@ export default function LivePlayer({
 
       return () => {
         if (playerRef.current && playerRef.current.destroy) {
-          playerRef.current.destroy();
+          try {
+            playerRef.current.destroy();
+          } catch (e) {
+            console.log('YouTube cleanup error:', e);
+          }
           playerRef.current = null;
         }
       };
@@ -181,14 +185,14 @@ export default function LivePlayer({
       });
 
       return () => {
-        if (playerRef.current) {
+        if (playerRef.current && playerRef.current.destroy) {
           try {
             playerRef.current.pause();
             playerRef.current.unload();
             playerRef.current.detachMediaElement();
             playerRef.current.destroy();
           } catch (e) {
-            console.log('Cleanup error:', e);
+            console.log('mpegts cleanup error:', e);
           }
           playerRef.current = null;
         }
@@ -228,11 +232,11 @@ export default function LivePlayer({
       });
 
       return () => {
-        if (playerRef.current) {
+        if (playerRef.current && typeof playerRef.current.dispose === 'function') {
           try {
             playerRef.current.dispose();
           } catch (e) {
-            console.log('Dispose error:', e);
+            console.log('video.js cleanup error:', e);
           }
           playerRef.current = null;
         }
