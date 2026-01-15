@@ -16,6 +16,10 @@ export default function ReporterChatModal({ reporter, article, onClose }) {
   const [messages, setMessages] = useState([]);
   const [isProcessing, setIsProcessing] = useState(false);
   const [playingMessageId, setPlayingMessageId] = useState(null);
+  const [isRecording, setIsRecording] = useState(false);
+  const [audioBlob, setAudioBlob] = useState(null);
+  const mediaRecorderRef = useRef(null);
+  const audioChunksRef = useRef([]);
   const chatEndRef = useRef(null);
   const queryClient = useQueryClient();
 
@@ -111,6 +115,73 @@ export default function ReporterChatModal({ reporter, article, onClose }) {
       toast.error("שגיאה בשליחת ההודעה");
     } finally {
       setIsProcessing(false);
+    }
+  };
+
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+      audioChunksRef.current = [];
+
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          audioChunksRef.current.push(event.data);
+        }
+      };
+
+      mediaRecorder.onstop = async () => {
+        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+        setAudioBlob(audioBlob);
+        
+        // Stop all tracks
+        stream.getTracks().forEach(track => track.stop());
+        
+        // Send the audio message
+        await sendAudioMessage(audioBlob);
+      };
+
+      mediaRecorder.start();
+      setIsRecording(true);
+      toast.success("מקליט...");
+    } catch (err) {
+      console.error("Error starting recording:", err);
+      toast.error("שגיאה בגישה למיקרופון");
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorderRef.current && isRecording) {
+      mediaRecorderRef.current.stop();
+      setIsRecording(false);
+    }
+  };
+
+  const sendAudioMessage = async (audioBlob) => {
+    if (!conversation || isProcessing) return;
+    
+    setIsProcessing(true);
+
+    try {
+      // Upload audio file
+      const file = new File([audioBlob], "voice-question.webm", { type: "audio/webm" });
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+
+      // Send message with audio
+      await base44.agents.addMessage(conversation, {
+        role: "user",
+        content: "שאלה קולית",
+        file_urls: [file_url]
+      });
+
+      toast.success("השאלה נשלחה!");
+    } catch (err) {
+      console.error("Error sending audio message:", err);
+      toast.error("שגיאה בשליחת ההקלטה");
+    } finally {
+      setIsProcessing(false);
+      setAudioBlob(null);
     }
   };
 
@@ -349,13 +420,21 @@ export default function ReporterChatModal({ reporter, article, onClose }) {
               onChange={(e) => setMessage(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && !isProcessing && handleSendMessage()}
               placeholder={`שאל את ${reporter.name} שאלה...`}
-              disabled={isProcessing || !conversation}
+              disabled={isProcessing || !conversation || isRecording}
               className="flex-1 dark:bg-gray-700 dark:border-gray-600"
             />
             
             <Button
+              onClick={isRecording ? stopRecording : startRecording}
+              disabled={isProcessing || !conversation}
+              className={`shrink-0 ${isRecording ? 'bg-red-600 hover:bg-red-700 animate-pulse' : 'bg-blue-600 hover:bg-blue-700'}`}
+            >
+              {isRecording ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+            </Button>
+            
+            <Button
               onClick={handleSendMessage}
-              disabled={!message.trim() || isProcessing || !conversation}
+              disabled={!message.trim() || isProcessing || !conversation || isRecording}
               className="bg-[#E31E24] hover:bg-[#B91C1C] shrink-0"
             >
               {isProcessing ? (
@@ -366,9 +445,13 @@ export default function ReporterChatModal({ reporter, article, onClose }) {
             </Button>
           </div>
           
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">
-            {reporter.name} מומחה ב{reporter.specialty}
-          </p>
+          <div className="flex items-center justify-center gap-4 text-xs text-gray-500 dark:text-gray-400 mt-2">
+            <span>{reporter.name} מומחה ב{reporter.specialty}</span>
+            <span className="text-blue-600 dark:text-blue-400 flex items-center gap-1">
+              <Mic className="w-3 h-3" />
+              לחץ על המיקרופון לשאלה קולית
+            </span>
+          </div>
         </div>
       </motion.div>
     </motion.div>
