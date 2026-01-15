@@ -13,6 +13,7 @@ import AutoNewsUpdater from "../components/news/AutoNewsUpdater";
 import AutoChannelsUpdater from "../components/news/AutoChannelsUpdater";
 import TikTokNewsFeed from "../components/news/TikTokNewsFeed";
 import EnhancedLivePlayer from "../components/news/EnhancedLivePlayer";
+import ReportersFeed from "../components/news/ReportersFeed";
 
 export default function Home() {
   const [selectedChannel, setSelectedChannel] = React.useState(() => {
