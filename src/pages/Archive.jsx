@@ -2,10 +2,9 @@ import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { Search, Calendar, Filter, Archive as ArchiveIcon, Film, Loader2, Volume2 } from "lucide-react";
+import { Search, Calendar, Filter, Archive as ArchiveIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Button } from "@/components/ui/button";
 import NewsCard from "../components/news/NewsCard";
 import moment from "moment";
 
@@ -31,9 +30,6 @@ export default function Archive() {
   const [searchQuery, setSearchQuery] = useState(initialSearch);
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [selectedDate, setSelectedDate] = useState("all");
-  const [creatingVideo, setCreatingVideo] = useState(false);
-  const [audioUrl, setAudioUrl] = useState(null);
-  const [generatingAudio, setGeneratingAudio] = useState(false);
 
   const { data: allArticles = [], isLoading } = useQuery({
     queryKey: ['archive-articles'],
@@ -43,16 +39,14 @@ export default function Archive() {
 
   // Filter articles
   const filteredArticles = allArticles.filter(article => {
-    if (!article) return false;
-    
     const matchesSearch = searchQuery === "" || 
-      article.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       article.content?.toLowerCase().includes(searchQuery.toLowerCase());
     
     const matchesCategory = selectedCategory === "all" || article.category === selectedCategory;
     
     let matchesDate = true;
-    if (selectedDate !== "all" && article.created_date) {
+    if (selectedDate !== "all") {
       const articleDate = moment(article.created_date);
       const now = moment();
       
@@ -70,81 +64,11 @@ export default function Archive() {
 
   // Group by date
   const articlesByDate = filteredArticles.reduce((acc, article) => {
-    if (!article?.created_date) return acc;
     const date = moment(article.created_date).format('DD/MM/YYYY');
     if (!acc[date]) acc[date] = [];
     acc[date].push(article);
     return acc;
   }, {});
-
-  const handleCreateRandomVideo = async () => {
-      if (filteredArticles.length === 0) return;
-
-      setCreatingVideo(true);
-      try {
-        const randomArticle = filteredArticles[Math.floor(Math.random() * filteredArticles.length)];
-        const text = `${randomArticle.title}. ${randomArticle.subtitle || ''} ${randomArticle.content || ''}`.substring(0, 1000);
-
-        const result = await base44.functions.generateDIDVideo({ text });
-
-        await base44.entities.TalkingHeadVideo.create({
-          article_id: randomArticle.id,
-          reporter_name: "כתב הרשת החדשה",
-          video_url: result.video_url,
-          talk_id: result.talk_id,
-          status: "completed",
-          duration: 30,
-          presentation_text: randomArticle.title,
-          views: 0,
-          is_featured: false,
-        });
-
-        alert("וידאו נוצר בהצלחה!");
-      } catch (error) {
-        console.error("שגיאה:", error);
-        alert("שגיאה ביצירת הוידאו");
-      } finally {
-        setCreatingVideo(false);
-      }
-    };
-
-    const handleCreateRoseAudio = async () => {
-      setGeneratingAudio(true);
-      try {
-        const result = await base44.functions.generateRoseBizaamAudio({});
-        setAudioUrl(result.audio_url);
-      } catch (error) {
-        console.error("שגיאה:", error);
-        alert("שגיאה ביצירת קול");
-      } finally {
-        setGeneratingAudio(false);
-      }
-    };
-
-    const handleReadArticle = async () => {
-      if (filteredArticles.length === 0) return;
-      
-      setGeneratingAudio(true);
-      try {
-        const randomArticle = filteredArticles[Math.floor(Math.random() * filteredArticles.length)];
-        const text = `${randomArticle.title}. ${randomArticle.subtitle || ''} ${randomArticle.content || ''}`.substring(0, 500);
-        
-        const result = await base44.integrations.Core.InvokeLLM({
-          prompt: `Convert this Hebrew text to speech and return a URL. Text: ${text}`,
-          add_context_from_internet: false
-        });
-        
-        // Using text-to-speech via browser API as fallback
-        const utterance = new SpeechSynthesisUtterance(text);
-        utterance.lang = 'he-IL';
-        speechSynthesis.speak(utterance);
-      } catch (error) {
-        console.error("שגיאה:", error);
-        alert("שגיאה בהשמעת הכתבה");
-      } finally {
-        setGeneratingAudio(false);
-      }
-    };
 
   return (
     <div className="space-y-6">
@@ -217,84 +141,8 @@ export default function Archive() {
         </div>
 
         <div className="mt-4 text-sm text-gray-600 dark:text-gray-400">
-                  נמצאו {filteredArticles.length} כתבות
-                </div>
-              </div>
-
-              {/* Rose Bizaam Audio Player */}
-              {audioUrl && (
-                <div className="mt-4 p-4 bg-gradient-to-r from-pink-500/20 to-purple-500/20 rounded-lg border border-pink-500/30">
-                  <div className="flex items-center gap-4">
-                    <div className="flex-1">
-                      <h3 className="font-bold text-white mb-2">כתבה: רוז ביזאם 🎤</h3>
-                      <audio 
-                        src={audioUrl} 
-                        controls 
-                        className="w-full"
-                      />
-                    </div>
-                    <button
-                      onClick={() => setAudioUrl(null)}
-                      className="text-gray-400 hover:text-white transition-colors"
-                    >
-                      ✕
-                    </button>
-                  </div>
-                </div>
-              )}
-
-      {/* Create Video Button */}
-      <div className="flex justify-between gap-4 flex-wrap">
-        <Button
-          onClick={handleCreateRandomVideo}
-          disabled={creatingVideo || filteredArticles.length === 0}
-          className="bg-gradient-to-r from-red-500 via-orange-500 to-pink-500 hover:from-red-600 hover:via-orange-600 hover:to-pink-600 text-white font-bold px-8 py-6 rounded-2xl text-lg shadow-2xl"
-        >
-          {creatingVideo ? (
-            <>
-              <Loader2 className="w-5 h-5 animate-spin mr-2" />
-              יוצר וידאו...
-            </>
-          ) : (
-            <>
-              <Film className="w-6 h-6 mr-2" />
-              יצור וידאו מכתבה אקראית
-            </>
-          )}
-        </Button>
-        <Button
-          onClick={handleCreateRoseAudio}
-          disabled={generatingAudio}
-          className="bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500 hover:from-purple-600 hover:via-pink-600 hover:to-rose-600 text-white font-bold px-8 py-6 rounded-2xl text-lg shadow-2xl"
-        >
-          {generatingAudio ? (
-            <>
-              <Loader2 className="w-5 h-5 animate-spin mr-2" />
-              יוצר קול...
-            </>
-          ) : (
-            <>
-              🎤 רוז ביזאם 40 שניות
-            </>
-          )}
-        </Button>
-        <Button
-          onClick={handleReadArticle}
-          disabled={generatingAudio || filteredArticles.length === 0}
-          className="bg-gradient-to-r from-blue-500 via-cyan-500 to-teal-500 hover:from-blue-600 hover:via-cyan-600 hover:to-teal-600 text-white font-bold px-8 py-6 rounded-2xl text-lg shadow-2xl"
-        >
-          {generatingAudio ? (
-            <>
-              <Loader2 className="w-5 h-5 animate-spin mr-2" />
-              משמיע...
-            </>
-          ) : (
-            <>
-              <Volume2 className="w-6 h-6 mr-2" />
-              האזן לכתבה
-            </>
-          )}
-        </Button>
+          נמצאו {filteredArticles.length} כתבות
+        </div>
       </div>
 
       {/* Articles by Date */}

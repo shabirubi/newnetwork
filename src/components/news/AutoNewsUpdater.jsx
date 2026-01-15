@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
-import { generateTalkingHeadVideo } from "@/functions/generateTalkingHeadVideo";
 
 const NEWS_CATEGORIES = [
   { label: "חדשות חמות", query: "breaking news israel today", videoSearch: false, category: "breaking" },
@@ -96,39 +95,8 @@ export default function AutoNewsUpdater() {
           if (articles && articles.length > 0) {
             for (const article of articles) {
               try {
-                const createdArticle = await base44.entities.NewsArticle.create(article);
-                allNewArticles.push(createdArticle);
-
-                // יצירת וידאו מדבר אוטומטית
-                setTimeout(async () => {
-                  try {
-                    console.log(`🎬 יוצר וידאו מדבר עבור: ${article.title}`);
-                    
-                    const videoResult = await generateTalkingHeadVideo({
-                      title: article.title,
-                      subtitle: article.subtitle,
-                      content: article.content,
-                      reporter_name: category.label,
-                      reporter_image: 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/a6c94b22a_image.png'
-                    });
-
-                    if (videoResult.success) {
-                      await base44.entities.TalkingHeadVideo.create({
-                        article_id: createdArticle.id,
-                        reporter_name: category.label,
-                        video_url: videoResult.video_url,
-                        talk_id: videoResult.talk_id,
-                        status: 'completed',
-                        duration: videoResult.duration,
-                        presentation_text: `${article.title}: ${article.subtitle}`
-                      });
-                      console.log(`✅ וידאו מדבר נשמר בהצלחה`);
-                    }
-                  } catch (videoError) {
-                    console.error('שגיאה ביצירת וידאו:', videoError.message);
-                  }
-                }, 2000); // השהייה קטנה כדי שלא יהיה overload
-                
+                await base44.entities.NewsArticle.create(article);
+                allNewArticles.push(article);
               } catch (err) {
                 console.log('Article exists:', err.message);
               }

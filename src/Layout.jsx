@@ -5,33 +5,34 @@ import {
   Menu, X, Radio, Newspaper, Shield, TrendingUp, 
   Vote, Cpu, Trophy, Clapperboard, Globe, Heart,
   Clock, ChevronLeft, Users, Moon, Sun, Home, Flame,
-  Siren, AlertTriangle, MessageSquareWarning, Film, MessageCircle
+  Siren, AlertTriangle, MessageSquareWarning, Film
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import NewsTicker from "./components/header/NewsTicker";
 import ReportersModal from "./components/reporter/ReportersModal";
-import ReportersTikTokModal from "./components/reporter/ReportersTikTokModal";
-import ReportersCarousel from "./components/reporter/ReportersCarousel";
 
-const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/a6c94b22a_image.png";
+const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/a44ef2558_212.png";
 
 const categories = [
-  { id: "home", label: "בית", href: "Home", icon: Home },
-  { id: "breaking", label: "עכשיו", href: "Category?cat=breaking", icon: Flame },
-  { id: "security", label: "ביטחון", href: "Category?cat=security", icon: Shield },
-  { id: "economy", label: "כלכלה", href: "Category?cat=economy", icon: TrendingUp },
-  { id: "politics", label: "פוליטיקה", href: "Category?cat=politics", icon: Vote },
-  { id: "technology", label: "טכנולוגיה", href: "Category?cat=technology", icon: Cpu },
-  { id: "sports", label: "ספורט", href: "Category?cat=sports", icon: Trophy },
-  { id: "entertainment", label: "בידור", href: "Category?cat=entertainment", icon: Clapperboard },
-  { id: "world", label: "עולם", href: "Category?cat=world", icon: Globe },
-  { id: "health", label: "בריאות", href: "Category?cat=health", icon: Heart },
+  { id: "home", label: "דף הבית", icon: Home, href: "Home" },
+  { id: "breaking", label: "חדשות עכשיו", icon: Radio, href: "Category?cat=breaking" },
+  { id: "security", label: "ביטחון ומדיניות", icon: Shield, href: "Category?cat=security" },
+  { id: "economy", label: "כלכלה ועסקים", icon: TrendingUp, href: "Category?cat=economy" },
+  { id: "politics", label: "פוליטיקה", icon: Vote, href: "Category?cat=politics" },
+  { id: "technology", label: "טכנולוגיה", icon: Cpu, href: "Category?cat=technology" },
+  { id: "sports", label: "ספורט", icon: Trophy, href: "Category?cat=sports" },
+  { id: "entertainment", label: "בידור ודרמה", icon: Clapperboard, href: "Category?cat=entertainment" },
+  { id: "world", label: "חדשות עולם", icon: Globe, href: "Category?cat=world" },
+  { id: "health", label: "בריאות", icon: Heart, href: "Category?cat=health" },
   ];
 
-export default function Layout({ children, currentPageName }) {
+  const additionalPages = [
+  { id: "archive", label: "ארכיון", icon: Clock, href: "Archive" }
+  ];
+
+export default function Layout({ children }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [reportersModalOpen, setReportersModalOpen] = useState(false);
-  const [reportersTikTokOpen, setReportersTikTokOpen] = useState(false);
-  const [sidebarExpanded, setSidebarExpanded] = useState(false);
   const [darkMode, setDarkMode] = useState(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('darkMode');
@@ -64,18 +65,6 @@ export default function Layout({ children, currentPageName }) {
           --primary: #E31E24;
           --primary-dark: #B91C1C;
           --primary-light: #FEE2E2;
-          --gradient-rainbow: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%);
-          --gradient-fire: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 25%, #c44569 50%, #556270 75%, #4ecdc4 100%);
-          --gradient-ocean: linear-gradient(135deg, #00c6ff 0%, #0072ff 100%);
-          --gradient-sunset: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-        }
-
-        .sidebar-toggle-target {
-          transform: translateX(100%);
-        }
-
-        .sidebar-toggle-target.sidebar-visible {
-          transform: translateX(0);
         }
 
         /* Hide scrollbars */
@@ -101,22 +90,44 @@ export default function Layout({ children, currentPageName }) {
           0% { transform: translateX(-100vw); }
           100% { transform: translateX(100vw); }
         }
-
-        @keyframes rainbow-flow {
-          0%, 100% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-        }
       `}</style>
 
-      {/* Animated Rainbow Line */}
-      <div className="fixed top-0 left-0 right-0 h-2 bg-gradient-to-r from-red-500 via-orange-500 via-yellow-500 via-green-500 via-blue-500 via-indigo-500 to-purple-500 bg-[length:200%_200%] animate-[rainbow-flow_5s_ease_infinite] z-[60] pointer-events-none shadow-lg"></div>
+      {/* Animated Red Line */}
+      <div className="fixed top-0 left-0 right-0 h-1.5 bg-transparent overflow-hidden z-[60] pointer-events-none">
+        <div className="absolute top-0 h-full w-32 bg-[#E31E24] animate-[slideRight_3s_ease-in-out_infinite]"></div>
+      </div>
 
-      {/* Reporters Carousel */}
-      <ReportersCarousel 
-        onReporterClick={(reporter) => {
-          setReportersTikTokOpen(true);
-        }}
-      />
+      {/* Breaking News Ticker */}
+      <NewsTicker darkMode={darkMode} setDarkMode={setDarkMode} />
+
+      {/* Floating Logo */}
+      <motion.div
+        initial={{ opacity: 0, x: -100 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.8, ease: "easeOut" }}
+        className="fixed right-6 top-1/2 -translate-y-1/2 z-50 hidden lg:block"
+      >
+        <motion.div
+          animate={{ 
+            y: [0, -10, 0],
+            rotate: [0, 2, 0, -2, 0]
+          }}
+          transition={{ 
+            duration: 4, 
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+          className="relative group cursor-pointer"
+          onClick={() => setReportersModalOpen(true)}
+        >
+          <div className="absolute inset-0 bg-[#E31E24] blur-2xl opacity-50 group-hover:opacity-70 transition-opacity rounded-full"></div>
+          <img 
+            src={LOGO_URL} 
+            alt="הרשת החדשה" 
+            className="h-24 w-auto relative z-10 drop-shadow-2xl hover:scale-110 transition-transform duration-300"
+          />
+        </motion.div>
+      </motion.div>
 
       {/* Reporters Modal */}
       <ReportersModal 
@@ -124,73 +135,24 @@ export default function Layout({ children, currentPageName }) {
         onClose={() => setReportersModalOpen(false)} 
       />
 
-      {/* Reporters TikTok Modal */}
-      <ReportersTikTokModal 
-        isOpen={reportersTikTokOpen} 
-        onClose={() => setReportersTikTokOpen(false)} 
-      />
-
-      {/* Floating Reporters Chat Button */}
-      <button
-        onClick={() => setReportersTikTokOpen(true)}
-        className="fixed right-6 bottom-24 sm:bottom-32 z-50 w-14 h-14 bg-gradient-to-br from-purple-500 via-pink-500 to-red-500 hover:from-purple-600 hover:via-pink-600 hover:to-red-600 rounded-full shadow-2xl shadow-purple-500/50 flex items-center justify-center text-white transition-all hover:scale-110 active:scale-95 bg-[length:200%_200%] animate-[rainbow-flow_4s_ease_infinite]"
-      >
-        <MessageCircle className="w-6 h-6" />
-      </button>
-
-      {/* Right Sidebar with Icons - Hidden on Home page */}
-      {currentPageName !== 'Home' && (
-        <motion.div
-          initial={false}
-          animate={{ width: sidebarExpanded ? 280 : 70 }}
-          transition={{ duration: 0.3, ease: "easeInOut" }}
-          onMouseEnter={() => setSidebarExpanded(true)}
-          onMouseLeave={() => setSidebarExpanded(false)}
-          className="sidebar-toggle-target fixed right-0 top-0 bottom-0 bg-black/90 backdrop-blur-xl shadow-2xl z-40 overflow-y-auto border-l border-white/10 hidden sm:block transition-all duration-300"
-          style={{
-            transform: 'translateX(0)',
-          }}
-        >
-        <div className="py-4 space-y-1">
-          <Link
-            to={createPageUrl("Live")}
-            onClick={(e) => {
-              e.preventDefault();
-              window.location.href = createPageUrl("Live");
-            }}
-            className="flex items-center gap-3 px-4 py-3 text-white bg-gradient-to-r from-red-500 via-orange-500 to-pink-500 hover:from-red-600 hover:via-orange-600 hover:to-pink-600 mx-2 rounded-lg transition-all shadow-lg shadow-pink-500/30 bg-[length:200%_200%] animate-[rainbow-flow_3s_ease_infinite]"
-          >
-            <Radio size={22} className="flex-shrink-0 animate-pulse" />
-            {sidebarExpanded && <span className="font-medium whitespace-nowrap">שידור חי</span>}
-          </Link>
-
-          <Link
-            to={createPageUrl("Home")}
-            onClick={(e) => {
-              e.preventDefault();
-              window.location.href = createPageUrl("Home");
-            }}
-            className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 mx-2 rounded-lg transition-all"
-          >
-            <Home size={22} className="flex-shrink-0" />
-            {sidebarExpanded && <span className="font-medium whitespace-nowrap">דף הבית</span>}
-          </Link>
-
-          {/* Categories */}
-          {categories.map((cat, idx) => {
-            const rainbowColors = [
-              'text-red-500',
-              'text-orange-500', 
-              'text-yellow-500',
-              'text-green-500',
-              'text-blue-500',
-              'text-indigo-500',
-              'text-purple-500',
-              'text-pink-500',
-              'text-rose-500',
-              'text-cyan-500'
-            ];
-            return (
+      {/* Header */}
+      <header className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50 transition-colors duration-300 border-b border-gray-200 dark:border-gray-700">
+        <div className="max-w-7xl mx-auto px-4">
+          {/* Desktop Navigation */}
+          <nav className="hidden sm:flex items-center justify-between gap-1 py-3">
+            <div className="flex items-center gap-1">
+            <Link
+              to={createPageUrl("Live")}
+              onClick={(e) => {
+                e.preventDefault();
+                window.location.href = createPageUrl("Live");
+              }}
+              className="flex items-center gap-1.5 px-3 py-2 text-white bg-[#E31E24] hover:bg-[#B91C1C] rounded-lg transition-all text-xs font-bold"
+            >
+              <Radio size={16} />
+              שידור חי
+            </Link>
+            {categories.map((cat) => (
               <Link
                 key={cat.id}
                 to={createPageUrl(cat.href)}
@@ -198,136 +160,120 @@ export default function Layout({ children, currentPageName }) {
                   e.preventDefault();
                   window.location.href = createPageUrl(cat.href);
                 }}
-                className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 mx-2 rounded-lg transition-all group"
+                className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
               >
-                <cat.icon size={22} className={`flex-shrink-0 ${rainbowColors[idx % rainbowColors.length]} group-hover:scale-110 transition-transform`} />
-                {sidebarExpanded && <span className="font-medium whitespace-nowrap">{cat.label}</span>}
+                <cat.icon size={16} />
+                {cat.label}
               </Link>
-            );
-          })}
+              ))}
+              <Link
+                to={createPageUrl("Schedule")}
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.location.href = createPageUrl("Schedule");
+                }}
+                className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
+              >
+                <Clock size={16} />
+                לוח שידורים
+              </Link>
+              <Link
+                to={createPageUrl("Reporters")}
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.location.href = createPageUrl("Reporters");
+                }}
+                className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
+              >
+                <Users size={16} />
+                אנשי השטח
+              </Link>
+              <Link
+                to={createPageUrl("NewsLoader")}
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.location.href = createPageUrl("NewsLoader");
+                }}
+                className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
+              >
+                <Globe size={16} />
+                טעינת חדשות
+              </Link>
+              <Link
+                to={createPageUrl("ChannelsManager")}
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.location.href = createPageUrl("ChannelsManager");
+                }}
+                className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
+              >
+                <Radio size={16} />
+                ניהול ערוצים
+              </Link>
+              <Link
+                to={createPageUrl("Archive")}
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.location.href = createPageUrl("Archive");
+                }}
+                className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
+              >
+                <Clock size={16} />
+                ארכיון
+              </Link>
+              <Link
+                to={createPageUrl("Movies")}
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.location.href = createPageUrl("Movies");
+                }}
+                className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
+              >
+                <Film size={16} />
+                סרטים קלאסיים
+              </Link>
+              <Link
+                to={createPageUrl("ReporterQA")}
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.location.href = createPageUrl("ReporterQA");
+                }}
+                className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
+              >
+                <MessageSquareWarning size={16} />
+                שאלות ותשובות
+              </Link>
 
-          <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
+              <button
+                onClick={() => setDarkMode(!darkMode)}
+                className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
+              >
+                {darkMode ? <Sun size={16} /> : <Moon size={16} />}
+              </button>
+              </div>
 
-          <Link
-            to={createPageUrl("Schedule")}
-            onClick={(e) => {
-              e.preventDefault();
-              window.location.href = createPageUrl("Schedule");
-            }}
-            className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 mx-2 rounded-lg transition-all group"
-          >
-            <Clock size={22} className="flex-shrink-0 text-cyan-500 group-hover:scale-110 transition-transform" />
-            {sidebarExpanded && <span className="font-medium whitespace-nowrap">לוח שידורים</span>}
-          </Link>
-
-          <Link
-            to={createPageUrl("Reporters")}
-            onClick={(e) => {
-              e.preventDefault();
-              window.location.href = createPageUrl("Reporters");
-            }}
-            className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 mx-2 rounded-lg transition-all group"
-          >
-            <Users size={22} className="flex-shrink-0 text-emerald-500 group-hover:scale-110 transition-transform" />
-            {sidebarExpanded && <span className="font-medium whitespace-nowrap">אנשי השטח</span>}
-          </Link>
-
-          <Link
-            to={createPageUrl("Archive")}
-            onClick={(e) => {
-              e.preventDefault();
-              window.location.href = createPageUrl("Archive");
-            }}
-            className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 mx-2 rounded-lg transition-all group"
-          >
-            <Clock size={22} className="flex-shrink-0 text-amber-500 group-hover:scale-110 transition-transform" />
-            {sidebarExpanded && <span className="font-medium whitespace-nowrap">ארכיון</span>}
-          </Link>
-
-          <Link
-            to={createPageUrl("Movies")}
-            onClick={(e) => {
-              e.preventDefault();
-              window.location.href = createPageUrl("Movies");
-            }}
-            className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 mx-2 rounded-lg transition-all group"
-          >
-            <Film size={22} className="flex-shrink-0 text-fuchsia-500 group-hover:scale-110 transition-transform" />
-            {sidebarExpanded && <span className="font-medium whitespace-nowrap">סרטים</span>}
-          </Link>
-
-          <Link
-            to={createPageUrl("TalkingHeads")}
-            onClick={(e) => {
-              e.preventDefault();
-              window.location.href = createPageUrl("TalkingHeads");
-            }}
-            className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 mx-2 rounded-lg transition-all group"
-          >
-            <Clapperboard size={22} className="flex-shrink-0 text-red-500 group-hover:scale-110 transition-transform" />
-            {sidebarExpanded && <span className="font-medium whitespace-nowrap">כתבים מדברים</span>}
-          </Link>
-
-          <Link
-            to={createPageUrl("NewsLoader")}
-            onClick={(e) => {
-              e.preventDefault();
-              window.location.href = createPageUrl("NewsLoader");
-            }}
-            className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 mx-2 rounded-lg transition-all group"
-          >
-            <Globe size={22} className="flex-shrink-0 text-sky-500 group-hover:scale-110 transition-transform" />
-            {sidebarExpanded && <span className="font-medium whitespace-nowrap">טעינת חדשות</span>}
-          </Link>
-
-          <Link
-            to={createPageUrl("ChannelsManager")}
-            onClick={(e) => {
-              e.preventDefault();
-              window.location.href = createPageUrl("ChannelsManager");
-            }}
-            className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 mx-2 rounded-lg transition-all group"
-          >
-            <Radio size={22} className="flex-shrink-0 text-violet-500 group-hover:scale-110 transition-transform" />
-            {sidebarExpanded && <span className="font-medium whitespace-nowrap">ניהול ערוצים</span>}
-          </Link>
-
-          <Link
-            to={createPageUrl("ReporterQA")}
-            onClick={(e) => {
-              e.preventDefault();
-              window.location.href = createPageUrl("ReporterQA");
-            }}
-            className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 mx-2 rounded-lg transition-all group"
-          >
-            <MessageSquareWarning size={22} className="flex-shrink-0 text-lime-500 group-hover:scale-110 transition-transform" />
-            {sidebarExpanded && <span className="font-medium whitespace-nowrap">שאלות ותשובות</span>}
-          </Link>
-
-          <Link
-            to={createPageUrl("TalkingHeads")}
-            onClick={(e) => {
-              e.preventDefault();
-              window.location.href = createPageUrl("TalkingHeads");
-            }}
-            className="flex items-center gap-3 px-4 py-3 text-white hover:bg-white/10 mx-2 rounded-lg transition-all group"
-          >
-            <Film size={22} className="flex-shrink-0 text-cyan-500 group-hover:scale-110 transition-transform" />
-            {sidebarExpanded && <span className="font-medium whitespace-nowrap">כתבים מדברים</span>}
-          </Link>
-
-          <div className="border-t border-gray-200 dark:border-gray-700 my-2"></div>
-
-          <button
-            onClick={() => setDarkMode(!darkMode)}
-            className="flex items-center gap-3 px-4 py-3 text-gray-700 dark:text-gray-200 hover:bg-red-50 dark:hover:bg-red-900/20 mx-2 rounded-lg transition-all w-full"
-          >
-            {darkMode ? <Sun size={22} className="flex-shrink-0" /> : <Moon size={22} className="flex-shrink-0" />}
-            {sidebarExpanded && <span className="font-medium whitespace-nowrap">{darkMode ? 'מצב יום' : 'מצב לילה'}</span>}
-          </button>
-          </div>
-          </motion.div>
-          )}
+              {/* Search Box */}
+              <div className="relative">
+              <input
+                type="text"
+                placeholder="חיפוש כתבות..."
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && e.target.value.trim()) {
+                    window.location.href = createPageUrl(`Archive?search=${encodeURIComponent(e.target.value)}`);
+                  }
+                }}
+                className="w-64 px-4 py-2 pr-10 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-[#E31E24]"
+              />
+              <button className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <circle cx="11" cy="11" r="8"/>
+                  <path d="m21 21-4.35-4.35"/>
+                </svg>
+              </button>
+              </div>
+              </nav>
+              </div>
+              </header>
 
       {/* Native Mobile Drawer */}
       <AnimatePresence>
@@ -355,7 +301,7 @@ export default function Layout({ children, currentPageName }) {
                   <img 
                     src={LOGO_URL} 
                     alt="הרשת החדשה" 
-                    className="h-16 w-auto"
+                    className="h-12 w-auto"
                   />
                   <button
                     onClick={() => setMobileMenuOpen(false)}
@@ -429,7 +375,7 @@ export default function Layout({ children, currentPageName }) {
       </AnimatePresence>
 
       {/* Main Content */}
-      <main className={`px-0 py-0 pb-16 sm:pb-6 transition-all duration-300 ${currentPageName !== 'Home' ? 'sm:pr-20' : ''}`}>
+      <main className="max-w-7xl mx-auto px-0 sm:px-4 py-0 sm:py-6 pb-16 sm:pb-24 lg:pb-6">
         {children}
       </main>
 
@@ -452,11 +398,8 @@ export default function Layout({ children, currentPageName }) {
             to={createPageUrl("Live")}
             className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-gray-100 dark:active:bg-gray-700 transition-colors touch-manipulation"
           >
-            <div className="relative">
-              <Radio size={28} className="text-red-500 mb-1" strokeWidth={2.5} />
-              <span className="absolute top-0 right-0 w-2 h-2 bg-gradient-to-r from-red-500 to-orange-500 rounded-full animate-pulse"></span>
-            </div>
-            <span className="text-[11px] font-bold bg-gradient-to-r from-red-500 to-orange-500 bg-clip-text text-transparent">חי</span>
+            <Radio size={28} className="text-[#E31E24] mb-1" strokeWidth={2.5} />
+            <span className="text-[11px] font-bold text-[#E31E24]">חי</span>
           </Link>
 
           <Link
@@ -485,7 +428,7 @@ export default function Layout({ children, currentPageName }) {
               <img 
                 src={LOGO_URL} 
                 alt="הרשת החדשה" 
-                className="h-24 w-auto mb-4"
+                className="h-16 w-auto mb-4"
               />
               <p className="text-gray-400 text-sm">
                 ערוץ חדשות דיגיטלי מבוסס AI עם בקרה אנושית, המייצר תוכן דיגיטלי במהירות ובאיכות.
@@ -515,12 +458,12 @@ export default function Layout({ children, currentPageName }) {
                 הצטרפו למהפכה התקשורתית פורצת הדרך
               </p>
               <Link 
-                  to={createPageUrl("Live")}
-                  className="inline-flex items-center gap-2 bg-gradient-to-r from-red-500 via-orange-500 to-pink-500 text-white px-6 py-3 rounded-full hover:from-red-600 hover:via-orange-600 hover:to-pink-600 transition-all shadow-lg shadow-pink-500/50 bg-[length:200%_200%] animate-[rainbow-flow_4s_ease_infinite]"
-                >
-                  <Radio size={18} />
-                  צפו בשידור חי
-                </Link>
+                to={createPageUrl("Live")}
+                className="inline-flex items-center gap-2 bg-[#E31E24] text-white px-6 py-3 rounded-full hover:bg-[#B91C1C] transition-all"
+              >
+                <Radio size={18} />
+                צפו בשידור חי
+              </Link>
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500 text-sm">
