@@ -7,12 +7,12 @@ import { Button } from "@/components/ui/button";
 
 export default function AIAnnouncer() {
   const [isOpen, setIsOpen] = useState(false);
-    const [isPlaying, setIsPlaying] = useState(false);
-    const [isSpeaking, setIsSpeaking] = useState(false);
-    const [currentArticleIndex, setCurrentArticleIndex] = useState(0);
-    const audio = React.useRef(null);
-    const backgroundMusic = React.useRef(null);
-    const shouldContinuePlaying = React.useRef(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [currentArticleIndex, setCurrentArticleIndex] = useState(0);
+  const audio = React.useRef(null);
+  const backgroundMusic = React.useRef(null);
+  const shouldContinuePlaying = React.useRef(false);
 
   const { data: articles = [] } = useQuery({
     queryKey: ['announcer-articles'],
