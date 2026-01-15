@@ -27,64 +27,34 @@ export default function AIAnnouncer() {
     setIsSpeaking(true);
 
     try {
-      // Use ElevenLabs for professional voice
       const textToSpeak = `דיווח עדכני מהרשת החדשה: ${article.title}${article.subtitle ? '. ' + article.subtitle : ''}`;
       
-      // Call ElevenLabs via backend or directly
-      const audioUrl = await generateElevenLabsAudio(textToSpeak);
-      
-      if (audioUrl) {
-        const audioElement = new Audio(audioUrl);
-        audioElement.onended = () => {
-          setIsSpeaking(false);
-          // Auto-advance to next article (loop infinitely)
-          setTimeout(() => {
-            setCurrentArticleIndex(prev => (prev + 1) % articles.length);
-          }, 1000); // 1 second pause between articles
-        };
-        audioElement.play();
-      } else {
-        throw new Error('Failed to generate audio');
-      }
+      // Use browser's Web Speech API for Hebrew
+      const utterance = new SpeechSynthesisUtterance(textToSpeak);
+      utterance.lang = 'he-IL';
+      utterance.rate = 1;
+      utterance.pitch = 1;
+      utterance.volume = 1;
+
+      utterance.onend = () => {
+        setIsSpeaking(false);
+        setTimeout(() => {
+          setCurrentArticleIndex(prev => (prev + 1) % articles.length);
+        }, 1000);
+      };
+
+      utterance.onerror = () => {
+        setIsSpeaking(false);
+        setIsPlaying(false);
+      };
+
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utterance);
     } catch (error) {
       console.error('Error generating speech:', error);
       setIsPlaying(false);
       setIsSpeaking(false);
     }
-  };
-
-  const generateElevenLabsAudio = async (text) => {
-    try {
-      // Using ElevenLabs API directly for professional Hebrew voice
-      const apiKey = process.env.REACT_APP_ELEVENLABS_API_KEY;
-      const voiceId = 'nPczCjzI2devNBz1zQrH'; // Professional male Hebrew voice
-      
-      const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'xi-api-key': apiKey,
-        },
-        body: JSON.stringify({
-          text: text,
-          model_id: 'eleven_multilingual_v2',
-          voice_settings: {
-            stability: 0.5,
-            similarity_boost: 0.75,
-            style: 0.5,
-            use_speaker_boost: true
-          }
-        })
-      });
-
-      if (response.ok) {
-        const audioBlob = await response.blob();
-        return URL.createObjectURL(audioBlob);
-      }
-    } catch (error) {
-      console.error('ElevenLabs error:', error);
-    }
-    return null;
   };
 
   const handleStop = () => {
