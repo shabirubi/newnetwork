@@ -362,6 +362,18 @@ export default function LivePlayer({
           />
         )}
 
+        {/* Mako Embed Player */}
+        {isPlaying && !showPromo && currentStreamUrl?.includes('mako.co.il') && (
+          <iframe
+            src="https://www.mako.co.il/AjaxPage?jspName=embedHTML5video.jsp&galleryChannelId=3bf5c3a8e967f510VgnVCM2000002a0c10acRCRD&videoChannelId=8bf955222beab610VgnVCM100000700a10acRCRD&vcmid=1e2258089b67f510VgnVCM2000002a0c10acRCRD"
+            className="absolute inset-0 w-full h-full"
+            allow="autoplay; fullscreen; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            frameBorder="0"
+            title={title}
+          />
+        )}
+
         {/* Stream iframe - for non-streamable URLs */}
         {isPlaying && !showPromo && currentStreamUrl && 
          !currentStreamUrl.includes('ok.ru') && 
