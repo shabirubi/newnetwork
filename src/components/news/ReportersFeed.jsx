@@ -348,7 +348,7 @@ export default function ReportersFeed() {
 
   if (reporterArticles.length === 0) {
     return (
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 sticky top-24 border border-gray-200 dark:border-gray-700 w-full min-w-[450px]">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 sticky top-24 border border-gray-200 dark:border-gray-700 w-full">
         <div className="flex items-center gap-2 mb-4 pb-3 border-b border-gray-200 dark:border-gray-700">
           <Video className="w-5 h-5 text-[#E31E24]" />
           <h2 className="font-bold text-base dark:text-white">אנשי השטח</h2>
@@ -376,7 +376,7 @@ export default function ReportersFeed() {
         />
       )}
       
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 sticky top-24 border border-gray-200 dark:border-gray-700 w-full min-w-[450px]">
+      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 sticky top-24 border border-gray-200 dark:border-gray-700 w-full">
       <div className="flex items-center gap-2 mb-4 pb-3 border-b border-gray-200 dark:border-gray-700">
         <Video className="w-5 h-5 text-[#E31E24]" />
         <h2 className="font-bold text-base dark:text-white">אנשי השטח</h2>
