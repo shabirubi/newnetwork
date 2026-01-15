@@ -400,87 +400,68 @@ export default function ReportersFeed() {
               transition={{ delay: index * 0.1 }}
               className="group"
             >
-              <div className="relative bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all border-2 border-gray-200 dark:border-gray-700 hover:border-[#E31E24] dark:hover:border-[#E31E24]">
-                {/* Compact Horizontal Layout */}
-                <div className="flex items-stretch">
-                  {/* Right Side - Reporter Image & Live Indicator */}
-                  <div className="relative w-48 shrink-0 bg-gradient-to-br from-[#E31E24] to-[#B91C1C] flex items-center justify-center">
-                    <div className="absolute top-3 right-3 flex items-center gap-1.5 bg-black/30 backdrop-blur-sm px-2.5 py-1.5 rounded-full">
-                      <span className="relative flex h-2.5 w-2.5">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-white"></span>
-                      </span>
-                      <span className="text-white text-xs font-bold">LIVE</span>
-                    </div>
-                    <div className="relative">
-                      <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-xl">
-                        <img
-                          src={item.reporter.image}
-                          alt={item.reporter.name}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <div className="absolute -bottom-2 -left-2 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-lg">
-                        <Mic className="w-4 h-4 text-[#E31E24]" />
-                      </div>
-                    </div>
+              <button
+                onClick={() => setChatReporter(item)}
+                className="w-full relative bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all border-2 border-gray-200 dark:border-gray-700 hover:border-[#E31E24] dark:hover:border-[#E31E24] cursor-pointer group/card"
+              >
+                {/* LIVE Badge */}
+                <div className="absolute top-3 left-3 z-10 flex items-center gap-1.5 bg-[#E31E24] px-3 py-1.5 rounded-full shadow-lg">
+                  <span className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+                  </span>
+                  <span className="text-white text-xs font-bold">LIVE</span>
+                </div>
+
+                {/* Reporter Image */}
+                <div className="relative h-48 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800">
+                  <img
+                    src={item.reporter.image}
+                    alt={item.reporter.name}
+                    className="w-full h-full object-cover group-hover/card:scale-110 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                  
+                  {/* Name Overlay */}
+                  <div className="absolute bottom-3 right-3 left-3">
+                    <h3 className="text-white font-bold text-lg mb-0.5 drop-shadow-lg">
+                      {item.reporter.name}
+                    </h3>
+                    <p className="text-white/90 text-sm drop-shadow-lg">
+                      {item.reporter.role}
+                    </p>
                   </div>
 
-                  {/* Content Area */}
-                  <div className="flex-1 p-5 flex flex-col">
-                    {/* Reporter Info */}
-                    <div className="mb-4">
-                      <h3 className="font-bold text-xl text-gray-900 dark:text-white leading-tight mb-1">
-                        {item.reporter.name}
-                      </h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">
-                        {item.reporter.role} • {item.time}
-                      </p>
-                    </div>
-
-                    {/* Article Preview */}
-                    <button
-                      onClick={() => {
-                        window.location.href = createPageUrl(`Article?id=${item.article.id}`);
-                      }}
-                      className="block text-right w-full mb-4 flex-1"
-                    >
-                      <div className="flex items-start gap-2">
-                        {item.article.is_breaking && (
-                          <TrendingUp className="w-5 h-5 text-[#E31E24] shrink-0 mt-0.5" />
-                        )}
-                        <p className="text-base text-gray-900 dark:text-white font-bold line-clamp-3 leading-snug">
-                          {item.article.title}
-                        </p>
-                      </div>
-                    </button>
-
-                    {/* Action Buttons */}
-                    <div className="flex gap-3">
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          setChatReporter(item);
-                        }}
-                        className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white text-base font-bold rounded-xl transition-colors shadow-md"
-                      >
-                        <MessageCircle className="w-5 h-5" />
-                        שיחה
-                      </button>
-                      <button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          setSelectedReporter(item);
-                        }}
-                        className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-[#E31E24] hover:bg-[#B91C1C] text-white text-base font-bold rounded-xl transition-colors shadow-md"
-                      >
-                        <Play className="w-5 h-5" fill="white" />
-                        האזן
-                      </button>
-                    </div>
+                  {/* Mic Icon */}
+                  <div className="absolute top-3 right-3 w-10 h-10 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+                    <Mic className="w-5 h-5 text-white" />
                   </div>
                 </div>
-              </div>
+
+                {/* Content */}
+                <div className="p-4">
+                  {/* Time */}
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mb-3">
+                    {item.time}
+                  </p>
+
+                  {/* Article */}
+                  <div className="flex items-start gap-2 mb-4">
+                    {item.article.is_breaking && (
+                      <TrendingUp className="w-4 h-4 text-[#E31E24] shrink-0 mt-0.5" />
+                    )}
+                    <p className="text-sm text-gray-900 dark:text-white font-bold text-right line-clamp-3 leading-relaxed">
+                      {item.article.title}
+                    </p>
+                  </div>
+
+                  {/* Chat Button */}
+                  <div className="flex items-center justify-center gap-2 px-4 py-2.5 bg-gradient-to-r from-[#E31E24] to-[#B91C1C] text-white text-sm font-bold rounded-xl transition-all group-hover/card:shadow-lg">
+                    <MessageCircle className="w-4 h-4" />
+                    פתח צ'אט
+                  </div>
+                </div>
+              </button>
             </motion.div>
           ))}
         </AnimatePresence>
