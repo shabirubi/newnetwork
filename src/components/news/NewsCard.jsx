@@ -150,7 +150,7 @@ export default function NewsCard({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1 }}
-      className="group bg-white dark:bg-gradient-to-br dark:from-gray-800 dark:to-gray-900 rounded-2xl overflow-hidden shadow-sm active:shadow-lg transition-all duration-300 border border-gray-200 dark:border-gray-700"
+      className="group bg-gradient-to-br from-gray-900 to-black rounded-2xl overflow-hidden shadow-2xl hover:shadow-red-500/20 active:shadow-lg transition-all duration-300 border border-gray-800 hover:border-gray-700"
     >
       <Link to={createPageUrl(`Article?id=${id}`)} className="block active:scale-[0.98] transition-transform">
         <div className="relative aspect-video overflow-hidden">
@@ -200,19 +200,19 @@ export default function NewsCard({
           <Badge className={`${categoryColors[category]} text-xs mb-3 rounded-full px-3 py-1`}>
             {categoryLabels[category]}
           </Badge>
-          
-          <h3 className="font-bold text-base text-gray-900 dark:text-white group-hover:text-[#E31E24] dark:group-hover:text-[#E31E24] transition-colors line-clamp-2 mb-2 leading-snug">
+
+          <h3 className="font-bold text-base text-white group-hover:text-[#E31E24] transition-colors line-clamp-2 mb-2 leading-snug">
             {title}
           </h3>
-          
+
           {subtitle && (
-            <p className="text-gray-600 dark:text-gray-300 text-sm line-clamp-2 mb-3">
+            <p className="text-gray-400 text-sm line-clamp-2 mb-3">
               {subtitle}
             </p>
           )}
-          
+
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 text-xs">
+            <div className="flex items-center gap-2 text-gray-500 text-xs">
               <Clock size={12} />
               {moment(created_date).fromNow()}
             </div>
