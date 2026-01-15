@@ -31,19 +31,22 @@ const categoryLabels = {
   health: "בריאות"
 };
 
-export default function TikTokNewsFeed() {
+export default function TikTokNewsFeed({ articles: propArticles }) {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [loadedCount, setLoadedCount] = useState(20);
+  const [loadedCount, setLoadedCount] = useState(50);
   const containerRef = useRef(null);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
 
-  const { data: articles = [] } = useQuery({
-    queryKey: ['tiktok-feed'],
+  const { data: fetchedArticles = [] } = useQuery({
+    queryKey: ['tiktok-feed', loadedCount],
     queryFn: () => base44.entities.NewsArticle.list('-created_date', loadedCount),
     staleTime: 60000,
-    initialData: []
+    initialData: [],
+    enabled: !propArticles || propArticles.length === 0
   });
+
+  const articles = propArticles && propArticles.length > 0 ? propArticles : fetchedArticles;
 
   // Load more on scroll/swipe
   useEffect(() => {
