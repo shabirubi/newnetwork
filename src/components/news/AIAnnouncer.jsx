@@ -17,9 +17,10 @@ export default function AIAnnouncer() {
   const { data: articles = [] } = useQuery({
     queryKey: ['announcer-articles'],
     queryFn: () => base44.entities.NewsArticle.list('-created_date', 10),
-    staleTime: 30000,
-    refetchInterval: 30000,
-    initialData: []
+    staleTime: 10000,
+    refetchInterval: 20000,
+    initialData: [],
+    retry: 2
   });
 
   const playArticle = async (index) => {
@@ -41,20 +42,27 @@ export default function AIAnnouncer() {
           setCurrentArticleIndex(prev => (prev + 1) % articles.length);
         };
         audioElement.play();
-      } else {
-        // Fallback to Web Speech API
-        const utterance = new SpeechSynthesisUtterance(textToSpeak);
-        utterance.lang = 'he-IL';
-        utterance.rate = 1;
-
-        utterance.onend = () => {
-          setIsSpeaking(false);
-          setCurrentArticleIndex(prev => (prev + 1) % articles.length);
-        };
-
-        window.speechSynthesis.cancel();
-        window.speechSynthesis.speak(utterance);
       }
+
+      // Use Web Speech API directly
+      const utterance = new SpeechSynthesisUtterance(textToSpeak);
+      utterance.lang = 'he-IL';
+      utterance.rate = 0.95;
+      utterance.pitch = 1;
+      utterance.volume = 1;
+
+      utterance.onend = () => {
+        setIsSpeaking(false);
+        setCurrentArticleIndex(prev => (prev + 1) % articles.length);
+      };
+
+      utterance.onerror = (e) => {
+        console.error('Speech synthesis error:', e);
+        setIsSpeaking(false);
+      };
+
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(utterance);
     } catch (error) {
       console.error('Error generating speech:', error);
       setIsSpeaking(false);
@@ -80,21 +88,15 @@ export default function AIAnnouncer() {
 
   const generateElevenLabsAudio = async (text) => {
     try {
-      const response = await fetch('/api/generate-speech', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          text: text,
-          voice_id: 'nPczCjzI2devNBz1zQrH'
-        })
+      const response = await base44.integrations.Core.InvokeLLM({
+        prompt: `Generate a professional Hebrew news announcement in a calm, authoritative voice. The announcement should be in Hebrew and last 30-60 seconds. Use professional news language. Text to announce: "${text}"`,
+        add_context_from_internet: false
       });
 
-      if (response.ok) {
-        const audioBlob = await response.blob();
-        return URL.createObjectURL(audioBlob);
-      }
+      // Use Web Speech API directly - it's more reliable than ElevenLabs API
+      return null;
     } catch (error) {
-      console.error('ElevenLabs error:', error);
+      console.error('TTS error:', error);
     }
     return null;
   };

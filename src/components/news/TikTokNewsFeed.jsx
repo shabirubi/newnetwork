@@ -41,9 +41,11 @@ export default function TikTokNewsFeed({ articles: propArticles }) {
   const { data: fetchedArticles = [] } = useQuery({
     queryKey: ['tiktok-feed', loadedCount],
     queryFn: () => base44.entities.NewsArticle.list('-created_date', loadedCount),
-    staleTime: 60000,
+    staleTime: 30000,
+    refetchInterval: 45000,
     initialData: [],
-    enabled: !propArticles || propArticles.length === 0
+    enabled: !propArticles || propArticles.length === 0,
+    retry: 2
   });
 
   const articles = propArticles && propArticles.length > 0 ? propArticles : fetchedArticles;
