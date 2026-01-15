@@ -342,7 +342,7 @@ export default function ReportersFeed() {
         return null;
       }).filter(Boolean);
 
-      setReporterArticles(matched.slice(0, 6));
+      setReporterArticles(matched.slice(0, 8));
     }
   }, [allArticles, dbReporters]);
 
@@ -389,7 +389,7 @@ export default function ReportersFeed() {
         </div>
       </div>
 
-      <div className="space-y-3 max-h-[600px] overflow-y-auto">
+      <div className="space-y-3 max-h-[700px] overflow-y-auto">
         <AnimatePresence mode="popLayout">
           {reporterArticles.map((item, index) => (
             <motion.div

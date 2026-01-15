@@ -89,14 +89,14 @@ export default function Home() {
       <AutoNewsUpdater />
       <AutoChannelsUpdater />
       {/* Hero Section - Extended Live Player */}
-      <section className="grid grid-cols-1 lg:grid-cols-12 gap-0 sm:gap-3 -mx-0 sm:mx-0 px-0 sm:px-4">
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-0 sm:gap-4 -mx-0 sm:mx-0 px-0 sm:px-4">
         {/* Right Sidebar - Updates Feed */}
-        <aside className="lg:col-span-2 hidden lg:block">
+        <aside className="lg:col-span-3 hidden lg:block">
           <UpdatesFeed />
         </aside>
 
         {/* Center - Extended Live Player */}
-        <div className="lg:col-span-8">
+        <div className="lg:col-span-6">
           <div className="bg-gradient-to-r from-gray-900 to-gray-800 dark:from-black dark:to-gray-900 sm:rounded-t-lg p-2 sm:p-3 flex items-center justify-between hidden sm:flex">
             <div className="flex items-center gap-3">
               <div className="relative flex h-2.5 w-2.5">
@@ -172,8 +172,8 @@ export default function Home() {
             </div>
 
             {/* Left Sidebar - Reporters Feed */}
-            <aside className="lg:col-span-2 hidden lg:block">
-            <ReportersFeed />
+            <aside className="lg:col-span-3 hidden lg:block">
+              <ReportersFeed />
             </aside>
             </section>
 

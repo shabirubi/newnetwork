@@ -233,6 +233,17 @@ export default function Layout({ children }) {
                 סרטים קלאסיים
               </Link>
               <Link
+                to={createPageUrl("RadioStations")}
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.location.href = createPageUrl("RadioStations");
+                }}
+                className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
+              >
+                <Radio size={16} />
+                תחנות רדיו
+              </Link>
+              <Link
                 to={createPageUrl("ReporterQA")}
                 onClick={(e) => {
                   e.preventDefault();
