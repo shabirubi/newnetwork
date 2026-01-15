@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import LivePlayer from "./LivePlayer";
-import ReportersFeed from "./ReportersFeed";
-import UpdatesFeed from "./UpdatesFeed";
+import ReportersFeed from "../news/ReportersFeed";
+import UpdatesFeed from "../news/UpdatesFeed";
 
 export default function EnhancedLivePlayer({ 
   title, 
