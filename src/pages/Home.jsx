@@ -186,9 +186,6 @@ export default function Home() {
               <ReportersFeed />
             </section>
 
-            {/* Live Stats */}
-            <LiveStats />
-
 
 
 
