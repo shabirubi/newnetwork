@@ -264,7 +264,7 @@ export default function LivePlayer({
       onMouseLeave={() => setShowControls(false)}
     >
       {/* Video Container */}
-      <div className="relative w-full aspect-[9/16] sm:aspect-video">
+      <div className="relative w-full aspect-video">
         {/* Logo Promo Animation */}
         {showPromo && (
           <motion.div
