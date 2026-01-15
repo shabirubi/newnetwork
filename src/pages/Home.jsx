@@ -73,18 +73,7 @@ export default function Home() {
   const currentChannel = selectedChannel === 'all' ? null : channels.find(c => c.id === selectedChannel);
   const channelStreamUrl = currentChannel?.stream_url || defaultStreamUrl;
 
-  if (isLoading) {
-    return (
-      <div className="space-y-8">
-        <Skeleton className="w-full aspect-video rounded-2xl" />
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[1,2,3].map(i => (
-            <Skeleton key={i} className="h-64 rounded-xl" />
-          ))}
-        </div>
-      </div>
-    );
-  }
+  // Don't block render on loading - show content as it loads
 
   return (
     <div className="space-y-0 sm:space-y-6">
@@ -130,20 +119,22 @@ export default function Home() {
       <TikTokNewsFeed articles={articles} />
 
       {/* All News Section */}
-      <section className="px-4 sm:px-0">
-        <div className="flex items-center justify-between mb-6">
-          <div className="flex items-center gap-2">
-            <Clock className="w-5 h-5 text-[#E31E24]" />
-            <h2 className="text-xl font-bold dark:text-white">חדשות אחרונות</h2>
+      {articles.length > 0 && (
+        <section className="px-4 sm:px-0">
+          <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center gap-2">
+              <Clock className="w-5 h-5 text-[#E31E24]" />
+              <h2 className="text-xl font-bold dark:text-white">חדשות אחרונות</h2>
+            </div>
           </div>
-        </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {articles.map((article, index) => (
-            <NewsCard key={article.id} article={article} index={index} />
-          ))}
-        </div>
-      </section>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {articles.map((article, index) => (
+              <NewsCard key={article.id} article={article} index={index} />
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Mobile Only - Reporters Feed Below Player */}
       <section className="sm:hidden px-4 py-4">
