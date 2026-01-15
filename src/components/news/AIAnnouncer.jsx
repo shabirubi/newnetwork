@@ -11,6 +11,7 @@ export default function AIAnnouncer() {
     const [isSpeaking, setIsSpeaking] = useState(false);
     const [currentArticleIndex, setCurrentArticleIndex] = useState(0);
     const audio = React.useRef(null);
+    const backgroundMusic = React.useRef(null);
     const shouldContinuePlaying = React.useRef(false);
 
   const { data: articles = [] } = useQuery({
@@ -64,6 +65,15 @@ export default function AIAnnouncer() {
     
     shouldContinuePlaying.current = true;
     setIsPlaying(true);
+    
+    // Start background music
+    if (!backgroundMusic.current) {
+      backgroundMusic.current = new Audio('https://cdn.pixabay.com/download/audio/2022/03/10/audio_4f0137bf85.mp3');
+      backgroundMusic.current.volume = 0.2;
+      backgroundMusic.current.loop = true;
+    }
+    backgroundMusic.current.play().catch(() => {});
+    
     playArticle(currentArticleIndex);
   };
 
@@ -91,6 +101,9 @@ export default function AIAnnouncer() {
   const handleStop = () => {
     shouldContinuePlaying.current = false;
     window.speechSynthesis.cancel();
+    if (backgroundMusic.current) {
+      backgroundMusic.current.pause();
+    }
     setIsPlaying(false);
     setIsSpeaking(false);
     setCurrentArticleIndex(0);
