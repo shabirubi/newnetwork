@@ -84,7 +84,7 @@ export default function UpdatesFeed() {
                 </div>
               </div>
             </Link>
-          </div>
+          </motion.div>
         ))}
       </div>
 
