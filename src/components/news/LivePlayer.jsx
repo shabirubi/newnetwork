@@ -107,11 +107,7 @@ export default function LivePlayer({
 
       return () => {
         if (playerRef.current && playerRef.current.destroy) {
-          try {
-            playerRef.current.destroy();
-          } catch (e) {
-            console.log('YouTube cleanup error:', e);
-          }
+          playerRef.current.destroy();
           playerRef.current = null;
         }
       };
@@ -185,14 +181,14 @@ export default function LivePlayer({
       });
 
       return () => {
-        if (playerRef.current && playerRef.current.destroy) {
+        if (playerRef.current) {
           try {
             playerRef.current.pause();
             playerRef.current.unload();
             playerRef.current.detachMediaElement();
             playerRef.current.destroy();
           } catch (e) {
-            console.log('mpegts cleanup error:', e);
+            console.log('Cleanup error:', e);
           }
           playerRef.current = null;
         }
@@ -232,11 +228,11 @@ export default function LivePlayer({
       });
 
       return () => {
-        if (playerRef.current && typeof playerRef.current.dispose === 'function') {
+        if (playerRef.current) {
           try {
             playerRef.current.dispose();
           } catch (e) {
-            console.log('video.js cleanup error:', e);
+            console.log('Dispose error:', e);
           }
           playerRef.current = null;
         }
@@ -264,7 +260,7 @@ export default function LivePlayer({
       onMouseLeave={() => setShowControls(false)}
     >
       {/* Video Container */}
-      <div className="relative w-full aspect-video">
+      <div className="relative w-full aspect-[9/16] sm:aspect-video">
         {/* Logo Promo Animation */}
         {showPromo && (
           <motion.div

@@ -26,8 +26,8 @@ export default function UpdatesFeed() {
       </div>
 
       {/* Feed - Scrollable with animations */}
-      <div className="bg-gray-50 dark:bg-gray-900 max-h-[650px] overflow-y-auto">
-        {breakingNews.slice(0, 8).map((article, index) => (
+      <div className="bg-gray-50 dark:bg-gray-900 max-h-[500px] overflow-y-auto">
+        {breakingNews.slice(0, 6).map((article, index) => (
           <motion.div
             key={article.id}
             initial={{ opacity: 0, x: -20 }}

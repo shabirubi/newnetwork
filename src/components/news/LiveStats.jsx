@@ -46,17 +46,17 @@ export default function LiveStats() {
   ];
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 px-4">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
       {stats.map((stat, index) => (
         <motion.div
           key={stat.label}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: index * 0.1 }}
-          className="relative overflow-hidden rounded-xl bg-gradient-to-br from-gray-900 to-black p-4 shadow-2xl border border-gray-800 hover:border-gray-700 hover:scale-105 transition-all"
+          className="relative overflow-hidden rounded-xl bg-white dark:bg-gray-800 p-4 shadow-lg border border-gray-100 dark:border-gray-700"
         >
           {/* Background Gradient */}
-          <div className={`absolute inset-0 bg-gradient-to-br ${stat.color} opacity-10`} />
+          <div className={`absolute inset-0 bg-gradient-to-br ${stat.color} opacity-5`} />
           
           <div className="relative">
             <div className="flex items-center gap-3 mb-2">
@@ -70,7 +70,7 @@ export default function LiveStats() {
                 )}
                 <stat.icon className="w-5 h-5 text-white relative z-10" />
               </div>
-              <div className="text-xs text-gray-400 font-medium">
+              <div className="text-xs text-gray-500 dark:text-gray-400 font-medium">
                 {stat.label}
               </div>
             </div>
@@ -81,7 +81,7 @@ export default function LiveStats() {
                 initial={stat.animate ? { opacity: 0, y: -10 } : {}}
                 animate={{ opacity: 1, y: 0 }}
                 exit={stat.animate ? { opacity: 0, y: 10 } : {}}
-                className="text-2xl font-bold text-white"
+                className="text-2xl font-bold text-gray-900 dark:text-white"
               >
                 {stat.value}
               </motion.div>

@@ -136,7 +136,7 @@ export default function Layout({ children }) {
       />
 
       {/* Header */}
-      <header className="bg-black shadow-md sticky top-0 z-50 transition-colors duration-300 border-b border-gray-800">
+      <header className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50 transition-colors duration-300 border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4">
           {/* Desktop Navigation */}
           <nav className="hidden sm:flex items-center justify-between gap-1 py-3">
@@ -147,7 +147,7 @@ export default function Layout({ children }) {
                 e.preventDefault();
                 window.location.href = createPageUrl("Live");
               }}
-              className="flex items-center gap-1.5 px-3 py-2 text-white bg-[#E31E24] hover:bg-[#B91C1C] rounded-lg transition-all text-xs font-bold shadow-lg shadow-red-500/30"
+              className="flex items-center gap-1.5 px-3 py-2 text-white bg-[#E31E24] hover:bg-[#B91C1C] rounded-lg transition-all text-xs font-bold"
             >
               <Radio size={16} />
               שידור חי
@@ -160,7 +160,7 @@ export default function Layout({ children }) {
                   e.preventDefault();
                   window.location.href = createPageUrl(cat.href);
                 }}
-                className="flex items-center gap-1.5 px-3 py-2 text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-all text-xs font-medium"
+                className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
               >
                 <cat.icon size={16} />
                 {cat.label}
@@ -172,7 +172,7 @@ export default function Layout({ children }) {
                   e.preventDefault();
                   window.location.href = createPageUrl("Schedule");
                 }}
-                className="flex items-center gap-1.5 px-3 py-2 text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-all text-xs font-medium"
+                className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
               >
                 <Clock size={16} />
                 לוח שידורים
@@ -183,7 +183,7 @@ export default function Layout({ children }) {
                   e.preventDefault();
                   window.location.href = createPageUrl("Reporters");
                 }}
-                className="flex items-center gap-1.5 px-3 py-2 text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-all text-xs font-medium"
+                className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
               >
                 <Users size={16} />
                 אנשי השטח
@@ -194,7 +194,7 @@ export default function Layout({ children }) {
                   e.preventDefault();
                   window.location.href = createPageUrl("NewsLoader");
                 }}
-                className="flex items-center gap-1.5 px-3 py-2 text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-all text-xs font-medium"
+                className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
               >
                 <Globe size={16} />
                 טעינת חדשות
@@ -205,7 +205,7 @@ export default function Layout({ children }) {
                   e.preventDefault();
                   window.location.href = createPageUrl("ChannelsManager");
                 }}
-                className="flex items-center gap-1.5 px-3 py-2 text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-all text-xs font-medium"
+                className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
               >
                 <Radio size={16} />
                 ניהול ערוצים
@@ -216,7 +216,7 @@ export default function Layout({ children }) {
                   e.preventDefault();
                   window.location.href = createPageUrl("Archive");
                 }}
-                className="flex items-center gap-1.5 px-3 py-2 text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-all text-xs font-medium"
+                className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
               >
                 <Clock size={16} />
                 ארכיון
@@ -227,21 +227,10 @@ export default function Layout({ children }) {
                   e.preventDefault();
                   window.location.href = createPageUrl("Movies");
                 }}
-                className="flex items-center gap-1.5 px-3 py-2 text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-all text-xs font-medium"
+                className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
               >
                 <Film size={16} />
                 סרטים קלאסיים
-              </Link>
-              <Link
-                to={createPageUrl("RadioStations")}
-                onClick={(e) => {
-                  e.preventDefault();
-                  window.location.href = createPageUrl("RadioStations");
-                }}
-                className="flex items-center gap-1.5 px-3 py-2 text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-all text-xs font-medium"
-              >
-                <Radio size={16} />
-                תחנות רדיו
               </Link>
               <Link
                 to={createPageUrl("ReporterQA")}
@@ -249,7 +238,7 @@ export default function Layout({ children }) {
                   e.preventDefault();
                   window.location.href = createPageUrl("ReporterQA");
                 }}
-                className="flex items-center gap-1.5 px-3 py-2 text-gray-300 hover:text-white hover:bg-white/10 rounded-lg transition-all text-xs font-medium"
+                className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
               >
                 <MessageSquareWarning size={16} />
                 שאלות ותשובות
