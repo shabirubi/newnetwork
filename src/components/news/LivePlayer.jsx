@@ -377,6 +377,7 @@ export default function LivePlayer({
         {/* Stream iframe - for non-streamable URLs */}
         {isPlaying && !showPromo && currentStreamUrl && 
          !currentStreamUrl.includes('ok.ru') && 
+         !currentStreamUrl.includes('mako.co.il') &&
          !currentStreamUrl.includes('.m3u8') && 
          !currentStreamUrl.includes('.mpd') && 
          !currentStreamUrl.includes('.ts') &&
