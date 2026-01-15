@@ -376,20 +376,22 @@ export default function ReportersFeed() {
         />
       )}
       
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sticky top-24 border border-gray-200 dark:border-gray-700">
-      <div className="flex items-center gap-2 mb-4 pb-3 border-b border-gray-200 dark:border-gray-700">
-        <Video className="w-5 h-5 text-[#E31E24]" />
-        <h2 className="font-bold text-base dark:text-white">אנשי השטח</h2>
-        <div className="mr-auto flex items-center gap-1">
-          <span className="relative flex h-2 w-2">
+      <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-6 sticky top-24 border border-gray-200 dark:border-gray-700 w-full">
+      <div className="flex items-center gap-3 mb-6 pb-4 border-b-2 border-gray-200 dark:border-gray-700">
+        <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#E31E24] to-[#B91C1C] flex items-center justify-center shadow-lg">
+          <Video className="w-5 h-5 text-white" />
+        </div>
+        <h2 className="font-bold text-xl dark:text-white">אנשי השטח</h2>
+        <div className="mr-auto flex items-center gap-2 bg-red-50 dark:bg-red-900/20 px-3 py-1.5 rounded-full">
+          <span className="relative flex h-2.5 w-2.5">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E31E24] opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#E31E24]"></span>
+            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#E31E24]"></span>
           </span>
-          <span className="text-[10px] text-[#E31E24] font-bold">LIVE</span>
+          <span className="text-xs text-[#E31E24] font-bold">שידור חי</span>
         </div>
       </div>
 
-      <div className="space-y-3 max-h-[600px] overflow-y-auto">
+      <div className="space-y-4 max-h-[700px] overflow-y-auto pr-2">
         <AnimatePresence mode="popLayout">
           {reporterArticles.map((item, index) => (
             <motion.div
@@ -400,31 +402,34 @@ export default function ReportersFeed() {
               transition={{ delay: index * 0.1 }}
               className="group"
             >
-              <div className="relative bg-gradient-to-br from-gray-50 to-white dark:from-gray-700/30 dark:to-gray-800/30 rounded-xl p-3 hover:shadow-lg transition-all border border-gray-100 dark:border-gray-700 hover:border-[#E31E24] dark:hover:border-[#E31E24]">
+              <div className="relative bg-gradient-to-br from-white via-gray-50 to-white dark:from-gray-800 dark:via-gray-800/50 dark:to-gray-800 rounded-2xl p-5 hover:shadow-2xl transition-all duration-300 border-2 border-gray-100 dark:border-gray-700 hover:border-[#E31E24] dark:hover:border-[#E31E24] hover:scale-[1.02]">
                 {/* Reporter Header */}
-                <div className="flex items-center gap-3 mb-3">
+                <div className="flex items-center gap-4 mb-4">
                   <div className="relative shrink-0">
-                    <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-gray-200 dark:border-gray-600 group-hover:border-[#E31E24] transition-colors shadow-md">
+                    <div className="w-20 h-20 rounded-2xl overflow-hidden border-3 border-gray-200 dark:border-gray-600 group-hover:border-[#E31E24] transition-all shadow-xl">
                       <img
                         src={item.reporter.image}
                         alt={item.reporter.name}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-300"
                       />
                     </div>
-                    <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-gradient-to-br from-[#E31E24] to-[#B91C1C] rounded-full flex items-center justify-center border-2 border-white dark:border-gray-800 shadow-lg">
-                      <Mic className="w-3 h-3 text-white" />
+                    <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-gradient-to-br from-[#E31E24] to-[#B91C1C] rounded-full flex items-center justify-center border-3 border-white dark:border-gray-800 shadow-lg animate-pulse">
+                      <Mic className="w-4 h-4 text-white" />
                     </div>
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3 className="font-bold text-sm text-gray-900 dark:text-white">
+                    <h3 className="font-bold text-base text-gray-900 dark:text-white mb-1">
                       {item.reporter.name}
                     </h3>
-                    <p className="text-[10px] text-gray-600 dark:text-gray-400 font-medium">
+                    <p className="text-xs text-gray-600 dark:text-gray-400 font-medium mb-1">
                       {item.reporter.role}
                     </p>
-                    <span className="text-[9px] text-[#E31E24] font-bold">
-                      {item.time}
-                    </span>
+                    <div className="flex items-center gap-1.5">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#E31E24] animate-pulse"></div>
+                      <span className="text-xs text-[#E31E24] font-bold">
+                        {item.time}
+                      </span>
+                    </div>
                   </div>
                 </div>
 
@@ -433,46 +438,46 @@ export default function ReportersFeed() {
                   onClick={() => {
                     window.location.href = createPageUrl(`Article?id=${item.article.id}`);
                   }}
-                  className="block text-right w-full cursor-pointer"
+                  className="block text-right w-full cursor-pointer mb-3"
                 >
-                  <p className="text-xs text-gray-800 dark:text-gray-200 font-medium line-clamp-2 leading-snug group-hover:text-[#E31E24] dark:group-hover:text-[#E31E24] transition-colors mb-2">
+                  <p className="text-sm text-gray-800 dark:text-gray-200 font-bold line-clamp-2 leading-relaxed group-hover:text-[#E31E24] dark:group-hover:text-[#E31E24] transition-colors mb-2">
                     {item.article.title}
                   </p>
                   {item.article.subtitle && (
-                    <p className="text-[10px] text-gray-600 dark:text-gray-400 line-clamp-1 mb-2">
+                    <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2 leading-relaxed">
                       {item.article.subtitle}
-                      </p>
-                      )}
-                      </button>
+                    </p>
+                  )}
+                </button>
 
                 {/* Actions */}
-                <div className="space-y-2 pt-2 border-t border-gray-200 dark:border-gray-700">
+                <div className="space-y-3 pt-3 border-t-2 border-gray-200 dark:border-gray-700">
                   {item.article.is_breaking && (
-                    <span className="inline-flex items-center gap-1 px-2 py-1 bg-[#E31E24] text-white text-[9px] font-bold rounded-full">
-                      <TrendingUp className="w-2.5 h-2.5" />
-                      חם
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-gradient-to-r from-[#E31E24] to-[#B91C1C] text-white text-xs font-bold rounded-full shadow-lg animate-pulse">
+                      <TrendingUp className="w-3.5 h-3.5" />
+                      חדשות חמות
                     </span>
                   )}
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-2 gap-3">
                     <button
                       onClick={(e) => {
                         e.preventDefault();
                         setChatReporter(item);
                       }}
-                      className="flex items-center justify-center gap-1 px-2 py-1.5 bg-blue-600 hover:bg-blue-700 text-white text-[10px] font-bold rounded-lg shadow-md hover:shadow-lg transition-all"
+                      className="flex items-center justify-center gap-2 px-3 py-2.5 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-xs font-bold rounded-xl shadow-lg hover:shadow-xl transition-all hover:scale-105"
                     >
-                      <MessageCircle className="w-3 h-3" />
-                      צ׳אט עם הכתב
+                      <MessageCircle className="w-4 h-4" />
+                      צ׳אט
                     </button>
                     <button
                       onClick={(e) => {
                         e.preventDefault();
                         setSelectedReporter(item);
                       }}
-                      className="flex items-center justify-center gap-1 px-2 py-1.5 bg-gradient-to-r from-[#E31E24] to-[#B91C1C] hover:from-[#B91C1C] hover:to-[#991B1B] text-white text-[10px] font-bold rounded-lg shadow-md hover:shadow-lg transition-all"
+                      className="flex items-center justify-center gap-2 px-3 py-2.5 bg-gradient-to-r from-[#E31E24] to-[#B91C1C] hover:from-[#B91C1C] hover:to-[#991B1B] text-white text-xs font-bold rounded-xl shadow-lg hover:shadow-xl transition-all hover:scale-105"
                     >
-                      <Play className="w-3 h-3" fill="white" />
-                      שמע כתבה
+                      <Play className="w-4 h-4" fill="white" />
+                      האזן
                     </button>
                   </div>
                 </div>
@@ -482,12 +487,12 @@ export default function ReportersFeed() {
         </AnimatePresence>
       </div>
 
-      <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
+      <div className="mt-6 pt-4 border-t-2 border-gray-200 dark:border-gray-700">
         <Link
           to={createPageUrl("Reporters")}
-          className="block text-center text-xs font-bold text-[#E31E24] hover:text-[#B91C1C] transition-colors"
+          className="block text-center text-sm font-bold text-white bg-gradient-to-r from-[#E31E24] to-[#B91C1C] hover:from-[#B91C1C] hover:to-[#991B1B] py-3 rounded-xl shadow-lg hover:shadow-xl transition-all hover:scale-105"
         >
-          כל הכתבים ←
+          צפה בכל הכתבים ←
         </Link>
       </div>
       </div>
