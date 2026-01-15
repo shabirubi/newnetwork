@@ -191,33 +191,7 @@ export default function Home() {
 
 
 
-      {/* Category Navigation Bar */}
-      <section className="bg-white dark:bg-gray-800 rounded-xl shadow-md p-4 border border-gray-200 dark:border-gray-700">
-        <div className="flex flex-wrap items-center justify-center gap-3">
-          {[
-            { label: "ביטחון", cat: "security", Icon: Shield, color: "hover:bg-orange-50 hover:text-orange-700" },
-            { label: "כלכלה", cat: "economy", Icon: DollarSign, color: "hover:bg-green-50 hover:text-green-700" },
-            { label: "פוליטיקה", cat: "politics", Icon: Landmark, color: "hover:bg-purple-50 hover:text-purple-700" },
-            { label: "טכנולוגיה", cat: "technology", Icon: Cpu, color: "hover:bg-blue-50 hover:text-blue-700" },
-            { label: "ספורט", cat: "sports", Icon: Trophy, color: "hover:bg-emerald-50 hover:text-emerald-700" },
-            { label: "בידור", cat: "entertainment", Icon: Clapperboard, color: "hover:bg-pink-50 hover:text-pink-700" },
-            { label: "עולם", cat: "world", Icon: Globe, color: "hover:bg-indigo-50 hover:text-indigo-700" },
-            { label: "בריאות", cat: "health", Icon: Heart, color: "hover:bg-red-50 hover:text-red-700" },
-          ].map(item => (
-            <Link
-              key={item.cat}
-              to={createPageUrl(`Category?cat=${item.cat}`)}
-              className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-bold text-gray-700 dark:text-gray-200 transition-all ${item.color} dark:hover:bg-opacity-20`}
-            >
-              <item.Icon size={18} />
-              {item.label}
-            </Link>
-          ))}
-        </div>
-      </section>
 
-      {/* Video Highlights */}
-      <VideoHighlights />
 
       {/* Latest News Grid */}
       <section>
@@ -235,43 +209,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Trending Section */}
-      <section className="bg-gradient-to-br from-gray-900 to-gray-800 dark:from-black dark:to-gray-900 rounded-2xl p-8 text-white">
-        <div className="flex items-center gap-2 mb-6">
-          <TrendingUp className="w-6 h-6 text-[#E31E24]" />
-          <h2 className="text-2xl font-bold">הכי נצפה עכשיו</h2>
-        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {trendingNews.slice(0, 3).map((article, index) => (
-            <motion.div
-              key={article.id}
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
-            >
-              <Link 
-                to={createPageUrl(`Article?id=${article.id}`)}
-                className="block group"
-              >
-                <div className="flex items-start gap-4">
-                  <span className="text-4xl font-bold text-[#E31E24]">
-                    {index + 1}
-                  </span>
-                  <div>
-                    <h3 className="font-bold text-lg group-hover:text-[#E31E24] transition-colors line-clamp-2">
-                      {article.title}
-                    </h3>
-                    <p className="text-gray-400 text-sm mt-2 line-clamp-2">
-                      {article.subtitle || article.content?.slice(0, 100)}
-                    </p>
-                  </div>
-                </div>
-              </Link>
-            </motion.div>
-          ))}
-        </div>
-      </section>
 
       {/* CTA Section */}
       <section className="bg-[#E31E24] rounded-2xl p-8 text-white text-center">
