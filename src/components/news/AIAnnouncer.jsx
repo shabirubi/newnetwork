@@ -73,17 +73,24 @@ export default function AIAnnouncer() {
 
   return (
     <>
-      {/* Announcer Button */}
+      {/* Announcer Button - Floating */}
       <motion.button
-        whileHover={{ scale: 1.05 }}
+        whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-24 left-6 z-40 flex flex-col items-center gap-2 group"
+        className="fixed bottom-32 right-6 z-50 flex flex-col items-center gap-3 group"
       >
-        <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#E31E24] to-[#B91C1C] shadow-lg flex items-center justify-center group-hover:shadow-2xl transition-all">
-          <Volume2 className="w-8 h-8 text-white" />
+        {/* Pulse Animation */}
+        <div className="absolute inset-0 w-20 h-20 rounded-full bg-[#E31E24] opacity-20 animate-pulse" />
+        
+        {/* Main Button */}
+        <div className="relative w-20 h-20 rounded-full bg-gradient-to-br from-[#E31E24] to-[#B91C1C] shadow-2xl flex items-center justify-center group-hover:shadow-[0_0_30px_rgba(227,30,36,0.6)] transition-all">
+          <div className="absolute inset-0 rounded-full border-2 border-[#E31E24] animate-pulse opacity-50" />
+          <Volume2 className="w-10 h-10 text-white relative z-10" />
         </div>
-        <span className="text-xs font-bold bg-white dark:bg-gray-800 px-3 py-1 rounded-full whitespace-nowrap shadow-md">
+        
+        {/* Label */}
+        <span className="text-xs font-bold bg-[#E31E24] text-white px-3 py-1.5 rounded-full whitespace-nowrap shadow-lg">
           השדרן משדר עדכונים חיים 24/7
         </span>
       </motion.button>
