@@ -110,10 +110,13 @@ export default function AIAnnouncer() {
   };
 
   React.useEffect(() => {
-    if (shouldContinuePlaying.current && !isSpeaking) {
-      playArticle(currentArticleIndex);
+    if (shouldContinuePlaying.current && !isSpeaking && articles.length > 0) {
+      const timer = setTimeout(() => {
+        playArticle(currentArticleIndex);
+      }, 500);
+      return () => clearTimeout(timer);
     }
-  }, [currentArticleIndex, isSpeaking, articles]);
+  }, [currentArticleIndex, isSpeaking]);
 
   if (articles.length === 0) return null;
 
