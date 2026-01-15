@@ -404,36 +404,36 @@ export default function ReportersFeed() {
                 {/* Compact Horizontal Layout */}
                 <div className="flex items-stretch">
                   {/* Right Side - Reporter Image & Live Indicator */}
-                  <div className="relative w-32 shrink-0 bg-gradient-to-br from-[#E31E24] to-[#B91C1C] flex items-center justify-center">
-                    <div className="absolute top-2 right-2 flex items-center gap-1 bg-black/30 backdrop-blur-sm px-2 py-1 rounded-full">
-                      <span className="relative flex h-2 w-2">
+                  <div className="relative w-48 shrink-0 bg-gradient-to-br from-[#E31E24] to-[#B91C1C] flex items-center justify-center">
+                    <div className="absolute top-3 right-3 flex items-center gap-1.5 bg-black/30 backdrop-blur-sm px-2.5 py-1.5 rounded-full">
+                      <span className="relative flex h-2.5 w-2.5">
                         <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+                        <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-white"></span>
                       </span>
-                      <span className="text-white text-[10px] font-bold">LIVE</span>
+                      <span className="text-white text-xs font-bold">LIVE</span>
                     </div>
                     <div className="relative">
-                      <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-xl">
+                      <div className="w-32 h-32 rounded-full overflow-hidden border-4 border-white shadow-xl">
                         <img
                           src={item.reporter.image}
                           alt={item.reporter.name}
                           className="w-full h-full object-cover"
                         />
                       </div>
-                      <div className="absolute -bottom-1 -left-1 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-lg">
-                        <Mic className="w-3 h-3 text-[#E31E24]" />
+                      <div className="absolute -bottom-2 -left-2 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-lg">
+                        <Mic className="w-4 h-4 text-[#E31E24]" />
                       </div>
                     </div>
                   </div>
 
                   {/* Content Area */}
-                  <div className="flex-1 p-4 flex flex-col">
+                  <div className="flex-1 p-5 flex flex-col">
                     {/* Reporter Info */}
-                    <div className="mb-3">
-                      <h3 className="font-bold text-lg text-gray-900 dark:text-white leading-tight mb-0.5">
+                    <div className="mb-4">
+                      <h3 className="font-bold text-xl text-gray-900 dark:text-white leading-tight mb-1">
                         {item.reporter.name}
                       </h3>
-                      <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">
+                      <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">
                         {item.reporter.role} • {item.time}
                       </p>
                     </div>
@@ -443,28 +443,28 @@ export default function ReportersFeed() {
                       onClick={() => {
                         window.location.href = createPageUrl(`Article?id=${item.article.id}`);
                       }}
-                      className="block text-right w-full mb-3 flex-1"
+                      className="block text-right w-full mb-4 flex-1"
                     >
                       <div className="flex items-start gap-2">
                         {item.article.is_breaking && (
-                          <TrendingUp className="w-4 h-4 text-[#E31E24] shrink-0 mt-0.5" />
+                          <TrendingUp className="w-5 h-5 text-[#E31E24] shrink-0 mt-0.5" />
                         )}
-                        <p className="text-sm text-gray-900 dark:text-white font-bold line-clamp-2 leading-snug">
+                        <p className="text-base text-gray-900 dark:text-white font-bold line-clamp-3 leading-snug">
                           {item.article.title}
                         </p>
                       </div>
                     </button>
 
                     {/* Action Buttons */}
-                    <div className="flex gap-2">
+                    <div className="flex gap-3">
                       <button
                         onClick={(e) => {
                           e.preventDefault();
                           setChatReporter(item);
                         }}
-                        className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-lg transition-colors"
+                        className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-blue-600 hover:bg-blue-700 text-white text-base font-bold rounded-xl transition-colors shadow-md"
                       >
-                        <MessageCircle className="w-4 h-4" />
+                        <MessageCircle className="w-5 h-5" />
                         שיחה
                       </button>
                       <button
@@ -472,9 +472,9 @@ export default function ReportersFeed() {
                           e.preventDefault();
                           setSelectedReporter(item);
                         }}
-                        className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 bg-[#E31E24] hover:bg-[#B91C1C] text-white text-sm font-bold rounded-lg transition-colors"
+                        className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-[#E31E24] hover:bg-[#B91C1C] text-white text-base font-bold rounded-xl transition-colors shadow-md"
                       >
-                        <Play className="w-4 h-4" fill="white" />
+                        <Play className="w-5 h-5" fill="white" />
                         האזן
                       </button>
                     </div>
