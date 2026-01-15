@@ -214,59 +214,15 @@ export default function ReporterChatModal({ reporter, article, onClose }) {
     setPlayingMessageId(messageId);
     
     try {
-      // ElevenLabs voice IDs - different voices for each reporter gender
-      const maleVoiceIds = [
-        'pNInz6obpgDQGcFmaJgB', // Adam
-        'yoZ06aMxZJJ28mfd3POQ', // Sam
-        'Yko7PKHZNXotIFUBG7I9', // Daniel
-        '21m00Tcm4TlvDq8ikWAM', // Josh
-        'N2lVS1w4EtoT3dr4eOWO', // Callum
-      ];
-      
-      const femaleVoiceIds = [
-        'EXAVITQu4vr4xnSDxMaL', // Sarah
-        'MF3mGyEYCl7XYWbV9V6O', // Elli
-        'XrExE9yKIg1WjnnlVkGX', // Matilda
-        'oWAxZDx7w5VEj9dCyTzz', // Grace
-        'iP95p4xoKVk53GoZ742B', // Lily
-      ];
-      
-      // Hash function to get consistent voice per reporter
-      const getVoiceId = (name, gender) => {
-        let hash = 0;
-        for (let i = 0; i < name.length; i++) {
-          hash = ((hash << 5) - hash) + name.charCodeAt(i);
-          hash = hash & hash;
-        }
-        const voiceArray = gender === 'female' ? femaleVoiceIds : maleVoiceIds;
-        return voiceArray[Math.abs(hash) % voiceArray.length];
-      };
-      
-      const voiceId = getVoiceId(reporter.name, reporter.gender);
-      
-      // Call ElevenLabs API
-      const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
-        method: 'POST',
-        headers: {
-          'Accept': 'audio/mpeg',
-          'Content-Type': 'application/json',
-          'xi-api-key': 'sk_e807be3a5a3c738c9593c95023f7bb78791d3aaa5a000ec0'
-        },
-        body: JSON.stringify({
-          text: text,
-          model_id: 'eleven_multilingual_v2',
-          voice_settings: {
-            stability: 0.5,
-            similarity_boost: 0.75
-          }
-        })
+      // Call backend function to generate voice securely
+      const result = await base44.functions.generateReporterVoice({
+        text: text,
+        reporterName: reporter.name,
+        reporterGender: reporter.gender
       });
 
-      if (!response.ok) {
-        throw new Error('Failed to generate speech');
-      }
-
-      const audioBlob = await response.blob();
+      // Convert base64 to blob
+      const audioBlob = base64ToBlob(result.audioBase64, result.mimeType);
       const audioUrl = URL.createObjectURL(audioBlob);
       const audio = new Audio(audioUrl);
       
@@ -282,6 +238,17 @@ export default function ReporterChatModal({ reporter, article, onClose }) {
       toast.error('שגיאה בהשמעת קול');
       setPlayingMessageId(null);
     }
+  };
+
+  // Helper function to convert base64 to blob
+  const base64ToBlob = (base64, mimeType) => {
+    const byteCharacters = atob(base64);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    return new Blob([byteArray], { type: mimeType });
   };
 
   useEffect(() => {
