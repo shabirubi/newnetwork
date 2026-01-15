@@ -401,87 +401,83 @@ export default function ReportersFeed() {
               className="group"
             >
               <div className="relative bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all border-2 border-gray-200 dark:border-gray-700 hover:border-[#E31E24] dark:hover:border-[#E31E24]">
-                {/* Top Bar - Live Indicator */}
-                <div className="bg-gradient-to-r from-[#E31E24] to-[#B91C1C] px-5 py-3 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="relative flex h-2.5 w-2.5">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-white"></span>
-                    </span>
-                    <span className="text-white text-sm font-bold">שידור חי</span>
-                  </div>
-                  <span className="text-white/90 text-sm font-medium">{item.time}</span>
-                </div>
-
-                {/* Reporter Profile */}
-                <div className="p-5">
-                  <div className="flex items-start gap-4 mb-5">
-                    <div className="relative shrink-0">
-                      <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-[#E31E24] shadow-xl">
+                {/* Compact Horizontal Layout */}
+                <div className="flex items-stretch">
+                  {/* Right Side - Reporter Image & Live Indicator */}
+                  <div className="relative w-32 shrink-0 bg-gradient-to-br from-[#E31E24] to-[#B91C1C] flex items-center justify-center">
+                    <div className="absolute top-2 right-2 flex items-center gap-1 bg-black/30 backdrop-blur-sm px-2 py-1 rounded-full">
+                      <span className="relative flex h-2 w-2">
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+                      </span>
+                      <span className="text-white text-[10px] font-bold">LIVE</span>
+                    </div>
+                    <div className="relative">
+                      <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-white shadow-xl">
                         <img
                           src={item.reporter.image}
                           alt={item.reporter.name}
                           className="w-full h-full object-cover"
                         />
                       </div>
-                      <div className="absolute -bottom-1 -right-1 w-7 h-7 bg-[#E31E24] rounded-full flex items-center justify-center border-3 border-white dark:border-gray-800 shadow-lg">
-                        <Mic className="w-4 h-4 text-white" />
+                      <div className="absolute -bottom-1 -left-1 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-lg">
+                        <Mic className="w-3 h-3 text-[#E31E24]" />
                       </div>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-bold text-xl text-gray-900 dark:text-white mb-1.5 leading-tight">
-                        {item.reporter.name}
-                      </h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-400 font-medium">
-                        {item.reporter.role}
-                      </p>
                     </div>
                   </div>
 
-                  {/* Article Preview */}
-                  <button
-                    onClick={() => {
-                      window.location.href = createPageUrl(`Article?id=${item.article.id}`);
-                    }}
-                    className="block text-right w-full mb-5 bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
-                  >
-                    <div className="flex items-start gap-2 mb-2">
-                      {item.article.is_breaking && (
-                        <TrendingUp className="w-5 h-5 text-[#E31E24] shrink-0 mt-0.5" />
-                      )}
-                      <p className="text-base text-gray-900 dark:text-white font-bold line-clamp-3 leading-snug">
-                        {item.article.title}
+                  {/* Content Area */}
+                  <div className="flex-1 p-4 flex flex-col">
+                    {/* Reporter Info */}
+                    <div className="mb-3">
+                      <h3 className="font-bold text-lg text-gray-900 dark:text-white leading-tight mb-0.5">
+                        {item.reporter.name}
+                      </h3>
+                      <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">
+                        {item.reporter.role} • {item.time}
                       </p>
                     </div>
-                    {item.article.subtitle && (
-                      <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 leading-relaxed mt-2">
-                        {item.article.subtitle}
-                      </p>
-                    )}
-                  </button>
 
-                  {/* Action Buttons */}
-                  <div className="flex gap-3">
+                    {/* Article Preview */}
                     <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setChatReporter(item);
+                      onClick={() => {
+                        window.location.href = createPageUrl(`Article?id=${item.article.id}`);
                       }}
-                      className="flex-1 flex items-center justify-center gap-2 px-5 py-4 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-base font-bold rounded-xl shadow-lg hover:shadow-xl transition-all"
+                      className="block text-right w-full mb-3 flex-1"
                     >
-                      <MessageCircle className="w-5 h-5" />
-                      שיחה
+                      <div className="flex items-start gap-2">
+                        {item.article.is_breaking && (
+                          <TrendingUp className="w-4 h-4 text-[#E31E24] shrink-0 mt-0.5" />
+                        )}
+                        <p className="text-sm text-gray-900 dark:text-white font-bold line-clamp-2 leading-snug">
+                          {item.article.title}
+                        </p>
+                      </div>
                     </button>
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        setSelectedReporter(item);
-                      }}
-                      className="flex-1 flex items-center justify-center gap-2 px-5 py-4 bg-gradient-to-r from-[#E31E24] to-[#B91C1C] hover:from-[#B91C1C] hover:to-[#991B1B] text-white text-base font-bold rounded-xl shadow-lg hover:shadow-xl transition-all"
-                    >
-                      <Play className="w-5 h-5" fill="white" />
-                      האזן
-                    </button>
+
+                    {/* Action Buttons */}
+                    <div className="flex gap-2">
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setChatReporter(item);
+                        }}
+                        className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-bold rounded-lg transition-colors"
+                      >
+                        <MessageCircle className="w-4 h-4" />
+                        שיחה
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setSelectedReporter(item);
+                        }}
+                        className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 bg-[#E31E24] hover:bg-[#B91C1C] text-white text-sm font-bold rounded-lg transition-colors"
+                      >
+                        <Play className="w-4 h-4" fill="white" />
+                        האזן
+                      </button>
+                    </div>
                   </div>
                 </div>
               </div>
