@@ -19,6 +19,7 @@ import AutoChannelsUpdater from "../components/news/AutoChannelsUpdater";
 import CurrencyStrip from "../components/header/CurrencyStrip";
 import TikTokNewsFeed from "../components/news/TikTokNewsFeed";
 import AIAnnouncer from "../components/news/AIAnnouncer";
+import PopupFeed from "../components/news/PopupFeed";
 
 export default function Home() {
   const [selectedChannel, setSelectedChannel] = React.useState(() => {
@@ -27,6 +28,8 @@ export default function Home() {
     }
     return 'all';
   });
+
+  const [popupOpen, setPopupOpen] = React.useState(false);
 
   React.useEffect(() => {
     const handleChannelChange = (e) => {
@@ -91,39 +94,38 @@ export default function Home() {
       <AutoNewsUpdater />
       <AutoChannelsUpdater />
       <AIAnnouncer />
-      {/* Hero Section - Extended Live Player */}
-      <section className="grid grid-cols-1 lg:grid-cols-12 gap-0 sm:gap-3 -mx-0 sm:mx-0 px-0 sm:px-4">
-        {/* Right Sidebar - Updates Feed */}
-        <aside className="lg:col-span-2 hidden lg:block">
-          <UpdatesFeed />
-        </aside>
+      <PopupFeed isOpen={popupOpen} onClose={() => setPopupOpen(false)} />
 
-        {/* Center - Extended Live Player */}
-        <div className="lg:col-span-8">
-          <div className="bg-gradient-to-r from-gray-900 to-gray-800 dark:from-black dark:to-gray-900 sm:rounded-t-lg p-2 sm:p-3 flex items-center justify-between hidden sm:flex">
-            <div className="flex items-center gap-3">
-              <div className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E31E24] opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#E31E24]"></span>
-              </div>
-              <h2 className="text-white text-lg font-bold">שידור חי</h2>
+      {/* Floating Button */}
+      <motion.button
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={() => setPopupOpen(true)}
+        className="fixed bottom-32 left-6 z-40 w-16 h-16 rounded-full bg-gradient-to-br from-[#E31E24] to-[#B91C1C] shadow-2xl flex items-center justify-center text-white font-bold hover:shadow-[0_0_30px_rgba(227,30,36,0.6)] transition-all"
+      >
+        <ChevronLeft className="w-8 h-8" />
+      </motion.button>
+
+      {/* Hero Section - No Sidebars */}
+      <section className="w-full">
+        <div className="bg-gradient-to-r from-gray-900 to-gray-800 dark:from-black dark:to-gray-900 sm:rounded-t-lg p-2 sm:p-3 flex items-center justify-between hidden sm:flex">
+          <div className="flex items-center gap-3">
+            <div className="relative flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E31E24] opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#E31E24]"></span>
             </div>
-            <CurrencyStrip activeLive={activeLive} />
+            <h2 className="text-white text-lg font-bold">שידור חי</h2>
           </div>
-          <div className="relative">
-            <LivePlayer 
-              title={currentChannel?.name || activeLive?.title || "הרשת החדשה - שידור חי"}
-              isLive={!!activeLive?.is_active}
-              viewerCount={activeLive?.viewer_count || 3456}
-              streamUrl={channelStreamUrl}
-            />
-          </div>
+          <CurrencyStrip activeLive={activeLive} />
         </div>
-
-        {/* Left Sidebar - Reporters Feed */}
-        <aside className="lg:col-span-2 hidden lg:block">
-          <ReportersFeed />
-        </aside>
+        <div className="relative">
+          <LivePlayer 
+            title={currentChannel?.name || activeLive?.title || "הרשת החדשה - שידור חי"}
+            isLive={!!activeLive?.is_active}
+            viewerCount={activeLive?.viewer_count || 3456}
+            streamUrl={channelStreamUrl}
+          />
+        </div>
       </section>
 
       {/* TikTok Style News Feed with All Articles */}
@@ -145,10 +147,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Mobile Only - Reporters Feed Below Player */}
-      <section className="sm:hidden px-4 py-4">
-        <ReportersFeed />
-      </section>
+
 
 
       {/* CTA Section */}
