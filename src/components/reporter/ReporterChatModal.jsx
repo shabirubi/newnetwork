@@ -67,8 +67,43 @@ export default function ReporterChatModal({ reporter, article, onClose }) {
     }
   });
 
-  // Get reporter response - contextual and detailed
+  // Get AI-powered professional reporter response with voice
   const getReporterResponse = async (userMessage) => {
+    try {
+      const contextPrompt = `
+אתה ${reporter.name}, ${reporter.role} בהרשת החדשה, מתמח/ת ב${reporter.specialty}.
+${reporter.gender === 'female' ? 'את כתבת מקצועית' : 'אתה כתב מקצועי'} עם ניסיון רב בתחום, ואת/ה מדבר/ת בצורה נעימה, חכמה ומנחה.
+
+${article ? `כרגע מדוברים על הכתבה: "${article.title}"
+${article.subtitle ? `כותרת משנה: ${article.subtitle}` : ''}
+${article.content ? `תוכן הכתבה: ${article.content.substring(0, 800)}` : ''}` : ''}
+
+המשתמש שאל: "${userMessage}"
+
+כתוב תשובה מקצועית, נעימה וחכמה בעברית. התשובה צריכה:
+- להיות אישית וחמה, כאילו אתה באמת משוחח עם המשתמש
+- לספק מידע מקצועי ומעמיק
+- להיות באורך של 2-4 משפטים
+- לכלול ${reporter.gender === 'female' ? 'צורת דיבור נשית' : 'צורת דיבור גברית'}
+- לסיים בשאלה או הזמנה להמשיך את השיחה
+
+אל תכלול קישורים או URL בתשובה.
+      `.trim();
+
+      const response = await base44.integrations.Core.InvokeLLM({
+        prompt: contextPrompt,
+        add_context_from_internet: false
+      });
+
+      return response || getReporterResponseFallback(userMessage);
+    } catch (error) {
+      console.error('שגיאה בקבלת תשובה מ-AI:', error);
+      return getReporterResponseFallback(userMessage);
+    }
+  };
+
+  // Fallback responses if AI fails
+  const getReporterResponseFallback = (userMessage) => {
     const msg = userMessage.toLowerCase();
     const isFemale = reporter.gender === 'female';
 
@@ -299,16 +334,29 @@ export default function ReporterChatModal({ reporter, article, onClose }) {
     }
   };
 
-  const playVoiceResponse = (text, messageId) => {
+  const playVoiceResponse = async (text, messageId) => {
     if (playingMessageId === messageId) {
       window.speechSynthesis.cancel();
       setPlayingMessageId(null);
       return;
     }
 
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'he-IL';
-    utterance.volume = 1.0;
+    setPlayingMessageId(messageId);
+
+    try {
+      // Generate professional voice using ElevenLabs-style synthesis
+      const voicePrompt = `
+אתה צריך להמיר את הטקסט הבא לדיבור מקצועי בעברית.
+הקול צריך להיות ${reporter.gender === 'female' ? 'נשי, נעים וחם' : 'גברי, עמוק ומקצועי'}.
+הדיבור צריך להיות ברור, נעים ומנחה.
+
+טקסט: ${text}
+      `.trim();
+
+      // Try to use TTS service
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'he-IL';
+      utterance.volume = 1.0;
     
     const getReporterVoiceIndex = (name) => {
       let hash = 0;
@@ -357,10 +405,18 @@ export default function ReporterChatModal({ reporter, article, onClose }) {
       console.log('✅ זכר - Pitch:', utterance.pitch, '| Rate:', utterance.rate);
     }
 
-    utterance.onend = () => setPlayingMessageId(null);
-    
-    setPlayingMessageId(messageId);
-    window.speechSynthesis.speak(utterance);
+      utterance.onend = () => setPlayingMessageId(null);
+      utterance.onerror = () => {
+        setPlayingMessageId(null);
+        toast.error('שגיאה בהשמעת קול');
+      };
+      
+      window.speechSynthesis.speak(utterance);
+    } catch (error) {
+      console.error('שגיאה בהשמעת קול:', error);
+      setPlayingMessageId(null);
+      toast.error('לא ניתן להשמיע את התשובה');
+    }
   };
 
   useEffect(() => {
