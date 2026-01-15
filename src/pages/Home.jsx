@@ -116,14 +116,7 @@ export default function Home() {
               streamUrl={channelStreamUrl}
             />
 
-            {/* Infinite News Feed */}
-            <div className="mt-6">
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                {articles.slice(0, 12).map((article, index) => (
-                  <NewsCard key={article.id} article={article} index={index} />
-                ))}
-              </div>
-            </div>
+
             </div>
             </div>
 
@@ -133,8 +126,8 @@ export default function Home() {
             </aside>
             </section>
 
-            {/* TikTok Style News Feed */}
-            <TikTokNewsFeed />
+            {/* TikTok Style News Feed with All Articles */}
+            <TikTokNewsFeed articles={articles} />
 
             {/* Mobile Only - Reporters Feed Below Player */}
             <section className="sm:hidden px-4 py-4">
