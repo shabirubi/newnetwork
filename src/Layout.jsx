@@ -139,8 +139,8 @@ export default function Layout({ children }) {
       <header className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50 transition-colors duration-300 border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4">
           {/* Desktop Navigation */}
-          <nav className="hidden sm:flex items-center justify-between gap-1 py-3">
-            <div className="flex items-center gap-1">
+          <nav className="hidden sm:flex items-center justify-start gap-2 py-3 flex-wrap">
+            <div className="flex items-center gap-2 flex-wrap">
             <Link
               to={createPageUrl("Live")}
               onClick={(e) => {
