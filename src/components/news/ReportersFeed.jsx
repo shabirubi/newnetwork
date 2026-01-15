@@ -400,76 +400,84 @@ export default function ReportersFeed() {
               transition={{ delay: index * 0.1 }}
               className="group"
             >
-              <div className="relative bg-gradient-to-br from-gray-50 to-white dark:from-gray-700/30 dark:to-gray-800/30 rounded-xl p-5 hover:shadow-xl transition-all border border-gray-100 dark:border-gray-700 hover:border-[#E31E24] dark:hover:border-[#E31E24]">
-                {/* Reporter Header */}
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="relative shrink-0">
-                    <div className="w-20 h-20 rounded-xl overflow-hidden border-2 border-gray-200 dark:border-gray-600 group-hover:border-[#E31E24] transition-colors shadow-lg">
-                      <img
-                        src={item.reporter.image}
-                        alt={item.reporter.name}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-gradient-to-br from-[#E31E24] to-[#B91C1C] rounded-full flex items-center justify-center border-2 border-white dark:border-gray-800 shadow-lg">
-                      <Mic className="w-4 h-4 text-white" />
-                    </div>
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <h3 className="font-bold text-base text-gray-900 dark:text-white mb-1">
-                      {item.reporter.name}
-                    </h3>
-                    <p className="text-xs text-gray-600 dark:text-gray-400 font-medium mb-1">
-                      {item.reporter.role}
-                    </p>
-                    <span className="text-xs text-[#E31E24] font-bold">
-                      {item.time}
+              <div className="relative bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all border border-gray-200 dark:border-gray-700 hover:border-[#E31E24] dark:hover:border-[#E31E24]">
+                {/* Top Bar - Live Indicator */}
+                <div className="bg-gradient-to-r from-[#E31E24] to-[#B91C1C] px-4 py-2 flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
                     </span>
+                    <span className="text-white text-xs font-bold">שידור חי</span>
                   </div>
+                  <span className="text-white/90 text-xs">{item.time}</span>
                 </div>
 
-                {/* Article Content */}
-                <button
-                  onClick={() => {
-                    window.location.href = createPageUrl(`Article?id=${item.article.id}`);
-                  }}
-                  className="block text-right w-full cursor-pointer mb-4"
-                >
-                  <p className="text-sm text-gray-800 dark:text-gray-200 font-bold line-clamp-2 leading-relaxed group-hover:text-[#E31E24] dark:group-hover:text-[#E31E24] transition-colors mb-2">
-                    {item.article.title}
-                  </p>
-                  {item.article.subtitle && (
-                    <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2 leading-relaxed">
-                      {item.article.subtitle}
-                    </p>
-                  )}
-                </button>
+                {/* Reporter Profile */}
+                <div className="p-4">
+                  <div className="flex items-start gap-4 mb-4">
+                    <div className="relative shrink-0">
+                      <div className="w-16 h-16 rounded-full overflow-hidden border-3 border-[#E31E24] shadow-lg">
+                        <img
+                          src={item.reporter.image}
+                          alt={item.reporter.name}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <div className="absolute -bottom-1 -right-1 w-6 h-6 bg-[#E31E24] rounded-full flex items-center justify-center border-2 border-white dark:border-gray-800">
+                        <Mic className="w-3 h-3 text-white" />
+                      </div>
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <h3 className="font-bold text-lg text-gray-900 dark:text-white mb-1 leading-tight">
+                        {item.reporter.name}
+                      </h3>
+                      <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">
+                        {item.reporter.role}
+                      </p>
+                    </div>
+                  </div>
 
-                {/* Actions */}
-                <div className="space-y-3 pt-3 border-t border-gray-200 dark:border-gray-700">
-                  {item.article.is_breaking && (
-                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#E31E24] text-white text-xs font-bold rounded-full">
-                      <TrendingUp className="w-3.5 h-3.5" />
-                      חדשות חמות
-                    </span>
-                  )}
-                  <div className="grid grid-cols-2 gap-3">
+                  {/* Article Preview */}
+                  <button
+                    onClick={() => {
+                      window.location.href = createPageUrl(`Article?id=${item.article.id}`);
+                    }}
+                    className="block text-right w-full mb-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl p-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    <div className="flex items-start gap-2 mb-2">
+                      {item.article.is_breaking && (
+                        <TrendingUp className="w-4 h-4 text-[#E31E24] shrink-0 mt-0.5" />
+                      )}
+                      <p className="text-sm text-gray-900 dark:text-white font-bold line-clamp-2 leading-snug">
+                        {item.article.title}
+                      </p>
+                    </div>
+                    {item.article.subtitle && (
+                      <p className="text-xs text-gray-600 dark:text-gray-400 line-clamp-2 leading-relaxed">
+                        {item.article.subtitle}
+                      </p>
+                    )}
+                  </button>
+
+                  {/* Action Buttons */}
+                  <div className="flex gap-2">
                     <button
                       onClick={(e) => {
                         e.preventDefault();
                         setChatReporter(item);
                       }}
-                      className="flex items-center justify-center gap-1.5 px-3 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg shadow-md hover:shadow-lg transition-all"
+                      className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-sm font-bold rounded-xl shadow-md hover:shadow-lg transition-all"
                     >
                       <MessageCircle className="w-4 h-4" />
-                      צ׳אט
+                      שיחה
                     </button>
                     <button
                       onClick={(e) => {
                         e.preventDefault();
                         setSelectedReporter(item);
                       }}
-                      className="flex items-center justify-center gap-1.5 px-3 py-2.5 bg-gradient-to-r from-[#E31E24] to-[#B91C1C] hover:from-[#B91C1C] hover:to-[#991B1B] text-white text-xs font-bold rounded-lg shadow-md hover:shadow-lg transition-all"
+                      className="flex-1 flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-[#E31E24] to-[#B91C1C] hover:from-[#B91C1C] hover:to-[#991B1B] text-white text-sm font-bold rounded-xl shadow-md hover:shadow-lg transition-all"
                     >
                       <Play className="w-4 h-4" fill="white" />
                       האזן

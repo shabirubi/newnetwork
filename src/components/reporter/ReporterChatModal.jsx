@@ -211,87 +211,94 @@ export default function ReporterChatModal({ reporter, article, onClose }) {
     }
 
     setPlayingMessageId(messageId);
+    toast.info("מייצר קול מקצועי...");
     
     try {
-      // Hash function for consistent voice selection
-      const getVoiceId = (name, gender) => {
-        let hash = 0;
-        for (let i = 0; i < name.length; i++) {
-          hash = ((hash << 5) - hash) + name.charCodeAt(i);
-          hash = hash & hash;
-        }
+      const result = await base44.integrations.Core.InvokeLLM({
+        prompt: `המר את הטקסט הבא לדיבור בעברית עם קול ${reporter.gender === 'female' ? 'נקבה טבעי' : 'זכר טבעי'}.
         
-        const maleVoices = [
-          'pNInz6obpgDQGcFmaJgB', // Adam
-          'yoZ06aMxZJJ28mfd3POQ', // Sam
-          'Yko7PKHZNXotIFUBG7I9', // Daniel
-          '21m00Tcm4TlvDq8ikWAM', // Josh
-          'N2lVS1w4EtoT3dr4eOWO'  // Callum
-        ];
-        
-        const femaleVoices = [
-          'EXAVITQu4vr4xnSDxMaL', // Sarah
-          'MF3mGyEYCl7XYWbV9V6O', // Elli
-          'XrExE9yKIg1WjnnlVkGX', // Matilda
-          'oWAxZDx7w5VEj9dCyTzz', // Grace
-          'iP95p4xoKVk53GoZ742B'  // Lily
-        ];
-        
-        const voices = gender === 'female' ? femaleVoices : maleVoices;
-        return voices[Math.abs(hash) % voices.length];
-      };
-      
-      const voiceId = getVoiceId(reporter.name, reporter.gender);
-      
-      console.log('🎙️ Generating voice for:', reporter.name, '| Gender:', reporter.gender, '| VoiceID:', voiceId);
-      
-      // Direct ElevenLabs API call
-      const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
-        method: 'POST',
-        headers: {
-          'Accept': 'audio/mpeg',
-          'Content-Type': 'application/json',
-          'xi-api-key': 'sk_e807be3a5a3c738c9593c95023f7bb78791d3aaa5a000ec0'
-        },
-        body: JSON.stringify({
-          text: text,
-          model_id: 'eleven_multilingual_v2',
-          voice_settings: {
-            stability: 0.5,
-            similarity_boost: 0.75,
-            style: 0.0,
-            use_speaker_boost: true
+טקסט: ${text}
+
+החזר JSON עם:
+- voice_type: "female" או "male" בהתאם למגדר הכתב
+- text: הטקסט המקורי`,
+        response_json_schema: {
+          type: "object",
+          properties: {
+            voice_type: { type: "string" },
+            text: { type: "string" }
           }
-        })
+        }
       });
 
-      if (!response.ok) {
-        const errorData = await response.text();
-        console.error('ElevenLabs API error:', response.status, errorData);
-        throw new Error(`API returned ${response.status}`);
+      // Use browser's Speech Synthesis with improved settings
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'he-IL';
+      utterance.volume = 1.0;
+      
+      // Wait for voices to load
+      await new Promise(resolve => {
+        if (window.speechSynthesis.getVoices().length > 0) {
+          resolve();
+        } else {
+          window.speechSynthesis.onvoiceschanged = () => resolve();
+        }
+      });
+      
+      const voices = window.speechSynthesis.getVoices();
+      console.log('Available voices:', voices.map(v => ({name: v.name, lang: v.lang, gender: v.name})));
+      
+      if (reporter.gender === 'female') {
+        // Find actual female Hebrew voices
+        const femaleVoices = voices.filter(v => 
+          (v.lang.includes('he') || v.lang.includes('iw') || v.lang.includes('IL')) &&
+          (v.name.toLowerCase().includes('female') || 
+           v.name.toLowerCase().includes('woman') ||
+           v.name.toLowerCase().includes('zehira') ||
+           v.name.toLowerCase().includes('carmit'))
+        );
+        
+        if (femaleVoices.length > 0) {
+          utterance.voice = femaleVoices[0];
+          utterance.pitch = 1.3;
+          utterance.rate = 1.0;
+          console.log('✅ Using female voice:', utterance.voice.name);
+        } else {
+          utterance.pitch = 1.8;
+          utterance.rate = 1.05;
+        }
+      } else {
+        // Find actual male Hebrew voices
+        const maleVoices = voices.filter(v => 
+          (v.lang.includes('he') || v.lang.includes('iw') || v.lang.includes('IL')) &&
+          (v.name.toLowerCase().includes('male') || 
+           v.name.toLowerCase().includes('man') ||
+           v.name.toLowerCase().includes('asaf') ||
+           v.name.toLowerCase().includes('david'))
+        );
+        
+        if (maleVoices.length > 0) {
+          utterance.voice = maleVoices[0];
+          utterance.pitch = 0.85;
+          utterance.rate = 0.95;
+          console.log('✅ Using male voice:', utterance.voice.name);
+        } else {
+          utterance.pitch = 0.7;
+          utterance.rate = 0.9;
+        }
       }
 
-      const audioBlob = await response.blob();
-      const audioUrl = URL.createObjectURL(audioBlob);
-      const audio = new Audio(audioUrl);
-      
-      audio.onended = () => {
+      utterance.onend = () => setPlayingMessageId(null);
+      utterance.onerror = (e) => {
+        console.error('Speech error:', e);
         setPlayingMessageId(null);
-        URL.revokeObjectURL(audioUrl);
+        toast.error('שגיאה בהשמעת קול');
       };
       
-      audio.onerror = (e) => {
-        console.error('Audio playback error:', e);
-        setPlayingMessageId(null);
-        URL.revokeObjectURL(audioUrl);
-        toast.error('שגיאה בהשמעת הקול');
-      };
-      
-      console.log('✅ Playing audio...');
-      await audio.play();
+      window.speechSynthesis.speak(utterance);
       
     } catch (err) {
-      console.error('❌ Voice generation error:', err);
+      console.error('Voice generation error:', err);
       toast.error('שגיאה בהשמעת קול');
       setPlayingMessageId(null);
     }
