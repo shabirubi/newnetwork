@@ -477,7 +477,7 @@ export default function ReportersFeed() {
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </div>
           ))}
         </AnimatePresence>
       </div>

@@ -466,7 +466,7 @@ ${article.content ? `תוכן הכתבה: ${article.content.substring(0, 800)}` 
 
         {/* Chat Messages */}
         <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 dark:bg-gray-900">
-          <AnimatePresence mode="popLayout">
+          <AnimatePresence mode="sync">
             {messages.map((msg) => (
               <motion.div
                 key={msg.id}
