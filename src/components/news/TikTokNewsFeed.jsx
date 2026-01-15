@@ -88,7 +88,14 @@ export default function TikTokNewsFeed({ articles: propArticles }) {
   };
 
   if (articles.length === 0) {
-    return null;
+    return (
+      <section className="relative h-screen overflow-hidden bg-black flex items-center justify-center">
+        <div className="text-white text-center">
+          <p className="text-xl mb-4">טוען חדשות...</p>
+          <div className="w-12 h-12 rounded-full border-4 border-[#E31E24] border-t-transparent animate-spin mx-auto" />
+        </div>
+      </section>
+    );
   }
 
   return (

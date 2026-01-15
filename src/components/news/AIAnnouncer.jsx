@@ -118,7 +118,20 @@ export default function AIAnnouncer() {
     }
   }, [currentArticleIndex, isSpeaking]);
 
-  if (articles.length === 0) return null;
+  if (articles.length === 0) return (
+    <motion.button
+      className="fixed bottom-32 right-6 z-50 flex flex-col items-center gap-3 group opacity-50"
+      disabled
+    >
+      <div className="absolute inset-0 w-20 h-20 rounded-full bg-[#E31E24] opacity-20 animate-pulse" />
+      <div className="relative w-20 h-20 rounded-full bg-gray-600 shadow-2xl flex items-center justify-center">
+        <Volume2 className="w-10 h-10 text-white relative z-10" />
+      </div>
+      <span className="text-xs font-bold bg-gray-600 text-white px-3 py-1.5 rounded-full whitespace-nowrap shadow-lg">
+        טוען...
+      </span>
+    </motion.button>
+  );
 
   const currentArticle = articles[currentArticleIndex];
 
