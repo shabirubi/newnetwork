@@ -120,8 +120,18 @@ export default function ReporterChatModal({ reporter, article, onClose }) {
 
   const startRecording = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mediaRecorder = new MediaRecorder(stream);
+      const stream = await navigator.mediaDevices.getUserMedia({ 
+        audio: {
+          echoCancellation: true,
+          noiseSuppression: true,
+          autoGainControl: true
+        } 
+      });
+      
+      const mediaRecorder = new MediaRecorder(stream, {
+        mimeType: 'audio/webm;codecs=opus'
+      });
+      
       mediaRecorderRef.current = mediaRecorder;
       audioChunksRef.current = [];
 
@@ -144,10 +154,14 @@ export default function ReporterChatModal({ reporter, article, onClose }) {
 
       mediaRecorder.start();
       setIsRecording(true);
-      toast.success("מקליט...");
+      toast.success("🎙️ מקליט... לחץ שוב לעצור");
     } catch (err) {
       console.error("Error starting recording:", err);
-      toast.error("שגיאה בגישה למיקרופון");
+      if (err.name === 'NotAllowedError') {
+        toast.error("נא לאפשר גישה למיקרופון בדפדפן");
+      } else {
+        toast.error("שגיאה בגישה למיקרופון");
+      }
     }
   };
 
@@ -155,6 +169,7 @@ export default function ReporterChatModal({ reporter, article, onClose }) {
     if (mediaRecorderRef.current && isRecording) {
       mediaRecorderRef.current.stop();
       setIsRecording(false);
+      toast.info("⏸️ עוצר הקלטה...");
     }
   };
 
@@ -187,68 +202,86 @@ export default function ReporterChatModal({ reporter, article, onClose }) {
 
 
 
-  const playVoiceResponse = (text, messageId) => {
+  const playVoiceResponse = async (text, messageId) => {
     if (playingMessageId === messageId) {
-      window.speechSynthesis.cancel();
+      // Stop current playback
+      const audioElements = document.querySelectorAll('audio');
+      audioElements.forEach(audio => audio.pause());
       setPlayingMessageId(null);
       return;
     }
 
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'he-IL';
-    utterance.volume = 1.0;
-    
-    const getReporterVoiceIndex = (name) => {
-      let hash = 0;
-      for (let i = 0; i < name.length; i++) {
-        hash = ((hash << 5) - hash) + name.charCodeAt(i);
-        hash = hash & hash;
-      }
-      return Math.abs(hash);
-    };
-    
-    const reporterIndex = getReporterVoiceIndex(reporter.name);
-    const voices = window.speechSynthesis.getVoices();
-    
-    console.log('🎙️ צ\'אט - קולות זמינים:', voices.filter(v => v.lang.includes('he')).map(v => v.name));
-    console.log('👤 כתב:', reporter.name, '| מין:', reporter.gender);
-    
-    if (reporter.gender === 'female') {
-      // EXTREME high pitch for females
-      const femalePitches = [2.0, 2.1, 2.2, 1.95, 2.05];
-      utterance.pitch = femalePitches[reporterIndex % femalePitches.length];
-      utterance.rate = 1.05 + (reporterIndex % 3) * 0.02;
-      
-      const femaleVoices = voices.filter(v => 
-        (v.lang.includes('he') || v.lang.includes('iw')) && 
-        (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('woman') ||
-         v.name.toLowerCase().includes('hadar') || v.name.toLowerCase().includes('carmit'))
-      );
-      if (femaleVoices.length > 0) {
-        utterance.voice = femaleVoices[reporterIndex % femaleVoices.length];
-      }
-      console.log('✅ נקבה - Pitch:', utterance.pitch, '| Rate:', utterance.rate);
-    } else {
-      // EXTREME low pitch for males
-      const malePitches = [0.5, 0.55, 0.6, 0.48, 0.52];
-      utterance.pitch = malePitches[reporterIndex % malePitches.length];
-      utterance.rate = 0.85 + (reporterIndex % 3) * 0.02;
-      
-      const maleVoices = voices.filter(v => 
-        (v.lang.includes('he') || v.lang.includes('iw')) && 
-        (v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('man') ||
-         v.name.toLowerCase().includes('asaf') || v.name.toLowerCase().includes('david'))
-      );
-      if (maleVoices.length > 0) {
-        utterance.voice = maleVoices[reporterIndex % maleVoices.length];
-      }
-      console.log('✅ זכר - Pitch:', utterance.pitch, '| Rate:', utterance.rate);
-    }
-
-    utterance.onend = () => setPlayingMessageId(null);
-    
     setPlayingMessageId(messageId);
-    window.speechSynthesis.speak(utterance);
+    
+    try {
+      // ElevenLabs voice IDs - different voices for each reporter gender
+      const maleVoiceIds = [
+        'pNInz6obpgDQGcFmaJgB', // Adam
+        'yoZ06aMxZJJ28mfd3POQ', // Sam
+        'Yko7PKHZNXotIFUBG7I9', // Daniel
+        '21m00Tcm4TlvDq8ikWAM', // Josh
+        'N2lVS1w4EtoT3dr4eOWO', // Callum
+      ];
+      
+      const femaleVoiceIds = [
+        'EXAVITQu4vr4xnSDxMaL', // Sarah
+        'MF3mGyEYCl7XYWbV9V6O', // Elli
+        'XrExE9yKIg1WjnnlVkGX', // Matilda
+        'oWAxZDx7w5VEj9dCyTzz', // Grace
+        'iP95p4xoKVk53GoZ742B', // Lily
+      ];
+      
+      // Hash function to get consistent voice per reporter
+      const getVoiceId = (name, gender) => {
+        let hash = 0;
+        for (let i = 0; i < name.length; i++) {
+          hash = ((hash << 5) - hash) + name.charCodeAt(i);
+          hash = hash & hash;
+        }
+        const voiceArray = gender === 'female' ? femaleVoiceIds : maleVoiceIds;
+        return voiceArray[Math.abs(hash) % voiceArray.length];
+      };
+      
+      const voiceId = getVoiceId(reporter.name, reporter.gender);
+      
+      // Call ElevenLabs API
+      const response = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'audio/mpeg',
+          'Content-Type': 'application/json',
+          'xi-api-key': 'sk_e807be3a5a3c738c9593c95023f7bb78791d3aaa5a000ec0'
+        },
+        body: JSON.stringify({
+          text: text,
+          model_id: 'eleven_multilingual_v2',
+          voice_settings: {
+            stability: 0.5,
+            similarity_boost: 0.75
+          }
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to generate speech');
+      }
+
+      const audioBlob = await response.blob();
+      const audioUrl = URL.createObjectURL(audioBlob);
+      const audio = new Audio(audioUrl);
+      
+      audio.onended = () => {
+        setPlayingMessageId(null);
+        URL.revokeObjectURL(audioUrl);
+      };
+      
+      await audio.play();
+      
+    } catch (err) {
+      console.error('Error playing voice:', err);
+      toast.error('שגיאה בהשמעת קול');
+      setPlayingMessageId(null);
+    }
   };
 
   useEffect(() => {
