@@ -244,7 +244,7 @@ export default function Archive() {
               )}
 
       {/* Create Video Button */}
-      <div className="flex justify-center gap-4 flex-wrap">
+      <div className="flex justify-between gap-4 flex-wrap">
         <Button
           onClick={handleCreateRandomVideo}
           disabled={creatingVideo || filteredArticles.length === 0}
