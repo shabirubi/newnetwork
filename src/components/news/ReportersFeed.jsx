@@ -348,12 +348,12 @@ export default function ReportersFeed() {
 
   if (reporterArticles.length === 0) {
     return (
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sticky top-24 border border-gray-200 dark:border-gray-700">
-        <div className="flex items-center gap-2 mb-4 pb-3 border-b border-gray-200 dark:border-gray-700">
-          <Video className="w-5 h-5 text-[#E31E24]" />
-          <h2 className="font-bold text-base dark:text-white">אנשי השטח</h2>
+      <div className="sticky top-24">
+        <div className="flex items-center gap-2 mb-4">
+          <Video className="w-6 h-6 text-[#E31E24]" />
+          <h2 className="font-bold text-xl dark:text-white">אנשי השטח</h2>
         </div>
-        <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-4">טוען דיווחים...</p>
+        <p className="text-sm text-gray-500 dark:text-gray-400 text-center py-8">טוען דיווחים...</p>
       </div>
     );
   }
@@ -376,20 +376,20 @@ export default function ReportersFeed() {
         />
       )}
       
-      <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 sticky top-24 border border-gray-200 dark:border-gray-700">
-      <div className="flex items-center gap-2 mb-4 pb-3 border-b border-gray-200 dark:border-gray-700">
-        <Video className="w-5 h-5 text-[#E31E24]" />
-        <h2 className="font-bold text-base dark:text-white">אנשי השטח</h2>
-        <div className="mr-auto flex items-center gap-1">
-          <span className="relative flex h-2 w-2">
+      <div className="sticky top-24">
+      <div className="flex items-center gap-2 mb-4">
+        <Video className="w-6 h-6 text-[#E31E24]" />
+        <h2 className="font-bold text-xl dark:text-white">אנשי השטח</h2>
+        <div className="mr-auto flex items-center gap-1.5">
+          <span className="relative flex h-2.5 w-2.5">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E31E24] opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-[#E31E24]"></span>
+            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#E31E24]"></span>
           </span>
-          <span className="text-[10px] text-[#E31E24] font-bold">LIVE</span>
+          <span className="text-xs text-[#E31E24] font-bold">LIVE</span>
         </div>
       </div>
 
-      <div className="space-y-4 max-h-[800px] overflow-y-auto">
+      <div className="space-y-6 max-h-[800px] overflow-y-auto pr-2">
         <AnimatePresence mode="popLayout">
           {reporterArticles.map((item, index) => (
             <motion.div
@@ -490,10 +490,10 @@ export default function ReportersFeed() {
         </AnimatePresence>
       </div>
 
-      <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
+      <div className="mt-6">
         <Link
           to={createPageUrl("Reporters")}
-          className="block text-center text-xs font-bold text-[#E31E24] hover:text-[#B91C1C] transition-colors"
+          className="block text-center text-sm font-bold text-[#E31E24] hover:text-[#B91C1C] transition-colors py-3 bg-red-50 dark:bg-red-900/20 rounded-xl"
         >
           כל הכתבים ←
         </Link>
