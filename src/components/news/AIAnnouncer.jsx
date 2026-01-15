@@ -44,12 +44,8 @@ export default function AIAnnouncer() {
 
       utterance.onend = () => {
         setIsSpeaking(false);
-        // Auto-advance to next article
-        if (currentArticleIndex < articles.length - 1) {
-          setCurrentArticleIndex(prev => prev + 1);
-        } else {
-          setIsPlaying(false);
-        }
+        // Auto-advance to next article (loop infinitely)
+        setCurrentArticleIndex(prev => (prev + 1) % articles.length);
       };
 
       window.speechSynthesis.speak(utterance);
