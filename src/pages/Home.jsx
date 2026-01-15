@@ -8,16 +8,11 @@ import { createPageUrl } from "../utils";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import LivePlayer from "../components/news/LivePlayer";
 import NewsCard from "../components/news/NewsCard";
-import ReportersFeed from "../components/news/ReportersFeed";
-import UpdatesFeed from "../components/news/UpdatesFeed";
-import VideoHighlights from "../components/news/VideoHighlights";
-import LiveStats from "../components/news/LiveStats";
 import AutoNewsUpdater from "../components/news/AutoNewsUpdater";
 import AutoChannelsUpdater from "../components/news/AutoChannelsUpdater";
-import CurrencyStrip from "../components/header/CurrencyStrip";
 import TikTokNewsFeed from "../components/news/TikTokNewsFeed";
+import EnhancedLivePlayer from "../components/news/EnhancedLivePlayer";
 
 export default function Home() {
   const [selectedChannel, setSelectedChannel] = React.useState(() => {
@@ -89,94 +84,17 @@ export default function Home() {
     <div className="space-y-0 sm:space-y-6">
       <AutoNewsUpdater />
       <AutoChannelsUpdater />
-      {/* Hero Section - Extended Live Player */}
+      {/* Enhanced Live Player with Integrated Panels */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-0 sm:gap-3 -mx-0 sm:mx-0 px-0 sm:px-4">
-        {/* Right Sidebar - Updates Feed */}
-        <aside className="lg:col-span-2 hidden lg:block">
-          <UpdatesFeed />
-        </aside>
-
-        {/* Center - Extended Live Player */}
-        <div className="lg:col-span-8">
-          <div className="bg-gradient-to-r from-gray-900 to-gray-800 dark:from-black dark:to-gray-900 sm:rounded-t-lg p-2 sm:p-3 flex items-center justify-between hidden sm:flex">
-            <div className="flex items-center gap-3">
-              <div className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E31E24] opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#E31E24]"></span>
-              </div>
-              <h2 className="text-white text-lg font-bold">שידור חי</h2>
-            </div>
-            <CurrencyStrip activeLive={activeLive} />
-          </div>
-          <div className="relative">
-            <LivePlayer 
-              title={currentChannel?.name || activeLive?.title || "הרשת החדשה - שידור חי"}
-              isLive={!!activeLive?.is_active}
-              viewerCount={activeLive?.viewer_count || 3456}
-              streamUrl={channelStreamUrl}
-            />
-
-            {/* Features Below Player */}
-            <div className="hidden sm:grid grid-cols-3 gap-4 mt-4">
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.1 }}
-                className="group relative bg-gradient-to-br from-white to-red-50 dark:from-gray-800 dark:to-red-900/20 rounded-xl p-4 shadow-lg hover:shadow-2xl transition-all duration-300 border border-red-100 dark:border-red-900/30 hover:border-red-300 dark:hover:border-red-700 hover:-translate-y-1"
-                >
-                <div className="flex items-center gap-3">
-                  <div className="w-11 h-11 rounded-full bg-gradient-to-br from-red-500 to-[#E31E24] flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
-                    <Radio className="w-5 h-5 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-sm text-gray-900 dark:text-white">שידור 24/7</h3>
-                    <p className="text-xs text-gray-600 dark:text-gray-300">תמיד מעודכנים</p>
-                  </div>
-                </div>
-              </motion.div>
-
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 }}
-                className="group relative bg-gradient-to-br from-white to-blue-50 dark:from-gray-800 dark:to-blue-900/20 rounded-xl p-4 shadow-lg hover:shadow-2xl transition-all duration-300 border border-blue-100 dark:border-blue-900/30 hover:border-blue-300 dark:hover:border-blue-700 hover:-translate-y-1"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-11 h-11 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
-                    <Zap className="w-5 h-5 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-sm text-gray-900 dark:text-white">עדכונים מהירים</h3>
-                    <p className="text-xs text-gray-600 dark:text-gray-300">בזמן אמת</p>
-                  </div>
-                </div>
-              </motion.div>
-
-              <motion.div 
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3 }}
-                className="group relative bg-gradient-to-br from-white to-green-50 dark:from-gray-800 dark:to-green-900/20 rounded-xl p-4 shadow-lg hover:shadow-2xl transition-all duration-300 border border-green-100 dark:border-green-900/30 hover:border-green-300 dark:hover:border-green-700 hover:-translate-y-1"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-11 h-11 rounded-full bg-gradient-to-br from-green-500 to-green-600 flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
-                    <Target className="w-5 h-5 text-white" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-sm text-gray-900 dark:text-white">כיסוי מקיף</h3>
-                    <p className="text-xs text-gray-600 dark:text-gray-300">מכל הזירות</p>
-                  </div>
-                </div>
-              </motion.div>
-            </div>
-            </div>
-            </div>
-
-            {/* Left Sidebar - Reporters Feed */}
-            <aside className="lg:col-span-2 hidden lg:block">
-            <ReportersFeed />
-            </aside>
-            </section>
+        <div className="lg:col-span-12">
+          <EnhancedLivePlayer
+            title={currentChannel?.name || activeLive?.title || "הרשת החדשה - שידור חי"}
+            isLive={!!activeLive?.is_active}
+            viewerCount={activeLive?.viewer_count || 3456}
+            streamUrl={channelStreamUrl}
+          />
+        </div>
+      </section>
 
             {/* TikTok Style News Feed */}
             <TikTokNewsFeed />
