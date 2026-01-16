@@ -13,16 +13,17 @@ Deno.serve(async (req) => {
     const testText = "שלום, אני קריין הטלוויזיה של הרשת החדשה. זהו שידור בדיקה.";
 
     console.log('Creating D-ID clip...');
+    console.log('Using text:', testText);
     
-    const didResponse = await fetch('https://api.d-id.com/clips', {
+    // Try with talks endpoint first (more reliable)
+    const didResponse = await fetch('https://api.d-id.com/talks', {
       method: 'POST',
       headers: {
         'Authorization': `Basic ${DID_API_KEY}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        presenter_id: 'amy-Aq6OmGZnMt',
-        driver_id: 'Vcq0R4a8F0',
+        source_url: 'https://d-id-public-bucket.s3.us-west-2.amazonaws.com/alice.jpg',
         script: {
           type: 'text',
           input: testText,
@@ -30,6 +31,10 @@ Deno.serve(async (req) => {
             type: 'microsoft',
             voice_id: 'he-IL-AvriNeural'
           }
+        },
+        config: {
+          fluent: true,
+          pad_audio: 0
         }
       })
     });
@@ -46,29 +51,30 @@ Deno.serve(async (req) => {
     }
 
     const didData = JSON.parse(didText);
-    const clipId = didData.id;
+    const talkId = didData.id;
     
-    console.log('Clip ID:', clipId);
+    console.log('Talk ID:', talkId);
+    console.log('Full D-ID response:', JSON.stringify(didData));
 
     // Poll for completion
     let attempts = 0;
     while (attempts < 60) {
       await new Promise(resolve => setTimeout(resolve, 3000));
       
-      const statusResponse = await fetch(`https://api.d-id.com/clips/${clipId}`, {
+      const statusResponse = await fetch(`https://api.d-id.com/talks/${talkId}`, {
         headers: {
           'Authorization': `Basic ${DID_API_KEY}`
         }
       });
 
       const statusData = await statusResponse.json();
-      console.log(`Attempt ${attempts + 1}: ${statusData.status}`);
+      console.log(`Attempt ${attempts + 1}: Status = ${statusData.status}`);
       
       if (statusData.status === 'done') {
         return Response.json({
           success: true,
           video_url: statusData.result_url,
-          clip_id: clipId
+          talk_id: talkId
         });
       }
       
@@ -84,7 +90,7 @@ Deno.serve(async (req) => {
 
     return Response.json({ 
       error: 'Timeout',
-      clip_id: clipId
+      talk_id: talkId
     }, { status: 408 });
 
   } catch (error) {
