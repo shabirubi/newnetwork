@@ -88,17 +88,25 @@ export default function VODModal({ isOpen, onClose }) {
   return (
     <AnimatePresence>
       <motion.div
-         initial={{ opacity: 0, scale: 0.95 }}
-         animate={{ opacity: 1, scale: 1 }}
-         exit={{ opacity: 0, scale: 0.95 }}
+         initial={{ opacity: 0 }}
+         animate={{ opacity: 1 }}
+         exit={{ opacity: 0 }}
          transition={{ duration: 0.3, ease: "easeOut" }}
-         className="fixed inset-0 z-[105] bg-black/50 backdrop-blur-2xl overflow-y-auto overflow-x-hidden flex flex-col"
+         className="fixed inset-0 z-[105] bg-black/50 backdrop-blur-2xl flex items-center justify-center p-4"
          onClick={(e) => {
            if (e.target === e.currentTarget && !selectedContent) {
              onClose();
            }
          }}
        >
+         <motion.div
+           initial={{ opacity: 0, scale: 0.95, y: 20 }}
+           animate={{ opacity: 1, scale: 1, y: 0 }}
+           exit={{ opacity: 0, scale: 0.95, y: 20 }}
+           transition={{ duration: 0.3, ease: "easeOut" }}
+           className="relative w-full h-full max-w-6xl max-h-[90vh] bg-black rounded-3xl shadow-2xl flex flex-col overflow-hidden"
+           onClick={(e) => e.stopPropagation()}
+         >
         <style>{`
           @keyframes tickerScroll {
             0% { transform: translateX(100%); }
