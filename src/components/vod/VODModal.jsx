@@ -164,18 +164,21 @@ export default function VODModal({ isOpen, onClose }) {
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
             <motion.div 
-              className="flex items-center gap-2 sm:gap-3 bg-transparent"
+              className="flex items-center gap-2 sm:gap-3"
               animate={{ 
                 scale: [1, 1.02, 1],
               }}
               transition={{ duration: 2, repeat: Infinity }}
             >
-              <img 
-                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png"
-                alt="Logo"
-                className="w-10 h-10 sm:w-12 sm:h-12 drop-shadow-xl"
-              />
-              <div className="bg-transparent">
+              <div className="relative">
+                <div className="absolute inset-0 blur-xl bg-gradient-to-r from-red-600 to-blue-600 opacity-50 rounded-full"></div>
+                <img 
+                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png"
+                  alt="Logo"
+                  className="relative w-10 h-10 sm:w-12 sm:h-12 drop-shadow-xl"
+                />
+              </div>
+              <div>
                 <h1 className="text-lg sm:text-2xl font-bold bg-gradient-to-r from-red-500 via-blue-400 to-red-500 bg-clip-text text-transparent">VOD LIVE</h1>
                 <p className="text-[10px] sm:text-xs text-gray-400">תוכן בידור וחדשות 24/7</p>
               </div>
