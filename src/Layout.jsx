@@ -5,7 +5,7 @@ import {
   Menu, X, Radio, Newspaper, Shield, TrendingUp, 
   Vote, Cpu, Trophy, Clapperboard, Globe, Heart,
   Clock, ChevronLeft, Users, Moon, Sun, Home, Flame,
-  Siren, AlertTriangle, MessageSquareWarning, Film
+  Siren, AlertTriangle, MessageSquareWarning, Film, Tv
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import NewsTicker from "./components/header/NewsTicker";
