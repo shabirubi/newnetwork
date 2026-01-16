@@ -412,18 +412,19 @@ export default function VODModal({ isOpen, onClose }) {
               </motion.section>
             ))
           )}
-        </main>
+          </main>
 
-        {/* Player Modal */}
-        <AnimatePresence>
-          {selectedContent && (
-            <VODPlayer
-              content={selectedContent}
-              onClose={() => setSelectedContent(null)}
-            />
-          )}
-        </AnimatePresence>
-      </motion.div>
+          {/* Player Modal */}
+          <AnimatePresence>
+            {selectedContent && (
+              <VODPlayer
+                content={selectedContent}
+                onClose={() => setSelectedContent(null)}
+              />
+            )}
+          </AnimatePresence>
+          </div>
+          </motion.div>
     </AnimatePresence>
   );
 }
