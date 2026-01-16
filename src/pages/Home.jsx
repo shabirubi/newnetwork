@@ -29,8 +29,6 @@ export default function Home() {
     }
     return 'all';
   });
-  const [vodModalOpen, setVodModalOpen] = React.useState(false);
-
   React.useEffect(() => {
     const handleChannelChange = (e) => {
       setSelectedChannel(e.detail);
