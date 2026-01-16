@@ -50,8 +50,8 @@ ${articles.map((a, i) => `${i + 1}. ${a.title} - ${a.subtitle || ''}`).join('\n'
 
     const script = scriptResponse;
 
-    // Generate audio with ElevenLabs - Rachel voice (female Hebrew)
-    const voiceId = 'pNInz6obpgDQGcFmaJgB'; // Rachel - natural female voice
+    // Generate audio with ElevenLabs - Rachel voice (professional female Hebrew)
+    const voiceId = 'EXAVITQu4vr4xnSDxMaL'; // Bella - professional female voice
     
     const elevenLabsResponse = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
       method: 'POST',

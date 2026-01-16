@@ -18,15 +18,18 @@ export default function RadioAnnouncer() {
     try {
       const response = await base44.functions.invoke('generateRadioShow', {});
       
-      if (response?.data) {
-        const audioBlob = new Blob([response.data], { type: 'audio/mpeg' });
+      if (response && response.data) {
+        // Convert ArrayBuffer to Blob
+        const audioBlob = new Blob([new Uint8Array(response.data)], { type: 'audio/mpeg' });
         const url = URL.createObjectURL(audioBlob);
         setAudioUrl(url);
         toast.success("השידור מוכן! 🎙️");
+      } else {
+        throw new Error('No audio data received');
       }
     } catch (error) {
       console.error('Error generating radio show:', error);
-      toast.error("שגיאה ביצירת השידור");
+      toast.error(`שגיאה: ${error.message || 'לא ניתן לייצר שידור'}`);
     } finally {
       setIsGenerating(false);
     }
