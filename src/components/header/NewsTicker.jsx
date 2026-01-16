@@ -216,22 +216,61 @@ CRITICAL: השתמש רק במקורות מהימנים. בנק ישראל הו�
               );
             })}
             {currencies.length > 0 && [...currencies, ...currencies].map((currency, index) => (
-              <span 
+              <motion.span 
                 key={`currency-${index}`} 
-                className="mx-6 sm:mx-10 inline-flex items-center gap-2 bg-gradient-to-r from-yellow-500/20 to-green-500/20 px-4 py-2 rounded-xl border border-yellow-400/30"
+                className="mx-6 sm:mx-10 inline-flex items-center gap-2 px-4 py-2 rounded-xl"
+                animate={{
+                  background: [
+                    'linear-gradient(to right, rgba(234, 179, 8, 0.2), rgba(34, 197, 94, 0.2))',
+                    'linear-gradient(to right, rgba(59, 130, 246, 0.3), rgba(168, 85, 247, 0.3))',
+                    'linear-gradient(to right, rgba(239, 68, 68, 0.2), rgba(245, 158, 11, 0.2))',
+                    'linear-gradient(to right, rgba(234, 179, 8, 0.2), rgba(34, 197, 94, 0.2))'
+                  ],
+                  boxShadow: [
+                    '0 0 10px rgba(234, 179, 8, 0.3)',
+                    '0 0 20px rgba(59, 130, 246, 0.5)',
+                    '0 0 15px rgba(239, 68, 68, 0.4)',
+                    '0 0 10px rgba(234, 179, 8, 0.3)'
+                  ],
+                  scale: [1, 1.05, 1]
+                }}
+                transition={{
+                  duration: 3,
+                  repeat: Infinity,
+                  ease: 'easeInOut',
+                  delay: index * 0.2
+                }}
+                style={{
+                  border: '2px solid rgba(234, 179, 8, 0.5)'
+                }}
               >
-                {currency.code === 'USD' && <DollarSign className="w-5 h-5 text-green-400" />}
-                {currency.code === 'EUR' && <Euro className="w-5 h-5 text-blue-400" />}
-                {currency.code === 'BTC' && <span className="text-orange-400 font-bold text-base">₿</span>}
-                {currency.code === 'GBP' && <span className="text-blue-300 font-bold text-base">£</span>}
+                {currency.code === 'USD' && <DollarSign className="w-5 h-5 text-green-400 animate-pulse" />}
+                {currency.code === 'EUR' && <Euro className="w-5 h-5 text-blue-400 animate-pulse" />}
+                {currency.code === 'BTC' && <span className="text-orange-400 font-bold text-base animate-pulse">₿</span>}
+                {currency.code === 'GBP' && <span className="text-blue-300 font-bold text-base animate-pulse">£</span>}
                 <span className="font-bold text-white text-base">{currency.name}</span>
                 <span className="text-yellow-300 font-bold text-base">
                   ₪{currency.code === 'BTC' ? (currency.rate || 0).toFixed(0) : (currency.rate || 0).toFixed(2)}
                 </span>
-                <span className={`font-bold text-sm ${(currency.changePercent || 0) >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                <motion.span 
+                  className={`font-bold text-sm ${(currency.changePercent || 0) >= 0 ? 'text-green-400' : 'text-red-400'}`}
+                  animate={{
+                    scale: [1, 1.15, 1],
+                    textShadow: [
+                      '0 0 5px currentColor',
+                      '0 0 15px currentColor',
+                      '0 0 5px currentColor'
+                    ]
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: 'easeInOut'
+                  }}
+                >
                   {(currency.changePercent || 0) >= 0 ? '▲' : '▼'}{Math.abs(currency.changePercent || 0).toFixed(2)}%
-                </span>
-              </span>
+                </motion.span>
+              </motion.span>
             ))}
           </motion.div>
         </button>
