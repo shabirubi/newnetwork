@@ -85,8 +85,8 @@ export default function Home() {
       <AutoChannelsUpdater />
       
       {/* VOD Floating Button - Rainbow Effect */}
-      <motion.a
-        href={createPageUrl("VOD")}
+      <motion.button
+        onClick={() => setVodModalOpen(true)}
         initial={{ opacity: 0, scale: 0.5 }}
         animate={{ 
           opacity: 1, 
@@ -94,7 +94,7 @@ export default function Home() {
         }}
         whileHover={{ scale: 1.05 }}
         transition={{ duration: 0.3 }}
-        className="fixed bottom-24 left-4 sm:left-6 z-50 group flex flex-col items-center gap-1"
+        className="fixed bottom-24 left-4 sm:left-6 z-50 group flex flex-col items-center gap-1 bg-transparent border-none cursor-pointer"
       >
         {/* Rainbow Background Effect */}
         <motion.div
