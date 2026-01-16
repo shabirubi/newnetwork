@@ -87,6 +87,20 @@ export default function VODModal({ isOpen, onClose }) {
           <X className="w-6 h-6" />
         </button>
 
+        {/* Back to Live Studio Button */}
+        <motion.button
+          onClick={onClose}
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          className="fixed top-4 right-20 z-[110] flex items-center gap-2 px-4 py-3 rounded-full bg-gradient-to-r from-red-600 to-red-800 hover:from-red-700 hover:to-red-900 text-white font-bold shadow-2xl transition-all"
+        >
+          <Radio className="w-5 h-5" />
+          <span className="hidden sm:inline">חזרה לאולפן החדשות בשידור חי</span>
+          <span className="sm:hidden">חזרה לשידור חי</span>
+        </motion.button>
+
         {/* News Ticker Strip */}
         <div className="fixed top-0 left-0 right-0 z-[108] bg-gradient-to-r from-red-900 via-red-700 to-red-900 border-b-2 border-red-500 overflow-hidden">
           <div className="flex items-center h-10 sm:h-12">
