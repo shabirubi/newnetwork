@@ -91,7 +91,7 @@ export default function VODModal({ isOpen, onClose }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[100] bg-black overflow-y-auto lg:overflow-y-auto overflow-hidden"
+        className="fixed inset-0 z-[105] bg-black overflow-y-auto lg:overflow-y-auto overflow-hidden"
         onClick={(e) => {
           if (e.target === e.currentTarget && !selectedContent) {
             onClose();
@@ -137,7 +137,7 @@ export default function VODModal({ isOpen, onClose }) {
         </motion.button>
 
         {/* News Ticker Strip */}
-        <div className="fixed top-0 left-0 right-0 z-[108] bg-gradient-to-r from-red-900 via-red-700 to-red-900 border-b-2 border-red-500 overflow-hidden">
+        <div className="fixed top-0 left-0 right-0 z-[115] bg-gradient-to-r from-red-900 via-red-700 to-red-900 border-b-2 border-red-500 overflow-hidden">
           <div className="flex items-center h-10 sm:h-12">
             <div className="bg-red-600 px-4 py-2 font-bold text-white flex items-center gap-2 whitespace-nowrap">
               <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
@@ -160,7 +160,7 @@ export default function VODModal({ isOpen, onClose }) {
         <motion.header
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          className="sticky top-10 sm:top-12 z-[105] bg-gradient-to-r from-black via-red-950/40 to-black backdrop-blur-md border-b border-red-900/30"
+          className="sticky top-10 sm:top-12 z-[110] bg-gradient-to-r from-black via-red-950/40 to-black backdrop-blur-md border-b border-red-900/30"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
             <motion.div 
@@ -284,7 +284,7 @@ export default function VODModal({ isOpen, onClose }) {
         )}
 
         {/* Mobile Categories - Native Bottom Sheet Style */}
-        <div className="lg:hidden fixed bottom-20 left-4 right-4 z-[106]">
+        <div className="lg:hidden fixed bottom-20 left-4 right-4 z-[112]">
           <motion.button
             whileTap={{ scale: 0.95 }}
             onClick={() => setShowCategoryMenu(!showCategoryMenu)}
@@ -307,7 +307,7 @@ export default function VODModal({ isOpen, onClose }) {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
-              className="lg:hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-[107]"
+              className="lg:hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-[111]"
               onClick={() => setShowCategoryMenu(false)}
             >
               <motion.div
@@ -349,7 +349,7 @@ export default function VODModal({ isOpen, onClose }) {
         </AnimatePresence>
 
         {/* Desktop Categories */}
-        <nav className="hidden lg:block sticky top-[115px] sm:top-[135px] z-[104] bg-black/90 backdrop-blur-md border-b border-red-900/20 overflow-x-auto">
+        <nav className="hidden lg:block sticky top-[115px] sm:top-[135px] z-[108] bg-black/90 backdrop-blur-md border-b border-red-900/20 overflow-x-auto">
           <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 sm:py-3 flex gap-1.5 sm:gap-2">
             {CATEGORIES.map((cat) => {
               const Icon = cat.icon;
