@@ -12,6 +12,7 @@ import ReporterQA from './pages/ReporterQA';
 import Reporters from './pages/Reporters';
 import Schedule from './pages/Schedule';
 import WarRoom from './pages/WarRoom';
+import TestDID from './pages/TestDID';
 import __Layout from './Layout.jsx';
 
 
@@ -30,6 +31,7 @@ export const PAGES = {
     "Reporters": Reporters,
     "Schedule": Schedule,
     "WarRoom": WarRoom,
+    "TestDID": TestDID,
 }
 
 export const pagesConfig = {
