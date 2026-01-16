@@ -20,7 +20,6 @@ import CurrencyStrip from "../components/header/CurrencyStrip";
 import TikTokNewsFeed from "../components/news/TikTokNewsFeed";
 import AIAnnouncer from "../components/news/AIAnnouncer";
 import TVAnchor from "../components/news/TVAnchor";
-import VODModal from "../components/vod/VODModal";
 
 export default function Home() {
   const [selectedChannel, setSelectedChannel] = React.useState(() => {
