@@ -196,6 +196,8 @@ export default function Home() {
         <ReportersFeed />
       </section>
 
+      {/* VOD Modal */}
+      <VODModal isOpen={vodModalOpen} onClose={() => setVodModalOpen(false)} />
 
       {/* CTA Section */}
       <section className="bg-[#E31E24] rounded-2xl p-8 text-white text-center">
