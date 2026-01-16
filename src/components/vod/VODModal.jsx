@@ -474,6 +474,7 @@ export default function VODModal({ isOpen, onClose }) {
             />
           )}
         </AnimatePresence>
+        </div>
       </motion.div>
     </AnimatePresence>
   );
