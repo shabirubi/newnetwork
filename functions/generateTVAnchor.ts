@@ -84,37 +84,28 @@ ${articles.map((a, i) => `${i + 1}. ${a.title}${a.subtitle ? ' - ' + a.subtitle 
       return Response.json({ error: 'Failed to generate audio' }, { status: audioResponse.status });
     }
 
-    const audioBuffer = await audioResponse.arrayBuffer();
-    const audioBase64 = btoa(String.fromCharCode(...new Uint8Array(audioBuffer)));
-
-    // Upload audio to temporary storage first
-    const audioFile = new File([audioBuffer], 'anchor-audio.mp3', { type: 'audio/mpeg' });
-    const { file_url: audioFileUrl } = await base44.asServiceRole.integrations.Core.UploadFile({ 
-      file: audioFile 
-    });
-
-    // Create talking avatar with D-ID
+    // Create talking avatar with D-ID using text (simpler approach)
     const didResponse = await fetch('https://api.d-id.com/talks', {
       method: 'POST',
       headers: {
         'Authorization': `Basic ${DID_API_KEY}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
       },
       body: JSON.stringify({
         source_url: 'https://create-images-results.d-id.com/google-oauth2%7C111488153715019116355/upl_ZKQCGLwxK8jGQlJ6bDsj1/image.jpeg',
         script: {
-          type: 'audio',
-          audio_url: audioFileUrl
+          type: 'text',
+          input: script,
+          provider: {
+            type: 'microsoft',
+            voice_id: 'he-IL-AvriNeural'
+          }
         },
         config: {
           fluent: true,
           pad_audio: 0,
-          stitch: true,
-          driver_expressions: {
-            expressions: [
-              { expression: 'serious', start_frame: 0, intensity: 0.7 }
-            ]
-          }
+          stitch: true
         }
       })
     });
