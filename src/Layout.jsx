@@ -237,6 +237,17 @@ export default function Layout({ children }) {
                 סרטים קלאסיים
               </Link>
               <Link
+                to={createPageUrl("VOD")}
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.location.href = createPageUrl("VOD");
+                }}
+                className="flex items-center gap-1.5 px-3 py-2 text-white bg-[#E31E24] hover:bg-[#B91C1C] rounded-lg transition-all text-xs font-bold"
+              >
+                <Tv size={16} />
+                VOD
+              </Link>
+              <Link
                 to={createPageUrl("ReporterQA")}
                 onClick={(e) => {
                   e.preventDefault();
