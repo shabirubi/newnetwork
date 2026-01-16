@@ -86,8 +86,8 @@ export default function Home() {
       <AutoChannelsUpdater />
       
       {/* VOD Floating Button - Rainbow Effect */}
-      <motion.button
-        onClick={() => setVodModalOpen(true)}
+      <motion.a
+        href={createPageUrl("VOD")}
         initial={{ opacity: 0, scale: 0.5 }}
         animate={{ 
           opacity: 1, 
