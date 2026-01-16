@@ -58,7 +58,9 @@ export default function Home() {
     staleTime: 2 * 60 * 1000,
     cacheTime: 10 * 60 * 1000,
     refetchOnWindowFocus: false,
-    initialData: []
+    refetchOnMount: false,
+    initialData: [],
+    placeholderData: (prev) => prev
   });
 
   const { data: liveStream } = useQuery({

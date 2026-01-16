@@ -38,14 +38,16 @@ export default function TikTokNewsFeed({ articles: propArticles }) {
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
 
-  const { data: fetchedArticles = [] } = useQuery({
+  const { data: fetchedArticles = [], isLoading } = useQuery({
     queryKey: ['tiktok-feed', loadedCount],
     queryFn: () => base44.entities.NewsArticle.list('-created_date', loadedCount),
     staleTime: 30000,
     refetchInterval: 45000,
     initialData: [],
     enabled: !propArticles || propArticles.length === 0,
-    retry: 2
+    retry: 2,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false
   });
 
   const articles = propArticles && propArticles.length > 0 ? propArticles : fetchedArticles;
@@ -90,11 +92,20 @@ export default function TikTokNewsFeed({ articles: propArticles }) {
   };
 
   if (articles.length === 0) {
+    if (isLoading) {
+      return (
+        <section className="relative h-screen overflow-hidden bg-black flex items-center justify-center">
+          <div className="text-white text-center">
+            <p className="text-xl mb-4">טוען חדשות...</p>
+            <div className="w-12 h-12 rounded-full border-4 border-[#E31E24] border-t-transparent animate-spin mx-auto" />
+          </div>
+        </section>
+      );
+    }
     return (
       <section className="relative h-screen overflow-hidden bg-black flex items-center justify-center">
         <div className="text-white text-center">
-          <p className="text-xl mb-4">טוען חדשות...</p>
-          <div className="w-12 h-12 rounded-full border-4 border-[#E31E24] border-t-transparent animate-spin mx-auto" />
+          <p className="text-xl">אין חדשות להצגה</p>
         </div>
       </section>
     );
