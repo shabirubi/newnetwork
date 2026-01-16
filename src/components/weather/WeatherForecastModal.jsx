@@ -18,20 +18,25 @@ export default function WeatherForecastModal({ isOpen, onClose, currentWeather }
     setAudioUrl(null);
 
     try {
-      // Generate weather forecast data
+      // Generate weather forecast data for all major Israeli cities
       const forecastData = await base44.integrations.Core.InvokeLLM({
-        prompt: `תן לי תחזית מזג אוויר מפורטת לתל אביב:
-        
+        prompt: `תן לי תחזית מזג אוויר מפורטת לכל הערים הגדולות בישראל מהשירות המטאורולוגי הישראלי (IMS - Israel Meteorological Service):
+
+הערים: תל אביב, ירושלים, חיפה, באר שבע, אילת, צפת, טבריה, נתניה, אשדוד, ראשון לציון
+
 מצב נוכחי: ${currentWeather?.temperature || 25}°C, ${currentWeather?.description || 'בהיר'}
 
+חפש נתונים אמיתיים מהשירות המטאורולוגי הישראלי או ממקורות מהימנים אחרים.
+
 החזר JSON עם:
-1. today - תחזית מפורטת להיום (טמפרטורה מקס/מין, מצב, סיכויי גשם, רוח)
-2. next7days - מערך של 7 ימים הבאים (תאריך, טמפרטורה, מצב, סיכויי גשם)
-3. script - סקריפט מקצועי ואנרגטי בן 30-40 שניות לתחזיאנית בשם "מיכל כהן"
+1. cities - מערך של כל הערים עם תחזית מפורטת (שם עיר, טמפרטורה נוכחית, מקס/מין, מצב, סיכויי גשם, רוח)
+2. today - תחזית כללית להיום לכל הארץ
+3. next7days - מערך של 7 ימים הבאים (תאריך, טמפרטורה ממוצעת, מצב, סיכויי גשם)
+4. script - סקריפט מקצועי ואנרגטי בן 40-50 שניות לתחזיאנית בשם "מיכל כהן"
 
 הסקריפט צריך לכלול:
 - ברכת פתיחה ("שלום, אני מיכל כהן עם תחזית מזג האוויר")
-- מזג האוויר היום
+- סקירה של מזג האוויר בערים המרכזיות
 - תחזית ל-3 הימים הקרובים
 - המלצה למה ללבוש / האם לקחת מטריה
 - סיום חיובי`,
@@ -39,6 +44,21 @@ export default function WeatherForecastModal({ isOpen, onClose, currentWeather }
         response_json_schema: {
           type: "object",
           properties: {
+            cities: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  name: { type: "string" },
+                  temp_current: { type: "number" },
+                  temp_max: { type: "number" },
+                  temp_min: { type: "number" },
+                  condition: { type: "string" },
+                  rain_chance: { type: "number" },
+                  wind_speed: { type: "number" }
+                }
+              }
+            },
             today: {
               type: "object",
               properties: {
@@ -116,7 +136,7 @@ export default function WeatherForecastModal({ isOpen, onClose, currentWeather }
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[200] flex items-center justify-center p-4"
+          className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[9999] flex items-center justify-center p-4"
           onClick={onClose}
         >
           <motion.div
@@ -148,7 +168,46 @@ export default function WeatherForecastModal({ isOpen, onClose, currentWeather }
             </div>
 
             <div className="p-6 space-y-6">
-              {/* Current Weather */}
+              {/* Israeli Cities Weather */}
+              {forecast?.cities && (
+                <motion.div 
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 text-white"
+                >
+                  <h3 className="text-2xl font-bold mb-4 flex items-center gap-2">
+                    <Thermometer className="w-6 h-6" />
+                    מזג האוויר בערי ישראל
+                  </h3>
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+                    {forecast.cities.map((city, index) => (
+                      <motion.div
+                        key={index}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: 0.05 * index }}
+                        className="bg-white/20 backdrop-blur rounded-xl p-4 text-center hover:bg-white/30 transition-all"
+                      >
+                        <p className="font-bold text-lg mb-2">{city.name}</p>
+                        <div className="mb-2">
+                          {getWeatherIcon(city.condition)}
+                        </div>
+                        <p className="text-3xl font-bold">{city.temp_current}°</p>
+                        <p className="text-xs opacity-80 mt-1">{city.temp_max}° / {city.temp_min}°</p>
+                        <p className="text-xs mt-2 opacity-70">{city.condition}</p>
+                        {city.rain_chance > 20 && (
+                          <div className="flex items-center justify-center gap-1 mt-2 text-xs">
+                            <Umbrella className="w-3 h-3" />
+                            {city.rain_chance}%
+                          </div>
+                        )}
+                      </motion.div>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+
+              {/* Current Weather Summary */}
               <motion.div 
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
