@@ -2,21 +2,31 @@ import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Play, Radio, Film, Newspaper, Cloud, Globe, Trophy, Tv, Users, Eye } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Play, Radio, Film, Newspaper, Cloud, Globe, Trophy, Tv, Users, Eye, ChevronUp, Music } from "lucide-react";
 import VODPlayer from "../components/vod/VODPlayer";
 
 const CATEGORIES = [
-  { id: "live", label: "שידורים חיים", icon: Radio },
-  { id: "movies", label: "סרטים", icon: Film },
-  { id: "news", label: "חדשות", icon: Newspaper },
-  { id: "forecast", label: "תחזית", icon: Cloud },
-  { id: "current_affairs", label: "אקטואליה", icon: Tv },
+  { id: "live", label: "עולם התוכן של הרשת החדשה", icon: Radio },
+  { id: "channels", label: "תחנות שידור בישראל", icon: Tv },
+  { id: "movies", label: "סרטים קלאסיים", icon: Film },
+  { id: "news", label: "חדשות ואקטואליה", icon: Newspaper },
+  { id: "forecast", label: "תחזית מזג אויר", icon: Cloud },
+  { id: "current_affairs", label: "תוכניות אקטואליה", icon: Tv },
   { id: "ethnic", label: "תרבות ואתניות", icon: Users },
-  { id: "sports", label: "ספורט", icon: Trophy },
-  { id: "drama", label: "דרמה", icon: Tv },
-  { id: "series", label: "סדרות", icon: Tv },
-  { id: "global", label: "ערוצים גלובליים", icon: Globe }
+  { id: "sports", label: "ספורט ואתלטיקה", icon: Trophy },
+  { id: "drama", label: "דרמה וסדרות", icon: Tv },
+  { id: "series", label: "סדרות וריאליטי", icon: Tv },
+  { id: "global", label: "ערוצים בינלאומיים", icon: Globe },
+  { id: "documentaries", label: "דוקומנטרי ותעודה", icon: Film },
+  { id: "kids", label: "ילדים ונוער", icon: Users },
+  { id: "music", label: "מוזיקה וקליפים", icon: Music },
+  { id: "lifestyle", label: "סגנון חיים ובריאות", icon: Tv },
+  { id: "food", label: "אוכל ובישול", icon: Tv },
+  { id: "tech", label: "טכנולוגיה וחדשנות", icon: Tv },
+  { id: "history", label: "היסטוריה ותרבות", icon: Film },
+  { id: "science", label: "מדע וטבע", icon: Globe },
+  { id: "comedy", label: "קומדיה ובידור", icon: Tv },
+  { id: "religion", label: "דת ורוחניות", icon: Tv }
 ];
 
 export default function VOD() {
