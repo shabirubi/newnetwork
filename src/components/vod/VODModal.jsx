@@ -59,7 +59,7 @@ export default function VODModal({ isOpen, onClose }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[100] bg-black overflow-y-auto"
+        className="fixed inset-0 z-[100] bg-black overflow-y-auto lg:overflow-y-auto overflow-hidden"
         onClick={(e) => {
           if (e.target === e.currentTarget && !selectedContent) {
             onClose();
@@ -173,7 +173,7 @@ export default function VODModal({ isOpen, onClose }) {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="relative mt-2 sm:mt-4"
+            className="relative mt-2 sm:mt-4 lg:block hidden"
           >
             <div 
               className="relative h-[50vh] sm:h-[60vh] bg-cover bg-center"
@@ -274,8 +274,92 @@ export default function VODModal({ isOpen, onClose }) {
           </nav>
         )}
 
-        {/* Content - Mobile Optimized */}
-        <main className="max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-6 space-y-6 sm:space-y-8 pb-20">
+        {/* Mobile TikTok-Style Content */}
+        <main className="lg:hidden h-screen overflow-y-scroll snap-y snap-mandatory">
+          {isLoading ? (
+            <div className="h-screen flex items-center justify-center">
+              <div className="animate-spin rounded-full h-12 w-12 border-4 border-red-600 border-t-transparent"></div>
+            </div>
+          ) : Object.keys(groupedByStrip).length === 0 ? (
+            <div className="h-screen flex items-center justify-center">
+              <div className="text-center">
+                <Film className="w-16 h-16 text-red-600 mx-auto mb-4 opacity-50" />
+                <h3 className="text-xl font-bold text-gray-400 mb-2">אין תוכן זמין</h3>
+                <p className="text-base text-gray-500">נסה קטגוריה אחרת</p>
+              </div>
+            </div>
+          ) : (
+            Object.entries(groupedByStrip).flatMap(([stripName, items]) => 
+              items.map((item) => (
+                <motion.div
+                  key={item.id}
+                  className="h-screen snap-start relative flex items-center justify-center bg-gradient-to-b from-gray-900 to-black"
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                >
+                  {/* Background */}
+                  {item.thumbnail && (
+                    <div className="absolute inset-0">
+                      <img src={item.thumbnail} alt={item.title} className="w-full h-full object-cover opacity-40" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
+                    </div>
+                  )}
+
+                  {/* Content */}
+                  <div className="relative z-10 w-full px-6 pb-32">
+                    {/* Category Badge */}
+                    <div className="mb-4">
+                      {item.is_live && (
+                        <div className="inline-flex items-center gap-2 bg-red-600 text-white text-sm px-3 py-1.5 rounded-full mb-3">
+                          <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
+                          LIVE
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Title */}
+                    <h3 className="text-white text-3xl font-bold mb-3 leading-tight">{item.title}</h3>
+
+                    {/* Description */}
+                    {item.description && (
+                      <p className="text-white/80 text-base mb-4 line-clamp-3">{item.description}</p>
+                    )}
+
+                    {/* Meta Info */}
+                    <div className="flex items-center gap-4 text-white/70 text-sm mb-6">
+                      {item.duration && <span>{item.duration}</span>}
+                      {item.genre && <span>• {item.genre}</span>}
+                      {item.viewers > 0 && <span>• {item.viewers} צופים</span>}
+                    </div>
+
+                    {/* Play Button */}
+                    <motion.button
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => setSelectedContent(item)}
+                      className="bg-red-600 hover:bg-red-700 text-white px-8 py-4 rounded-full font-bold text-lg flex items-center gap-2 shadow-2xl"
+                    >
+                      <Play className="w-6 h-6" fill="white" />
+                      צפה עכשיו
+                    </motion.button>
+                  </div>
+
+                  {/* Side Actions */}
+                  <div className="absolute left-4 bottom-40 flex flex-col gap-6 z-10">
+                    <button className="flex flex-col items-center gap-1 text-white">
+                      <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                        <Eye className="w-6 h-6" />
+                      </div>
+                      <span className="text-xs">{item.viewers || 0}</span>
+                    </button>
+                  </div>
+                </motion.div>
+              ))
+            )
+          )}
+        </main>
+
+        {/* Desktop Content - Original Grid */}
+        <main className="hidden lg:block max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-6 space-y-6 sm:space-y-8 pb-20">
           {isLoading ? (
             <div className="flex items-center justify-center h-64">
               <div className="animate-spin rounded-full h-12 w-12 border-4 border-red-600 border-t-transparent"></div>
