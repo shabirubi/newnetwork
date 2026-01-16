@@ -130,19 +130,21 @@ export default function VODModal({ isOpen, onClose }) {
 
 
 
-        {/* Main Studio Player */}
-        {showMainPlayer && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="relative mt-0 lg:block hidden flex-shrink-0"
-          >
-            <div 
-              className="relative h-[50vh] sm:h-[60vh] bg-cover bg-center"
-              style={{
-                backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.7)), url('${STUDIO_BG}')`
-              }}
+        {/* Content Wrapper with Scrolling */}
+        <div className="flex-1 overflow-y-auto overflow-x-hidden flex flex-col">
+          {/* Main Studio Player */}
+          {showMainPlayer && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="relative flex-shrink-0"
             >
+              <div 
+                className="relative h-[30vh] sm:h-[40vh] bg-cover bg-center"
+                style={{
+                  backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.7)), url('${STUDIO_BG}')`
+                }}
+              >
               {/* Watermark Logo */}
               <motion.div
                 initial={{ opacity: 0 }}
