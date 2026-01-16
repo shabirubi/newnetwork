@@ -7,16 +7,26 @@ import VODPlayer from "./VODPlayer";
 import LivePlayer from "../news/LivePlayer";
 
 const CATEGORIES = [
-  { id: "live", label: "שידורים חיים", icon: Radio },
-  { id: "movies", label: "סרטים", icon: Film },
-  { id: "news", label: "חדשות", icon: Newspaper },
-  { id: "forecast", label: "תחזית", icon: Cloud },
-  { id: "current_affairs", label: "אקטואליה", icon: Tv },
+  { id: "live", label: "עולם התוכן של הרשת החדשה", icon: Radio },
+  { id: "movies", label: "סרטים קלאסיים", icon: Film },
+  { id: "news", label: "חדשות ואקטואליה", icon: Newspaper },
+  { id: "forecast", label: "תחזית מזג אויר", icon: Cloud },
+  { id: "current_affairs", label: "תוכניות אקטואליה", icon: Tv },
   { id: "ethnic", label: "תרבות ואתניות", icon: Users },
-  { id: "sports", label: "ספורט", icon: Trophy },
-  { id: "drama", label: "דרמה", icon: Tv },
-  { id: "series", label: "סדרות", icon: Tv },
-  { id: "global", label: "ערוצים גלובליים", icon: Globe }
+  { id: "sports", label: "ספורט ואתלטיקה", icon: Trophy },
+  { id: "drama", label: "דרמה וסדרות", icon: Tv },
+  { id: "series", label: "סדרות וריאליטי", icon: Tv },
+  { id: "global", label: "ערוצים בינלאומיים", icon: Globe },
+  { id: "documentaries", label: "דוקומנטרי ותעודה", icon: Film },
+  { id: "kids", label: "ילדים ונוער", icon: Users },
+  { id: "music", label: "מוזיקה וקליפים", icon: Music },
+  { id: "lifestyle", label: "סגנון חיים ובריאות", icon: Tv },
+  { id: "food", label: "אוכל ובישול", icon: Tv },
+  { id: "tech", label: "טכנולוגיה וחדשנות", icon: Tv },
+  { id: "history", label: "היסטוריה ותרבות", icon: Film },
+  { id: "science", label: "מדע וטבע", icon: Globe },
+  { id: "comedy", label: "קומדיה ובידור", icon: Tv },
+  { id: "religion", label: "דת ורוחניות", icon: Tv }
 ];
 
 export default function VODModal({ isOpen, onClose }) {
@@ -95,11 +105,14 @@ export default function VODModal({ isOpen, onClose }) {
           animate={{ opacity: 1, y: 0 }}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="fixed top-4 right-20 z-[110] flex items-center gap-2 px-4 py-3 rounded-full bg-gradient-to-r from-red-600 to-red-800 hover:from-red-700 hover:to-red-900 text-white font-bold shadow-2xl transition-all"
+          className="fixed top-4 right-20 z-[110] flex items-center gap-2 px-4 py-3 rounded-full bg-gradient-to-r from-black/80 via-red-900/60 to-black/80 backdrop-blur-sm border border-red-600/40 hover:border-red-500/60 text-white font-bold shadow-2xl transition-all"
+          style={{
+            background: 'linear-gradient(135deg, rgba(0,0,0,0.85) 0%, rgba(139,0,0,0.7) 25%, rgba(220,20,60,0.6) 50%, rgba(139,0,0,0.7) 75%, rgba(0,0,0,0.85) 100%)'
+          }}
         >
-          <Radio className="w-5 h-5" />
-          <span className="hidden sm:inline">חזרה לאולפן החדשות בשידור חי</span>
-          <span className="sm:hidden">חזרה לשידור חי</span>
+          <Radio className="w-5 h-5 text-red-400" />
+          <span className="hidden sm:inline bg-gradient-to-r from-red-400 via-red-300 to-red-400 bg-clip-text text-transparent">חזרה לאולפן החדשות בשידור חי</span>
+          <span className="sm:hidden bg-gradient-to-r from-red-400 via-red-300 to-red-400 bg-clip-text text-transparent">חזרה לשידור חי</span>
         </motion.button>
 
         {/* News Ticker Strip */}
