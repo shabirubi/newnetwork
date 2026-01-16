@@ -95,7 +95,7 @@ export default function Home() {
         }}
         whileHover={{ scale: 1.05 }}
         transition={{ duration: 0.3 }}
-        className="fixed bottom-24 left-4 sm:left-6 z-50 group flex flex-col items-center gap-4"
+        className="fixed bottom-24 left-4 sm:left-6 z-50 group flex flex-col items-center gap-1"
       >
         {/* Rainbow Background Effect */}
         <motion.div
@@ -111,14 +111,14 @@ export default function Home() {
             ]
           }}
           transition={{ duration: 3, repeat: Infinity }}
-          className="absolute top-0 left-1/2 -translate-x-1/2 rounded-full blur-3xl opacity-70 w-64 h-64 sm:w-48 sm:h-48"
+          className="absolute top-0 left-1/2 -translate-x-1/2 rounded-full blur-3xl opacity-70 w-48 h-48 sm:w-40 sm:h-40"
         />
         
         {/* Logo */}
         <img 
           src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png"
           alt="VOD"
-          className="relative w-48 h-48 sm:w-40 sm:h-40 drop-shadow-2xl"
+          className="relative w-36 h-36 sm:w-28 sm:h-28 drop-shadow-2xl"
         />
         
         {/* Text Button */}
