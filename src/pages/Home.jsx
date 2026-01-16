@@ -20,6 +20,7 @@ import CurrencyStrip from "../components/header/CurrencyStrip";
 import TikTokNewsFeed from "../components/news/TikTokNewsFeed";
 import AIAnnouncer from "../components/news/AIAnnouncer";
 import TVAnchor from "../components/news/TVAnchor";
+import VODModal from "../components/vod/VODModal";
 
 export default function Home() {
   const [selectedChannel, setSelectedChannel] = React.useState(() => {
@@ -28,6 +29,7 @@ export default function Home() {
     }
     return 'all';
   });
+  const [vodModalOpen, setVodModalOpen] = React.useState(false);
 
   React.useEffect(() => {
     const handleChannelChange = (e) => {
@@ -87,15 +89,19 @@ export default function Home() {
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
-        className="fixed bottom-24 left-6 z-50"
+        className="fixed bottom-24 sm:bottom-24 left-4 sm:left-6 z-50"
       >
-        <Link to={createPageUrl("VOD")}>
-          <Button className="bg-gradient-to-r from-red-600 to-red-800 hover:from-red-700 hover:to-red-900 text-white px-6 py-6 rounded-2xl shadow-2xl flex items-center gap-3 text-lg font-bold">
-            <Tv className="w-6 h-6" />
-            VOD
-          </Button>
-        </Link>
+        <Button 
+          onClick={() => setVodModalOpen(true)}
+          className="bg-gradient-to-r from-red-600 to-red-800 hover:from-red-700 hover:to-red-900 text-white px-4 py-4 sm:px-6 sm:py-6 rounded-2xl shadow-2xl flex items-center gap-2 sm:gap-3 text-base sm:text-lg font-bold"
+        >
+          <Tv className="w-5 h-5 sm:w-6 sm:h-6" />
+          <span className="hidden sm:inline">VOD</span>
+        </Button>
       </motion.div>
+      
+      {/* VOD Modal */}
+      <VODModal isOpen={vodModalOpen} onClose={() => setVodModalOpen(false)} />
       {/* Hero Section - TikTok News Feed */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-0 sm:gap-3 -mx-0 sm:mx-0 px-0 sm:px-4">
         {/* Right Sidebar - Updates Feed */}
