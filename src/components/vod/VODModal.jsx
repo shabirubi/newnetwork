@@ -136,72 +136,7 @@ export default function VODModal({ isOpen, onClose }) {
           <span className="sm:hidden bg-gradient-to-r from-red-400 via-red-300 to-red-400 bg-clip-text text-transparent">חזרה לשידור חי</span>
         </motion.button>
 
-        {/* News Ticker Strip */}
-        <div className="fixed top-0 left-0 right-0 z-[115] bg-gradient-to-r from-red-900 via-red-700 to-red-900 border-b-2 border-red-500 overflow-hidden">
-          <div className="flex items-center h-10 sm:h-12">
-            <div className="bg-red-600 px-4 py-2 font-bold text-white flex items-center gap-2 whitespace-nowrap">
-              <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
-              LIVE
-            </div>
-            <div className="flex-1 overflow-hidden">
-              <div className="news-ticker flex gap-8 px-4">
-                {[...breakingNews, ...breakingNews].map((news, idx) => (
-                  <div key={idx} className="flex items-center gap-3 whitespace-nowrap text-white">
-                    <span className="text-yellow-400 font-bold">●</span>
-                    <span className="font-semibold">{news.title}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
 
-        {/* Header with Radio Button */}
-        <motion.header
-          initial={{ y: -20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          className="sticky top-10 sm:top-12 z-[110] bg-gradient-to-r from-black via-red-950/40 to-black backdrop-blur-md border-b border-red-900/30"
-        >
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
-            <motion.div 
-              className="flex items-center gap-2 sm:gap-3"
-              animate={{ 
-                scale: [1, 1.02, 1],
-              }}
-              transition={{ duration: 2, repeat: Infinity }}
-            >
-              <div className="relative">
-                <div className="absolute inset-0 blur-xl bg-gradient-to-r from-red-600 to-blue-600 opacity-50 rounded-full"></div>
-                <img 
-                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png"
-                  alt="Logo"
-                  className="relative w-10 h-10 sm:w-12 sm:h-12 drop-shadow-xl"
-                />
-              </div>
-              <div>
-                <h1 className="text-lg sm:text-2xl font-bold bg-gradient-to-r from-red-500 via-blue-400 to-red-500 bg-clip-text text-transparent">VOD LIVE</h1>
-                <p className="text-[10px] sm:text-xs text-gray-400">תוכן בידור וחדשות 24/7</p>
-              </div>
-            </motion.div>
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => setIsRadioPlaying(!isRadioPlaying)}
-                className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full font-bold transition-all ${
-                  isRadioPlaying 
-                    ? 'bg-red-600 text-white animate-pulse' 
-                    : 'bg-red-900/50 text-red-400 hover:bg-red-800'
-                }`}
-              >
-                <Radio className="w-4 h-4" />
-                <span className="hidden sm:inline">רדיו</span>
-              </button>
-              <div className="hidden sm:flex items-center gap-2 text-xs sm:text-sm text-gray-400">
-                <Eye className="w-3 h-3 sm:w-4 sm:h-4" />
-                <span>{content.length}</span>
-              </div>
-            </div>
-          </div>
-        </motion.header>
 
         {/* Main Studio Player */}
         {showMainPlayer && (
