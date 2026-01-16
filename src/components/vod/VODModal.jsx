@@ -287,7 +287,7 @@ export default function VODModal({ isOpen, onClose }) {
         </AnimatePresence>
 
         {/* Desktop Categories */}
-        <nav className="hidden lg:block sticky top-[115px] sm:top-[135px] z-[108] bg-black/90 backdrop-blur-md border-b border-red-900/20 overflow-x-auto">
+        <nav className="hidden lg:block fixed top-0 left-0 right-0 z-[108] bg-gradient-to-b from-black/90 via-black/80 to-black/50 backdrop-blur-lg border-b border-red-600/20 overflow-x-auto pt-16">
           <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 sm:py-3 flex gap-1.5 sm:gap-2">
             {CATEGORIES.map((cat) => {
               const Icon = cat.icon;
