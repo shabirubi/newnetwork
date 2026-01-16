@@ -93,9 +93,9 @@ export default function Home() {
           opacity: 1, 
           scale: 1
         }}
-        whileHover={{ scale: 1.1 }}
+        whileHover={{ scale: 1.05 }}
         transition={{ duration: 0.3 }}
-        className="fixed bottom-24 left-4 sm:left-6 z-50 group flex flex-col items-center"
+        className="fixed bottom-24 left-4 sm:left-6 z-50 group flex flex-col items-center gap-3"
       >
         {/* Rainbow Background Effect */}
         <motion.div
@@ -111,20 +111,22 @@ export default function Home() {
             ]
           }}
           transition={{ duration: 3, repeat: Infinity }}
-          className="absolute top-0 left-1/2 -translate-x-1/2 rounded-full blur-2xl opacity-70 w-20 h-20 sm:w-24 sm:h-24"
+          className="absolute top-0 left-1/2 -translate-x-1/2 rounded-full blur-3xl opacity-70 w-40 h-40 sm:w-32 sm:h-32"
         />
         
         {/* Logo */}
         <img 
           src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png"
           alt="VOD"
-          className="relative w-20 h-20 sm:w-16 sm:h-16 drop-shadow-2xl mb-2"
+          className="relative w-32 h-32 sm:w-24 sm:h-24 drop-shadow-2xl"
         />
         
-        {/* Text */}
-        <span className="relative text-white text-xs sm:text-sm font-bold text-center drop-shadow-lg whitespace-nowrap">
-          עולם התוכן של<br />הרשת החדשה
-        </span>
+        {/* Text Button */}
+        <div className="relative bg-gradient-to-r from-red-600 via-purple-600 to-blue-600 px-4 py-2 rounded-xl shadow-2xl">
+          <span className="text-white text-sm sm:text-base font-bold text-center whitespace-nowrap">
+            עולם התוכן של הרשת החדשה
+          </span>
+        </div>
       </motion.button>
       
       {/* VOD Modal */}
