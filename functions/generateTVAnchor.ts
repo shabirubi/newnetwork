@@ -3,22 +3,12 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
-    const user = await base44.auth.me();
     
-    if (user?.role !== 'admin') {
-      return Response.json({ error: 'Forbidden: Admin access required' }, { status: 403 });
-    }
-
-    const ELEVENLABS_API_KEY = Deno.env.get('ELEVENLABS_API_KEY');
     const DID_API_KEY = Deno.env.get('DID_API_KEY');
     
-    if (!ELEVENLABS_API_KEY || !DID_API_KEY) {
+    if (!DID_API_KEY) {
       return Response.json({ 
-        error: 'API keys not configured',
-        missing: {
-          elevenlabs: !ELEVENLABS_API_KEY,
-          did: !DID_API_KEY
-        }
+        error: 'DID_API_KEY not configured'
       }, { status: 500 });
     }
 
@@ -36,7 +26,7 @@ Deno.serve(async (req) => {
     // Generate script for TV anchor
     const scriptPrompt = `
 אתה קריין חדשות טלוויזיה מקצועי של "הרשת החדשה".
-צור תסריט שידור חדשות קצר (45-60 שניות) בעברית עם הכתבות הבאות:
+צור תסריט שידור חדשות קצר (30-45 שניות) בעברית עם הכתבות הבאות:
 
 ${articles.map((a, i) => `${i + 1}. ${a.title}${a.subtitle ? ' - ' + a.subtitle : ''}`).join('\n')}
 
@@ -44,7 +34,8 @@ ${articles.map((a, i) => `${i + 1}. ${a.title}${a.subtitle ? ' - ' + a.subtitle 
 - פתיחה: "ערב טוב, אתכם מהסטודיו של הרשת החדשה"
 - דיבור ברור, מקצועי ואמין
 - שפה עברית רשמית וחדשותית
-- סיום: "זה היה עדכון חדשות מהרשת החדשה"
+- קצר וממוקד - עד 3 משפטים
+- סיום: "זה היה עדכון חדשות"
 
 תן רק את התסריט לקריין, בלי הערות.
 `;
@@ -56,41 +47,14 @@ ${articles.map((a, i) => `${i + 1}. ${a.title}${a.subtitle ? ' - ' + a.subtitle 
 
     const script = scriptResponse;
 
-    // Generate audio with ElevenLabs - Male professional voice
-    const voiceId = 'pNInz6obpgDQGcFmaJgB'; // Adam - professional male voice
+    // Create talking avatar with D-ID
+    console.log('Creating D-ID talk with script:', script);
     
-    const audioResponse = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voiceId}`, {
-      method: 'POST',
-      headers: {
-        'Accept': 'audio/mpeg',
-        'Content-Type': 'application/json',
-        'xi-api-key': ELEVENLABS_API_KEY
-      },
-      body: JSON.stringify({
-        text: script,
-        model_id: 'eleven_multilingual_v2',
-        voice_settings: {
-          stability: 0.7,
-          similarity_boost: 0.85,
-          style: 0.3,
-          use_speaker_boost: true
-        }
-      })
-    });
-
-    if (!audioResponse.ok) {
-      const error = await audioResponse.text();
-      console.error('ElevenLabs error:', error);
-      return Response.json({ error: 'Failed to generate audio' }, { status: audioResponse.status });
-    }
-
-    // Create talking avatar with D-ID using text (simpler approach)
     const didResponse = await fetch('https://api.d-id.com/talks', {
       method: 'POST',
       headers: {
         'Authorization': `Basic ${DID_API_KEY}`,
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
         source_url: 'https://create-images-results.d-id.com/google-oauth2%7C111488153715019116355/upl_ZKQCGLwxK8jGQlJ6bDsj1/image.jpeg',
@@ -104,28 +68,34 @@ ${articles.map((a, i) => `${i + 1}. ${a.title}${a.subtitle ? ' - ' + a.subtitle 
         },
         config: {
           fluent: true,
-          pad_audio: 0,
+          pad_audio: 0.0,
           stitch: true
         }
       })
     });
 
     if (!didResponse.ok) {
-      const error = await didResponse.json();
-      console.error('D-ID error:', error);
-      return Response.json({ error: 'Failed to create video', details: error }, { status: didResponse.status });
+      const errorText = await didResponse.text();
+      console.error('D-ID error response:', errorText);
+      return Response.json({ 
+        error: 'Failed to create video', 
+        details: errorText,
+        status: didResponse.status 
+      }, { status: 500 });
     }
 
     const didData = await didResponse.json();
+    console.log('D-ID talk created:', didData);
 
-    // Poll for video completion
     const talkId = didData.id;
+    
+    // Poll for video completion
     let videoUrl = null;
     let attempts = 0;
-    const maxAttempts = 60; // 2 minutes max
+    const maxAttempts = 90; // 3 minutes max
 
     while (!videoUrl && attempts < maxAttempts) {
-      await new Promise(resolve => setTimeout(resolve, 2000)); // Wait 2 seconds
+      await new Promise(resolve => setTimeout(resolve, 2000));
       
       const statusResponse = await fetch(`https://api.d-id.com/talks/${talkId}`, {
         headers: {
@@ -133,24 +103,39 @@ ${articles.map((a, i) => `${i + 1}. ${a.title}${a.subtitle ? ' - ' + a.subtitle 
         }
       });
 
+      if (!statusResponse.ok) {
+        console.error('Status check failed:', await statusResponse.text());
+        attempts++;
+        continue;
+      }
+
       const statusData = await statusResponse.json();
+      console.log(`Attempt ${attempts + 1}: Status = ${statusData.status}`);
       
       if (statusData.status === 'done') {
         videoUrl = statusData.result_url;
+        break;
       } else if (statusData.status === 'error') {
-        throw new Error('Video generation failed');
+        return Response.json({ 
+          error: 'Video generation failed', 
+          details: statusData 
+        }, { status: 500 });
       }
       
       attempts++;
     }
 
     if (!videoUrl) {
-      return Response.json({ error: 'Video generation timeout' }, { status: 408 });
+      return Response.json({ 
+        error: 'Video generation timeout',
+        attempts: attempts 
+      }, { status: 408 });
     }
 
     return Response.json({
       video_url: videoUrl,
-      script: script
+      script: script,
+      talk_id: talkId
     });
 
   } catch (error) {
