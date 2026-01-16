@@ -132,10 +132,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </motion.button>
-      
-      {/* VOD Modal */}
-      <VODModal isOpen={vodModalOpen} onClose={() => setVodModalOpen(false)} />
+        </motion.a>
       {/* Hero Section - TikTok News Feed */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-0 sm:gap-3 -mx-0 sm:mx-0 px-0 sm:px-4">
         {/* Right Sidebar - Updates Feed */}
