@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Play, Radio, Film, Newspaper, Cloud, Globe, Trophy, Tv, Users, Eye, Volume2, Music } from "lucide-react";
+import { X, Play, Radio, Film, Newspaper, Cloud, Globe, Trophy, Tv, Users, Eye, Volume2, Music, ChevronUp } from "lucide-react";
 import VODPlayer from "./VODPlayer";
 import LivePlayer from "../news/LivePlayer";
 
