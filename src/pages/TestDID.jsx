@@ -13,6 +13,34 @@ export default function TestDID() {
     setLogs(prev => [...prev, `${new Date().toLocaleTimeString()}: ${message}`]);
   };
 
+  const checkConnection = async () => {
+    setLoading(true);
+    setError(null);
+    setVideoUrl(null);
+    setLogs([]);
+    
+    try {
+      addLog('בודק חיבור ל-D-ID...');
+      
+      const response = await base44.functions.invoke('checkDID');
+      
+      addLog('תגובה התקבלה');
+      
+      if (response.data.success) {
+        addLog('החיבור תקין! קרדיטים: ' + JSON.stringify(response.data.credits));
+        setError(null);
+      } else {
+        addLog('שגיאה בחיבור');
+        setError(JSON.stringify(response.data, null, 2));
+      }
+    } catch (err) {
+      addLog('שגיאה: ' + err.message);
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const testDID = async () => {
     setLoading(true);
     setError(null);
@@ -48,7 +76,24 @@ export default function TestDID() {
           בדיקת D-ID
         </h1>
 
-        <div className="bg-gray-800 rounded-xl p-6 mb-6">
+        <div className="bg-gray-800 rounded-xl p-6 mb-6 space-y-4">
+          <Button
+            onClick={checkConnection}
+            disabled={loading}
+            className="w-full bg-blue-600 hover:bg-blue-700 py-6 text-xl font-bold"
+          >
+            {loading ? (
+              <>
+                <Loader2 className="w-6 h-6 ml-2 animate-spin" />
+                בודק...
+              </>
+            ) : (
+              <>
+                בדוק חיבור ל-D-ID
+              </>
+            )}
+          </Button>
+
           <Button
             onClick={testDID}
             disabled={loading}
