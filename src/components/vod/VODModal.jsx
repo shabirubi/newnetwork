@@ -115,7 +115,7 @@ export default function VODModal({ isOpen, onClose }) {
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="fixed top-4 left-4 z-[110] p-3 rounded-full bg-red-600 hover:bg-red-700 text-white transition-all shadow-2xl"
+          className="absolute top-4 left-4 z-[110] p-3 rounded-full bg-red-600 hover:bg-red-700 text-white transition-all shadow-2xl"
         >
           <X className="w-6 h-6" />
         </button>
