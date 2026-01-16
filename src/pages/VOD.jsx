@@ -71,7 +71,7 @@ export default function VOD() {
   }, {});
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black text-white">
+    <div className="min-h-screen bg-black text-white flex flex-col">
       {/* Header */}
       <motion.header
         initial={{ y: -20, opacity: 0 }}
@@ -84,13 +84,9 @@ export default function VOD() {
               <Play className="w-6 h-6 text-white" fill="white" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-red-500">VOD LIVE</h1>
-              <p className="text-xs text-gray-400">תוכן בידור וחדשות 24/7</p>
+              <h1 className="text-2xl font-bold text-red-500">עולם התוכן של הרשת החדשה</h1>
+              <p className="text-xs text-gray-400">{content.length} פריטים זמינים</p>
             </div>
-          </div>
-          <div className="flex items-center gap-2 text-sm text-gray-400">
-            <Eye className="w-4 h-4" />
-            <span>{content.length} פריטים</span>
           </div>
         </div>
       </motion.header>
