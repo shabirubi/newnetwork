@@ -19,7 +19,7 @@ import AutoChannelsUpdater from "../components/news/AutoChannelsUpdater";
 import CurrencyStrip from "../components/header/CurrencyStrip";
 import TikTokNewsFeed from "../components/news/TikTokNewsFeed";
 import AIAnnouncer from "../components/news/AIAnnouncer";
-import RadioAnnouncer from "../components/news/RadioAnnouncer";
+import TVAnchor from "../components/news/TVAnchor";
 
 export default function Home() {
   const [selectedChannel, setSelectedChannel] = React.useState(() => {
@@ -81,7 +81,7 @@ export default function Home() {
       <AutoNewsUpdater />
       <AutoChannelsUpdater />
       <AIAnnouncer />
-      <RadioAnnouncer />
+      <TVAnchor />
       {/* Hero Section - Extended Live Player */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-0 sm:gap-3 -mx-0 sm:mx-0 px-0 sm:px-4">
         {/* Right Sidebar - Updates Feed */}
