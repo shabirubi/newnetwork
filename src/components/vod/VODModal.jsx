@@ -144,7 +144,7 @@ export default function VODModal({ isOpen, onClose }) {
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="relative mt-2 sm:mt-4 lg:block hidden"
+            className="relative mt-0 lg:block hidden flex-shrink-0"
           >
             <div 
               className="relative h-[50vh] sm:h-[60vh] bg-cover bg-center"
