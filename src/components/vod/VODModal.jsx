@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Play, Radio, Film, Newspaper, Cloud, Globe, Trophy, Tv, Users, Eye } from "lucide-react";
+import { X, Play, Radio, Film, Newspaper, Cloud, Globe, Trophy, Tv, Users, Eye, Volume2, Music } from "lucide-react";
 import VODPlayer from "./VODPlayer";
+import LivePlayer from "../news/LivePlayer";
 
 const CATEGORIES = [
   { id: "live", label: "שידורים חיים", icon: Radio },
@@ -21,12 +22,22 @@ const CATEGORIES = [
 export default function VODModal({ isOpen, onClose }) {
   const [activeCategory, setActiveCategory] = useState("live");
   const [selectedContent, setSelectedContent] = useState(null);
+  const [showMainPlayer, setShowMainPlayer] = useState(true);
+  const [isRadioPlaying, setIsRadioPlaying] = useState(false);
 
   const { data: content = [], isLoading } = useQuery({
     queryKey: ['vod-content', activeCategory],
     queryFn: () => base44.entities.VODContent.filter({ category: activeCategory }, 'order'),
     initialData: [],
     enabled: isOpen
+  });
+
+  const { data: breakingNews = [] } = useQuery({
+    queryKey: ['breaking-news-vod'],
+    queryFn: () => base44.entities.NewsArticle.filter({ is_breaking: true }, '-created_date', 10),
+    initialData: [],
+    enabled: isOpen,
+    refetchInterval: 30000
   });
 
   const groupedByStrip = content.reduce((acc, item) => {
@@ -40,19 +51,34 @@ export default function VODModal({ isOpen, onClose }) {
 
   if (!isOpen) return null;
 
+  const STUDIO_BG = "https://images.unsplash.com/photo-1598488035139-bdbb2231ce04?w=1920&q=80";
+
   return (
     <AnimatePresence>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[100] bg-black"
+        className="fixed inset-0 z-[100] bg-black overflow-y-auto"
         onClick={(e) => {
           if (e.target === e.currentTarget && !selectedContent) {
             onClose();
           }
         }}
       >
+        <style>{`
+          @keyframes tickerScroll {
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+          }
+          .news-ticker {
+            animation: tickerScroll 40s linear infinite;
+          }
+          .news-ticker:hover {
+            animation-play-state: paused;
+          }
+        `}</style>
+
         {/* Close Button */}
         <button
           onClick={onClose}
@@ -61,11 +87,31 @@ export default function VODModal({ isOpen, onClose }) {
           <X className="w-6 h-6" />
         </button>
 
-        {/* Header */}
+        {/* News Ticker Strip */}
+        <div className="fixed top-0 left-0 right-0 z-[108] bg-gradient-to-r from-red-900 via-red-700 to-red-900 border-b-2 border-red-500 overflow-hidden">
+          <div className="flex items-center h-10 sm:h-12">
+            <div className="bg-red-600 px-4 py-2 font-bold text-white flex items-center gap-2 whitespace-nowrap">
+              <span className="w-2 h-2 bg-white rounded-full animate-pulse"></span>
+              LIVE
+            </div>
+            <div className="flex-1 overflow-hidden">
+              <div className="news-ticker flex gap-8 px-4">
+                {[...breakingNews, ...breakingNews].map((news, idx) => (
+                  <div key={idx} className="flex items-center gap-3 whitespace-nowrap text-white">
+                    <span className="text-yellow-400 font-bold">●</span>
+                    <span className="font-semibold">{news.title}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Header with Radio Button */}
         <motion.header
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          className="sticky top-0 z-[105] bg-gradient-to-r from-black via-red-950/40 to-black backdrop-blur-md border-b border-red-900/30"
+          className="sticky top-10 sm:top-12 z-[105] bg-gradient-to-r from-black via-red-950/40 to-black backdrop-blur-md border-b border-red-900/30"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
             <div className="flex items-center gap-2 sm:gap-3">
@@ -77,16 +123,87 @@ export default function VODModal({ isOpen, onClose }) {
                 <p className="text-[10px] sm:text-xs text-gray-400">תוכן בידור וחדשות 24/7</p>
               </div>
             </div>
-            <div className="flex items-center gap-2 text-xs sm:text-sm text-gray-400">
-              <Eye className="w-3 h-3 sm:w-4 sm:h-4" />
-              <span className="hidden sm:inline">{content.length} פריטים</span>
-              <span className="sm:hidden">{content.length}</span>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => setIsRadioPlaying(!isRadioPlaying)}
+                className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-full font-bold transition-all ${
+                  isRadioPlaying 
+                    ? 'bg-red-600 text-white animate-pulse' 
+                    : 'bg-red-900/50 text-red-400 hover:bg-red-800'
+                }`}
+              >
+                <Radio className="w-4 h-4" />
+                <span className="hidden sm:inline">רדיו</span>
+              </button>
+              <div className="hidden sm:flex items-center gap-2 text-xs sm:text-sm text-gray-400">
+                <Eye className="w-3 h-3 sm:w-4 sm:h-4" />
+                <span>{content.length}</span>
+              </div>
             </div>
           </div>
         </motion.header>
 
+        {/* Main Studio Player */}
+        {showMainPlayer && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="relative mt-2 sm:mt-4"
+          >
+            <div 
+              className="relative h-[50vh] sm:h-[60vh] bg-cover bg-center"
+              style={{
+                backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.7)), url('${STUDIO_BG}')`
+              }}
+            >
+              {/* Studio Overlay */}
+              <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-4">
+                <motion.div
+                  animate={{ scale: [1, 1.05, 1] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                  className="w-20 h-20 sm:w-32 sm:h-32 rounded-full bg-red-600/30 backdrop-blur-xl border-4 border-red-500 flex items-center justify-center mb-6"
+                >
+                  <Play className="w-10 h-10 sm:w-16 sm:h-16 text-white" fill="white" />
+                </motion.div>
+                <h2 className="text-2xl sm:text-4xl font-bold mb-2 text-center">אולפן הרשת החדשה</h2>
+                <p className="text-sm sm:text-lg text-red-300 mb-4 text-center">שידור חי עם פאנל הכתבים שלנו</p>
+                <div className="flex gap-3 mt-4">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="bg-red-600 hover:bg-red-700 px-6 sm:px-8 py-3 sm:py-4 rounded-full font-bold text-base sm:text-lg flex items-center gap-2"
+                  >
+                    <Play className="w-5 h-5" fill="white" />
+                    צפה בשידור
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="bg-white/10 backdrop-blur hover:bg-white/20 px-6 sm:px-8 py-3 sm:py-4 rounded-full font-bold text-base sm:text-lg flex items-center gap-2"
+                  >
+                    <Music className="w-5 h-5" />
+                    מוזיקה
+                  </motion.button>
+                </div>
+              </div>
+
+              {/* Live Indicator */}
+              <div className="absolute top-4 right-4 bg-red-600 text-white px-3 py-1.5 rounded-full flex items-center gap-2 animate-pulse">
+                <span className="w-2 h-2 bg-white rounded-full"></span>
+                <span className="text-sm font-bold">ON AIR</span>
+              </div>
+
+              {/* Viewer Count */}
+              <div className="absolute bottom-4 left-4 bg-black/60 backdrop-blur text-white px-4 py-2 rounded-full flex items-center gap-2">
+                <Eye className="w-4 h-4" />
+                <span className="text-sm font-bold">3,456 צופים</span>
+              </div>
+            </div>
+          </motion.div>
+        )}
+
         {/* Categories - Mobile Optimized */}
-        <nav className="sticky top-[57px] sm:top-[73px] z-[104] bg-black/90 backdrop-blur-md border-b border-red-900/20 overflow-x-auto">
+        <nav className="sticky top-[115px] sm:top-[135px] z-[104] bg-black/90 backdrop-blur-md border-b border-red-900/20 overflow-x-auto">
           <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 sm:py-3 flex gap-1.5 sm:gap-2">
             {CATEGORIES.map((cat) => {
               const Icon = cat.icon;
