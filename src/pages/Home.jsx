@@ -20,8 +20,10 @@ import CurrencyStrip from "../components/header/CurrencyStrip";
 import TikTokNewsFeed from "../components/news/TikTokNewsFeed";
 import AIAnnouncer from "../components/news/AIAnnouncer";
 import TVAnchor from "../components/news/TVAnchor";
+import VODModal from "../components/vod/VODModal";
 
 export default function Home() {
+  const [vodModalOpen, setVodModalOpen] = React.useState(false);
   const [selectedChannel, setSelectedChannel] = React.useState(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('selectedChannel') || 'all';
