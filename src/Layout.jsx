@@ -12,7 +12,7 @@ import NewsTicker from "./components/header/NewsTicker";
 import ReportersModal from "./components/reporter/ReportersModal";
 import AIAnnouncer from "./components/news/AIAnnouncer";
 
-const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/a44ef2558_212.png";
+const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/cede78010_image.png";
 
 const categories = [
   { id: "home", label: "דף הבית", icon: Home, href: "Home" },
@@ -121,11 +121,11 @@ export default function Layout({ children }) {
           className="relative group cursor-pointer"
           onClick={() => setReportersModalOpen(true)}
         >
-          <div className="absolute inset-0 bg-[#E31E24] blur-2xl opacity-50 group-hover:opacity-70 transition-opacity rounded-full"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-red-600 via-blue-600 to-red-600 blur-2xl opacity-50 group-hover:opacity-70 transition-opacity rounded-full"></div>
           <img 
             src={LOGO_URL} 
             alt="הרשת החדשה" 
-            className="h-24 w-auto relative z-10 drop-shadow-2xl hover:scale-110 transition-transform duration-300"
+            className="h-28 w-auto relative z-10 drop-shadow-2xl hover:scale-110 transition-transform duration-300"
           />
         </motion.div>
       </motion.div>

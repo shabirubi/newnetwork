@@ -128,15 +128,26 @@ export default function VODModal({ isOpen, onClose }) {
           className="sticky top-10 sm:top-12 z-[105] bg-gradient-to-r from-black via-red-950/40 to-black backdrop-blur-md border-b border-red-900/30"
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 py-3 sm:py-4 flex items-center justify-between">
-            <div className="flex items-center gap-2 sm:gap-3">
-              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-red-600 to-red-800 flex items-center justify-center">
-                <Play className="w-5 h-5 sm:w-6 sm:h-6 text-white" fill="white" />
+            <motion.div 
+              className="flex items-center gap-2 sm:gap-3"
+              animate={{ 
+                scale: [1, 1.02, 1],
+              }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              <div className="relative">
+                <div className="absolute inset-0 blur-xl bg-gradient-to-r from-red-600 to-blue-600 opacity-50 rounded-full"></div>
+                <img 
+                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/cede78010_image.png"
+                  alt="Logo"
+                  className="relative w-10 h-10 sm:w-12 sm:h-12 drop-shadow-xl"
+                />
               </div>
               <div>
-                <h1 className="text-lg sm:text-2xl font-bold text-red-500">VOD LIVE</h1>
+                <h1 className="text-lg sm:text-2xl font-bold bg-gradient-to-r from-red-500 via-blue-400 to-red-500 bg-clip-text text-transparent">VOD LIVE</h1>
                 <p className="text-[10px] sm:text-xs text-gray-400">תוכן בידור וחדשות 24/7</p>
               </div>
-            </div>
+            </motion.div>
             <div className="flex items-center gap-3">
               <button
                 onClick={() => setIsRadioPlaying(!isRadioPlaying)}
@@ -170,14 +181,35 @@ export default function VODModal({ isOpen, onClose }) {
                 backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.7)), url('${STUDIO_BG}')`
               }}
             >
+              {/* Watermark Logo */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 0.3 }}
+                className="absolute top-4 left-4 z-10"
+              >
+                <img 
+                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/cede78010_image.png"
+                  alt="Logo"
+                  className="w-16 h-16 sm:w-24 sm:h-24 drop-shadow-2xl"
+                />
+              </motion.div>
+
               {/* Studio Overlay */}
               <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-4">
                 <motion.div
-                  animate={{ scale: [1, 1.05, 1] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                  className="w-20 h-20 sm:w-32 sm:h-32 rounded-full bg-red-600/30 backdrop-blur-xl border-4 border-red-500 flex items-center justify-center mb-6"
+                  animate={{ 
+                    scale: [1, 1.05, 1],
+                    rotate: [0, 5, 0, -5, 0]
+                  }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                  className="relative mb-6"
                 >
-                  <Play className="w-10 h-10 sm:w-16 sm:h-16 text-white" fill="white" />
+                  <div className="absolute inset-0 blur-2xl bg-gradient-to-r from-red-600 via-blue-600 to-red-600 opacity-60 rounded-full"></div>
+                  <img 
+                    src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/cede78010_image.png"
+                    alt="Logo"
+                    className="relative w-32 h-32 sm:w-48 sm:h-48 drop-shadow-2xl"
+                  />
                 </motion.div>
                 <h2 className="text-2xl sm:text-4xl font-bold mb-2 text-center">אולפן הרשת החדשה</h2>
                 <p className="text-sm sm:text-lg text-red-300 mb-4 text-center">שידור חי עם פאנל הכתבים שלנו</p>
