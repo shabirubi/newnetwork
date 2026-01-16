@@ -32,10 +32,31 @@ const CATEGORIES = [
 export default function VOD() {
   const [activeCategory, setActiveCategory] = useState("live");
   const [selectedContent, setSelectedContent] = useState(null);
+  const [showCategoryMenu, setShowCategoryMenu] = useState(false);
+
+  const { data: channels = [] } = useQuery({
+    queryKey: ['channels'],
+    queryFn: () => base44.entities.NewsChannel.filter({ is_active: true }, 'name'),
+    initialData: [],
+    enabled: activeCategory === 'channels'
+  });
 
   const { data: content = [], isLoading } = useQuery({
     queryKey: ['vod-content', activeCategory],
-    queryFn: () => base44.entities.VODContent.filter({ category: activeCategory }, 'order'),
+    queryFn: () => {
+      if (activeCategory === 'channels') {
+        return channels.map(ch => ({
+          id: ch.id,
+          title: ch.name,
+          description: ch.description || '',
+          stream_url: ch.stream_url,
+          is_live: true,
+          thumbnail: `https://images.unsplash.com/photo-1587739920494-8281e212fc14?w=400&h=225&fit=crop`,
+          strip_name: 'תחנות שידור ישראליות'
+        }));
+      }
+      return base44.entities.VODContent.filter({ category: activeCategory }, 'order');
+    },
     initialData: []
   });
 
