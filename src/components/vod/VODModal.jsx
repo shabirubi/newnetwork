@@ -209,11 +209,58 @@ export default function VODModal({ isOpen, onClose }) {
                 <span className="text-sm font-bold">3,456 צופים</span>
               </div>
             </div>
-          </motion.div>
-        )}
+            </motion.div>
+            )}
 
-        {/* Mobile Categories - Native Bottom Sheet Style */}
-        <div className="lg:hidden fixed bottom-20 left-4 right-4 z-[112]">
+            {/* Desktop Categories */}
+            <nav className="hidden lg:block flex-shrink-0 bg-gradient-to-b from-black/90 via-black/80 to-black/50 backdrop-blur-lg border-b border-red-600/20 overflow-x-auto">
+            <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 sm:py-3 flex gap-1.5 sm:gap-2">
+            {CATEGORIES.map((cat) => {
+              const Icon = cat.icon;
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => setActiveCategory(cat.id)}
+                  className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full whitespace-nowrap text-xs sm:text-sm transition-all ${
+                    activeCategory === cat.id
+                      ? 'bg-red-600 text-white shadow-lg shadow-red-600/50'
+                      : 'bg-gray-900/50 border border-red-900/30 text-red-500 hover:bg-red-900/30'
+                  }`}
+                >
+                  <Icon className="w-3 h-3 sm:w-4 sm:h-4" />
+                  <span>{cat.label}</span>
+                </button>
+              );
+            })}
+            </div>
+            </nav>
+
+            {/* Mobile Categories - Inside Modal */}
+            <div className="lg:hidden flex-shrink-0 bg-gradient-to-b from-black/90 via-black/80 to-black/50 backdrop-blur-lg border-b border-red-600/20 p-2">
+            <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            className="flex gap-2 overflow-x-auto pb-2"
+            >
+            {CATEGORIES.map((cat) => {
+              const Icon = cat.icon;
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => setActiveCategory(cat.id)}
+                  className={`flex items-center gap-1 px-3 py-2 rounded-full whitespace-nowrap text-xs transition-all flex-shrink-0 ${
+                    activeCategory === cat.id
+                      ? 'bg-red-600 text-white shadow-lg shadow-red-600/50'
+                      : 'bg-gray-900/50 border border-red-900/30 text-red-500 hover:bg-red-900/30'
+                  }`}
+                >
+                  <Icon className="w-3 h-3" />
+                  <span className="hidden xs:inline">{cat.label}</span>
+                </button>
+              );
+            })}
+            </motion.div>
+            </div>
           <motion.button
             whileTap={{ scale: 0.95 }}
             onClick={() => setShowCategoryMenu(!showCategoryMenu)}
