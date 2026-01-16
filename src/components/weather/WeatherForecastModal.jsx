@@ -127,7 +127,7 @@ export default function WeatherForecastModal({ isOpen, onClose, currentWeather }
             className="bg-gradient-to-br from-sky-400 via-blue-500 to-indigo-600 rounded-3xl max-w-5xl w-full max-h-[90vh] overflow-y-auto shadow-2xl"
           >
             {/* Header */}
-            <div className="relative p-6 pb-4">
+            <div className="relative p-6 pb-4 pt-12">
               <button
                 onClick={onClose}
                 className="absolute top-4 left-4 p-2 rounded-full bg-white/20 hover:bg-white/30 text-white transition-colors z-10"
