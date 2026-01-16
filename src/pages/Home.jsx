@@ -82,7 +82,38 @@ export default function Home() {
     <div className="space-y-0 sm:space-y-6">
       <AutoNewsUpdater />
       <AutoChannelsUpdater />
-      <TVAnchor />
+      
+      {/* VOD Floating Button - Rainbow Effect */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: 1, scale: 1 }}
+        whileHover={{ scale: 1.1 }}
+        className="fixed bottom-24 left-6 z-50"
+      >
+        <motion.button
+          onClick={() => setVodModalOpen(true)}
+          animate={{
+            boxShadow: [
+              "0 0 20px #ff0000",
+              "0 0 30px #ff7700",
+              "0 0 40px #ffdd00",
+              "0 0 30px #00ff00",
+              "0 0 40px #0088ff",
+              "0 0 30px #8800ff",
+              "0 0 20px #ff00ff",
+              "0 0 20px #ff0000"
+            ]
+          }}
+          transition={{ duration: 3, repeat: Infinity }}
+          className="relative w-20 h-20 rounded-full bg-gradient-to-br from-red-600 via-purple-600 to-blue-600 flex items-center justify-center shadow-2xl group"
+        >
+          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-red-500 via-yellow-500 to-blue-500 opacity-0 group-hover:opacity-100 animate-pulse transition-opacity"></div>
+          <Tv className="w-10 h-10 text-white relative z-10" />
+          <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-gradient-to-r from-red-600 to-blue-600 text-white px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap shadow-lg">
+            VOD LIVE
+          </div>
+        </motion.button>
+      </motion.div>
       
       {/* VOD Modal */}
       <VODModal isOpen={vodModalOpen} onClose={() => setVodModalOpen(false)} />
