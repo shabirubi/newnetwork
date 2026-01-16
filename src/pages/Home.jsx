@@ -109,7 +109,7 @@ export default function Home() {
         >
           <div className="absolute inset-0 rounded-full bg-gradient-to-br from-red-500 via-blue-500 to-red-500 opacity-0 group-hover:opacity-100 animate-pulse transition-opacity"></div>
           <img 
-            src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/9ac609ae4_image.png"
+            src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png"
             alt="VOD"
             className="w-12 h-12 relative z-10 drop-shadow-2xl"
           />

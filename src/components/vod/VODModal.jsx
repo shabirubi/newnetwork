@@ -138,7 +138,7 @@ export default function VODModal({ isOpen, onClose }) {
               <div className="relative">
                 <div className="absolute inset-0 blur-xl bg-gradient-to-r from-red-600 to-blue-600 opacity-50 rounded-full"></div>
                 <img 
-                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/9ac609ae4_image.png"
+                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png"
                   alt="Logo"
                   className="relative w-10 h-10 sm:w-12 sm:h-12 drop-shadow-xl"
                 />
@@ -188,7 +188,7 @@ export default function VODModal({ isOpen, onClose }) {
                 className="absolute top-4 left-4 z-10"
               >
                 <img 
-                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/9ac609ae4_image.png"
+                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png"
                   alt="Logo"
                   className="w-16 h-16 sm:w-24 sm:h-24 drop-shadow-2xl"
                 />
@@ -206,7 +206,7 @@ export default function VODModal({ isOpen, onClose }) {
                 >
                   <div className="absolute inset-0 blur-2xl bg-gradient-to-r from-red-600 via-blue-600 to-red-600 opacity-60 rounded-full"></div>
                   <img 
-                    src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/9ac609ae4_image.png"
+                    src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png"
                     alt="Logo"
                     className="relative w-32 h-32 sm:w-48 sm:h-48 drop-shadow-2xl"
                   />
