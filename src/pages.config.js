@@ -12,8 +12,8 @@ import ReporterQA from './pages/ReporterQA';
 import Reporters from './pages/Reporters';
 import Schedule from './pages/Schedule';
 import TestDID from './pages/TestDID';
-import WarRoom from './pages/WarRoom';
 import VOD from './pages/VOD';
+import WarRoom from './pages/WarRoom';
 import __Layout from './Layout.jsx';
 
 
@@ -32,8 +32,8 @@ export const PAGES = {
     "Reporters": Reporters,
     "Schedule": Schedule,
     "TestDID": TestDID,
-    "WarRoom": WarRoom,
     "VOD": VOD,
+    "WarRoom": WarRoom,
 }
 
 export const pagesConfig = {

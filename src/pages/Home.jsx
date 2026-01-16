@@ -82,23 +82,7 @@ export default function Home() {
     <div className="space-y-0 sm:space-y-6">
       <AutoNewsUpdater />
       <AutoChannelsUpdater />
-      <AIAnnouncer />
       <TVAnchor />
-      
-      {/* VOD Button */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.9 }}
-        animate={{ opacity: 1, scale: 1 }}
-        className="fixed bottom-24 sm:bottom-24 left-4 sm:left-6 z-50"
-      >
-        <Button 
-          onClick={() => setVodModalOpen(true)}
-          className="bg-gradient-to-r from-red-600 to-red-800 hover:from-red-700 hover:to-red-900 text-white px-4 py-4 sm:px-6 sm:py-6 rounded-2xl shadow-2xl flex items-center gap-2 sm:gap-3 text-base sm:text-lg font-bold"
-        >
-          <Tv className="w-5 h-5 sm:w-6 sm:h-6" />
-          <span className="hidden sm:inline">VOD</span>
-        </Button>
-      </motion.div>
       
       {/* VOD Modal */}
       <VODModal isOpen={vodModalOpen} onClose={() => setVodModalOpen(false)} />
