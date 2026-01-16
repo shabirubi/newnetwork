@@ -87,6 +87,12 @@ ${articles.map((a, i) => `${i + 1}. ${a.title}${a.subtitle ? ' - ' + a.subtitle 
     const audioBuffer = await audioResponse.arrayBuffer();
     const audioBase64 = btoa(String.fromCharCode(...new Uint8Array(audioBuffer)));
 
+    // Upload audio to temporary storage first
+    const audioFile = new File([audioBuffer], 'anchor-audio.mp3', { type: 'audio/mpeg' });
+    const { file_url: audioFileUrl } = await base44.asServiceRole.integrations.Core.UploadFile({ 
+      file: audioFile 
+    });
+
     // Create talking avatar with D-ID
     const didResponse = await fetch('https://api.d-id.com/talks', {
       method: 'POST',
@@ -98,12 +104,17 @@ ${articles.map((a, i) => `${i + 1}. ${a.title}${a.subtitle ? ' - ' + a.subtitle 
         source_url: 'https://create-images-results.d-id.com/google-oauth2%7C111488153715019116355/upl_ZKQCGLwxK8jGQlJ6bDsj1/image.jpeg',
         script: {
           type: 'audio',
-          audio_url: `data:audio/mpeg;base64,${audioBase64}`
+          audio_url: audioFileUrl
         },
         config: {
           fluent: true,
           pad_audio: 0,
-          stitch: true
+          stitch: true,
+          driver_expressions: {
+            expressions: [
+              { expression: 'serious', start_frame: 0, intensity: 0.7 }
+            ]
+          }
         }
       })
     });
