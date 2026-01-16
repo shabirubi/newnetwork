@@ -95,7 +95,7 @@ export default function Home() {
         }}
         whileHover={{ scale: 1.1 }}
         transition={{ duration: 0.3 }}
-        className="fixed bottom-24 left-4 sm:left-6 z-50 group"
+        className="fixed bottom-24 left-4 sm:left-6 z-50 group flex flex-col items-center"
       >
         {/* Rainbow Background Effect */}
         <motion.div
@@ -111,15 +111,20 @@ export default function Home() {
             ]
           }}
           transition={{ duration: 3, repeat: Infinity }}
-          className="absolute inset-0 rounded-full blur-2xl opacity-70 w-24 h-24 sm:w-28 sm:h-28 -translate-x-2 -translate-y-2"
+          className="absolute top-0 left-1/2 -translate-x-1/2 rounded-full blur-2xl opacity-70 w-20 h-20 sm:w-24 sm:h-24"
         />
         
         {/* Logo */}
         <img 
           src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png"
           alt="VOD"
-          className="relative w-28 h-28 sm:w-20 sm:h-20 drop-shadow-2xl"
+          className="relative w-20 h-20 sm:w-16 sm:h-16 drop-shadow-2xl mb-2"
         />
+        
+        {/* Text */}
+        <span className="relative text-white text-xs sm:text-sm font-bold text-center drop-shadow-lg whitespace-nowrap">
+          עולם התוכן של<br />הרשת החדשה
+        </span>
       </motion.button>
       
       {/* VOD Modal */}
