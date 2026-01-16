@@ -99,8 +99,6 @@ export default function VODModal({ isOpen, onClose }) {
           }
         }}
       >
-        {/* Inner scrollable container */}
-        <div className="absolute inset-0 overflow-y-auto overflow-x-hidden">
         <style>{`
           @keyframes tickerScroll {
             0% { transform: translateX(100%); }
