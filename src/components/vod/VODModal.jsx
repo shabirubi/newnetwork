@@ -308,7 +308,7 @@ export default function VODModal({ isOpen, onClose }) {
         </nav>
 
         {/* Mobile TikTok-Style Content */}
-        <main className="lg:hidden h-screen overflow-y-scroll snap-y snap-mandatory">
+        <main className="lg:hidden flex-1 overflow-y-scroll snap-y snap-mandatory">
           {isLoading ? (
             <div className="h-screen flex items-center justify-center">
               <div className="animate-spin rounded-full h-12 w-12 border-4 border-red-600 border-t-transparent"></div>
