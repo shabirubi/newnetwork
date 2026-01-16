@@ -180,7 +180,7 @@ export default function VOD() {
       </AnimatePresence>
 
       {/* Content Strips */}
-      <main className="max-w-7xl mx-auto px-4 py-6 space-y-8">
+      <main className="flex-1 overflow-y-auto max-w-7xl mx-auto w-full px-4 py-6 space-y-8 pb-20 sm:pb-6">
         {isLoading ? (
           <div className="flex items-center justify-center h-64">
             <div className="animate-spin rounded-full h-12 w-12 border-4 border-red-600 border-t-transparent"></div>
