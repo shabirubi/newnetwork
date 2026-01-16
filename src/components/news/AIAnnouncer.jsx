@@ -88,15 +88,17 @@ export default function AIAnnouncer() {
 
   const generateElevenLabsAudio = async (text) => {
     try {
-      const response = await base44.integrations.Core.InvokeLLM({
-        prompt: `Generate a professional Hebrew news announcement in a calm, authoritative voice. The announcement should be in Hebrew and last 30-60 seconds. Use professional news language. Text to announce: "${text}"`,
-        add_context_from_internet: false
+      const response = await base44.functions.invoke('generateSpeech', {
+        text: text,
+        voice_id: 'nPczCjzI2devNBz1zQrH'
       });
 
-      // Use Web Speech API directly - it's more reliable than ElevenLabs API
-      return null;
+      if (response?.data) {
+        const audioBlob = new Blob([response.data], { type: 'audio/mpeg' });
+        return URL.createObjectURL(audioBlob);
+      }
     } catch (error) {
-      console.error('TTS error:', error);
+      console.error('ElevenLabs error:', error);
     }
     return null;
   };
