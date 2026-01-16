@@ -156,7 +156,7 @@ export default function VODModal({ isOpen, onClose }) {
            </nav>
 
            {/* Mobile Categories */}
-           <div className="lg:hidden flex-shrink-0 bg-gradient-to-b from-black/90 via-black/80 to-black/50 backdrop-blur-lg border-b border-red-600/20 p-2">
+           <div className="lg:hidden sticky top-0 z-40 flex-shrink-0 bg-gradient-to-b from-black/90 via-black/80 to-black/50 backdrop-blur-lg border-b border-red-600/20 p-2">
              <div className="flex gap-2 overflow-x-auto pb-2">
                {CATEGORIES.map((cat) => {
                  const Icon = cat.icon;
