@@ -8,6 +8,7 @@ import LivePlayer from "../news/LivePlayer";
 
 const CATEGORIES = [
   { id: "live", label: "עולם התוכן של הרשת החדשה", icon: Radio },
+  { id: "channels", label: "תחנות שידור בישראל", icon: Tv },
   { id: "movies", label: "סרטים קלאסיים", icon: Film },
   { id: "news", label: "חדשות ואקטואליה", icon: Newspaper },
   { id: "forecast", label: "תחזית מזג אויר", icon: Cloud },
