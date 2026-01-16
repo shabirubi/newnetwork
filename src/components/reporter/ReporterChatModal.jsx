@@ -124,13 +124,26 @@ export default function ReporterChatModal({ reporter, article, onClose }) {
         audio: {
           echoCancellation: true,
           noiseSuppression: true,
-          autoGainControl: true
+          autoGainControl: true,
+          channelCount: 1,
+          sampleRate: 44100
         } 
       });
       
-      const mediaRecorder = new MediaRecorder(stream, {
-        mimeType: 'audio/webm;codecs=opus'
-      });
+      // Try to use audio/webm or fallback to available formats
+      let mimeType = 'audio/webm;codecs=opus';
+      if (!MediaRecorder.isTypeSupported(mimeType)) {
+        mimeType = 'audio/webm';
+        if (!MediaRecorder.isTypeSupported(mimeType)) {
+          mimeType = 'audio/ogg;codecs=opus';
+          if (!MediaRecorder.isTypeSupported(mimeType)) {
+            mimeType = ''; // Let browser choose
+          }
+        }
+      }
+      
+      const options = mimeType ? { mimeType } : {};
+      const mediaRecorder = new MediaRecorder(stream, options);
       
       mediaRecorderRef.current = mediaRecorder;
       audioChunksRef.current = [];
@@ -142,7 +155,7 @@ export default function ReporterChatModal({ reporter, article, onClose }) {
       };
 
       mediaRecorder.onstop = async () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+        const audioBlob = new Blob(audioChunksRef.current, { type: mimeType || 'audio/webm' });
         setAudioBlob(audioBlob);
         
         // Stop all tracks
@@ -152,13 +165,15 @@ export default function ReporterChatModal({ reporter, article, onClose }) {
         await sendAudioMessage(audioBlob);
       };
 
-      mediaRecorder.start();
+      mediaRecorder.start(100); // Record in 100ms chunks
       setIsRecording(true);
       toast.success("🎙️ מקליט... לחץ שוב לעצור");
     } catch (err) {
       console.error("Error starting recording:", err);
-      if (err.name === 'NotAllowedError') {
+      if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
         toast.error("נא לאפשר גישה למיקרופון בדפדפן");
+      } else if (err.name === 'NotFoundError') {
+        toast.error("לא נמצא מיקרופון במכשיר");
       } else {
         toast.error("שגיאה בגישה למיקרופון");
       }
