@@ -94,7 +94,7 @@ export default function Home() {
           scale: 1
         }}
         whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
+        transition={{ duration: 0.3 }}
         className="fixed bottom-24 left-4 sm:left-6 z-50 group flex flex-col items-center gap-1"
       >
         {/* Rainbow Background Effect */}
@@ -121,22 +121,17 @@ export default function Home() {
           className="relative w-36 h-36 sm:w-28 sm:h-28 drop-shadow-2xl"
         />
         
-        {/* Text Button - Same style as "Back to Live" */}
-        <motion.div 
-          className="relative flex items-center gap-2 px-4 py-3 rounded-full bg-gradient-to-r from-black/80 via-red-900/60 to-black/80 backdrop-blur-sm border border-red-600/40 hover:border-red-500/60 text-white font-bold shadow-2xl transition-all"
-          style={{
-            background: 'linear-gradient(135deg, rgba(0,0,0,0.85) 0%, rgba(139,0,0,0.7) 25%, rgba(220,20,60,0.6) 50%, rgba(139,0,0,0.7) 75%, rgba(0,0,0,0.85) 100%)'
-          }}
-        >
+        {/* Text Button */}
+        <div className="relative bg-gradient-to-br from-red-600 via-purple-600 to-blue-600 px-4 py-2 rounded-xl shadow-lg border-2 border-white/30">
           <div className="text-center">
-            <div className="bg-gradient-to-r from-red-400 via-red-300 to-red-400 bg-clip-text text-transparent text-sm sm:text-base font-bold leading-tight">
+            <div className="text-white text-xs font-bold leading-tight">
               עולם התוכן של
             </div>
-            <div className="bg-gradient-to-r from-red-400 via-red-300 to-red-400 bg-clip-text text-transparent text-sm sm:text-base font-bold leading-tight">
+            <div className="text-white text-xs font-bold leading-tight">
               הרשת החדשה
             </div>
           </div>
-        </motion.div>
+        </div>
       </motion.button>
       
       {/* VOD Modal */}
