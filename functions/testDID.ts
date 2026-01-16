@@ -12,16 +12,17 @@ Deno.serve(async (req) => {
 
     const testText = "שלום, אני קריין הטלוויזיה של הרשת החדשה. זהו שידור בדיקה.";
 
-    console.log('Creating D-ID talk...');
+    console.log('Creating D-ID clip...');
     
-    const didResponse = await fetch('https://api.d-id.com/talks', {
+    const didResponse = await fetch('https://api.d-id.com/clips', {
       method: 'POST',
       headers: {
         'Authorization': `Basic ${DID_API_KEY}`,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        source_url: 'https://create-images-results.d-id.com/google-oauth2%7C111488153715019116355/upl_ZKQCGLwxK8jGQlJ6bDsj1/image.jpeg',
+        presenter_id: 'amy-Aq6OmGZnMt',
+        driver_id: 'Vcq0R4a8F0',
         script: {
           type: 'text',
           input: testText,
@@ -29,10 +30,6 @@ Deno.serve(async (req) => {
             type: 'microsoft',
             voice_id: 'he-IL-AvriNeural'
           }
-        },
-        config: {
-          fluent: true,
-          pad_audio: 0
         }
       })
     });
@@ -49,16 +46,16 @@ Deno.serve(async (req) => {
     }
 
     const didData = JSON.parse(didText);
-    const talkId = didData.id;
+    const clipId = didData.id;
     
-    console.log('Talk ID:', talkId);
+    console.log('Clip ID:', clipId);
 
     // Poll for completion
     let attempts = 0;
     while (attempts < 60) {
       await new Promise(resolve => setTimeout(resolve, 3000));
       
-      const statusResponse = await fetch(`https://api.d-id.com/talks/${talkId}`, {
+      const statusResponse = await fetch(`https://api.d-id.com/clips/${clipId}`, {
         headers: {
           'Authorization': `Basic ${DID_API_KEY}`
         }
@@ -71,7 +68,7 @@ Deno.serve(async (req) => {
         return Response.json({
           success: true,
           video_url: statusData.result_url,
-          talk_id: talkId
+          clip_id: clipId
         });
       }
       
@@ -87,7 +84,7 @@ Deno.serve(async (req) => {
 
     return Response.json({ 
       error: 'Timeout',
-      talk_id: talkId
+      clip_id: clipId
     }, { status: 408 });
 
   } catch (error) {
