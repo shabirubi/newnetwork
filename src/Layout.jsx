@@ -12,7 +12,7 @@ import NewsTicker from "./components/header/NewsTicker";
 import ReportersModal from "./components/reporter/ReportersModal";
 import AIAnnouncer from "./components/news/AIAnnouncer";
 
-const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/e7941dcbd_image.png";
+const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/9ac609ae4_image.png";
 
 const categories = [
   { id: "home", label: "דף הבית", icon: Home, href: "Home" },
