@@ -131,224 +131,135 @@ export default function VODModal({ isOpen, onClose }) {
 
 
         {/* Content Wrapper with Scrolling */}
-        <div className="flex-1 overflow-y-auto overflow-x-hidden flex flex-col">
-          {/* Main Studio Player */}
-          {showMainPlayer && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="relative flex-shrink-0"
-            >
-              <div 
-                className="relative h-[30vh] sm:h-[40vh] bg-cover bg-center"
-                style={{
-                  backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.7)), url('${STUDIO_BG}')`
-                }}
-              >
-              {/* Watermark Logo */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 0.3 }}
-                className="absolute top-4 left-4 z-10"
-              >
-                <img 
-                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png"
-                  alt="Logo"
-                  className="w-16 h-16 sm:w-24 sm:h-24 drop-shadow-2xl"
-                />
-              </motion.div>
+         <div className="flex-1 overflow-y-auto overflow-x-hidden flex flex-col">
+           {/* Desktop Categories */}
+           <nav className="hidden lg:block flex-shrink-0 bg-gradient-to-b from-black/90 via-black/80 to-black/50 backdrop-blur-lg border-b border-red-600/20 overflow-x-auto">
+             <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 sm:py-3 flex gap-1.5 sm:gap-2">
+               {CATEGORIES.map((cat) => {
+                 const Icon = cat.icon;
+                 return (
+                   <button
+                     key={cat.id}
+                     onClick={() => setActiveCategory(cat.id)}
+                     className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full whitespace-nowrap text-xs sm:text-sm transition-all ${
+                       activeCategory === cat.id
+                         ? 'bg-red-600 text-white shadow-lg shadow-red-600/50'
+                         : 'bg-gray-900/50 border border-red-900/30 text-red-500 hover:bg-red-900/30'
+                     }`}
+                   >
+                     <Icon className="w-3 h-3 sm:w-4 sm:h-4" />
+                     <span>{cat.label}</span>
+                   </button>
+                 );
+               })}
+             </div>
+           </nav>
 
-              {/* Studio Overlay */}
-              <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-4">
-                <motion.div
-                  animate={{ 
-                    scale: [1, 1.05, 1],
-                    rotate: [0, 5, 0, -5, 0]
-                  }}
-                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
-                  className="relative mb-6"
-                >
-                  <div className="absolute inset-0 blur-2xl bg-gradient-to-r from-red-600 via-blue-600 to-red-600 opacity-60 rounded-full"></div>
-                  <img 
-                    src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png"
-                    alt="Logo"
-                    className="relative w-32 h-32 sm:w-48 sm:h-48 drop-shadow-2xl"
-                  />
-                </motion.div>
-                <h2 className="text-2xl sm:text-4xl font-bold mb-2 text-center">אולפן הרשת החדשה</h2>
-                <p className="text-sm sm:text-lg text-red-300 mb-4 text-center">שידור חי עם פאנל הכתבים שלנו</p>
-                <div className="flex gap-3 mt-4">
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="bg-red-600 hover:bg-red-700 px-6 sm:px-8 py-3 sm:py-4 rounded-full font-bold text-base sm:text-lg flex items-center gap-2"
-                  >
-                    <Play className="w-5 h-5" fill="white" />
-                    צפה בשידור
-                  </motion.button>
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    className="bg-white/10 backdrop-blur hover:bg-white/20 px-6 sm:px-8 py-3 sm:py-4 rounded-full font-bold text-base sm:text-lg flex items-center gap-2"
-                  >
-                    <Music className="w-5 h-5" />
-                    מוזיקה
-                  </motion.button>
-                </div>
-              </div>
+           {/* Mobile Categories */}
+           <div className="lg:hidden flex-shrink-0 bg-gradient-to-b from-black/90 via-black/80 to-black/50 backdrop-blur-lg border-b border-red-600/20 p-2">
+             <div className="flex gap-2 overflow-x-auto pb-2">
+               {CATEGORIES.map((cat) => {
+                 const Icon = cat.icon;
+                 return (
+                   <button
+                     key={cat.id}
+                     onClick={() => setActiveCategory(cat.id)}
+                     className={`flex items-center gap-1 px-3 py-2 rounded-full whitespace-nowrap text-xs transition-all flex-shrink-0 ${
+                       activeCategory === cat.id
+                         ? 'bg-red-600 text-white shadow-lg shadow-red-600/50'
+                         : 'bg-gray-900/50 border border-red-900/30 text-red-500 hover:bg-red-900/30'
+                     }`}
+                   >
+                     <Icon className="w-3 h-3" />
+                     <span className="hidden xs:inline">{cat.label}</span>
+                   </button>
+                 );
+               })}
+             </div>
+           </div>
 
-              {/* Live Indicator */}
-              <div className="absolute top-4 right-4 bg-red-600 text-white px-3 py-1.5 rounded-full flex items-center gap-2 animate-pulse">
-                <span className="w-2 h-2 bg-white rounded-full"></span>
-                <span className="text-sm font-bold">ON AIR</span>
-              </div>
+           {/* Main Studio Player */}
+           {showMainPlayer && (
+             <motion.div
+               initial={{ opacity: 0, y: 20 }}
+               animate={{ opacity: 1, y: 0 }}
+               className="relative flex-shrink-0"
+             >
+               <div 
+                 className="relative h-[30vh] sm:h-[40vh] bg-cover bg-center"
+                 style={{
+                   backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.7)), url('${STUDIO_BG}')`
+                 }}
+               >
+                 {/* Watermark Logo */}
+                 <motion.div
+                   initial={{ opacity: 0 }}
+                   animate={{ opacity: 0.3 }}
+                   className="absolute top-4 left-4 z-10"
+                 >
+                   <img 
+                     src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png"
+                     alt="Logo"
+                     className="w-16 h-16 sm:w-24 sm:h-24 drop-shadow-2xl"
+                   />
+                 </motion.div>
 
-              {/* Viewer Count */}
-              <div className="absolute bottom-4 left-4 bg-black/60 backdrop-blur text-white px-4 py-2 rounded-full flex items-center gap-2">
-                <Eye className="w-4 h-4" />
-                <span className="text-sm font-bold">3,456 צופים</span>
-              </div>
-            </div>
-            </motion.div>
-            )}
+                 {/* Studio Overlay */}
+                 <div className="absolute inset-0 flex flex-col items-center justify-center text-white p-4">
+                   <motion.div
+                     animate={{ 
+                       scale: [1, 1.05, 1],
+                       rotate: [0, 5, 0, -5, 0]
+                     }}
+                     transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                     className="relative mb-6"
+                   >
+                     <div className="absolute inset-0 blur-2xl bg-gradient-to-r from-red-600 via-blue-600 to-red-600 opacity-60 rounded-full"></div>
+                     <img 
+                       src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png"
+                       alt="Logo"
+                       className="relative w-32 h-32 sm:w-48 sm:h-48 drop-shadow-2xl"
+                     />
+                   </motion.div>
+                   <h2 className="text-2xl sm:text-4xl font-bold mb-2 text-center">אולפן הרשת החדשה</h2>
+                   <p className="text-sm sm:text-lg text-red-300 mb-4 text-center">שידור חי עם פאנל הכתבים שלנו</p>
+                   <div className="flex gap-3 mt-4">
+                     <motion.button
+                       whileHover={{ scale: 1.05 }}
+                       whileTap={{ scale: 0.95 }}
+                       className="bg-red-600 hover:bg-red-700 px-6 sm:px-8 py-3 sm:py-4 rounded-full font-bold text-base sm:text-lg flex items-center gap-2"
+                     >
+                       <Play className="w-5 h-5" fill="white" />
+                       צפה בשידור
+                     </motion.button>
+                     <motion.button
+                       whileHover={{ scale: 1.05 }}
+                       whileTap={{ scale: 0.95 }}
+                       className="bg-white/10 backdrop-blur hover:bg-white/20 px-6 sm:px-8 py-3 sm:py-4 rounded-full font-bold text-base sm:text-lg flex items-center gap-2"
+                     >
+                       <Music className="w-5 h-5" />
+                       מוזיקה
+                     </motion.button>
+                   </div>
+                 </div>
 
-            {/* Desktop Categories */}
-            <nav className="hidden lg:block flex-shrink-0 bg-gradient-to-b from-black/90 via-black/80 to-black/50 backdrop-blur-lg border-b border-red-600/20 overflow-x-auto">
-            <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 sm:py-3 flex gap-1.5 sm:gap-2">
-            {CATEGORIES.map((cat) => {
-              const Icon = cat.icon;
-              return (
-                <button
-                  key={cat.id}
-                  onClick={() => setActiveCategory(cat.id)}
-                  className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full whitespace-nowrap text-xs sm:text-sm transition-all ${
-                    activeCategory === cat.id
-                      ? 'bg-red-600 text-white shadow-lg shadow-red-600/50'
-                      : 'bg-gray-900/50 border border-red-900/30 text-red-500 hover:bg-red-900/30'
-                  }`}
-                >
-                  <Icon className="w-3 h-3 sm:w-4 sm:h-4" />
-                  <span>{cat.label}</span>
-                </button>
-              );
-            })}
-            </div>
-            </nav>
+                 {/* Live Indicator */}
+                 <div className="absolute top-4 right-4 bg-red-600 text-white px-3 py-1.5 rounded-full flex items-center gap-2 animate-pulse">
+                   <span className="w-2 h-2 bg-white rounded-full"></span>
+                   <span className="text-sm font-bold">ON AIR</span>
+                 </div>
 
-            {/* Mobile Categories - Inside Modal */}
-            <div className="lg:hidden flex-shrink-0 bg-gradient-to-b from-black/90 via-black/80 to-black/50 backdrop-blur-lg border-b border-red-600/20 p-2">
-            <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            className="flex gap-2 overflow-x-auto pb-2"
-            >
-            {CATEGORIES.map((cat) => {
-              const Icon = cat.icon;
-              return (
-                <button
-                  key={cat.id}
-                  onClick={() => setActiveCategory(cat.id)}
-                  className={`flex items-center gap-1 px-3 py-2 rounded-full whitespace-nowrap text-xs transition-all flex-shrink-0 ${
-                    activeCategory === cat.id
-                      ? 'bg-red-600 text-white shadow-lg shadow-red-600/50'
-                      : 'bg-gray-900/50 border border-red-900/30 text-red-500 hover:bg-red-900/30'
-                  }`}
-                >
-                  <Icon className="w-3 h-3" />
-                  <span className="hidden xs:inline">{cat.label}</span>
-                </button>
-              );
-            })}
-            </motion.div>
-            </div>
-          <motion.button
-            whileTap={{ scale: 0.95 }}
-            onClick={() => setShowCategoryMenu(!showCategoryMenu)}
-            className="w-full bg-gradient-to-r from-red-600 via-purple-600 to-blue-600 text-white py-4 rounded-2xl font-bold text-base shadow-2xl flex items-center justify-center gap-2"
-          >
-            <span>{CATEGORIES.find(c => c.id === activeCategory)?.label || "בחר קטגוריה"}</span>
-            <motion.div
-              animate={{ rotate: showCategoryMenu ? 180 : 0 }}
-              transition={{ duration: 0.3 }}
-            >
-              <ChevronUp className="w-5 h-5" />
-            </motion.div>
-          </motion.button>
-        </div>
+                 {/* Viewer Count */}
+                 <div className="absolute bottom-4 left-4 bg-black/60 backdrop-blur text-white px-4 py-2 rounded-full flex items-center gap-2">
+                   <Eye className="w-4 h-4" />
+                   <span className="text-sm font-bold">3,456 צופים</span>
+                 </div>
+               </div>
+             </motion.div>
+           )}
 
-        {/* Mobile Category Menu - Bottom Sheet */}
-        <AnimatePresence>
-          {showCategoryMenu && (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="lg:hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-[111]"
-              onClick={() => setShowCategoryMenu(false)}
-            >
-              <motion.div
-                initial={{ y: "100%" }}
-                animate={{ y: 0 }}
-                exit={{ y: "100%" }}
-                transition={{ type: "spring", damping: 30, stiffness: 300 }}
-                onClick={(e) => e.stopPropagation()}
-                className="absolute bottom-0 left-0 right-0 bg-gradient-to-b from-gray-900 to-black rounded-t-3xl p-6 max-h-[80vh] overflow-y-auto"
-              >
-                <div className="w-12 h-1.5 bg-gray-600 rounded-full mx-auto mb-6"></div>
-                <h3 className="text-white text-2xl font-bold mb-6">קטגוריות</h3>
-                <div className="grid grid-cols-2 gap-3">
-                  {CATEGORIES.map((cat) => {
-                    const Icon = cat.icon;
-                    return (
-                      <motion.button
-                        key={cat.id}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={() => {
-                          setActiveCategory(cat.id);
-                          setShowCategoryMenu(false);
-                        }}
-                        className={`flex flex-col items-center justify-center gap-3 p-6 rounded-2xl transition-all ${
-                          activeCategory === cat.id
-                            ? 'bg-gradient-to-br from-red-600 to-red-700 text-white shadow-lg'
-                            : 'bg-white/10 text-gray-300 hover:bg-white/20'
-                        }`}
-                      >
-                        <Icon className="w-8 h-8" />
-                        <span className="font-bold text-sm text-center">{cat.label}</span>
-                      </motion.button>
-                    );
-                  })}
-                </div>
-              </motion.div>
-            </motion.div>
-          )}
-        </AnimatePresence>
-
-        {/* Desktop Categories */}
-        <nav className="hidden lg:block sticky top-0 left-0 right-0 z-[108] bg-gradient-to-b from-black/90 via-black/80 to-black/50 backdrop-blur-lg border-b border-red-600/20 overflow-x-auto">
-          <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 sm:py-3 flex gap-1.5 sm:gap-2">
-            {CATEGORIES.map((cat) => {
-              const Icon = cat.icon;
-              return (
-                <button
-                  key={cat.id}
-                  onClick={() => setActiveCategory(cat.id)}
-                  className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full whitespace-nowrap text-xs sm:text-sm transition-all ${
-                    activeCategory === cat.id
-                      ? 'bg-red-600 text-white shadow-lg shadow-red-600/50'
-                      : 'bg-gray-900/50 border border-red-900/30 text-red-500 hover:bg-red-900/30'
-                  }`}
-                >
-                  <Icon className="w-3 h-3 sm:w-4 sm:h-4" />
-                  <span>{cat.label}</span>
-                </button>
-              );
-            })}
-          </div>
-        </nav>
-
-        {/* Mobile TikTok-Style Content */}
-        <main className="lg:hidden flex-1 overflow-y-scroll snap-y snap-mandatory">
+           {/* Mobile TikTok-Style Content */}
+           <main className="lg:hidden flex-1 overflow-y-scroll snap-y snap-mandatory">
           {isLoading ? (
             <div className="h-screen flex items-center justify-center">
               <div className="animate-spin rounded-full h-12 w-12 border-4 border-red-600 border-t-transparent"></div>
