@@ -94,7 +94,7 @@ export default function Layout({ children }) {
       `}</style>
 
       {/* Animated Red Line */}
-      <div className="fixed top-0 left-0 right-0 h-1.5 bg-transparent overflow-hidden z-[60] pointer-events-none">
+      <div className="fixed top-0 left-0 right-0 h-1.5 bg-transparent overflow-hidden z-[35] pointer-events-none">
         <div className="absolute top-0 h-full w-32 bg-[#E31E24] animate-[slideRight_3s_ease-in-out_infinite]"></div>
       </div>
 
@@ -140,7 +140,7 @@ export default function Layout({ children }) {
       <AIAnnouncer />
 
       {/* Header */}
-      <header className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-40 transition-colors duration-300 border-b border-gray-200 dark:border-gray-700">
+      <header className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-30 transition-colors duration-300 border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4">
           {/* Desktop Navigation */}
           <nav className="hidden sm:flex items-center justify-between gap-1 py-3">
@@ -395,7 +395,7 @@ export default function Layout({ children }) {
       </main>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 z-[100] safe-area-inset-bottom shadow-lg">
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 z-50 safe-area-inset-bottom shadow-lg">
         <div className="grid grid-cols-4 gap-1 px-2 py-3">
           <Link
             to={createPageUrl("Home")}
