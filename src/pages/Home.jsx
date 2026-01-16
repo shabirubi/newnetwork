@@ -131,7 +131,7 @@ export default function Home() {
             </div>
           </div>
         </div>
-        </motion.a>
+      </motion.button>
 
       {/* Hero Section - TikTok News Feed */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-0 sm:gap-3 -mx-0 sm:mx-0 px-0 sm:px-4">
