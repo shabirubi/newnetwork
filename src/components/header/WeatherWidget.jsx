@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Cloud, Sun, CloudRain, CloudSnow, Wind, Thermometer, Droplets } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import WeatherForecastModal from "../weather/WeatherForecastModal";
 
 export default function WeatherWidget() {
   const [weather, setWeather] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [modalOpen, setModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchWeather = async () => {
@@ -65,21 +67,32 @@ export default function WeatherWidget() {
   }
 
   return (
-    <motion.div 
-      initial={{ opacity: 0, y: -10 }}
-      animate={{ opacity: 1, y: 0 }}
-      className="flex items-center gap-1"
-    >
-      <div className={`flex items-center gap-1 px-2 py-1 rounded-full ${getSeasonColor(weather?.season)}`}>
-        {getWeatherIcon(weather?.condition)}
-        <div className="flex items-center gap-0.5">
-          <span className="font-bold text-xs">{weather?.temperature || 25}°</span>
-        </div>
-        <div className="hidden sm:flex items-center gap-0.5 text-[10px] opacity-80">
-          <Droplets className="w-2.5 h-2.5" />
-          <span>{weather?.humidity || 50}%</span>
-        </div>
-      </div>
-    </motion.div>
+    <>
+      <motion.div 
+        initial={{ opacity: 0, y: -10 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="flex items-center gap-1"
+      >
+        <button
+          onClick={() => setModalOpen(true)}
+          className={`flex items-center gap-1 px-2 py-1 rounded-full transition-all hover:scale-105 hover:shadow-lg cursor-pointer ${getSeasonColor(weather?.season)}`}
+        >
+          {getWeatherIcon(weather?.condition)}
+          <div className="flex items-center gap-0.5">
+            <span className="font-bold text-xs">{weather?.temperature || 25}°</span>
+          </div>
+          <div className="hidden sm:flex items-center gap-0.5 text-[10px] opacity-80">
+            <Droplets className="w-2.5 h-2.5" />
+            <span>{weather?.humidity || 50}%</span>
+          </div>
+        </button>
+      </motion.div>
+
+      <WeatherForecastModal 
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        currentWeather={weather}
+      />
+    </>
   );
 }
