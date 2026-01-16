@@ -127,7 +127,7 @@ export default function VODModal({ isOpen, onClose }) {
           animate={{ opacity: 1, y: 0 }}
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
-          className="fixed top-4 right-20 z-[110] flex items-center gap-2 px-4 py-3 rounded-full bg-gradient-to-r from-black/80 via-red-900/60 to-black/80 backdrop-blur-sm border border-red-600/40 hover:border-red-500/60 text-white font-bold shadow-2xl transition-all"
+          className="sticky top-0 left-0 right-0 z-[110] flex items-center gap-2 px-4 py-3 rounded-full bg-gradient-to-r from-black/80 via-red-900/60 to-black/80 backdrop-blur-sm border border-red-600/40 hover:border-red-500/60 text-white font-bold shadow-2xl transition-all mx-4 mt-4 w-auto"
           style={{
             background: 'linear-gradient(135deg, rgba(0,0,0,0.85) 0%, rgba(139,0,0,0.7) 25%, rgba(220,20,60,0.6) 50%, rgba(139,0,0,0.7) 75%, rgba(0,0,0,0.85) 100%)'
           }}
