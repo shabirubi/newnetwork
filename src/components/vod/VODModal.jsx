@@ -91,7 +91,7 @@ export default function VODModal({ isOpen, onClose }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[105] bg-black overflow-y-auto lg:overflow-y-auto overflow-hidden"
+        className="fixed inset-0 z-[105] bg-black/40 backdrop-blur-xl overflow-y-auto lg:overflow-y-auto overflow-hidden"
         onClick={(e) => {
           if (e.target === e.currentTarget && !selectedContent) {
             onClose();
