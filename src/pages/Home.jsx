@@ -85,35 +85,40 @@ export default function Home() {
       <AutoNewsUpdater />
       <AutoChannelsUpdater />
       
-      {/* VOD Floating Button - Clean Icon Only */}
+      {/* VOD Floating Button - Rainbow Effect */}
       <motion.button
         onClick={() => setVodModalOpen(true)}
         initial={{ opacity: 0, scale: 0.5 }}
         animate={{ 
           opacity: 1, 
-          scale: 1,
-          filter: [
-            "drop-shadow(0 0 10px rgba(255,0,0,0.8))",
-            "drop-shadow(0 0 15px rgba(255,119,0,0.8))",
-            "drop-shadow(0 0 20px rgba(255,221,0,0.8))",
-            "drop-shadow(0 0 15px rgba(0,255,0,0.8))",
-            "drop-shadow(0 0 20px rgba(0,136,255,0.8))",
-            "drop-shadow(0 0 15px rgba(136,0,255,0.8))",
-            "drop-shadow(0 0 10px rgba(255,0,255,0.8))",
-            "drop-shadow(0 0 10px rgba(255,0,0,0.8))"
-          ]
+          scale: 1
         }}
-        whileHover={{ scale: 1.15 }}
-        transition={{ 
-          scale: { duration: 0.3 },
-          filter: { duration: 3, repeat: Infinity }
-        }}
-        className="fixed bottom-24 left-6 z-50"
+        whileHover={{ scale: 1.1 }}
+        transition={{ duration: 0.3 }}
+        className="fixed bottom-24 left-4 sm:left-6 z-50 group"
       >
+        {/* Rainbow Background Effect */}
+        <motion.div
+          animate={{
+            background: [
+              "linear-gradient(45deg, #ff0000, #ff7700)",
+              "linear-gradient(45deg, #ff7700, #ffdd00)",
+              "linear-gradient(45deg, #ffdd00, #00ff00)",
+              "linear-gradient(45deg, #00ff00, #0088ff)",
+              "linear-gradient(45deg, #0088ff, #8800ff)",
+              "linear-gradient(45deg, #8800ff, #ff00ff)",
+              "linear-gradient(45deg, #ff00ff, #ff0000)",
+            ]
+          }}
+          transition={{ duration: 3, repeat: Infinity }}
+          className="absolute inset-0 rounded-full blur-2xl opacity-70 w-24 h-24 sm:w-28 sm:h-28 -translate-x-2 -translate-y-2"
+        />
+        
+        {/* Logo */}
         <img 
           src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png"
           alt="VOD"
-          className="w-20 h-20"
+          className="relative w-28 h-28 sm:w-20 sm:h-20 drop-shadow-2xl"
         />
       </motion.button>
       
