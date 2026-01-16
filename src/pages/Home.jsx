@@ -82,33 +82,16 @@ export default function Home() {
       <AutoChannelsUpdater />
       <AIAnnouncer />
       <TVAnchor />
-      {/* Hero Section - Extended Live Player */}
+      {/* Hero Section - TikTok News Feed */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-0 sm:gap-3 -mx-0 sm:mx-0 px-0 sm:px-4">
         {/* Right Sidebar - Updates Feed */}
         <aside className="lg:col-span-2 hidden lg:block">
           <UpdatesFeed />
         </aside>
 
-        {/* Center - Extended Live Player */}
+        {/* Center - TikTok News Feed */}
         <div className="lg:col-span-8">
-          <div className="bg-gradient-to-r from-gray-900 to-gray-800 dark:from-black dark:to-gray-900 sm:rounded-t-lg p-2 sm:p-3 flex items-center justify-between hidden sm:flex">
-            <div className="flex items-center gap-3">
-              <div className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E31E24] opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#E31E24]"></span>
-              </div>
-              <h2 className="text-white text-lg font-bold">שידור חי</h2>
-            </div>
-            <CurrencyStrip activeLive={activeLive} />
-          </div>
-          <div className="relative">
-            <LivePlayer 
-              title={currentChannel?.name || activeLive?.title || "הרשת החדשה - שידור חי"}
-              isLive={!!activeLive?.is_active}
-              viewerCount={activeLive?.viewer_count || 3456}
-              streamUrl={channelStreamUrl}
-            />
-          </div>
+          <TikTokNewsFeed articles={articles} />
         </div>
 
         {/* Left Sidebar - Reporters Feed */}
@@ -117,8 +100,27 @@ export default function Home() {
         </aside>
       </section>
 
-      {/* TikTok Style News Feed with All Articles */}
-      <TikTokNewsFeed articles={articles} />
+      {/* Live Player Section */}
+      <section className="px-0 sm:px-4">
+        <div className="bg-gradient-to-r from-gray-900 to-gray-800 dark:from-black dark:to-gray-900 sm:rounded-t-lg p-2 sm:p-3 flex items-center justify-between hidden sm:flex">
+          <div className="flex items-center gap-3">
+            <div className="relative flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E31E24] opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#E31E24]"></span>
+            </div>
+            <h2 className="text-white text-lg font-bold">שידור חי</h2>
+          </div>
+          <CurrencyStrip activeLive={activeLive} />
+        </div>
+        <div className="relative">
+          <LivePlayer 
+            title={currentChannel?.name || activeLive?.title || "הרשת החדשה - שידור חי"}
+            isLive={!!activeLive?.is_active}
+            viewerCount={activeLive?.viewer_count || 3456}
+            streamUrl={channelStreamUrl}
+          />
+        </div>
+      </section>
 
       {/* All News Section */}
       {articles.length > 0 && (
