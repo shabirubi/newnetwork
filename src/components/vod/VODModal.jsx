@@ -24,6 +24,7 @@ export default function VODModal({ isOpen, onClose }) {
   const [selectedContent, setSelectedContent] = useState(null);
   const [showMainPlayer, setShowMainPlayer] = useState(true);
   const [isRadioPlaying, setIsRadioPlaying] = useState(false);
+  const [showCategoryMenu, setShowCategoryMenu] = useState(false);
 
   const { data: content = [], isLoading } = useQuery({
     queryKey: ['vod-content', activeCategory],
@@ -248,31 +249,93 @@ export default function VODModal({ isOpen, onClose }) {
           </motion.div>
         )}
 
-        {/* Categories - Below Studio Player */}
-        {!showMainPlayer && (
-          <nav className="sticky top-[115px] sm:top-[135px] z-[104] bg-black/90 backdrop-blur-md border-b border-red-900/20 overflow-x-auto">
-            <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 sm:py-3 flex gap-1.5 sm:gap-2">
-              {CATEGORIES.map((cat) => {
-                const Icon = cat.icon;
-                return (
-                  <button
-                    key={cat.id}
-                    onClick={() => setActiveCategory(cat.id)}
-                    className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full whitespace-nowrap text-xs sm:text-sm transition-all ${
-                      activeCategory === cat.id
-                        ? 'bg-red-600 text-white shadow-lg shadow-red-600/50'
-                        : 'bg-gray-900/50 border border-red-900/30 text-red-500 hover:bg-red-900/30'
-                    }`}
-                  >
-                    <Icon className="w-3 h-3 sm:w-4 sm:h-4" />
-                    <span className="hidden sm:inline">{cat.label}</span>
-                    <span className="sm:hidden">{cat.label.split(' ')[0]}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </nav>
-        )}
+        {/* Mobile Categories - Native Bottom Sheet Style */}
+        <div className="lg:hidden fixed bottom-20 left-4 right-4 z-[106]">
+          <motion.button
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setShowCategoryMenu(!showCategoryMenu)}
+            className="w-full bg-gradient-to-r from-red-600 via-purple-600 to-blue-600 text-white py-4 rounded-2xl font-bold text-base shadow-2xl flex items-center justify-center gap-2"
+          >
+            <span>{CATEGORIES.find(c => c.id === activeCategory)?.label || "בחר קטגוריה"}</span>
+            <motion.div
+              animate={{ rotate: showCategoryMenu ? 180 : 0 }}
+              transition={{ duration: 0.3 }}
+            >
+              <ChevronUp className="w-5 h-5" />
+            </motion.div>
+          </motion.button>
+        </div>
+
+        {/* Mobile Category Menu - Bottom Sheet */}
+        <AnimatePresence>
+          {showCategoryMenu && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="lg:hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-[107]"
+              onClick={() => setShowCategoryMenu(false)}
+            >
+              <motion.div
+                initial={{ y: "100%" }}
+                animate={{ y: 0 }}
+                exit={{ y: "100%" }}
+                transition={{ type: "spring", damping: 30, stiffness: 300 }}
+                onClick={(e) => e.stopPropagation()}
+                className="absolute bottom-0 left-0 right-0 bg-gradient-to-b from-gray-900 to-black rounded-t-3xl p-6 max-h-[80vh] overflow-y-auto"
+              >
+                <div className="w-12 h-1.5 bg-gray-600 rounded-full mx-auto mb-6"></div>
+                <h3 className="text-white text-2xl font-bold mb-6">קטגוריות</h3>
+                <div className="grid grid-cols-2 gap-3">
+                  {CATEGORIES.map((cat) => {
+                    const Icon = cat.icon;
+                    return (
+                      <motion.button
+                        key={cat.id}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => {
+                          setActiveCategory(cat.id);
+                          setShowCategoryMenu(false);
+                        }}
+                        className={`flex flex-col items-center justify-center gap-3 p-6 rounded-2xl transition-all ${
+                          activeCategory === cat.id
+                            ? 'bg-gradient-to-br from-red-600 to-red-700 text-white shadow-lg'
+                            : 'bg-white/10 text-gray-300 hover:bg-white/20'
+                        }`}
+                      >
+                        <Icon className="w-8 h-8" />
+                        <span className="font-bold text-sm text-center">{cat.label}</span>
+                      </motion.button>
+                    );
+                  })}
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Desktop Categories */}
+        <nav className="hidden lg:block sticky top-[115px] sm:top-[135px] z-[104] bg-black/90 backdrop-blur-md border-b border-red-900/20 overflow-x-auto">
+          <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 sm:py-3 flex gap-1.5 sm:gap-2">
+            {CATEGORIES.map((cat) => {
+              const Icon = cat.icon;
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => setActiveCategory(cat.id)}
+                  className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full whitespace-nowrap text-xs sm:text-sm transition-all ${
+                    activeCategory === cat.id
+                      ? 'bg-red-600 text-white shadow-lg shadow-red-600/50'
+                      : 'bg-gray-900/50 border border-red-900/30 text-red-500 hover:bg-red-900/30'
+                  }`}
+                >
+                  <Icon className="w-3 h-3 sm:w-4 sm:h-4" />
+                  <span>{cat.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </nav>
 
         {/* Mobile TikTok-Style Content */}
         <main className="lg:hidden h-screen overflow-y-scroll snap-y snap-mandatory">
