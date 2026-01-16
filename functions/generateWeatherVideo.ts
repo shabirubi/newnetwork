@@ -17,6 +17,7 @@ Deno.serve(async (req) => {
     }
 
     console.log('Generating weather video...');
+    console.log('API Key format check:', DID_API_KEY.substring(0, 10) + '...');
 
     // Step 1: Generate audio with ElevenLabs
     console.log('Generating audio with ElevenLabs...');
@@ -55,10 +56,14 @@ Deno.serve(async (req) => {
 
     // Step 2: Create video with D-ID using the audio
     console.log('Creating D-ID video with audio...');
+    
+    // D-ID expects the key in the format: Basic base64(username:password) or just the key directly
+    const authHeader = DID_API_KEY.startsWith('Basic ') ? DID_API_KEY : `Basic ${DID_API_KEY}`;
+    
     const didResponse = await fetch('https://api.d-id.com/talks', {
       method: 'POST',
       headers: {
-        'Authorization': `Basic ${DID_API_KEY}`,
+        'Authorization': authHeader,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
@@ -97,7 +102,7 @@ Deno.serve(async (req) => {
 
       const statusResponse = await fetch(`https://api.d-id.com/talks/${talkId}`, {
         headers: {
-          'Authorization': `Basic ${DID_API_KEY}`
+          'Authorization': authHeader
         }
       });
 
