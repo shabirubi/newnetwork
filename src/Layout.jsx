@@ -140,7 +140,7 @@ export default function Layout({ children }) {
       <AIAnnouncer />
 
       {/* Header */}
-      <header className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-50 transition-colors duration-300 border-b border-gray-200 dark:border-gray-700">
+      <header className="bg-white dark:bg-gray-800 shadow-md sticky top-0 z-40 transition-colors duration-300 border-b border-gray-200 dark:border-gray-700">
         <div className="max-w-7xl mx-auto px-4">
           {/* Desktop Navigation */}
           <nav className="hidden sm:flex items-center justify-between gap-1 py-3">

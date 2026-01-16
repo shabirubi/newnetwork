@@ -95,7 +95,7 @@ export default function Home() {
         }}
         whileHover={{ scale: 1.05 }}
         transition={{ duration: 0.3 }}
-        className="fixed bottom-24 left-4 sm:left-6 z-50 group flex flex-col items-center gap-3"
+        className="fixed bottom-24 left-4 sm:left-6 z-50 group flex flex-col items-center gap-4"
       >
         {/* Rainbow Background Effect */}
         <motion.div
@@ -111,21 +111,26 @@ export default function Home() {
             ]
           }}
           transition={{ duration: 3, repeat: Infinity }}
-          className="absolute top-0 left-1/2 -translate-x-1/2 rounded-full blur-3xl opacity-70 w-40 h-40 sm:w-32 sm:h-32"
+          className="absolute top-0 left-1/2 -translate-x-1/2 rounded-full blur-3xl opacity-70 w-64 h-64 sm:w-48 sm:h-48"
         />
         
         {/* Logo */}
         <img 
           src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png"
           alt="VOD"
-          className="relative w-32 h-32 sm:w-24 sm:h-24 drop-shadow-2xl"
+          className="relative w-48 h-48 sm:w-40 sm:h-40 drop-shadow-2xl"
         />
         
         {/* Text Button */}
-        <div className="relative bg-gradient-to-r from-red-600 via-purple-600 to-blue-600 px-4 py-2 rounded-xl shadow-2xl">
-          <span className="text-white text-sm sm:text-base font-bold text-center whitespace-nowrap">
-            עולם התוכן של הרשת החדשה
-          </span>
+        <div className="relative bg-gradient-to-br from-red-600 via-purple-600 to-blue-600 px-6 py-3 rounded-2xl shadow-2xl border-2 border-white/30">
+          <div className="text-center">
+            <div className="text-white text-base sm:text-lg font-bold leading-tight">
+              עולם התוכן של
+            </div>
+            <div className="text-white text-base sm:text-lg font-bold leading-tight">
+              הרשת החדשה
+            </div>
+          </div>
         </div>
       </motion.button>
       
