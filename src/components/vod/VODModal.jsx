@@ -133,7 +133,7 @@ export default function VODModal({ isOpen, onClose }) {
         {/* Content Wrapper with Scrolling */}
          <div className="flex-1 overflow-y-auto overflow-x-hidden flex flex-col">
            {/* Desktop Categories */}
-           <nav className="hidden lg:block flex-shrink-0 bg-gradient-to-b from-black/90 via-black/80 to-black/50 backdrop-blur-lg border-b border-red-600/20 overflow-x-auto">
+           <nav className="hidden lg:sticky lg:top-0 lg:z-40 lg:block flex-shrink-0 bg-gradient-to-b from-black/90 via-black/80 to-black/50 backdrop-blur-lg border-b border-red-600/20 overflow-x-auto">
              <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 sm:py-3 flex gap-1.5 sm:gap-2">
                {CATEGORIES.map((cat) => {
                  const Icon = cat.icon;
