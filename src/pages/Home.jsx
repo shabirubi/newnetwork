@@ -83,41 +83,37 @@ export default function Home() {
       <AutoNewsUpdater />
       <AutoChannelsUpdater />
       
-      {/* VOD Floating Button - Rainbow Effect */}
-      <motion.div
+      {/* VOD Floating Button - Clean Icon Only */}
+      <motion.button
+        onClick={() => setVodModalOpen(true)}
         initial={{ opacity: 0, scale: 0.5 }}
-        animate={{ opacity: 1, scale: 1 }}
-        whileHover={{ scale: 1.1 }}
+        animate={{ 
+          opacity: 1, 
+          scale: 1,
+          filter: [
+            "drop-shadow(0 0 10px rgba(255,0,0,0.8))",
+            "drop-shadow(0 0 15px rgba(255,119,0,0.8))",
+            "drop-shadow(0 0 20px rgba(255,221,0,0.8))",
+            "drop-shadow(0 0 15px rgba(0,255,0,0.8))",
+            "drop-shadow(0 0 20px rgba(0,136,255,0.8))",
+            "drop-shadow(0 0 15px rgba(136,0,255,0.8))",
+            "drop-shadow(0 0 10px rgba(255,0,255,0.8))",
+            "drop-shadow(0 0 10px rgba(255,0,0,0.8))"
+          ]
+        }}
+        whileHover={{ scale: 1.15 }}
+        transition={{ 
+          scale: { duration: 0.3 },
+          filter: { duration: 3, repeat: Infinity }
+        }}
         className="fixed bottom-24 left-6 z-50"
       >
-        <motion.button
-          onClick={() => setVodModalOpen(true)}
-          animate={{
-            boxShadow: [
-              "0 0 20px #ff0000",
-              "0 0 30px #ff7700",
-              "0 0 40px #ffdd00",
-              "0 0 30px #00ff00",
-              "0 0 40px #0088ff",
-              "0 0 30px #8800ff",
-              "0 0 20px #ff00ff",
-              "0 0 20px #ff0000"
-            ]
-          }}
-          transition={{ duration: 3, repeat: Infinity }}
-          className="relative w-20 h-20 rounded-full bg-gradient-to-br from-red-600 via-purple-600 to-blue-600 flex items-center justify-center shadow-2xl group"
-        >
-          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-red-500 via-blue-500 to-red-500 opacity-0 group-hover:opacity-100 animate-pulse transition-opacity"></div>
-          <img 
-            src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png"
-            alt="VOD"
-            className="w-12 h-12 relative z-10 drop-shadow-2xl"
-          />
-          <div className="absolute -bottom-10 left-1/2 -translate-x-1/2 bg-gradient-to-r from-red-600 via-purple-600 to-blue-600 text-white px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap shadow-lg">
-            VOD LIVE
-          </div>
-        </motion.button>
-      </motion.div>
+        <img 
+          src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png"
+          alt="VOD"
+          className="w-20 h-20"
+        />
+      </motion.button>
       
       {/* VOD Modal */}
       <VODModal isOpen={vodModalOpen} onClose={() => setVodModalOpen(false)} />
