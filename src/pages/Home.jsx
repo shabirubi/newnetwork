@@ -1,6 +1,6 @@
 import React from "react";
 import { base44 } from "@/api/base44Client";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Radio, TrendingUp, Clock, ChevronLeft, Flame, Zap, Target, Shield, DollarSign, Landmark, Cpu, Trophy, Clapperboard, Globe, Heart, Tv, Newspaper, MessageCircle } from "lucide-react";
 import { Link } from "react-router-dom";
@@ -53,6 +53,8 @@ export default function Home() {
 
   const defaultStreamUrl = "https://ok.ru/video/10508051226319";
 
+  const queryClient = useQueryClient();
+
   const { data: articles = [], isLoading } = useQuery({
     queryKey: ['news-articles', selectedChannel],
     queryFn: () => {
@@ -63,11 +65,16 @@ export default function Home() {
     },
     staleTime: 5 * 60 * 1000,
     gcTime: 30 * 60 * 1000,
+    refetchInterval: 30 * 60 * 1000,
     refetchOnWindowFocus: false,
     refetchOnMount: false,
     initialData: [],
     placeholderData: (prev) => prev
   });
+
+  React.useEffect(() => {
+    queryClient.invalidateQueries({ queryKey: ['news-articles'] });
+  }, [queryClient]);
 
   const { data: liveStream } = useQuery({
     queryKey: ['live-stream'],
