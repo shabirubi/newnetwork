@@ -45,6 +45,7 @@ import WorldNewsContainer from "../components/home/WorldNewsContainer";
 import ShortVideosContainer from "../components/home/ShortVideosContainer";
 import WorldNewsReportersContainer from "../components/home/WorldNewsReportersContainer";
 import MoviesSeriesContainer from "../components/home/MoviesSeriesContainer";
+import PlutoTVChannelsContainer from "../components/home/PlutoTVChannelsContainer";
 
 
 export default function Home() {
@@ -305,6 +306,9 @@ export default function Home() {
 
       {/* Movies Series Container */}
       <MoviesSeriesContainer />
+
+      {/* Pluto TV Channels Container */}
+      <PlutoTVChannelsContainer />
 
       {/* Newsletter Signup */}
       <NewsletterSignup />
