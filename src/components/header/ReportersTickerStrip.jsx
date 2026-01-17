@@ -27,10 +27,8 @@ export default function ReportersTickerStrip() {
       </div>
 
       <div className="flex-1 overflow-hidden">
-        <div
-                  className="flex gap-6 h-full items-center overflow-x-auto"
-                >
-                  {reporters.map((reporter, idx) => (
+        <div className="flex gap-6 h-full items-center overflow-x-auto">
+          {reporters.map((reporter, idx) => (
             <div
               key={`${reporter.id}-${idx}`}
               className="flex-shrink-0 flex items-center gap-3 px-4 py-2 bg-gray-800/50 rounded-lg border border-purple-500/30 hover:border-purple-500/60 transition-all cursor-pointer group"
@@ -44,10 +42,9 @@ export default function ReportersTickerStrip() {
                 <div className="text-white font-bold text-xs">{reporter.name}</div>
                 <div className="text-purple-300 text-xs">{reporter.specialty}</div>
               </div>
-              </div>
-              ))}
-              </div>
-              </div>
-              </div>
+            </div>
+          ))}
+        </div>
+      </div>
               );
               }
