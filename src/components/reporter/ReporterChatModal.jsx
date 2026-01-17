@@ -338,7 +338,7 @@ export default function ReporterChatModal({ reporter, article, onClose, isOpen =
         animate={{ scale: 1, y: 0 }}
         exit={{ scale: 0.9, y: 20 }}
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-2xl bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[80vh]"
+        className="w-full max-w-2xl bg-white dark:bg-gray-800 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[80vh] sm:max-h-[90vh]"
       >
         {/* Header */}
         <div className="bg-gradient-to-r from-[#E31E24] to-[#B91C1C] p-4 text-white">
