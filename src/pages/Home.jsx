@@ -316,6 +316,9 @@ export default function Home() {
       {/* Reporter Chat Button */}
       <ReporterChatButton />
 
+      {/* User Experience Features */}
+      <UserExperienceFeatures />
+
       {/* CTA Section */}
       <section className="bg-[#E31E24] rounded-2xl p-8 text-white text-center">
         <h2 className="text-2xl md:text-3xl font-bold mb-4">
