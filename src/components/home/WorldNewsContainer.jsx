@@ -8,6 +8,22 @@ export default function WorldNewsContainer() {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [generatingImages, setGeneratingImages] = useState({});
+
+  const generateArticleImage = async (article) => {
+    try {
+      setGeneratingImages(prev => ({ ...prev, [article.title]: true }));
+      const response = await base44.integrations.Core.GenerateImage({
+        prompt: `Professional news image for: ${article.title}. High quality, modern journalism style, professional photograph related to: ${article.category}. Clean, presentable for news media.`
+      });
+      return response.url;
+    } catch (err) {
+      console.error('Image generation failed:', err);
+      return null;
+    } finally {
+      setGeneratingImages(prev => ({ ...prev, [article.title]: false }));
+    }
+  };
 
   const fetchWorldNews = async () => {
     setLoading(true);
@@ -16,7 +32,13 @@ export default function WorldNewsContainer() {
       const response = await base44.functions.invoke('fetchWorldNews');
       console.log('World news response:', response);
       const newsArticles = response.data?.articles || response?.articles || [];
-      setArticles(Array.isArray(newsArticles) ? newsArticles : []);
+      const articlesWithImages = await Promise.all(
+        (Array.isArray(newsArticles) ? newsArticles : []).map(async (article) => {
+          const imageUrl = await generateArticleImage(article);
+          return { ...article, image_url: imageUrl };
+        })
+      );
+      setArticles(articlesWithImages);
     } catch (err) {
       setError('שגיאה בטעינת חדשות עולמיות: ' + err.message);
       console.error('Fetch error:', err);
@@ -71,40 +93,55 @@ export default function WorldNewsContainer() {
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {articles.map((article, idx) => (
           <motion.div
             key={idx}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.05 }}
-            className={`bg-gradient-to-br ${getCategoryColor(article.category)} rounded-xl p-5 text-white shadow-lg hover:shadow-xl transition-all group relative overflow-hidden`}
+            className={`bg-gradient-to-br ${getCategoryColor(article.category)} rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all group cursor-pointer h-full flex flex-col`}
           >
-            <div className="absolute -top-8 -right-8 w-24 h-24 bg-white/10 rounded-full group-hover:bg-white/20 transition-all" />
+            {/* Image Container */}
+            {article.image_url ? (
+              <div className="relative h-48 overflow-hidden">
+                <img
+                  src={article.image_url}
+                  alt={article.title}
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+              </div>
+            ) : generatingImages[article.title] ? (
+              <div className="h-48 bg-gradient-to-br from-gray-600 to-gray-700 flex items-center justify-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white" />
+              </div>
+            ) : (
+              <div className="h-48 bg-gradient-to-br from-gray-600 to-gray-700" />
+            )}
 
-            <div className="relative z-10">
-              {/* Category Badge */}
-              <div className="inline-block bg-white/20 text-white text-xs font-bold px-3 py-1 rounded-full mb-3 backdrop-blur-sm">
+            {/* Content */}
+            <div className="p-5 flex flex-col flex-1 text-white">
+              {/* Badge */}
+              <div className="inline-block bg-white/20 text-white text-xs font-bold px-3 py-1 rounded-full mb-3 w-fit backdrop-blur-sm">
                 {article.source || 'חדשות'}
               </div>
 
               {/* Title */}
-              <h3 className="font-bold text-sm md:text-base line-clamp-2 mb-2 group-hover:text-white transition-colors">
+              <h3 className="font-bold text-base line-clamp-2 mb-2 group-hover:text-yellow-200 transition-colors">
                 {article.title}
               </h3>
 
               {/* Description */}
-              <p className="text-white/80 text-xs md:text-sm line-clamp-3 mb-4">
+              <p className="text-white/80 text-sm line-clamp-2 mb-4 flex-1">
                 {article.description}
               </p>
 
               {/* Category Tag */}
               {article.category && (
-                <div className="inline-block">
-                  <span className="text-[10px] md:text-xs text-white/70 bg-white/10 px-2 py-1 rounded">
-                    {article.category}
-                  </span>
-                </div>
+                <span className="text-[11px] text-white/70 bg-white/10 px-3 py-1 rounded-full w-fit">
+                  {article.category}
+                </span>
               )}
             </div>
           </motion.div>
