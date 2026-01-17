@@ -1,3 +1,4 @@
+import Accessibility from './pages/Accessibility';
 import Archive from './pages/Archive';
 import Article from './pages/Article';
 import Category from './pages/Category';
@@ -11,15 +12,15 @@ import PublicReports from './pages/PublicReports';
 import ReporterQA from './pages/ReporterQA';
 import Reporters from './pages/Reporters';
 import Schedule from './pages/Schedule';
+import Terms from './pages/Terms';
 import TestDID from './pages/TestDID';
 import VOD from './pages/VOD';
 import WarRoom from './pages/WarRoom';
-import Terms from './pages/Terms';
-import Accessibility from './pages/Accessibility';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
+    "Accessibility": Accessibility,
     "Archive": Archive,
     "Article": Article,
     "Category": Category,
@@ -33,11 +34,10 @@ export const PAGES = {
     "ReporterQA": ReporterQA,
     "Reporters": Reporters,
     "Schedule": Schedule,
+    "Terms": Terms,
     "TestDID": TestDID,
     "VOD": VOD,
     "WarRoom": WarRoom,
-    "Terms": Terms,
-    "Accessibility": Accessibility,
 }
 
 export const pagesConfig = {
