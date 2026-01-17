@@ -27,11 +27,16 @@ export default function ReportersTickerStrip() {
       </div>
 
       <div className="flex-1 overflow-hidden">
-        <div className="flex gap-6 h-full items-center overflow-x-auto">
-          {reporters.map((reporter, idx) => (
-            <div
+        <motion.div 
+          className="flex gap-6 h-full items-center"
+          animate={{ x: ["0%", "-100%"] }}
+          transition={{ duration: 30, repeat: Infinity, ease: "linear" }}
+        >
+          {displayReporters.map((reporter, idx) => (
+            <motion.div
               key={`${reporter.id}-${idx}`}
               className="flex-shrink-0 flex items-center gap-3 px-4 py-2 bg-black/30 rounded-lg border border-white/10 hover:border-white/30 transition-all cursor-pointer group backdrop-blur-md"
+              whileHover={{ scale: 1.05, borderColor: "rgba(255,255,255,0.5)" }}
             >
               <img
                 src={reporter.image}
@@ -42,10 +47,10 @@ export default function ReportersTickerStrip() {
                 <div className="text-white font-bold text-xs">{reporter.name}</div>
                 <div className="text-gray-300 text-xs">{reporter.specialty}</div>
               </div>
-            </div>
+            </motion.div>
           ))}
-        </div>
-        </div>
+        </motion.div>
+      </div>
         </div>
         );
         }
