@@ -27,6 +27,7 @@ import BroadcastStrip from "../components/news/BroadcastStrip";
 import AccessibilityPanel from "../components/accessibility/AccessibilityPanel";
 import NewsReels from "../components/news/NewsReels";
 import LiveReporterQA from "../components/news/LiveReporterQA";
+import TestimonialsSection from "../components/home/TestimonialsSection";
 
 
 export default function Home() {
@@ -250,6 +251,9 @@ export default function Home() {
 
       {/* Live Reporter Q&A Section */}
       <LiveReporterQA />
+
+      {/* Testimonials Section */}
+      <TestimonialsSection />
 
       {/* All News Section */}
        {articles.length > 0 && (

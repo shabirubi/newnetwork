@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Play, Pause, Share2, Heart } from "lucide-react";
 import moment from "moment";
+import NewsReelsModal from "./NewsReelsModal";
 
 export default function NewsReels() {
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [playingId, setPlayingId] = useState(null);
+  const [selectedReel, setSelectedReel] = useState(null);
 
   // מערך של 30 סרטוני חדשות דמה
   const newsReels = Array.from({ length: 30 }, (_, i) => ({
@@ -88,7 +89,7 @@ export default function NewsReels() {
                     <motion.button
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.95 }}
-                      onClick={() => setPlayingId(reel.id)}
+                      onClick={() => setSelectedReel(reel)}
                       className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white/80 hover:bg-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity z-10"
                     >
                       <Play className="w-6 h-6 text-black fill-black" />
@@ -144,6 +145,13 @@ export default function NewsReels() {
           </span>
         </div>
       </div>
+
+      {/* Video Modal */}
+      <AnimatePresence>
+        {selectedReel && (
+          <NewsReelsModal reel={selectedReel} onClose={() => setSelectedReel(null)} />
+        )}
+      </AnimatePresence>
     </section>
   );
 }
