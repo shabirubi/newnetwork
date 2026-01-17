@@ -16,10 +16,10 @@ export default function UpdatesFeed() {
   });
 
   return (
-    <div className="sticky top-6">
+    <div className="sticky top-6 bg-black">
       {/* Header */}
       <div className="p-4 pb-3">
-        <h2 className="font-bold text-lg text-gray-900 dark:text-white flex items-center gap-2">
+        <h2 className="font-bold text-lg text-white flex items-center gap-2">
           <Flame className="w-5 h-5 text-[#E31E24]" />
           עדכונים חמים
         </h2>
@@ -33,7 +33,7 @@ export default function UpdatesFeed() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: index * 0.1 }}
-            className="border-b border-gray-200 dark:border-gray-800 hover:bg-gray-50 dark:hover:bg-gray-900/50 transition-all group"
+            className="border-b border-gray-800 hover:bg-gray-900/50 transition-all group"
             >
             <Link 
               to={createPageUrl(`Article?id=${article.id}`)}
@@ -64,15 +64,15 @@ export default function UpdatesFeed() {
 
               {/* Content */}
               <div>
-                <p className="text-xs text-gray-900 dark:text-white font-bold line-clamp-2 leading-snug mb-1.5 group-hover:text-[#E31E24] dark:group-hover:text-[#E31E24] transition-colors">
+                <p className="text-xs text-white font-bold line-clamp-2 leading-snug mb-1.5 group-hover:text-[#E31E24] transition-colors">
                   {article.title}
                 </p>
                 {article.subtitle && (
-                  <p className="text-[10px] text-gray-600 dark:text-gray-400 line-clamp-1 mb-2">
+                  <p className="text-[10px] text-gray-400 line-clamp-1 mb-2">
                     {article.subtitle}
                   </p>
                 )}
-                <div className="flex items-center gap-2 text-[10px] text-gray-500 dark:text-gray-400">
+                <div className="flex items-center gap-2 text-[10px] text-gray-400">
                   <Clock size={10} />
                   <span className="font-medium">
                     {new Date(article.created_date).toLocaleTimeString('he-IL', {
@@ -91,9 +91,9 @@ export default function UpdatesFeed() {
       {/* Footer */}
       <Link 
         to={createPageUrl("Category?cat=breaking")}
-        className="block p-3 text-center hover:text-[#E31E24] transition-colors border-t border-gray-200 dark:border-gray-800 mt-2"
+        className="block p-3 text-center hover:text-[#E31E24] transition-colors border-t border-gray-800 mt-2"
       >
-        <span className="text-gray-700 dark:text-gray-300 font-bold text-sm">לכל החדשות החמות →</span>
+        <span className="text-gray-300 font-bold text-sm">לכל החדשות החמות →</span>
       </Link>
     </div>
   );

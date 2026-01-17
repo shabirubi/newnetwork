@@ -134,9 +134,9 @@ export default function Home() {
       </motion.button>
 
       {/* Hero Section - TikTok News Feed */}
-      <section className="grid grid-cols-1 lg:grid-cols-12 gap-0 -mx-0 sm:mx-0 px-0 sm:px-4">
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-0 -mx-0 sm:mx-0 px-0 sm:px-4 bg-black">
         {/* Right Sidebar - Updates Feed */}
-        <aside className="lg:col-span-3 hidden lg:block">
+        <aside className="lg:col-span-3 hidden lg:block bg-black">
           <UpdatesFeed />
         </aside>
 
