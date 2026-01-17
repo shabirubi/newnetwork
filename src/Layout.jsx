@@ -392,22 +392,6 @@ export default function Layout({ children }) {
 
               {/* Menu Items */}
               <div className="p-4 space-y-1">
-                {categories.map((cat) => (
-                  <Link
-                    key={cat.id}
-                    to={createPageUrl(cat.href)}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center gap-4 px-4 py-4 text-gray-700 dark:text-gray-200 rounded-2xl active:bg-gray-100 dark:active:bg-gray-700 transition-colors"
-                  >
-                    <div className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-                      <cat.icon size={20} />
-                    </div>
-                    <span className="flex-1 font-medium">{cat.label}</span>
-                    <ChevronLeft size={18} className="text-gray-400" />
-                  </Link>
-                ))}
-
-                <div className="border-t border-gray-200 dark:border-gray-700 my-4"></div>
 
                 <Link
                   to={createPageUrl("Schedule")}
