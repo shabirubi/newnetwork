@@ -8,16 +8,43 @@ import ReporterChatModal from "../reporter/ReporterChatModal";
 export default function WorldNewsReportersContainer() {
   const [selectedReporter, setSelectedReporter] = useState(null);
   const [chatModalOpen, setChatModalOpen] = useState(false);
+  const [generatingImages, setGeneratingImages] = useState({});
+
+  const generateReporterImage = async (reporter) => {
+    try {
+      setGeneratingImages(prev => ({ ...prev, [reporter.id]: true }));
+      const response = await base44.integrations.Core.GenerateImage({
+        prompt: `Professional portrait of international news reporter. Clean, modern, professional journalist headshot style. High quality photo for news media. World news correspondent.`
+      });
+      return response.url;
+    } catch (err) {
+      console.error('Image generation failed:', err);
+      return null;
+    } finally {
+      setGeneratingImages(prev => ({ ...prev, [reporter.id]: false }));
+    }
+  };
 
   const { data: reporters = [], isLoading } = useQuery({
     queryKey: ['world-news-reporters'],
     queryFn: async () => {
       const allReporters = await base44.entities.Reporter.list('-created_date', 50);
-      return allReporters.filter(r => 
+      const filtered = allReporters.filter(r => 
         r.is_active && 
         r.categories && 
         r.categories.some(cat => cat.toLowerCase().includes('world') || cat.toLowerCase().includes('global'))
       ).slice(0, 6);
+      
+      const withImages = await Promise.all(
+        filtered.map(async (reporter) => {
+          if (!reporter.image) {
+            const backgroundImage = await generateReporterImage(reporter);
+            return { ...reporter, background_image: backgroundImage };
+          }
+          return reporter;
+        })
+      );
+      return withImages;
     },
     initialData: []
   });
@@ -61,13 +88,27 @@ export default function WorldNewsReportersContainer() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.05 }}
-            className="group relative rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all bg-gradient-to-br from-blue-600 to-indigo-700 text-white"
+            className="group relative rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all h-full flex flex-col bg-gradient-to-br from-blue-600 to-indigo-700 text-white"
           >
-            {/* Background decoration */}
-            <div className="absolute -top-12 -right-12 w-32 h-32 bg-white/10 rounded-full group-hover:bg-white/20 transition-all" />
-            <div className="absolute -bottom-8 -left-8 w-24 h-24 bg-white/10 rounded-full group-hover:bg-white/20 transition-all" />
+            {/* Background Image */}
+            {reporter.background_image ? (
+              <div className="absolute inset-0">
+                <img
+                  src={reporter.background_image}
+                  alt={reporter.name}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent group-hover:from-black/80 transition-all" />
+              </div>
+            ) : generatingImages[reporter.id] ? (
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center">
+                <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white" />
+              </div>
+            ) : (
+              <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-indigo-700" />
+            )}
 
-            <div className="relative p-5 h-full flex flex-col">
+            <div className="relative z-10 p-5 h-full flex flex-col">
               {/* Reporter Image */}
               {reporter.image && (
                 <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-white/30 mb-3 mx-auto">
