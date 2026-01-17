@@ -4,57 +4,66 @@ import { X, Play, Pause } from "lucide-react";
 
 export default function ReporterCardModal({ reporter, isOpen, onClose }) {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [audio, setAudio] = useState(null);
-
-  useEffect(() => {
-    if (isOpen && reporter) {
-      generateVoice();
-    }
-  }, [isOpen, reporter]);
-
-  const generateVoice = async () => {
-    try {
-      const text = `שלום, אני ${reporter.name}, ${reporter.role} בהרשת החדשה. אני מתמחה בתחום ${reporter.specialty} וכותב על ${reporter.categories?.join(", ")}. ${reporter.bio || ""}`;
-      
-      const response = await fetch("https://api.elevenlabs.io/v1/text-to-speech/21m00Tcm4TlvDq8ikWAM", {
-        method: "POST",
-        headers: {
-          "xi-api-key": import.meta.env.VITE_ELEVENLABS_API_KEY || "",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          text,
-          model_id: "eleven_monolingual_v1",
-          voice_settings: {
-            stability: 0.5,
-            similarity_boost: 0.75
-          }
-        })
-      });
-
-      if (response.ok) {
-        const audioBlob = await response.blob();
-        const audioUrl = URL.createObjectURL(audioBlob);
-        const audioElement = new Audio(audioUrl);
-        setAudio(audioElement);
-      }
-    } catch (error) {
-      console.error("Error generating voice:", error);
-    }
-  };
 
   const togglePlay = () => {
-    if (!audio) return;
+    if (!reporter) return;
+    
+    const text = `שלום, אני ${reporter.name}, ${reporter.role} בהרשת החדשה. אני מתמחה בתחום ${reporter.specialty} וכותב על ${reporter.categories?.join(", ")}. ${reporter.bio || ""}`;
     
     if (isPlaying) {
-      audio.pause();
+      window.speechSynthesis.cancel();
       setIsPlaying(false);
+      return;
+    }
+
+    setIsPlaying(true);
+    
+    // Wait for voices to load
+    if (window.speechSynthesis.getVoices().length === 0) {
+      window.speechSynthesis.onvoiceschanged = () => playVoice(text);
     } else {
-      audio.play();
-      setIsPlaying(true);
-      audio.onended = () => setIsPlaying(false);
+      playVoice(text);
     }
   };
+
+  const playVoice = (text) => {
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'he-IL';
+    utterance.volume = 1.0;
+    
+    const voices = window.speechSynthesis.getVoices();
+    
+    if (reporter.gender === 'female') {
+      const femaleVoices = voices.filter(v => 
+        (v.lang.includes('he') || v.lang.includes('iw')) &&
+        (v.name.toLowerCase().includes('female') || v.name.toLowerCase().includes('woman'))
+      );
+      if (femaleVoices.length > 0) {
+        utterance.voice = femaleVoices[0];
+        utterance.pitch = 1.3;
+      } else {
+        utterance.pitch = 1.8;
+      }
+    } else {
+      const maleVoices = voices.filter(v => 
+        (v.lang.includes('he') || v.lang.includes('iw')) &&
+        (v.name.toLowerCase().includes('male') || v.name.toLowerCase().includes('man'))
+      );
+      if (maleVoices.length > 0) {
+        utterance.voice = maleVoices[0];
+        utterance.pitch = 0.85;
+      } else {
+        utterance.pitch = 0.7;
+      }
+    }
+
+    utterance.onend = () => setIsPlaying(false);
+    utterance.onerror = () => setIsPlaying(false);
+    
+    window.speechSynthesis.speak(utterance);
+  };
+
+
 
   return (
     <AnimatePresence>
