@@ -149,12 +149,12 @@ export default function Article() {
           </Badge>
         </div>
 
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4 leading-tight">
+        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight">
           {article.title}
         </h1>
 
         {article.subtitle && (
-          <p className="text-xl text-gray-600 mb-6">
+          <p className="text-xl text-gray-200 mb-6">
             {article.subtitle}
           </p>
         )}
@@ -169,14 +169,32 @@ export default function Article() {
 
           {/* Share Buttons */}
           <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-500 ml-2">שתפו:</span>
-            <Button variant="outline" size="icon" className="rounded-full">
+            <span className="text-sm text-gray-300 ml-2">שתפו:</span>
+            <Button 
+              variant="outline" 
+              size="icon" 
+              className="rounded-full"
+              onClick={() => window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, '_blank')}
+              title="שתף בפייסבוק"
+            >
               <Facebook size={18} />
             </Button>
-            <Button variant="outline" size="icon" className="rounded-full">
+            <Button 
+              variant="outline" 
+              size="icon" 
+              className="rounded-full"
+              onClick={() => window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(article.title)}`, '_blank')}
+              title="שתף בטוויטר"
+            >
               <Twitter size={18} />
             </Button>
-            <Button variant="outline" size="icon" className="rounded-full">
+            <Button 
+              variant="outline" 
+              size="icon" 
+              className="rounded-full"
+              onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(article.title + ' ' + window.location.href)}`, '_blank')}
+              title="שתף בוואצאפ"
+            >
               <MessageCircle size={18} />
             </Button>
             <Button 
@@ -184,6 +202,7 @@ export default function Article() {
               size="icon" 
               className="rounded-full"
               onClick={copyLink}
+              title="העתק קישור"
             >
               <Copy size={18} />
             </Button>
@@ -221,7 +240,7 @@ export default function Article() {
       {/* Video if exists */}
       {article.video_url && (
         <div className="mb-12">
-          <h3 className="font-bold text-xl mb-4">צפו בסרטון</h3>
+          <h3 className="font-bold text-xl mb-4 text-white">צפו בסרטון</h3>
           <div className="aspect-video bg-gray-900 rounded-2xl overflow-hidden">
             <iframe 
               src={article.video_url}
@@ -240,7 +259,7 @@ export default function Article() {
       {/* Related Articles */}
       {filteredRelated.length > 0 && (
         <section className="border-t pt-8">
-          <h2 className="text-2xl font-bold mb-6 dark:text-white">ידיעות נוספות</h2>
+          <h2 className="text-2xl font-bold mb-6 text-white">ידיעות נוספות</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {filteredRelated.map((relatedArticle, index) => (
               <NewsCard 
