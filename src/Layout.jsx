@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "./utils";
+import useAccessibility from "./hooks/useAccessibility";
 import { 
   Menu, X, Radio, Newspaper, Shield, TrendingUp, 
   Vote, Cpu, Trophy, Clapperboard, Globe, Heart,
@@ -32,9 +33,10 @@ const categories = [
   ];
 
 export default function Layout({ children }) {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [reportersModalOpen, setReportersModalOpen] = useState(false);
-  const [darkMode, setDarkMode] = useState(() => {
+        const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+        const [reportersModalOpen, setReportersModalOpen] = useState(false);
+        const { settings: a11ySettings } = useAccessibility();
+        const [darkMode, setDarkMode] = useState(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('darkMode');
       return saved === null ? true : saved === 'true';

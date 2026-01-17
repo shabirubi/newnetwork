@@ -1,44 +1,51 @@
+css
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* High Contrast Mode */
-.high-contrast {
-  --background: #000000;
-  --foreground: #FFFFFF;
-  --primary: #FFFF00;
-  --secondary: #00FFFF;
-}
-
-.high-contrast * {
-  color: #FFFFFF !important;
+html.high-contrast {
   background-color: #000000 !important;
-  border-color: #FFFFFF !important;
+  color: #FFFFFF !important;
 }
 
-.high-contrast button,
-.high-contrast a {
+html.high-contrast body {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+}
+
+html.high-contrast * {
+  background-color: #000000 !important;
+  color: #FFFFFF !important;
+  border-color: #FFFF00 !important;
+}
+
+html.high-contrast button,
+html.high-contrast a,
+html.high-contrast input[type="button"],
+html.high-contrast input[type="submit"] {
   background-color: #FFFF00 !important;
   color: #000000 !important;
   border: 3px solid #000000 !important;
 }
 
-.high-contrast input,
-.high-contrast textarea,
-.high-contrast select {
+html.high-contrast input,
+html.high-contrast textarea,
+html.high-contrast select {
   background-color: #FFFFFF !important;
   color: #000000 !important;
   border: 2px solid #000000 !important;
 }
 
 /* Dyslexia Font */
-.dyslexia-font {
-  font-family: 'Comic Sans MS', 'Trebuchet MS', cursive, sans-serif;
+html.dyslexia-font {
+  font-family: 'Comic Sans MS', 'Trebuchet MS', cursive, sans-serif !important;
   letter-spacing: 0.12em;
   line-height: 1.6;
-  font-weight: 500;
 }
 
-.dyslexia-font p {
+html.dyslexia-font * {
+  font-family: 'Comic Sans MS', 'Trebuchet MS', cursive, sans-serif !important;
+  letter-spacing: 0.12em;
   word-spacing: 0.16em;
 }

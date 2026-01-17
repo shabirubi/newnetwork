@@ -1,46 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Type, Contrast, Palette, Volume2 } from "lucide-react";
+import { X, Type, Contrast } from "lucide-react";
+import useAccessibility from "../../hooks/useAccessibility";
 
 export default function AccessibilityPanel({ isOpen, onClose }) {
-  const [settings, setSettings] = useState(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('a11y-settings');
-      return saved ? JSON.parse(saved) : {
-        textSize: 1,
-        contrast: 'normal',
-        colorMode: 'auto',
-        dyslexia: false,
-        boldText: false
-      };
-    }
-    return { textSize: 1, contrast: 'normal', colorMode: 'auto', dyslexia: false, boldText: false };
-  });
+  const { settings, setSettings } = useAccessibility();
 
-  useEffect(() => {
-    localStorage.setItem('a11y-settings', JSON.stringify(settings));
-    
-    const root = document.documentElement;
-    root.style.fontSize = (16 * settings.textSize) + 'px';
-    
-    if (settings.contrast === 'high') {
-      document.body.classList.add('high-contrast');
-    } else {
-      document.body.classList.remove('high-contrast');
-    }
 
-    if (settings.dyslexia) {
-      document.body.classList.add('dyslexia-font');
-    } else {
-      document.body.classList.remove('dyslexia-font');
-    }
-
-    if (settings.boldText) {
-      document.body.style.fontWeight = '600';
-    } else {
-      document.body.style.fontWeight = 'normal';
-    }
-  }, [settings]);
 
   return (
     <AnimatePresence>
