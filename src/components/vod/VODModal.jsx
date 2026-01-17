@@ -225,39 +225,6 @@ export default function VODModal({ isOpen, onClose }) {
                     allowFullScreen
                     allow="autoplay"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent pointer-events-none" />
-                </div>
-
-                {/* Overlay Content */}
-                <div className="relative h-full flex flex-col items-center justify-end pb-12 text-center px-6">
-                  <motion.div
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 0.3 }}
-                    className="backdrop-blur-md bg-black/40 rounded-3xl p-8 shadow-2xl"
-                  >
-                    <motion.div
-                      animate={{ 
-                        scale: [1, 1.05, 1],
-                        rotate: [0, 5, 0, -5, 0]
-                      }}
-                      transition={{ duration: 3, repeat: Infinity }}
-                      className="mb-4"
-                    >
-                      <img 
-                        src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png"
-                        alt="Logo"
-                        className="w-16 h-16 lg:w-20 lg:h-20 mx-auto drop-shadow-2xl"
-                      />
-                    </motion.div>
-                    <h1 className="text-2xl lg:text-4xl font-bold text-white mb-2">עולם התוכן של הרשת החדשה</h1>
-                    <p className="text-gray-200 text-sm lg:text-base mb-4">אלפי שעות של תוכן איכותי בהישג יד</p>
-                    
-                    <div className="inline-flex items-center gap-2 bg-red-600 px-4 py-2 rounded-full animate-pulse">
-                      <span className="w-2 h-2 bg-white rounded-full"></span>
-                      <span className="text-sm font-bold text-white">מתנגן עכשיו</span>
-                    </div>
-                  </motion.div>
                 </div>
               </motion.div>
             )}
