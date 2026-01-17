@@ -21,6 +21,7 @@ export default function ReporterChatModal({ reporter, article, onClose, isOpen =
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
   const chatEndRef = useRef(null);
+  const inputRef = useRef(null);
   const queryClient = useQueryClient();
 
   const [currentUser, setCurrentUser] = useState(null);
@@ -485,14 +486,22 @@ export default function ReporterChatModal({ reporter, article, onClose, isOpen =
           </div>
           
           <div className="flex gap-2 flex-wrap sm:flex-nowrap">
-            <Input
+            <input
+              ref={inputRef}
+              type="text"
               value={message}
               onChange={(e) => setMessage(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && !isProcessing && handleSendMessage()}
-              placeholder={`שאל...`}
+              onKeyPress={(e) => {
+                if (e.key === 'Enter' && !isProcessing && message.trim()) {
+                  e.preventDefault();
+                  handleSendMessage();
+                }
+              }}
+              placeholder={`שאל את ${reporter.name}...`}
               disabled={isProcessing || !conversation || isRecording}
-              className="flex-1 min-w-0 dark:bg-gray-700 dark:border-gray-600 text-sm"
+              className="flex-1 min-w-0 px-3 py-2 rounded-lg border border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:text-white text-sm font-sans"
               autoComplete="off"
+              spellCheck="false"
             />
             
             <Button
