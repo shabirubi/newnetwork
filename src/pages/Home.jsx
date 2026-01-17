@@ -211,42 +211,6 @@ export default function Home() {
       {/* VOD Modal */}
       <VODModal isOpen={vodModalOpen} onClose={() => setVodModalOpen(false)} />
 
-      {/* Reporter Chat Button */}
-      <ReporterChatButton />
-
-      {/* Categories Menu Button */}
-      <motion.button
-        onClick={() => setCategoriesMenuOpen(true)}
-        initial={{ opacity: 0, scale: 0.5 }}
-        animate={{ opacity: 1, scale: 1 }}
-        whileHover={{ scale: 1.05 }}
-        transition={{ duration: 0.3 }}
-        className="fixed bottom-24 right-24 sm:right-32 z-50 group flex flex-col items-center gap-1"
-      >
-        {/* Pulse Effect */}
-        <motion.div
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.5, 0, 0.5]
-          }}
-          transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
-          className="absolute top-0 left-1/2 -translate-x-1/2 rounded-full bg-red-500 w-20 h-20 sm:w-16 sm:h-16"
-        />
-        
-        {/* Newspaper Icon */}
-        <div className="relative bg-gradient-to-br from-red-600 to-red-700 rounded-full p-4 sm:p-3 shadow-2xl border-2 border-white/30">
-          <Newspaper className="w-8 h-8 sm:w-7 sm:h-7 text-white" />
-        </div>
-        
-        {/* Label */}
-        <div className="bg-gradient-to-br from-red-600 to-red-700 px-3 py-1.5 rounded-xl shadow-lg border-2 border-white/30">
-          <div className="text-center">
-            <div className="text-white text-xs font-bold leading-tight">קטגוריות</div>
-            <div className="text-white text-xs font-bold leading-tight">חדשות</div>
-          </div>
-        </div>
-      </motion.button>
-
       {/* Categories Menu Modal */}
       <CategoriesMenu isOpen={categoriesMenuOpen} onClose={() => setCategoriesMenuOpen(false)} />
 
