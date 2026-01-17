@@ -45,8 +45,13 @@ export default function EntertainmentUpdatesFeed() {
       </div>
 
       {/* Feed - Scrollable with animations */}
-      <div className="max-h-[600px] overflow-y-auto space-y-0">
-        {combined.map((article, index) => (
+      <div className="max-h-[600px] overflow-hidden">
+        <motion.div
+          animate={{ y: [0, -1200] }}
+          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          className="space-y-0"
+        >
+          {combined.map((article, index) => (
           <motion.div
             key={article.id}
             initial={{ opacity: 0, x: 20 }}
@@ -99,6 +104,53 @@ export default function EntertainmentUpdatesFeed() {
             </Link>
           </motion.div>
         ))}
+          {/* Duplicate for seamless loop */}
+          {combined.map((article, index) => (
+            <motion.div
+              key={`${article.id}-duplicate`}
+              className="border-b border-gray-800 hover:bg-gray-900/50 transition-all group"
+            >
+              <Link 
+                to={createPageUrl(`Article?id=${article.id}`)}
+                className="block p-3"
+              >
+                {article.image_url && (
+                  <div className="w-full h-24 rounded-lg overflow-hidden mb-2.5 relative">
+                    <img 
+                      src={article.image_url}
+                      alt={article.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                    />
+                    <div className="absolute top-2 left-2 bg-black/70 backdrop-blur-sm text-white text-[9px] font-bold px-2 py-1 rounded-full flex items-center gap-1">
+                      <Zap size={10} className="text-yellow-500" />
+                      {article.category === 'sports' ? 'ספורט' : 'פנאי'}
+                    </div>
+                  </div>
+                )}
+                <div>
+                  <p className="text-xs text-white font-bold line-clamp-2 leading-snug mb-1.5 group-hover:text-yellow-500 transition-colors">
+                    {article.title}
+                  </p>
+                  {article.subtitle && (
+                    <p className="text-[10px] text-gray-400 line-clamp-1 mb-2">
+                      {article.subtitle}
+                    </p>
+                  )}
+                  <div className="flex items-center gap-2 text-[10px] text-gray-400">
+                    <Clock size={10} />
+                    <span className="font-medium">
+                      {new Date(article.created_date).toLocaleTimeString('he-IL', {
+                        hour: '2-digit',
+                        minute: '2-digit'
+                      })}
+                    </span>
+                    <span>• {moment(article.created_date).fromNow()}</span>
+                  </div>
+                </div>
+              </Link>
+            </motion.div>
+          ))}
+        </motion.div>
       </div>
 
       {/* Footer */}
