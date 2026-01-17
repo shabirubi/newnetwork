@@ -76,7 +76,7 @@ export default function ReporterChatModal({ reporter, article, onClose, isOpen =
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages]);
+  }, [chatMessages]);
 
   return (
     <motion.div
