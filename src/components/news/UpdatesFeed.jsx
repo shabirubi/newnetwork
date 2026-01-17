@@ -26,11 +26,7 @@ export default function UpdatesFeed() {
       </div>
 
       {/* Feed - Scrollable with animations */}
-      <motion.div 
-        className="max-h-[600px] overflow-y-auto space-y-0"
-        animate={{ rotate: 360 }}
-        transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
-      >
+      <div className="max-h-[600px] overflow-y-auto space-y-0">
         {breakingNews.slice(0, 8).map((article, index) => (
           <motion.div
             key={article.id}
@@ -90,7 +86,7 @@ export default function UpdatesFeed() {
             </Link>
           </motion.div>
         ))}
-      </motion.div>
+      </div>
 
       {/* Footer */}
       <Link 
