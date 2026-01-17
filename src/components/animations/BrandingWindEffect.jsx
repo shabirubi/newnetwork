@@ -4,16 +4,22 @@ import { motion } from "framer-motion";
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png";
 
 export default function BrandingWindEffect() {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
-    // Show effect every 30 seconds
+    // Hide after 4 seconds on first load
+    const hideTimer = setTimeout(() => setIsVisible(false), 4000);
+
+    // Show effect every 30 seconds after that
     const interval = setInterval(() => {
       setIsVisible(true);
-      setTimeout(() => setIsVisible(false), 5000);
+      setTimeout(() => setIsVisible(false), 4000);
     }, 30000);
 
-    return () => clearInterval(interval);
+    return () => {
+      clearTimeout(hideTimer);
+      clearInterval(interval);
+    };
   }, []);
 
   if (!isVisible) return null;
