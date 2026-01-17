@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 
-export default function ReporterChatModal({ reporter, article, onClose }) {
+export default function ReporterChatModal({ reporter, article, onClose, isOpen = true }) {
   const [message, setMessage] = useState("");
   const [conversation, setConversation] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -24,6 +24,8 @@ export default function ReporterChatModal({ reporter, article, onClose }) {
   const queryClient = useQueryClient();
 
   const [currentUser, setCurrentUser] = useState(null);
+
+  if (!isOpen) return null;
 
   useEffect(() => {
     const getUser = async () => {
