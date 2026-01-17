@@ -31,6 +31,10 @@ import TestimonialsSection from "../components/home/TestimonialsSection";
 import TikTokNewsContainer from "../components/home/TikTokNewsContainer";
 import TrendingTopicsContainer from "../components/home/TrendingTopicsContainer";
 import NewsletterSignup from "../components/home/NewsletterSignup";
+import ReportersSpotlight from "../components/home/ReportersSpotlight";
+import BreakingNewsWidget from "../components/home/BreakingNewsWidget";
+import ExpertAnalysisContainer from "../components/home/ExpertAnalysisContainer";
+import NewsStatisticsDashboard from "../components/home/NewsStatisticsDashboard";
 
 
 export default function Home() {
@@ -257,6 +261,18 @@ export default function Home() {
 
       {/* TikTok News Container */}
       <TikTokNewsContainer />
+
+      {/* Breaking News Widget */}
+      <BreakingNewsWidget />
+
+      {/* Reporters Spotlight */}
+      <ReportersSpotlight />
+
+      {/* Expert Analysis */}
+      <ExpertAnalysisContainer />
+
+      {/* News Statistics Dashboard */}
+      <NewsStatisticsDashboard />
 
       {/* Newsletter Signup */}
       <NewsletterSignup />
