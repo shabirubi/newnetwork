@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { motion } from "framer-motion";
-import { Tv, Play } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Tv, Play, X } from "lucide-react";
 
 const PLUTO_TV_CHANNELS = [
   { id: "andromeda-it", name: "Andromeda", genre: "sci-fi", streamUrl: "https://stitcher-ipv4.pluto.tv/v1/stitch/embed/hls/channel/60802d37ee238e0007c94e64/master.m3u8?advertisingId={PSID}&appVersion=unknown&deviceDNT={TARGETOPT}&deviceId={PSID}&deviceLat=0&deviceLon=0&deviceMake=samsung&deviceModel=samsung&deviceType=samsung-tvplus&deviceVersion=unknown&embedPartner=samsung-tvplus&profileFloor=&profileLimit=&samsung_app_domain={APP_DOMAIN}&samsung_app_name={APP_NAME}&us_privacy=1YNY" },
@@ -124,45 +124,50 @@ export default function PlutoTVChannelsContainer() {
       </div>
 
       {/* Pluto TV Player Modal */}
-      {selectedChannel && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
-          onClick={() => setSelectedChannel(null)}
-        >
+      <AnimatePresence>
+        {selectedChannel && (
           <motion.div
-            initial={{ scale: 0.9 }}
-            animate={{ scale: 1 }}
-            onClick={(e) => e.stopPropagation()}
-            className="w-full max-w-4xl bg-black rounded-2xl overflow-hidden shadow-2xl"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
+            onClick={() => setSelectedChannel(null)}
           >
-            {/* Header */}
-            <div className="bg-gradient-to-r from-gray-900 to-gray-800 p-4 flex items-center justify-between">
-              <div>
-                <h3 className="text-white font-bold text-lg">{selectedChannel.name}</h3>
-                <p className="text-gray-400 text-sm capitalize">{selectedChannel.genre}</p>
+            <motion.div
+              initial={{ scale: 0.9 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.9 }}
+              onClick={(e) => e.stopPropagation()}
+              className="w-full max-w-6xl bg-black rounded-2xl overflow-hidden shadow-2xl"
+            >
+              {/* Header */}
+              <div className="bg-gradient-to-r from-gray-900 to-gray-800 p-4 flex items-center justify-between">
+                <div>
+                  <h3 className="text-white font-bold text-lg">{selectedChannel.name}</h3>
+                  <p className="text-gray-400 text-sm capitalize">{selectedChannel.genre}</p>
+                </div>
+                <button
+                  onClick={() => setSelectedChannel(null)}
+                  className="text-white hover:text-red-500 transition-colors p-2 rounded-full hover:bg-gray-800"
+                >
+                  <X className="w-5 h-5" />
+                </button>
               </div>
-              <button
-                onClick={() => setSelectedChannel(null)}
-                className="text-white hover:text-red-500 transition-colors p-2"
-              >
-                ✕
-              </button>
-            </div>
 
-            {/* Player */}
-            <div className="relative w-full aspect-video bg-black">
-              <iframe
-                src={selectedChannel.streamUrl}
-                allowFullScreen
-                className="w-full h-full"
-              />
-            </div>
+              {/* Player */}
+              <div className="relative w-full" style={{ aspectRatio: '16 / 9' }}>
+                <iframe
+                  src={selectedChannel.streamUrl}
+                  allow="fullscreen"
+                  allowFullScreen
+                  frameBorder="0"
+                  className="w-full h-full"
+                />
+              </div>
+            </motion.div>
           </motion.div>
-        </motion.div>
-      )}
+        )}
+      </AnimatePresence>
     </section>
   );
 }
