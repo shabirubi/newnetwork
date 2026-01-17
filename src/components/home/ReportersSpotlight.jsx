@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
-import { Award, Users, TrendingUp, ExternalLink, MessageSquare, Eye } from "lucide-react";
+import { Award, Users, TrendingUp, ExternalLink, MessageSquare, Eye, ChevronLeft, ChevronRight } from "lucide-react";
 
 export default function ReportersSpotlight() {
   const [selectedReporter, setSelectedReporter] = useState(null);
+  const [currentIndex, setCurrentIndex] = useState(0);
 
   const { data: reporters = [] } = useQuery({
     queryKey: ['reporters-spotlight'],
@@ -14,6 +15,15 @@ export default function ReportersSpotlight() {
   });
 
   const topReporters = reporters.slice(0, 6);
+  const otherReporters = topReporters.slice(1, 7);
+  
+  const nextSlide = () => {
+    setCurrentIndex((prev) => (prev + 1) % otherReporters.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentIndex((prev) => (prev - 1 + otherReporters.length) % otherReporters.length);
+  };
 
   return (
     <section className="px-4 sm:px-4 mt-8">
@@ -95,49 +105,90 @@ export default function ReportersSpotlight() {
           </motion.div>
         )}
 
-        {/* Right - Other Reporters Grid */}
+        {/* Right - Carousel */}
         <div className="lg:col-span-2">
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            {topReporters.slice(1, 7).map((reporter, idx) => (
-              <motion.div
-                key={reporter.id}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: idx * 0.08 }}
-                whileHover={{ y: -5 }}
-                className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-4 border border-gray-700 hover:border-[#E31E24]/50 transition-all cursor-pointer group"
-                onClick={() => setSelectedReporter(reporter)}
-              >
-                <div className="flex items-start gap-3 mb-3">
-                  <img
-                    src={reporter.image}
-                    alt={reporter.name}
-                    className="w-14 h-14 rounded-lg object-cover flex-shrink-0 group-hover:ring-2 ring-[#E31E24] transition-all"
-                  />
-                  <div className="flex-1 min-w-0">
-                    <h4 className="text-white font-bold text-sm">{reporter.name}</h4>
-                    <p className="text-[#E31E24] text-xs font-bold">{reporter.role}</p>
-                  </div>
-                </div>
-
-                {/* Specialty */}
-                <p className="text-gray-300 text-xs mb-3 line-clamp-2">
-                  {reporter.specialty}
-                </p>
-
-                {/* Categories */}
-                <div className="flex flex-wrap gap-1">
-                  {reporter.categories?.slice(0, 2).map((cat) => (
-                    <span
-                      key={cat}
-                      className="text-xs bg-gray-700 text-gray-200 px-1.5 py-0.5 rounded"
+          <div className="relative">
+            <div className="overflow-hidden">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentIndex}
+                  initial={{ opacity: 0, x: 100 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -100 }}
+                  transition={{ duration: 0.3 }}
+                  className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+                >
+                  {otherReporters.slice(currentIndex, currentIndex + 2).map((reporter, idx) => (
+                    <motion.div
+                      key={reporter.id}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: idx * 0.1 }}
+                      whileHover={{ y: -5 }}
+                      className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-4 border border-gray-700 hover:border-[#E31E24]/50 transition-all cursor-pointer group"
+                      onClick={() => setSelectedReporter(reporter)}
                     >
-                      {cat}
-                    </span>
+                      <div className="flex items-start gap-3 mb-3">
+                        <img
+                          src={reporter.image}
+                          alt={reporter.name}
+                          className="w-14 h-14 rounded-lg object-cover flex-shrink-0 group-hover:ring-2 ring-[#E31E24] transition-all"
+                        />
+                        <div className="flex-1 min-w-0">
+                          <h4 className="text-white font-bold text-sm">{reporter.name}</h4>
+                          <p className="text-[#E31E24] text-xs font-bold">{reporter.role}</p>
+                        </div>
+                      </div>
+
+                      {/* Specialty */}
+                      <p className="text-gray-300 text-xs mb-3 line-clamp-2">
+                        {reporter.specialty}
+                      </p>
+
+                      {/* Categories */}
+                      <div className="flex flex-wrap gap-1">
+                        {reporter.categories?.slice(0, 2).map((cat) => (
+                          <span
+                            key={cat}
+                            className="text-xs bg-gray-700 text-gray-200 px-1.5 py-0.5 rounded"
+                          >
+                            {cat}
+                          </span>
+                        ))}
+                      </div>
+                    </motion.div>
                   ))}
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              </AnimatePresence>
+            </div>
+
+            {/* Navigation Buttons */}
+            <button
+              onClick={prevSlide}
+              className="absolute -left-4 top-1/2 -translate-y-1/2 z-10 bg-[#E31E24] hover:bg-red-700 text-white p-2 rounded-full transition-all"
+            >
+              <ChevronLeft className="w-5 h-5" />
+            </button>
+            <button
+              onClick={nextSlide}
+              className="absolute -right-4 top-1/2 -translate-y-1/2 z-10 bg-[#E31E24] hover:bg-red-700 text-white p-2 rounded-full transition-all"
+            >
+              <ChevronRight className="w-5 h-5" />
+            </button>
+
+            {/* Indicators */}
+            <div className="flex justify-center gap-2 mt-4">
+              {Array.from({ length: Math.ceil(otherReporters.length / 2) }).map((_, idx) => (
+                <motion.button
+                  key={idx}
+                  onClick={() => setCurrentIndex(idx * 2)}
+                  className={`h-2 rounded-full transition-all ${
+                    idx === Math.floor(currentIndex / 2) ? 'bg-[#E31E24] w-8' : 'bg-gray-600 w-2'
+                  }`}
+                  whileHover={{ scale: 1.2 }}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </div>
