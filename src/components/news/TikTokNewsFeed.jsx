@@ -60,6 +60,14 @@ export default function TikTokNewsFeed({ articles: propArticles }) {
     }
   }, [currentIndex, loadedCount]);
 
+  // Auto-scroll through articles
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex(prev => (prev + 1) % articles.length);
+    }, 6000);
+    return () => clearInterval(interval);
+  }, [articles.length]);
+
   const handleTouchStart = (e) => {
     setTouchStart(e.targetTouches[0].clientY);
   };
