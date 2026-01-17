@@ -21,12 +21,27 @@ export default function BroadcastStrip() {
         transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
       >
         {displayItems.map((item, idx) => (
-          <span key={`${item.id}-${idx}`} className="text-gray-400 flex-shrink-0">
+          <span key={`${item.id}-${idx}`} className="flex-shrink-0 font-bold animate-pulse" style={{
+            backgroundImage: 'linear-gradient(90deg, #E31E24, #FCD34D, #E31E24)',
+            backgroundSize: '200% 100%',
+            animation: 'gradientShift 3s ease-in-out infinite',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+            textShadow: '0 0 20px rgba(227, 30, 36, 0.8), 0 0 10px rgba(252, 211, 77, 0.6)',
+            filter: 'drop-shadow(0 0 8px rgba(227, 30, 36, 0.6)) drop-shadow(0 0 4px rgba(252, 211, 77, 0.4))'
+          }}>
             {item.is_live && <span className="text-red-500 font-bold">● </span>}
             {item.title} • {item.start_time}
           </span>
         ))}
       </motion.div>
+      <style>{`
+        @keyframes gradientShift {
+          0%, 100% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+        }
+      `}</style>
     </div>
   );
 }
