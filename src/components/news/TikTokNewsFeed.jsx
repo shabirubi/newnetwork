@@ -6,6 +6,7 @@ import { TrendingUp, Clock, Share2, Bookmark, Eye, ChevronUp } from "lucide-reac
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../../utils";
 import moment from "moment";
+import BroadcastStrip from "./BroadcastStrip";
 
 const categoryColors = {
   breaking: "bg-[#E31E24] text-white",
@@ -112,14 +113,16 @@ export default function TikTokNewsFeed({ articles: propArticles }) {
   }
 
   return (
-    <section 
-      ref={containerRef}
-      className="relative h-screen overflow-hidden bg-black"
-      onWheel={handleWheel}
-      onTouchStart={handleTouchStart}
-      onTouchMove={handleTouchMove}
-      onTouchEnd={handleTouchEnd}
-    >
+    <section className="relative bg-black">
+      <BroadcastStrip />
+      <section 
+        ref={containerRef}
+        className="relative h-screen overflow-hidden bg-black"
+        onWheel={handleWheel}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
       {/* News Cards */}
       <AnimatePresence mode="wait">
         {articles.slice(currentIndex, currentIndex + 1).map((article, idx) => (
@@ -238,6 +241,7 @@ export default function TikTokNewsFeed({ articles: propArticles }) {
           <ChevronUp className="w-5 h-5" />
         </motion.div>
       )}
+      </section>
     </section>
   );
 }
