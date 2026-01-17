@@ -29,19 +29,25 @@ export default function ReporterChatModal({ reporter, article, onClose, isOpen =
     getUser();
   }, []);
 
-  const { data: chatMessages = [] } = useQuery({
+  const { data: chatMessages = [], refetch } = useQuery({
     queryKey: ['reporter-chat', reporter?.id, article?.id],
     queryFn: async () => {
       const msgs = await base44.entities.ReporterChat.filter({
         reporter_id: reporter.id,
         article_id: article?.id || null
       }, '-created_date', 100);
-      return msgs;
+      return msgs.reverse();
     },
     enabled: !!reporter,
-    refetchInterval: 2000,
+    refetchInterval: 1500,
     refetchOnMount: true
   });
+
+  useEffect(() => {
+    const handleRefresh = () => refetch();
+    window.addEventListener('refreshChat', handleRefresh);
+    return () => window.removeEventListener('refreshChat', handleRefresh);
+  }, [refetch]);
 
 
 
@@ -53,16 +59,24 @@ export default function ReporterChatModal({ reporter, article, onClose, isOpen =
     setIsProcessing(true);
 
     try {
-      await base44.entities.ReporterChat.create({
-        reporter_id: reporter.id,
-        reporter_name: reporter.name,
-        article_id: article?.id || null,
-        user_email: currentUser.email,
-        user_name: currentUser.full_name,
-        message: userMessage,
-        sender_type: "user"
+      const response = await base44.functions.invoke('generateReporterResponse', {
+        reporterId: reporter.id,
+        reporterName: reporter.name,
+        reporterSpecialty: reporter.specialty,
+        message: userMessage
       });
-      inputRef.current?.focus();
+
+      if (response.data?.success) {
+        // Refetch messages to show the new response
+        setTimeout(() => {
+          const event = new CustomEvent('refreshChat');
+          window.dispatchEvent(event);
+        }, 500);
+        inputRef.current?.focus();
+      } else {
+        toast.error("שגיאה בקבלת תשובה");
+        setMessage(userMessage);
+      }
     } catch (err) {
       console.error("Error sending message:", err);
       toast.error("שגיאה בשליחת ההודעה");
