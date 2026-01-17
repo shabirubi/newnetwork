@@ -199,16 +199,22 @@ export default function Home() {
           { category: 'politics', label: 'פוליטיקה' }
         ].map(({ category, label }) => {
           const categoryArticles = articles.filter(a => a.category === category).slice(0, 4);
-          return categoryArticles.length > 0 ? (
+          return (
             <div key={category}>
               <h3 className="text-xl font-bold dark:text-white mb-4">{label}</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                {categoryArticles.map((article) => (
-                  <NewsCard key={article.id} article={article} />
-                ))}
+                {categoryArticles.length > 0 ? (
+                  categoryArticles.map((article) => (
+                    <NewsCard key={article.id} article={article} />
+                  ))
+                ) : (
+                  <div className="col-span-full text-center text-gray-400 py-8">
+                    אין חדשות זמינות בקטגוריה זו כרגע
+                  </div>
+                )}
               </div>
             </div>
-          ) : null;
+          );
         })}
       </section>
 
