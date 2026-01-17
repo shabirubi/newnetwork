@@ -26,14 +26,28 @@ export default function UpdatesFeed() {
       </div>
 
       {/* Feed - Scrollable with animations */}
-      <div className="max-h-[600px] overflow-y-auto space-y-0">
+      <div className="max-h-[600px] overflow-y-auto space-y-0 relative">
+        <svg className="absolute inset-0 w-full h-full pointer-events-none opacity-5" viewBox="0 0 400 600">
+          <circle cx="200" cy="300" r="180" fill="none" stroke="currentColor" strokeWidth="2" />
+          {[...Array(12)].map((_, i) => {
+            const angle = (i / 12) * Math.PI * 2;
+            const x = 200 + 180 * Math.cos(angle);
+            const y = 300 + 180 * Math.sin(angle);
+            return <circle key={i} cx={x} cy={y} r="8" fill="currentColor" />;
+          })}
+        </svg>
+        
         {breakingNews.slice(0, 8).map((article, index) => (
           <motion.div
             key={article.id}
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: index * 0.1 }}
-            className="border-b border-gray-800 hover:bg-gray-900/50 transition-all group"
+            className="border-b border-gray-800 hover:bg-gray-900/50 transition-all group relative z-10"
+            style={{
+              transform: `rotate(${(index / 8) * 360}deg)`,
+              transformOrigin: 'center'
+            }}
             >
             <Link 
               to={createPageUrl(`Article?id=${article.id}`)}
