@@ -92,11 +92,6 @@ export default function VODModal({ isOpen, onClose }) {
          animate={{ opacity: 1 }}
          exit={{ opacity: 0 }}
          className="fixed inset-0 z-[105] bg-gradient-to-br from-gray-950 via-black to-gray-950"
-         onClick={(e) => {
-           if (e.target === e.currentTarget && !selectedContent) {
-             onClose();
-           }
-         }}
        >
         {/* Close Button */}
         <button
