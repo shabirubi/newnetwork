@@ -2,7 +2,7 @@ import React from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
-import { Radio, TrendingUp, Clock, ChevronLeft, Flame, Zap, Target, Shield, DollarSign, Landmark, Cpu, Trophy, Clapperboard, Globe, Heart, Tv, Newspaper } from "lucide-react";
+import { Radio, TrendingUp, Clock, ChevronLeft, Flame, Zap, Target, Shield, DollarSign, Landmark, Cpu, Trophy, Clapperboard, Globe, Heart, Tv, Newspaper, MessageCircle } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
 import { Button } from "@/components/ui/button";
@@ -88,8 +88,22 @@ export default function Home() {
       <AutoChannelsUpdater />
       
       {/* Floating Action Buttons - Left Side Column */}
-      <div className="fixed left-4 sm:left-6 bottom-24 z-50 flex flex-col gap-4">
-        {/* VOD Button */}
+            <div className="fixed left-4 sm:left-6 bottom-24 z-50 flex flex-col gap-4">
+              {/* Chat Button */}
+              <motion.button
+                onClick={() => window.dispatchEvent(new CustomEvent('openReporterChat'))}
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ duration: 0.3, delay: -0.1 }}
+                className="group relative bg-gradient-to-br from-blue-600 to-blue-700 rounded-full p-4 sm:p-3.5 shadow-2xl border-2 border-white/30 hover:border-white/50 transition-all"
+                title="צ'אט עם הכתבים"
+              >
+                <MessageCircle className="w-6 h-6 sm:w-5 sm:h-5 text-white" />
+              </motion.button>
+
+              {/* VOD Button */}
         <motion.button
           onClick={() => setVodModalOpen(true)}
           initial={{ opacity: 0, scale: 0.5 }}
