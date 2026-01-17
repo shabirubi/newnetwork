@@ -16,12 +16,12 @@ export default function BroadcastStrip() {
   return (
     <div className="bg-gradient-to-r from-gray-900 via-black to-gray-900 overflow-hidden border-b border-red-900/20 h-6">
       <motion.div
-        className="flex gap-8 whitespace-nowrap h-full items-center text-xs"
+        className="flex gap-8 whitespace-nowrap h-full items-center text-lg"
         animate={{ x: [0, -1000] }}
         transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
       >
         {displayItems.map((item, idx) => (
-          <span key={`${item.id}-${idx}`} className="flex-shrink-0 font-bold animate-pulse" style={{
+          <span key={`${item.id}-${idx}`} className="flex-shrink-0 font-bold animate-pulse text-base" style={{
             backgroundImage: 'linear-gradient(90deg, #E31E24, #FCD34D, #E31E24)',
             backgroundSize: '200% 100%',
             animation: 'gradientShift 3s ease-in-out infinite',
