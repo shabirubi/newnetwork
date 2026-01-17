@@ -27,7 +27,6 @@ import VODModal from "../components/vod/VODModal";
 export default function Home() {
   const [vodModalOpen, setVodModalOpen] = React.useState(false);
   const [categoriesMenuOpen, setCategoriesMenuOpen] = React.useState(false);
-  const [reporterDrawerOpen, setReporterDrawerOpen] = React.useState(false);
   const [selectedChannel, setSelectedChannel] = React.useState(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('selectedChannel') || 'all';
@@ -104,21 +103,7 @@ export default function Home() {
           <Tv className="w-6 h-6 sm:w-5 sm:h-5 text-white" />
         </motion.button>
 
-        {/* Reporter Chat Button */}
-        <motion.button
-          onClick={() => setReporterDrawerOpen(true)}
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-          transition={{ duration: 0.3, delay: 0.1 }}
-          className="group relative bg-gradient-to-br from-blue-600 to-blue-700 rounded-full p-4 sm:p-3.5 shadow-2xl border-2 border-white/30 hover:border-white/50 transition-all"
-          title="צ'אט עם הכתבים"
-        >
-          <svg className="w-6 h-6 sm:w-5 sm:h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12h-8v-2h8v2zm0-4h-8V8h8v2z"/>
-          </svg>
-        </motion.button>
+
 
         {/* Categories Button */}
         <motion.button
@@ -215,8 +200,8 @@ export default function Home() {
       {/* Categories Menu Modal */}
       <CategoriesMenu isOpen={categoriesMenuOpen} onClose={() => setCategoriesMenuOpen(false)} />
 
-      {/* Reporter Drawer Modal */}
-      <ReporterChatButton isOpen={reporterDrawerOpen} onClose={() => setReporterDrawerOpen(false)} />
+      {/* Reporter Chat Button */}
+      <ReporterChatButton />
 
       {/* CTA Section */}
       <section className="bg-[#E31E24] rounded-2xl p-8 text-white text-center">
