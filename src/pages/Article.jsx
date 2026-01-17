@@ -213,7 +213,7 @@ export default function Article() {
         transition={{ delay: 0.2 }}
         className="prose prose-lg max-w-none mb-12"
       >
-        <div className="text-gray-800 leading-relaxed text-lg whitespace-pre-wrap">
+        <div className="text-white dark:text-white leading-relaxed text-lg whitespace-pre-wrap">
           {article.content}
         </div>
       </motion.div>
