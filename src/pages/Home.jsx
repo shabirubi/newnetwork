@@ -10,8 +10,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 import LivePlayer from "../components/news/LivePlayer";
 import NewsCard from "../components/news/NewsCard";
-import ReportersFeed from "../components/news/ReportersFeed";
 import UpdatesFeed from "../components/news/UpdatesFeed";
+import ReporterChatButton from "../components/reporter/ReporterChatButton";
 import VideoHighlights from "../components/news/VideoHighlights";
 import LiveStats from "../components/news/LiveStats";
 import AutoNewsUpdater from "../components/news/AutoNewsUpdater";
@@ -141,14 +141,9 @@ export default function Home() {
         </aside>
 
         {/* Center - TikTok News Feed */}
-        <div className="lg:col-span-8">
+        <div className="lg:col-span-10">
           <TikTokNewsFeed articles={articles} />
         </div>
-
-        {/* Left Sidebar - Reporters Feed */}
-        <aside className="lg:col-span-2 hidden lg:block">
-          <ReportersFeed />
-        </aside>
       </section>
 
       {/* Live Player Section */}
@@ -191,13 +186,13 @@ export default function Home() {
         </section>
       )}
 
-      {/* Mobile Only - Reporters Feed Below Player */}
-      <section className="sm:hidden px-4 py-4">
-        <ReportersFeed />
-      </section>
+
 
       {/* VOD Modal */}
       <VODModal isOpen={vodModalOpen} onClose={() => setVodModalOpen(false)} />
+
+      {/* Reporter Chat Button */}
+      <ReporterChatButton />
 
       {/* CTA Section */}
       <section className="bg-[#E31E24] rounded-2xl p-8 text-white text-center">
