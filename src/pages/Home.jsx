@@ -11,6 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import LivePlayer from "../components/news/LivePlayer";
 import NewsCard from "../components/news/NewsCard";
 import UpdatesFeed from "../components/news/UpdatesFeed";
+import EntertainmentUpdatesFeed from "../components/news/EntertainmentUpdatesFeed";
 import ReporterChatButton from "../components/reporter/ReporterChatButton";
 import VideoHighlights from "../components/news/VideoHighlights";
 import LiveStats from "../components/news/LiveStats";
@@ -135,15 +136,20 @@ export default function Home() {
 
       {/* Hero Section - TikTok News Feed */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-0 -mx-0 sm:mx-0 px-0 sm:px-4 bg-black">
+        {/* Left Sidebar - Entertainment Updates Feed */}
+        <aside className="lg:col-span-3 hidden lg:block bg-black">
+          <EntertainmentUpdatesFeed />
+        </aside>
+
+        {/* Center - TikTok News Feed */}
+        <div className="lg:col-span-6">
+          <TikTokNewsFeed articles={articles} />
+        </div>
+
         {/* Right Sidebar - Updates Feed */}
         <aside className="lg:col-span-3 hidden lg:block bg-black">
           <UpdatesFeed />
         </aside>
-
-        {/* Center - TikTok News Feed */}
-        <div className="lg:col-span-9">
-          <TikTokNewsFeed articles={articles} />
-        </div>
       </section>
 
       {/* Live Player Section */}
