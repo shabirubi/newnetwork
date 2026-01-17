@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
@@ -7,6 +7,8 @@ import ReporterCardModal from "./ReporterCardModal";
 
 export default function ReportersTickerStrip() {
   const [selectedReporter, setSelectedReporter] = useState(null);
+  const [dragX, setDragX] = useState(0);
+  const containerRef = useRef(null);
 
   const { data: reporters = [] } = useQuery({
     queryKey: ['reporters-ticker'],
@@ -23,15 +25,25 @@ export default function ReportersTickerStrip() {
   // Calculate duration based on number of reporters to maintain consistent speed
   const duration = reporters.length * 3.5;
 
+  const handleDrag = (e, info) => {
+    if (Math.abs(info.delta.x) > 5) {
+      setDragX(info.offset.x);
+    }
+  };
+
   return (
     <>
-      <div className="bg-gradient-to-r from-black/60 via-black/40 to-black/60 overflow-hidden border-b border-[#E31E24]/20 py-2 backdrop-blur-md">
+      <div ref={containerRef} className="bg-gradient-to-r from-black/60 via-black/40 to-black/60 overflow-hidden border-b border-[#E31E24]/20 py-2 backdrop-blur-md" style={{ touchAction: 'pan-y' }}>
         <motion.div 
-        className="flex gap-2 items-center px-2"
-        initial={{ x: 0 }}
-        animate={{ x: `-${(reporters.length / displayReporters.length) * 100}%` }}
-        transition={{ duration, repeat: Infinity, ease: "linear", repeatType: "loop" }}
-      >
+          className="flex gap-2 items-center px-2"
+          drag="x"
+          dragElastic={0.2}
+          onDrag={handleDrag}
+          dragConstraints={{ left: -500, right: 500 }}
+          initial={{ x: 0 }}
+          animate={{ x: dragX > 0 ? dragX : `-${(reporters.length / displayReporters.length) * 100}%` }}
+          transition={dragX === 0 ? { duration, repeat: Infinity, ease: "linear", repeatType: "loop" } : undefined}
+        >
         {displayReporters.map((reporter, idx) => (
           <motion.div
             key={`${reporter.id}-${idx}`}
