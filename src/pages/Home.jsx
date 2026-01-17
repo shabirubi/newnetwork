@@ -134,14 +134,14 @@ export default function Home() {
       </motion.button>
 
       {/* Hero Section - TikTok News Feed */}
-      <section className="grid grid-cols-1 lg:grid-cols-12 gap-0 sm:gap-3 -mx-0 sm:mx-0 px-0 sm:px-4">
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-0 -mx-0 sm:mx-0 px-0 sm:px-4">
         {/* Right Sidebar - Updates Feed */}
-        <aside className="lg:col-span-2 hidden lg:block">
+        <aside className="lg:col-span-3 hidden lg:block">
           <UpdatesFeed />
         </aside>
 
         {/* Center - TikTok News Feed */}
-        <div className="lg:col-span-10">
+        <div className="lg:col-span-9">
           <TikTokNewsFeed articles={articles} />
         </div>
       </section>
