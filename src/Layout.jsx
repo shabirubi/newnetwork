@@ -103,7 +103,7 @@ export default function Layout({ children }) {
       </div>
 
       {/* Breaking News Ticker */}
-      <NewsTicker darkMode={darkMode} setDarkMode={setDarkMode} />
+      <NewsTicker darkMode={darkMode} setDarkMode={setDarkMode} onMenuClick={() => setCategoriesSidebarOpen(true)} />
 
       {/* Reporters Ticker Strip */}
       <ReportersTickerStrip />
