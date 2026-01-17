@@ -1,7 +1,7 @@
 import React from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Type, Contrast } from "lucide-react";
-import useAccessibility from "../../hooks/useAccessibility";
+import useAccessibility from "./useAccessibility";
 
 export default function AccessibilityPanel({ isOpen, onClose }) {
   const { settings, setSettings } = useAccessibility();
