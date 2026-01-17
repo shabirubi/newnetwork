@@ -12,6 +12,8 @@ import NewsTicker from "./components/header/NewsTicker";
 import ReportersTickerStrip from "./components/header/ReportersTickerStrip";
 import ReportersModal from "./components/reporter/ReportersModal";
 import AIAnnouncer from "./components/news/AIAnnouncer";
+import RightSidebarUpdates from "./components/sidebar/RightSidebarUpdates";
+import LeftSidebarCategories from "./components/sidebar/LeftSidebarCategories";
 
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png";
 
@@ -62,7 +64,7 @@ export default function Layout({ children }) {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300" dir="rtl">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300 flex flex-col" dir="rtl">
       <style>{`
         :root {
           --primary: #E31E24;
@@ -290,10 +292,19 @@ export default function Layout({ children }) {
         )}
       </AnimatePresence>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-0 sm:px-4 py-0 sm:py-6 pb-16 sm:pb-24 lg:pb-6">
-        {children}
-      </main>
+      {/* Content with Sidebars */}
+      <div className="flex flex-1">
+        {/* Left Sidebar */}
+        <LeftSidebarCategories />
+
+        {/* Main Content */}
+        <main className="flex-1 px-0 sm:px-4 py-0 sm:py-6 pb-16 sm:pb-24 lg:pb-6 max-w-7xl mx-auto">
+          {children}
+        </main>
+
+        {/* Right Sidebar */}
+        <RightSidebarUpdates />
+      </div>
 
       {/* Mobile Bottom Navigation */}
       <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 z-50 safe-area-inset-bottom shadow-lg">
