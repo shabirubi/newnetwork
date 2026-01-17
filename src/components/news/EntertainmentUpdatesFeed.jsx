@@ -103,7 +103,7 @@ export default function EntertainmentUpdatesFeed() {
             </Link>
           </motion.div>
         ))}
-      </div>
+      </motion.div>
 
       {/* Footer */}
       <Link 
