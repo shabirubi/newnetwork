@@ -1,27 +1,60 @@
-import React from 'react';
-import { AlertCircle } from 'lucide-react';
+import React, { useEffect, useRef } from 'react';
 
 export default function PlutoTVPlayer({ streamUrl }) {
-  // Pluto TV requires special handling with Shaka Player for DRM protection
-  // The best way is to use a proxy service or direct embed
-  
+  const videoRef = useRef(null);
+
+  useEffect(() => {
+    if (!streamUrl || !videoRef.current) return;
+
+    const video = videoRef.current;
+    let hls = null;
+
+    const loadStream = async () => {
+      try {
+        // Check if we can use hls.js
+        const { default: HLS } = await import('hls.js');
+        
+        if (HLS.isSupported()) {
+          hls = new HLS({
+            debug: false,
+            enableWorker: true,
+            lowLatencyMode: true,
+          });
+
+          hls.loadSource(streamUrl);
+          hls.attachMedia(video);
+
+          hls.on(HLS.Events.MANIFEST_PARSED, () => {
+            video.play().catch(err => console.log('Autoplay blocked:', err));
+          });
+
+          hls.on(HLS.Events.ERROR, (event, data) => {
+            console.error('HLS error:', data);
+          });
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+          // Native HLS (Safari/iOS)
+          video.src = streamUrl;
+          video.play().catch(err => console.log('Autoplay blocked:', err));
+        }
+      } catch (error) {
+        console.error('Failed to load stream:', error);
+      }
+    };
+
+    loadStream();
+
+    return () => {
+      if (hls) hls.destroy();
+    };
+  }, [streamUrl]);
+
   return (
-    <div className="w-full h-full bg-black flex flex-col items-center justify-center text-white p-6">
-      <AlertCircle className="w-12 h-12 mb-4 text-yellow-500" />
-      <p className="text-center mb-4">
-        הערוץ זמין ב-Pluto TV ישירות
-      </p>
-      <a
-        href={`https://www.pluto.tv/`}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="bg-red-600 hover:bg-red-700 px-6 py-3 rounded-lg font-bold transition-colors"
-      >
-        פתח ב-Pluto TV
-      </a>
-      <p className="text-gray-400 text-sm mt-4 max-w-md text-center">
-        Pluto TV שומר על זכויות הטלוויזיה שלו ודורש נגן מיוחד. בקרו ישירות ב-Pluto TV כדי לצפות בערוצים.
-      </p>
-    </div>
+    <video
+      ref={videoRef}
+      controls
+      autoPlay
+      muted
+      className="w-full h-full bg-black"
+    />
   );
 }
