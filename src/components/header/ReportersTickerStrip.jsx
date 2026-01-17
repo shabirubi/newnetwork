@@ -27,12 +27,10 @@ export default function ReportersTickerStrip() {
       </div>
 
       <div className="flex-1 overflow-hidden">
-        <motion.div
-          className="flex gap-6 h-full items-center"
-          animate={{ x: -10000 }}
-          transition={{ duration: 120, repeat: Infinity, ease: "linear" }}
-        >
-          {displayReporters.map((reporter, idx) => (
+        <div
+                  className="flex gap-6 h-full items-center overflow-x-auto"
+                >
+                  {reporters.map((reporter, idx) => (
             <div
               key={`${reporter.id}-${idx}`}
               className="flex-shrink-0 flex items-center gap-3 px-4 py-2 bg-gray-800/50 rounded-lg border border-purple-500/30 hover:border-purple-500/60 transition-all cursor-pointer group"
