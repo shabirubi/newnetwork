@@ -228,11 +228,11 @@ export default function VODModal({ isOpen, onClose }) {
                       <img 
                         src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png"
                         alt="הרשת החדשה"
-                        className="w-12 h-12 lg:w-16 lg:h-16 drop-shadow-2xl"
+                        className="w-8 h-8 lg:w-10 lg:h-10 drop-shadow-2xl"
                       />
                       <div>
-                        <h3 className="text-white font-bold text-sm lg:text-lg">הרשת החדשה</h3>
-                        <p className="text-red-500 text-xs lg:text-sm font-bold">VOD - שידור חי</p>
+                        <h3 className="text-white font-bold text-sm lg:text-base">הרשת החדשה</h3>
+                        <p className="text-red-500 text-xs font-bold">VOD - שידור חי</p>
                       </div>
                     </div>
                     <div className="bg-red-600 px-3 py-1 lg:px-4 lg:py-2 rounded-full flex items-center gap-2 animate-pulse">
@@ -315,11 +315,11 @@ export default function VODModal({ isOpen, onClose }) {
                     <img 
                       src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png"
                       alt="הרשת החדשה"
-                      className="w-16 h-16 lg:w-20 lg:h-20 drop-shadow-2xl"
+                      className="w-12 h-12 lg:w-14 lg:h-14 drop-shadow-2xl"
                     />
                     <div>
-                      <h3 className="text-white font-bold text-xl lg:text-2xl">הרשת החדשה</h3>
-                      <p className="text-red-500 text-sm lg:text-base font-bold">VOD - שידור חי</p>
+                      <h3 className="text-white font-bold text-lg lg:text-xl">הרשת החדשה</h3>
+                      <p className="text-red-500 text-sm font-bold">VOD - שידור חי</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-4">
@@ -404,7 +404,7 @@ export default function VODModal({ isOpen, onClose }) {
                                   />
                                 ) : (
                                   <div className="w-full h-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
-                                    <Tv className="w-20 h-20 text-gray-600" />
+                                    <Tv className="w-12 h-12 text-gray-600" />
                                   </div>
                                 )}
                                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
