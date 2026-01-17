@@ -87,54 +87,66 @@ export default function Home() {
       <AutoNewsUpdater />
       <AutoChannelsUpdater />
       
-      {/* VOD Floating Button - Rainbow Effect */}
-      <motion.button
-        onClick={() => setVodModalOpen(true)}
-        initial={{ opacity: 0, scale: 0.5 }}
-        animate={{ 
-          opacity: 1, 
-          scale: 1
-        }}
-        whileHover={{ scale: 1.05 }}
-        transition={{ duration: 0.3 }}
-        className="fixed bottom-24 left-4 sm:left-6 z-50 group flex flex-col items-center gap-1 bg-transparent border-none cursor-pointer"
-      >
-        {/* Rainbow Background Effect */}
-        <motion.div
-          animate={{
-            background: [
-              "linear-gradient(45deg, #ff0000, #ff7700)",
-              "linear-gradient(45deg, #ff7700, #ffdd00)",
-              "linear-gradient(45deg, #ffdd00, #00ff00)",
-              "linear-gradient(45deg, #00ff00, #0088ff)",
-              "linear-gradient(45deg, #0088ff, #8800ff)",
-              "linear-gradient(45deg, #8800ff, #ff00ff)",
-              "linear-gradient(45deg, #ff00ff, #ff0000)",
-            ]
-          }}
-          transition={{ duration: 3, repeat: Infinity }}
-          className="absolute top-0 left-1/2 -translate-x-1/2 rounded-full blur-3xl opacity-70 w-48 h-48 sm:w-40 sm:h-40"
-        />
-        
-        {/* Logo */}
-        <img 
-          src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png"
-          alt="VOD"
-          className="relative w-36 h-36 sm:w-28 sm:h-28 drop-shadow-2xl"
-        />
-        
-        {/* Text Button */}
-        <div className="relative bg-gradient-to-br from-red-600 via-purple-600 to-blue-600 px-4 py-2 rounded-xl shadow-lg border-2 border-white/30">
-          <div className="text-center">
-            <div className="text-white text-xs font-bold leading-tight">
-              עולם התוכן של
-            </div>
-            <div className="text-white text-xs font-bold leading-tight">
-              הרשת החדשה
-            </div>
-          </div>
-        </div>
-      </motion.button>
+      {/* Floating Action Buttons - Left Side Column */}
+      <div className="fixed left-4 sm:left-6 bottom-24 z-50 flex flex-col gap-4">
+        {/* VOD Button */}
+        <motion.button
+          onClick={() => setVodModalOpen(true)}
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          transition={{ duration: 0.3 }}
+          className="group relative bg-gradient-to-br from-red-600 via-purple-600 to-blue-600 rounded-full p-4 sm:p-3.5 shadow-2xl border-2 border-white/30 hover:border-white/50 transition-all"
+          title="עולם התוכן"
+        >
+          <Tv className="w-6 h-6 sm:w-5 sm:h-5 text-white" />
+        </motion.button>
+
+        {/* Reporter Chat Button */}
+        <motion.button
+          onClick={() => {}}
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          transition={{ duration: 0.3, delay: 0.1 }}
+          className="group relative bg-gradient-to-br from-blue-600 to-blue-700 rounded-full p-4 sm:p-3.5 shadow-2xl border-2 border-white/30 hover:border-white/50 transition-all"
+          title="צ'אט עם הכתבים"
+        >
+          <svg className="w-6 h-6 sm:w-5 sm:h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12h-8v-2h8v2zm0-4h-8V8h8v2z"/>
+          </svg>
+        </motion.button>
+
+        {/* Categories Button */}
+        <motion.button
+          onClick={() => setCategoriesMenuOpen(true)}
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          transition={{ duration: 0.3, delay: 0.2 }}
+          className="group relative bg-gradient-to-br from-red-600 to-red-700 rounded-full p-4 sm:p-3.5 shadow-2xl border-2 border-white/30 hover:border-white/50 transition-all"
+          title="קטגוריות חדשות"
+        >
+          <Newspaper className="w-6 h-6 sm:w-5 sm:h-5 text-white" />
+        </motion.button>
+
+        {/* Radio Button */}
+        <motion.button
+          onClick={() => window.location.href = createPageUrl("Live")}
+          initial={{ opacity: 0, scale: 0.5 }}
+          animate={{ opacity: 1, scale: 1 }}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          transition={{ duration: 0.3, delay: 0.3 }}
+          className="group relative bg-gradient-to-br from-red-700 to-red-800 rounded-full p-4 sm:p-3.5 shadow-2xl border-2 border-white/30 hover:border-white/50 transition-all animate-pulse"
+          title="שידור חי"
+        >
+          <Radio className="w-6 h-6 sm:w-5 sm:h-5 text-white" />
+        </motion.button>
+      </div>
 
       {/* Hero Section - TikTok News Feed */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-0 -mx-0 sm:mx-0 px-0 sm:px-4 bg-black">
