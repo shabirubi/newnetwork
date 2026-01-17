@@ -48,7 +48,7 @@ export default function EntertainmentUpdatesFeed() {
       <div className="max-h-[600px] overflow-hidden">
         <motion.div
           animate={{ y: [0, -1200] }}
-          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
           className="space-y-0"
         >
           {combined.map((article, index) => (
