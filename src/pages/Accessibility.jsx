@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
-import { AccessibilityIcon, Volume2, Eye, Keyboard, Zap, Users, ArrowRight, CheckCircle } from "lucide-react";
+import { AccessibilityIcon, Volume2, Eye, Keyboard, Zap, Users, ArrowRight, CheckCircle, Vibrate } from "lucide-react";
 import { motion } from "framer-motion";
+import { useHapticFeedback } from "../components/utils/useHapticFeedback";
 
 export default function Accessibility() {
+  const { isEnabled, setIsEnabled, tap } = useHapticFeedback();
   const features = [
     {
       icon: Eye,
@@ -41,6 +43,12 @@ export default function Accessibility() {
       title: "תמיכה במסכנים",
       description: "תאימות מלאה למסכנים ויישומי סיוע נגישות",
       items: ["NVDA תומך", "JAWS תומך", "VoiceOver תומך", "תיוגי ARIA"]
+    },
+    {
+      icon: Vibrate,
+      title: "חוויה לנייד",
+      description: "רטט וצלילים על מכשירים ניידים לחוויה טובה יותר",
+      items: ["רטט משוב", "צלילי הודעה", "ניתן להשבית", "עובד על כל הנייד"]
     }
   ];
 
@@ -103,6 +111,47 @@ export default function Accessibility() {
 
       {/* Content */}
       <div className="max-w-5xl mx-auto px-4 py-12">
+        {/* Haptic Settings */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-gradient-to-r from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 rounded-2xl p-8 mb-12 shadow-lg border-l-4 border-purple-600"
+        >
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+              <Vibrate className="w-6 h-6 text-purple-600" />
+              חוויה מנייד
+            </h2>
+            <button
+              onClick={() => {
+                setIsEnabled(!isEnabled);
+                tap();
+              }}
+              className={`relative inline-flex h-8 w-14 items-center rounded-full transition-colors ${
+                isEnabled ? 'bg-purple-600' : 'bg-gray-300'
+              }`}
+            >
+              <span
+                className={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform ${
+                  isEnabled ? 'translate-x-7' : 'translate-x-1'
+                }`}
+              />
+            </button>
+          </div>
+          <p className="text-gray-700 dark:text-gray-300 mb-4">
+            כאשר מופעל, תחוש רטט וצלילים קטנים כשתלחץ על כפתורים ויסתיים פעולות.
+          </p>
+          <div className="flex gap-3 flex-wrap">
+            <button
+              onClick={() => tap()}
+              disabled={!isEnabled}
+              className="px-4 py-2 bg-purple-600 text-white rounded-lg disabled:opacity-50 disabled:cursor-not-allowed hover:bg-purple-700 transition-colors"
+            >
+              נסה רטט
+            </button>
+          </div>
+        </motion.div>
+
         {/* Introduction */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
