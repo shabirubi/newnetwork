@@ -16,7 +16,9 @@ export default function UpdatesFeed() {
   });
 
   return (
-    <div className="sticky top-6 bg-black">
+    <div className="sticky top-6 bg-black" style={{
+      perspective: '1000px'
+    }}>
       {/* Header */}
       <div className="p-4 pb-3">
         <h2 className="font-bold text-lg text-white flex items-center gap-2">
