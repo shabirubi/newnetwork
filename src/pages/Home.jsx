@@ -190,6 +190,28 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Category News Section */}
+      <section className="px-4 sm:px-4 mt-8 space-y-8">
+        {[
+          { category: 'horoscope', label: 'אסטרולוגיה' },
+          { category: 'entertainment', label: 'בידור' },
+          { category: 'sports', label: 'ספורט' },
+          { category: 'politics', label: 'פוליטיקה' }
+        ].map(({ category, label }) => {
+          const categoryArticles = articles.filter(a => a.category === category).slice(0, 4);
+          return categoryArticles.length > 0 ? (
+            <div key={category}>
+              <h3 className="text-xl font-bold dark:text-white mb-4">{label}</h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                {categoryArticles.map((article) => (
+                  <NewsCard key={article.id} article={article} />
+                ))}
+              </div>
+            </div>
+          ) : null;
+        })}
+      </section>
+
       {/* All News Section */}
       {articles.length > 0 && (
         <section className="px-4 sm:px-4 mt-8">
