@@ -26,6 +26,7 @@ import VODModal from "../components/vod/VODModal";
 import BroadcastStrip from "../components/news/BroadcastStrip";
 import AccessibilityPanel from "../components/accessibility/AccessibilityPanel";
 import NewsReels from "../components/news/NewsReels";
+import LiveReporterQA from "../components/news/LiveReporterQA";
 
 
 export default function Home() {
@@ -246,6 +247,9 @@ export default function Home() {
 
       {/* News Reels Section */}
       <NewsReels />
+
+      {/* Live Reporter Q&A Section */}
+      <LiveReporterQA />
 
       {/* All News Section */}
        {articles.length > 0 && (
