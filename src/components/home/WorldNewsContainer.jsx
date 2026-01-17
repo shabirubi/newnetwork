@@ -14,10 +14,12 @@ export default function WorldNewsContainer() {
     setError(null);
     try {
       const response = await base44.functions.invoke('fetchWorldNews');
-      setArticles(response.data.articles || []);
+      console.log('World news response:', response);
+      const newsArticles = response.data?.articles || response?.articles || [];
+      setArticles(Array.isArray(newsArticles) ? newsArticles : []);
     } catch (err) {
-      setError('שגיאה בטעינת חדשות עולמיות');
-      console.error(err);
+      setError('שגיאה בטעינת חדשות עולמיות: ' + err.message);
+      console.error('Fetch error:', err);
     } finally {
       setLoading(false);
     }
