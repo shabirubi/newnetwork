@@ -481,8 +481,23 @@ export default function Layout({ children }) {
               </Link>
             </div>
           </div>
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500 text-sm">
-            © 2024 הרשת החדשה. כל הזכויות שמורות.
+          <div className="border-t border-gray-800 mt-8 pt-8">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-6">
+              <Link to={createPageUrl("Terms")} className="text-gray-400 hover:text-[#E31E24] transition-colors text-sm">
+                תקנון שימוש
+              </Link>
+              <span className="text-gray-600 hidden sm:inline">•</span>
+              <Link to={createPageUrl("Accessibility")} className="text-gray-400 hover:text-[#E31E24] transition-colors text-sm">
+                הצהרת נגישות
+              </Link>
+              <span className="text-gray-600 hidden sm:inline">•</span>
+              <a href="mailto:privacy@hareshet.co.il" className="text-gray-400 hover:text-[#E31E24] transition-colors text-sm">
+                צור קשר
+              </a>
+            </div>
+            <div className="text-center text-gray-500 text-sm">
+              © 2024 הרשת החדשה. כל הזכויות שמורות.
+            </div>
           </div>
         </div>
       </footer>
