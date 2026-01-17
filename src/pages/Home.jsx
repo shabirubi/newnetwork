@@ -38,6 +38,9 @@ import NewsStatisticsDashboard from "../components/home/NewsStatisticsDashboard"
 import UserExperienceFeatures from "../components/home/UserExperienceFeatures";
 import UserUploadedVideos from "../components/home/UserUploadedVideos";
 import UploadVideoModal from "../components/home/UploadVideoModal";
+import LiveStatisticsContainer from "../components/home/LiveStatisticsContainer";
+import MostViewedContainer from "../components/home/MostViewedContainer";
+import CategoriesHighlightContainer from "../components/home/CategoriesHighlightContainer";
 
 
 export default function Home() {
@@ -277,6 +280,15 @@ export default function Home() {
 
       {/* News Statistics Dashboard */}
       <NewsStatisticsDashboard />
+
+      {/* Live Statistics Container */}
+      <LiveStatisticsContainer />
+
+      {/* Most Viewed Container */}
+      <MostViewedContainer />
+
+      {/* Categories Highlight Container */}
+      <CategoriesHighlightContainer />
 
       {/* Newsletter Signup */}
       <NewsletterSignup />
