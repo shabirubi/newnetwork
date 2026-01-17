@@ -17,7 +17,19 @@ export default function ReporterChatButton() {
 
   return (
     <>
-      {/* Reporters List Modal */}
+      {/* Floating Chat Button */}
+      <motion.button
+        onClick={() => setIsOpen(true)}
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: 1, scale: 1 }}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+        transition={{ duration: 0.3 }}
+        className="group relative bg-gradient-to-br from-blue-600 to-blue-700 rounded-full p-4 sm:p-3.5 shadow-2xl border-2 border-white/30 hover:border-white/50 transition-all fixed left-4 sm:left-6 bottom-44 z-50"
+        title="צ'אט עם הכתבים"
+      >
+        <MessageCircle className="w-6 h-6 sm:w-5 sm:h-5 text-white" />
+      </motion.button>
 
       {/* Reporters List Modal */}
       <AnimatePresence>
