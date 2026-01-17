@@ -90,7 +90,7 @@ export default function UpdatesFeed() {
             </Link>
           </motion.div>
         ))}
-      </div>
+      </motion.div>
 
       {/* Footer */}
       <Link 
