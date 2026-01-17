@@ -18,8 +18,8 @@ export default function ReportersTickerStrip() {
   if (reporters.length === 0) return null;
 
   return (
-    <div className="bg-gradient-to-r from-gray-900 via-black to-gray-900 overflow-hidden border-b border-purple-900/20 h-16 flex items-center">
-      <div className="flex items-center gap-4 px-4 h-full">
+    <div className="bg-gradient-to-r from-gray-900 via-black to-gray-900 overflow-hidden border-b border-purple-900/20 h-16 flex items-center w-full">
+      <div className="flex items-center gap-4 px-0 h-full">
         <div className="flex items-center gap-2 flex-shrink-0 text-purple-400 font-bold text-sm whitespace-nowrap">
           <Users className="w-4 h-4" />
           אנשי השטח
