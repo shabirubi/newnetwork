@@ -27,6 +27,7 @@ import VODModal from "../components/vod/VODModal";
 export default function Home() {
   const [vodModalOpen, setVodModalOpen] = React.useState(false);
   const [categoriesMenuOpen, setCategoriesMenuOpen] = React.useState(false);
+  const [reporterDrawerOpen, setReporterDrawerOpen] = React.useState(false);
   const [selectedChannel, setSelectedChannel] = React.useState(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('selectedChannel') || 'all';
@@ -105,7 +106,7 @@ export default function Home() {
 
         {/* Reporter Chat Button */}
         <motion.button
-          onClick={() => {}}
+          onClick={() => setReporterDrawerOpen(true)}
           initial={{ opacity: 0, scale: 0.5 }}
           animate={{ opacity: 1, scale: 1 }}
           whileHover={{ scale: 1.1 }}
@@ -213,6 +214,9 @@ export default function Home() {
 
       {/* Categories Menu Modal */}
       <CategoriesMenu isOpen={categoriesMenuOpen} onClose={() => setCategoriesMenuOpen(false)} />
+
+      {/* Reporter Drawer Modal */}
+      <ReporterChatButton isOpen={reporterDrawerOpen} onClose={() => setReporterDrawerOpen(false)} />
 
       {/* CTA Section */}
       <section className="bg-[#E31E24] rounded-2xl p-8 text-white text-center">
