@@ -6,7 +6,6 @@ import { TrendingUp, Clock, Share2, Bookmark, Eye, ChevronUp } from "lucide-reac
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../../utils";
 import moment from "moment";
-import BroadcastStrip from "./BroadcastStrip";
 import CurrencyStrip from "./CurrencyStrip";
 
 const categoryColors = {
@@ -116,7 +115,6 @@ export default function TikTokNewsFeed({ articles: propArticles }) {
   return (
     <section className="relative bg-black">
       <CurrencyStrip />
-      <BroadcastStrip />
       <section 
         ref={containerRef}
         className="relative h-screen overflow-hidden bg-black"
