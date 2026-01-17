@@ -44,10 +44,10 @@ export default function ReportersTickerStrip() {
                 <div className="text-white font-bold text-xs">{reporter.name}</div>
                 <div className="text-purple-300 text-xs">{reporter.specialty}</div>
               </div>
-            </div>
-          ))}
-        </motion.div>
-      </div>
-    </div>
-  );
-}
+              </div>
+              ))}
+              </div>
+              </div>
+              </div>
+              );
+              }
