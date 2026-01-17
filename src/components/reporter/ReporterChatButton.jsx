@@ -20,7 +20,6 @@ export default function ReporterChatButton() {
       {/* Reporters List Modal */}
 
       {/* Reporters List Modal */}
-      <AnimatePresence>
         {isOpen && (
           <motion.div
             initial={{ opacity: 0 }}
