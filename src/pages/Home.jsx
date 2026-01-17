@@ -61,10 +61,11 @@ export default function Home() {
       }
       return base44.entities.NewsArticle.filter({ channel_id: selectedChannel }, '-created_date', 50);
     },
-    staleTime: 2 * 60 * 1000,
-    cacheTime: 10 * 60 * 1000,
-    refetchOnWindowFocus: false,
-    refetchOnMount: false,
+    staleTime: 30 * 1000,
+    gcTime: 10 * 60 * 1000,
+    refetchInterval: 1 * 60 * 1000,
+    refetchOnWindowFocus: true,
+    refetchOnMount: 'stale',
     initialData: [],
     placeholderData: (prev) => prev
   });
