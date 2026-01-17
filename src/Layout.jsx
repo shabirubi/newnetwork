@@ -106,6 +106,14 @@ export default function Layout({ children }) {
       {/* Reporters Ticker Strip */}
       <ReportersTickerStrip />
 
+      {/* Mobile Menu Button */}
+      <button
+        onClick={() => setMobileMenuOpen(true)}
+        className="fixed bottom-24 left-4 z-40 lg:hidden bg-[#E31E24] text-white p-3 rounded-full shadow-lg active:scale-95 transition-transform"
+      >
+        <Menu size={24} />
+      </button>
+
       {/* Floating Logo */}
       <motion.div
         initial={{ opacity: 0, x: -100 }}
