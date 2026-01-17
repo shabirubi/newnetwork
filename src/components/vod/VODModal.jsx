@@ -325,11 +325,88 @@ export default function VODModal({ isOpen, onClose }) {
               </motion.div>
             )}
 
-            {/* No Israeli TV Channels - Only Main Player */}
+            {/* Content Grid */}
             <main className="flex-1 overflow-y-auto px-4 lg:px-8 py-6">
-              <div className="text-center py-20 text-gray-400">
-                <p className="text-lg">השתמש בנגן למעלה לצפייה</p>
-              </div>
+              {activeCategory === "channels" ? (
+                <div className="text-center py-20 text-gray-400">
+                  <p className="text-lg">השתמש בנגן למעלה לצפייה</p>
+                </div>
+              ) : (
+                <motion.section
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="space-y-6"
+                >
+                  {Object.entries(groupedByStrip).map(([stripName, items]) => (
+                    <div key={stripName} className="space-y-4">
+                      <h2 className="text-2xl font-bold text-white flex items-center gap-3">
+                        <span className="w-1.5 h-8 bg-gradient-to-b from-red-600 to-red-800 rounded-full"></span>
+                        {stripName}
+                      </h2>
+                      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+                        {isLoading ? (
+                          <div className="col-span-full flex items-center justify-center py-20">
+                            <div className="animate-spin rounded-full h-16 w-16 border-4 border-red-600 border-t-transparent"></div>
+                          </div>
+                        ) : items.length === 0 ? (
+                          <div className="col-span-full flex flex-col items-center justify-center py-20">
+                            <Tv className="w-24 h-24 text-red-600/50 mb-4" />
+                            <h3 className="text-2xl font-bold text-gray-400 mb-2">אין תוכן זמין</h3>
+                            <p className="text-gray-500">התוכן ייטען בקרוב...</p>
+                          </div>
+                        ) : (
+                          items.map((item, idx) => (
+                            <motion.div
+                              key={item.id}
+                              initial={{ opacity: 0, y: 20 }}
+                              animate={{ opacity: 1, y: 0 }}
+                              transition={{ delay: idx * 0.05 }}
+                              whileHover={{ scale: 1.05, y: -8 }}
+                              onClick={() => setSelectedContent(item)}
+                              className="group relative bg-gradient-to-b from-gray-900 to-black rounded-2xl overflow-hidden cursor-pointer border border-gray-800 hover:border-red-600 transition-all shadow-lg hover:shadow-red-600/20"
+                            >
+                              <div className="aspect-[2/3] relative overflow-hidden">
+                                {item.thumbnail ? (
+                                  <img 
+                                    src={item.thumbnail} 
+                                    alt={item.title}
+                                    className="w-full h-full object-cover bg-gray-900 group-hover:scale-110 transition-transform duration-500"
+                                  />
+                                ) : (
+                                  <div className="w-full h-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                                    <Tv className="w-20 h-20 text-gray-600" />
+                                  </div>
+                                )}
+                                <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
+
+                                {item.is_live && (
+                                  <div className="absolute top-3 right-3 bg-red-600 px-3 py-1 rounded-full flex items-center gap-1.5 text-xs font-bold animate-pulse">
+                                    <span className="w-2 h-2 bg-white rounded-full"></span>
+                                    LIVE
+                                  </div>
+                                )}
+
+                                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                                  <div className="bg-red-600 rounded-full p-6 shadow-2xl">
+                                    <Play className="w-12 h-12 text-white" fill="white" />
+                                  </div>
+                                </div>
+
+                                <div className="absolute bottom-0 left-0 right-0 p-4">
+                                  <h3 className="text-white font-bold text-base mb-1 line-clamp-2">{item.title}</h3>
+                                  {item.description && (
+                                    <p className="text-gray-300 text-xs line-clamp-1">{item.description}</p>
+                                  )}
+                                </div>
+                              </div>
+                            </motion.div>
+                          ))
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </motion.section>
+              )}
             </main>
           </div>
         </div>
