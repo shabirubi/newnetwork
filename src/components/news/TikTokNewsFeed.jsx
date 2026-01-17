@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "../../utils";
 import moment from "moment";
 import CurrencyStrip from "./CurrencyStrip";
+import BrandingWindEffect from "../animations/BrandingWindEffect";
 
 const categoryColors = {
   breaking: "bg-[#E31E24] text-white",
@@ -123,6 +124,7 @@ export default function TikTokNewsFeed({ articles: propArticles }) {
   return (
     <section className="relative bg-black">
       <CurrencyStrip />
+      <BrandingWindEffect />
       <section 
         ref={containerRef}
         className="relative h-screen overflow-hidden bg-black"
@@ -166,7 +168,10 @@ export default function TikTokNewsFeed({ articles: propArticles }) {
                 </div>
 
                 {/* Title */}
-                <Link to={createPageUrl(`Article?id=${article.id}`)}>
+                <Link 
+                  to={createPageUrl(`Article?id=${article.id}`)}
+                  className="block cursor-pointer hover:opacity-90 transition-opacity"
+                >
                   <h2 className="text-white text-2xl md:text-3xl font-bold mb-3 leading-tight">
                     {article.title}
                   </h2>
