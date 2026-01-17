@@ -93,37 +93,52 @@ export default function VODModal({ isOpen, onClose }) {
          exit={{ opacity: 0 }}
          className="fixed inset-0 z-[105] bg-gradient-to-br from-gray-950 via-black to-gray-950"
        >
-        {/* Close Button */}
-        <button
-          onClick={onClose}
-          className="fixed top-6 left-6 z-[120] p-3 rounded-full bg-gradient-to-br from-red-600 to-red-800 hover:from-red-700 hover:to-red-900 text-white transition-all shadow-2xl"
-        >
-          <X className="w-6 h-6" />
-        </button>
-
         {/* Main Layout */}
-        <div className="flex h-full">
+        <div className="flex h-screen w-screen">
           {/* Sidebar - Desktop Only */}
           <motion.aside
             initial={{ x: -300, opacity: 0 }}
             animate={{ x: 0, opacity: 1 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className="hidden lg:flex flex-col w-64 bg-gradient-to-b from-gray-900/95 via-black/95 to-gray-900/95 backdrop-blur-xl border-l border-red-900/30 p-6"
+            className="hidden lg:flex flex-col w-72 bg-gradient-to-b from-gray-900/98 via-black/98 to-gray-900/98 backdrop-blur-xl border-l border-red-900/30 p-6 shadow-2xl"
           >
             {/* Logo */}
-            <div className="mb-8">
+            <div className="mb-6">
               <img 
                 src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png"
                 alt="הרשת החדשה"
-                className="w-32 h-32 mx-auto drop-shadow-2xl"
+                className="w-24 h-24 mx-auto drop-shadow-2xl"
               />
-              <h2 className="text-2xl font-bold text-center mt-4 bg-gradient-to-l from-red-500 to-red-700 bg-clip-text text-transparent">
+              <motion.h2 
+                className="text-4xl font-bold text-center mt-4 bg-gradient-to-l from-red-500 via-red-600 to-red-700 bg-clip-text text-transparent"
+                animate={{ 
+                  backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+                  filter: [
+                    'drop-shadow(0 0 10px rgba(239, 68, 68, 0.5))',
+                    'drop-shadow(0 0 20px rgba(239, 68, 68, 0.8))',
+                    'drop-shadow(0 0 10px rgba(239, 68, 68, 0.5))'
+                  ]
+                }}
+                transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                style={{ backgroundSize: '200% 200%' }}
+              >
                 VOD
-              </h2>
+              </motion.h2>
             </div>
 
+            {/* Back to News Button */}
+            <motion.button
+              whileHover={{ scale: 1.02, x: -5 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={onClose}
+              className="mb-6 w-full bg-gradient-to-l from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-6 py-4 rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-red-600/30 transition-all"
+            >
+              <ChevronUp className="w-5 h-5 rotate-90" />
+              <span>חזרה לאתר החדשות</span>
+            </motion.button>
+
             {/* Categories */}
-            <nav className="flex-1 overflow-y-auto space-y-2">
+            <nav className="flex-1 overflow-y-auto space-y-2 scrollbar-thin scrollbar-thumb-red-900 scrollbar-track-gray-900">
               {CATEGORIES.map((cat) => {
                 const Icon = cat.icon;
                 return (
