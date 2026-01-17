@@ -214,10 +214,30 @@ export default function VODModal({ isOpen, onClose }) {
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="relative h-[50vh] lg:h-[60vh] flex-shrink-0"
+                className="relative h-[50vh] lg:h-[60vh] flex-shrink-0 bg-gradient-to-br from-gray-950 via-black to-gray-950 p-4 lg:p-6"
               >
-                {/* Background Video Player */}
-                <div className="absolute inset-0 overflow-hidden">
+                {/* Player Frame */}
+                <div className="relative h-full rounded-2xl overflow-hidden border-4 border-red-600/50 shadow-2xl shadow-red-600/30">
+                  {/* Top Bar with Logo */}
+                  <div className="absolute top-0 left-0 right-0 z-10 bg-gradient-to-b from-black/90 to-transparent p-4 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <img 
+                        src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png"
+                        alt="הרשת החדשה"
+                        className="w-12 h-12 lg:w-16 lg:h-16 drop-shadow-2xl"
+                      />
+                      <div>
+                        <h3 className="text-white font-bold text-sm lg:text-lg">הרשת החדשה</h3>
+                        <p className="text-red-500 text-xs lg:text-sm font-bold">VOD - שידור חי</p>
+                      </div>
+                    </div>
+                    <div className="bg-red-600 px-3 py-1 lg:px-4 lg:py-2 rounded-full flex items-center gap-2 animate-pulse">
+                      <span className="w-2 h-2 bg-white rounded-full"></span>
+                      <span className="text-white text-xs lg:text-sm font-bold">LIVE</span>
+                    </div>
+                  </div>
+
+                  {/* Video Player */}
                   <iframe 
                     src="https://www.mako.co.il/AjaxPage?jspName=embedHTML5video.jsp&galleryChannelId=3bf5c3a8e967f510VgnVCM2000002a0c10acRCRD&videoChannelId=8bf955222beab610VgnVCM100000700a10acRCRD&vcmid=1e2258089b67f510VgnVCM2000002a0c10acRCRD"
                     className="w-full h-full"
@@ -225,6 +245,14 @@ export default function VODModal({ isOpen, onClose }) {
                     allowFullScreen
                     allow="autoplay"
                   />
+
+                  {/* Bottom Bar with Branding */}
+                  <div className="absolute bottom-0 left-0 right-0 z-10 bg-gradient-to-t from-black/90 to-transparent p-3 lg:p-4">
+                    <div className="flex items-center justify-center gap-2">
+                      <Radio className="w-4 h-4 lg:w-5 lg:h-5 text-red-500 animate-pulse" />
+                      <span className="text-white text-xs lg:text-sm font-bold">משודר בחסות הרשת החדשה</span>
+                    </div>
+                  </div>
                 </div>
               </motion.div>
             )}
