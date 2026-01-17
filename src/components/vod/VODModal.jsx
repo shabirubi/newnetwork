@@ -162,8 +162,32 @@ export default function VODModal({ isOpen, onClose }) {
 
           {/* Main Content Area */}
           <div className="flex-1 flex flex-col overflow-hidden">
-            {/* Mobile Categories Bar */}
+            {/* Mobile Header with Back Button */}
             <div className="lg:hidden sticky top-0 z-40 bg-gradient-to-b from-black via-gray-900 to-transparent backdrop-blur-xl border-b border-red-900/30 p-3">
+              <div className="flex items-center justify-between mb-3">
+                <motion.h1 
+                  className="text-2xl font-bold bg-gradient-to-l from-red-500 via-red-600 to-red-700 bg-clip-text text-transparent"
+                  animate={{ 
+                    backgroundPosition: ['0% 50%', '100% 50%', '0% 50%'],
+                    filter: [
+                      'drop-shadow(0 0 8px rgba(239, 68, 68, 0.5))',
+                      'drop-shadow(0 0 15px rgba(239, 68, 68, 0.8))',
+                      'drop-shadow(0 0 8px rgba(239, 68, 68, 0.5))'
+                    ]
+                  }}
+                  transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
+                  style={{ backgroundSize: '200% 200%' }}
+                >
+                  VOD
+                </motion.h1>
+                <button
+                  onClick={onClose}
+                  className="bg-gradient-to-l from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-4 py-2 rounded-full font-bold flex items-center gap-2 text-sm shadow-lg"
+                >
+                  <ChevronUp className="w-4 h-4 rotate-90" />
+                  חזרה
+                </button>
+              </div>
               <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
                 {CATEGORIES.map((cat) => {
                   const Icon = cat.icon;
