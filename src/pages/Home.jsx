@@ -313,6 +313,9 @@ export default function Home() {
       {/* Categories Menu Modal */}
       <CategoriesMenu isOpen={categoriesMenuOpen} onClose={() => setCategoriesMenuOpen(false)} />
 
+      {/* Upload Video Modal */}
+      <UploadVideoModal isOpen={uploadVideoModalOpen} onClose={() => setUploadVideoModalOpen(false)} />
+
       {/* Accessibility Panel */}
       <AccessibilityPanel isOpen={a11yOpen} onClose={() => setA11yOpen(false)} />
 
