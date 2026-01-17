@@ -7,7 +7,6 @@ import VODPlayer from "./VODPlayer";
 import LivePlayer from "../news/LivePlayer";
 
 const CATEGORIES = [
-  { id: "live", label: "עולם התוכן של הרשת החדשה", icon: Radio },
   { id: "channels", label: "תחנות שידור בישראל", icon: Tv },
   { id: "movies", label: "סרטים קלאסיים", icon: Film },
   { id: "news", label: "חדשות ואקטואליה", icon: Newspaper },
@@ -31,7 +30,7 @@ const CATEGORIES = [
 ];
 
 export default function VODModal({ isOpen, onClose }) {
-  const [activeCategory, setActiveCategory] = useState("live");
+  const [activeCategory, setActiveCategory] = useState("channels");
   const [selectedContent, setSelectedContent] = useState(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showMainPlayer, setShowMainPlayer] = useState(true);
@@ -94,6 +93,21 @@ export default function VODModal({ isOpen, onClose }) {
          exit={{ opacity: 0 }}
          className="fixed inset-0 z-[105] bg-gradient-to-br from-gray-950 via-black to-gray-950"
        >
+        {/* Back Button - Left Side */}
+        <motion.button
+          initial={{ x: -100, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          onClick={onClose}
+          className="fixed left-4 top-1/2 -translate-y-1/2 z-50 bg-gradient-to-br from-black via-red-900 to-black hover:from-red-900 hover:via-black hover:to-red-900 text-white px-4 py-6 rounded-2xl font-bold shadow-2xl border-2 border-red-600/50 transition-all"
+        >
+          <div className="flex flex-col items-center gap-2">
+            <ChevronUp className="w-6 h-6 rotate-90" />
+            <span className="text-xs whitespace-nowrap writing-mode-vertical">חזרה לאתר</span>
+          </div>
+        </motion.button>
+
         {/* Main Layout */}
         <div className="flex h-screen w-screen">
           {/* Sidebar - Desktop Only */}
@@ -127,16 +141,7 @@ export default function VODModal({ isOpen, onClose }) {
               </motion.h2>
             </div>
 
-            {/* Back to News Button */}
-            <motion.button
-              whileHover={{ scale: 1.02, x: -5 }}
-              whileTap={{ scale: 0.98 }}
-              onClick={onClose}
-              className="mb-6 w-full bg-gradient-to-l from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-6 py-4 rounded-xl font-bold flex items-center justify-center gap-2 shadow-lg shadow-red-600/30 transition-all"
-            >
-              <ChevronUp className="w-5 h-5 rotate-90" />
-              <span>חזרה לאתר החדשות</span>
-            </motion.button>
+
 
             {/* Categories */}
             <nav className="flex-1 overflow-y-auto space-y-2 scrollbar-thin scrollbar-thumb-red-900 scrollbar-track-gray-900">
@@ -181,13 +186,7 @@ export default function VODModal({ isOpen, onClose }) {
                 >
                   VOD
                 </motion.h1>
-                <button
-                  onClick={onClose}
-                  className="bg-gradient-to-l from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white px-4 py-2 rounded-full font-bold flex items-center gap-2 text-sm shadow-lg"
-                >
-                  <ChevronUp className="w-4 h-4 rotate-90" />
-                  חזרה
-                </button>
+
               </div>
               <div className="flex gap-2 overflow-x-auto pb-2 scrollbar-hide">
                 {CATEGORIES.map((cat) => {
@@ -273,7 +272,7 @@ export default function VODModal({ isOpen, onClose }) {
             )}
 
             {/* Fullscreen Player */}
-            {isFullscreen && activeCategory === "live" && (
+            {isFullscreen && activeCategory === "channels" && (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
