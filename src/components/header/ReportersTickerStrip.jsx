@@ -14,42 +14,39 @@ export default function ReportersTickerStrip() {
 
   if (reporters.length === 0) return null;
 
-  // Create enough duplicates for seamless looping
-  const displayReporters = Array.from({ length: 4 }, () => reporters).flat();
+  const displayReporters = [...reporters, ...reporters];
 
   return (
     <div className="bg-gradient-to-r from-gray-900 via-black to-gray-900 overflow-hidden border-b border-purple-900/20 h-16 flex items-center w-full">
-      <div className="flex items-center gap-4 px-0 h-full">
-        <div className="flex items-center gap-2 flex-shrink-0 text-purple-400 font-bold text-sm whitespace-nowrap px-4">
+      <div className="flex items-center gap-4 px-4 h-full">
+        <div className="flex items-center gap-2 flex-shrink-0 text-purple-400 font-bold text-sm whitespace-nowrap">
           <Users className="w-4 h-4" />
           אנשי השטח
         </div>
       </div>
 
-      <div className="flex-1 overflow-hidden">
-        <motion.div
-          className="flex gap-6 whitespace-nowrap h-full items-center"
-          animate={{ x: `-${(reporters.length * 180)}px` }}
-          transition={{ duration: reporters.length * 8, repeat: Infinity, ease: "linear" }}
-        >
-          {displayReporters.map((reporter, idx) => (
-            <div
-              key={`${reporter.id}-${idx}`}
-              className="flex-shrink-0 flex items-center gap-3 px-4 py-2 bg-gray-800/50 rounded-lg border border-purple-500/30 hover:border-purple-500/60 transition-all cursor-pointer group"
-            >
-              <img
-                src={reporter.image}
-                alt={reporter.name}
-                className="w-8 h-8 rounded-full object-cover group-hover:ring-2 ring-purple-500 transition-all"
-              />
-              <div className="text-sm">
-                <div className="text-white font-bold text-xs">{reporter.name}</div>
-                <div className="text-purple-300 text-xs">{reporter.specialty}</div>
-              </div>
+      <motion.div
+        className="flex gap-6 whitespace-nowrap h-full items-center"
+        animate={{ x: [0, -2000] }}
+        transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
+      >
+        {displayReporters.map((reporter, idx) => (
+          <div
+            key={`${reporter.id}-${idx}`}
+            className="flex-shrink-0 flex items-center gap-3 px-4 py-2 bg-gray-800/50 rounded-lg border border-purple-500/30 hover:border-purple-500/60 transition-all cursor-pointer group"
+          >
+            <img
+              src={reporter.image}
+              alt={reporter.name}
+              className="w-8 h-8 rounded-full object-cover group-hover:ring-2 ring-purple-500 transition-all"
+            />
+            <div className="text-sm">
+              <div className="text-white font-bold text-xs">{reporter.name}</div>
+              <div className="text-purple-300 text-xs">{reporter.specialty}</div>
             </div>
-          ))}
-        </motion.div>
-      </div>
+          </div>
+        ))}
+      </motion.div>
     </div>
   );
 }
