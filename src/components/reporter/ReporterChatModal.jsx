@@ -61,6 +61,7 @@ export default function ReporterChatModal({ reporter, article, onClose, isOpen =
           }
         });
         setConversation(conv);
+        setMessages([]);
 
         // Send initial context message
         const contextMessage = article 
@@ -79,7 +80,7 @@ export default function ReporterChatModal({ reporter, article, onClose, isOpen =
     };
 
     initConversation();
-  }, [currentUser, reporter, article]);
+  }, [currentUser, reporter, article, toast]);
 
   // Subscribe to conversation updates
   useEffect(() => {
@@ -100,22 +101,18 @@ export default function ReporterChatModal({ reporter, article, onClose, isOpen =
     const userMessage = message.trim();
     setMessage("");
     setIsProcessing(true);
+    inputRef.current?.blur();
 
     try {
-      // Add context about the article if exists
-      let fullMessage = userMessage;
-      if (article) {
-        fullMessage = `[הקשר: הכתבה "${article.title}" - ${article.category}]\n\nשאלת המשתמש: ${userMessage}`;
-      }
-
       await base44.agents.addMessage(conversation, {
         role: "user",
-        content: fullMessage
+        content: userMessage
       });
-
+      inputRef.current?.focus();
     } catch (err) {
       console.error("Error sending message:", err);
       toast.error("שגיאה בשליחת ההודעה");
+      setMessage(userMessage);
     } finally {
       setIsProcessing(false);
     }
