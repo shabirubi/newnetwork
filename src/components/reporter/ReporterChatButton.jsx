@@ -17,43 +17,7 @@ export default function ReporterChatButton() {
 
   return (
     <>
-      {/* Floating Chat Button */}
-      <motion.button
-        onClick={() => setIsOpen(true)}
-        initial={{ opacity: 0, scale: 0.5 }}
-        animate={{ opacity: 1, scale: 1 }}
-        whileHover={{ scale: 1.05 }}
-        transition={{ duration: 0.3 }}
-        className="fixed bottom-24 right-4 sm:right-6 z-50 group flex flex-col items-center gap-1"
-      >
-        {/* Pulse Effect */}
-        <motion.div
-          animate={{
-            scale: [1, 1.2, 1],
-            opacity: [0.5, 0, 0.5]
-          }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="absolute top-0 left-1/2 -translate-x-1/2 rounded-full bg-blue-500 w-20 h-20 sm:w-16 sm:h-16"
-        />
-        
-        {/* Chat Icon */}
-        <div className="relative bg-gradient-to-br from-blue-600 to-blue-700 rounded-full p-4 sm:p-3 shadow-2xl border-2 border-white/30">
-          <MessageCircle className="w-8 h-8 sm:w-7 sm:h-7 text-white" />
-          {reporters.length > 0 && (
-            <span className="absolute -top-1 -right-1 bg-red-600 text-white text-xs font-bold rounded-full w-6 h-6 flex items-center justify-center border-2 border-white">
-              {reporters.length}
-            </span>
-          )}
-        </div>
-        
-        {/* Label */}
-        <div className="bg-gradient-to-br from-blue-600 to-blue-700 px-3 py-1.5 rounded-xl shadow-lg border-2 border-white/30">
-          <div className="text-center">
-            <div className="text-white text-xs font-bold leading-tight">צ'אט עם</div>
-            <div className="text-white text-xs font-bold leading-tight">הכתבים</div>
-          </div>
-        </div>
-      </motion.button>
+      {/* Reporters List Modal */}
 
       {/* Reporters List Modal */}
       <AnimatePresence>
