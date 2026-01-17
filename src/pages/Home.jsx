@@ -44,6 +44,7 @@ export default function Home() {
   const [vodModalOpen, setVodModalOpen] = React.useState(false);
   const [categoriesMenuOpen, setCategoriesMenuOpen] = React.useState(false);
   const [a11yOpen, setA11yOpen] = React.useState(false);
+  const [uploadVideoModalOpen, setUploadVideoModalOpen] = React.useState(false);
   const [selectedChannel, setSelectedChannel] = React.useState(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('selectedChannel') || 'all';
