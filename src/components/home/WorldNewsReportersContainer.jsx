@@ -1,0 +1,147 @@
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { Globe, MessageCircle, Star } from "lucide-react";
+import { base44 } from "@/api/base44Client";
+import { useQuery } from "@tanstack/react-query";
+import ReporterChatModal from "../reporter/ReporterChatModal";
+
+export default function WorldNewsReportersContainer() {
+  const [selectedReporter, setSelectedReporter] = useState(null);
+  const [chatModalOpen, setChatModalOpen] = useState(false);
+
+  const { data: reporters = [], isLoading } = useQuery({
+    queryKey: ['world-news-reporters'],
+    queryFn: async () => {
+      const allReporters = await base44.entities.Reporter.list('-created_date', 50);
+      return allReporters.filter(r => 
+        r.is_active && 
+        r.categories && 
+        r.categories.some(cat => cat.toLowerCase().includes('world') || cat.toLowerCase().includes('global'))
+      ).slice(0, 6);
+    },
+    initialData: []
+  });
+
+  const handleReporterClick = (reporter) => {
+    setSelectedReporter(reporter);
+    setChatModalOpen(true);
+  };
+
+  if (isLoading) {
+    return (
+      <section className="px-4 sm:px-4 mt-8">
+        <div className="flex items-center gap-2 mb-6">
+          <Globe className="w-5 h-5 text-blue-500" />
+          <h2 className="text-xl font-bold dark:text-white">כתבנו בחדשות החוץ</h2>
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {[1, 2, 3].map(i => (
+            <div key={i} className="h-48 bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 rounded-xl animate-pulse" />
+          ))}
+        </div>
+      </section>
+    );
+  }
+
+  if (reporters.length === 0) {
+    return null;
+  }
+
+  return (
+    <section className="px-4 sm:px-4 mt-8">
+      <div className="flex items-center gap-2 mb-6">
+        <Globe className="w-5 h-5 text-blue-500" />
+        <h2 className="text-xl font-bold dark:text-white">כתבנו בחדשות החוץ</h2>
+      </div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {reporters.map((reporter, idx) => (
+          <motion.div
+            key={reporter.id}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: idx * 0.05 }}
+            className="group relative rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all bg-gradient-to-br from-blue-600 to-indigo-700 text-white"
+          >
+            {/* Background decoration */}
+            <div className="absolute -top-12 -right-12 w-32 h-32 bg-white/10 rounded-full group-hover:bg-white/20 transition-all" />
+            <div className="absolute -bottom-8 -left-8 w-24 h-24 bg-white/10 rounded-full group-hover:bg-white/20 transition-all" />
+
+            <div className="relative p-5 h-full flex flex-col">
+              {/* Reporter Image */}
+              {reporter.image && (
+                <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-white/30 mb-3 mx-auto">
+                  <img
+                    src={reporter.image}
+                    alt={reporter.name}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              )}
+
+              {/* Reporter Info */}
+              <h3 className="text-lg font-bold text-center mb-1">{reporter.name}</h3>
+              <p className="text-white/80 text-sm text-center mb-1">{reporter.role}</p>
+              
+              {reporter.specialty && (
+                <p className="text-white/70 text-xs text-center mb-3 line-clamp-2">
+                  {reporter.specialty}
+                </p>
+              )}
+
+              {/* Bio */}
+              {reporter.bio && (
+                <p className="text-white/75 text-xs mb-4 flex-1 line-clamp-2">
+                  {reporter.bio}
+                </p>
+              )}
+
+              {/* Categories */}
+              {reporter.categories && reporter.categories.length > 0 && (
+                <div className="flex flex-wrap gap-1 mb-4">
+                  {reporter.categories.slice(0, 2).map((cat, i) => (
+                    <span
+                      key={i}
+                      className="text-[10px] bg-white/20 px-2 py-1 rounded-full"
+                    >
+                      {cat}
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              {/* Action Button */}
+              <button
+                onClick={() => handleReporterClick(reporter)}
+                className="w-full bg-white text-blue-600 font-bold py-2 rounded-lg hover:bg-white/90 transition-all flex items-center justify-center gap-2 mt-auto group/btn"
+              >
+                <MessageCircle className="w-4 h-4 group-hover/btn:scale-110 transition-transform" />
+                שאל על חדשות החוץ
+              </button>
+
+              {/* Featured Badge */}
+              {reporter.specialty && (
+                <div className="absolute top-3 right-3 bg-yellow-400 text-blue-700 p-1.5 rounded-full">
+                  <Star className="w-3 h-3 fill-current" />
+                </div>
+              )}
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Chat Modal */}
+      {selectedReporter && (
+        <ReporterChatModal
+          isOpen={chatModalOpen}
+          onClose={() => {
+            setChatModalOpen(false);
+            setSelectedReporter(null);
+          }}
+          reporter={selectedReporter}
+          topic="חדשות חוץ ודיווחים בינלאומיים"
+        />
+      )}
+    </section>
+  );
+}
