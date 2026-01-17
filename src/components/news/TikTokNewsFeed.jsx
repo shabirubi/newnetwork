@@ -128,9 +128,9 @@ export default function TikTokNewsFeed({ articles: propArticles }) {
         {articles.slice(currentIndex, currentIndex + 1).map((article, idx) => (
           <motion.div
             key={article.id}
-            initial={{ y: "100%" }}
+            initial={{ y: "-100%" }}
             animate={{ y: 0 }}
-            exit={{ y: "-100%" }}
+            exit={{ y: "100%" }}
             transition={{ type: "spring", damping: 30, stiffness: 300 }}
             className="absolute inset-0 flex items-center justify-center"
           >
@@ -233,12 +233,14 @@ export default function TikTokNewsFeed({ articles: propArticles }) {
       {currentIndex === 0 && (
         <motion.div
           initial={{ opacity: 1, y: 0 }}
-          animate={{ opacity: [1, 0.5, 1], y: [0, 10, 0] }}
+          animate={{ opacity: [1, 0.5, 1], y: [0, -10, 0] }}
           transition={{ duration: 2, repeat: Infinity }}
           className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white text-sm flex flex-col items-center gap-2"
         >
-          <span>גלול למעלה לעוד חדשות</span>
-          <ChevronUp className="w-5 h-5" />
+          <span>גלול למטה לעוד חדשות</span>
+          <motion.div animate={{ rotate: 180 }}>
+            <ChevronUp className="w-5 h-5" />
+          </motion.div>
         </motion.div>
       )}
       </section>
