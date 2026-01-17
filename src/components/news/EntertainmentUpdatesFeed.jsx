@@ -45,7 +45,11 @@ export default function EntertainmentUpdatesFeed() {
       </div>
 
       {/* Feed - Scrollable with animations */}
-      <div className="max-h-[600px] overflow-y-auto space-y-0">
+      <motion.div 
+        className="max-h-[600px] overflow-y-auto space-y-0"
+        animate={{ rotate: -360 }}
+        transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+      >
         {combined.map((article, index) => (
           <motion.div
             key={article.id}
