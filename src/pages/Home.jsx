@@ -152,8 +152,8 @@ export default function Home() {
       </section>
 
       {/* Live Player Section */}
-      <section className="px-0 sm:px-4">
-        <div className="bg-gradient-to-r from-gray-900 to-gray-800 dark:from-black dark:to-gray-900 sm:rounded-t-lg p-2 sm:p-3 flex items-center justify-between hidden sm:flex">
+      <section className="px-0 sm:px-4 mt-6">
+        <div className="bg-gradient-to-r from-gray-900 to-gray-800 dark:from-black dark:to-gray-900 sm:rounded-t-lg p-2 sm:p-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="relative flex h-2.5 w-2.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E31E24] opacity-75"></span>
@@ -175,7 +175,7 @@ export default function Home() {
 
       {/* All News Section */}
       {articles.length > 0 && (
-        <section className="px-4 sm:px-0">
+        <section className="px-4 sm:px-4 mt-8">
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-2">
               <Clock className="w-5 h-5 text-[#E31E24]" />
