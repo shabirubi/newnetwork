@@ -131,16 +131,16 @@ export default function AutoNewsUpdater() {
       const currentDate = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}`;
       const currentTime = `${now.getHours()}:${now.getMinutes().toString().padStart(2, '0')}`;
       
-      const prompt = `CRITICAL: התאריך היום הוא 7 בינואר 2026 (07/01/2026) והשעה ${currentTime}.
+      const prompt = `CRITICAL: התאריך היום הוא ${currentDate} והשעה ${currentTime}.
 
-תן לי 4 כותרות חדשות אמיתיות מהיום 07/01/2026 בנושא: ${category.label}.
+תן לי 4 כותרות חדשות אמיתיות מהיום ${currentDate} בנושא: ${category.label}.
 
 חשוב מאוד:
-- חדשות מהיום 7 בינואר 2026 בלבד - לא מ-2025 ולא מתאריכים ישנים
-- חפש חדשות שפורסמו ב-24 השעות האחרונות (7.1.2026)
+- חדשות מהיום ${currentDate} בלבד
+- חפש חדשות שפורסמו ב-24 השעות האחרונות
 - אם זה קטגוריית רכילות/בידור - סיפורים דרמטיים על סלבריטאים מהיום
-- אם זה שוק הון/נדל"ן - נתונים כלכליים מהיום 7.1.2026
-- וודא שכל הידיעות מתייחסות לאירועים של 2026 ולא 2025
+- אם זה שוק הון/נדל"ן - נתונים כלכליים מהיום
+- וודא שכל הידיעות מתייחסות לאירועים של היום
 
 החזר JSON array עם 4 articles:
 [{
@@ -151,7 +151,7 @@ export default function AutoNewsUpdater() {
   "is_featured": false
 }]
 
-חדשות אמיתיות מ-7.1.2026 בלבד!`;
+חדשות אמיתיות מהיום בלבד!`;
 
       const result = await base44.integrations.Core.InvokeLLM({
         prompt,
