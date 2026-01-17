@@ -17,12 +17,16 @@ export default function ReportersTickerStrip() {
   // Create multiple duplicates for seamless looping
   const displayReporters = Array.from({ length: 10 }, () => reporters).flat();
 
+  // Calculate duration based on number of reporters to maintain consistent speed
+  const duration = reporters.length * 3.5;
+
   return (
     <div className="bg-gradient-to-r from-black/60 via-black/40 to-black/60 overflow-hidden border-b border-[#E31E24]/20 py-2 backdrop-blur-md">
       <motion.div 
         className="flex gap-2 items-center px-2"
-        animate={{ x: ["0%", "-100%"] }}
-        transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
+        initial={{ x: 0 }}
+        animate={{ x: `-${(reporters.length / displayReporters.length) * 100}%` }}
+        transition={{ duration, repeat: Infinity, ease: "linear", repeatType: "loop" }}
       >
         {displayReporters.map((reporter, idx) => (
           <motion.div
