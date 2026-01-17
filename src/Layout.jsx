@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import NewsTicker from "./components/header/NewsTicker";
+import ReportersTickerStrip from "./components/header/ReportersTickerStrip";
 import ReportersModal from "./components/reporter/ReportersModal";
 import AIAnnouncer from "./components/news/AIAnnouncer";
 
@@ -33,6 +34,7 @@ const categories = [
 
 export default function Layout({ children }) {
         const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+        const [categoriesSidebarOpen, setCategoriesSidebarOpen] = useState(false);
         const [reportersModalOpen, setReportersModalOpen] = useState(false);
         const [darkMode, setDarkMode] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -101,6 +103,9 @@ export default function Layout({ children }) {
       {/* Breaking News Ticker */}
       <NewsTicker darkMode={darkMode} setDarkMode={setDarkMode} />
 
+      {/* Reporters Ticker Strip */}
+      <ReportersTickerStrip />
+
       {/* Floating Logo */}
       <motion.div
         initial={{ opacity: 0, x: -100 }}
@@ -145,6 +150,13 @@ export default function Layout({ children }) {
           {/* Desktop Navigation */}
           <nav className="hidden sm:flex items-center justify-between gap-1 py-3">
             <div className="flex items-center gap-1">
+            <button
+              onClick={() => setCategoriesSidebarOpen(true)}
+              className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
+            >
+              <Menu size={16} />
+              קטגוריות
+            </button>
             <Link
               to={createPageUrl("Live")}
               onClick={(e) => {
@@ -156,20 +168,6 @@ export default function Layout({ children }) {
               <Radio size={16} />
               שידור חי
             </Link>
-            {categories.map((cat) => (
-              <Link
-                key={cat.id}
-                to={createPageUrl(cat.href)}
-                onClick={(e) => {
-                  e.preventDefault();
-                  window.location.href = createPageUrl(cat.href);
-                }}
-                className="flex items-center gap-1.5 px-3 py-2 text-gray-700 dark:text-gray-200 hover:text-[#E31E24] dark:hover:text-[#E31E24] hover:bg-red-50 dark:hover:bg-red-900/20 rounded-lg transition-all text-xs font-medium"
-              >
-                <cat.icon size={16} />
-                {cat.label}
-              </Link>
-              ))}
               <Link
                 to={createPageUrl("Schedule")}
                 onClick={(e) => {
@@ -289,6 +287,59 @@ export default function Layout({ children }) {
               </nav>
               </div>
               </header>
+
+      {/* Categories Sidebar */}
+      <AnimatePresence>
+        {categoriesSidebarOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[9999]"
+          >
+            <div 
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+              onClick={() => setCategoriesSidebarOpen(false)}
+            />
+            <motion.nav 
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="absolute right-0 top-0 bottom-0 w-64 bg-white dark:bg-gray-800 shadow-2xl overflow-y-auto"
+            >
+              <div className="sticky top-0 bg-gradient-to-br from-gray-900 to-gray-800 dark:from-black dark:to-gray-900 p-4 shadow-lg">
+                <div className="flex items-center justify-between">
+                  <h2 className="text-white font-bold">קטגוריות</h2>
+                  <button
+                    onClick={() => setCategoriesSidebarOpen(false)}
+                    className="p-2 rounded-full bg-white/10 text-white active:scale-95 transition-transform"
+                  >
+                    <X size={22} />
+                  </button>
+                </div>
+              </div>
+
+              <div className="p-4 space-y-1">
+                {categories.map((cat) => (
+                  <Link
+                    key={cat.id}
+                    to={createPageUrl(cat.href)}
+                    onClick={() => setCategoriesSidebarOpen(false)}
+                    className="flex items-center gap-4 px-4 py-4 text-gray-700 dark:text-gray-200 rounded-2xl active:bg-gray-100 dark:active:bg-gray-700 transition-colors"
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+                      <cat.icon size={20} />
+                    </div>
+                    <span className="flex-1 font-medium">{cat.label}</span>
+                    <ChevronLeft size={18} className="text-gray-400" />
+                  </Link>
+                ))}
+              </div>
+            </motion.nav>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Native Mobile Drawer */}
       <AnimatePresence>
