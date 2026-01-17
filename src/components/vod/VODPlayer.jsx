@@ -34,36 +34,15 @@ export default function VODPlayer({ content, onClose }) {
         </div>
 
         {/* Video Player */}
-        <div className="aspect-video bg-black">
-          {content.stream_url?.includes('youtube.com') || content.stream_url?.includes('youtu.be') ? (
-            <iframe
-              src={content.stream_url.replace('watch?v=', 'embed/')}
-              className="w-full h-full"
-              allow="autoplay; fullscreen; encrypted-media"
-              allowFullScreen
-            />
-          ) : content.stream_url?.includes('ok.ru') ? (
-            <iframe
-              src={`https://ok.ru/videoembed/${content.stream_url.split('/video/')[1]}`}
-              className="w-full h-full"
-              allow="autoplay; fullscreen; encrypted-media"
-              allowFullScreen
-            />
-          ) : content.stream_url?.includes('mako.co.il') ? (
-            <iframe
-              src={content.stream_url}
-              className="w-full h-full"
-              allow="autoplay; fullscreen; encrypted-media"
-              allowFullScreen
-            />
-          ) : (
-            <iframe
-              src={content.stream_url}
-              className="w-full h-full"
-              allow="autoplay; fullscreen; encrypted-media"
-              allowFullScreen
-            />
-          )}
+        <div className="aspect-video bg-black relative">
+          <iframe
+            src={content.stream_url}
+            className="w-full h-full"
+            allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+            allowFullScreen
+            sandbox="allow-same-origin allow-scripts allow-presentation allow-forms"
+            referrerPolicy="no-referrer-when-downgrade"
+          />
         </div>
 
         {/* Actions */}
