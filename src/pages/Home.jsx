@@ -23,6 +23,7 @@ import TikTokNewsFeed from "../components/news/TikTokNewsFeed";
 import AIAnnouncer from "../components/news/AIAnnouncer";
 import TVAnchor from "../components/news/TVAnchor";
 import VODModal from "../components/vod/VODModal";
+import BroadcastStrip from "../components/news/BroadcastStrip";
 
 export default function Home() {
   const [vodModalOpen, setVodModalOpen] = React.useState(false);
@@ -147,6 +148,11 @@ export default function Home() {
           <Radio className="w-6 h-6 sm:w-5 sm:h-5 text-white" />
         </motion.button>
       </div>
+
+      {/* Broadcast Schedule Strip */}
+      <section className="px-0 sm:px-0">
+        <BroadcastStrip />
+      </section>
 
       {/* Hero Section - TikTok News Feed */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-0 -mx-0 sm:mx-0 px-0 sm:px-4 bg-black">
