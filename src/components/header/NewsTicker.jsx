@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "../../utils";
 import { base44 } from "@/api/base44Client";
 import { motion } from "framer-motion";
-import { Flame, Siren, MessageSquareWarning, Moon, Sun, TrendingUp, TrendingDown, DollarSign, Euro } from "lucide-react";
+import { Flame, Siren, MessageSquareWarning, Moon, Sun, TrendingUp, TrendingDown, DollarSign, Euro, Menu } from "lucide-react";
 import ClockWidget from "./ClockWidget";
 import WeatherWidget from "./WeatherWidget";
 import ChannelSelector from "./ChannelSelector";
