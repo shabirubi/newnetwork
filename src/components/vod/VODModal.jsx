@@ -209,49 +209,55 @@ export default function VODModal({ isOpen, onClose }) {
               </div>
             </div>
 
-            {/* Hero Section */}
+            {/* Hero Section with Background Player */}
             {activeCategory === "live" && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="relative h-64 lg:h-80 flex-shrink-0"
+                className="relative h-[50vh] lg:h-[60vh] flex-shrink-0"
               >
-                <div 
-                  className="absolute inset-0 bg-cover bg-center"
-                  style={{
-                    backgroundImage: `linear-gradient(to bottom, rgba(0,0,0,0.2), rgba(0,0,0,0.9)), url('${STUDIO_BG}')`
-                  }}
-                />
-                <div className="relative h-full flex flex-col items-center justify-center text-center px-6">
+                {/* Background Video Player */}
+                <div className="absolute inset-0 overflow-hidden">
+                  <iframe 
+                    src="https://www.mako.co.il/AjaxPage?jspName=embedHTML5video.jsp&galleryChannelId=3bf5c3a8e967f510VgnVCM2000002a0c10acRCRD&videoChannelId=8bf955222beab610VgnVCM100000700a10acRCRD&vcmid=1e2258089b67f510VgnVCM2000002a0c10acRCRD"
+                    className="w-full h-full"
+                    frameBorder="0"
+                    allowFullScreen
+                    allow="autoplay"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent pointer-events-none" />
+                </div>
+
+                {/* Overlay Content */}
+                <div className="relative h-full flex flex-col items-center justify-end pb-12 text-center px-6">
                   <motion.div
-                    animate={{ 
-                      scale: [1, 1.05, 1],
-                      rotate: [0, 5, 0, -5, 0]
-                    }}
-                    transition={{ duration: 3, repeat: Infinity }}
+                    initial={{ y: 20, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.3 }}
+                    className="backdrop-blur-md bg-black/40 rounded-3xl p-8 shadow-2xl"
                   >
-                    <img 
-                      src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png"
-                      alt="Logo"
-                      className="w-24 h-24 lg:w-32 lg:h-32 drop-shadow-2xl"
-                    />
-                  </motion.div>
-                  <h1 className="text-3xl lg:text-5xl font-bold text-white mt-6 mb-3">עולם התוכן של הרשת החדשה</h1>
-                  <p className="text-gray-300 text-lg mb-6">אלפי שעות של תוכן איכותי בהישג יד</p>
-                  <div className="flex gap-3">
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="bg-gradient-to-l from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 px-8 py-3 rounded-full font-bold flex items-center gap-2 shadow-xl"
+                    <motion.div
+                      animate={{ 
+                        scale: [1, 1.05, 1],
+                        rotate: [0, 5, 0, -5, 0]
+                      }}
+                      transition={{ duration: 3, repeat: Infinity }}
+                      className="mb-4"
                     >
-                      <Play className="w-5 h-5" fill="white" />
-                      צפה עכשיו
-                    </motion.button>
-                  </div>
-                  <div className="absolute top-4 right-4 bg-red-600 px-4 py-2 rounded-full flex items-center gap-2 animate-pulse">
-                    <span className="w-2 h-2 bg-white rounded-full"></span>
-                    <span className="text-sm font-bold">ON AIR</span>
-                  </div>
+                      <img 
+                        src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png"
+                        alt="Logo"
+                        className="w-16 h-16 lg:w-20 lg:h-20 mx-auto drop-shadow-2xl"
+                      />
+                    </motion.div>
+                    <h1 className="text-2xl lg:text-4xl font-bold text-white mb-2">עולם התוכן של הרשת החדשה</h1>
+                    <p className="text-gray-200 text-sm lg:text-base mb-4">אלפי שעות של תוכן איכותי בהישג יד</p>
+                    
+                    <div className="inline-flex items-center gap-2 bg-red-600 px-4 py-2 rounded-full animate-pulse">
+                      <span className="w-2 h-2 bg-white rounded-full"></span>
+                      <span className="text-sm font-bold text-white">מתנגן עכשיו</span>
+                    </div>
+                  </motion.div>
                 </div>
               </motion.div>
             )}
