@@ -232,13 +232,16 @@ export default function TikTokNewsFeed({ articles: propArticles }) {
       {/* Scroll Hint */}
       {currentIndex === 0 && (
         <motion.div
-          initial={{ opacity: 1, y: 0 }}
-          animate={{ opacity: [1, 0.5, 1], y: [0, -10, 0] }}
+          initial={{ opacity: 1 }}
+          animate={{ opacity: [1, 0.5, 1] }}
           transition={{ duration: 2, repeat: Infinity }}
           className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white text-sm flex flex-col items-center gap-2"
         >
           <span>גלול למטה לעוד חדשות</span>
-          <motion.div animate={{ rotate: 180 }}>
+          <motion.div 
+            animate={{ y: [0, 8, 0], rotate: 180 }}
+            transition={{ duration: 1.5, repeat: Infinity }}
+          >
             <ChevronUp className="w-5 h-5" />
           </motion.div>
         </motion.div>
