@@ -11,30 +11,14 @@ Deno.serve(async (req) => {
 
     // Fetch world news from multiple sources
     const response = await base44.integrations.Core.InvokeLLM({
-      prompt: `עבור את הידיעות החמות ביותר כרגע בעולם. חפש ידיעות מ:
-      - BBC
-      - CNN
-      - Fox News
-      - Reuters
-      - Associated Press
-      - The Guardian
-      - The New York Times
-      - Sky News
-      - France 24
-      - Al Jazeera
-      
-      תחזור עם מיני 15-20 ידיעות חדשות וחשמוניות מהעולם כמו:
-      - אירועי פוליטיקה בינלאומית
-      - בעיות כלכליות גלובליות
-      - מאורעות בעולם
-      - חדשות טכנולוגיה בינלאומית
-      - חדשות ספורט עולמיות
-      
-      לכל ידיעה, תן:
-      - כותרת (בעברית)
-      - תיאור קצר (בעברית)
-      - קטגוריה
-      - מקור (הרשת החדשות)`,
+      prompt: `חפש את הידיעות החמות ביותר כרגע בעולם מ BBC, CNN, Reuters, Al Jazeera, Guardian ועוד. תן לי 15-20 ידיעות שונות בעברית על:
+- פוליטיקה בינלאומית
+- כלכלה עולמית  
+- מאורעות חמים בעולם
+- טכנולוגיה
+- ספורט
+
+לכל ידיעה תן בדיוק: title (בעברית), description (בעברית, 1-2 משפטים), category, source (שם הרשת).`,
       add_context_from_internet: true,
       response_json_schema: {
         type: "object",
@@ -48,18 +32,28 @@ Deno.serve(async (req) => {
                 description: { type: "string" },
                 category: { type: "string" },
                 source: { type: "string" }
-              }
+              },
+              required: ["title", "description"]
             }
           }
-        }
+        },
+        required: ["articles"]
       }
     });
 
+    const articles = Array.isArray(response?.articles) ? response.articles : [];
+    
     return Response.json({
-      articles: response.articles || [],
+      articles: articles.map(a => ({
+        title: a.title || 'חדשה ללא כותרת',
+        description: a.description || '',
+        category: a.category || 'world',
+        source: a.source || 'עיתון בינלאומי'
+      })),
       timestamp: new Date().toISOString()
     });
   } catch (error) {
+    console.error('Error fetching world news:', error);
     return Response.json({ 
       error: error.message,
       articles: []
