@@ -218,7 +218,10 @@ export default function VODModal({ isOpen, onClose }) {
                 className="relative h-[75vh] flex-shrink-0 bg-gradient-to-br from-gray-950 via-black to-gray-950 p-4 lg:p-6"
               >
                 {/* Player Frame */}
-                <div className="relative h-full rounded-2xl overflow-hidden border-4 border-red-600/50 shadow-2xl shadow-red-600/30 group cursor-pointer">
+                <div 
+                  onClick={() => setShowMainPlayer(false)}
+                  className="relative h-full rounded-2xl overflow-hidden border-4 border-red-600/50 shadow-2xl shadow-red-600/30 group cursor-pointer"
+                >
                   {/* Top Bar with Logo */}
                   <div className="absolute top-0 left-0 right-0 z-10 bg-gradient-to-b from-black/90 to-transparent p-4 flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -238,28 +241,55 @@ export default function VODModal({ isOpen, onClose }) {
                     </div>
                   </div>
 
-                  {/* Play Button Overlay */}
-                  <div 
-                    onClick={() => setIsFullscreen(true)}
-                    className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity z-20"
-                  >
-                    <motion.div
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.9 }}
-                      className="bg-red-600 rounded-full p-8 shadow-2xl"
-                    >
-                      <Play className="w-16 h-16 text-white" fill="white" />
-                    </motion.div>
-                  </div>
+                  {showMainPlayer ? (
+                    <>
+                      {/* Placeholder Image */}
+                      <img 
+                        src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/38133068e_image.png"
+                        alt="VOD Player"
+                        className="w-full h-full object-cover"
+                      />
 
-                  {/* Video Player */}
-                  <iframe 
-                    src="https://www.mako.co.il/AjaxPage?jspName=embedHTML5video.jsp&galleryChannelId=3bf5c3a8e967f510VgnVCM2000002a0c10acRCRD&videoChannelId=8bf955222beab610VgnVCM100000700a10acRCRD&vcmid=1e2258089b67f510VgnVCM2000002a0c10acRCRD"
-                    className="w-full h-full pointer-events-none"
-                    frameBorder="0"
-                    allowFullScreen
-                    allow="autoplay"
-                  />
+                      {/* Play Button Overlay */}
+                      <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition-all z-20">
+                        <motion.div
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          className="bg-red-600 rounded-full p-8 shadow-2xl"
+                        >
+                          <Play className="w-16 h-16 text-white" fill="white" />
+                        </motion.div>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      {/* Video Player */}
+                      <iframe 
+                        src="https://www.mako.co.il/AjaxPage?jspName=embedHTML5video.jsp&galleryChannelId=3bf5c3a8e967f510VgnVCM2000002a0c10acRCRD&videoChannelId=8bf955222beab610VgnVCM100000700a10acRCRD&vcmid=1e2258089b67f510VgnVCM2000002a0c10acRCRD"
+                        className="w-full h-full"
+                        frameBorder="0"
+                        allowFullScreen
+                        allow="autoplay"
+                      />
+
+                      {/* Play Button to go Fullscreen */}
+                      <div 
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setIsFullscreen(true);
+                        }}
+                        className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity z-20"
+                      >
+                        <motion.div
+                          whileHover={{ scale: 1.1 }}
+                          whileTap={{ scale: 0.9 }}
+                          className="bg-red-600 rounded-full p-8 shadow-2xl"
+                        >
+                          <Play className="w-16 h-16 text-white" fill="white" />
+                        </motion.div>
+                      </div>
+                    </>
+                  )}
 
                   {/* Bottom Bar with Branding */}
                   <div className="absolute bottom-0 left-0 right-0 z-10 bg-gradient-to-t from-black/90 to-transparent p-3 lg:p-4">
