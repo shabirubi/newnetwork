@@ -9,7 +9,7 @@ import WeatherWidget from "./WeatherWidget";
 import ChannelSelector from "./ChannelSelector";
 
 
-export default function NewsTicker({ darkMode, setDarkMode }) {
+export default function NewsTicker({ darkMode, setDarkMode, onMenuClick }) {
   const [news, setNews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currencies, setCurrencies] = useState([]);
