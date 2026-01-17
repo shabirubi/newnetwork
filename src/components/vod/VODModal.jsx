@@ -33,6 +33,7 @@ const CATEGORIES = [
 export default function VODModal({ isOpen, onClose }) {
   const [activeCategory, setActiveCategory] = useState("live");
   const [selectedContent, setSelectedContent] = useState(null);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   const [showMainPlayer, setShowMainPlayer] = useState(true);
   const [isRadioPlaying, setIsRadioPlaying] = useState(false);
   const [showCategoryMenu, setShowCategoryMenu] = useState(false);
@@ -210,14 +211,14 @@ export default function VODModal({ isOpen, onClose }) {
             </div>
 
             {/* Hero Section with Background Player */}
-            {activeCategory === "live" && (
+            {activeCategory === "live" && !isFullscreen && (
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 className="relative h-[50vh] lg:h-[60vh] flex-shrink-0 bg-gradient-to-br from-gray-950 via-black to-gray-950 p-4 lg:p-6"
               >
                 {/* Player Frame */}
-                <div className="relative h-full rounded-2xl overflow-hidden border-4 border-red-600/50 shadow-2xl shadow-red-600/30">
+                <div className="relative h-full rounded-2xl overflow-hidden border-4 border-red-600/50 shadow-2xl shadow-red-600/30 group cursor-pointer">
                   {/* Top Bar with Logo */}
                   <div className="absolute top-0 left-0 right-0 z-10 bg-gradient-to-b from-black/90 to-transparent p-4 flex items-center justify-between">
                     <div className="flex items-center gap-3">
@@ -237,10 +238,24 @@ export default function VODModal({ isOpen, onClose }) {
                     </div>
                   </div>
 
+                  {/* Play Button Overlay */}
+                  <div 
+                    onClick={() => setIsFullscreen(true)}
+                    className="absolute inset-0 flex items-center justify-center bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity z-20"
+                  >
+                    <motion.div
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      className="bg-red-600 rounded-full p-8 shadow-2xl"
+                    >
+                      <Play className="w-16 h-16 text-white" fill="white" />
+                    </motion.div>
+                  </div>
+
                   {/* Video Player */}
                   <iframe 
                     src="https://www.mako.co.il/AjaxPage?jspName=embedHTML5video.jsp&galleryChannelId=3bf5c3a8e967f510VgnVCM2000002a0c10acRCRD&videoChannelId=8bf955222beab610VgnVCM100000700a10acRCRD&vcmid=1e2258089b67f510VgnVCM2000002a0c10acRCRD"
-                    className="w-full h-full"
+                    className="w-full h-full pointer-events-none"
                     frameBorder="0"
                     allowFullScreen
                     allow="autoplay"
@@ -252,6 +267,59 @@ export default function VODModal({ isOpen, onClose }) {
                       <Radio className="w-4 h-4 lg:w-5 lg:h-5 text-red-500 animate-pulse" />
                       <span className="text-white text-xs lg:text-sm font-bold">משודר בחסות הרשת החדשה</span>
                     </div>
+                  </div>
+                </div>
+              </motion.div>
+            )}
+
+            {/* Fullscreen Player */}
+            {isFullscreen && activeCategory === "live" && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="fixed inset-0 z-[200] bg-black"
+              >
+                {/* Top Bar with Logo */}
+                <div className="absolute top-0 left-0 right-0 z-20 bg-gradient-to-b from-black/95 to-transparent p-6 flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <img 
+                      src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png"
+                      alt="הרשת החדשה"
+                      className="w-16 h-16 lg:w-20 lg:h-20 drop-shadow-2xl"
+                    />
+                    <div>
+                      <h3 className="text-white font-bold text-xl lg:text-2xl">הרשת החדשה</h3>
+                      <p className="text-red-500 text-sm lg:text-base font-bold">VOD - שידור חי</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <div className="bg-red-600 px-5 py-3 rounded-full flex items-center gap-2 animate-pulse">
+                      <span className="w-3 h-3 bg-white rounded-full"></span>
+                      <span className="text-white text-base font-bold">LIVE</span>
+                    </div>
+                    <button
+                      onClick={() => setIsFullscreen(false)}
+                      className="bg-white/10 hover:bg-white/20 p-3 rounded-full transition-all"
+                    >
+                      <X className="w-6 h-6 text-white" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Video Player */}
+                <iframe 
+                  src="https://www.mako.co.il/AjaxPage?jspName=embedHTML5video.jsp&galleryChannelId=3bf5c3a8e967f510VgnVCM2000002a0c10acRCRD&videoChannelId=8bf955222beab610VgnVCM100000700a10acRCRD&vcmid=1e2258089b67f510VgnVCM2000002a0c10acRCRD"
+                  className="w-full h-full"
+                  frameBorder="0"
+                  allowFullScreen
+                  allow="autoplay"
+                />
+
+                {/* Bottom Bar with Branding */}
+                <div className="absolute bottom-0 left-0 right-0 z-20 bg-gradient-to-t from-black/95 to-transparent p-6">
+                  <div className="flex items-center justify-center gap-3">
+                    <Radio className="w-6 h-6 text-red-500 animate-pulse" />
+                    <span className="text-white text-lg font-bold">משודר בחסות הרשת החדשה</span>
                   </div>
                 </div>
               </motion.div>
