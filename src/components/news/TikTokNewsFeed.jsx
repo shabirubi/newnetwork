@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "../../utils";
 import moment from "moment";
 import BroadcastStrip from "./BroadcastStrip";
+import CurrencyStrip from "./CurrencyStrip";
 
 const categoryColors = {
   breaking: "bg-[#E31E24] text-white",
@@ -114,6 +115,7 @@ export default function TikTokNewsFeed({ articles: propArticles }) {
 
   return (
     <section className="relative bg-black">
+      <CurrencyStrip />
       <BroadcastStrip />
       <section 
         ref={containerRef}
