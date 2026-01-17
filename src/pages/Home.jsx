@@ -41,6 +41,7 @@ import UploadVideoModal from "../components/home/UploadVideoModal";
 import LiveStatisticsContainer from "../components/home/LiveStatisticsContainer";
 import MostViewedContainer from "../components/home/MostViewedContainer";
 import CategoriesHighlightContainer from "../components/home/CategoriesHighlightContainer";
+import WorldNewsContainer from "../components/home/WorldNewsContainer";
 
 
 export default function Home() {
@@ -289,6 +290,9 @@ export default function Home() {
 
       {/* Categories Highlight Container */}
       <CategoriesHighlightContainer />
+
+      {/* World News Container */}
+      <WorldNewsContainer />
 
       {/* Newsletter Signup */}
       <NewsletterSignup />
