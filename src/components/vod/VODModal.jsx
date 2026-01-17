@@ -404,7 +404,7 @@ export default function VODModal({ isOpen, onClose }) {
                                   />
                                 ) : (
                                   <div className="w-full h-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
-                                    <Tv className="w-20 h-20 text-gray-600" />
+                                    <Tv className="w-8 h-8 text-gray-600" />
                                   </div>
                                 )}
                                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent opacity-60 group-hover:opacity-80 transition-opacity" />
