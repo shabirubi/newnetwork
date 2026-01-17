@@ -330,7 +330,7 @@ export default function ReporterChatModal({ reporter, article, onClose, isOpen =
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[9999] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+      className="fixed inset-0 z-[9999] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-0 sm:p-4"
       onClick={onClose}
     >
       <motion.div
@@ -338,7 +338,7 @@ export default function ReporterChatModal({ reporter, article, onClose, isOpen =
         animate={{ y: 0, opacity: 1 }}
         exit={{ y: "100%", opacity: 0 }}
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-2xl bg-white dark:bg-gray-800 rounded-t-2xl sm:rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh] sm:max-h-[80vh]"
+        className="w-full sm:max-w-2xl bg-white dark:bg-gray-800 rounded-t-2xl sm:rounded-2xl shadow-2xl overflow-hidden flex flex-col h-[95vh] sm:max-h-[85vh]"
       >
         {/* Header */}
         <div className="bg-gradient-to-r from-[#E31E24] to-[#B91C1C] p-4 text-white">
@@ -367,7 +367,7 @@ export default function ReporterChatModal({ reporter, article, onClose, isOpen =
         </div>
 
         {/* Chat Messages */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50 dark:bg-gray-900">
+        <div className="flex-1 overflow-y-auto overscroll-contain p-3 sm:p-4 space-y-3 sm:space-y-4 bg-gray-50 dark:bg-gray-900">
           {!conversation && (
             <div className="flex items-center justify-center h-full">
               <div className="flex flex-col items-center gap-3 text-gray-500">
@@ -476,51 +476,46 @@ export default function ReporterChatModal({ reporter, article, onClose, isOpen =
         </div>
 
         {/* Input Area */}
-        <div className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-4">
-          <div className="flex items-center gap-2 mb-2">
+        <div className="bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 p-4 safe-area-inset-bottom">
+          <div className="flex items-center gap-2 mb-3">
             <Sparkles className="w-4 h-4 text-[#E31E24]" />
             <p className="text-xs text-gray-600 dark:text-gray-400">
-              צ'אט מופעל ע"י AI מתקדם - תשובות מקצועיות ומעמיקות
+              צ'אט מופעל ע"י AI - {reporter.name} מומחה ב{reporter.specialty}
             </p>
           </div>
           
-          <div className="flex gap-2">
+          <div className="flex gap-2 flex-wrap sm:flex-nowrap">
             <Input
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && !isProcessing && handleSendMessage()}
-              placeholder={`שאל את ${reporter.name} שאלה...`}
+              placeholder={`שאל...`}
               disabled={isProcessing || !conversation || isRecording}
-              className="flex-1 dark:bg-gray-700 dark:border-gray-600"
+              className="flex-1 min-w-0 dark:bg-gray-700 dark:border-gray-600 text-sm"
+              autoComplete="off"
             />
             
             <Button
               onClick={isRecording ? stopRecording : startRecording}
               disabled={isProcessing || !conversation}
-              className={`shrink-0 ${isRecording ? 'bg-red-600 hover:bg-red-700 animate-pulse' : 'bg-blue-600 hover:bg-blue-700'}`}
+              className={`shrink-0 w-10 h-10 p-0 ${isRecording ? 'bg-red-600 hover:bg-red-700 animate-pulse' : 'bg-blue-600 hover:bg-blue-700'}`}
+              title={isRecording ? "עצור הקלטה" : "התחל הקלטה קולית"}
             >
-              {isRecording ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
+              {isRecording ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
             </Button>
             
             <Button
               onClick={handleSendMessage}
               disabled={!message.trim() || isProcessing || !conversation || isRecording}
-              className="bg-[#E31E24] hover:bg-[#B91C1C] shrink-0"
+              className="bg-[#E31E24] hover:bg-[#B91C1C] shrink-0 w-10 h-10 p-0"
+              title="שלח הודעה"
             >
               {isProcessing ? (
-                <Loader2 className="w-5 h-5 animate-spin" />
+                <Loader2 className="w-4 h-4 animate-spin" />
               ) : (
-                <Send className="w-5 h-5" />
+                <Send className="w-4 h-4" />
               )}
             </Button>
-          </div>
-          
-          <div className="flex items-center justify-center gap-4 text-xs text-gray-500 dark:text-gray-400 mt-2">
-            <span>{reporter.name} מומחה ב{reporter.specialty}</span>
-            <span className="text-blue-600 dark:text-blue-400 flex items-center gap-1">
-              <Mic className="w-3 h-3" />
-              לחץ על המיקרופון לשאלה קולית
-            </span>
           </div>
         </div>
       </motion.div>
