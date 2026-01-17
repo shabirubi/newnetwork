@@ -28,6 +28,9 @@ import AccessibilityPanel from "../components/accessibility/AccessibilityPanel";
 import NewsReels from "../components/news/NewsReels";
 import LiveReporterQA from "../components/news/LiveReporterQA";
 import TestimonialsSection from "../components/home/TestimonialsSection";
+import TikTokNewsContainer from "../components/home/TikTokNewsContainer";
+import TrendingTopicsContainer from "../components/home/TrendingTopicsContainer";
+import NewsletterSignup from "../components/home/NewsletterSignup";
 
 
 export default function Home() {
@@ -248,6 +251,15 @@ export default function Home() {
 
       {/* News Reels Section */}
       <NewsReels />
+
+      {/* Trending Topics Container */}
+      <TrendingTopicsContainer />
+
+      {/* TikTok News Container */}
+      <TikTokNewsContainer />
+
+      {/* Newsletter Signup */}
+      <NewsletterSignup />
 
       {/* Live Reporter Q&A Section */}
       <LiveReporterQA />
