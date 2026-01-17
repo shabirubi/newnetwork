@@ -1,8 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import { Tv, Play } from "lucide-react";
-import { base44 } from "@/api/base44Client";
-import { useQuery } from "@tanstack/react-query";
 
 const PLUTO_TV_CHANNELS = [
   { id: "andromeda-it", name: "Andromeda", genre: "sci-fi" },
@@ -75,40 +73,7 @@ const getGenreColor = (genre) => {
 };
 
 export default function PlutoTVChannelsContainer() {
-  const [generatingImages, setGeneratingImages] = useState({});
-
-  const generateChannelImage = async (channel) => {
-    try {
-      setGeneratingImages(prev => ({ ...prev, [channel.id]: true }));
-      const response = await base44.integrations.Core.GenerateImage({
-        prompt: `Professional TV channel logo and thumbnail for "${channel.name}". Genre: ${channel.genre}. Vibrant, modern design, suitable for streaming platform. High quality artwork.`
-      });
-      return response.url;
-    } catch (err) {
-      console.error('Image generation failed:', err);
-      return null;
-    } finally {
-      setGeneratingImages(prev => ({ ...prev, [channel.id]: false }));
-    }
-  };
-
-  const { data: channelsWithImages = [], isLoading } = useQuery({
-    queryKey: ['pluto-tv-channels'],
-    queryFn: async () => {
-      const withImages = await Promise.all(
-        PLUTO_TV_CHANNELS.map(async (channel) => {
-          const imageUrl = await generateChannelImage(channel);
-          return { ...channel, image_url: imageUrl };
-        })
-      );
-      return withImages;
-    },
-    initialData: []
-  });
-
-  if (channelsWithImages.length === 0) {
-    return null;
-  }
+  const channelsWithImages = PLUTO_TV_CHANNELS;
 
   return (
     <section className="px-4 sm:px-4 mt-8">
@@ -139,10 +104,6 @@ export default function PlutoTVChannelsContainer() {
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent group-hover:from-black/80 transition-all" />
-              </div>
-            ) : generatingImages[channel.id] ? (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-white" />
               </div>
             ) : null}
 
