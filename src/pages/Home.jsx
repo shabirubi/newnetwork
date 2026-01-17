@@ -35,6 +35,7 @@ import ReportersSpotlight from "../components/home/ReportersSpotlight";
 import BreakingNewsWidget from "../components/home/BreakingNewsWidget";
 import ExpertAnalysisContainer from "../components/home/ExpertAnalysisContainer";
 import NewsStatisticsDashboard from "../components/home/NewsStatisticsDashboard";
+import UserExperienceFeatures from "../components/home/UserExperienceFeatures";
 
 
 export default function Home() {
