@@ -7,6 +7,7 @@ import VODPlayer from "./VODPlayer";
 import LivePlayer from "../news/LivePlayer";
 
 const CATEGORIES = [
+  { id: "live", label: "עולם התוכן של הרשת החדשה", icon: Radio },
   { id: "channels", label: "תחנות שידור בישראל", icon: Tv },
   { id: "movies", label: "סרטים קלאסיים", icon: Film },
   { id: "news", label: "חדשות ואקטואליה", icon: Newspaper },
@@ -30,7 +31,7 @@ const CATEGORIES = [
 ];
 
 export default function VODModal({ isOpen, onClose }) {
-  const [activeCategory, setActiveCategory] = useState("channels");
+  const [activeCategory, setActiveCategory] = useState("live");
   const [selectedContent, setSelectedContent] = useState(null);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showMainPlayer, setShowMainPlayer] = useState(true);
@@ -272,7 +273,7 @@ export default function VODModal({ isOpen, onClose }) {
             )}
 
             {/* Fullscreen Player */}
-            {isFullscreen && activeCategory === "channels" && (
+            {isFullscreen && activeCategory === "live" && (
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
