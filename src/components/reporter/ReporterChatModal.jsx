@@ -1,29 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
-import ReactMarkdown from "react-markdown";
 import {
-  X, Send, Mic, MicOff, Volume2, VolumeX, Loader2, User, Radio, Sparkles
+  X, Send, Loader2, User, Sparkles
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 
 export default function ReporterChatModal({ reporter, article, onClose, isOpen = true }) {
   const [message, setMessage] = useState("");
-  const [conversation, setConversation] = useState(null);
-  const [messages, setMessages] = useState([]);
   const [isProcessing, setIsProcessing] = useState(false);
-  const [playingMessageId, setPlayingMessageId] = useState(null);
-  const [isRecording, setIsRecording] = useState(false);
-  const [audioBlob, setAudioBlob] = useState(null);
-  const mediaRecorderRef = useRef(null);
-  const audioChunksRef = useRef([]);
-  const chatEndRef = useRef(null);
   const inputRef = useRef(null);
-  const queryClient = useQueryClient();
-
+  const chatEndRef = useRef(null);
   const [currentUser, setCurrentUser] = useState(null);
 
   if (!isOpen) return null;
@@ -40,73 +29,38 @@ export default function ReporterChatModal({ reporter, article, onClose, isOpen =
     getUser();
   }, []);
 
-  // Create conversation on mount
-  useEffect(() => {
-    const initConversation = async () => {
-      if (!currentUser) return;
-
-      try {
-        const conv = await base44.agents.createConversation({
-          agent_name: "general_reporter",
-          metadata: {
-            name: `שיחה עם ${reporter.name}`,
-            reporter_id: reporter.id,
-            reporter_name: reporter.name,
-            reporter_role: reporter.role,
-            reporter_specialty: reporter.specialty,
-            reporter_gender: reporter.gender,
-            article_id: article?.id || null,
-            article_title: article?.title || null,
-            user_email: currentUser.email
-          }
-        });
-        setConversation(conv);
-        setMessages([]);
-
-        // Send initial context message
-        const contextMessage = article 
-          ? `היי! אני ${reporter.name}, ${reporter.role}. אני מתמחה ב${reporter.specialty}. אני כאן כדי לדבר איתך על הכתבה "${article.title}". ${article.subtitle || ''}\n\nמה תרצה לדעת?`
-          : `שלום! אני ${reporter.name}, ${reporter.role}. אני מתמחה ב${reporter.specialty}. במה אוכל לעזור לך היום?`;
-
-        await base44.agents.addMessage(conv, {
-          role: "assistant",
-          content: contextMessage
-        });
-
-      } catch (err) {
-        console.error("Error creating conversation:", err);
-        toast.error("שגיאה ביצירת השיחה");
-      }
-    };
-
-    initConversation();
-  }, [currentUser, reporter, article, toast]);
-
-  // Subscribe to conversation updates
-  useEffect(() => {
-    if (!conversation) return;
-
-    const unsubscribe = base44.agents.subscribeToConversation(conversation.id, (data) => {
-      setMessages(data.messages || []);
-    });
-
-    return () => unsubscribe();
-  }, [conversation]);
+  const { data: chatMessages = [] } = useQuery({
+    queryKey: ['reporter-chat', reporter?.id, article?.id],
+    queryFn: async () => {
+      const msgs = await base44.entities.ReporterChat.filter({
+        reporter_id: reporter.id,
+        article_id: article?.id || null
+      }, '-created_date', 100);
+      return msgs;
+    },
+    enabled: !!reporter,
+    refetchInterval: 2000,
+    refetchOnMount: true
+  });
 
 
 
   const handleSendMessage = async () => {
-    if (!message.trim() || !conversation || isProcessing) return;
+    if (!message.trim() || isProcessing || !currentUser) return;
 
     const userMessage = message.trim();
     setMessage("");
     setIsProcessing(true);
-    inputRef.current?.blur();
 
     try {
-      await base44.agents.addMessage(conversation, {
-        role: "user",
-        content: userMessage
+      await base44.entities.ReporterChat.create({
+        reporter_id: reporter.id,
+        reporter_name: reporter.name,
+        article_id: article?.id || null,
+        user_email: currentUser.email,
+        user_name: currentUser.full_name,
+        message: userMessage,
+        sender_type: "user"
       });
       inputRef.current?.focus();
     } catch (err) {
@@ -118,206 +72,7 @@ export default function ReporterChatModal({ reporter, article, onClose, isOpen =
     }
   };
 
-  const startRecording = async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ 
-        audio: {
-          echoCancellation: true,
-          noiseSuppression: true,
-          autoGainControl: true,
-          channelCount: 1,
-          sampleRate: 44100
-        } 
-      });
-      
-      // Try to use audio/webm or fallback to available formats
-      let mimeType = 'audio/webm;codecs=opus';
-      if (!MediaRecorder.isTypeSupported(mimeType)) {
-        mimeType = 'audio/webm';
-        if (!MediaRecorder.isTypeSupported(mimeType)) {
-          mimeType = 'audio/ogg;codecs=opus';
-          if (!MediaRecorder.isTypeSupported(mimeType)) {
-            mimeType = ''; // Let browser choose
-          }
-        }
-      }
-      
-      const options = mimeType ? { mimeType } : {};
-      const mediaRecorder = new MediaRecorder(stream, options);
-      
-      mediaRecorderRef.current = mediaRecorder;
-      audioChunksRef.current = [];
 
-      mediaRecorder.ondataavailable = (event) => {
-        if (event.data.size > 0) {
-          audioChunksRef.current.push(event.data);
-        }
-      };
-
-      mediaRecorder.onstop = async () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: mimeType || 'audio/webm' });
-        setAudioBlob(audioBlob);
-        
-        // Stop all tracks
-        stream.getTracks().forEach(track => track.stop());
-        
-        // Send the audio message
-        await sendAudioMessage(audioBlob);
-      };
-
-      mediaRecorder.start(100); // Record in 100ms chunks
-      setIsRecording(true);
-      toast.success("🎙️ מקליט... לחץ שוב לעצור");
-    } catch (err) {
-      console.error("Error starting recording:", err);
-      if (err.name === 'NotAllowedError' || err.name === 'PermissionDeniedError') {
-        toast.error("נא לאפשר גישה למיקרופון בדפדפן");
-      } else if (err.name === 'NotFoundError') {
-        toast.error("לא נמצא מיקרופון במכשיר");
-      } else {
-        toast.error("שגיאה בגישה למיקרופון");
-      }
-    }
-  };
-
-  const stopRecording = () => {
-    if (mediaRecorderRef.current && isRecording) {
-      mediaRecorderRef.current.stop();
-      setIsRecording(false);
-      toast.info("⏸️ עוצר הקלטה...");
-    }
-  };
-
-  const sendAudioMessage = async (audioBlob) => {
-    if (!conversation || isProcessing) return;
-    
-    setIsProcessing(true);
-
-    try {
-      // Upload audio file
-      const file = new File([audioBlob], "voice-question.webm", { type: "audio/webm" });
-      const { file_url } = await base44.integrations.Core.UploadFile({ file });
-
-      // Send message with audio
-      await base44.agents.addMessage(conversation, {
-        role: "user",
-        content: "שאלה קולית",
-        file_urls: [file_url]
-      });
-
-      toast.success("השאלה נשלחה!");
-    } catch (err) {
-      console.error("Error sending audio message:", err);
-      toast.error("שגיאה בשליחת ההקלטה");
-    } finally {
-      setIsProcessing(false);
-      setAudioBlob(null);
-    }
-  };
-
-
-
-  const playVoiceResponse = async (text, messageId) => {
-    if (playingMessageId === messageId) {
-      const audioElements = document.querySelectorAll('audio');
-      audioElements.forEach(audio => audio.pause());
-      setPlayingMessageId(null);
-      return;
-    }
-
-    setPlayingMessageId(messageId);
-    toast.info("מייצר קול מקצועי...");
-    
-    try {
-      const result = await base44.integrations.Core.InvokeLLM({
-        prompt: `המר את הטקסט הבא לדיבור בעברית עם קול ${reporter.gender === 'female' ? 'נקבה טבעי' : 'זכר טבעי'}.
-        
-טקסט: ${text}
-
-החזר JSON עם:
-- voice_type: "female" או "male" בהתאם למגדר הכתב
-- text: הטקסט המקורי`,
-        response_json_schema: {
-          type: "object",
-          properties: {
-            voice_type: { type: "string" },
-            text: { type: "string" }
-          }
-        }
-      });
-
-      // Use browser's Speech Synthesis with improved settings
-      const utterance = new SpeechSynthesisUtterance(text);
-      utterance.lang = 'he-IL';
-      utterance.volume = 1.0;
-      
-      // Wait for voices to load
-      await new Promise(resolve => {
-        if (window.speechSynthesis.getVoices().length > 0) {
-          resolve();
-        } else {
-          window.speechSynthesis.onvoiceschanged = () => resolve();
-        }
-      });
-      
-      const voices = window.speechSynthesis.getVoices();
-      console.log('Available voices:', voices.map(v => ({name: v.name, lang: v.lang, gender: v.name})));
-      
-      if (reporter.gender === 'female') {
-        // Find actual female Hebrew voices
-        const femaleVoices = voices.filter(v => 
-          (v.lang.includes('he') || v.lang.includes('iw') || v.lang.includes('IL')) &&
-          (v.name.toLowerCase().includes('female') || 
-           v.name.toLowerCase().includes('woman') ||
-           v.name.toLowerCase().includes('zehira') ||
-           v.name.toLowerCase().includes('carmit'))
-        );
-        
-        if (femaleVoices.length > 0) {
-          utterance.voice = femaleVoices[0];
-          utterance.pitch = 1.3;
-          utterance.rate = 1.0;
-          console.log('✅ Using female voice:', utterance.voice.name);
-        } else {
-          utterance.pitch = 1.8;
-          utterance.rate = 1.05;
-        }
-      } else {
-        // Find actual male Hebrew voices
-        const maleVoices = voices.filter(v => 
-          (v.lang.includes('he') || v.lang.includes('iw') || v.lang.includes('IL')) &&
-          (v.name.toLowerCase().includes('male') || 
-           v.name.toLowerCase().includes('man') ||
-           v.name.toLowerCase().includes('asaf') ||
-           v.name.toLowerCase().includes('david'))
-        );
-        
-        if (maleVoices.length > 0) {
-          utterance.voice = maleVoices[0];
-          utterance.pitch = 0.85;
-          utterance.rate = 0.95;
-          console.log('✅ Using male voice:', utterance.voice.name);
-        } else {
-          utterance.pitch = 0.7;
-          utterance.rate = 0.9;
-        }
-      }
-
-      utterance.onend = () => setPlayingMessageId(null);
-      utterance.onerror = (e) => {
-        console.error('Speech error:', e);
-        setPlayingMessageId(null);
-        toast.error('שגיאה בהשמעת קול');
-      };
-      
-      window.speechSynthesis.speak(utterance);
-      
-    } catch (err) {
-      console.error('Voice generation error:', err);
-      toast.error('שגיאה בהשמעת קול');
-      setPlayingMessageId(null);
-    }
-  };
 
   useEffect(() => {
     chatEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -366,16 +121,7 @@ export default function ReporterChatModal({ reporter, article, onClose, isOpen =
 
         {/* Chat Messages */}
         <div className="flex-1 overflow-y-auto overscroll-contain p-3 sm:p-4 space-y-3 sm:space-y-4 bg-gray-50 dark:bg-gray-900">
-          {!conversation && (
-            <div className="flex items-center justify-center h-full">
-              <div className="flex flex-col items-center gap-3 text-gray-500">
-                <Sparkles className="w-8 h-8 animate-pulse text-[#E31E24]" />
-                <p className="text-sm">מאתחל שיחה חכמה עם הכתב...</p>
-              </div>
-            </div>
-          )}
-
-          {conversation && messages.length === 0 && !isProcessing && (
+          {chatMessages.length === 0 && !isProcessing && (
             <div className="flex items-center justify-center h-full">
               <div className="text-center text-gray-500">
                 <Sparkles className="w-12 h-12 mx-auto mb-3 text-[#E31E24]" />
@@ -385,65 +131,25 @@ export default function ReporterChatModal({ reporter, article, onClose, isOpen =
           )}
 
           <AnimatePresence mode="popLayout">
-            {messages.map((msg, idx) => {
-              const isUser = msg.role === 'user';
-              const isAssistant = msg.role === 'assistant';
-              
-              // Skip system messages
-              if (msg.role === 'system') return null;
+            {chatMessages.map((msg) => {
+              const isUser = msg.sender_type === 'user';
 
               return (
                 <motion.div
-                  key={idx}
+                  key={msg.id}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   className={`flex gap-3 ${isUser ? 'justify-end' : 'justify-start'}`}
                 >
-                  {isAssistant && (
+                  {!isUser && (
                     <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-[#E31E24] shrink-0">
                       <img src={reporter.image} alt={reporter.name} className="w-full h-full object-cover" />
                     </div>
                   )}
                   
                   <div className={`max-w-[85%] ${isUser ? 'bg-[#E31E24] text-white' : 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white'} rounded-2xl p-3 shadow-md`}>
-                    {isUser ? (
-                      <p className="text-sm leading-relaxed whitespace-pre-wrap">
-                        {msg.content.replace(/\[הקשר:.*?\]\n\n/g, '').replace('שאלת המשתמש: ', '')}
-                      </p>
-                    ) : (
-                      <ReactMarkdown 
-                        className="text-sm prose prose-sm prose-slate dark:prose-invert max-w-none [&>*:first-child]:mt-0 [&>*:last-child]:mb-0"
-                        components={{
-                          p: ({ children }) => <p className="mb-2 last:mb-0 leading-relaxed">{children}</p>,
-                          strong: ({ children }) => <strong className="font-bold text-[#E31E24]">{children}</strong>,
-                          ul: ({ children }) => <ul className="list-disc mr-4 mb-2">{children}</ul>,
-                          ol: ({ children }) => <ol className="list-decimal mr-4 mb-2">{children}</ol>,
-                          li: ({ children }) => <li className="mb-1">{children}</li>,
-                        }}
-                      >
-                        {msg.content}
-                      </ReactMarkdown>
-                    )}
-                    
-                    {isAssistant && (
-                      <button
-                        onClick={() => playVoiceResponse(msg.content, idx)}
-                        className="mt-2 flex items-center gap-1 text-xs text-[#E31E24] hover:text-[#B91C1C] transition-colors"
-                      >
-                        {playingMessageId === idx ? (
-                          <>
-                            <VolumeX className="w-3 h-3" />
-                            עצור
-                          </>
-                        ) : (
-                          <>
-                            <Volume2 className="w-3 h-3" />
-                            שמע תשובה
-                          </>
-                        )}
-                      </button>
-                    )}
+                    <p className="text-sm leading-relaxed">{msg.message || msg.response_text}</p>
                   </div>
 
                   {isUser && (
@@ -464,7 +170,7 @@ export default function ReporterChatModal({ reporter, article, onClose, isOpen =
               <div className="bg-white dark:bg-gray-800 rounded-2xl p-3 shadow-md">
                 <div className="flex items-center gap-2">
                   <Loader2 className="w-4 h-4 animate-spin text-[#E31E24]" />
-                  <span className="text-xs text-gray-500">{reporter.name} חושב...</span>
+                  <span className="text-xs text-gray-500">שליחת הודעה...</span>
                 </div>
               </div>
             </div>
@@ -482,7 +188,7 @@ export default function ReporterChatModal({ reporter, article, onClose, isOpen =
             </p>
           </div>
           
-          <div className="flex gap-2 flex-wrap sm:flex-nowrap">
+          <div className="flex gap-2">
             <input
               ref={inputRef}
               type="text"
@@ -495,26 +201,15 @@ export default function ReporterChatModal({ reporter, article, onClose, isOpen =
                 }
               }}
               placeholder={`שאל את ${reporter.name}...`}
-              disabled={isProcessing || !conversation || isRecording}
-              className="flex-1 min-w-0 px-3 py-2 rounded-lg border border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:text-white text-sm font-sans"
+              disabled={isProcessing}
+              className="flex-1 px-3 py-2 rounded-lg border border-gray-300 dark:bg-gray-700 dark:border-gray-600 dark:text-white text-sm"
               autoComplete="off"
-              spellCheck="false"
             />
             
             <Button
-              onClick={isRecording ? stopRecording : startRecording}
-              disabled={isProcessing || !conversation}
-              className={`shrink-0 w-10 h-10 p-0 ${isRecording ? 'bg-red-600 hover:bg-red-700 animate-pulse' : 'bg-blue-600 hover:bg-blue-700'}`}
-              title={isRecording ? "עצור הקלטה" : "התחל הקלטה קולית"}
-            >
-              {isRecording ? <MicOff className="w-4 h-4" /> : <Mic className="w-4 h-4" />}
-            </Button>
-            
-            <Button
               onClick={handleSendMessage}
-              disabled={!message.trim() || isProcessing || !conversation || isRecording}
+              disabled={!message.trim() || isProcessing}
               className="bg-[#E31E24] hover:bg-[#B91C1C] shrink-0 w-10 h-10 p-0"
-              title="שלח הודעה"
             >
               {isProcessing ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
