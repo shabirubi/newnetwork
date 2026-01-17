@@ -9,6 +9,12 @@ export default function ReporterChatButton() {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedReporter, setSelectedReporter] = useState(null);
 
+  React.useEffect(() => {
+    const handleOpenChat = () => setIsOpen(true);
+    window.addEventListener('openReporterChat', handleOpenChat);
+    return () => window.removeEventListener('openReporterChat', handleOpenChat);
+  }, []);
+
   const { data: reporters = [] } = useQuery({
     queryKey: ['reporters'],
     queryFn: () => base44.entities.Reporter.filter({ is_active: true }),
