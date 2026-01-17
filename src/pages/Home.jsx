@@ -44,6 +44,7 @@ import CategoriesHighlightContainer from "../components/home/CategoriesHighlight
 import WorldNewsContainer from "../components/home/WorldNewsContainer";
 import ShortVideosContainer from "../components/home/ShortVideosContainer";
 import WorldNewsReportersContainer from "../components/home/WorldNewsReportersContainer";
+import MoviesSeriesContainer from "../components/home/MoviesSeriesContainer";
 
 
 export default function Home() {
@@ -301,6 +302,9 @@ export default function Home() {
 
       {/* World News Reporters Container */}
       <WorldNewsReportersContainer />
+
+      {/* Movies Series Container */}
+      <MoviesSeriesContainer />
 
       {/* Newsletter Signup */}
       <NewsletterSignup />
