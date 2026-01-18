@@ -8,7 +8,6 @@ import {
   Users, Mic, TrendingUp, ChevronLeft, Play,
   Filter, Search, MessageCircle, MessageCircleQuestion
 } from "lucide-react";
-import ReporterChatModal from "../components/reporter/ReporterChatModal";
 import AskReporterModal from "../components/reporter/AskReporterModal";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -86,13 +85,6 @@ export default function Reporters() {
 
   return (
     <div className="max-w-7xl mx-auto px-4 py-8" dir="rtl">
-      {chatReporter && (
-        <ReporterChatModal
-          reporter={chatReporter.reporter}
-          article={chatReporter.article}
-          onClose={() => setChatReporter(null)}
-        />
-      )}
       {askReporter && (
         <AskReporterModal
           reporter={askReporter}
@@ -301,7 +293,7 @@ export default function Reporters() {
                       שאל
                     </button>
                     <button
-                      onClick={() => setChatReporter({ reporter, article: latestArticle })}
+                      onClick={() => window.dispatchEvent(new CustomEvent('openReporterChat'))}
                       className="flex items-center justify-center gap-1 px-2 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-lg transition-all"
                     >
                       <MessageCircle className="w-3.5 h-3.5" />
