@@ -6,7 +6,6 @@ import { Search, Calendar, Filter, Archive as ArchiveIcon } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import NewsCard from "../components/news/NewsCard";
-import ReporterChatButton from "../components/reporter/ReporterChatButton";
 import moment from "moment";
 
 const categoryLabels = {
@@ -172,9 +171,6 @@ export default function Archive() {
           ))}
         </div>
       )}
-
-      {/* Reporter Chat Button */}
-      <ReporterChatButton />
     </div>
   );
 }
