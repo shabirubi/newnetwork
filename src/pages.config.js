@@ -20,6 +20,7 @@ import VOD from './pages/VOD';
 import WarRoom from './pages/WarRoom';
 import ReporterImagesLibrary from './pages/ReporterImagesLibrary';
 import ReporterImageUpload from './pages/ReporterImageUpload';
+import DownloadReporterImages from './pages/DownloadReporterImages';
 import __Layout from './Layout.jsx';
 
 
@@ -46,6 +47,7 @@ export const PAGES = {
     "WarRoom": WarRoom,
     "ReporterImagesLibrary": ReporterImagesLibrary,
     "ReporterImageUpload": ReporterImageUpload,
+    "DownloadReporterImages": DownloadReporterImages,
 }
 
 export const pagesConfig = {
