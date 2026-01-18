@@ -338,7 +338,7 @@ export default function VODModal({ isOpen, onClose }) {
 
                 {/* Video Player */}
                 <iframe 
-                  src="https://www.mako.co.il/AjaxPage?jspName=embedHTML5video.jsp&galleryChannelId=3bf5c3a8e967f510VgnVCM2000002a0c10acRCRD&videoChannelId=8bf955222beab610VgnVCM100000700a10acRCRD&vcmid=1e2258089b67f510VgnVCM2000002a0c10acRCRD"
+                  src="https://www.youtube.com/embed/KTvV8GJ1WAE?autoplay=1"
                   className="w-full h-full"
                   frameBorder="0"
                   allowFullScreen
