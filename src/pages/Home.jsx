@@ -47,6 +47,10 @@ import ShortVideosContainer from "../components/home/ShortVideosContainer";
 import WorldNewsReportersContainer from "../components/home/WorldNewsReportersContainer";
 import MoviesSeriesContainer from "../components/home/MoviesSeriesContainer";
 import PlutoTVChannelsContainer from "../components/home/PlutoTVChannelsContainer";
+import HeadlineGenerator from "../components/tools/HeadlineGenerator";
+import ArticleSummarizer from "../components/tools/ArticleSummarizer";
+import ImageGenerator from "../components/tools/ImageGenerator";
+import TrendsAnalyzer from "../components/tools/TrendsAnalyzer";
 
 
 export default function Home() {
@@ -357,6 +361,12 @@ export default function Home() {
 
       {/* Talking Avatar */}
       <TalkingAvatar />
+
+      {/* Editorial Tools */}
+      <HeadlineGenerator />
+      <ArticleSummarizer />
+      <ImageGenerator />
+      <TrendsAnalyzer />
 
       {/* User Experience Features */}
       <UserExperienceFeatures />
