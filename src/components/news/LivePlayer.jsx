@@ -473,10 +473,10 @@ export default function LivePlayer({
         <div className="absolute bottom-16 sm:bottom-20 left-0 right-0 bg-gradient-to-r from-black/80 via-black/60 to-black/80 backdrop-blur-sm overflow-hidden h-20 sm:h-24 border-t border-b border-yellow-400/30">
           <motion.div
             className="flex items-center h-full"
-            animate={{ x: [0, -2000] }}
-            transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
+            animate={{ x: [0, -3200] }}
+            transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
           >
-            {Array(6).fill(ads).flat().map((ad, idx) => (
+            {Array(12).fill(ads).flat().map((ad, idx) => (
               <div 
                 key={`ad-${idx}`}
                 className="flex-shrink-0 mx-4 relative group cursor-pointer"
