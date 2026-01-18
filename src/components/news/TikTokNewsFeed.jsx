@@ -33,6 +33,8 @@ const categoryLabels = {
   health: "בריאות"
 };
 
+const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png";
+
 export default function TikTokNewsFeed({ articles: propArticles }) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loadedCount, setLoadedCount] = useState(50);
@@ -154,6 +156,14 @@ export default function TikTokNewsFeed({ articles: propArticles }) {
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
+                  {/* Watermark Logo */}
+                  <div className="absolute top-4 right-4 opacity-30 hover:opacity-60 transition-opacity">
+                    <img 
+                      src={LOGO_URL} 
+                      alt="הרשת החדשה" 
+                      className="h-12 w-auto drop-shadow-2xl"
+                    />
+                  </div>
                 </div>
               )}
 
