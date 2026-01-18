@@ -8,8 +8,10 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import moment from "moment";
 
-export default function ReporterChat() {
+export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
   const [isOpen, setIsOpen] = useState(false);
+  const openState = externalIsOpen !== undefined ? externalIsOpen : isOpen;
+  const setOpenState = externalSetIsOpen || setIsOpen;
   const [selectedReporter, setSelectedReporter] = useState(null);
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
@@ -82,7 +84,7 @@ export default function ReporterChat() {
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
         className="bg-gradient-to-br from-indigo-600 to-purple-600 rounded-2xl p-8 cursor-pointer shadow-2xl"
-        onClick={() => setIsOpen(true)}
+        onClick={() => setOpenState(true)}
       >
         <div className="flex items-center gap-4 mb-4">
           <div className="bg-white/20 backdrop-blur-sm rounded-full p-4 relative">
@@ -100,13 +102,13 @@ export default function ReporterChat() {
       </motion.div>
 
       <AnimatePresence>
-        {isOpen && (
+        {openState && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-[99999]"
-            onClick={() => setIsOpen(false)}
+            onClick={() => setOpenState(false)}
           >
             <motion.div
               initial={{ scale: 0.9, opacity: 0 }}
@@ -128,7 +130,7 @@ export default function ReporterChat() {
                 </div>
                 <button
                   onClick={() => {
-                    setIsOpen(false);
+                    setOpenState(false);
                     setSelectedReporter(null);
                     setMessages([]);
                   }}

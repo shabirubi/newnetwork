@@ -72,6 +72,7 @@ export default function Home() {
   const [categoriesMenuOpen, setCategoriesMenuOpen] = React.useState(false);
   const [a11yOpen, setA11yOpen] = React.useState(false);
   const [uploadVideoModalOpen, setUploadVideoModalOpen] = React.useState(false);
+  const [reporterChatOpen, setReporterChatOpen] = React.useState(false);
   const [selectedChannel, setSelectedChannel] = React.useState(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('selectedChannel') || 'all';
@@ -143,7 +144,7 @@ export default function Home() {
                   <div className="fixed left-4 sm:left-6 bottom-24 z-50 flex flex-col gap-4">
                     {/* Reporter Chat Button */}
                     <motion.button
-                      onClick={() => window.dispatchEvent(new CustomEvent('openReporterChat'))}
+                      onClick={() => setReporterChatOpen(true)}
                       initial={{ opacity: 0, scale: 0.5 }}
                       animate={{ opacity: 1, scale: 1 }}
                       whileHover={{ scale: 1.1 }}
@@ -392,23 +393,23 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        <NewsSearch />
-        <LiveStatsApp />
-        <NewsQuiz />
-        <PersonalAlerts />
-        <NewsMap />
-        <DailySummary />
-        <ArticleRating />
-        <WeatherWidget />
-        <BreakingNotifications />
-        <ReadingList />
-        <NewsTimeline />
-        <VoiceNews />
-        <TodoList />
-        <TrendingHashtags />
-        <FavoriteCategories />
-        <FactChecker />
-        <ReporterChat />
+          <NewsSearch />
+          <LiveStatsApp />
+          <NewsQuiz />
+          <PersonalAlerts />
+          <NewsMap />
+          <DailySummary />
+          <ArticleRating />
+          <WeatherWidget />
+          <BreakingNotifications />
+          <ReadingList />
+          <NewsTimeline />
+          <VoiceNews />
+          <TodoList />
+          <TrendingHashtags />
+          <FavoriteCategories />
+          <FactChecker />
+          <ReporterChat externalIsOpen={reporterChatOpen} externalSetIsOpen={setReporterChatOpen} />
         </div>
       </section>
 
