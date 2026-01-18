@@ -18,18 +18,31 @@ export default function TalkingAvatar() {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast.error("נא להעלות קובץ תמונה");
+      return;
+    }
+
     setUploadingImage(true);
     toast.info("מעלה תמונה...");
 
     try {
-      const response = await base44.integrations.Core.UploadFile({ file });
-      console.log('Upload response:', response);
-      const fileUrl = response.file_url || response.url;
-      setAvatarUrl(fileUrl);
-      toast.success("התמונה הועלתה!");
+      // Upload file
+      const result = await base44.integrations.Core.UploadFile({ file });
+      
+      // Get URL from response
+      const url = result?.file_url || result?.url || result;
+      
+      if (!url || typeof url !== 'string') {
+        throw new Error('Invalid response from upload');
+      }
+      
+      setAvatarUrl(url);
+      toast.success("התמונה הועלתה בהצלחה!");
     } catch (error) {
-      toast.error("שגיאה בהעלאת התמונה");
       console.error('Upload error:', error);
+      toast.error(`שגיאה: ${error.message || 'לא ניתן להעלות תמונה'}`);
     } finally {
       setUploadingImage(false);
     }
