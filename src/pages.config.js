@@ -17,6 +17,7 @@ import Terms from './pages/Terms';
 import TestDID from './pages/TestDID';
 import VOD from './pages/VOD';
 import WarRoom from './pages/WarRoom';
+import TestApps from './pages/TestApps';
 import __Layout from './Layout.jsx';
 
 
@@ -40,6 +41,7 @@ export const PAGES = {
     "TestDID": TestDID,
     "VOD": VOD,
     "WarRoom": WarRoom,
+    "TestApps": TestApps,
 }
 
 export const pagesConfig = {
