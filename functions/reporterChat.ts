@@ -15,7 +15,7 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
-    const response = await base44.integrations.Core.InvokeLLM({
+    const llmResponse = await base44.integrations.Core.InvokeLLM({
       prompt: `אתה ${reporterName}, כתב/כתבת חדשות עם התמחות ב-${reporterSpecialty}. 
 קטגוריות שבהן אתה עובד: ${reporterCategories || 'כללי'}.
 ביוגרפיה: ${reporterBio || 'כתב/כתבת חדשות'}
@@ -28,7 +28,7 @@ Deno.serve(async (req) => {
 
     return Response.json({ 
       success: true,
-      message: response 
+      message: llmResponse || "לא הצלחתי לטעון תשובה כעת"
     });
   } catch (error) {
     console.error('Reporter chat error:', error);
