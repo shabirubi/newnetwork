@@ -16,18 +16,32 @@ export default function TalkingAvatar() {
 
   const handleImageUpload = async (e) => {
     const file = e.target.files?.[0];
-    if (!file) return;
+    if (!file) {
+      toast.error("לא נבחר קובץ");
+      return;
+    }
 
+    console.log('File selected:', file.name, file.size, file.type);
     setUploadingImage(true);
 
     try {
+      console.log('Starting upload...');
       const result = await base44.integrations.Core.UploadFile({ file });
-      const url = result.file_url;
+      console.log('Upload result:', result);
+      
+      const url = result.file_url || result.url || result;
+      console.log('Final URL:', url);
+      
+      if (!url) {
+        throw new Error('לא התקבל URL מהשרת');
+      }
+      
       setAvatarUrl(url);
-      toast.success("התמונה הועלתה!");
+      toast.success("התמונה הועלתה בהצלחה!");
+      console.log('Image URL saved:', url);
     } catch (error) {
       console.error('Upload error:', error);
-      toast.error("שגיאה בהעלאת התמונה");
+      toast.error(`שגיאה: ${error.message}`);
     } finally {
       setUploadingImage(false);
     }
