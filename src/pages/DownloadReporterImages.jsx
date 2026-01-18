@@ -52,19 +52,19 @@ export default function DownloadReporterImages() {
         {!isLoading && reporters.filter((r) => r.image).length > 0 && (
           <div className="mb-6 flex gap-4 justify-center">
             <button
-              onClick={downloadAllAsZip}
+              onClick={downloadAllImages}
               disabled={downloading}
               className="bg-red-600 hover:bg-red-700 disabled:bg-gray-600 text-white font-bold py-3 px-8 rounded-lg flex items-center gap-2 transition-all"
             >
               {downloading ? (
                 <>
                   <Loader2 className="w-5 h-5 animate-spin" />
-                  מעדכן...
+                  מוריד את כל התמונות...
                 </>
               ) : (
                 <>
-                  <Package className="w-5 h-5" />
-                  הורד הכל ב-ZIP
+                  <Download className="w-5 h-5" />
+                  הורד את כל התמונות
                 </>
               )}
             </button>
