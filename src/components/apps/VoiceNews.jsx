@@ -13,8 +13,19 @@ export default function VoiceNews() {
 
   const { data: articles = [] } = useQuery({
     queryKey: ['voice-articles'],
-    queryFn: () => base44.entities.NewsArticle.list('-created_date', 10),
-    initialData: []
+    queryFn: async () => {
+      const allArticles = await base44.entities.NewsArticle.list('-created_date', 50);
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      return allArticles.filter(a => {
+        const articleDate = new Date(a.created_date);
+        articleDate.setHours(0, 0, 0, 0);
+        return articleDate.getTime() === today.getTime();
+      }).slice(0, 10);
+    },
+    initialData: [],
+    staleTime: 5 * 60 * 1000,
+    refetchInterval: 10 * 60 * 1000
   });
 
   const readArticle = (text) => {
