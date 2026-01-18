@@ -398,6 +398,23 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Spotify Section */}
+      <section className="px-4 mb-12">
+        <h2 className="text-3xl font-bold dark:text-white mb-6 text-center">שיר היום</h2>
+        <div className="flex justify-center">
+          <iframe 
+            src="https://open.spotify.com/embed/track/0v2ZtLZ0IMss2OZre5Qulh?utm_source=generator" 
+            width="100%" 
+            height="152" 
+            frameBorder="0" 
+            allowFullScreen="" 
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy"
+            className="rounded-2xl max-w-2xl"
+          />
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="bg-[#E31E24]/90 backdrop-blur-sm rounded-2xl p-8 text-white text-center">
         <h2 className="text-2xl md:text-3xl font-bold mb-4">
