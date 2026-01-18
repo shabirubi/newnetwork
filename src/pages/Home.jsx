@@ -16,7 +16,7 @@ import ReporterChatButton from "../components/reporter/ReporterChatButton";
 import CategoriesMenu from "../components/shared/CategoriesMenu";
 import VideoHighlights from "../components/news/VideoHighlights";
 import TalkingAvatar from "../components/avatar/TalkingAvatar";
-import LiveStats from "../components/news/LiveStats";
+
 import AutoNewsUpdater from "../components/news/AutoNewsUpdater";
 import AutoChannelsUpdater from "../components/news/AutoChannelsUpdater";
 import CurrencyStrip from "../components/header/CurrencyStrip";
@@ -40,7 +40,7 @@ import UserExperienceFeatures from "../components/home/UserExperienceFeatures";
 import UserUploadedVideos from "../components/home/UserUploadedVideos";
 import UploadVideoModal from "../components/home/UploadVideoModal";
 import NewsSearch from "../components/apps/NewsSearch";
-import LiveStats from "../components/apps/LiveStats";
+import LiveStatsApp from "../components/apps/LiveStats";
 import NewsQuiz from "../components/apps/NewsQuiz";
 import PersonalAlerts from "../components/apps/PersonalAlerts";
 import LiveStatisticsContainer from "../components/home/LiveStatisticsContainer";
@@ -378,7 +378,7 @@ export default function Home() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <NewsSearch />
-          <LiveStats />
+          <LiveStatsApp />
           <NewsQuiz />
           <PersonalAlerts />
         </div>
