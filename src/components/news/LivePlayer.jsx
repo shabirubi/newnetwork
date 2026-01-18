@@ -34,11 +34,41 @@ export default function LivePlayer({
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [viewerReactions, setViewerReactions] = useState(1234);
   const [dynamicViewerCount, setDynamicViewerCount] = useState(viewerCount || 2847);
+  const [ads, setAds] = useState([]);
+  const [loadingAds, setLoadingAds] = useState(true);
   const videoRef = useRef(null);
   const containerRef = useRef(null);
   const playerRef = useRef(null);
 
   const currentStreamUrl = streamUrl || DEFAULT_STREAM;
+
+  // Generate ads with AI
+  useEffect(() => {
+    const generateAds = async () => {
+      try {
+        const adPromises = [
+          { title: "מבצע חורף חם!", brand: "סופר פארם", type: "קוסמטיקה" },
+          { title: "50% הנחה על כל המוצרים", brand: "פוקס", type: "אופנה" },
+          { title: "טיסות לחול בהנחה", brand: "אל על", type: "תעופה" },
+          { title: "משלוחים חינם עד הבית", brand: "שופרסל אונלין", type: "קניות" }
+        ].map(async (ad) => {
+          const result = await base44.integrations.Core.GenerateImage({
+            prompt: `Create a professional Israeli advertisement banner for ${ad.brand}. Theme: ${ad.type}. Text: "${ad.title}". Style: modern, colorful, high quality commercial ad with Hebrew text, brand colors, professional gradient background. No people faces.`
+          });
+          return { ...ad, image: result.url };
+        });
+
+        const generatedAds = await Promise.all(adPromises);
+        setAds(generatedAds);
+        setLoadingAds(false);
+      } catch (error) {
+        console.error('Error generating ads:', error);
+        setLoadingAds(false);
+      }
+    };
+
+    generateAds();
+  }, []);
 
   // Promo animation effect
   useEffect(() => {
@@ -437,6 +467,42 @@ export default function LivePlayer({
         )}
 
       </div>
+
+      {/* Ads Strip */}
+      {!loadingAds && ads.length > 0 && (
+        <div className="absolute bottom-16 sm:bottom-20 left-0 right-0 bg-gradient-to-r from-black/80 via-black/60 to-black/80 backdrop-blur-sm overflow-hidden h-20 sm:h-24 border-t border-b border-yellow-400/30">
+          <motion.div
+            className="flex items-center h-full"
+            animate={{ x: [0, -2000] }}
+            transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
+          >
+            {Array(6).fill(ads).flat().map((ad, idx) => (
+              <div 
+                key={`ad-${idx}`}
+                className="flex-shrink-0 mx-4 relative group cursor-pointer"
+              >
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  className="relative w-60 sm:w-80 h-16 sm:h-20 rounded-xl overflow-hidden shadow-2xl"
+                >
+                  <img 
+                    src={ad.image} 
+                    alt={ad.title}
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-2 sm:p-3">
+                    <span className="text-yellow-400 font-bold text-xs mb-0.5">{ad.brand}</span>
+                    <span className="text-white font-bold text-sm sm:text-base">{ad.title}</span>
+                  </div>
+                  <div className="absolute top-2 left-2 bg-red-600 text-white px-2 py-0.5 rounded text-[10px] sm:text-xs font-bold">
+                    פרסומת
+                  </div>
+                </motion.div>
+              </div>
+            ))}
+          </motion.div>
+        </div>
+      )}
 
       {/* Controls Bar */}
       <motion.div
