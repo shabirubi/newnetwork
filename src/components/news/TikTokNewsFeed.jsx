@@ -157,11 +157,11 @@ export default function TikTokNewsFeed({ articles: propArticles }) {
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
                   {/* Watermark Logo */}
-                  <div className="absolute top-4 right-4 opacity-30 hover:opacity-60 transition-opacity">
+                  <div className="absolute top-6 right-6 opacity-90 hover:opacity-100 transition-opacity">
                     <img 
                       src={LOGO_URL} 
                       alt="הרשת החדשה" 
-                      className="h-12 w-auto drop-shadow-2xl"
+                      className="h-20 sm:h-24 w-auto drop-shadow-2xl"
                     />
                   </div>
                 </div>
