@@ -429,6 +429,22 @@ export default function Home() {
         </div>
       </section>
 
+      {/* YouTube Video Section */}
+      <section className="px-4 mb-12">
+        <h2 className="text-3xl font-bold dark:text-white mb-6 text-center">וידאו מומלץ</h2>
+        <div className="flex justify-center">
+          <iframe 
+            src="https://www.youtube.com/embed/KTvV8GJ1WAE?autoplay=1"
+            width="100%" 
+            height="400" 
+            frameBorder="0" 
+            allowFullScreen="" 
+            allow="autoplay"
+            className="rounded-2xl max-w-4xl"
+          />
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="bg-[#E31E24]/90 backdrop-blur-sm rounded-2xl p-8 text-white text-center">
         <h2 className="text-2xl md:text-3xl font-bold mb-4">
