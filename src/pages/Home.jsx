@@ -117,7 +117,7 @@ export default function Home() {
   // Don't block render on loading - show content as it loads
 
   return (
-    <div className="space-y-0 sm:space-y-6">
+    <div className="min-h-screen bg-black space-y-0 sm:space-y-6">
       <AutoNewsUpdater />
       <AutoChannelsUpdater />
       
@@ -199,7 +199,7 @@ export default function Home() {
       </div>
 
       {/* Hero Section - TikTok News Feed */}
-      <section className="grid grid-cols-1 lg:grid-cols-12 gap-0 -mx-0 sm:mx-0 px-0 sm:px-4 bg-black">
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-0 -mx-0 sm:mx-0 px-0 sm:px-4">
         {/* Left Sidebar - Entertainment Updates Feed */}
         <aside className="lg:col-span-3 hidden lg:block bg-black">
           <EntertainmentUpdatesFeed />
@@ -218,7 +218,7 @@ export default function Home() {
 
       {/* Live Player Section */}
       <section className="px-0 sm:px-4 mt-6">
-        <div className="bg-gradient-to-r from-gray-900 to-gray-800 dark:from-black dark:to-gray-900 sm:rounded-t-lg p-2 sm:p-3 flex items-center justify-between">
+        <div className="bg-black/60 backdrop-blur-sm sm:rounded-t-lg p-2 sm:p-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="relative flex h-2.5 w-2.5">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E31E24] opacity-75"></span>
@@ -365,7 +365,7 @@ export default function Home() {
       <UserUploadedVideos onUploadClick={() => setUploadVideoModalOpen(true)} />
 
       {/* CTA Section */}
-      <section className="bg-[#E31E24] rounded-2xl p-8 text-white text-center">
+      <section className="bg-[#E31E24]/90 backdrop-blur-sm rounded-2xl p-8 text-white text-center">
         <h2 className="text-2xl md:text-3xl font-bold mb-4">
           הצטרפו למהפכה התקשורתית
         </h2>
