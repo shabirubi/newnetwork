@@ -41,7 +41,7 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
     setIsLoading(true);
 
     try {
-      const response = await base44.integrations.Core.InvokeLLM({
+      const aiResponse = await base44.integrations.Core.InvokeLLM({
         prompt: `אתה ${selectedReporter.name}, כתב/כתבת חדשות עם התמחות ב-${selectedReporter.specialty}. 
         קטגוריות שבהן אתה עובד: ${selectedReporter.categories.join(', ')}.
         ביוגרפיה: ${selectedReporter.bio}
@@ -54,7 +54,7 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
 
       const aiMessage = {
         role: "assistant",
-        content: response,
+        content: aiResponse || "סליחה, לא הצלחתי לטעון תשובה כעת. אנא נסה שוב.",
         reporter: selectedReporter.name,
         timestamp: new Date()
       };
