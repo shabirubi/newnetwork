@@ -47,11 +47,7 @@ import ShortVideosContainer from "../components/home/ShortVideosContainer";
 import WorldNewsReportersContainer from "../components/home/WorldNewsReportersContainer";
 import MoviesSeriesContainer from "../components/home/MoviesSeriesContainer";
 import PlutoTVChannelsContainer from "../components/home/PlutoTVChannelsContainer";
-import HeadlineGenerator from "../components/tools/HeadlineGenerator";
-import ArticleSummarizer from "../components/tools/ArticleSummarizer";
-import ImageGenerator from "../components/tools/ImageGenerator";
-import TrendsAnalyzer from "../components/tools/TrendsAnalyzer";
-import ArticleCreator from "../components/tools/ArticleCreator";
+
 
 
 export default function Home() {
@@ -385,21 +381,7 @@ export default function Home() {
         </Link>
       </section>
 
-      {/* Editorial Tools Section */}
-      <section className="px-4 space-y-8">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold dark:text-white mb-2">כלי עריכה מתקדמים</h2>
-          <p className="text-gray-400">טכנולוגיית AI לשירות העיתונאות</p>
-        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-16 md:gap-24 lg:gap-32">
-          <ArticleCreator />
-          <HeadlineGenerator />
-          <ArticleSummarizer />
-          <ImageGenerator />
-          <TrendsAnalyzer />
-        </div>
-      </section>
     </div>
   );
 }
