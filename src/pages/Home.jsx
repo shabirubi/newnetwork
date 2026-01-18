@@ -39,10 +39,6 @@ import NewsStatisticsDashboard from "../components/home/NewsStatisticsDashboard"
 import UserExperienceFeatures from "../components/home/UserExperienceFeatures";
 import UserUploadedVideos from "../components/home/UserUploadedVideos";
 import UploadVideoModal from "../components/home/UploadVideoModal";
-import NewsSearch from "../components/apps/NewsSearch";
-import LiveStatsApp from "../components/apps/LiveStats";
-import NewsQuiz from "../components/apps/NewsQuiz";
-import PersonalAlerts from "../components/apps/PersonalAlerts";
 import LiveStatisticsContainer from "../components/home/LiveStatisticsContainer";
 import MostViewedContainer from "../components/home/MostViewedContainer";
 import CategoriesHighlightContainer from "../components/home/CategoriesHighlightContainer";
@@ -368,21 +364,6 @@ export default function Home() {
 
       {/* User Uploaded Videos */}
       <UserUploadedVideos onUploadClick={() => setUploadVideoModalOpen(true)} />
-
-      {/* Apps Section */}
-      <section className="px-4 space-y-8">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold dark:text-white mb-2">אפליקציות אינטראקטיביות</h2>
-          <p className="text-gray-400">כלים חכמים לחוויית משתמש משופרת</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          <NewsSearch />
-          <LiveStatsApp />
-          <NewsQuiz />
-          <PersonalAlerts />
-        </div>
-      </section>
 
       {/* CTA Section */}
       <section className="bg-[#E31E24]/90 backdrop-blur-sm rounded-2xl p-8 text-white text-center">
