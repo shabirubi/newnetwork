@@ -19,6 +19,7 @@ import TestDID from './pages/TestDID';
 import VOD from './pages/VOD';
 import WarRoom from './pages/WarRoom';
 import ReporterImagesLibrary from './pages/ReporterImagesLibrary';
+import ReporterImageUpload from './pages/ReporterImageUpload';
 import __Layout from './Layout.jsx';
 
 
@@ -44,6 +45,7 @@ export const PAGES = {
     "VOD": VOD,
     "WarRoom": WarRoom,
     "ReporterImagesLibrary": ReporterImagesLibrary,
+    "ReporterImageUpload": ReporterImageUpload,
 }
 
 export const pagesConfig = {
