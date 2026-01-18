@@ -392,7 +392,7 @@ export default function Home() {
           <p className="text-gray-400">טכנולוגיית AI לשירות העיתונאות</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-12 md:gap-16 lg:gap-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-16 md:gap-24 lg:gap-32">
           <ArticleCreator />
           <HeadlineGenerator />
           <ArticleSummarizer />
