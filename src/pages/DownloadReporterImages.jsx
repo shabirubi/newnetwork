@@ -22,24 +22,18 @@ export default function DownloadReporterImages() {
     document.body.removeChild(link);
   };
 
-  const downloadAllAsZip = async () => {
+  const downloadAllImages = async () => {
     if (downloading) return;
     setDownloading(true);
 
     try {
-      const zip = new JSZip();
       const reportersWithImages = reporters.filter((r) => r.image);
-
       for (const reporter of reportersWithImages) {
-        const response = await fetch(reporter.image);
-        const blob = await response.blob();
-        zip.file(`${reporter.name}.jpg`, blob);
+        await new Promise(resolve => setTimeout(resolve, 200));
+        downloadImage(reporter.image, reporter.name);
       }
-
-      const zipBlob = await zip.generateAsync({ type: "blob" });
-      saveAs(zipBlob, "תמונות_כתבים.zip");
     } catch (error) {
-      console.error("שגיאה בהורדת הקובץ:", error);
+      console.error("שגיאה בהורדת התמונות:", error);
     } finally {
       setDownloading(false);
     }
