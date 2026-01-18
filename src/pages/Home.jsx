@@ -55,6 +55,7 @@ import TodoList from "../components/apps/TodoList";
 import TrendingHashtags from "../components/apps/TrendingHashtags";
 import FavoriteCategories from "../components/apps/FavoriteCategories";
 import FactChecker from "../components/apps/FactChecker";
+import ReporterChat from "../components/apps/ReporterChat";
 import LiveStatisticsContainer from "../components/home/LiveStatisticsContainer";
 import MostViewedContainer from "../components/home/MostViewedContainer";
 import CategoriesHighlightContainer from "../components/home/CategoriesHighlightContainer";
@@ -376,22 +377,23 @@ export default function Home() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <NewsSearch />
-          <LiveStatsApp />
-          <NewsQuiz />
-          <PersonalAlerts />
-          <NewsMap />
-          <DailySummary />
-          <ArticleRating />
-          <WeatherWidget />
-          <BreakingNotifications />
-          <ReadingList />
-          <NewsTimeline />
-          <VoiceNews />
-          <TodoList />
-          <TrendingHashtags />
-          <FavoriteCategories />
-          <FactChecker />
+        <NewsSearch />
+        <LiveStatsApp />
+        <NewsQuiz />
+        <PersonalAlerts />
+        <NewsMap />
+        <DailySummary />
+        <ArticleRating />
+        <WeatherWidget />
+        <BreakingNotifications />
+        <ReadingList />
+        <NewsTimeline />
+        <VoiceNews />
+        <TodoList />
+        <TrendingHashtags />
+        <FavoriteCategories />
+        <FactChecker />
+        <ReporterChat />
         </div>
       </section>
 

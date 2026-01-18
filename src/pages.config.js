@@ -14,10 +14,10 @@ import ReporterQA from './pages/ReporterQA';
 import Reporters from './pages/Reporters';
 import Schedule from './pages/Schedule';
 import Terms from './pages/Terms';
+import TestApps from './pages/TestApps';
 import TestDID from './pages/TestDID';
 import VOD from './pages/VOD';
 import WarRoom from './pages/WarRoom';
-import TestApps from './pages/TestApps';
 import __Layout from './Layout.jsx';
 
 
@@ -38,10 +38,10 @@ export const PAGES = {
     "Reporters": Reporters,
     "Schedule": Schedule,
     "Terms": Terms,
+    "TestApps": TestApps,
     "TestDID": TestDID,
     "VOD": VOD,
     "WarRoom": WarRoom,
-    "TestApps": TestApps,
 }
 
 export const pagesConfig = {
