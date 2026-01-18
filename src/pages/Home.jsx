@@ -43,6 +43,10 @@ import NewsSearch from "../components/apps/NewsSearch";
 import LiveStatsApp from "../components/apps/LiveStatsApp";
 import NewsQuiz from "../components/apps/NewsQuiz";
 import PersonalAlerts from "../components/apps/PersonalAlerts";
+import NewsMap from "../components/apps/NewsMap";
+import DailySummary from "../components/apps/DailySummary";
+import ArticleRating from "../components/apps/ArticleRating";
+import WeatherWidget from "../components/apps/WeatherWidget";
 import LiveStatisticsContainer from "../components/home/LiveStatisticsContainer";
 import MostViewedContainer from "../components/home/MostViewedContainer";
 import CategoriesHighlightContainer from "../components/home/CategoriesHighlightContainer";
@@ -376,11 +380,15 @@ export default function Home() {
           <p className="text-gray-400">כלים חכמים לחוויית משתמש משופרת</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
           <NewsSearch />
           <LiveStatsApp />
           <NewsQuiz />
           <PersonalAlerts />
+          <NewsMap />
+          <DailySummary />
+          <ArticleRating />
+          <WeatherWidget />
         </div>
       </section>
 
