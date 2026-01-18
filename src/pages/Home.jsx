@@ -151,6 +151,11 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-black space-y-0 sm:space-y-6">
+      {/* Welcome Video Overlay */}
+      {welcomeVideoShown && (
+        <WelcomeVideoOverlay onVideoEnd={handleWelcomeVideoEnd} />
+      )}
+
       <AutoNewsUpdater />
       <AutoChannelsUpdater />
       
