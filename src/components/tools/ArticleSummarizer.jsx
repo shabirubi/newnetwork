@@ -52,16 +52,24 @@ ${articleText}`,
   };
 
   return (
-    <>
-      <motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
+    <div className="bg-black/60 backdrop-blur-sm rounded-2xl p-6 border border-green-500/30">
+      <div className="flex items-center gap-3 mb-4">
+        <div className="w-12 h-12 rounded-full bg-green-600/20 flex items-center justify-center">
+          <FileText className="w-6 h-6 text-green-400" />
+        </div>
+        <div>
+          <h3 className="text-xl font-bold text-white">מסכם כתבות AI</h3>
+          <p className="text-gray-400 text-sm">תקציר של 2-3 משפטים</p>
+        </div>
+      </div>
+      
+      <Button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-80 left-4 z-50 bg-gradient-to-br from-green-600 to-green-700 rounded-full p-4 shadow-2xl border-2 border-white/30 hover:border-white/50 transition-all group"
-        title="מסכם כתבות AI"
+        className="w-full bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800"
       >
-        <FileText className="w-6 h-6 text-white" />
-      </motion.button>
+        <FileText className="w-5 h-5 ml-2" />
+        פתח כלי
+      </Button>
 
       <AnimatePresence>
         {isOpen && (
@@ -162,6 +170,6 @@ ${articleText}`,
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </div>
   );
 }

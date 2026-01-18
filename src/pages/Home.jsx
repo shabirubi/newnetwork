@@ -362,12 +362,6 @@ export default function Home() {
       {/* Talking Avatar */}
       <TalkingAvatar />
 
-      {/* Editorial Tools */}
-      <HeadlineGenerator />
-      <ArticleSummarizer />
-      <ImageGenerator />
-      <TrendsAnalyzer />
-
       {/* User Experience Features */}
       <UserExperienceFeatures />
 
@@ -388,6 +382,21 @@ export default function Home() {
             צפו בשידור חי
           </Button>
         </Link>
+      </section>
+
+      {/* Editorial Tools Section */}
+      <section className="px-4 space-y-8">
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-bold dark:text-white mb-2">כלי עריכה מתקדמים</h2>
+          <p className="text-gray-400">טכנולוגיית AI לשירות העיתונאות</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <HeadlineGenerator />
+          <ArticleSummarizer />
+          <ImageGenerator />
+          <TrendsAnalyzer />
+        </div>
       </section>
     </div>
   );

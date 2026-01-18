@@ -58,19 +58,27 @@ export default function TrendsAnalyzer() {
   };
 
   return (
-    <>
-      <motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
+    <div className="bg-black/60 backdrop-blur-sm rounded-2xl p-6 border border-orange-500/30">
+      <div className="flex items-center gap-3 mb-4">
+        <div className="w-12 h-12 rounded-full bg-orange-600/20 flex items-center justify-center">
+          <TrendingUp className="w-6 h-6 text-orange-400" />
+        </div>
+        <div>
+          <h3 className="text-xl font-bold text-white">ניתוח מגמות AI</h3>
+          <p className="text-gray-400 text-sm">נושאים חמים ומילות מפתח</p>
+        </div>
+      </div>
+      
+      <Button
         onClick={() => {
           setIsOpen(true);
           if (!trends) analyzeTrends();
         }}
-        className="fixed bottom-[27rem] left-4 z-50 bg-gradient-to-br from-orange-600 to-orange-700 rounded-full p-4 shadow-2xl border-2 border-white/30 hover:border-white/50 transition-all group"
-        title="ניתוח מגמות AI"
+        className="w-full bg-gradient-to-r from-orange-600 to-orange-700 hover:from-orange-700 hover:to-orange-800"
       >
-        <TrendingUp className="w-6 h-6 text-white" />
-      </motion.button>
+        <TrendingUp className="w-5 h-5 ml-2" />
+        פתח כלי
+      </Button>
 
       <AnimatePresence>
         {isOpen && (
@@ -201,6 +209,6 @@ export default function TrendsAnalyzer() {
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </div>
   );
 }
