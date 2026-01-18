@@ -361,7 +361,7 @@ ${generatedImages.filter(r => r.success).map((reporter, idx) => `  {
                 >
                   {reporter.success ? (
                     <>
-                      <div className="relative mb-3">
+                      <div className="relative mb-3 group">
                         <img
                           src={reporter.imageUrl}
                           alt={reporter.name}
@@ -370,6 +370,13 @@ ${generatedImages.filter(r => r.success).map((reporter, idx) => `  {
                         <div className="absolute top-2 right-2 bg-green-500 text-white rounded-full p-2">
                           <Check size={16} />
                         </div>
+                        <button
+                          onClick={() => downloadImage(reporter.imageUrl, reporter.name)}
+                          className="absolute inset-0 bg-black/0 group-hover:bg-black/40 rounded-lg transition-colors flex items-center justify-center opacity-0 group-hover:opacity-100"
+                          title="הורד תמונה"
+                        >
+                          <Download className="text-white w-6 h-6" />
+                        </button>
                       </div>
                       <h3 className="font-bold text-lg dark:text-white">{reporter.name}</h3>
                       <p className="text-sm text-gray-600 dark:text-gray-400">{reporter.role}</p>
