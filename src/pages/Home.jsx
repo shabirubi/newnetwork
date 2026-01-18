@@ -51,6 +51,10 @@ import BreakingNotifications from "../components/apps/BreakingNotifications";
 import ReadingList from "../components/apps/ReadingList";
 import NewsTimeline from "../components/apps/NewsTimeline";
 import VoiceNews from "../components/apps/VoiceNews";
+import TodoList from "../components/apps/TodoList";
+import TrendingHashtags from "../components/apps/TrendingHashtags";
+import FavoriteCategories from "../components/apps/FavoriteCategories";
+import FactChecker from "../components/apps/FactChecker";
 import LiveStatisticsContainer from "../components/home/LiveStatisticsContainer";
 import MostViewedContainer from "../components/home/MostViewedContainer";
 import CategoriesHighlightContainer from "../components/home/CategoriesHighlightContainer";
@@ -397,6 +401,10 @@ export default function Home() {
           <ReadingList />
           <NewsTimeline />
           <VoiceNews />
+          <TodoList />
+          <TrendingHashtags />
+          <FavoriteCategories />
+          <FactChecker />
         </div>
       </section>
 
