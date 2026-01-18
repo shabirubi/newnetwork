@@ -215,6 +215,23 @@ ${generatedImages.filter(r => r.success).map((reporter, idx) => `  {
     alert('הקוד הועתק! כעת תוכל להדביק אותו בקובץ ReportersFeed.jsx');
   };
 
+  const downloadImage = (imageUrl, reporterName) => {
+    const link = document.createElement('a');
+    link.href = imageUrl;
+    link.download = `${reporterName}.jpg`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const downloadAllImages = async () => {
+    const successfulImages = generatedImages.filter(r => r.success);
+    for (const reporter of successfulImages) {
+      await new Promise(resolve => setTimeout(resolve, 300));
+      downloadImage(reporter.imageUrl, reporter.name);
+    }
+  };
+
   const getCategories = (role) => {
     const categoryMap = {
       "כתב ביטחון": ["security", "breaking"],
