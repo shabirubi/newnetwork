@@ -385,20 +385,39 @@ ${generatedImages.filter(r => r.success).map((reporter, idx) => `  {
             </div>
 
             {!loading && generatedImages.filter(r => r.success).length > 0 && (
-              <div className="bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-300 dark:border-blue-700 rounded-xl p-6">
-                <h3 className="font-bold text-lg mb-3 dark:text-white flex items-center gap-2">
-                  <Download size={20} />
-                  קוד מוכן להעתקה
-                </h3>
-                <p className="text-sm text-gray-700 dark:text-gray-300 mb-4">
-                  לחץ על הכפתור למטה כדי להעתיק את הקוד עם כל ה-URLs החדשים
-                </p>
-                <Button
-                  onClick={copyCode}
-                  className="bg-blue-600 hover:bg-blue-700 text-white"
-                >
-                  העתק קוד
-                </Button>
+              <div className="space-y-4">
+                <div className="bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-300 dark:border-blue-700 rounded-xl p-6">
+                  <h3 className="font-bold text-lg mb-3 dark:text-white flex items-center gap-2">
+                    <Download size={20} />
+                    הורדת תמונות
+                  </h3>
+                  <p className="text-sm text-gray-700 dark:text-gray-300 mb-4">
+                    הורד את כל התמונות של הכתבים בקליק אחד
+                  </p>
+                  <Button
+                    onClick={downloadAllImages}
+                    className="bg-green-600 hover:bg-green-700 text-white w-full"
+                  >
+                    <Download className="mr-2 h-4 w-4" />
+                    הורד את כל התמונות
+                  </Button>
+                </div>
+
+                <div className="bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-300 dark:border-blue-700 rounded-xl p-6">
+                  <h3 className="font-bold text-lg mb-3 dark:text-white flex items-center gap-2">
+                    <Download size={20} />
+                    קוד מוכן להעתקה
+                  </h3>
+                  <p className="text-sm text-gray-700 dark:text-gray-300 mb-4">
+                    לחץ על הכפתור למטה כדי להעתיק את הקוד עם כל ה-URLs החדשים
+                  </p>
+                  <Button
+                    onClick={copyCode}
+                    className="bg-blue-600 hover:bg-blue-700 text-white"
+                  >
+                    העתק קוד
+                  </Button>
+                </div>
               </div>
             )}
           </div>
