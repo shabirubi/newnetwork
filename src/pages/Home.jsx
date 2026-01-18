@@ -141,7 +141,7 @@ export default function Home() {
       <AutoChannelsUpdater />
       
       {/* Floating Action Buttons - Left Side Column */}
-                  <div className="fixed left-4 sm:left-6 bottom-24 z-50 flex flex-col gap-4">
+                  <div className="fixed left-4 sm:left-6 top-1/3 z-50 flex flex-col gap-4">
                     {/* Reporter Chat Button */}
                     <motion.button
                       onClick={() => setReporterChatOpen(true)}
