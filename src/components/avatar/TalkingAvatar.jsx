@@ -22,12 +22,14 @@ export default function TalkingAvatar() {
     toast.info("מעלה תמונה...");
 
     try {
-      const { file_url } = await base44.integrations.Core.UploadFile({ file });
-      setAvatarUrl(file_url);
+      const response = await base44.integrations.Core.UploadFile({ file });
+      console.log('Upload response:', response);
+      const fileUrl = response.file_url || response.url;
+      setAvatarUrl(fileUrl);
       toast.success("התמונה הועלתה!");
     } catch (error) {
       toast.error("שגיאה בהעלאת התמונה");
-      console.error(error);
+      console.error('Upload error:', error);
     } finally {
       setUploadingImage(false);
     }
