@@ -41,25 +41,23 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
     setIsLoading(true);
 
     try {
-      const aiResponse = await base44.integrations.Core.InvokeLLM({
-        prompt: `אתה ${selectedReporter.name}, כתב/כתבת חדשות עם התמחות ב-${selectedReporter.specialty}. 
-        קטגוריות שבהן אתה עובד: ${selectedReporter.categories.join(', ')}.
-        ביוגרפיה: ${selectedReporter.bio}
-        
-        המשתמש שלחת לך הודעה: "${inputValue}"
-        
-        תשובתך צריכה להיות טבעית, מעניינת ולא ארוכה יותר מ-3 משפטים. השיבה בעברית.`,
-        add_context_from_internet: true
+      const { data } = await base44.functions.invoke('reporterChat', {
+        reporterName: selectedReporter.name,
+        reporterSpecialty: selectedReporter.specialty,
+        reporterCategories: selectedReporter.categories?.join(', ') || 'כללי',
+        reporterBio: selectedReporter.bio,
+        userMessage: inputValue
       });
 
       const aiMessage = {
         role: "assistant",
-        content: aiResponse || "סליחה, לא הצלחתי לטעון תשובה כעת. אנא נסה שוב.",
+        content: data?.message || "סליחה, לא הצלחתי לטעון תשובה כעת. אנא נסה שוב.",
         reporter: selectedReporter.name,
         timestamp: new Date()
       };
       setMessages(prev => [...prev, aiMessage]);
     } catch (error) {
+      console.error('Chat error:', error);
       toast.error("שגיאה בשליחת ההודעה");
     } finally {
       setIsLoading(false);
