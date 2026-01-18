@@ -142,21 +142,6 @@ export default function Home() {
       
       {/* Floating Action Buttons - Left Side Column */}
                   <div className="fixed left-4 sm:left-6 bottom-24 z-50 flex flex-col gap-4">
-                    {/* Reporter Chat Button */}
-                    <motion.button
-                      onClick={() => setReporterChatOpen(true)}
-                      initial={{ opacity: 0, scale: 0.5 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      whileHover={{ scale: 1.1 }}
-                      whileTap={{ scale: 0.95 }}
-                      transition={{ duration: 0.3, delay: -0.3 }}
-                      className="group relative bg-gradient-to-br from-indigo-600 to-purple-600 rounded-full p-4 sm:p-3.5 shadow-2xl border-2 border-white/30 hover:border-white/50 transition-all"
-                      title="צ'אט כתבים חכם"
-                    >
-                      <MessageCircle className="w-6 h-6 sm:w-5 sm:h-5 text-white" />
-                      <div className="absolute -top-1 -left-1 w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-                    </motion.button>
-
                     {/* Accessibility Button */}
                     <motion.button
                       onClick={() => setA11yOpen(true)}
