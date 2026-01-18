@@ -16,16 +16,33 @@ export default function TalkingAvatar() {
 
   const handleImageUpload = async (e) => {
     const file = e.target.files?.[0];
-    if (!file) return;
+    if (!file) {
+      console.log("❌ לא נבחר קובץ");
+      return;
+    }
 
+    console.log("📁 קובץ נבחר:", file.name, file.type, file.size);
     setUploadingImage(true);
+    toast.loading("מעלה תמונה...", { id: 'img-upload' });
 
     try {
-      const { file_url } = await base44.integrations.Core.UploadFile({ file });
-      setAvatarUrl(file_url);
-      toast.success("התמונה הועלתה!");
+      console.log("🚀 מתחיל העלאה...");
+      const result = await base44.integrations.Core.UploadFile({ file });
+      console.log("✅ תוצאה מהשרת:", result);
+      
+      const url = result.file_url || result.url || result;
+      console.log("🔗 URL סופי:", url);
+      
+      if (!url || typeof url !== 'string') {
+        throw new Error(`URL לא תקין: ${JSON.stringify(result)}`);
+      }
+      
+      setAvatarUrl(url);
+      toast.success("התמונה הועלתה בהצלחה! ✅", { id: 'img-upload' });
+      console.log("💾 URL נשמר ב-state:", url);
     } catch (error) {
-      toast.error("שגיאה בהעלאת התמונה");
+      console.error("❌ שגיאה בהעלאה:", error);
+      toast.error(`שגיאה: ${error.message}`, { id: 'img-upload' });
     } finally {
       setUploadingImage(false);
     }
