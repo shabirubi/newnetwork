@@ -16,33 +16,18 @@ export default function TalkingAvatar() {
 
   const handleImageUpload = async (e) => {
     const file = e.target.files?.[0];
-    if (!file) {
-      console.log("❌ לא נבחר קובץ");
-      return;
-    }
+    if (!file) return;
 
-    console.log("📁 קובץ נבחר:", file.name, file.type, file.size);
     setUploadingImage(true);
-    toast.loading("מעלה תמונה...", { id: 'img-upload' });
 
     try {
-      console.log("🚀 מתחיל העלאה...");
       const result = await base44.integrations.Core.UploadFile({ file });
-      console.log("✅ תוצאה מהשרת:", result);
-      
-      const url = result.file_url || result.url || result;
-      console.log("🔗 URL סופי:", url);
-      
-      if (!url || typeof url !== 'string') {
-        throw new Error(`URL לא תקין: ${JSON.stringify(result)}`);
-      }
-      
+      const url = result.file_url;
       setAvatarUrl(url);
-      toast.success("התמונה הועלתה בהצלחה! ✅", { id: 'img-upload' });
-      console.log("💾 URL נשמר ב-state:", url);
+      toast.success("התמונה הועלתה!");
     } catch (error) {
-      console.error("❌ שגיאה בהעלאה:", error);
-      toast.error(`שגיאה: ${error.message}`, { id: 'img-upload' });
+      console.error('Upload error:', error);
+      toast.error("שגיאה בהעלאת התמונה");
     } finally {
       setUploadingImage(false);
     }
@@ -60,23 +45,23 @@ export default function TalkingAvatar() {
     }
 
     setIsGenerating(true);
-    toast.info("יוצר דמות מדברת... זה עלול לקחת כדקה");
+    toast.loading("יוצר דמות מדברת...", { id: 'video-gen' });
 
     try {
       const response = await base44.functions.invoke('generateTalkingVideo', {
-        text: text,
-        avatarUrl: avatarUrl
+        text,
+        avatarUrl
       });
 
       if (response.data?.video_url) {
         setVideoUrl(response.data.video_url);
-        toast.success("הדמות המדברת מוכנה! 🎥");
+        toast.success("הוידאו מוכן! 🎥", { id: 'video-gen' });
       } else {
-        throw new Error('לא התקבל וידאו');
+        throw new Error('לא הצלחתי ליצור וידאו');
       }
     } catch (error) {
-      console.error('Error:', error);
-      toast.error(`שגיאה: ${error.message || 'לא ניתן לייצר וידאו'}`);
+      console.error('Video error:', error);
+      toast.error(`שגיאה: ${error.message}`, { id: 'video-gen' });
     } finally {
       setIsGenerating(false);
     }
