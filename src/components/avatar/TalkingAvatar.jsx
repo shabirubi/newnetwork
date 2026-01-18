@@ -196,8 +196,13 @@ export default function TalkingAvatar() {
                             <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
                           </div>
                         )}
-                        <label className="flex-1 cursor-pointer">
-                          <div className="border-2 border-dashed border-gray-600 hover:border-purple-500 rounded-xl p-6 text-center transition-colors">
+                        <div className="flex-1">
+                          <Button
+                            type="button"
+                            onClick={() => document.getElementById('avatar-upload').click()}
+                            disabled={uploadingImage}
+                            className="w-full border-2 border-dashed border-gray-600 hover:border-purple-500 bg-transparent hover:bg-purple-500/10 py-8"
+                          >
                             {uploadingImage ? (
                               <div className="flex items-center justify-center gap-2 text-purple-400">
                                 <Loader2 className="w-5 h-5 animate-spin" />
@@ -209,15 +214,16 @@ export default function TalkingAvatar() {
                                 <p className="text-sm">לחץ להעלאת תמונה</p>
                               </div>
                             )}
-                          </div>
+                          </Button>
                           <input
+                            id="avatar-upload"
                             type="file"
                             accept="image/*"
                             onChange={handleImageUpload}
                             className="hidden"
                             disabled={uploadingImage}
                           />
-                        </label>
+                        </div>
                       </div>
                       <p className="text-xs text-gray-500 mt-2">
                         💡 טיפ: השתמש בתמונה ברורה של פנים כדי לקבל תוצאות מיטביות
