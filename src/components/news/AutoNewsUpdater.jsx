@@ -182,7 +182,7 @@ export default function AutoNewsUpdater() {
       const enrichedArticles = await Promise.all(
         articles.map(async (article) => {
           try {
-            const imagePrompt = `News photo for: ${article.title}. Professional journalism photography, high quality, realistic.`;
+            const imagePrompt = `Professional news photograph depicting: ${article.title}. High quality journalism image, realistic, professional photography. IMPORTANT: NO TEXT OR CAPTIONS in the image, only visual content.`;
             const { url: image_url } = await base44.integrations.Core.GenerateImage({
               prompt: imagePrompt
             });

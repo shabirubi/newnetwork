@@ -11,7 +11,7 @@ export default function WorldNewsReportersContainer() {
     try {
       setGeneratingImages(prev => ({ ...prev, [reporter.id]: true }));
       const response = await base44.integrations.Core.GenerateImage({
-        prompt: `Professional portrait of international news reporter. Clean, modern, professional journalist headshot style. High quality photo for news media. World news correspondent.`
+        prompt: `Professional portrait of international news reporter. Clean, modern, professional journalist headshot style. High quality photo for news media. World news correspondent. IMPORTANT: NO TEXT in the image.`
       });
       return response.url;
     } catch (err) {
