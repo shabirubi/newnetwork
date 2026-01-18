@@ -64,7 +64,7 @@ export default function Layout({ children }) {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300 flex flex-col overflow-x-hidden" dir="rtl">
+    <div className="min-h-screen bg-black transition-colors duration-300 flex flex-col overflow-x-hidden" dir="rtl">
       <style>{`
         :root {
           --primary: #E31E24;
@@ -307,7 +307,7 @@ export default function Layout({ children }) {
       </div>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 border-t border-gray-200 dark:border-gray-700 z-50 safe-area-inset-bottom shadow-lg">
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-black border-t border-gray-800 z-50 safe-area-inset-bottom shadow-lg">
         <div className="grid grid-cols-4 gap-1 px-2 py-3">
           <Link
             to={createPageUrl("Home")}
@@ -315,15 +315,15 @@ export default function Layout({ children }) {
               e.preventDefault();
               window.location.href = createPageUrl("Home");
             }}
-            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-gray-100 dark:active:bg-gray-700 transition-colors touch-manipulation relative z-[110]"
-          >
-            <Home size={28} className="text-gray-600 dark:text-gray-300 mb-1" strokeWidth={2.5} />
-            <span className="text-[11px] font-bold text-gray-600 dark:text-gray-300">בית</span>
+            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-gray-800 transition-colors touch-manipulation relative z-[110]"
+            >
+            <Home size={28} className="text-gray-300 mb-1" strokeWidth={2.5} />
+            <span className="text-[11px] font-bold text-gray-300">בית</span>
           </Link>
 
           <Link
             to={createPageUrl("Live")}
-            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-gray-100 dark:active:bg-gray-700 transition-colors touch-manipulation"
+            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-gray-800 transition-colors touch-manipulation"
           >
             <Radio size={28} className="text-[#E31E24] mb-1" strokeWidth={2.5} />
             <span className="text-[11px] font-bold text-[#E31E24]">חי</span>
@@ -331,18 +331,18 @@ export default function Layout({ children }) {
 
           <Link
             to={createPageUrl("Category?cat=breaking")}
-            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-gray-100 dark:active:bg-gray-700 transition-colors touch-manipulation"
+            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-gray-800 transition-colors touch-manipulation"
           >
-            <Flame size={28} className="text-gray-600 dark:text-gray-300 mb-1" strokeWidth={2.5} />
-            <span className="text-[11px] font-bold text-gray-600 dark:text-gray-300">חמות</span>
+            <Flame size={28} className="text-gray-300 mb-1" strokeWidth={2.5} />
+            <span className="text-[11px] font-bold text-gray-300">חמות</span>
           </Link>
 
           <button
             onClick={() => setMobileMenuOpen(true)}
-            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-gray-100 dark:active:bg-gray-700 transition-colors touch-manipulation"
+            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-gray-800 transition-colors touch-manipulation"
           >
-            <Menu size={28} className="text-gray-600 dark:text-gray-300 mb-1" strokeWidth={2.5} />
-            <span className="text-[11px] font-bold text-gray-600 dark:text-gray-300">עוד</span>
+            <Menu size={28} className="text-gray-300 mb-1" strokeWidth={2.5} />
+            <span className="text-[11px] font-bold text-gray-300">עוד</span>
           </button>
         </div>
       </nav>
