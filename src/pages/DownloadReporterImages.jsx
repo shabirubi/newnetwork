@@ -1,10 +1,8 @@
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
-import { Download, Loader2, Package } from "lucide-react";
+import { Download, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
-import JSZip from "jszip";
-import { saveAs } from "file-saver";
 
 export default function DownloadReporterImages() {
   const [downloading, setDownloading] = useState(false);
