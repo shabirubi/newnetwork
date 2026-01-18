@@ -140,22 +140,37 @@ export default function Home() {
       <AutoChannelsUpdater />
       
       {/* Floating Action Buttons - Left Side Column */}
-            <div className="fixed left-4 sm:left-6 bottom-24 z-50 flex flex-col gap-4">
-              {/* Accessibility Button */}
-              <motion.button
-                onClick={() => setA11yOpen(true)}
-                initial={{ opacity: 0, scale: 0.5 }}
-                animate={{ opacity: 1, scale: 1 }}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.95 }}
-                transition={{ duration: 0.3, delay: -0.2 }}
-                className="bg-gradient-to-br from-purple-600 to-purple-700 rounded-full p-4 sm:p-3.5 shadow-2xl border-2 border-white/30 hover:border-white/50 transition-all"
-                title="אפשרויות נגישות"
-              >
-                <svg className="w-6 h-6 sm:w-5 sm:h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
-                </svg>
-              </motion.button>
+                  <div className="fixed left-4 sm:left-6 bottom-24 z-50 flex flex-col gap-4">
+                    {/* Reporter Chat Button */}
+                    <motion.button
+                      onClick={() => window.dispatchEvent(new CustomEvent('openReporterChat'))}
+                      initial={{ opacity: 0, scale: 0.5 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.95 }}
+                      transition={{ duration: 0.3, delay: -0.3 }}
+                      className="group relative bg-gradient-to-br from-indigo-600 to-purple-600 rounded-full p-4 sm:p-3.5 shadow-2xl border-2 border-white/30 hover:border-white/50 transition-all"
+                      title="צ'אט כתבים חכם"
+                    >
+                      <MessageCircle className="w-6 h-6 sm:w-5 sm:h-5 text-white" />
+                      <div className="absolute -top-1 -left-1 w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                    </motion.button>
+
+                    {/* Accessibility Button */}
+                    <motion.button
+                      onClick={() => setA11yOpen(true)}
+                      initial={{ opacity: 0, scale: 0.5 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.95 }}
+                      transition={{ duration: 0.3, delay: -0.2 }}
+                      className="bg-gradient-to-br from-purple-600 to-purple-700 rounded-full p-4 sm:p-3.5 shadow-2xl border-2 border-white/30 hover:border-white/50 transition-all"
+                      title="אפשרויות נגישות"
+                    >
+                      <svg className="w-6 h-6 sm:w-5 sm:h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+                      </svg>
+                    </motion.button>
 
 
 
