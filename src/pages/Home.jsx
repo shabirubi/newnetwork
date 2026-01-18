@@ -51,6 +51,7 @@ import HeadlineGenerator from "../components/tools/HeadlineGenerator";
 import ArticleSummarizer from "../components/tools/ArticleSummarizer";
 import ImageGenerator from "../components/tools/ImageGenerator";
 import TrendsAnalyzer from "../components/tools/TrendsAnalyzer";
+import ArticleCreator from "../components/tools/ArticleCreator";
 
 
 export default function Home() {
@@ -391,7 +392,8 @@ export default function Home() {
           <p className="text-gray-400">טכנולוגיית AI לשירות העיתונאות</p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <ArticleCreator />
           <HeadlineGenerator />
           <ArticleSummarizer />
           <ImageGenerator />
