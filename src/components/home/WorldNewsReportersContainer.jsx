@@ -3,11 +3,8 @@ import { motion } from "framer-motion";
 import { Globe, MessageCircle, Star } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
-import ReporterChatModal from "../reporter/ReporterChatModal";
 
 export default function WorldNewsReportersContainer() {
-  const [selectedReporter, setSelectedReporter] = useState(null);
-  const [chatModalOpen, setChatModalOpen] = useState(false);
   const [generatingImages, setGeneratingImages] = useState({});
 
   const generateReporterImage = async (reporter) => {
@@ -49,9 +46,8 @@ export default function WorldNewsReportersContainer() {
     initialData: []
   });
 
-  const handleReporterClick = (reporter) => {
-    setSelectedReporter(reporter);
-    setChatModalOpen(true);
+  const handleReporterClick = () => {
+    window.dispatchEvent(new CustomEvent('openReporterChat'));
   };
 
   if (isLoading) {
@@ -153,7 +149,7 @@ export default function WorldNewsReportersContainer() {
 
               {/* Action Button */}
               <button
-                onClick={() => handleReporterClick(reporter)}
+                onClick={handleReporterClick}
                 className="w-full bg-white text-blue-600 font-bold py-2 rounded-lg hover:bg-white/90 transition-all flex items-center justify-center gap-2 mt-auto group/btn"
               >
                 <MessageCircle className="w-4 h-4 group-hover/btn:scale-110 transition-transform" />
@@ -170,19 +166,6 @@ export default function WorldNewsReportersContainer() {
           </motion.div>
         ))}
       </div>
-
-      {/* Chat Modal */}
-      {selectedReporter && (
-        <ReporterChatModal
-          isOpen={chatModalOpen}
-          onClose={() => {
-            setChatModalOpen(false);
-            setSelectedReporter(null);
-          }}
-          reporter={selectedReporter}
-          topic="חדשות חוץ ודיווחים בינלאומיים"
-        />
-      )}
     </section>
   );
 }
