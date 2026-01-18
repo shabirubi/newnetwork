@@ -3,6 +3,7 @@ import Archive from './pages/Archive';
 import Article from './pages/Article';
 import Category from './pages/Category';
 import ChannelsManager from './pages/ChannelsManager';
+import DownloadReporterImages from './pages/DownloadReporterImages';
 import GenerateReporterImages from './pages/GenerateReporterImages';
 import Home from './pages/Home';
 import Live from './pages/Live';
@@ -10,6 +11,8 @@ import NewsAdmin from './pages/NewsAdmin';
 import NewsLoader from './pages/NewsLoader';
 import PublicReports from './pages/PublicReports';
 import RegenerateImages from './pages/RegenerateImages';
+import ReporterImageUpload from './pages/ReporterImageUpload';
+import ReporterImagesLibrary from './pages/ReporterImagesLibrary';
 import ReporterQA from './pages/ReporterQA';
 import Reporters from './pages/Reporters';
 import Schedule from './pages/Schedule';
@@ -18,9 +21,6 @@ import TestApps from './pages/TestApps';
 import TestDID from './pages/TestDID';
 import VOD from './pages/VOD';
 import WarRoom from './pages/WarRoom';
-import ReporterImagesLibrary from './pages/ReporterImagesLibrary';
-import ReporterImageUpload from './pages/ReporterImageUpload';
-import DownloadReporterImages from './pages/DownloadReporterImages';
 import __Layout from './Layout.jsx';
 
 
@@ -30,6 +30,7 @@ export const PAGES = {
     "Article": Article,
     "Category": Category,
     "ChannelsManager": ChannelsManager,
+    "DownloadReporterImages": DownloadReporterImages,
     "GenerateReporterImages": GenerateReporterImages,
     "Home": Home,
     "Live": Live,
@@ -37,6 +38,8 @@ export const PAGES = {
     "NewsLoader": NewsLoader,
     "PublicReports": PublicReports,
     "RegenerateImages": RegenerateImages,
+    "ReporterImageUpload": ReporterImageUpload,
+    "ReporterImagesLibrary": ReporterImagesLibrary,
     "ReporterQA": ReporterQA,
     "Reporters": Reporters,
     "Schedule": Schedule,
@@ -45,9 +48,6 @@ export const PAGES = {
     "TestDID": TestDID,
     "VOD": VOD,
     "WarRoom": WarRoom,
-    "ReporterImagesLibrary": ReporterImagesLibrary,
-    "ReporterImageUpload": ReporterImageUpload,
-    "DownloadReporterImages": DownloadReporterImages,
 }
 
 export const pagesConfig = {

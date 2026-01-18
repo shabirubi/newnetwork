@@ -8,6 +8,7 @@ import { createPageUrl } from "../utils";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
+import WelcomeVideoOverlay from "../components/home/WelcomeVideoOverlay";
 import LivePlayer from "../components/news/LivePlayer";
 import NewsCard from "../components/news/NewsCard";
 import UpdatesFeed from "../components/news/UpdatesFeed";
