@@ -47,6 +47,10 @@ import NewsMap from "../components/apps/NewsMap";
 import DailySummary from "../components/apps/DailySummary";
 import ArticleRating from "../components/apps/ArticleRating";
 import WeatherWidget from "../components/apps/WeatherWidget";
+import BreakingNotifications from "../components/apps/BreakingNotifications";
+import ReadingList from "../components/apps/ReadingList";
+import NewsTimeline from "../components/apps/NewsTimeline";
+import VoiceNews from "../components/apps/VoiceNews";
 import LiveStatisticsContainer from "../components/home/LiveStatisticsContainer";
 import MostViewedContainer from "../components/home/MostViewedContainer";
 import CategoriesHighlightContainer from "../components/home/CategoriesHighlightContainer";
@@ -389,6 +393,10 @@ export default function Home() {
           <DailySummary />
           <ArticleRating />
           <WeatherWidget />
+          <BreakingNotifications />
+          <ReadingList />
+          <NewsTimeline />
+          <VoiceNews />
         </div>
       </section>
 
