@@ -21,38 +21,38 @@ export default function TalkingAvatar() {
       return;
     }
 
-    console.log("Selected file:", file.name, file.type, file.size);
-
-    // Validate file type
-    if (!file.type.startsWith('image/')) {
-      toast.error("נא להעלות קובץ תמונה");
-      return;
-    }
+    console.log("File selected:", file);
 
     setUploadingImage(true);
-    toast.info("מעלה תמונה...");
+    toast.loading("מעלה תמונה...", { id: 'upload' });
 
     try {
-      console.log("Starting upload...");
-      
-      // Upload file
       const result = await base44.integrations.Core.UploadFile({ file });
-      console.log("Upload result:", result);
+      console.log("Full upload result:", JSON.stringify(result, null, 2));
       
-      // Get URL from response
-      const url = result?.file_url || result?.url;
-      console.log("Extracted URL:", url);
+      let url = null;
+      
+      if (typeof result === 'string') {
+        url = result;
+      } else if (result?.file_url) {
+        url = result.file_url;
+      } else if (result?.url) {
+        url = result.url;
+      } else if (result?.data?.file_url) {
+        url = result.data.file_url;
+      }
+      
+      console.log("Final URL:", url);
       
       if (!url) {
-        throw new Error('לא התקבל URL מהשרת');
+        throw new Error('לא התקבל כתובת לתמונה');
       }
       
       setAvatarUrl(url);
-      console.log("Avatar URL set to:", url);
-      toast.success("התמונה הועלתה בהצלחה!");
+      toast.success("התמונה הועלתה!", { id: 'upload' });
     } catch (error) {
-      console.error('Upload error:', error);
-      toast.error(`שגיאה בהעלאה: ${error.message || 'נסה שוב'}`);
+      console.error('Full error:', error);
+      toast.error(`שגיאה: ${error.message}`, { id: 'upload' });
     } finally {
       setUploadingImage(false);
     }
