@@ -9,6 +9,7 @@ import Live from './pages/Live';
 import NewsAdmin from './pages/NewsAdmin';
 import NewsLoader from './pages/NewsLoader';
 import PublicReports from './pages/PublicReports';
+import RegenerateImages from './pages/RegenerateImages';
 import ReporterQA from './pages/ReporterQA';
 import Reporters from './pages/Reporters';
 import Schedule from './pages/Schedule';
@@ -16,7 +17,6 @@ import Terms from './pages/Terms';
 import TestDID from './pages/TestDID';
 import VOD from './pages/VOD';
 import WarRoom from './pages/WarRoom';
-import RegenerateImages from './pages/RegenerateImages';
 import __Layout from './Layout.jsx';
 
 
@@ -32,6 +32,7 @@ export const PAGES = {
     "NewsAdmin": NewsAdmin,
     "NewsLoader": NewsLoader,
     "PublicReports": PublicReports,
+    "RegenerateImages": RegenerateImages,
     "ReporterQA": ReporterQA,
     "Reporters": Reporters,
     "Schedule": Schedule,
@@ -39,7 +40,6 @@ export const PAGES = {
     "TestDID": TestDID,
     "VOD": VOD,
     "WarRoom": WarRoom,
-    "RegenerateImages": RegenerateImages,
 }
 
 export const pagesConfig = {

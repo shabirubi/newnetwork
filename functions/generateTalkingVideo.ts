@@ -1,79 +1,93 @@
-/**
- * Generate talking video using D-ID API
- * Creates realistic AI avatars that speak with lip-sync
- */
-export default async function generateTalkingVideo(data, context) {
-  const { text, avatarUrl, voice = "he-IL-AvriNeural" } = data;
-  
-  const DID_API_KEY = context.secrets.DID_API_KEY;
-  
-  if (!DID_API_KEY) {
-    throw new Error("D-ID API Key not configured. Please add DID_API_KEY to secrets.");
-  }
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
 
-  // Create talk using D-ID API
-  const response = await fetch('https://api.d-id.com/talks', {
-    method: 'POST',
-    headers: {
-      'Authorization': `Basic ${DID_API_KEY}`,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      script: {
-        type: 'text',
-        input: text,
-        provider: {
-          type: 'microsoft',
-          voice_id: voice
-        }
-      },
-      source_url: avatarUrl,
-      config: {
-        fluent: true,
-        pad_audio: 0,
-        stitch: true
-      }
-    })
-  });
+Deno.serve(async (req) => {
+  try {
+    const base44 = createClientFromRequest(req);
+    const user = await base44.auth.me();
 
-  if (!response.ok) {
-    const error = await response.text();
-    throw new Error(`D-ID API error: ${error}`);
-  }
+    if (!user) {
+      return Response.json({ error: 'Unauthorized' }, { status: 401 });
+    }
 
-  const result = await response.json();
-  const talkId = result.id;
+    const { text, avatarUrl } = await req.json();
 
-  // Poll for video completion
-  let attempts = 0;
-  const maxAttempts = 60; // 60 seconds max wait
-  
-  while (attempts < maxAttempts) {
-    await new Promise(resolve => setTimeout(resolve, 1000)); // Wait 1 second
+    if (!text || !avatarUrl) {
+      return Response.json({ error: 'Missing text or avatarUrl' }, { status: 400 });
+    }
+
+    const DID_API_KEY = Deno.env.get('DID_API_KEY');
     
-    const statusResponse = await fetch(`https://api.d-id.com/talks/${talkId}`, {
+    if (!DID_API_KEY) {
+      return Response.json({ error: 'D-ID API Key not configured' }, { status: 500 });
+    }
+
+    // Create talk using D-ID API
+    const response = await fetch('https://api.d-id.com/talks', {
+      method: 'POST',
       headers: {
-        'Authorization': `Basic ${DID_API_KEY}`
-      }
+        'Authorization': `Basic ${DID_API_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        script: {
+          type: 'text',
+          input: text,
+          provider: {
+            type: 'microsoft',
+            voice_id: 'he-IL-AvriNeural'
+          }
+        },
+        source_url: avatarUrl,
+        config: {
+          fluent: true,
+          pad_audio: 0,
+          stitch: true
+        }
+      })
     });
+
+    if (!response.ok) {
+      const error = await response.text();
+      return Response.json({ error: `D-ID API error: ${error}` }, { status: 500 });
+    }
+
+    const result = await response.json();
+    const talkId = result.id;
+
+    // Poll for video completion
+    let attempts = 0;
+    const maxAttempts = 90;
     
-    const statusData = await statusResponse.json();
-    
-    if (statusData.status === 'done') {
-      return {
-        success: true,
-        video_url: statusData.result_url,
-        duration: statusData.duration,
-        talk_id: talkId
-      };
+    while (attempts < maxAttempts) {
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      const statusResponse = await fetch(`https://api.d-id.com/talks/${talkId}`, {
+        headers: {
+          'Authorization': `Basic ${DID_API_KEY}`
+        }
+      });
+      
+      const statusData = await statusResponse.json();
+      
+      if (statusData.status === 'done') {
+        return Response.json({
+          success: true,
+          video_url: statusData.result_url,
+          duration: statusData.duration,
+          talk_id: talkId
+        });
+      }
+      
+      if (statusData.status === 'error') {
+        return Response.json({ error: `Video generation failed: ${statusData.error}` }, { status: 500 });
+      }
+      
+      attempts++;
     }
     
-    if (statusData.status === 'error') {
-      throw new Error(`Video generation failed: ${statusData.error}`);
-    }
-    
-    attempts++;
+    return Response.json({ error: 'Video generation timeout' }, { status: 504 });
+
+  } catch (error) {
+    return Response.json({ error: error.message }, { status: 500 });
   }
-  
-  throw new Error('Video generation timeout');
-}
+});

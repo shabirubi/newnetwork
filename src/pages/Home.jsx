@@ -15,6 +15,7 @@ import EntertainmentUpdatesFeed from "../components/news/EntertainmentUpdatesFee
 import ReporterChatButton from "../components/reporter/ReporterChatButton";
 import CategoriesMenu from "../components/shared/CategoriesMenu";
 import VideoHighlights from "../components/news/VideoHighlights";
+import TalkingAvatar from "../components/avatar/TalkingAvatar";
 import LiveStats from "../components/news/LiveStats";
 import AutoNewsUpdater from "../components/news/AutoNewsUpdater";
 import AutoChannelsUpdater from "../components/news/AutoChannelsUpdater";
@@ -353,6 +354,9 @@ export default function Home() {
 
       {/* Reporter Chat Button */}
       <ReporterChatButton />
+
+      {/* Talking Avatar */}
+      <TalkingAvatar />
 
       {/* User Experience Features */}
       <UserExperienceFeatures />
