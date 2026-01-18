@@ -69,6 +69,12 @@ import PlutoTVChannelsContainer from "../components/home/PlutoTVChannelsContaine
 
 
 export default function Home() {
+  const [welcomeVideoShown, setWelcomeVideoShown] = React.useState(() => {
+    if (typeof window !== 'undefined') {
+      return !localStorage.getItem('welcomeVideoShown');
+    }
+    return true;
+  });
   const [vodModalOpen, setVodModalOpen] = React.useState(false);
   const [categoriesMenuOpen, setCategoriesMenuOpen] = React.useState(false);
   const [a11yOpen, setA11yOpen] = React.useState(false);
@@ -80,6 +86,13 @@ export default function Home() {
     }
     return 'all';
   });
+
+  const handleWelcomeVideoEnd = () => {
+    setWelcomeVideoShown(false);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('welcomeVideoShown', 'true');
+    }
+  };
   React.useEffect(() => {
     const handleChannelChange = (e) => {
       setSelectedChannel(e.detail);
