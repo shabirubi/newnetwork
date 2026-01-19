@@ -48,55 +48,57 @@ export default function VODContent() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute inset-0 z-30 flex items-center justify-center"
+            className="fixed inset-0 z-30 flex items-center justify-center p-4 sm:p-6"
           >
             <div
-              className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+              className="absolute inset-0 bg-black/90 backdrop-blur-md"
               onClick={() => setChannelsOpen(false)}
             />
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
+              initial={{ scale: 0.8, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="relative bg-gradient-to-br from-black/90 via-[#1a0000]/80 to-black/90 rounded-3xl overflow-hidden shadow-2xl border-2 border-[#E31E24]/40 w-11/12 h-auto max-w-6xl max-h-[85vh] backdrop-blur-sm"
+              exit={{ scale: 0.8, opacity: 0 }}
+              className="relative bg-gradient-to-br from-black/95 via-[#0a0000]/90 to-black/95 rounded-3xl overflow-hidden shadow-2xl border-2 border-[#E31E24]/50 w-full h-full max-w-7xl max-h-[90vh] backdrop-blur-sm flex flex-col"
               style={{
-                boxShadow: '0 0 40px rgba(227, 30, 36, 0.4), inset 0 0 20px rgba(227, 30, 36, 0.1)'
+                boxShadow: '0 0 60px rgba(227, 30, 36, 0.5), inset 0 0 30px rgba(227, 30, 36, 0.15)'
               }}
             >
               <button
                 onClick={() => setChannelsOpen(false)}
-                className="absolute top-6 right-6 p-3 hover:bg-[#E31E24]/30 rounded-full transition-all z-10 border border-[#E31E24]/50"
+                className="absolute top-6 right-6 p-3 hover:bg-[#E31E24]/40 rounded-full transition-all z-10 border-2 border-[#E31E24]/60 hover:border-[#E31E24] bg-black/50 backdrop-blur-sm"
               >
-                <X className="w-6 h-6 text-[#E31E24]" />
+                <X className="w-7 h-7 text-[#E31E24]" />
               </button>
-              <div className="w-full overflow-y-auto p-8">
-                <div className="text-center mb-8">
-                  <h2 className="text-4xl font-bold bg-gradient-to-r from-[#E31E24] via-red-500 to-[#E31E24] bg-clip-text text-transparent mb-2">
+              <div className="flex-1 overflow-y-auto p-8 sm:p-12">
+                <div className="text-center mb-12">
+                  <h2 className="text-5xl font-bold bg-gradient-to-r from-[#E31E24] via-red-600 to-[#E31E24] bg-clip-text text-transparent mb-4">
                     ערוצים ישראלים
                   </h2>
-                  <div className="h-1 w-32 bg-gradient-to-r from-[#E31E24] to-transparent mx-auto" />
+                  <div className="h-1.5 w-48 bg-gradient-to-r from-[#E31E24] via-transparent to-[#E31E24] mx-auto rounded-full" 
+                    style={{ boxShadow: '0 0 20px rgba(227, 30, 36, 0.6)' }}
+                  />
                 </div>
-                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-4">
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 2xl:grid-cols-8 gap-6 auto-rows-max justify-items-center">
                   {channels.map((channel) => (
                     <motion.div
                       key={channel.id}
-                      whileHover={{ scale: 1.15, rotateZ: 2 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="flex flex-col items-center gap-2 group"
+                      whileHover={{ scale: 1.2, rotateZ: 3 }}
+                      whileTap={{ scale: 0.9 }}
+                      className="flex flex-col items-center gap-3 group"
                     >
-                      <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden bg-gradient-to-br from-black to-[#330000] border-2 border-[#E31E24]/60 hover:border-[#E31E24] transition-all group-hover:shadow-[0_0_20px_rgba(227,30,36,0.6)]"
+                      <div className="relative w-24 h-24 sm:w-28 sm:h-28 rounded-2xl overflow-hidden bg-gradient-to-br from-black to-[#220000] border-2 border-[#E31E24]/70 hover:border-[#E31E24] transition-all group-hover:shadow-[0_0_30px_rgba(227,30,36,0.8)]"
                         style={{
-                          boxShadow: 'inset 0 0 15px rgba(227, 30, 36, 0.1), 0 0 10px rgba(227, 30, 36, 0.3)'
+                          boxShadow: 'inset 0 0 20px rgba(227, 30, 36, 0.15), 0 0 15px rgba(227, 30, 36, 0.4)'
                         }}
                       >
                         <img 
                           src={channel.logo}
                           alt={channel.name}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform"
+                          className="w-full h-full object-cover group-hover:scale-120 transition-transform"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#E31E24]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#E31E24]/30 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                       </div>
-                      <p className="text-white text-xs text-center font-bold line-clamp-2 w-full px-1 group-hover:text-[#E31E24] transition-colors">
+                      <p className="text-white text-sm text-center font-bold line-clamp-2 w-full px-2 group-hover:text-[#E31E24] transition-colors">
                         {channel.name}
                       </p>
                     </motion.div>
