@@ -41,35 +41,45 @@ export default function VODContent() {
         ערוצים
       </motion.button>
 
+      <style>{`
+        .channels-scroll::-webkit-scrollbar {
+          display: none;
+        }
+        .channels-scroll {
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+        }
+      `}</style>
+
       {/* Channels Modal */}
-      <AnimatePresence>
-        {channelsOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-30 flex items-center justify-center p-4 sm:p-6"
-          >
-            <div
-              className="absolute inset-0 bg-black/90 backdrop-blur-md"
-              onClick={() => setChannelsOpen(false)}
-            />
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              className="relative bg-gradient-to-br from-black/95 via-[#0a0000]/90 to-black/95 rounded-3xl overflow-hidden shadow-2xl border-2 border-[#E31E24]/50 w-full h-full max-w-7xl max-h-[90vh] backdrop-blur-sm flex flex-col"
-              style={{
-                boxShadow: '0 0 60px rgba(227, 30, 36, 0.5), inset 0 0 30px rgba(227, 30, 36, 0.15)'
-              }}
-            >
-              <button
-                onClick={() => setChannelsOpen(false)}
-                className="absolute top-6 right-6 p-3 hover:bg-[#E31E24]/40 rounded-full transition-all z-10 border-2 border-[#E31E24]/60 hover:border-[#E31E24] bg-black/50 backdrop-blur-sm"
-              >
-                <X className="w-7 h-7 text-[#E31E24]" />
-              </button>
-              <div className="flex-1 overflow-y-auto p-8 sm:p-12">
+            <AnimatePresence>
+              {channelsOpen && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="fixed inset-0 z-30 flex items-center justify-center p-4 sm:p-6"
+                >
+                  <div
+                    className="absolute inset-0 bg-black/90 backdrop-blur-md"
+                    onClick={() => setChannelsOpen(false)}
+                  />
+                  <motion.div
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    exit={{ scale: 0.8, opacity: 0 }}
+                    className="relative bg-gradient-to-br from-black/95 via-[#0a0000]/90 to-black/95 rounded-3xl overflow-hidden shadow-2xl border-2 border-[#E31E24]/50 w-full h-full max-w-7xl max-h-[90vh] backdrop-blur-sm flex flex-col"
+                    style={{
+                      boxShadow: '0 0 60px rgba(227, 30, 36, 0.5), inset 0 0 30px rgba(227, 30, 36, 0.15)'
+                    }}
+                  >
+                    <button
+                      onClick={() => setChannelsOpen(false)}
+                      className="absolute top-6 right-6 p-3 hover:bg-[#E31E24]/40 rounded-full transition-all z-10 border-2 border-[#E31E24]/60 hover:border-[#E31E24] bg-black/50 backdrop-blur-sm"
+                    >
+                      <X className="w-7 h-7 text-[#E31E24]" />
+                    </button>
+                    <div className="channels-scroll flex-1 overflow-y-auto p-8 sm:p-12">
                 <div className="text-center mb-12">
                   <h2 className="text-5xl font-bold bg-gradient-to-r from-[#E31E24] via-red-600 to-[#E31E24] bg-clip-text text-transparent mb-4">
                     ערוצים ישראלים
