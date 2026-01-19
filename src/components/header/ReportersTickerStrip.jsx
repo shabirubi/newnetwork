@@ -18,6 +18,22 @@ export default function ReportersTickerStrip() {
     refetchInterval: 30000
   });
 
+  const scroll = (direction) => {
+    const container = scrollContainerRef.current;
+    if (!container) return;
+    const scrollAmount = 200;
+    container.scrollBy({
+      left: direction === 'left' ? -scrollAmount : scrollAmount,
+      behavior: 'smooth'
+    });
+  };
+
+  const handleScroll = () => {
+    if (scrollContainerRef.current) {
+      setScrollPosition(scrollContainerRef.current.scrollLeft);
+    }
+  };
+
   if (reporters.length === 0) return null;
 
   return (
