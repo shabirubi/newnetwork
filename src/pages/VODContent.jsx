@@ -55,7 +55,7 @@ export default function VODContent() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="relative bg-black rounded-2xl overflow-hidden shadow-2xl border border-cyan-500/30 w-11/12 h-5/6 max-w-2xl"
+              className="relative bg-black rounded-2xl overflow-hidden shadow-2xl border border-cyan-500/30 w-11/12 h-5/6 max-w-4xl"
             >
               <button
                 onClick={() => setChannelsOpen(false)}
@@ -63,13 +63,27 @@ export default function VODContent() {
               >
                 <X className="w-6 h-6 text-white" />
               </button>
-              <iframe
-                src="https://raspberrytv.net/price/4"
-                className="w-full h-full"
-                frameBorder="0"
-                allowFullScreen
-                style={{ marginTop: '-80px' }}
-              />
+              <div className="w-full h-full overflow-y-auto p-6">
+                <h2 className="text-2xl font-bold text-white mb-6">ערוצים ישראלים</h2>
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                  {channels.map((channel) => (
+                    <motion.div
+                      key={channel.id}
+                      whileHover={{ scale: 1.05 }}
+                      className="flex flex-col items-center gap-3 cursor-pointer"
+                    >
+                      <div className="w-full aspect-square rounded-lg overflow-hidden bg-gray-900 border border-cyan-500/30 hover:border-cyan-500/70 transition-colors">
+                        <img 
+                          src={channel.logo}
+                          alt={channel.name}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <p className="text-white text-sm text-center font-medium line-clamp-2">{channel.name}</p>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
             </motion.div>
           </motion.div>
         )}
