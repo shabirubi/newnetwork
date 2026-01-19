@@ -102,7 +102,7 @@ export default function VODContent() {
         </div>
 
         {/* Main Content */}
-        <main className="flex-1 max-w-7xl mx-auto w-full px-4 py-8">
+        <main className="flex-1 max-w-7xl mx-auto w-full px-4 py-8 relative z-20">
           {filteredContent.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-20 text-center">
               <div className="text-6xl mb-4">🎬</div>
