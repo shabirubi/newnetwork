@@ -159,130 +159,130 @@ export default function Layout({ children }) {
       {/* Categories Sidebar */}
       <AnimatePresence>
         {categoriesSidebarOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[9999]"
-          >
-            <div 
-              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-              onClick={() => setCategoriesSidebarOpen(false)}
-            />
-            <motion.nav 
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="absolute right-0 top-0 bottom-0 w-64 bg-white dark:bg-gray-800 shadow-2xl overflow-y-auto"
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[9999]"
             >
-              <div className="sticky top-0 bg-gradient-to-br from-gray-900 to-gray-800 dark:from-black dark:to-gray-900 p-4 shadow-lg">
-                <div className="flex items-center justify-between">
-                  <h2 className="text-white font-bold">קטגוריות</h2>
-                  <button
-                    onClick={() => setCategoriesSidebarOpen(false)}
-                    className="p-2 rounded-full bg-white/10 text-white active:scale-95 transition-transform"
-                  >
-                    <X size={22} />
-                  </button>
+              <div 
+                className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+                onClick={() => setCategoriesSidebarOpen(false)}
+              />
+              <motion.nav 
+                initial={{ x: "100%" }}
+                animate={{ x: 0 }}
+                exit={{ x: "100%" }}
+                transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                className="absolute right-0 top-0 bottom-0 w-64 bg-black/90 backdrop-blur-xl border-l border-[#E31E24]/30 shadow-2xl shadow-[#E31E24]/20 overflow-y-auto"
+              >
+                <div className="sticky top-0 bg-gradient-to-br from-black via-[#E31E24]/20 to-black p-4 shadow-lg border-b border-[#E31E24]/30">
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-white font-bold">קטגוריות</h2>
+                    <button
+                      onClick={() => setCategoriesSidebarOpen(false)}
+                      className="p-2 rounded-full bg-[#E31E24]/20 hover:bg-[#E31E24]/40 text-white active:scale-95 transition-all"
+                    >
+                      <X size={22} />
+                    </button>
+                  </div>
                 </div>
-              </div>
 
-              <div className="p-4 space-y-1">
-                {categories.map((cat) => (
-                  <Link
-                    key={cat.id}
-                    to={createPageUrl(cat.href)}
-                    onClick={() => setCategoriesSidebarOpen(false)}
-                    className="flex items-center gap-4 px-4 py-4 text-gray-700 dark:text-gray-200 rounded-2xl active:bg-gray-100 dark:active:bg-gray-700 transition-colors"
-                  >
-                    <div className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-                      <cat.icon size={20} />
-                    </div>
-                    <span className="flex-1 font-medium">{cat.label}</span>
-                    <ChevronLeft size={18} className="text-gray-400" />
-                  </Link>
-                ))}
-              </div>
-            </motion.nav>
-          </motion.div>
-        )}
+                <div className="p-4 space-y-1">
+                  {categories.map((cat) => (
+                    <Link
+                      key={cat.id}
+                      to={createPageUrl(cat.href)}
+                      onClick={() => setCategoriesSidebarOpen(false)}
+                      className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#E31E24]/20 active:bg-[#E31E24]/40 transition-all border border-transparent hover:border-[#E31E24]/30"
+                    >
+                      <div className="w-10 h-10 rounded-xl bg-black/40 border border-[#E31E24]/20 flex items-center justify-center">
+                        <cat.icon size={20} className="text-[#E31E24]" />
+                      </div>
+                      <span className="flex-1 font-medium">{cat.label}</span>
+                      <ChevronLeft size={18} className="text-[#E31E24]" />
+                    </Link>
+                  ))}
+                </div>
+              </motion.nav>
+            </motion.div>
+          )}
       </AnimatePresence>
 
       {/* Native Mobile Drawer */}
       <AnimatePresence>
         {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[9999] lg:hidden"
-          >
-            <div 
-              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-              onClick={() => setMobileMenuOpen(false)}
-            />
-            <motion.nav 
-              initial={{ x: "100%" }}
-              animate={{ x: 0 }}
-              exit={{ x: "100%" }}
-              transition={{ type: "spring", damping: 25, stiffness: 200 }}
-              className="absolute right-0 top-0 bottom-0 w-[85vw] max-w-sm bg-white dark:bg-gray-800 shadow-2xl overflow-y-auto"
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[9999] lg:hidden"
             >
-              {/* Drawer Header */}
-              <div className="sticky top-0 bg-gradient-to-br from-gray-900 to-gray-800 dark:from-black dark:to-gray-900 p-4 shadow-lg">
-                <div className="flex items-center justify-between">
-                  <img 
-                    src={LOGO_URL} 
-                    alt="הרשת החדשה" 
-                    className="h-12 w-auto"
-                  />
-                  <button
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="p-2 rounded-full bg-white/10 text-white active:scale-95 transition-transform"
-                  >
-                    <X size={22} />
-                  </button>
+              <div 
+                className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+                onClick={() => setMobileMenuOpen(false)}
+              />
+              <motion.nav 
+                initial={{ x: "100%" }}
+                animate={{ x: 0 }}
+                exit={{ x: "100%" }}
+                transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                className="absolute right-0 top-0 bottom-0 w-[85vw] max-w-sm bg-black/90 backdrop-blur-xl border-l border-[#E31E24]/30 shadow-2xl shadow-[#E31E24]/20 overflow-y-auto"
+              >
+                {/* Drawer Header */}
+                <div className="sticky top-0 bg-gradient-to-br from-black via-[#E31E24]/20 to-black p-4 shadow-lg border-b border-[#E31E24]/30">
+                  <div className="flex items-center justify-between">
+                    <img 
+                      src={LOGO_URL} 
+                      alt="הרשת החדשה" 
+                      className="h-12 w-auto"
+                    />
+                    <button
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="p-2 rounded-full bg-[#E31E24]/20 hover:bg-[#E31E24]/40 text-white active:scale-95 transition-all"
+                    >
+                      <X size={22} />
+                    </button>
+                  </div>
                 </div>
-              </div>
 
-              {/* Live Button */}
-              <div className="p-4 border-b border-gray-200 dark:border-gray-700">
-                <Link
-                  to={createPageUrl("Live")}
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center justify-center gap-2 w-full py-4 bg-[#E31E24] text-white rounded-2xl font-bold shadow-lg active:scale-95 transition-transform"
-                >
-                  <Radio size={20} />
-                  שידור חי
-                </Link>
-              </div>
+                {/* Live Button */}
+                <div className="p-4 border-b border-[#E31E24]/30">
+                  <Link
+                    to={createPageUrl("Live")}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="flex items-center justify-center gap-2 w-full py-4 bg-gradient-to-r from-[#E31E24] to-[#B91C1C] text-white rounded-2xl font-bold shadow-lg shadow-[#E31E24]/30 active:scale-95 transition-transform"
+                  >
+                    <Radio size={20} />
+                    שידור חי
+                  </Link>
+                </div>
 
-              {/* Menu Items */}
-              <div className="p-4 space-y-1">
+                {/* Menu Items */}
+                <div className="p-4 space-y-1">
 
                 <Link
                   to={createPageUrl("Schedule")}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-4 px-4 py-4 text-gray-700 dark:text-gray-200 rounded-2xl active:bg-gray-100 dark:active:bg-gray-700 transition-colors"
+                  className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#E31E24]/20 active:bg-[#E31E24]/40 transition-all border border-transparent hover:border-[#E31E24]/30"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-                    <Clock size={20} />
+                  <div className="w-10 h-10 rounded-xl bg-black/40 border border-[#E31E24]/20 flex items-center justify-center">
+                    <Clock size={20} className="text-[#E31E24]" />
                   </div>
                   <span className="flex-1 font-medium">לוח שידורים</span>
-                  <ChevronLeft size={18} className="text-gray-400" />
+                  <ChevronLeft size={18} className="text-[#E31E24]" />
                 </Link>
 
                 <Link
                   to={createPageUrl("Reporters")}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-4 px-4 py-4 text-gray-700 dark:text-gray-200 rounded-2xl active:bg-gray-100 dark:active:bg-gray-700 transition-colors"
+                  className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#E31E24]/20 active:bg-[#E31E24]/40 transition-all border border-transparent hover:border-[#E31E24]/30"
                 >
-                  <div className="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
-                    <Users size={20} />
+                  <div className="w-10 h-10 rounded-xl bg-black/40 border border-[#E31E24]/20 flex items-center justify-center">
+                    <Users size={20} className="text-[#E31E24]" />
                   </div>
                   <span className="flex-1 font-medium">אנשי השטח</span>
-                  <ChevronLeft size={18} className="text-gray-400" />
+                  <ChevronLeft size={18} className="text-[#E31E24]" />
                 </Link>
 
 
