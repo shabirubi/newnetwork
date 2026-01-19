@@ -29,10 +29,13 @@ export default function VODContent() {
 
       {/* Channels Button */}
       <motion.button
-        whileHover={{ scale: 1.05 }}
+        whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setChannelsOpen(true)}
-        className="absolute top-8 right-8 z-20 bg-gradient-to-br from-cyan-500 via-purple-500 to-pink-500 text-white px-6 py-3 rounded-full font-bold flex items-center gap-2 shadow-2xl hover:shadow-3xl transition-all border border-white/20"
+        className="absolute top-8 right-8 z-20 bg-gradient-to-br from-black/80 via-[#E31E24]/60 to-black/90 text-white px-8 py-4 rounded-full font-bold flex items-center gap-2 shadow-2xl hover:shadow-[0_0_30px_rgba(227,30,36,0.8)] transition-all border-2 border-[#E31E24]/70 backdrop-blur-sm"
+        style={{
+          boxShadow: '0 0 20px rgba(227, 30, 36, 0.5), inset 0 0 15px rgba(227, 30, 36, 0.2)'
+        }}
       >
         <Tv className="w-5 h-5" />
         ערוצים
