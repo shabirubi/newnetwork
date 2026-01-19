@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Tv, ChevronLeft } from "lucide-react";
+import { X, Tv, ChevronLeft, ChevronUp, ChevronDown } from "lucide-react";
 import { createPageUrl } from "../utils";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -167,34 +167,70 @@ const BACKGROUND_IMAGE = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/ob
         )}
       </AnimatePresence>
 
-      {/* Video Player */}
-      <div className="relative z-10">
+      {/* Video Player with TikTok-like Scrolling */}
+      <div className="relative z-10 flex items-center justify-center gap-6">
+        {/* Up Arrow Button */}
+        <motion.button
+          onClick={() => setCurrentVideoIndex(Math.max(0, currentVideoIndex - 1))}
+          disabled={currentVideoIndex === 0}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          className="hidden sm:flex flex-col items-center gap-2 text-white disabled:opacity-30 disabled:cursor-not-allowed"
+        >
+          <ChevronUp className="w-8 h-8 text-[#E31E24]" />
+          <span className="text-xs font-bold">הקודם</span>
+        </motion.button>
+
         <style>{`
           @keyframes neon-glow {
             0%, 100% { box-shadow: 0 0 10px rgba(227, 30, 36, 0.5), 0 0 20px rgba(227, 30, 36, 0.3); }
             50% { box-shadow: 0 0 20px rgba(227, 30, 36, 0.8), 0 0 40px rgba(227, 30, 36, 0.6); }
           }
         `}</style>
-        <div
-          className="rounded-2xl overflow-hidden bg-black border-2 border-black"
-          style={{
-            width: '320px',
-            height: '568px',
-            animation: 'neon-glow 3s ease-in-out infinite'
-          }}
-        >
-          <iframe
-            key={currentVideo?.id}
-            src={currentVideo?.url}
-            className="w-full h-full"
-            frameBorder="0"
-            allowFullScreen
-            allow="autoplay; encrypted-media"
-            onLoad={(e) => {
-              setTimeout(handleVideoEnded, 120000); // Auto-advance after ~2 minutes
+        
+        <div className="relative">
+          <motion.div
+            key={currentVideoIndex}
+            initial={{ opacity: 0, y: 50 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -50 }}
+            className="rounded-2xl overflow-hidden bg-black border-2 border-black"
+            style={{
+              width: '320px',
+              height: '568px',
+              animation: 'neon-glow 3s ease-in-out infinite'
             }}
-          />
+          >
+            <iframe
+              key={currentVideo?.id}
+              src={currentVideo?.url}
+              className="w-full h-full"
+              frameBorder="0"
+              allowFullScreen
+              allow="autoplay; encrypted-media"
+              onLoad={(e) => {
+                setTimeout(handleVideoEnded, 120000);
+              }}
+            />
+          </motion.div>
+
+          {/* Video Counter */}
+          <div className="absolute bottom-4 left-4 bg-black/60 backdrop-blur-sm px-3 py-2 rounded-full text-white text-xs font-bold border border-[#E31E24]/40">
+            {currentVideoIndex + 1} / {videoQueue.length}
+          </div>
         </div>
+
+        {/* Down Arrow Button */}
+        <motion.button
+          onClick={() => setCurrentVideoIndex(Math.min(videoQueue.length - 1, currentVideoIndex + 1))}
+          disabled={currentVideoIndex === videoQueue.length - 1}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          className="hidden sm:flex flex-col items-center gap-2 text-white disabled:opacity-30 disabled:cursor-not-allowed"
+        >
+          <ChevronDown className="w-8 h-8 text-[#E31E24]" />
+          <span className="text-xs font-bold">הבא</span>
+        </motion.button>
       </div>
     </div>
   );
