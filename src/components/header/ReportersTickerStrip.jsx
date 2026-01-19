@@ -19,22 +19,10 @@ export default function ReportersTickerStrip() {
 
   if (reporters.length === 0) return null;
 
-  // Create 4 duplicates for perfect seamless infinite loop
-  const displayReporters = [...reporters, ...reporters, ...reporters, ...reporters];
-
   return (
     <>
-      <div ref={containerRef} className="bg-black/90 backdrop-blur-xl border-b border-[#E31E24]/30 shadow-xl shadow-[#E31E24]/20 overflow-hidden py-2" style={{ touchAction: 'pan-y' }}>
-        <motion.div 
-          className="flex gap-2 items-center"
-          animate={{ x: ["0%", "-25%"] }}
-          transition={{ 
-            duration: reporters.length * 4,
-            repeat: Infinity, 
-            ease: "linear",
-            repeatType: "loop"
-          }}
-        >
+      <div ref={containerRef} className="bg-black/90 backdrop-blur-xl border-b border-[#E31E24]/30 shadow-xl shadow-[#E31E24]/20 overflow-x-auto py-2" style={{ touchAction: 'pan-y' }}>
+        <div className="flex gap-2 items-center px-4">
         {displayReporters.map((reporter, idx) => (
           <motion.div
             key={`${reporter.id}-${idx}`}
