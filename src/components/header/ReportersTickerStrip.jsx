@@ -2,13 +2,14 @@ import React, { useState, useRef } from "react";
 import { motion } from "framer-motion";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
-import { Users } from "lucide-react";
+import { Users, ChevronLeft, ChevronRight } from "lucide-react";
 import ReporterCardModal from "./ReporterCardModal";
 
 export default function ReportersTickerStrip() {
   const [selectedReporter, setSelectedReporter] = useState(null);
-  const [dragX, setDragX] = useState(0);
+  const [scrollPosition, setScrollPosition] = useState(0);
   const containerRef = useRef(null);
+  const scrollContainerRef = useRef(null);
 
   const { data: reporters = [] } = useQuery({
     queryKey: ['reporters-ticker'],
