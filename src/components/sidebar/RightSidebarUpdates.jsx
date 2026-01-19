@@ -24,7 +24,7 @@ export default function RightSidebarUpdates() {
   const displayUpdates = Array.from({ length: 3 }, () => updates).flat();
 
   return (
-    <div className="hidden xl:flex w-16 bg-gradient-to-b from-gray-900 via-black to-gray-900 border-r border-red-900/20 overflow-hidden sticky top-0 h-screen">
+    <div className="hidden xl:flex w-24 bg-black/60 backdrop-blur-xl border-r border-[#E31E24]/30 overflow-hidden sticky top-0 h-screen">
       <div className="flex items-center justify-center w-full relative">
         <div className="flex flex-col gap-6 absolute">
           <motion.div
@@ -39,7 +39,7 @@ export default function RightSidebarUpdates() {
                 className="flex flex-col items-center gap-2 px-2 py-3 group cursor-pointer"
                 title={update.title}
               >
-                <div className="flex-shrink-0 w-12 h-12 rounded-lg bg-red-500/20 border border-red-500/40 flex items-center justify-center group-hover:border-red-500/80 transition-all">
+                <div className="flex-shrink-0 w-16 h-16 rounded-lg bg-black/40 border border-[#E31E24]/40 flex items-center justify-center group-hover:border-[#E31E24]/80 transition-all">
                   {update.image_url ? (
                     <img
                       src={update.image_url}
@@ -47,10 +47,10 @@ export default function RightSidebarUpdates() {
                       className="w-full h-full object-cover rounded-lg"
                     />
                   ) : (
-                    <Flame className="w-5 h-5 text-red-400 animate-pulse" />
+                    <Flame className="w-6 h-6 text-[#E31E24] animate-pulse" />
                   )}
                 </div>
-                <span className="text-[10px] text-red-400 text-center line-clamp-2 leading-tight">
+                <span className="text-[11px] text-[#E31E24] text-center line-clamp-2 leading-tight font-bold">
                   {update.title.substring(0, 30)}
                 </span>
               </Link>

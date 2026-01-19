@@ -26,7 +26,7 @@ export default function LeftSidebarCategories() {
   const displayCategories = Array.from({ length: 3 }, () => CATEGORIES).flat();
 
   return (
-    <div className="hidden xl:flex w-16 bg-gradient-to-b from-gray-900 via-black to-gray-900 border-l border-purple-900/20 overflow-hidden sticky top-0 h-screen">
+    <div className="hidden xl:flex w-24 bg-black/60 backdrop-blur-xl border-l border-[#E31E24]/30 overflow-hidden sticky top-0 h-screen">
       <div className="flex items-center justify-center w-full relative">
         <div className="flex flex-col gap-4 absolute">
           <motion.div
@@ -43,10 +43,10 @@ export default function LeftSidebarCategories() {
                   className="flex flex-col items-center gap-1 px-2 py-3 group cursor-pointer"
                   title={cat.label}
                 >
-                  <div className={`w-10 h-10 rounded-lg bg-gray-800/50 border border-purple-500/30 flex items-center justify-center group-hover:border-purple-500/80 transition-all ${cat.color}`}>
-                    <Icon className="w-5 h-5" />
+                  <div className={`w-12 h-12 rounded-lg bg-black/40 border border-[#E31E24]/30 flex items-center justify-center group-hover:border-[#E31E24]/80 transition-all ${cat.color}`}>
+                    <Icon className="w-6 h-6" />
                   </div>
-                  <span className="text-[9px] text-purple-300 text-center font-bold">
+                  <span className="text-[10px] text-[#E31E24] text-center font-bold">
                     {cat.label}
                   </span>
                 </Link>
