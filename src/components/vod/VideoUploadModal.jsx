@@ -36,28 +36,23 @@ export default function VideoUploadModal({ isOpen, onClose, onVideoUploaded }) {
     setError("");
 
     try {
-      const formData = new FormData();
-      formData.append("file", selectedFile);
-      formData.append("title", title.trim());
-
-      // Call function with FormData
-      const response = await fetch('/api/functions/uploadUserVideo', {
-        method: 'POST',
-        body: formData
+      // Upload file using base44 integration
+      const fileUrl = await base44.integrations.Core.UploadFile({ file: selectedFile });
+      
+      // Create UserVideo record
+      const video = await base44.entities.UserVideo.create({
+        title: title.trim(),
+        video_url: fileUrl.file_url,
+        file_size: selectedFile.size / (1024 * 1024),
+        status: 'ready',
+        uploader_email: (await base44.auth.me()).email,
+        thumbnail_url: `https://img.youtube.com/vi/${Math.random().toString(36).substring(7)}/0.jpg`
       });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "שגיאה בהעלאת הסרטון");
-      }
-
-      if (data.success) {
-        onVideoUploaded?.(data.video);
-        setTitle("");
-        setSelectedFile(null);
-        onClose();
-      }
+      onVideoUploaded?.(video);
+      setTitle("");
+      setSelectedFile(null);
+      onClose();
     } catch (err) {
       setError(err.message || "שגיאה בהעלאת הסרטון");
     } finally {
