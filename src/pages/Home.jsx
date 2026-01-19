@@ -234,18 +234,18 @@ export default function Home() {
 
 
               {/* VOD Button */}
-        <motion.button
-          onClick={() => setVodModalOpen(true)}
-          initial={{ opacity: 0, scale: 0.5 }}
-          animate={{ opacity: 1, scale: 1 }}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-          transition={{ duration: 0.3 }}
-          className="group relative bg-gradient-to-br from-black/80 via-[#E31E24]/60 to-black/80 backdrop-blur-sm rounded-full p-4 sm:p-3.5 shadow-2xl border-2 border-[#E31E24]/40 hover:border-[#E31E24]/70 transition-all"
-          title="עולם התוכן"
-        >
-          <Tv className="w-6 h-6 sm:w-5 sm:h-5 text-white" />
-        </motion.button>
+              <motion.button
+                onClick={() => window.location.href = createPageUrl("VODContent")}
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                transition={{ duration: 0.3 }}
+                className="group relative bg-gradient-to-br from-black/80 via-[#E31E24]/60 to-black/80 backdrop-blur-sm rounded-full p-4 sm:p-3.5 shadow-2xl border-2 border-[#E31E24]/40 hover:border-[#E31E24]/70 transition-all"
+                title="עולם התוכן"
+              >
+                <Tv className="w-6 h-6 sm:w-5 sm:h-5 text-white" />
+              </motion.button>
 
 
 
