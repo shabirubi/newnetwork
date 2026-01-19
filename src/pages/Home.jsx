@@ -20,7 +20,7 @@ import TalkingAvatar from "../components/avatar/TalkingAvatar";
 
 import AutoNewsUpdater from "../components/news/AutoNewsUpdater";
 import AutoChannelsUpdater from "../components/news/AutoChannelsUpdater";
-import CurrencyStrip from "../components/header/CurrencyStrip";
+
 import TikTokNewsFeed from "../components/news/TikTokNewsFeed";
 import AIAnnouncer from "../components/news/AIAnnouncer";
 import TVAnchor from "../components/news/TVAnchor";
