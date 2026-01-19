@@ -21,7 +21,7 @@ import TalkingAvatar from "../components/avatar/TalkingAvatar";
 import AutoNewsUpdater from "../components/news/AutoNewsUpdater";
 import AutoChannelsUpdater from "../components/news/AutoChannelsUpdater";
 
-import TikTokNewsFeed from "../components/news/TikTokNewsFeed";
+import VideosFeed from "../components/home/VideosFeed";
 import AIAnnouncer from "../components/news/AIAnnouncer";
 import TVAnchor from "../components/news/TVAnchor";
 import VODModal from "../components/vod/VODModal";
