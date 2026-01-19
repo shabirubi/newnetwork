@@ -9,24 +9,65 @@ const BACKGROUND_IMAGE = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/ob
 
       export default function VODContent() {
           const [channelsOpen, setChannelsOpen] = useState(false);
-    const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
-    const queryClient = useQueryClient();
+        const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+        const containerRef = useRef(null);
+        const touchStartRef = useRef(0);
+        const queryClient = useQueryClient();
 
-    const { data: channels = [] } = useQuery({
-      queryKey: ['israeli-channels'],
-      queryFn: () => base44.entities.IsraeliChannels.list(),
-      initialData: []
-    });
+        const { data: channels = [] } = useQuery({
+          queryKey: ['israeli-channels'],
+          queryFn: () => base44.entities.IsraeliChannels.list(),
+          initialData: []
+        });
 
-    const { data: userVideos = [] } = useQuery({
-      queryKey: ['user-videos'],
-      queryFn: () => base44.entities.UserVideo.filter({ status: 'ready' }, '-created_date', 50),
-      initialData: []
-    });
+        const { data: userVideos = [] } = useQuery({
+          queryKey: ['user-videos'],
+          queryFn: () => base44.entities.UserVideo.filter({ status: 'ready' }, '-created_date', 50),
+          initialData: []
+        });
 
-    const handleVideoUploaded = (video) => {
-      queryClient.invalidateQueries({ queryKey: ['user-videos'] });
-    };
+        const handleVideoUploaded = (video) => {
+          queryClient.invalidateQueries({ queryKey: ['user-videos'] });
+        };
+
+        // Handle wheel scroll
+        useEffect(() => {
+          const handleWheel = (e) => {
+            if (containerRef.current && containerRef.current.contains(e.target)) {
+              e.preventDefault();
+              if (e.deltaY > 0) {
+                // Scroll down
+                setCurrentVideoIndex(prev => Math.min(videoQueue.length - 1, prev + 1));
+              } else {
+                // Scroll up
+                setCurrentVideoIndex(prev => Math.max(0, prev - 1));
+              }
+            }
+          };
+
+          document.addEventListener('wheel', handleWheel, { passive: false });
+          return () => document.removeEventListener('wheel', handleWheel);
+        }, []);
+
+        // Handle touch swipe
+        const handleTouchStart = (e) => {
+          touchStartRef.current = e.touches[0].clientY;
+        };
+
+        const handleTouchEnd = (e) => {
+          const touchEnd = e.changedTouches[0].clientY;
+          const diff = touchStartRef.current - touchEnd;
+
+          if (Math.abs(diff) > 50) {
+            if (diff > 0) {
+              // Swipe up - next video
+              setCurrentVideoIndex(prev => Math.min(videoQueue.length - 1, prev + 1));
+            } else {
+              // Swipe down - previous video
+              setCurrentVideoIndex(prev => Math.max(0, prev - 1));
+            }
+          }
+        };
 
     const videoQueue = [
       { id: 'initial', url: 'https://www.youtube.com/embed/4miQnYCTdS8?autoplay=1&rel=0' },
