@@ -7,7 +7,12 @@ import { useQuery } from "@tanstack/react-query";
 const BACKGROUND_IMAGE = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/43de178a9_image.png";
 
 export default function VODContent() {
-  const [channelsOpen, setChannelsOpen] = useState(false);
+    const [channelsOpen, setChannelsOpen] = useState(false);
+    const { data: channels = [] } = useQuery({
+      queryKey: ['israeli-channels'],
+      queryFn: () => base44.entities.IsraeliChannels.list(),
+      initialData: []
+    });
 
   return (
     <div
