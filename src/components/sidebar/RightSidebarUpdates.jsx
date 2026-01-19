@@ -24,7 +24,7 @@ export default function RightSidebarUpdates() {
   const displayUpdates = Array.from({ length: 3 }, () => updates).flat();
 
   return (
-    <div className="hidden xl:flex w-24 bg-black/60 backdrop-blur-xl border-r border-[#E31E24]/30 overflow-hidden sticky top-0 h-screen">
+    <div className="hidden xl:flex w-40 bg-black/60 backdrop-blur-xl border-r border-[#E31E24]/30 overflow-hidden sticky top-0 h-screen">
       <div className="flex items-center justify-center w-full relative">
         <div className="flex flex-col gap-6 absolute">
           <motion.div

@@ -26,7 +26,7 @@ export default function LeftSidebarCategories() {
   const displayCategories = Array.from({ length: 3 }, () => CATEGORIES).flat();
 
   return (
-    <div className="hidden xl:flex w-24 bg-black/60 backdrop-blur-xl border-l border-[#E31E24]/30 overflow-hidden sticky top-0 h-screen">
+    <div className="hidden xl:flex w-40 bg-black/60 backdrop-blur-xl border-l border-[#E31E24]/30 overflow-hidden sticky top-0 h-screen">
       <div className="flex items-center justify-center w-full relative">
         <div className="flex flex-col gap-4 absolute">
           <motion.div
