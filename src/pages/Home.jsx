@@ -170,8 +170,25 @@ export default function Home() {
           />
         </div>
       </section>
-      
-      {/* Floating Action Buttons - Left Side Column */}
+
+      {/* Featured Video Section */}
+      <section className="px-4 mt-6">
+        <div className="bg-black/40 backdrop-blur-sm rounded-lg p-4">
+          <div className="flex justify-center">
+            <iframe 
+              src="https://www.youtube.com/embed/4miQnYCTdS8"
+              width="100%" 
+              height="500" 
+              frameBorder="0" 
+              allowFullScreen="" 
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+              className="rounded-lg max-w-md"
+            />
+          </div>
+        </div>
+      </section>
+
+            {/* Floating Action Buttons - Left Side Column */}
                   <div className="fixed left-4 sm:left-6 top-1/3 z-50 flex flex-col gap-4">
                     {/* Reporter Chat Button */}
                     <motion.button
