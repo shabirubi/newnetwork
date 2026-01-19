@@ -238,18 +238,18 @@ const BACKGROUND_IMAGE = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/ob
         `}</style>
         
         <div className="relative">
-          <motion.div
-            key={currentVideoIndex}
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -50 }}
-            className="rounded-2xl overflow-hidden bg-black border-2 border-black"
-            style={{
-              width: '320px',
-              height: '568px',
-              animation: 'neon-glow 3s ease-in-out infinite'
-            }}
-          >
+           <motion.div
+             key={currentVideoIndex}
+             initial={{ opacity: 0, y: 50 }}
+             animate={{ opacity: 1, y: 0 }}
+             exit={{ opacity: 0, y: -50 }}
+             className="rounded-2xl overflow-hidden bg-black border-2 border-black"
+             style={{
+               width: 'clamp(280px, 90vw, 320px)',
+               height: 'clamp(500px, 160vw, 568px)',
+               animation: 'neon-glow 3s ease-in-out infinite'
+             }}
+           >
             <iframe
               key={currentVideo?.id}
               src={currentVideo?.url}
