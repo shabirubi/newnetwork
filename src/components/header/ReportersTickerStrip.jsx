@@ -21,13 +21,13 @@ export default function ReportersTickerStrip() {
 
   return (
     <>
-      <div ref={containerRef} className="bg-black/90 backdrop-blur-xl border-b border-[#E31E24]/30 shadow-xl shadow-[#E31E24]/20 overflow-x-auto py-1.5" style={{ touchAction: 'pan-y' }}>
-        <div className="flex gap-1.5 items-center px-2">
+      <div ref={containerRef} className="bg-black/90 backdrop-blur-xl border-b border-[#E31E24]/30 shadow-xl shadow-[#E31E24]/20 overflow-x-auto py-1" style={{ touchAction: 'pan-y' }}>
+        <div className="flex gap-1 items-center px-1.5">
         {reporters.map((reporter, idx) => (
           <motion.div
             key={`${reporter.id}-${idx}`}
             onClick={() => setSelectedReporter(reporter)}
-            className="flex-shrink-0 flex flex-col items-center gap-1 p-1.5 bg-black/60 backdrop-blur-xl rounded-lg border border-[#E31E24]/30 hover:border-[#E31E24]/60 hover:bg-[#E31E24]/20 transition-all cursor-pointer group shadow-lg hover:shadow-[#E31E24]/30"
+            className="flex-shrink-0 flex flex-col items-center gap-0.5 p-1 bg-black/60 backdrop-blur-xl rounded-lg border border-[#E31E24]/30 hover:border-[#E31E24]/60 hover:bg-[#E31E24]/20 transition-all cursor-pointer group shadow-lg hover:shadow-[#E31E24]/30"
             whileHover={{ scale: 1.05, y: -2 }}
             animate={{
               boxShadow: [
@@ -48,13 +48,13 @@ export default function ReportersTickerStrip() {
             <motion.img
               src={reporter.image}
               alt={reporter.name}
-              className="w-16 h-16 rounded-lg object-cover border-2 border-[#E31E24]/20 group-hover:border-[#E31E24] transition-all"
+              className="w-20 h-20 rounded-lg object-cover border-2 border-[#E31E24]/20 group-hover:border-[#E31E24] transition-all"
               whileHover={{ rotate: [0, -2, 2, 0] }}
               transition={{ duration: 0.3 }}
             />
-            <div className="text-center min-w-[70px]">
-              <div className="text-white font-bold text-[10px] line-clamp-1">{reporter.name}</div>
-              <div className="text-[#E31E24] text-[9px] font-medium line-clamp-1">{reporter.specialty}</div>
+            <div className="text-center min-w-[60px]">
+              <div className="text-white font-bold text-[9px] line-clamp-1">{reporter.name}</div>
+              <div className="text-[#E31E24] text-[8px] font-medium line-clamp-1">{reporter.specialty}</div>
             </div>
           </motion.div>
         ))}
