@@ -11,6 +11,13 @@ export default function WelcomeVideoOverlay({ onVideoEnd }) {
     }, 500);
   };
 
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      handleVideoEnd();
+    }, 45000); // 45 seconds - typical YouTube Shorts duration
+    return () => clearTimeout(timer);
+  }, []);
+
   return (
     <AnimatePresence>
       {!videoEnded && (
