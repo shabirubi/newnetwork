@@ -160,7 +160,7 @@ export default function Home() {
       <AutoChannelsUpdater />
 
       {/* Live Player Section */}
-      <section className="px-0 sm:px-4 -mt-2">
+      <section className="px-0 sm:px-4 mb-0">
         <div className="bg-black/60 backdrop-blur-sm sm:rounded-t-lg p-2 sm:p-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="relative flex h-2.5 w-2.5">
