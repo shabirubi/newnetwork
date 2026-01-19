@@ -201,6 +201,35 @@ CRITICAL: השתמש רק במקורות מהימנים. בנק ישראל הו�
           </div>
         </button>
 
+        {/* Broadcast Strip */}
+        <div className="overflow-hidden w-32 sm:w-48 md:w-64 shrink-0">
+          <motion.div
+            className="flex whitespace-nowrap"
+            animate={{ x: [-400, 0] }}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+          >
+            <span 
+              className="font-bold text-[10px] sm:text-xs" 
+              style={{
+                backgroundImage: 'linear-gradient(90deg, #E31E24, #FCD34D, #E31E24)',
+                backgroundSize: '200% 100%',
+                animation: 'gradientShift 3s ease-in-out infinite',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
+              }}
+            >
+              מהדורת החדשות בשידור חי - כל יום בשעה 21:00 • עדכוני חדשות 24/7 • 
+            </span>
+          </motion.div>
+          <style>{`
+            @keyframes gradientShift {
+              0%, 100% { background-position: 0% 50%; }
+              50% { background-position: 100% 50%; }
+            }
+          `}</style>
+        </div>
+
         <button 
           onClick={() => {
             window.location.href = createPageUrl("Category?cat=breaking");
@@ -309,19 +338,11 @@ function TickerContent({ news, currencies }) {
     })
   }));
 
-  const broadcastMessages = [
-    "מהדורת החדשות בשידור חי - כל יום בשעה 21:00",
-    "ספורט וחדשות: בעדכון מינוטי כל היום",
-    "כלכלה שוק השוקים: נתונים עדכניים בזמן אמת",
-    "עדכוני חדשות מכל העולם 24/7",
-    "הרשת החדשה - מהפכת החדשות הדיגיטלית"
-  ];
-
   return (
     <motion.div
       className="flex whitespace-nowrap text-base sm:text-lg pointer-events-none items-center font-bold"
-      animate={{ x: `-${(news.length * 300 + currencies.length * 250 + updates.length * 350 + broadcastMessages.length * 400)}px` }}
-      transition={{ duration: (news.length + currencies.length + updates.length + broadcastMessages.length) * 3, repeat: Infinity, ease: "linear" }}
+      animate={{ x: `-${(news.length * 300 + currencies.length * 250 + updates.length * 350)}px` }}
+      transition={{ duration: (news.length + currencies.length + updates.length) * 3, repeat: Infinity, ease: "linear" }}
     >
       {[...news, ...news].map((item, index) => {
         const colors = ['text-[#E31E24]', 'text-yellow-400', 'text-white', 'text-blue-400', 'text-red-400'];
@@ -396,22 +417,6 @@ function TickerContent({ news, currencies }) {
             <Clock size={12} />
             {update.time}
           </span>
-        </span>
-      ))}
-      {[...broadcastMessages, ...broadcastMessages].map((msg, idx) => (
-        <span 
-          key={`broadcast-${idx}`} 
-          className="mx-8 sm:mx-10 flex-shrink-0 font-bold text-sm sm:text-base" 
-          style={{
-            backgroundImage: 'linear-gradient(90deg, #E31E24, #FCD34D, #E31E24)',
-            backgroundSize: '200% 100%',
-            animation: 'gradientShift 3s ease-in-out infinite',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-          }}
-        >
-          • {msg}
         </span>
       ))}
     </motion.div>
