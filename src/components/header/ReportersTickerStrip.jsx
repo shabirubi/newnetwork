@@ -19,17 +19,17 @@ export default function ReportersTickerStrip() {
 
   if (reporters.length === 0) return null;
 
-  // Create triple duplicates for seamless infinite loop
-  const displayReporters = [...reporters, ...reporters, ...reporters];
+  // Create 6 duplicates for seamless infinite loop - ensures strip is always full
+  const displayReporters = [...reporters, ...reporters, ...reporters, ...reporters, ...reporters, ...reporters];
 
   return (
     <>
       <div ref={containerRef} className="bg-black/90 backdrop-blur-xl border-b border-[#E31E24]/30 shadow-xl shadow-[#E31E24]/20 overflow-hidden py-2" style={{ touchAction: 'pan-y' }}>
         <motion.div 
           className="flex gap-2 items-center"
-          animate={{ x: ["0%", "-33.333%"] }}
+          animate={{ x: ["0%", "-16.666%"] }}
           transition={{ 
-            duration: reporters.length * 3,
+            duration: reporters.length * 2,
             repeat: Infinity, 
             ease: "linear",
             repeatType: "loop"
