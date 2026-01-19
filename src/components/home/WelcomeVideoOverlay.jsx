@@ -52,9 +52,28 @@ export default function WelcomeVideoOverlay({ onVideoEnd }) {
               animate={{ opacity: 1 }}
               transition={{ delay: 2 }}
               onClick={handleVideoEnd}
-              className="absolute top-4 left-4 bg-white/20 hover:bg-white/40 backdrop-blur-md text-white px-4 py-2 rounded-full text-sm font-bold transition-all"
+              className="absolute top-4 left-4 bg-white/20 hover:bg-white/40 backdrop-blur-md text-white px-4 py-2 rounded-full text-sm font-bold transition-all z-10"
             >
               דלג →
+            </motion.button>
+
+            {/* Main Action Button */}
+            <motion.button
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 3 }}
+              onClick={() => {
+                handleVideoEnd();
+                setTimeout(() => {
+                  const videosSection = document.getElementById('user-videos-section');
+                  if (videosSection) {
+                    videosSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                  }
+                }, 600);
+              }}
+              className="absolute bottom-8 left-1/2 -translate-x-1/2 bg-gradient-to-r from-[#E31E24] to-[#B91C1C] text-white px-8 py-4 rounded-full text-base font-bold shadow-2xl hover:shadow-3xl transition-all hover:scale-105 z-10 whitespace-nowrap"
+            >
+              אם ברצונכם לצפות בעדכונים נוספים לחצו כאן
             </motion.button>
 
             {/* Loading indicator */}
