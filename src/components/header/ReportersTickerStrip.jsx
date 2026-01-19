@@ -58,7 +58,7 @@ export default function ReportersTickerStrip() {
             </div>
           </motion.div>
         ))}
-        </motion.div>
+        </div>
       </div>
 
       <ReporterCardModal 
