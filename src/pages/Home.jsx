@@ -266,7 +266,6 @@ export default function Home() {
             </div>
             <h2 className="text-white text-lg font-bold">שידור חי</h2>
           </div>
-          <CurrencyStrip activeLive={activeLive} />
         </div>
         <div className="relative">
           <LivePlayer 
