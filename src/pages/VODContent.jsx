@@ -55,31 +55,47 @@ export default function VODContent() {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="relative bg-black rounded-2xl overflow-hidden shadow-2xl border border-cyan-500/30 w-11/12 h-5/6 max-w-4xl"
+              className="relative bg-gradient-to-br from-black/90 via-[#1a0000]/80 to-black/90 rounded-3xl overflow-hidden shadow-2xl border-2 border-[#E31E24]/40 w-11/12 h-auto max-w-6xl max-h-[85vh] backdrop-blur-sm"
+              style={{
+                boxShadow: '0 0 40px rgba(227, 30, 36, 0.4), inset 0 0 20px rgba(227, 30, 36, 0.1)'
+              }}
             >
               <button
                 onClick={() => setChannelsOpen(false)}
-                className="absolute top-4 right-4 p-2 hover:bg-white/10 rounded-full transition-colors z-10"
+                className="absolute top-6 right-6 p-3 hover:bg-[#E31E24]/30 rounded-full transition-all z-10 border border-[#E31E24]/50"
               >
-                <X className="w-6 h-6 text-white" />
+                <X className="w-6 h-6 text-[#E31E24]" />
               </button>
-              <div className="w-full h-full overflow-y-auto p-6">
-                <h2 className="text-2xl font-bold text-white mb-6">ערוצים ישראלים</h2>
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+              <div className="w-full overflow-y-auto p-8">
+                <div className="text-center mb-8">
+                  <h2 className="text-4xl font-bold bg-gradient-to-r from-[#E31E24] via-red-500 to-[#E31E24] bg-clip-text text-transparent mb-2">
+                    ערוצים ישראלים
+                  </h2>
+                  <div className="h-1 w-32 bg-gradient-to-r from-[#E31E24] to-transparent mx-auto" />
+                </div>
+                <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-7 gap-4">
                   {channels.map((channel) => (
                     <motion.div
                       key={channel.id}
-                      whileHover={{ scale: 1.05 }}
-                      className="flex flex-col items-center gap-3 cursor-pointer"
+                      whileHover={{ scale: 1.15, rotateZ: 2 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="flex flex-col items-center gap-2 group"
                     >
-                      <div className="w-full aspect-square rounded-lg overflow-hidden bg-gray-900 border border-cyan-500/30 hover:border-cyan-500/70 transition-colors">
+                      <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-xl overflow-hidden bg-gradient-to-br from-black to-[#330000] border-2 border-[#E31E24]/60 hover:border-[#E31E24] transition-all group-hover:shadow-[0_0_20px_rgba(227,30,36,0.6)]"
+                        style={{
+                          boxShadow: 'inset 0 0 15px rgba(227, 30, 36, 0.1), 0 0 10px rgba(227, 30, 36, 0.3)'
+                        }}
+                      >
                         <img 
                           src={channel.logo}
                           alt={channel.name}
-                          className="w-full h-full object-cover"
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform"
                         />
+                        <div className="absolute inset-0 bg-gradient-to-t from-[#E31E24]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                       </div>
-                      <p className="text-white text-sm text-center font-medium line-clamp-2">{channel.name}</p>
+                      <p className="text-white text-xs text-center font-bold line-clamp-2 w-full px-1 group-hover:text-[#E31E24] transition-colors">
+                        {channel.name}
+                      </p>
                     </motion.div>
                   ))}
                 </div>
