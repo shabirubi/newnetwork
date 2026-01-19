@@ -209,7 +209,7 @@ export default function Home() {
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.95 }}
                       transition={{ duration: 0.3, delay: -0.4 }}
-                      className="bg-gradient-to-br from-black/80 via-[#E31E24]/60 to-black/80 backdrop-blur-sm rounded-full p-4 sm:p-3.5 shadow-2xl border-2 border-[#E31E24]/40 hover:border-[#E31E24]/70 transition-all animate-pulse"
+                      className="bg-gradient-to-br from-black/80 via-[#E31E24]/60 to-black/80 backdrop-blur-sm rounded-full p-2.5 sm:p-2 shadow-lg border-2 border-[#E31E24]/40 hover:border-[#E31E24]/70 transition-all animate-pulse"
                       title="צ'אט כתבים"
                     >
                       <MessageCircle className="w-6 h-6 sm:w-5 sm:h-5 text-white" />
