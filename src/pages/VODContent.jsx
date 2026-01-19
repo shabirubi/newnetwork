@@ -175,7 +175,7 @@ const BACKGROUND_IMAGE = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/ob
                     >
                       <X className="w-7 h-7 text-[#E31E24]" />
                     </button>
-                    <div className="channels-scroll flex-1 overflow-y-auto p-8 sm:p-12">
+                    <div className="channels-scroll flex-1 overflow-y-auto p-8 sm:p-12 min-h-0">
                 <div className="text-center mb-12">
                   <h2 className="text-5xl font-bold bg-gradient-to-r from-[#E31E24] via-red-600 to-[#E31E24] bg-clip-text text-transparent mb-4">
                     ערוצים ישראלים
