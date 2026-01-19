@@ -251,11 +251,6 @@ export default function Home() {
         </motion.button>
       </div>
 
-      {/* Hero Section - Videos Feed */}
-      <section className="w-full">
-        <VideosFeed />
-      </section>
-
       {/* TikTok News with Sidebars */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-0 -mx-0 sm:mx-0 px-0 sm:px-4 mt-6">
         {/* Left Sidebar - Entertainment Updates Feed */}
