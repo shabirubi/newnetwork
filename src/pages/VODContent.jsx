@@ -68,7 +68,7 @@ export default function VODContent() {
       </AnimatePresence>
 
       {/* Video Player */}
-      <div className="relative z-10 w-11/12 max-w-4xl">
+      <div className="relative z-10">
         <style>{`
           @keyframes neon-glow {
             0%, 100% { box-shadow: 0 0 10px rgba(227, 30, 36, 0.5), 0 0 20px rgba(227, 30, 36, 0.3); }
@@ -76,13 +76,15 @@ export default function VODContent() {
           }
         `}</style>
         <div
-          className="rounded-2xl overflow-hidden aspect-video bg-black border-2 border-black"
+          className="rounded-2xl overflow-hidden bg-black border-2 border-black"
           style={{
+            width: '320px',
+            height: '568px',
             animation: 'neon-glow 3s ease-in-out infinite'
           }}
         >
           <iframe
-            src="https://www.youtube.com/embed/4miQnYCTdS8?autoplay=1&rel=0&modestbranding=1"
+            src="https://www.youtube.com/embed/4miQnYCTdS8?autoplay=1&rel=0&modestbranding=1&fs=0"
             className="w-full h-full"
             frameBorder="0"
             allowFullScreen
