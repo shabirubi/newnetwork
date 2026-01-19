@@ -275,10 +275,10 @@ const BACKGROUND_IMAGE = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/ob
           disabled={currentVideoIndex === videoQueue.length - 1}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
-          className="hidden sm:flex flex-col items-center gap-2 text-white disabled:opacity-30 disabled:cursor-not-allowed"
+          className="flex flex-col items-center gap-2 text-white disabled:opacity-30 disabled:cursor-not-allowed"
         >
-          <ChevronDown className="w-8 h-8 text-[#E31E24]" />
-          <span className="text-xs font-bold">הבא</span>
+          <ChevronDown className="w-6 h-6 sm:w-8 sm:h-8 text-[#E31E24]" />
+          <span className="text-[10px] sm:text-xs font-bold hidden sm:block">הבא</span>
         </motion.button>
       </div>
     </div>
