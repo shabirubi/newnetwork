@@ -20,6 +20,53 @@ export default function VODContent() {
       {/* Overlay */}
       <div className="absolute inset-0 bg-black/70" />
 
+      {/* Channels Button */}
+      <motion.button
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={() => setChannelsOpen(true)}
+        className="absolute top-8 right-8 z-20 bg-gradient-to-br from-cyan-500 via-purple-500 to-pink-500 text-white px-6 py-3 rounded-full font-bold flex items-center gap-2 shadow-2xl hover:shadow-3xl transition-all border border-white/20"
+      >
+        <Tv className="w-5 h-5" />
+        ערוצים
+      </motion.button>
+
+      {/* Channels Modal */}
+      <AnimatePresence>
+        {channelsOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="absolute inset-0 z-30 flex items-center justify-center"
+          >
+            <div
+              className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+              onClick={() => setChannelsOpen(false)}
+            />
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="relative bg-black rounded-2xl overflow-hidden shadow-2xl border border-cyan-500/30 w-11/12 h-5/6 max-w-2xl"
+            >
+              <button
+                onClick={() => setChannelsOpen(false)}
+                className="absolute top-4 right-4 p-2 hover:bg-white/10 rounded-full transition-colors z-10"
+              >
+                <X className="w-6 h-6 text-white" />
+              </button>
+              <iframe
+                src="https://raspberrytv.net/price/4"
+                className="w-full h-full"
+                frameBorder="0"
+                allowFullScreen
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Video Player */}
       <div className="relative z-10 w-11/12 max-w-4xl">
         <style>{`
