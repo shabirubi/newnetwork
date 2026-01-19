@@ -1,17 +1,14 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Tv, ChevronLeft, Upload } from "lucide-react";
+import { X, Tv, ChevronLeft } from "lucide-react";
 import { createPageUrl } from "../utils";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import VideoUploadModal from "../components/vod/VideoUploadModal";
-
 const BACKGROUND_IMAGE = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/43de178a9_image.png";
-const NEXT_VIDEO_URL = "https://youtu.be/2q9lcnXBicQ";
+      const NEXT_VIDEO_URL = "https://youtu.be/2q9lcnXBicQ";
 
-export default function VODContent() {
-    const [channelsOpen, setChannelsOpen] = useState(false);
-    const [uploadModalOpen, setUploadModalOpen] = useState(false);
+      export default function VODContent() {
+          const [channelsOpen, setChannelsOpen] = useState(false);
     const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
     const queryClient = useQueryClient();
 
@@ -88,19 +85,6 @@ export default function VODContent() {
         חזרה חדשות הרשת
       </motion.button>
 
-      {/* Upload Video Button */}
-      <motion.button
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={() => setUploadModalOpen(true)}
-        className="absolute top-8 left-40 z-20 bg-gradient-to-br from-black/80 via-[#E31E24]/60 to-black/90 text-white px-8 py-4 rounded-full font-bold flex items-center gap-2 shadow-2xl hover:shadow-[0_0_30px_rgba(227,30,36,0.8)] transition-all border-2 border-[#E31E24]/70 backdrop-blur-sm"
-        style={{
-          boxShadow: '0 0 20px rgba(227, 30, 36, 0.5), inset 0 0 15px rgba(227, 30, 36, 0.2)'
-        }}
-      >
-        <Upload className="w-5 h-5" />
-        העלה סרטון
-      </motion.button>
 
       <style>{`
         .channels-scroll::-webkit-scrollbar {
@@ -112,12 +96,7 @@ export default function VODContent() {
         }
       `}</style>
 
-      {/* Upload Video Modal */}
-      <VideoUploadModal 
-        isOpen={uploadModalOpen} 
-        onClose={() => setUploadModalOpen(false)}
-        onVideoUploaded={handleVideoUploaded}
-      />
+
 
       {/* Channels Modal */}
             <AnimatePresence>
