@@ -92,6 +92,9 @@ const BACKGROUND_IMAGE = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/ob
 
   return (
     <div
+      ref={containerRef}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
       className="min-h-screen relative overflow-hidden flex items-center justify-center"
       style={{
         backgroundImage: `url('${BACKGROUND_IMAGE}')`,
