@@ -71,8 +71,8 @@ export default function VODContent() {
       <div className="relative z-10 w-11/12 max-w-4xl">
         <style>{`
           @keyframes neon-glow {
-            0%, 100% { box-shadow: 0 0 10px rgba(0, 255, 255, 0.5), 0 0 20px rgba(0, 255, 0, 0.3); }
-            50% { box-shadow: 0 0 20px rgba(0, 255, 255, 0.8), 0 0 40px rgba(0, 255, 0, 0.5); }
+            0%, 100% { box-shadow: 0 0 10px rgba(227, 30, 36, 0.5), 0 0 20px rgba(227, 30, 36, 0.3); }
+            50% { box-shadow: 0 0 20px rgba(227, 30, 36, 0.8), 0 0 40px rgba(227, 30, 36, 0.6); }
           }
         `}</style>
         <div
