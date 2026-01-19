@@ -111,7 +111,7 @@ export default function Layout({ children }) {
       {/* Mobile Menu Button */}
       <button
         onClick={() => setMobileMenuOpen(true)}
-        className="fixed bottom-24 left-4 z-40 lg:hidden bg-[#E31E24] text-white p-3 rounded-full shadow-lg active:scale-95 transition-transform"
+        className="fixed bottom-24 left-4 z-40 lg:hidden bg-gradient-to-br from-black/80 via-[#E31E24]/60 to-black/80 backdrop-blur-sm border-2 border-[#E31E24]/40 text-white p-3 rounded-full shadow-lg active:scale-95 transition-transform"
       >
         <Menu size={24} />
       </button>
@@ -307,7 +307,7 @@ export default function Layout({ children }) {
       </div>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-black border-t border-gray-800 z-50 safe-area-inset-bottom shadow-lg">
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-gradient-to-br from-black/90 via-[#E31E24]/20 to-black/90 backdrop-blur-xl border-t border-[#E31E24]/30 z-50 safe-area-inset-bottom shadow-lg">
         <div className="grid grid-cols-4 gap-1 px-2 py-3">
           <Link
             to={createPageUrl("Home")}
@@ -315,7 +315,7 @@ export default function Layout({ children }) {
               e.preventDefault();
               window.location.href = createPageUrl("Home");
             }}
-            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-gray-800 transition-colors touch-manipulation relative z-[110]"
+            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-[#E31E24]/20 transition-colors touch-manipulation relative z-[110]"
             >
             <Home size={28} className="text-gray-300 mb-1" strokeWidth={2.5} />
             <span className="text-[11px] font-bold text-gray-300">בית</span>
@@ -323,7 +323,7 @@ export default function Layout({ children }) {
 
           <Link
             to={createPageUrl("Live")}
-            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-gray-800 transition-colors touch-manipulation"
+            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-[#E31E24]/20 transition-colors touch-manipulation"
           >
             <Radio size={28} className="text-[#E31E24] mb-1" strokeWidth={2.5} />
             <span className="text-[11px] font-bold text-[#E31E24]">חי</span>
@@ -331,7 +331,7 @@ export default function Layout({ children }) {
 
           <Link
             to={createPageUrl("Category?cat=breaking")}
-            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-gray-800 transition-colors touch-manipulation"
+            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-[#E31E24]/20 transition-colors touch-manipulation"
           >
             <Flame size={28} className="text-gray-300 mb-1" strokeWidth={2.5} />
             <span className="text-[11px] font-bold text-gray-300">חמות</span>
@@ -339,7 +339,7 @@ export default function Layout({ children }) {
 
           <button
             onClick={() => setMobileMenuOpen(true)}
-            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-gray-800 transition-colors touch-manipulation"
+            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-[#E31E24]/20 transition-colors touch-manipulation"
           >
             <Menu size={28} className="text-gray-300 mb-1" strokeWidth={2.5} />
             <span className="text-[11px] font-bold text-gray-300">עוד</span>

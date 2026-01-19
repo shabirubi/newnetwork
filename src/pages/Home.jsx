@@ -161,12 +161,14 @@ export default function Home() {
 
       {/* Live Player Section */}
       <section className="px-0 sm:px-0 mb-0 -mt-14">
-        <LivePlayer 
-          title={currentChannel?.name || activeLive?.title || "הרשת החדשה - שידור חי"}
-          isLive={!!activeLive?.is_active}
-          viewerCount={activeLive?.viewer_count || 3456}
-          streamUrl={channelStreamUrl}
-        />
+        <div className="border-4 border-[#E31E24]/60 bg-gradient-to-br from-black/80 via-[#E31E24]/20 to-black/80 backdrop-blur-sm rounded-lg p-2">
+          <LivePlayer 
+            title={currentChannel?.name || activeLive?.title || "הרשת החדשה - שידור חי"}
+            isLive={!!activeLive?.is_active}
+            viewerCount={activeLive?.viewer_count || 3456}
+            streamUrl={channelStreamUrl}
+          />
+        </div>
       </section>
       
       {/* Floating Action Buttons - Left Side Column */}
@@ -179,7 +181,7 @@ export default function Home() {
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.95 }}
                       transition={{ duration: 0.3, delay: -0.4 }}
-                      className="bg-gradient-to-br from-yellow-400 to-yellow-500 rounded-full p-4 sm:p-3.5 shadow-2xl border-2 border-white/30 hover:border-white/50 transition-all animate-pulse"
+                      className="bg-gradient-to-br from-black/80 via-[#E31E24]/60 to-black/80 backdrop-blur-sm rounded-full p-4 sm:p-3.5 shadow-2xl border-2 border-[#E31E24]/40 hover:border-[#E31E24]/70 transition-all animate-pulse"
                       title="צ'אט כתבים"
                     >
                       <MessageCircle className="w-6 h-6 sm:w-5 sm:h-5 text-white" />
@@ -193,7 +195,7 @@ export default function Home() {
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.95 }}
                       transition={{ duration: 0.3, delay: -0.2 }}
-                      className="bg-gradient-to-br from-purple-600 to-purple-700 rounded-full p-4 sm:p-3.5 shadow-2xl border-2 border-white/30 hover:border-white/50 transition-all"
+                      className="bg-gradient-to-br from-black/80 via-[#E31E24]/60 to-black/80 backdrop-blur-sm rounded-full p-4 sm:p-3.5 shadow-2xl border-2 border-[#E31E24]/40 hover:border-[#E31E24]/70 transition-all"
                       title="אפשרויות נגישות"
                     >
                       <svg className="w-6 h-6 sm:w-5 sm:h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
@@ -211,7 +213,7 @@ export default function Home() {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           transition={{ duration: 0.3 }}
-          className="group relative bg-gradient-to-br from-red-600 via-purple-600 to-blue-600 rounded-full p-4 sm:p-3.5 shadow-2xl border-2 border-white/30 hover:border-white/50 transition-all"
+          className="group relative bg-gradient-to-br from-black/80 via-[#E31E24]/60 to-black/80 backdrop-blur-sm rounded-full p-4 sm:p-3.5 shadow-2xl border-2 border-[#E31E24]/40 hover:border-[#E31E24]/70 transition-all"
           title="עולם התוכן"
         >
           <Tv className="w-6 h-6 sm:w-5 sm:h-5 text-white" />
@@ -227,7 +229,7 @@ export default function Home() {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           transition={{ duration: 0.3, delay: 0.2 }}
-          className="group relative bg-gradient-to-br from-red-600 to-red-700 rounded-full p-4 sm:p-3.5 shadow-2xl border-2 border-white/30 hover:border-white/50 transition-all"
+          className="group relative bg-gradient-to-br from-black/80 via-[#E31E24]/60 to-black/80 backdrop-blur-sm rounded-full p-4 sm:p-3.5 shadow-2xl border-2 border-[#E31E24]/40 hover:border-[#E31E24]/70 transition-all"
           title="קטגוריות חדשות"
         >
           <Newspaper className="w-6 h-6 sm:w-5 sm:h-5 text-white" />
@@ -241,7 +243,7 @@ export default function Home() {
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           transition={{ duration: 0.3, delay: 0.3 }}
-          className="group relative bg-gradient-to-br from-red-700 to-red-800 rounded-full p-4 sm:p-3.5 shadow-2xl border-2 border-white/30 hover:border-white/50 transition-all animate-pulse"
+          className="group relative bg-gradient-to-br from-black/80 via-[#E31E24]/60 to-black/80 backdrop-blur-sm rounded-full p-4 sm:p-3.5 shadow-2xl border-2 border-[#E31E24]/40 hover:border-[#E31E24]/70 transition-all animate-pulse"
           title="שידור חי"
         >
           <Radio className="w-6 h-6 sm:w-5 sm:h-5 text-white" />
