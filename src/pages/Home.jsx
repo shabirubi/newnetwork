@@ -238,26 +238,8 @@ export default function Home() {
         </motion.button>
       </div>
 
-      {/* Hero Section - TikTok News Feed */}
-      <section className="grid grid-cols-1 lg:grid-cols-12 gap-0 -mx-0 sm:mx-0 px-0 sm:px-4">
-        {/* Left Sidebar - Entertainment Updates Feed */}
-        <aside className="lg:col-span-3 hidden lg:block bg-black">
-          <EntertainmentUpdatesFeed />
-        </aside>
-
-        {/* Center - TikTok News Feed */}
-        <div className="lg:col-span-6">
-          <TikTokNewsFeed articles={articles} />
-        </div>
-
-        {/* Right Sidebar - Updates Feed */}
-        <aside className="lg:col-span-3 hidden lg:block bg-black">
-          <UpdatesFeed />
-        </aside>
-      </section>
-
       {/* Live Player Section */}
-      <section className="px-0 sm:px-4 mt-6">
+      <section className="px-0 sm:px-4">
         <div className="bg-black/60 backdrop-blur-sm sm:rounded-t-lg p-2 sm:p-3 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="relative flex h-2.5 w-2.5">
@@ -275,6 +257,24 @@ export default function Home() {
             streamUrl={channelStreamUrl}
           />
         </div>
+      </section>
+
+      {/* Hero Section - TikTok News Feed */}
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-0 -mx-0 sm:mx-0 px-0 sm:px-4 mt-6">
+        {/* Left Sidebar - Entertainment Updates Feed */}
+        <aside className="lg:col-span-3 hidden lg:block bg-black">
+          <EntertainmentUpdatesFeed />
+        </aside>
+
+        {/* Center - TikTok News Feed */}
+        <div className="lg:col-span-6">
+          <TikTokNewsFeed articles={articles} />
+        </div>
+
+        {/* Right Sidebar - Updates Feed */}
+        <aside className="lg:col-span-3 hidden lg:block bg-black">
+          <UpdatesFeed />
+        </aside>
       </section>
 
       {/* Category News Section */}
