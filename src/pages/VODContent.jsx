@@ -217,27 +217,26 @@ const BACKGROUND_IMAGE = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/ob
       </AnimatePresence>
 
       {/* Video Player with TikTok-like Scrolling */}
-      <div className="relative z-10 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 w-full sm:w-auto px-4 sm:px-0">
-        {/* Up Arrow Button */}
+      <style>{`
+        @keyframes neon-glow {
+          0%, 100% { box-shadow: 0 0 10px rgba(227, 30, 36, 0.5), 0 0 20px rgba(227, 30, 36, 0.3); }
+          50% { box-shadow: 0 0 20px rgba(227, 30, 36, 0.8), 0 0 40px rgba(227, 30, 36, 0.6); }
+        }
+      `}</style>
+
+      <div className="relative z-10 flex items-center justify-center gap-3 sm:gap-6 w-full px-4 sm:px-0">
+        {/* Up Arrow Button - Left */}
         <motion.button
           onClick={() => setCurrentVideoIndex(Math.max(0, currentVideoIndex - 1))}
           disabled={currentVideoIndex === 0}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
-          className="flex flex-col items-center gap-2 text-white disabled:opacity-30 disabled:cursor-not-allowed"
+          className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/40 backdrop-blur-sm border border-[#E31E24]/40 hover:border-[#E31E24] text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
         >
-          <ChevronUp className="w-6 h-6 sm:w-8 sm:h-8 text-[#E31E24]" />
-          <span className="text-[10px] sm:text-xs font-bold hidden sm:block">הקודם</span>
+          <ChevronUp className="w-5 h-5 sm:w-6 sm:h-6 text-[#E31E24]" />
         </motion.button>
 
-        <style>{`
-          @keyframes neon-glow {
-            0%, 100% { box-shadow: 0 0 10px rgba(227, 30, 36, 0.5), 0 0 20px rgba(227, 30, 36, 0.3); }
-            50% { box-shadow: 0 0 20px rgba(227, 30, 36, 0.8), 0 0 40px rgba(227, 30, 36, 0.6); }
-          }
-        `}</style>
-        
-        <div className="relative">
+        <div className="relative flex-shrink-0">
            <motion.div
              key={currentVideoIndex}
              initial={{ opacity: 0, y: 50 }}
@@ -269,16 +268,15 @@ const BACKGROUND_IMAGE = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/ob
           </div>
         </div>
 
-        {/* Down Arrow Button */}
+        {/* Down Arrow Button - Right */}
         <motion.button
           onClick={() => setCurrentVideoIndex(Math.min(videoQueue.length - 1, currentVideoIndex + 1))}
           disabled={currentVideoIndex === videoQueue.length - 1}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
-          className="flex flex-col items-center gap-2 text-white disabled:opacity-30 disabled:cursor-not-allowed"
+          className="flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-black/40 backdrop-blur-sm border border-[#E31E24]/40 hover:border-[#E31E24] text-white disabled:opacity-30 disabled:cursor-not-allowed transition-all"
         >
-          <ChevronDown className="w-6 h-6 sm:w-8 sm:h-8 text-[#E31E24]" />
-          <span className="text-[10px] sm:text-xs font-bold hidden sm:block">הבא</span>
+          <ChevronDown className="w-5 h-5 sm:w-6 sm:h-6 text-[#E31E24]" />
         </motion.button>
       </div>
     </div>
