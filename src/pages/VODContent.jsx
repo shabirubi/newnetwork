@@ -41,6 +41,20 @@ export default function VODContent() {
         ערוצים
       </motion.button>
 
+      {/* Back Button */}
+      <motion.button
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={() => window.location.href = createPageUrl("Home")}
+        className="absolute top-8 left-8 z-20 bg-gradient-to-br from-black/80 via-[#E31E24]/60 to-black/90 text-white px-8 py-4 rounded-full font-bold flex items-center gap-2 shadow-2xl hover:shadow-[0_0_30px_rgba(227,30,36,0.8)] transition-all border-2 border-[#E31E24]/70 backdrop-blur-sm"
+        style={{
+          boxShadow: '0 0 20px rgba(227, 30, 36, 0.5), inset 0 0 15px rgba(227, 30, 36, 0.2)'
+        }}
+      >
+        <ChevronLeft className="w-5 h-5" />
+        חזרה חדשות הרשת
+      </motion.button>
+
       <style>{`
         .channels-scroll::-webkit-scrollbar {
           display: none;
