@@ -217,17 +217,17 @@ const BACKGROUND_IMAGE = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/ob
       </AnimatePresence>
 
       {/* Video Player with TikTok-like Scrolling */}
-      <div className="relative z-10 flex items-center justify-center gap-6">
+      <div className="relative z-10 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-6 w-full sm:w-auto px-4 sm:px-0">
         {/* Up Arrow Button */}
         <motion.button
           onClick={() => setCurrentVideoIndex(Math.max(0, currentVideoIndex - 1))}
           disabled={currentVideoIndex === 0}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
-          className="hidden sm:flex flex-col items-center gap-2 text-white disabled:opacity-30 disabled:cursor-not-allowed"
+          className="flex flex-col items-center gap-2 text-white disabled:opacity-30 disabled:cursor-not-allowed"
         >
-          <ChevronUp className="w-8 h-8 text-[#E31E24]" />
-          <span className="text-xs font-bold">הקודם</span>
+          <ChevronUp className="w-6 h-6 sm:w-8 sm:h-8 text-[#E31E24]" />
+          <span className="text-[10px] sm:text-xs font-bold hidden sm:block">הקודם</span>
         </motion.button>
 
         <style>{`
