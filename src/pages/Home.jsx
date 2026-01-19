@@ -174,7 +174,7 @@ export default function Home() {
       {/* Featured Video Section */}
       <section className="px-4 mt-6">
         <div className="bg-black/40 backdrop-blur-sm rounded-lg p-4">
-          <div className="flex justify-center">
+          <div className="flex flex-col items-center gap-4">
             <iframe 
               src="https://www.youtube.com/embed/4miQnYCTdS8"
               width="100%" 
@@ -184,6 +184,17 @@ export default function Home() {
               allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
               className="rounded-lg max-w-md"
             />
+            <button
+              onClick={() => {
+                const videosSection = document.getElementById('user-videos-section');
+                if (videosSection) {
+                  videosSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+              }}
+              className="bg-gradient-to-r from-[#E31E24] to-[#B91C1C] text-white px-8 py-4 rounded-full text-lg font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105"
+            >
+              אם ברצונכם לצפות בעדכונים נוספים לחצו כאן
+            </button>
           </div>
         </div>
       </section>
@@ -408,7 +419,9 @@ export default function Home() {
       <UserExperienceFeatures />
 
       {/* User Uploaded Videos */}
-      <UserUploadedVideos onUploadClick={() => setUploadVideoModalOpen(true)} />
+      <div id="user-videos-section">
+        <UserUploadedVideos onUploadClick={() => setUploadVideoModalOpen(true)} />
+      </div>
 
       {/* Apps Section */}
       <section className="px-4 space-y-8 mb-12">
