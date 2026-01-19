@@ -33,7 +33,7 @@ export default function ReportersTickerStrip() {
 
   return (
     <>
-      <div ref={containerRef} className="bg-gradient-to-r from-black/60 via-black/40 to-black/60 overflow-hidden border-b border-[#E31E24]/20 py-2 backdrop-blur-md" style={{ touchAction: 'pan-y' }}>
+      <div ref={containerRef} className="bg-black/90 backdrop-blur-xl border-b border-[#E31E24]/30 shadow-xl shadow-[#E31E24]/20 overflow-hidden py-2" style={{ touchAction: 'pan-y' }}>
         <motion.div 
           className="flex gap-2 items-center px-2"
           drag="x"
@@ -48,13 +48,30 @@ export default function ReportersTickerStrip() {
           <motion.div
             key={`${reporter.id}-${idx}`}
             onClick={() => setSelectedReporter(reporter)}
-            className="flex-shrink-0 flex flex-col items-center gap-1.5 p-2 bg-gradient-to-br from-gray-800/50 to-gray-900/50 rounded-lg border border-[#E31E24]/20 hover:border-[#E31E24]/60 transition-all cursor-pointer group backdrop-blur-sm hover:bg-gray-800/60"
-            whileHover={{ scale: 1.05, y: -3 }}
+            className="flex-shrink-0 flex flex-col items-center gap-1.5 p-2 bg-black/60 backdrop-blur-xl rounded-xl border border-[#E31E24]/30 hover:border-[#E31E24]/60 hover:bg-[#E31E24]/20 transition-all cursor-pointer group shadow-lg hover:shadow-[#E31E24]/30"
+            whileHover={{ scale: 1.08, y: -4 }}
+            animate={{
+              boxShadow: [
+                '0 0 10px rgba(227, 31, 36, 0.2)',
+                '0 0 20px rgba(227, 31, 36, 0.4)',
+                '0 0 10px rgba(227, 31, 36, 0.2)'
+              ]
+            }}
+            transition={{
+              boxShadow: {
+                duration: 2,
+                repeat: Infinity,
+                ease: "easeInOut",
+                delay: idx * 0.1
+              }
+            }}
           >
-            <img
+            <motion.img
               src={reporter.image}
               alt={reporter.name}
-              className="w-12 h-12 rounded-md object-cover group-hover:ring-2 ring-[#E31E24] transition-all"
+              className="w-12 h-12 rounded-lg object-cover border-2 border-[#E31E24]/20 group-hover:border-[#E31E24] transition-all"
+              whileHover={{ rotate: [0, -2, 2, 0] }}
+              transition={{ duration: 0.3 }}
             />
             <div className="text-center min-w-[100px]">
               <div className="text-white font-bold text-xs line-clamp-1">{reporter.name}</div>
