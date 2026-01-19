@@ -20,8 +20,11 @@ Deno.serve(async (req) => {
     // Get file size
     const fileSizeInMB = file.size / (1024 * 1024);
 
+    // Convert File to ArrayBuffer for upload
+    const buffer = await file.arrayBuffer();
+    
     // Upload file using the integration
-    const uploadResponse = await base44.integrations.Core.UploadFile({ file });
+    const uploadResponse = await base44.integrations.Core.UploadFile({ file: buffer });
     const videoUrl = uploadResponse.file_url;
 
     // Create UserVideo record
