@@ -341,21 +341,19 @@ function TickerContent({ news, currencies }) {
       {currencies.length > 0 && [...currencies, ...currencies].map((currency, index) => (
         <motion.span 
           key={`currency-${index}`} 
-          className="mx-6 sm:mx-10 inline-flex items-center gap-2 px-4 py-2 rounded-xl"
+          className="mx-6 sm:mx-10 inline-flex items-center gap-2 px-3 py-1.5 rounded-lg backdrop-blur-sm"
           animate={{
             background: [
-              'linear-gradient(to right, rgba(234, 179, 8, 0.2), rgba(34, 197, 94, 0.2))',
-              'linear-gradient(to right, rgba(59, 130, 246, 0.3), rgba(168, 85, 247, 0.3))',
-              'linear-gradient(to right, rgba(239, 68, 68, 0.2), rgba(245, 158, 11, 0.2))',
-              'linear-gradient(to right, rgba(234, 179, 8, 0.2), rgba(34, 197, 94, 0.2))'
+              'linear-gradient(to right, rgba(0, 0, 0, 0.6), rgba(227, 31, 36, 0.4))',
+              'linear-gradient(to right, rgba(227, 31, 36, 0.5), rgba(0, 0, 0, 0.7))',
+              'linear-gradient(to right, rgba(0, 0, 0, 0.6), rgba(227, 31, 36, 0.4))'
             ],
             boxShadow: [
-              '0 0 10px rgba(234, 179, 8, 0.3)',
-              '0 0 20px rgba(59, 130, 246, 0.5)',
-              '0 0 15px rgba(239, 68, 68, 0.4)',
-              '0 0 10px rgba(234, 179, 8, 0.3)'
+              '0 0 10px rgba(227, 31, 36, 0.3)',
+              '0 0 20px rgba(227, 31, 36, 0.5)',
+              '0 0 10px rgba(227, 31, 36, 0.3)'
             ],
-            scale: [1, 1.05, 1]
+            scale: [1, 1.03, 1]
           }}
           transition={{
             duration: 3,
@@ -364,26 +362,21 @@ function TickerContent({ news, currencies }) {
             delay: index * 0.2
           }}
           style={{
-            border: '2px solid rgba(234, 179, 8, 0.5)'
+            border: '1px solid rgba(227, 31, 36, 0.4)'
           }}
         >
-          {currency.code === 'USD' && <DollarSign className="w-5 h-5 text-green-400 animate-pulse" />}
-          {currency.code === 'EUR' && <Euro className="w-5 h-5 text-blue-400 animate-pulse" />}
-          {currency.code === 'BTC' && <span className="text-orange-400 font-bold text-base animate-pulse">₿</span>}
-          {currency.code === 'GBP' && <span className="text-blue-300 font-bold text-base animate-pulse">£</span>}
-          <span className="font-bold text-white text-base">{currency.name}</span>
-          <span className="text-yellow-300 font-bold text-base">
+          {currency.code === 'USD' && <DollarSign className="w-4 h-4 text-[#E31E24] animate-pulse" />}
+          {currency.code === 'EUR' && <Euro className="w-4 h-4 text-[#E31E24] animate-pulse" />}
+          {currency.code === 'BTC' && <span className="text-[#E31E24] font-bold text-sm animate-pulse">₿</span>}
+          {currency.code === 'GBP' && <span className="text-[#E31E24] font-bold text-sm animate-pulse">£</span>}
+          <span className="font-bold text-white text-sm">{currency.name}</span>
+          <span className="text-red-400 font-bold text-sm">
             ₪{currency.code === 'BTC' ? (currency.rate || 0).toFixed(0) : (currency.rate || 0).toFixed(2)}
           </span>
           <motion.span 
-            className={`font-bold text-sm ${(currency.changePercent || 0) >= 0 ? 'text-green-400' : 'text-red-400'}`}
+            className={`font-bold text-xs ${(currency.changePercent || 0) >= 0 ? 'text-green-400' : 'text-red-400'}`}
             animate={{
-              scale: [1, 1.15, 1],
-              textShadow: [
-                '0 0 5px currentColor',
-                '0 0 15px currentColor',
-                '0 0 5px currentColor'
-              ]
+              scale: [1, 1.1, 1]
             }}
             transition={{
               duration: 2,
