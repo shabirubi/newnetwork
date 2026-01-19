@@ -22,6 +22,7 @@ import AutoNewsUpdater from "../components/news/AutoNewsUpdater";
 import AutoChannelsUpdater from "../components/news/AutoChannelsUpdater";
 
 import VideosFeed from "../components/home/VideosFeed";
+import TikTokNewsFeed from "../components/news/TikTokNewsFeed";
 import AIAnnouncer from "../components/news/AIAnnouncer";
 import TVAnchor from "../components/news/TVAnchor";
 import VODModal from "../components/vod/VODModal";
