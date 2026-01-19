@@ -158,6 +158,27 @@ export default function Home() {
 
       <AutoNewsUpdater />
       <AutoChannelsUpdater />
+
+      {/* Live Player Section */}
+      <section className="px-0 sm:px-4 mb-6">
+        <div className="bg-black/60 backdrop-blur-sm sm:rounded-t-lg p-2 sm:p-3 flex items-center justify-between">
+          <div className="flex items-center gap-3">
+            <div className="relative flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E31E24] opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#E31E24]"></span>
+            </div>
+            <h2 className="text-white text-lg font-bold">שידור חי</h2>
+          </div>
+        </div>
+        <div className="relative">
+          <LivePlayer 
+            title={currentChannel?.name || activeLive?.title || "הרשת החדשה - שידור חי"}
+            isLive={!!activeLive?.is_active}
+            viewerCount={activeLive?.viewer_count || 3456}
+            streamUrl={channelStreamUrl}
+          />
+        </div>
+      </section>
       
       {/* Floating Action Buttons - Left Side Column */}
                   <div className="fixed left-4 sm:left-6 top-1/3 z-50 flex flex-col gap-4">
@@ -237,27 +258,6 @@ export default function Home() {
           <Radio className="w-6 h-6 sm:w-5 sm:h-5 text-white" />
         </motion.button>
       </div>
-
-      {/* Live Player Section */}
-      <section className="px-0 sm:px-4">
-        <div className="bg-black/60 backdrop-blur-sm sm:rounded-t-lg p-2 sm:p-3 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="relative flex h-2.5 w-2.5">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E31E24] opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#E31E24]"></span>
-            </div>
-            <h2 className="text-white text-lg font-bold">שידור חי</h2>
-          </div>
-        </div>
-        <div className="relative">
-          <LivePlayer 
-            title={currentChannel?.name || activeLive?.title || "הרשת החדשה - שידור חי"}
-            isLive={!!activeLive?.is_active}
-            viewerCount={activeLive?.viewer_count || 3456}
-            streamUrl={channelStreamUrl}
-          />
-        </div>
-      </section>
 
       {/* Hero Section - TikTok News Feed */}
       <section className="grid grid-cols-1 lg:grid-cols-12 gap-0 -mx-0 sm:mx-0 px-0 sm:px-4 mt-6">
