@@ -14,7 +14,7 @@ export default function WorldNewsContainer() {
     try {
       setGeneratingImages(prev => ({ ...prev, [article.title]: true }));
       const response = await base44.integrations.Core.GenerateImage({
-        prompt: `Creative banana-themed artistic representation related to: ${article.title}. Fresh yellow bananas as the main subject, professional photography style. High quality, vibrant, artistic composition. IMPORTANT: NO TEXT OR LETTERS in the image.`
+        prompt: `Professional news image for: ${article.title}. High quality, modern journalism style, professional photograph directly related to the news story. Category: ${article.category}. Clean, presentable for news media. IMPORTANT: NO TEXT OR LETTERS in the image, only relevant visual content.`
       });
       return response.url;
     } catch (err) {
