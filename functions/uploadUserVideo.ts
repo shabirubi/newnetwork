@@ -20,15 +20,12 @@ Deno.serve(async (req) => {
     // Get file size
     const fileSizeInMB = file.size / (1024 * 1024);
 
-    // Convert File to ArrayBuffer for upload
-    const buffer = await file.arrayBuffer();
-    
-    // Upload file using the integration
-    const uploadResponse = await base44.integrations.Core.UploadFile({ file: buffer });
+    // Upload file as Blob using the service role
+    const uploadResponse = await base44.asServiceRole.integrations.Core.UploadFile({ file });
     const videoUrl = uploadResponse.file_url;
 
     // Create UserVideo record
-    const userVideo = await base44.entities.UserVideo.create({
+    const userVideo = await base44.asServiceRole.entities.UserVideo.create({
       title,
       video_url: videoUrl,
       file_size: fileSizeInMB,
