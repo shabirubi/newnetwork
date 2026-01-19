@@ -188,11 +188,18 @@ CRITICAL: השתמש רק במקורות מהימנים. בנק ישראל הו�
     <div className="bg-black dark:bg-gray-950 text-white overflow-hidden relative z-[35] w-full">
       {/* Breaking News Strip */}
       <div className="flex items-center gap-1 sm:gap-3 px-0 py-2 w-full">
-        <span className="bg-[#E31E24] text-white px-2 sm:px-3 py-1 sm:py-1.5 font-bold text-[10px] sm:text-xs shrink-0 flex items-center gap-1 sm:gap-1.5 rounded relative z-10">
-          <Flame className="w-3 sm:w-3.5 h-3 sm:h-3.5 animate-pulse" />
-          <span className="hidden xs:inline">חדשות חמות</span>
-          <span className="xs:hidden">חם</span>
-        </span>
+        {/* Menu Button - Right Side */}
+        <button
+          onClick={onMenuClick}
+          className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-lg hover:bg-white/20 text-[#E31E24] active:scale-95 transition-all touch-manipulation relative z-[70] group shrink-0"
+          title="תפריט"
+        >
+          <div className="flex flex-col gap-1.5">
+            <div className="w-5 h-0.5 bg-[#E31E24] rounded-full group-hover:w-6 transition-all"></div>
+            <div className="w-5 h-0.5 bg-[#E31E24] rounded-full group-hover:w-6 transition-all"></div>
+            <div className="w-5 h-0.5 bg-[#E31E24] rounded-full group-hover:w-6 transition-all"></div>
+          </div>
+        </button>
 
         <button 
           onClick={() => {
@@ -204,13 +211,13 @@ CRITICAL: השתמש רק במקורות מהימנים. בנק ישראל הו�
         </button>
 
         <div className="flex items-center gap-1 sm:gap-2 shrink-0 relative z-[60]">
-          {/* Currency Strip next to Menu */}
+          {/* Currency Strip next to other buttons */}
           {currencies.length > 0 && (
-            <div className="hidden lg:flex items-center gap-2 bg-black/60 backdrop-blur-sm rounded-lg px-3 py-2 border border-red-900/30">
-              {currencies.map((currency, idx) => (
+            <div className="flex items-center gap-1 sm:gap-2 bg-black/60 backdrop-blur-sm rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 border border-red-900/30">
+              {currencies.slice(0, 2).map((currency, idx) => (
                 <motion.div
                   key={`sidebar-currency-${idx}`}
-                  className="flex items-center gap-1.5"
+                  className="flex items-center gap-1"
                   animate={{
                     scale: [1, 1.05, 1]
                   }}
@@ -221,33 +228,21 @@ CRITICAL: השתמש רק במקורות מהימנים. בנק ישראל הו�
                     delay: idx * 0.3
                   }}
                 >
-                  {currency.code === 'USD' && <DollarSign className="w-3.5 h-3.5 text-[#E31E24]" />}
-                  {currency.code === 'EUR' && <Euro className="w-3.5 h-3.5 text-[#E31E24]" />}
-                  {currency.code === 'BTC' && <span className="text-[#E31E24] font-bold text-xs">₿</span>}
-                  {currency.code === 'GBP' && <span className="text-[#E31E24] font-bold text-xs">£</span>}
-                  <span className="text-white font-bold text-xs">{currency.name}</span>
-                  <span className="text-red-400 font-bold text-xs">
+                  {currency.code === 'USD' && <DollarSign className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-[#E31E24]" />}
+                  {currency.code === 'EUR' && <Euro className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-[#E31E24]" />}
+                  {currency.code === 'BTC' && <span className="text-[#E31E24] font-bold text-[10px] sm:text-xs">₿</span>}
+                  {currency.code === 'GBP' && <span className="text-[#E31E24] font-bold text-[10px] sm:text-xs">£</span>}
+                  <span className="text-white font-bold text-[10px] sm:text-xs hidden xs:inline">{currency.name}</span>
+                  <span className="text-red-400 font-bold text-[10px] sm:text-xs">
                     ₪{currency.code === 'BTC' ? (currency.rate || 0).toFixed(0) : (currency.rate || 0).toFixed(2)}
                   </span>
-                  <span className={`font-bold text-[10px] ${(currency.changePercent || 0) >= 0 ? 'text-green-400' : 'text-red-400'}`}>
+                  <span className={`font-bold text-[9px] sm:text-[10px] ${(currency.changePercent || 0) >= 0 ? 'text-green-400' : 'text-red-400'}`}>
                     {(currency.changePercent || 0) >= 0 ? '▲' : '▼'}{Math.abs(currency.changePercent || 0).toFixed(2)}%
                   </span>
                 </motion.div>
               ))}
             </div>
           )}
-
-          <button
-            onClick={onMenuClick}
-            className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-lg hover:bg-white/20 text-[#E31E24] active:scale-95 transition-all touch-manipulation relative z-[70] group"
-            title="תפריט"
-          >
-            <div className="flex flex-col gap-1.5">
-              <div className="w-5 h-0.5 bg-[#E31E24] rounded-full group-hover:w-6 transition-all"></div>
-              <div className="w-5 h-0.5 bg-[#E31E24] rounded-full group-hover:w-6 transition-all"></div>
-              <div className="w-5 h-0.5 bg-[#E31E24] rounded-full group-hover:w-6 transition-all"></div>
-            </div>
-          </button>
 
           <button
             onClick={(e) => {
