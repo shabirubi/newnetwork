@@ -34,7 +34,11 @@ const categories = [
   { id: "archive", label: "ארכיון", icon: Clock, href: "Archive" }
   ];
 
-export default function Layout({ children }) {
+export default function Layout({ children, currentPageName }) {
+  // דף VODContent - ללא Layout
+  if (currentPageName === 'VODContent') {
+    return children;
+  }
         const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
         const [categoriesSidebarOpen, setCategoriesSidebarOpen] = useState(false);
         const [reportersModalOpen, setReportersModalOpen] = useState(false);
