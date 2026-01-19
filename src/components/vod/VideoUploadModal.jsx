@@ -38,15 +38,22 @@ export default function VideoUploadModal({ isOpen, onClose, onVideoUploaded }) {
     try {
       const formData = new FormData();
       formData.append("file", selectedFile);
-      formData.append("title", title);
+      formData.append("title", title.trim());
 
-      const response = await base44.functions.invoke("uploadUserVideo", {
-        file: selectedFile,
-        title: title.trim()
+      // Call function with FormData
+      const response = await fetch('/api/functions/uploadUserVideo', {
+        method: 'POST',
+        body: formData
       });
 
-      if (response.data.success) {
-        onVideoUploaded?.(response.data.video);
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "שגיאה בהעלאת הסרטון");
+      }
+
+      if (data.success) {
+        onVideoUploaded?.(data.video);
         setTitle("");
         setSelectedFile(null);
         onClose();
