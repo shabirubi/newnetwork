@@ -169,14 +169,16 @@ export default function AutoNewsUpdater() {
                   content: { type: "string" },
                   is_breaking: { type: "boolean" },
                   is_featured: { type: "boolean" }
-                }
+                },
+                required: ["title", "subtitle", "content"]
               }
             }
-          }
+          },
+          required: ["articles"]
         }
       });
 
-      const articles = result?.articles || [];
+      const articles = (typeof result === 'object' && result.articles) ? result.articles : (Array.isArray(result) ? result : []);
       
       // Generate images and add details
       const enrichedArticles = await Promise.all(
