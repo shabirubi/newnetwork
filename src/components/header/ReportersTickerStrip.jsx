@@ -92,8 +92,9 @@ export default function ReportersTickerStrip() {
             </div>
           </motion.div>
         ))}
+         </div>
         </div>
-      </div>
+        </div>
 
       <ReporterCardModal 
         reporter={selectedReporter}
