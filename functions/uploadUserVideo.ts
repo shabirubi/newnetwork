@@ -23,8 +23,12 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'File size exceeds 30MB limit' }, { status: 400 });
     }
 
+    // Convert file to buffer
+    const buffer = await file.arrayBuffer();
+    const fileBlob = new Blob([buffer], { type: file.type });
+
     // Upload file
-    const uploadResponse = await base44.integrations.Core.UploadFile({ file });
+    const uploadResponse = await base44.integrations.Core.UploadFile({ file: fileBlob });
     const videoUrl = uploadResponse.file_url;
 
     // Create UserVideo record
@@ -39,6 +43,7 @@ Deno.serve(async (req) => {
 
     return Response.json({ success: true, video: userVideo });
   } catch (error) {
+    console.error('Upload error:', error);
     return Response.json({ error: error.message }, { status: 500 });
   }
 });
