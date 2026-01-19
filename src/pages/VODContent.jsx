@@ -198,11 +198,15 @@ export default function VODContent() {
           }}
         >
           <iframe
-            src="https://www.youtube.com/embed/4miQnYCTdS8?autoplay=1&rel=0&modestbranding=1&fs=0"
+            key={currentVideo?.id}
+            src={currentVideo?.url}
             className="w-full h-full"
             frameBorder="0"
             allowFullScreen
             allow="autoplay; encrypted-media"
+            onLoad={(e) => {
+              setTimeout(handleVideoEnded, 120000); // Auto-advance after ~2 minutes
+            }}
           />
         </div>
       </div>
