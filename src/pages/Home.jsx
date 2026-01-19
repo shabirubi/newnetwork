@@ -445,7 +445,7 @@ export default function Home() {
         <h2 className="text-3xl font-bold dark:text-white mb-6 text-center">וידאו מומלץ</h2>
         <div className="flex justify-center">
           <iframe 
-            src="https://www.youtube.com/embed/KTvV8GJ1WAE?autoplay=1"
+            src="https://www.youtube.com/embed/k7WPygB6GlI?autoplay=1"
             width="100%" 
             height="400" 
             frameBorder="0" 
