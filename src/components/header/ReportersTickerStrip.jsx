@@ -91,16 +91,16 @@ export default function ReportersTickerStrip() {
               <div className="text-[#E31E24] text-[8px] font-medium line-clamp-1">{reporter.specialty}</div>
             </div>
           </motion.div>
-        ))}
-         </div>
-        </div>
-        </div>
+          ))}
+          </div>
+          </div>
+          </div>
 
-      <ReporterCardModal 
-        reporter={selectedReporter}
-        isOpen={!!selectedReporter}
-        onClose={() => setSelectedReporter(null)}
-      />
-    </>
-  );
-}
+          <ReporterCardModal 
+          reporter={selectedReporter}
+          isOpen={!!selectedReporter}
+          onClose={() => setSelectedReporter(null)}
+          />
+          </>
+          );
+          }
