@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { X, Tv } from "lucide-react";
 
 const BACKGROUND_IMAGE = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/43de178a9_image.png";
 
 export default function VODContent() {
+  const [channelsOpen, setChannelsOpen] = useState(false);
+
   return (
     <div
       className="min-h-screen relative overflow-hidden flex items-center justify-center"
