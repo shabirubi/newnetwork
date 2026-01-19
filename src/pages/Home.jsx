@@ -174,7 +174,7 @@ export default function Home() {
       {/* Featured Video Section */}
       <section className="px-4 mt-6">
         <div className="bg-black/40 backdrop-blur-sm rounded-lg p-4">
-          <div className="flex flex-col items-center gap-4">
+          <div className="flex flex-col lg:flex-row items-center gap-4">
             <iframe 
               src="https://www.youtube.com/embed/4miQnYCTdS8"
               width="100%" 
@@ -182,7 +182,7 @@ export default function Home() {
               frameBorder="0" 
               allowFullScreen="" 
               allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-              className="rounded-lg max-w-md"
+              className="rounded-lg max-w-md flex-shrink-0"
             />
             <button
               onClick={() => {
@@ -191,7 +191,7 @@ export default function Home() {
                   videosSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
                 }
               }}
-              className="bg-gradient-to-r from-[#E31E24] to-[#B91C1C] text-white px-8 py-4 rounded-full text-lg font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105"
+              className="bg-gradient-to-r from-[#E31E24] to-[#B91C1C] text-white px-8 py-4 rounded-full text-lg font-bold shadow-lg hover:shadow-xl transition-all hover:scale-105 whitespace-nowrap"
             >
               אם ברצונכם לצפות בעדכונים נוספים לחצו כאן
             </button>
