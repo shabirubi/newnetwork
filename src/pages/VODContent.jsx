@@ -33,6 +33,7 @@ const BACKGROUND_IMAGE = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/ob
       { id: 'next', url: `https://www.youtube.com/embed/${NEXT_VIDEO_URL.split('/').pop()}?autoplay=1&rel=0` },
       { id: 'youtube-vecTR4YAf-w', url: 'https://www.youtube.com/embed/vecTR4YAf-w?autoplay=1&rel=0' },
       { id: 'youtube-OE6Oj8pW0BU', url: 'https://www.youtube.com/embed/OE6Oj8pW0BU?autoplay=1&rel=0' },
+      { id: 'youtube-t60lrCbStcY', url: 'https://www.youtube.com/embed/t60lrCbStcY?autoplay=1&rel=0' },
       ...userVideos.map(v => ({ id: v.id, url: v.video_url }))
     ];
 
