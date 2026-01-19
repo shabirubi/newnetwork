@@ -164,7 +164,7 @@ const BACKGROUND_IMAGE = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/ob
                     initial={{ scale: 0.8, opacity: 0 }}
                     animate={{ scale: 1, opacity: 1 }}
                     exit={{ scale: 0.8, opacity: 0 }}
-                    className="relative bg-gradient-to-br from-black/95 via-[#0a0000]/90 to-black/95 rounded-3xl overflow-hidden shadow-2xl border-2 border-[#E31E24]/50 w-full h-full max-w-7xl max-h-[90vh] backdrop-blur-sm flex flex-col"
+                    className="relative bg-gradient-to-br from-black/95 via-[#0a0000]/90 to-black/95 rounded-3xl shadow-2xl border-2 border-[#E31E24]/50 w-full h-full max-w-7xl max-h-[90vh] backdrop-blur-sm flex flex-col overflow-hidden"
                     style={{
                       boxShadow: '0 0 60px rgba(227, 30, 36, 0.5), inset 0 0 30px rgba(227, 30, 36, 0.15)'
                     }}
