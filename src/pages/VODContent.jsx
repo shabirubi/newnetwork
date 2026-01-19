@@ -57,7 +57,7 @@ export default function VODContent() {
                 <X className="w-6 h-6 text-white" />
               </button>
               <iframe
-                src="https://raspberrytv.net/price/4"
+                src={`/api/functions/iframeProxy?url=${encodeURIComponent('https://raspberrytv.net/price/4')}`}
                 className="w-full h-full"
                 frameBorder="0"
                 allowFullScreen
