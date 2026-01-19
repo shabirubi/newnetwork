@@ -7,12 +7,10 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
 
 const BACKGROUND_IMAGE = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/43de178a9_image.png";
+const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png";
 
 export default function VODContent() {
   const [selectedContent, setSelectedContent] = useState(null);
-  const [viewMode, setViewMode] = useState('grid');
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [searchQuery, setSearchQuery] = useState('');
 
   const { data: vodContent = [] } = useQuery({
     queryKey: ['vod-content'],

@@ -19,10 +19,10 @@ import Schedule from './pages/Schedule';
 import Terms from './pages/Terms';
 import TestApps from './pages/TestApps';
 import TestDID from './pages/TestDID';
-import VOD from './pages/VOD';
-import WarRoom from './pages/WarRoom';
 import UserVideos from './pages/UserVideos';
+import VOD from './pages/VOD';
 import VODContent from './pages/VODContent';
+import WarRoom from './pages/WarRoom';
 import __Layout from './Layout.jsx';
 
 
@@ -48,10 +48,10 @@ export const PAGES = {
     "Terms": Terms,
     "TestApps": TestApps,
     "TestDID": TestDID,
-    "VOD": VOD,
-    "WarRoom": WarRoom,
     "UserVideos": UserVideos,
+    "VOD": VOD,
     "VODContent": VODContent,
+    "WarRoom": WarRoom,
 }
 
 export const pagesConfig = {
