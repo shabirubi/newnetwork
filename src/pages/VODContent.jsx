@@ -53,55 +53,6 @@ export default function VODContent() {
 
       {/* Content */}
       <div className="relative z-10 min-h-screen flex flex-col">
-        {/* Logo Header */}
-        <header className="sticky top-0 z-40 backdrop-blur-md bg-black/40 border-b border-[#E31E24]/30">
-          <div className="max-w-7xl mx-auto px-4 py-4">
-            <div className="flex items-center justify-between">
-              <Link to={createPageUrl("Home")} className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-                <img 
-                  src={LOGO_URL} 
-                  alt="הרשת החדשה" 
-                  className="h-14 w-auto"
-                />
-              </Link>
-            </div>
-          </div>
-        </header>
-
-        {/* Search and Filters */}
-        <div className="bg-black/40 backdrop-blur-md border-b border-[#E31E24]/30 sticky top-20 z-30">
-          <div className="max-w-7xl mx-auto px-4 py-4 space-y-4">
-            {/* Search Bar */}
-            <div className="relative">
-              <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <input
-                type="text"
-                placeholder="חפשו תוכן..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full bg-black/50 border border-[#E31E24]/30 rounded-lg pr-12 py-3 text-white placeholder-gray-500 focus:outline-none focus:border-[#E31E24] transition-colors"
-              />
-            </div>
-
-            {/* Categories */}
-            <div className="flex items-center gap-2 overflow-x-auto pb-2">
-              {categories.map(cat => (
-                <button
-                  key={cat.id}
-                  onClick={() => setSelectedCategory(cat.id)}
-                  className={`px-4 py-2 rounded-full font-bold whitespace-nowrap transition-all ${
-                    selectedCategory === cat.id
-                      ? 'bg-gradient-to-r from-[#E31E24] to-[#B91C1C] text-white shadow-lg'
-                      : 'bg-black/50 text-gray-300 border border-gray-600 hover:border-[#E31E24]'
-                  }`}
-                >
-                  {cat.label}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-
         {/* Main Content */}
         <main className="flex-1 max-w-7xl mx-auto w-full px-4 py-8 relative z-20">
           {filteredContent.length === 0 ? (
