@@ -36,7 +36,7 @@ export default function WelcomeVideoOverlay({ onVideoEnd }) {
           >
             {/* YouTube Shorts Embed */}
             <iframe
-              src="https://www.youtube.com/embed/P2yEIgfJ0J8?autoplay=1&modestbranding=1&fs=0"
+              src="https://www.youtube.com/embed/k7WPygB6GlI?autoplay=1&modestbranding=1&fs=0"
               className="w-full h-full"
               frameBorder="0"
               allow="autoplay; encrypted-media"
