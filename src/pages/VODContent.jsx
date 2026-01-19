@@ -11,6 +11,8 @@ const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/pub
 
 export default function VODContent() {
   const [selectedContent, setSelectedContent] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
 
   const { data: vodContent = [] } = useQuery({
     queryKey: ['vod-content'],
