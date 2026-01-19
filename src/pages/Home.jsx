@@ -160,7 +160,7 @@ export default function Home() {
       <AutoChannelsUpdater />
 
       {/* Live Player Section */}
-      <section className="px-0 sm:px-0 mb-0 -mt-10">
+      <section className="px-0 sm:px-0 mb-0 -mt-14">
         <LivePlayer 
           title={currentChannel?.name || activeLive?.title || "הרשת החדשה - שידור חי"}
           isLive={!!activeLive?.is_active}
