@@ -43,8 +43,8 @@ export default function LeftSidebarCategories() {
                   className="flex flex-col items-center gap-1 px-2 py-3 group cursor-pointer"
                   title={cat.label}
                 >
-                  <div className={`w-12 h-12 rounded-lg bg-black/40 border border-[#E31E24]/30 flex items-center justify-center group-hover:border-[#E31E24]/80 transition-all ${cat.color}`}>
-                    <Icon className="w-6 h-6" />
+                  <div className={`w-16 h-16 rounded-lg bg-black/40 border border-[#E31E24]/30 flex items-center justify-center group-hover:border-[#E31E24]/80 transition-all ${cat.color}`}>
+                    <Icon className="w-8 h-8" />
                   </div>
                   <span className="text-[10px] text-[#E31E24] text-center font-bold">
                     {cat.label}

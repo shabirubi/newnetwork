@@ -39,7 +39,7 @@ export default function RightSidebarUpdates() {
                 className="flex flex-col items-center gap-2 px-2 py-3 group cursor-pointer"
                 title={update.title}
               >
-                <div className="flex-shrink-0 w-16 h-16 rounded-lg bg-black/40 border border-[#E31E24]/40 flex items-center justify-center group-hover:border-[#E31E24]/80 transition-all">
+                <div className="flex-shrink-0 w-24 h-24 rounded-lg bg-black/40 border border-[#E31E24]/40 flex items-center justify-center group-hover:border-[#E31E24]/80 transition-all">
                   {update.image_url ? (
                     <img
                       src={update.image_url}
@@ -47,7 +47,7 @@ export default function RightSidebarUpdates() {
                       className="w-full h-full object-cover rounded-lg"
                     />
                   ) : (
-                    <Flame className="w-6 h-6 text-[#E31E24] animate-pulse" />
+                    <Flame className="w-8 h-8 text-[#E31E24] animate-pulse" />
                   )}
                 </div>
                 <span className="text-[11px] text-[#E31E24] text-center line-clamp-2 leading-tight font-bold">
