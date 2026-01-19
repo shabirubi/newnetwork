@@ -35,6 +35,7 @@ const BACKGROUND_IMAGE = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/ob
       { id: 'youtube-OE6Oj8pW0BU', url: 'https://www.youtube.com/embed/OE6Oj8pW0BU?autoplay=1&rel=0' },
       { id: 'youtube-t60lrCbStcY', url: 'https://www.youtube.com/embed/t60lrCbStcY?autoplay=1&rel=0' },
       { id: 'youtube-KaUe7coSZEc', url: 'https://www.youtube.com/embed/KaUe7coSZEc?autoplay=1&rel=0' },
+      { id: 'youtube-joJfZwtQGbU', url: 'https://www.youtube.com/embed/joJfZwtQGbU?autoplay=1&rel=0' },
       ...userVideos.map(v => ({ id: v.id, url: v.video_url }))
     ];
 
