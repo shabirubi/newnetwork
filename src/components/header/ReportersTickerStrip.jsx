@@ -19,30 +19,20 @@ export default function ReportersTickerStrip() {
 
   if (reporters.length === 0) return null;
 
-  // Create multiple duplicates for seamless looping
-  const displayReporters = Array.from({ length: 10 }, () => reporters).flat();
-
-  // Calculate duration based on number of reporters to maintain consistent speed
-  const duration = reporters.length * 3.5;
-
-  const handleDrag = (e, info) => {
-    if (Math.abs(info.delta.x) > 5) {
-      setDragX(info.offset.x);
-    }
-  };
+  // Create duplicates for seamless looping
+  const displayReporters = [...reporters, ...reporters];
 
   return (
     <>
       <div ref={containerRef} className="bg-black/90 backdrop-blur-xl border-b border-[#E31E24]/30 shadow-xl shadow-[#E31E24]/20 overflow-hidden py-2" style={{ touchAction: 'pan-y' }}>
         <motion.div 
           className="flex gap-2 items-center px-2"
-          drag="x"
-          dragElastic={0.2}
-          onDrag={handleDrag}
-          dragConstraints={{ left: -500, right: 500 }}
-          initial={{ x: 0 }}
-          animate={{ x: dragX > 0 ? dragX : `-${(reporters.length / displayReporters.length) * 100}%` }}
-          transition={dragX === 0 ? { duration, repeat: Infinity, ease: "linear", repeatType: "loop" } : undefined}
+          animate={{ x: [0, `-${50}%`] }}
+          transition={{ 
+            duration: reporters.length * 3,
+            repeat: Infinity, 
+            ease: "linear"
+          }}
         >
         {displayReporters.map((reporter, idx) => (
           <motion.div
