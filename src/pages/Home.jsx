@@ -200,7 +200,7 @@ export default function Home() {
       </section>
 
             {/* Floating Action Buttons - Left Side Column */}
-                  <div className="fixed left-4 sm:left-6 top-1/3 z-50 flex flex-col gap-4">
+                  <div className="fixed left-4 sm:left-6 top-20 z-50 flex flex-col gap-2">
                     {/* Reporter Chat Button */}
                     <motion.button
                       onClick={() => setReporterChatOpen(true)}
