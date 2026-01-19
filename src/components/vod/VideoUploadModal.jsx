@@ -15,13 +15,6 @@ export default function VideoUploadModal({ isOpen, onClose, onVideoUploaded }) {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const fileSizeInMB = file.size / (1024 * 1024);
-    
-    if (fileSizeInMB > 30) {
-      setError("גודל הקובץ חייב להיות עד 30MB");
-      return;
-    }
-
     setSelectedFile(file);
     setError("");
   };
@@ -96,7 +89,7 @@ export default function VideoUploadModal({ isOpen, onClose, onVideoUploaded }) {
                   <span className="text-white font-bold text-sm">
                     {selectedFile ? selectedFile.name : "לחץ כדי לבחור סרטון"}
                   </span>
-                  <span className="text-gray-400 text-xs">עד 30MB</span>
+                  <span className="text-gray-400 text-xs">בחר סרטון כלשהו</span>
                 </button>
                 <input
                   ref={fileInputRef}

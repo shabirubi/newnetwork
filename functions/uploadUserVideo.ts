@@ -17,11 +17,8 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Missing file or title' }, { status: 400 });
     }
 
-    // Check file size (30MB max)
+    // Get file size
     const fileSizeInMB = file.size / (1024 * 1024);
-    if (fileSizeInMB > 30) {
-      return Response.json({ error: 'File size exceeds 30MB limit' }, { status: 400 });
-    }
 
     // Upload file using the integration
     const uploadResponse = await base44.integrations.Core.UploadFile({ file });
