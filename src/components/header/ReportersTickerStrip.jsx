@@ -38,8 +38,25 @@ export default function ReportersTickerStrip() {
 
   return (
     <>
-      <div ref={containerRef} className="bg-black/90 backdrop-blur-xl border-b border-[#E31E24]/30 shadow-xl shadow-[#E31E24]/20 overflow-x-auto py-1" style={{ touchAction: 'pan-y' }}>
-        <div className="flex gap-1 items-center px-1.5">
+      <div ref={containerRef} className="relative bg-black/90 backdrop-blur-xl border-b border-[#E31E24]/30 shadow-xl shadow-[#E31E24]/20 py-1">
+        {/* Left Arrow */}
+        <button
+          onClick={() => scroll('left')}
+          className="hidden lg:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-8 h-8 bg-gradient-to-r from-black via-black/80 to-transparent hover:from-black/60 transition-all"
+        >
+          <ChevronLeft className="w-5 h-5 text-[#E31E24]" />
+        </button>
+
+        {/* Right Arrow */}
+        <button
+          onClick={() => scroll('right')}
+          className="hidden lg:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 items-center justify-center w-8 h-8 bg-gradient-to-l from-black via-black/80 to-transparent hover:from-black/60 transition-all"
+        >
+          <ChevronRight className="w-5 h-5 text-[#E31E24]" />
+        </button>
+
+        <div ref={scrollContainerRef} className="overflow-x-auto scrollbar-hide" onScroll={handleScroll} style={{ touchAction: 'pan-x' }}>
+          <div className="flex gap-1 items-center px-1.5 lg:px-10">
         {reporters.map((reporter, idx) => (
           <motion.div
             key={`${reporter.id}-${idx}`}
