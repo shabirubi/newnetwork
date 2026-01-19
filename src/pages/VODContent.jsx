@@ -1,19 +1,51 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Tv, ChevronLeft } from "lucide-react";
+import { X, Tv, ChevronLeft, Upload } from "lucide-react";
 import { createPageUrl } from "../utils";
 import { base44 } from "@/api/base44Client";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import VideoUploadModal from "../components/vod/VideoUploadModal";
 
 const BACKGROUND_IMAGE = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/43de178a9_image.png";
+const NEXT_VIDEO_URL = "https://youtu.be/2q9lcnXBicQ";
 
 export default function VODContent() {
     const [channelsOpen, setChannelsOpen] = useState(false);
+    const [uploadModalOpen, setUploadModalOpen] = useState(false);
+    const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+    const queryClient = useQueryClient();
+
     const { data: channels = [] } = useQuery({
       queryKey: ['israeli-channels'],
       queryFn: () => base44.entities.IsraeliChannels.list(),
       initialData: []
     });
+
+    const { data: userVideos = [] } = useQuery({
+      queryKey: ['user-videos'],
+      queryFn: () => base44.entities.UserVideo.filter({ status: 'ready' }, '-created_date', 50),
+      initialData: []
+    });
+
+    const handleVideoUploaded = (video) => {
+      queryClient.invalidateQueries({ queryKey: ['user-videos'] });
+    };
+
+    const videoQueue = [
+      { id: 'initial', url: 'https://www.youtube.com/embed/4miQnYCTdS8?autoplay=1&rel=0' },
+      { id: 'next', url: `https://www.youtube.com/embed/${NEXT_VIDEO_URL.split('/').pop()}?autoplay=1&rel=0` },
+      ...userVideos.map(v => ({ id: v.id, url: v.video_url }))
+    ];
+
+    const currentVideo = videoQueue[currentVideoIndex];
+
+    const handleVideoEnded = () => {
+      if (currentVideoIndex < videoQueue.length - 1) {
+        setCurrentVideoIndex(currentVideoIndex + 1);
+      } else {
+        setCurrentVideoIndex(0);
+      }
+    };
 
   return (
     <div
