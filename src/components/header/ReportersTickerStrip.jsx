@@ -23,7 +23,7 @@ export default function ReportersTickerStrip() {
     <>
       <div ref={containerRef} className="bg-black/90 backdrop-blur-xl border-b border-[#E31E24]/30 shadow-xl shadow-[#E31E24]/20 overflow-x-auto py-2" style={{ touchAction: 'pan-y' }}>
         <div className="flex gap-2 items-center px-4">
-        {displayReporters.map((reporter, idx) => (
+        {reporters.map((reporter, idx) => (
           <motion.div
             key={`${reporter.id}-${idx}`}
             onClick={() => setSelectedReporter(reporter)}
