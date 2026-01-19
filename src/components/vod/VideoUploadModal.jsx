@@ -94,7 +94,6 @@ export default function VideoUploadModal({ isOpen, onClose, onVideoUploaded }) {
                 <input
                   ref={fileInputRef}
                   type="file"
-                  accept="video/*"
                   onChange={handleFileSelect}
                   className="hidden"
                   disabled={uploading}
