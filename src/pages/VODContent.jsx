@@ -112,6 +112,13 @@ export default function VODContent() {
         }
       `}</style>
 
+      {/* Upload Video Modal */}
+      <VideoUploadModal 
+        isOpen={uploadModalOpen} 
+        onClose={() => setUploadModalOpen(false)}
+        onVideoUploaded={handleVideoUploaded}
+      />
+
       {/* Channels Modal */}
             <AnimatePresence>
               {channelsOpen && (
