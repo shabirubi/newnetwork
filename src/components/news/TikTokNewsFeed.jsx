@@ -6,7 +6,6 @@ import { TrendingUp, Clock, Share2, Bookmark, Eye, ChevronUp } from "lucide-reac
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../../utils";
 import moment from "moment";
-import CurrencyStrip from "./CurrencyStrip";
 import BrandingWindEffect from "../animations/BrandingWindEffect";
 
 const categoryColors = {
@@ -125,7 +124,6 @@ export default function TikTokNewsFeed({ articles: propArticles }) {
 
   return (
     <section className="relative bg-black">
-      <CurrencyStrip />
       <BrandingWindEffect />
       <section 
         ref={containerRef}
