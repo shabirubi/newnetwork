@@ -1,44 +1,34 @@
-import React from "react";
-import { motion } from "framer-motion";
-import { Music, Heart, MessageCircle, Share2 } from "lucide-react";
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Music, X, Play } from "lucide-react";
 
 export default function TikTokNewsContainer() {
+  const [selectedVideo, setSelectedVideo] = useState(null);
+
   const tiktokVideos = [
     {
-      id: 1,
+      id: 'youtube-k7WPygB6GlI',
       title: "חדשות עכשיו - ביטחון",
       username: "@hareshet_live",
-      views: "234K",
-      likes: "12K",
-      comments: "2K",
-      image: "https://images.unsplash.com/photo-1611339555312-e607c90352fd?w=500&h=800&fit=crop"
+      url: "https://www.youtube.com/embed/k7WPygB6GlI?autoplay=1"
     },
     {
-      id: 2,
+      id: 'youtube-4miQnYCTdS8',
       title: "כלכלה - אפדייט חם",
       username: "@hareshet_economy",
-      views: "567K",
-      likes: "45K",
-      comments: "8K",
-      image: "https://images.unsplash.com/photo-1579621970563-430f63602022?w=500&h=800&fit=crop"
+      url: "https://www.youtube.com/embed/4miQnYCTdS8?autoplay=1"
     },
     {
-      id: 3,
+      id: 'youtube-2q9lcnXBicQ',
       title: "ספורט - התוקפת השעה",
       username: "@hareshet_sports",
-      views: "892K",
-      likes: "78K",
-      comments: "12K",
-      image: "https://images.unsplash.com/photo-1461896836934-ffe607ba8211?w=500&h=800&fit=crop"
+      url: "https://www.youtube.com/embed/2q9lcnXBicQ?autoplay=1"
     },
     {
-      id: 4,
+      id: 'youtube-vecTR4YAf-w',
       title: "טכנולוגיה - חידוש פורץ",
       username: "@hareshet_tech",
-      views: "456K",
-      likes: "34K",
-      comments: "6K",
-      image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=500&h=800&fit=crop"
+      url: "https://www.youtube.com/embed/vecTR4YAf-w?autoplay=1"
     }
   ];
 
@@ -61,68 +51,84 @@ export default function TikTokNewsContainer() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {tiktokVideos.map((video, idx) => (
-          <motion.a
+          <motion.div
             key={video.id}
-            href="https://www.tiktok.com"
-            target="_blank"
-            rel="noopener noreferrer"
+            onClick={() => setSelectedVideo(video)}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.1 }}
             whileHover={{ scale: 1.05 }}
-            className="group relative rounded-2xl overflow-hidden aspect-[9/16] bg-black cursor-pointer border-2 border-[#E31E24]/40 hover:border-[#E31E24]/80 transition-all"
+            className="group relative rounded-2xl overflow-hidden aspect-[9/16] bg-gradient-to-br from-black/80 via-[#E31E24]/30 to-black/80 backdrop-blur-sm cursor-pointer border-2 border-[#E31E24]/40 hover:border-[#E31E24]/80 transition-all"
             style={{
               boxShadow: '0 0 20px rgba(227, 30, 36, 0.3), inset 0 0 20px rgba(227, 30, 36, 0.1)'
             }}
           >
-            {/* Video Thumbnail */}
-            <img
-              src={video.image}
-              alt={video.title}
-              className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+            {/* Video Preview */}
+            <iframe
+              src={`https://www.youtube.com/embed/${video.id.replace('youtube-', '')}?controls=0&mute=1`}
+              className="w-full h-full object-cover pointer-events-none"
+              frameBorder="0"
             />
 
             {/* Overlay Gradient */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent group-hover:via-black/40 transition-all" />
 
             {/* Content */}
-            <div className="absolute inset-0 flex flex-col justify-between p-4 opacity-0 group-hover:opacity-100 transition-opacity">
-              {/* Title */}
-              <div>
-                <h3 className="text-white font-bold text-sm line-clamp-2 mb-2">
-                  {video.title}
-                </h3>
-                <p className="text-white/80 text-xs font-medium">{video.username}</p>
-              </div>
-
-              {/* Stats */}
-              <div className="space-y-2">
-                <div className="flex items-center gap-2 text-white/90 text-xs">
-                  <span className="font-bold">{video.views}</span>
-                  <span>צפיות</span>
-                </div>
-                <div className="flex items-center gap-4 text-white/80">
-                  <div className="flex items-center gap-1">
-                    <Heart className="w-4 h-4 fill-current" />
-                    <span className="text-xs">{video.likes}</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <MessageCircle className="w-4 h-4" />
-                    <span className="text-xs">{video.comments}</span>
-                  </div>
-                </div>
-              </div>
+            <div className="absolute bottom-0 left-0 right-0 p-4">
+              <h3 className="text-white font-bold text-sm line-clamp-2 mb-1">
+                {video.title}
+              </h3>
+              <p className="text-white/70 text-xs font-medium">{video.username}</p>
             </div>
 
             {/* Play Icon */}
-            <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-              <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
-                <Music className="w-6 h-6 text-white fill-white" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="w-16 h-16 rounded-full bg-[#E31E24]/80 backdrop-blur-sm flex items-center justify-center group-hover:scale-110 transition-transform border-2 border-white/30">
+                <Play className="w-8 h-8 text-white fill-white ml-1" />
               </div>
             </div>
-          </motion.a>
+          </motion.div>
         ))}
       </div>
+
+      {/* Video Modal */}
+      <AnimatePresence>
+        {selectedVideo && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+            onClick={() => setSelectedVideo(null)}
+          >
+            <div className="absolute inset-0 bg-black/95 backdrop-blur-md" />
+            <motion.div
+              initial={{ scale: 0.9 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.9 }}
+              className="relative w-full max-w-md aspect-[9/16] bg-black rounded-2xl overflow-hidden border-2 border-[#E31E24]/60"
+              style={{
+                boxShadow: '0 0 40px rgba(227, 30, 36, 0.5)'
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                onClick={() => setSelectedVideo(null)}
+                className="absolute top-4 right-4 z-10 p-2 bg-black/60 hover:bg-black/80 rounded-full transition-all border border-white/20"
+              >
+                <X className="w-6 h-6 text-white" />
+              </button>
+              <iframe
+                src={selectedVideo.url}
+                className="w-full h-full"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
