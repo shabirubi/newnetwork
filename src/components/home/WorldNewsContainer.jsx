@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Globe, RefreshCw, AlertCircle } from "lucide-react";
+import { Globe, RefreshCw, AlertCircle, MapPin, ExternalLink } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 
@@ -53,18 +53,28 @@ export default function WorldNewsContainer() {
     return () => clearInterval(interval);
   }, []);
 
-  const categoryColors = {
-    'politics': 'from-purple-600 to-purple-700',
-    'economy': 'from-green-600 to-green-700',
-    'technology': 'from-blue-600 to-blue-700',
-    'sports': 'from-orange-600 to-orange-700',
-    'world': 'from-indigo-600 to-indigo-700',
-    'security': 'from-red-600 to-red-700',
-    'default': 'from-gray-600 to-gray-700'
-  };
-
-  const getCategoryColor = (category) => {
-    return categoryColors[category?.toLowerCase()] || categoryColors.default;
+  const countryFlags = {
+    'USA': '🇺🇸',
+    'UK': '🇬🇧',
+    'France': '🇫🇷',
+    'Germany': '🇩🇪',
+    'China': '🇨🇳',
+    'Russia': '🇷🇺',
+    'Japan': '🇯🇵',
+    'India': '🇮🇳',
+    'Brazil': '🇧🇷',
+    'Ukraine': '🇺🇦',
+    'Israel': '🇮🇱',
+    'Iran': '🇮🇷',
+    'Turkey': '🇹🇷',
+    'Saudi Arabia': '🇸🇦',
+    'South Korea': '🇰🇷',
+    'Italy': '🇮🇹',
+    'Spain': '🇪🇸',
+    'Canada': '🇨🇦',
+    'Australia': '🇦🇺',
+    'Mexico': '🇲🇽',
+    'default': '🌍'
   };
 
   return (
@@ -87,7 +97,7 @@ export default function WorldNewsContainer() {
       </div>
 
       {error && (
-        <div className="bg-red-500/20 border border-red-500/50 rounded-xl p-4 flex items-center gap-2 text-red-400 mb-6">
+        <div className="bg-gradient-to-br from-black/80 via-[#E31E24]/30 to-black/80 backdrop-blur-sm border-2 border-[#E31E24]/60 rounded-xl p-4 flex items-center gap-2 text-white mb-6">
           <AlertCircle className="w-5 h-5" />
           <span>{error}</span>
         </div>
@@ -100,7 +110,10 @@ export default function WorldNewsContainer() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.05 }}
-            className={`bg-gradient-to-br ${getCategoryColor(article.category)} rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all group cursor-pointer h-full flex flex-col`}
+            className="bg-gradient-to-br from-black/80 via-[#E31E24]/30 to-black/80 backdrop-blur-sm rounded-2xl overflow-hidden border-2 border-[#E31E24]/40 hover:border-[#E31E24]/80 transition-all group cursor-pointer h-full flex flex-col"
+            style={{
+              boxShadow: '0 0 20px rgba(227, 30, 36, 0.3), inset 0 0 20px rgba(227, 30, 36, 0.1)'
+            }}
           >
             {/* Image Container */}
             {article.image_url ? (
@@ -110,48 +123,65 @@ export default function WorldNewsContainer() {
                   alt={article.title}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                
+                {/* Country Flag */}
+                {article.source && (
+                  <div className="absolute top-3 right-3 text-3xl drop-shadow-lg">
+                    {countryFlags[article.source] || countryFlags.default}
+                  </div>
+                )}
               </div>
             ) : generatingImages[article.title] ? (
-              <div className="h-48 bg-gradient-to-br from-gray-600 to-gray-700 flex items-center justify-center">
+              <div className="h-48 bg-gradient-to-br from-black/60 via-[#E31E24]/30 to-black/60 flex items-center justify-center">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white" />
               </div>
             ) : (
-              <div className="h-48 bg-gradient-to-br from-gray-600 to-gray-700" />
+              <div className="h-48 bg-gradient-to-br from-black/60 via-[#E31E24]/30 to-black/60" />
             )}
 
             {/* Content */}
             <div className="p-5 flex flex-col flex-1 text-white">
-              {/* Badge */}
-              <div className="inline-block bg-white/20 text-white text-xs font-bold px-3 py-1 rounded-full mb-3 w-fit backdrop-blur-sm">
-                {article.source || 'חדשות'}
+              {/* Source & Location */}
+              <div className="flex items-center gap-2 mb-3">
+                <MapPin className="w-3 h-3 text-[#E31E24]" />
+                <span className="text-xs font-bold text-white/90">
+                  {article.source || 'עולם'}
+                </span>
+                {article.category && (
+                  <>
+                    <span className="text-white/40">•</span>
+                    <span className="text-xs text-white/70 capitalize">
+                      {article.category}
+                    </span>
+                  </>
+                )}
               </div>
 
               {/* Title */}
-              <h3 className="font-bold text-base line-clamp-2 mb-2 group-hover:text-yellow-200 transition-colors">
+              <h3 className="font-bold text-base line-clamp-2 mb-2 group-hover:text-[#E31E24] transition-colors">
                 {article.title}
               </h3>
 
               {/* Description */}
-              <p className="text-white/80 text-sm line-clamp-2 mb-4 flex-1">
+              <p className="text-white/80 text-sm line-clamp-3 mb-4 flex-1">
                 {article.description}
               </p>
 
-              {/* Category Tag */}
-              {article.category && (
-                <span className="text-[11px] text-white/70 bg-white/10 px-3 py-1 rounded-full w-fit">
-                  {article.category}
-                </span>
-              )}
+              {/* Read More Link */}
+              <div className="flex items-center gap-2 text-xs text-white/80 hover:text-[#E31E24] transition-colors pt-3 border-t border-[#E31E24]/30">
+                <ExternalLink className="w-3 h-3" />
+                <span>קרא עוד</span>
+              </div>
             </div>
           </motion.div>
         ))}
       </div>
 
       {!loading && articles.length === 0 && !error && (
-        <div className="text-center py-12 bg-white dark:bg-gray-800 rounded-2xl">
-          <Globe className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-          <p className="text-gray-500 dark:text-gray-400">אין חדשות זמינות כרגע</p>
+        <div className="text-center py-12 bg-gradient-to-br from-black/80 via-[#E31E24]/20 to-black/80 backdrop-blur-sm rounded-2xl border-2 border-[#E31E24]/40">
+          <Globe className="w-12 h-12 text-[#E31E24] mx-auto mb-4" />
+          <p className="text-gray-400">אין חדשות זמינות כרגע</p>
         </div>
       )}
 
