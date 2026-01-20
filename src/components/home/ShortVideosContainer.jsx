@@ -101,7 +101,10 @@ export default function ShortVideosContainer() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.05 }}
             onClick={() => setSelectedVideo(video)}
-            className="group cursor-pointer relative rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all h-80"
+            className="group cursor-pointer relative rounded-xl overflow-hidden border-2 border-[#E31E24]/40 hover:border-[#E31E24]/80 transition-all h-80"
+            style={{
+              boxShadow: '0 0 20px rgba(227, 30, 36, 0.3), inset 0 0 20px rgba(227, 30, 36, 0.1)'
+            }}
           >
             {/* Video Thumbnail */}
             <img

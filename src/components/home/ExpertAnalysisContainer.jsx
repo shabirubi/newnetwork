@@ -47,7 +47,10 @@ export default function ExpertAnalysisContainer() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: idx * 0.1 }}
                 whileHover={{ y: -5 }}
-                className="h-full bg-gradient-to-br from-purple-900/30 to-gray-900 rounded-2xl overflow-hidden border border-purple-500/30 hover:border-purple-500/60 transition-all group"
+                className="h-full bg-gradient-to-br from-black/80 via-[#E31E24]/30 to-black/80 backdrop-blur-sm rounded-2xl overflow-hidden border-2 border-[#E31E24]/40 hover:border-[#E31E24]/80 transition-all group"
+                style={{
+                  boxShadow: '0 0 20px rgba(227, 30, 36, 0.3), inset 0 0 20px rgba(227, 30, 36, 0.1)'
+                }}
               >
                 {/* Image */}
                 {article.image_url && (
@@ -106,8 +109,8 @@ export default function ExpertAnalysisContainer() {
       </div>
 
       {analysisArticles.length === 0 && (
-        <div className="bg-gray-800 rounded-2xl p-8 text-center">
-          <Brain className="w-12 h-12 text-gray-600 mx-auto mb-3" />
+        <div className="bg-gradient-to-br from-black/80 via-[#E31E24]/20 to-black/80 backdrop-blur-sm rounded-2xl p-8 text-center border-2 border-[#E31E24]/40">
+          <Brain className="w-12 h-12 text-[#E31E24] mx-auto mb-3" />
           <p className="text-gray-400">אין ניתוחים זמינים כרגע</p>
         </div>
       )}

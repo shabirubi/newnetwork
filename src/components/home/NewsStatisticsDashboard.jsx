@@ -43,30 +43,22 @@ export default function NewsStatisticsDashboard() {
     {
       label: "סך הכתבות",
       value: totalArticles,
-      icon: BarChart3,
-      color: "from-blue-600 to-blue-900",
-      textColor: "text-blue-400"
+      icon: BarChart3
     },
     {
       label: "חדשות חמות",
       value: breakingCount,
-      icon: Zap,
-      color: "from-yellow-600 to-yellow-900",
-      textColor: "text-yellow-400"
+      icon: Zap
     },
     {
       label: "סך הצפיות",
       value: totalViews.toLocaleString(),
-      icon: Eye,
-      color: "from-purple-600 to-purple-900",
-      textColor: "text-purple-400"
+      icon: Eye
     },
     {
       label: "ממוצע צפיות",
       value: avgViewsPerArticle.toLocaleString(),
-      icon: TrendingUp,
-      color: "from-green-600 to-green-900",
-      textColor: "text-green-400"
+      icon: TrendingUp
     }
   ];
 
@@ -90,15 +82,18 @@ export default function NewsStatisticsDashboard() {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: idx * 0.1 }}
               whileHover={{ scale: 1.05 }}
-              className={`bg-gradient-to-br ${stat.color} rounded-xl p-5 border border-white/10 hover:border-white/20 transition-all cursor-pointer group`}
+              className="bg-gradient-to-br from-black/80 via-[#E31E24]/30 to-black/80 backdrop-blur-sm rounded-xl p-5 border-2 border-[#E31E24]/40 hover:border-[#E31E24]/80 transition-all cursor-pointer group"
+              style={{
+                boxShadow: '0 0 15px rgba(227, 30, 36, 0.3), inset 0 0 15px rgba(227, 30, 36, 0.1)'
+              }}
             >
               <div className="flex items-start justify-between mb-3">
-                <div className={`w-12 h-12 rounded-lg bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition-all`}>
-                  <Icon className={`w-6 h-6 ${stat.textColor}`} />
+                <div className="w-12 h-12 rounded-lg bg-[#E31E24]/20 flex items-center justify-center group-hover:bg-[#E31E24]/40 transition-all border border-[#E31E24]/30">
+                  <Icon className="w-6 h-6 text-[#E31E24]" />
                 </div>
               </div>
               <div className="text-white/70 text-sm font-medium mb-1">{stat.label}</div>
-              <div className={`text-2xl font-bold ${stat.textColor}`}>{stat.value}</div>
+              <div className="text-2xl font-bold text-white">{stat.value}</div>
             </motion.div>
           );
         })}
@@ -108,7 +103,10 @@ export default function NewsStatisticsDashboard() {
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 border border-gray-700"
+        className="bg-gradient-to-br from-black/80 via-[#E31E24]/20 to-black/80 backdrop-blur-sm rounded-2xl p-6 border-2 border-[#E31E24]/40"
+        style={{
+          boxShadow: '0 0 20px rgba(227, 30, 36, 0.3), inset 0 0 20px rgba(227, 30, 36, 0.1)'
+        }}
       >
         <div className="flex items-center gap-2 mb-6">
           <TrendingUp className="w-5 h-5 text-[#E31E24]" />
@@ -153,7 +151,10 @@ export default function NewsStatisticsDashboard() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 }}
-          className="mt-6 bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 border border-gray-700"
+          className="mt-6 bg-gradient-to-br from-black/80 via-[#E31E24]/20 to-black/80 backdrop-blur-sm rounded-2xl p-6 border-2 border-[#E31E24]/40"
+          style={{
+            boxShadow: '0 0 20px rgba(227, 30, 36, 0.3), inset 0 0 20px rgba(227, 30, 36, 0.1)'
+          }}
         >
           <div className="flex items-center gap-2 mb-4">
             <Users className="w-5 h-5 text-green-500" />
@@ -165,7 +166,7 @@ export default function NewsStatisticsDashboard() {
               <motion.div
                 key={channel.id}
                 whileHover={{ scale: 1.05 }}
-                className="bg-gray-700/50 rounded-lg p-3 border border-gray-600 hover:border-green-500 transition-all cursor-pointer"
+                className="bg-gradient-to-br from-black/60 via-[#E31E24]/20 to-black/60 rounded-lg p-3 border-2 border-[#E31E24]/40 hover:border-[#E31E24]/80 transition-all cursor-pointer"
               >
                 <p className="text-white font-bold text-sm mb-1">{channel.name}</p>
                 <div className="flex items-center gap-2">

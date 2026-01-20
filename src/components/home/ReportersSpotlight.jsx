@@ -42,7 +42,11 @@ export default function ReportersSpotlight() {
             animate={{ opacity: 1, x: 0 }}
             className="lg:col-span-1"
           >
-            <div className="relative bg-gradient-to-br from-gray-800 via-gray-900 to-black rounded-2xl overflow-hidden border border-[#E31E24]/30 h-full">
+            <div className="relative bg-gradient-to-br from-black/80 via-[#E31E24]/30 to-black/80 backdrop-blur-sm rounded-2xl overflow-hidden border-2 border-[#E31E24]/40 h-full"
+              style={{
+                boxShadow: '0 0 30px rgba(227, 30, 36, 0.3), inset 0 0 30px rgba(227, 30, 36, 0.1)'
+              }}
+            >
               {/* Background Glow */}
               <div className="absolute inset-0 bg-gradient-to-br from-[#E31E24]/10 to-transparent opacity-50"></div>
 
@@ -125,7 +129,10 @@ export default function ReportersSpotlight() {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: idx * 0.1 }}
                       whileHover={{ y: -5 }}
-                      className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-4 border border-gray-700 hover:border-[#E31E24]/50 transition-all cursor-pointer group"
+                      className="bg-gradient-to-br from-black/80 via-[#E31E24]/20 to-black/80 backdrop-blur-sm rounded-xl p-4 border-2 border-[#E31E24]/40 hover:border-[#E31E24]/80 transition-all cursor-pointer group"
+                      style={{
+                        boxShadow: '0 0 15px rgba(227, 30, 36, 0.3), inset 0 0 15px rgba(227, 30, 36, 0.1)'
+                      }}
                       onClick={() => setSelectedReporter(reporter)}
                     >
                       <div className="flex items-start gap-3 mb-3">

@@ -84,7 +84,10 @@ export default function WorldNewsReportersContainer() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.05 }}
-            className="group relative rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all h-full flex flex-col bg-gradient-to-br from-blue-600 to-indigo-700 text-white"
+            className="group relative rounded-2xl overflow-hidden border-2 border-[#E31E24]/40 hover:border-[#E31E24]/80 transition-all h-full flex flex-col bg-gradient-to-br from-black/80 via-[#E31E24]/30 to-black/80 backdrop-blur-sm text-white"
+            style={{
+              boxShadow: '0 0 20px rgba(227, 30, 36, 0.3), inset 0 0 20px rgba(227, 30, 36, 0.1)'
+            }}
           >
             {/* Background Image */}
             {reporter.background_image ? (

@@ -17,10 +17,10 @@ export default function LiveStatisticsContainer() {
   const avgEngagement = Math.floor(Math.random() * 85 + 15);
 
   const stats = [
-    { icon: Eye, label: "צפיות", value: totalViews.toLocaleString('he-IL'), color: "from-blue-600 to-cyan-600" },
-    { icon: Users, label: "קוראים פעילים", value: totalReaders.toLocaleString('he-IL'), color: "from-purple-600 to-pink-600" },
-    { icon: MessageSquare, label: "תגובות", value: articlesCount, color: "from-orange-600 to-red-600" },
-    { icon: TrendingUp, label: "עלייה", value: `+${avgEngagement}%`, color: "from-green-600 to-emerald-600" }
+    { icon: Eye, label: "צפיות", value: totalViews.toLocaleString('he-IL') },
+    { icon: Users, label: "קוראים פעילים", value: totalReaders.toLocaleString('he-IL') },
+    { icon: MessageSquare, label: "תגובות", value: articlesCount },
+    { icon: TrendingUp, label: "עלייה", value: `+${avgEngagement}%` }
   ];
 
   return (
@@ -39,7 +39,10 @@ export default function LiveStatisticsContainer() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.1 }}
-              className={`bg-gradient-to-br ${stat.color} rounded-2xl p-6 text-white shadow-lg overflow-hidden relative group`}
+              className="bg-gradient-to-br from-black/80 via-[#E31E24]/30 to-black/80 backdrop-blur-sm rounded-2xl p-6 text-white border-2 border-[#E31E24]/40 hover:border-[#E31E24]/80 overflow-hidden relative group transition-all"
+              style={{
+                boxShadow: '0 0 20px rgba(227, 30, 36, 0.3), inset 0 0 20px rgba(227, 30, 36, 0.1)'
+              }}
             >
               <div className="absolute -top-8 -right-8 w-24 h-24 bg-white/10 rounded-full group-hover:bg-white/20 transition-all" />
               

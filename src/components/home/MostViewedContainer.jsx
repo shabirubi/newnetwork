@@ -33,7 +33,10 @@ export default function MostViewedContainer() {
           >
             <Link
               to={createPageUrl(`Article?id=${article.id}`)}
-              className="flex items-center gap-4 p-4 bg-gradient-to-r from-gray-800/50 to-gray-700/30 dark:from-gray-800 dark:to-gray-900 rounded-xl hover:from-gray-800 hover:to-gray-700 transition-all border border-gray-700/50 dark:border-gray-700"
+              className="flex items-center gap-4 p-4 bg-gradient-to-br from-black/80 via-[#E31E24]/20 to-black/80 backdrop-blur-sm rounded-xl border-2 border-[#E31E24]/40 hover:border-[#E31E24]/80 transition-all"
+              style={{
+                boxShadow: '0 0 15px rgba(227, 30, 36, 0.3), inset 0 0 15px rgba(227, 30, 36, 0.1)'
+              }}
             >
               {/* Rank */}
               <div className="flex-shrink-0">

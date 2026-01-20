@@ -8,14 +8,14 @@ import {
 } from "lucide-react";
 
 const categories = [
-  { id: "breaking", label: "חדשות חמות", icon: Radio, color: "from-red-600 to-red-700" },
-  { id: "security", label: "ביטחון", icon: Shield, color: "from-orange-600 to-orange-700" },
-  { id: "economy", label: "כלכלה", icon: TrendingUp, color: "from-green-600 to-green-700" },
-  { id: "politics", label: "פוליטיקה", icon: Vote, color: "from-purple-600 to-purple-700" },
-  { id: "technology", label: "טכנולוגיה", icon: Cpu, color: "from-blue-600 to-blue-700" },
-  { id: "sports", label: "ספורט", icon: Trophy, color: "from-emerald-600 to-emerald-700" },
-  { id: "entertainment", label: "בידור", icon: Clapperboard, color: "from-pink-600 to-pink-700" },
-  { id: "world", label: "עולם", icon: Globe, color: "from-indigo-600 to-indigo-700" },
+  { id: "breaking", label: "חדשות חמות", icon: Radio },
+  { id: "security", label: "ביטחון", icon: Shield },
+  { id: "economy", label: "כלכלה", icon: TrendingUp },
+  { id: "politics", label: "פוליטיקה", icon: Vote },
+  { id: "technology", label: "טכנולוגיה", icon: Cpu },
+  { id: "sports", label: "ספורט", icon: Trophy },
+  { id: "entertainment", label: "בידור", icon: Clapperboard },
+  { id: "world", label: "עולם", icon: Globe },
 ];
 
 export default function CategoriesHighlightContainer() {
@@ -39,7 +39,10 @@ export default function CategoriesHighlightContainer() {
             >
               <Link
                 to={createPageUrl(`Category?cat=${cat.id}`)}
-                className={`bg-gradient-to-br ${cat.color} rounded-2xl p-6 text-white shadow-xl hover:shadow-2xl transition-all group relative overflow-hidden h-full flex flex-col items-center justify-center text-center`}
+                className="bg-gradient-to-br from-black/80 via-[#E31E24]/30 to-black/80 backdrop-blur-sm rounded-2xl p-6 text-white border-2 border-[#E31E24]/40 hover:border-[#E31E24]/80 transition-all group relative overflow-hidden h-full flex flex-col items-center justify-center text-center"
+                style={{
+                  boxShadow: '0 0 20px rgba(227, 30, 36, 0.3), inset 0 0 20px rgba(227, 30, 36, 0.1)'
+                }}
               >
                 {/* Background elements */}
                 <div className="absolute -top-10 -right-10 w-28 h-28 bg-white/10 rounded-full group-hover:bg-white/20 transition-all" />
