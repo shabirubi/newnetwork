@@ -139,7 +139,7 @@ export default function Layout({ children, currentPageName }) {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setReportersModalOpen(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-black/60 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 transition-all hover:scale-105 hover:bg-black/70"
+              className="hidden lg:flex items-center gap-2 px-4 py-2 bg-black/60 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 transition-all hover:scale-105 hover:bg-black/70"
             >
               <Users className="w-4 h-4 text-white" />
               <span className="text-white text-sm font-bold hidden sm:inline">כתבים</span>
@@ -147,7 +147,7 @@ export default function Layout({ children, currentPageName }) {
 
             <button
               onClick={() => setCategoriesSidebarOpen(true)}
-              className="flex items-center gap-2 px-4 py-2 bg-black/60 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 transition-all hover:scale-105 hover:bg-black/70"
+              className="hidden lg:flex items-center gap-2 px-4 py-2 bg-black/60 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 transition-all hover:scale-105 hover:bg-black/70"
             >
               <Menu className="w-4 h-4 text-white" />
               <span className="text-white text-sm font-bold hidden sm:inline">תפריט</span>
@@ -155,7 +155,7 @@ export default function Layout({ children, currentPageName }) {
 
             <Link 
               to={createPageUrl("UserProfile")}
-              className="flex items-center gap-2 px-4 py-2 bg-black/60 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 transition-all hover:scale-105 hover:bg-black/70"
+              className="hidden lg:flex items-center gap-2 px-4 py-2 bg-black/60 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 transition-all hover:scale-105 hover:bg-black/70"
             >
               <User className="w-4 h-4 text-white" />
               <span className="text-white text-sm font-bold hidden sm:inline">פרופיל</span>
