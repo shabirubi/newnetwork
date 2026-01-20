@@ -136,7 +136,7 @@ export default function Layout({ children, currentPageName }) {
             </div>
           </div>
           
-          <div className="flex items-center gap-2">
+          <div className="hidden sm:flex items-center gap-2">
             <button
               onClick={() => setReportersModalOpen(true)}
               className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-black/60 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-white/20 transition-all hover:scale-105 hover:bg-black/70 text-xs sm:text-sm"
@@ -192,7 +192,23 @@ export default function Layout({ children, currentPageName }) {
               <Sparkles className="w-4 h-4 text-white" />
               <span className="text-white font-bold hidden sm:inline">דמויות</span>
             </button>
-          </div>
+            </div>
+
+            {/* Mobile: Logo Only */}
+            <motion.img 
+            src={LOGO_URL} 
+            alt="הרשת החדשה" 
+            className="h-10 w-auto drop-shadow-2xl sm:hidden"
+            animate={{ 
+              scale: [1, 1.05, 1],
+              filter: ['brightness(1)', 'brightness(1.2)', 'brightness(1)']
+            }}
+            transition={{ 
+              duration: 3, 
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+            />
         </div>
       </div>
 
