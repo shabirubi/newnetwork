@@ -136,13 +136,31 @@ export default function Layout({ children, currentPageName }) {
             </div>
           </div>
           
-          <Link 
-            to={createPageUrl("UserProfile")}
-            className="flex items-center gap-2 px-4 py-2 bg-black/60 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 transition-all hover:scale-105 hover:bg-black/70"
-          >
-            <User className="w-4 h-4 text-white" />
-            <span className="text-white text-sm font-bold hidden sm:inline">פרופיל</span>
-          </Link>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setReportersModalOpen(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-black/60 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 transition-all hover:scale-105 hover:bg-black/70"
+            >
+              <Users className="w-4 h-4 text-white" />
+              <span className="text-white text-sm font-bold hidden sm:inline">כתבים</span>
+            </button>
+
+            <button
+              onClick={() => setCategoriesSidebarOpen(true)}
+              className="flex items-center gap-2 px-4 py-2 bg-black/60 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 transition-all hover:scale-105 hover:bg-black/70"
+            >
+              <Menu className="w-4 h-4 text-white" />
+              <span className="text-white text-sm font-bold hidden sm:inline">תפריט</span>
+            </button>
+
+            <Link 
+              to={createPageUrl("UserProfile")}
+              className="flex items-center gap-2 px-4 py-2 bg-black/60 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 transition-all hover:scale-105 hover:bg-black/70"
+            >
+              <User className="w-4 h-4 text-white" />
+              <span className="text-white text-sm font-bold hidden sm:inline">פרופיל</span>
+            </Link>
+          </div>
         </div>
       </div>
 
@@ -152,42 +170,7 @@ export default function Layout({ children, currentPageName }) {
       {/* Reporters Ticker Strip */}
       <ReportersTickerStrip />
 
-      {/* Mobile Menu Button */}
-      <button
-        onClick={() => setMobileMenuOpen(true)}
-        className="fixed bottom-24 left-4 z-40 lg:hidden bg-gradient-to-br from-black/80 via-[#E31E24]/60 to-black/80 backdrop-blur-sm border-2 border-[#E31E24]/40 text-white p-3 rounded-full shadow-lg active:scale-95 transition-transform"
-      >
-        <Menu size={24} />
-      </button>
 
-      {/* Floating Logo */}
-      <motion.div
-        initial={{ opacity: 0, x: -100 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.8, ease: "easeOut" }}
-        className="fixed right-6 top-1/2 -translate-y-1/2 z-50 hidden lg:block"
-      >
-        <motion.div
-          animate={{ 
-            y: [0, -10, 0],
-            rotate: [0, 2, 0, -2, 0]
-          }}
-          transition={{ 
-            duration: 4, 
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-          className="relative group cursor-pointer"
-          onClick={() => setReportersModalOpen(true)}
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-red-600 via-blue-600 to-red-600 blur-2xl opacity-50 group-hover:opacity-70 transition-opacity rounded-full"></div>
-          <img 
-            src={LOGO_URL} 
-            alt="הרשת החדשה" 
-            className="h-28 w-auto relative z-10 drop-shadow-2xl hover:scale-110 transition-transform duration-300"
-          />
-        </motion.div>
-      </motion.div>
 
       {/* Reporters Modal */}
       <ReportersModal 
