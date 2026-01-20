@@ -40,6 +40,7 @@ export default function LivePlayer({
   const [currentSlogan, setCurrentSlogan] = useState(0);
   const [displayedText, setDisplayedText] = useState("");
   const [currentAdIndex, setCurrentAdIndex] = useState(0);
+  const [isWideAd, setIsWideAd] = useState(false);
   const videoRef = useRef(null);
   const containerRef = useRef(null);
   const playerRef = useRef(null);
@@ -87,10 +88,11 @@ export default function LivePlayer({
 
   const currentStreamUrl = streamUrl || DEFAULT_STREAM;
 
-  // Rotate ads
+  // Rotate ads and toggle wide view
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentAdIndex((prev) => (prev + 1) % bannerAds.length);
+      setIsWideAd((prev) => !prev);
     }, 5000);
     return () => clearInterval(interval);
   }, []);
@@ -635,16 +637,16 @@ export default function LivePlayer({
 
       </div>
 
-      {/* Ads Carousel - Left Side */}
-      <div className="absolute top-28 sm:top-32 left-4 sm:left-6 z-30 h-16 sm:h-20 max-w-[160px] sm:max-w-[200px]">
+      {/* Ads Carousel - Top Left */}
+      <div className={`absolute top-24 sm:top-26 left-4 sm:left-6 z-30 h-16 sm:h-20 transition-all duration-500 ${isWideAd ? 'w-96 sm:w-[420px]' : 'max-w-[160px] sm:max-w-[200px]'}`}>
         <AnimatePresence mode="wait">
           <motion.div
-            key={currentAdIndex}
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -50 }}
-            transition={{ duration: 0.4 }}
-            className="relative w-40 sm:w-48 h-16 sm:h-20 rounded-lg overflow-hidden shadow-lg"
+            key={`${currentAdIndex}-${isWideAd}`}
+            initial={{ opacity: 0, x: -50, scale: 0.95 }}
+            animate={{ opacity: 1, x: 0, scale: 1 }}
+            exit={{ opacity: 0, x: -50, scale: 0.95 }}
+            transition={{ duration: 0.5, ease: "easeOut" }}
+            className={`relative rounded-lg overflow-hidden shadow-lg h-16 sm:h-20 ${isWideAd ? 'w-full' : 'w-40 sm:w-48'}`}
             style={{
               border: '1px solid rgba(227, 30, 36, 0.5)',
               boxShadow: '0 0 15px rgba(227, 30, 36, 0.3)'
@@ -655,8 +657,8 @@ export default function LivePlayer({
               alt={bannerAds[currentAdIndex].brand}
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-black/20 flex items-end p-1.5">
-              <span className="text-white font-bold text-[10px] sm:text-xs drop-shadow-lg truncate">{bannerAds[currentAdIndex].brand}</span>
+            <div className={`absolute inset-0 ${isWideAd ? 'bg-gradient-to-r from-black/40 to-transparent flex items-center px-4' : 'bg-black/20 flex items-end p-1.5'}`}>
+              <span className={`text-white font-bold drop-shadow-lg ${isWideAd ? 'text-sm sm:text-base' : 'text-[10px] sm:text-xs truncate'}`}>{bannerAds[currentAdIndex].brand}</span>
             </div>
           </motion.div>
         </AnimatePresence>
