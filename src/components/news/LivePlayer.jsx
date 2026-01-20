@@ -6,7 +6,8 @@ import mpegts from "mpegts.js";
 import { 
   Play, Pause, Volume2, VolumeX, Maximize, 
   Users, Radio, Settings, Download, Bookmark, 
-  MessageCircle, Eye, Share2
+  MessageCircle, Eye, Share2, Newspaper, TrendingUp,
+  DollarSign, Trophy, Tv, Target, Moon, Sunrise
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
@@ -53,15 +54,15 @@ export default function LivePlayer({
   ];
 
   const scheduleItems = [
-    { time: "06:00", title: "חדשות הבוקר עם רונית ויוסי", icon: "☀️" },
-    { time: "08:00", title: "סקירת עיתונות עם דני", icon: "📰" },
-    { time: "10:00", title: "פוליטיקה היום עם שרון", icon: "🏛️" },
-    { time: "12:00", title: "מהדורת הצהריים", icon: "📺" },
-    { time: "14:00", title: "כלכלה ושוק ההון", icon: "💰" },
-    { time: "16:00", title: "ספורט בשידור חי", icon: "⚽" },
-    { time: "18:00", title: "חדשות הערב המרכזיות", icon: "🌆" },
-    { time: "20:00", title: "ניתוח מעמיק עם המומחים", icon: "🎯" },
-    { time: "22:00", title: "סיכום יומי והצצה למחר", icon: "🌙" }
+    { time: "06:00", title: "חדשות הבוקר עם רונית ויוסי", Icon: Sunrise },
+    { time: "08:00", title: "סקירת עיתונות עם דני", Icon: Newspaper },
+    { time: "10:00", title: "פוליטיקה היום עם שרון", Icon: Users },
+    { time: "12:00", title: "מהדורת הצהריים", Icon: Tv },
+    { time: "14:00", title: "כלכלה ושוק ההון", Icon: DollarSign },
+    { time: "16:00", title: "ספורט בשידור חי", Icon: Trophy },
+    { time: "18:00", title: "חדשות הערב המרכזיות", Icon: Radio },
+    { time: "20:00", title: "ניתוח מעמיק עם המומחים", Icon: Target },
+    { time: "22:00", title: "סיכום יומי והצצה למחר", Icon: Moon }
   ];
 
   const currentStreamUrl = streamUrl || DEFAULT_STREAM;
@@ -596,25 +597,28 @@ export default function LivePlayer({
 
       </div>
 
-      {/* Schedule Strip */}
-      <div className="absolute top-24 sm:top-28 left-12 sm:left-16 right-12 sm:right-16 bg-black/70 backdrop-blur-md overflow-hidden h-12 sm:h-14 border border-[#E31E24]/30 rounded-xl shadow-2xl z-30">
+      {/* Schedule Strip - Inside Frame */}
+      <div className="absolute top-[72px] sm:top-24 left-10 sm:left-14 right-10 sm:right-14 bg-black/80 backdrop-blur-md overflow-hidden h-10 sm:h-12 border border-[#E31E24]/40 rounded-lg shadow-2xl z-30">
         <motion.div
           className="flex items-center h-full"
           animate={{ x: ["0%", "-100%"] }}
-          transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+          transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
         >
-          {Array(3).fill(scheduleItems).flat().map((item, idx) => (
-            <div 
-              key={`schedule-${idx}`}
-              className="flex-shrink-0 flex items-center gap-3 sm:gap-4 px-6 sm:px-8 border-l border-[#E31E24]/20"
-            >
-              <span className="text-2xl sm:text-3xl">{item.icon}</span>
-              <div>
-                <div className="text-[#E31E24] font-black text-xs sm:text-sm" style={{ fontFamily: 'Arial Black, sans-serif' }}>{item.time}</div>
-                <div className="text-white font-bold text-xs sm:text-base whitespace-nowrap" style={{ fontFamily: 'system-ui, sans-serif' }}>{item.title}</div>
+          {Array(3).fill(scheduleItems).flat().map((item, idx) => {
+            const IconComponent = item.Icon;
+            return (
+              <div 
+                key={`schedule-${idx}`}
+                className="flex-shrink-0 flex items-center gap-2 sm:gap-3 px-4 sm:px-6 border-l border-[#E31E24]/30"
+              >
+                <IconComponent className="w-4 h-4 sm:w-5 sm:h-5 text-[#E31E24]" />
+                <div>
+                  <div className="text-[#E31E24] font-black text-[10px] sm:text-xs" style={{ fontFamily: 'Arial Black, sans-serif' }}>{item.time}</div>
+                  <div className="text-white font-bold text-xs sm:text-sm whitespace-nowrap" style={{ fontFamily: 'system-ui, sans-serif' }}>{item.title}</div>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </motion.div>
       </div>
 
