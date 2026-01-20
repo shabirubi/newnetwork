@@ -66,6 +66,7 @@ import ShortVideosContainer from "../components/home/ShortVideosContainer";
 import WorldNewsReportersContainer from "../components/home/WorldNewsReportersContainer";
 import MoviesSeriesContainer from "../components/home/MoviesSeriesContainer";
 import PlutoTVChannelsContainer from "../components/home/PlutoTVChannelsContainer";
+import AllVideosGallery from "../components/home/AllVideosGallery";
 
 
 
@@ -395,6 +396,9 @@ export default function Home() {
       <div id="user-videos-section">
         <UserUploadedVideos onUploadClick={() => setUploadVideoModalOpen(true)} />
       </div>
+
+      {/* All Videos Gallery */}
+      <AllVideosGallery />
 
       {/* Apps Section */}
       <section className="px-4 space-y-8 mb-12">

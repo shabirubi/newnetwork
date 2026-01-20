@@ -5,7 +5,6 @@ import { createPageUrl } from "../utils";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 const BACKGROUND_IMAGE = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/43de178a9_image.png";
-      const NEXT_VIDEO_URL = "https://youtu.be/2q9lcnXBicQ";
 
       export default function VODContent() {
           const [channelsOpen, setChannelsOpen] = useState(false);
@@ -70,13 +69,12 @@ const BACKGROUND_IMAGE = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/ob
         };
 
     const videoQueue = [
-      { id: 'initial', url: 'https://www.youtube.com/embed/4miQnYCTdS8?autoplay=1&rel=0' },
-      { id: 'next', url: `https://www.youtube.com/embed/${NEXT_VIDEO_URL.split('/').pop()}?autoplay=1&rel=0` },
+      { id: 'youtube-k7WPygB6GlI', url: 'https://www.youtube.com/embed/k7WPygB6GlI?autoplay=1&rel=0' },
+      { id: 'youtube-4miQnYCTdS8', url: 'https://www.youtube.com/embed/4miQnYCTdS8?autoplay=1&rel=0' },
+      { id: 'youtube-2q9lcnXBicQ', url: 'https://www.youtube.com/embed/2q9lcnXBicQ?autoplay=1&rel=0' },
       { id: 'youtube-vecTR4YAf-w', url: 'https://www.youtube.com/embed/vecTR4YAf-w?autoplay=1&rel=0' },
       { id: 'youtube-OE6Oj8pW0BU', url: 'https://www.youtube.com/embed/OE6Oj8pW0BU?autoplay=1&rel=0' },
       { id: 'youtube-t60lrCbStcY', url: 'https://www.youtube.com/embed/t60lrCbStcY?autoplay=1&rel=0' },
-      { id: 'youtube-KaUe7coSZEc', url: 'https://www.youtube.com/embed/KaUe7coSZEc?autoplay=1&rel=0' },
-      { id: 'youtube-joJfZwtQGbU', url: 'https://www.youtube.com/embed/joJfZwtQGbU?autoplay=1&rel=0' },
       ...userVideos.map(v => ({ id: v.id, url: v.video_url }))
     ];
 

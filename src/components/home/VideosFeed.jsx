@@ -21,12 +21,14 @@ export default function VideosFeed() {
     refetchInterval: 60000,
   });
 
-  // Combine hardcoded YouTube videos with user videos
+  // Real YouTube videos from the channel
   const youtubeVideos = [
-    { id: 'yt-k7WPygB6GlI', title: 'סרטון ממוחשב חדשות', url: 'https://www.youtube.com/embed/k7WPygB6GlI?autoplay=1&rel=0', thumbnail: 'https://img.youtube.com/vi/k7WPygB6GlI/maxresdefault.jpg' },
-    { id: 'yt-4miQnYCTdS8', title: 'שידור יוטיוב', url: 'https://www.youtube.com/embed/4miQnYCTdS8?autoplay=1&rel=0', thumbnail: 'https://img.youtube.com/vi/4miQnYCTdS8/maxresdefault.jpg' },
-    { id: 'yt-2q9lcnXBicQ', title: 'הרשת החדשה', url: 'https://www.youtube.com/embed/2q9lcnXBicQ?autoplay=1&rel=0', thumbnail: 'https://img.youtube.com/vi/2q9lcnXBicQ/maxresdefault.jpg' },
+    { id: 'yt-k7WPygB6GlI', title: 'סרטון ממוחשב - הרשת החדשה', url: 'https://www.youtube.com/embed/k7WPygB6GlI?autoplay=1&rel=0', thumbnail: 'https://img.youtube.com/vi/k7WPygB6GlI/maxresdefault.jpg' },
+    { id: 'yt-4miQnYCTdS8', title: 'הרשת החדשה - שידור חי', url: 'https://www.youtube.com/embed/4miQnYCTdS8?autoplay=1&rel=0', thumbnail: 'https://img.youtube.com/vi/4miQnYCTdS8/maxresdefault.jpg' },
+    { id: 'yt-2q9lcnXBicQ', title: 'תוכן מיוחד הרשת', url: 'https://www.youtube.com/embed/2q9lcnXBicQ?autoplay=1&rel=0', thumbnail: 'https://img.youtube.com/vi/2q9lcnXBicQ/maxresdefault.jpg' },
     { id: 'yt-vecTR4YAf-w', title: 'חדשות בזמן אמת', url: 'https://www.youtube.com/embed/vecTR4YAf-w?autoplay=1&rel=0', thumbnail: 'https://img.youtube.com/vi/vecTR4YAf-w/maxresdefault.jpg' },
+    { id: 'yt-OE6Oj8pW0BU', title: 'עדכוני חדשות', url: 'https://www.youtube.com/embed/OE6Oj8pW0BU?autoplay=1&rel=0', thumbnail: 'https://img.youtube.com/vi/OE6Oj8pW0BU/maxresdefault.jpg' },
+    { id: 'yt-t60lrCbStcY', title: 'סיקור מיוחד', url: 'https://www.youtube.com/embed/t60lrCbStcY?autoplay=1&rel=0', thumbnail: 'https://img.youtube.com/vi/t60lrCbStcY/maxresdefault.jpg' },
   ];
 
   const videos = [
