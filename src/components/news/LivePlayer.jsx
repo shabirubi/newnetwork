@@ -646,17 +646,39 @@ export default function LivePlayer({
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: -50, scale: 0.95 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className={`relative rounded-lg overflow-hidden shadow-lg h-16 sm:h-20 bg-gradient-to-br ${bannerAds[currentAdIndex].gradient} flex items-center justify-between px-3 sm:px-4 ${isWideAd ? 'w-full' : 'w-40 sm:w-48'}`}
+            className={`relative rounded-xl overflow-hidden shadow-2xl h-16 sm:h-20 flex items-center justify-between px-3 sm:px-4 ${isWideAd ? 'w-full' : 'w-40 sm:w-48'} backdrop-blur-sm`}
             style={{
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-              boxShadow: '0 0 15px rgba(227, 30, 36, 0.3)'
+              border: '1px solid rgba(227, 30, 36, 0.4)',
+              boxShadow: '0 8px 32px rgba(227, 30, 36, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
+              background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.4) 0%, rgba(227, 30, 36, 0.05) 100%)',
+              backdropFilter: 'blur(10px)'
             }}
           >
+            {/* Logo Section */}
+            <div className="absolute top-1.5 left-2 h-4 opacity-60">
+              <img 
+                src={LOGO_URL}
+                alt="רשת החדשה"
+                className="h-full w-auto"
+              />
+            </div>
+            
+            {/* Ad Image */}
             <img 
               src={bannerAds[currentAdIndex].image}
               alt={bannerAds[currentAdIndex].brand}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover absolute inset-0"
             />
+            
+            {/* Professional Overlay Gradient */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-transparent to-black/20 opacity-60" />
+            
+            {/* Brand Text */}
+            <div className="relative z-10 flex flex-col justify-end h-full pb-2 pl-2 pr-2">
+              <p className="text-white text-[10px] sm:text-xs font-bold drop-shadow-lg leading-tight" style={{ fontFamily: "'Poppins', sans-serif", textShadow: '2px 2px 4px rgba(0,0,0,0.7)' }}>
+                {bannerAds[currentAdIndex].brand}
+              </p>
+            </div>
           </motion.div>
         </AnimatePresence>
       </div>
