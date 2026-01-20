@@ -44,9 +44,12 @@ export default function ShortVideosContainer() {
           >
             {/* Video Thumbnail */}
             <img
-              src={`https://img.youtube.com/vi/${video.videoId}/maxresdefault.jpg`}
+              src={`https://img.youtube.com/vi/${video.videoId}/hqdefault.jpg`}
               alt={video.title}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+              onError={(e) => {
+                e.target.src = `https://img.youtube.com/vi/${video.videoId}/0.jpg`;
+              }}
             />
 
             {/* Gradient Overlay */}
