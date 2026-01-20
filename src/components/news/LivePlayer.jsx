@@ -56,22 +56,22 @@ export default function LivePlayer({
   ];
 
   const bannerAds = [
-    { id: 1, image: "https://images.unsplash.com/photo-1556656793-08538906a9f8?w=400&h=160&fit=crop", brand: "Apple" },
-    { id: 2, image: "https://images.unsplash.com/photo-1511707267537-b85faf00021e?w=400&h=160&fit=crop", brand: "Samsung" },
-    { id: 3, image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400&h=160&fit=crop", brand: "Sony" },
-    { id: 4, image: "https://images.unsplash.com/photo-1523335334684-37898b6baf30?w=400&h=160&fit=crop", brand: "Rolex" },
-    { id: 5, image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=160&fit=crop", brand: "Nike" },
-    { id: 6, image: "https://images.unsplash.com/photo-1587463366461-026f50cfbc87?w=400&h=160&fit=crop", brand: "Adidas" },
-    { id: 7, image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=160&fit=crop", brand: "Microsoft" },
-    { id: 8, image: "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=400&h=160&fit=crop", brand: "LG" },
-    { id: 9, image: "https://images.unsplash.com/photo-1489090360580-2c8e5e5e7c65?w=400&h=160&fit=crop", brand: "Canon" },
-    { id: 10, image: "https://images.unsplash.com/photo-1556821552-3a63f67cfaef?w=400&h=160&fit=crop", brand: "Audi" },
-    { id: 11, image: "https://images.unsplash.com/photo-1606839118379-dda055fbb96f?w=400&h=160&fit=crop", brand: "Ferrari" },
-    { id: 12, image: "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&h=160&fit=crop", brand: "Emirates" },
-    { id: 13, image: "https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=400&h=160&fit=crop", brand: "Prada" },
-    { id: 14, image: "https://images.unsplash.com/photo-1572365992253-3cb3e56dd362?w=400&h=160&fit=crop", brand: "Finance" },
-    { id: 15, image: "https://images.unsplash.com/photo-1523206489230-c012066a6fb0?w=400&h=160&fit=crop", brand: "Cartier" },
-    { id: 16, image: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=400&h=160&fit=crop", brand: "BMW" }
+    { id: 1, image: "https://images.unsplash.com/photo-1495121553079-4c61bcce1894?w=400&h=160&fit=crop", brand: "ZARA - תערוקת אופנה בלעדית" },
+    { id: 2, image: "https://images.unsplash.com/photo-1469619644737-61910b0a8f33?w=400&h=160&fit=crop", brand: "H&M - קלקציה חדשה הגיעה" },
+    { id: 3, image: "https://images.unsplash.com/photo-1556821552-3a63f67cfaef?w=400&h=160&fit=crop", brand: "Forever 21 - מבחר ענק" },
+    { id: 4, image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=160&fit=crop", brand: "Shein - קנו בחכמה" },
+    { id: 5, image: "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&h=160&fit=crop", brand: "UNIQLO - איכות ופשוט" },
+    { id: 6, image: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=400&h=160&fit=crop", brand: "COS - עיצוב מינימליסטי" },
+    { id: 7, image: "https://images.unsplash.com/photo-1555529669-e69e7ea0bb9b?w=400&h=160&fit=crop", brand: "Mango - סטייל מדיטרני" },
+    { id: 8, image: "https://images.unsplash.com/photo-1490481651571-e89e0149fec0?w=400&h=160&fit=crop", brand: "Pull & Bear - קז'ואל שיק" },
+    { id: 9, image: "https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=400&h=160&fit=crop", brand: "Top Shop - ט्रנדים חדשים" },
+    { id: 10, image: "https://images.unsplash.com/photo-1514432324607-2e467f4af445?w=400&h=160&fit=crop", brand: "River Island - אופנה בריטית" },
+    { id: 11, image: "https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=400&h=160&fit=crop", brand: "Asos - הגדול בעולם" },
+    { id: 12, image: "https://images.unsplash.com/photo-1567449165295-25e45c2d4eaa?w=400&h=160&fit=crop", brand: "Boohoo - עצמאי יוקרתי" },
+    { id: 13, image: "https://images.unsplash.com/photo-1575260975783-b10b1ea7b046?w=400&h=160&fit=crop", brand: "PrettyLittleThing - בהבחירה" },
+    { id: 14, image: "https://images.unsplash.com/photo-1490216162932-2e7e2b4f1a6a?w=400&h=160&fit=crop", brand: "Revolve - דיוור הפאשן" },
+    { id: 15, image: "https://images.unsplash.com/photo-1479064555552-3ef4979005a1?w=400&h=160&fit=crop", brand: "Vestiaire Collective - יוקרה בחזקה" },
+    { id: 16, image: "https://images.unsplash.com/photo-1559631200-a1baa0fc6e0c?w=400&h=160&fit=crop", brand: "The Outnet - מותגים בחזקה" }
   ];
 
   const scheduleItems = [
