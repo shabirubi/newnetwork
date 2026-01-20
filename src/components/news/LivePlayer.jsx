@@ -355,17 +355,17 @@ export default function LivePlayer({
         {/* Frame Border - Covering YouTube Elements */}
         <div className="absolute inset-0 z-30 pointer-events-none">
           {/* Top Frame */}
-          <div className="absolute top-0 left-0 right-0 h-28 sm:h-32 bg-black flex flex-col px-4 sm:px-6 py-2"
-            style={{
-              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.8)'
-            }}
-          >
-            {/* Logo and Title Row */}
-            <div className="flex items-center justify-between mb-2 gap-3">
-              <motion.img 
-                src={LOGO_URL}
-                alt="הרשת החדשה"
-                className="h-12 sm:h-16 w-auto drop-shadow-2xl"
+           <div className="absolute top-0 left-0 right-0 h-32 sm:h-40 bg-black flex flex-col px-2 sm:px-6 py-2 sm:py-3"
+             style={{
+               boxShadow: '0 4px 20px rgba(0, 0, 0, 0.8)'
+             }}
+           >
+             {/* Logo and Title Row */}
+             <div className="flex items-center justify-between mb-1 sm:mb-2 gap-2 sm:gap-3">
+               <motion.img 
+                 src={LOGO_URL}
+                 alt="הרשת החדשה"
+                 className="h-16 sm:h-20 w-auto drop-shadow-2xl"
                 animate={{ 
                   scale: [1, 1.05, 1],
                   filter: ['brightness(1)', 'brightness(1.2)', 'brightness(1)']
@@ -376,15 +376,15 @@ export default function LivePlayer({
                   ease: "easeInOut"
                 }}
               />
-              <div className="text-right flex-1 overflow-hidden">
-                <div className="text-white font-extrabold text-sm sm:text-lg drop-shadow-lg mb-1" style={{ fontFamily: "'Inter', 'Helvetica Neue', sans-serif" }}>הרשת החדשה</div>
-                <div className="text-[#E31E24] font-bold text-sm sm:text-lg tracking-wide" style={{ fontFamily: "'Poppins', 'Inter', sans-serif", textShadow: '2px 2px 4px rgba(0,0,0,0.5)', letterSpacing: '0.5px' }}>
+              <div className="text-right flex-1 overflow-hidden min-w-0">
+                <div className="text-white font-extrabold text-base sm:text-xl drop-shadow-lg mb-0.5 sm:mb-1 leading-tight" style={{ fontFamily: "'Inter', 'Helvetica Neue', sans-serif" }}>הרשת החדשה</div>
+                <div className="text-[#E31E24] font-bold text-xs sm:text-base tracking-wide break-words" style={{ fontFamily: "'Poppins', 'Inter', sans-serif", textShadow: '2px 2px 4px rgba(0,0,0,0.5)', letterSpacing: '0.5px' }}>
                   {displayedText}
                   <span className="animate-pulse ml-1">|</span>
                 </div>
               </div>
               {ads.length > 0 && (
-                <div className="bg-gradient-to-r from-yellow-600/80 via-yellow-500/80 to-yellow-600/80 backdrop-blur-sm overflow-hidden rounded-lg flex-1 max-w-sm h-7 sm:h-8 border border-yellow-400/50 shadow-lg" style={{ boxShadow: '0 0 15px rgba(234, 179, 8, 0.5)' }}>
+                <div className="bg-gradient-to-r from-yellow-600/80 via-yellow-500/80 to-yellow-600/80 backdrop-blur-sm overflow-hidden rounded-lg flex-1 max-w-xs h-8 sm:h-10 border border-yellow-400/50 shadow-lg hidden sm:block" style={{ boxShadow: '0 0 15px rgba(234, 179, 8, 0.5)' }}>
                   <motion.div
                     className="flex items-center h-full gap-1 sm:gap-3 px-2"
                     animate={{ x: ["0%", "-100%"] }}
@@ -423,22 +423,22 @@ export default function LivePlayer({
           </div>
 
           {/* Bottom Frame */}
-          <div className="absolute bottom-0 left-0 right-0 h-12 sm:h-16 bg-black flex items-center justify-center px-4 sm:px-6"
-            style={{
-              boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.8)'
-            }}
-          >
-            <div className="flex items-center gap-3 sm:gap-4">
-              <div className="flex items-center gap-2 bg-[#E31E24]/20 backdrop-blur-sm px-3 py-1.5 rounded-full border border-[#E31E24]/50">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E31E24] opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#E31E24]"></span>
-                </span>
-                <span className="text-white font-bold text-xs sm:text-sm">שידור חי</span>
-              </div>
-              <div className="text-white/80 font-bold text-xs sm:text-sm">הערוץ היחיד שאתם צריכים</div>
-            </div>
-          </div>
+           <div className="absolute bottom-0 left-0 right-0 h-14 sm:h-16 bg-black flex items-center justify-center px-2 sm:px-6"
+             style={{
+               boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.8)'
+             }}
+           >
+             <div className="flex items-center gap-2 sm:gap-4 w-full justify-center flex-wrap">
+               <div className="flex items-center gap-2 bg-[#E31E24]/20 backdrop-blur-sm px-3 sm:px-4 py-2 rounded-full border border-[#E31E24]/50">
+                 <span className="relative flex h-2.5 w-2.5 sm:h-3 sm:w-3">
+                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E31E24] opacity-75"></span>
+                   <span className="relative inline-flex rounded-full h-2.5 w-2.5 sm:h-3 sm:w-3 bg-[#E31E24]"></span>
+                 </span>
+                 <span className="text-white font-bold text-sm sm:text-base">שידור חי</span>
+               </div>
+               <div className="text-white/80 font-bold text-xs sm:text-sm hidden sm:block">הערוץ היחיד שאתם צריכים</div>
+             </div>
+           </div>
 
           {/* Left Frame */}
           <div className="absolute top-28 sm:top-32 bottom-12 sm:bottom-16 left-0 w-8 sm:w-12 bg-black"
