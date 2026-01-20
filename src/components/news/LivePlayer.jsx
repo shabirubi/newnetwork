@@ -39,6 +39,7 @@ export default function LivePlayer({
   const [loadingAds, setLoadingAds] = useState(true);
   const [currentSlogan, setCurrentSlogan] = useState(0);
   const [displayedText, setDisplayedText] = useState("");
+  const [currentAdIndex, setCurrentAdIndex] = useState(0);
   const videoRef = useRef(null);
   const containerRef = useRef(null);
   const playerRef = useRef(null);
@@ -51,6 +52,25 @@ export default function LivePlayer({
     "הכתבים המובילים בישראל",
     "מייצרים תוכן. מייצרים חדשות",
     "הערוץ היחיד שאתם צריכים"
+  ];
+
+  const bannerAds = [
+    { id: 1, image: "https://images.unsplash.com/photo-1556740738-b6a63e27c4df?w=300&h=100&fit=crop", brand: "Apple", title: "iPhone 15 Pro" },
+    { id: 2, image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=100&fit=crop", brand: "Samsung", title: "Galaxy S24" },
+    { id: 3, image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=300&h=100&fit=crop", brand: "Sony", title: "PlayStation 5" },
+    { id: 4, image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&h=100&fit=crop", brand: "Rolex", title: "Watches" },
+    { id: 5, image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=300&h=100&fit=crop", brand: "Nike", title: "Sports" },
+    { id: 6, image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&h=100&fit=crop", brand: "Adidas", title: "Fashion" },
+    { id: 7, image: "https://images.unsplash.com/photo-1587463366461-026f50cfbc87?w=300&h=100&fit=crop", brand: "Microsoft", title: "Surface" },
+    { id: 8, image: "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=300&h=100&fit=crop", brand: "LG", title: "Displays" },
+    { id: 9, image: "https://images.unsplash.com/photo-1489090360580-2c8e5e5e7c65?w=300&h=100&fit=crop", brand: "Canon", title: "Cameras" },
+    { id: 10, image: "https://images.unsplash.com/photo-1511707267537-b85faf00021e?w=300&h=100&fit=crop", brand: "Audi", title: "Vehicles" },
+    { id: 11, image: "https://images.unsplash.com/photo-1556821552-3a63f67cfaef?w=300&h=100&fit=crop", brand: "Ferrari", title: "Luxury" },
+    { id: 12, image: "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=300&h=100&fit=crop", brand: "Travel", title: "Vacation" },
+    { id: 13, image: "https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=300&h=100&fit=crop", brand: "Fashion", title: "Prada" },
+    { id: 14, image: "https://images.unsplash.com/photo-1572365992253-3cb3e56dd362?w=300&h=100&fit=crop", brand: "Bank", title: "Finance" },
+    { id: 15, image: "https://images.unsplash.com/photo-1523206489230-c012066a6fb0?w=300&h=100&fit=crop", brand: "Jewelry", title: "Luxury" },
+    { id: 16, image: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=300&h=100&fit=crop", brand: "Motors", title: "BMW" }
   ];
 
   const scheduleItems = [
@@ -67,40 +87,12 @@ export default function LivePlayer({
 
   const currentStreamUrl = streamUrl || DEFAULT_STREAM;
 
-  // Generate ads with AI
+  // Rotate ads
   useEffect(() => {
-    const generateAds = async () => {
-      try {
-        const adPromises = [
-          { title: "מבצע חורף חם!", brand: "סופר פארם", type: "קוסמטיקה" },
-          { title: "50% הנחה על כל המוצרים", brand: "פוקס", type: "אופנה" },
-          { title: "טיסות לחול בהנחה", brand: "אל על", type: "תעופה" },
-          { title: "משלוחים חינם עד הבית", brand: "שופרסל אונלין", type: "קניות" }
-        ].map(async (ad) => {
-          const result = await base44.integrations.Core.GenerateImage({
-            prompt: `Create a professional Israeli advertisement banner for ${ad.brand}. Theme: ${ad.type}. Text: "${ad.title}". Style: modern, colorful, high quality commercial ad with Hebrew text, brand colors, professional gradient background. No people faces.`
-          });
-          return { ...ad, image: result.url };
-        });
-
-        const generatedAds = await Promise.all(adPromises);
-        setAds(generatedAds);
-        setLoadingAds(false);
-      } catch (error) {
-        console.error('Error generating ads:', error);
-        // Fallback to default brand logos
-        const fallbackAds = [
-          { title: "סופר פארם", brand: "סופר פארם", type: "קוסמטיקה", image: "https://upload.wikimedia.org/wikipedia/he/thumb/4/41/Super-pharm.svg/1024px-Super-pharm.svg.png" },
-          { title: "פוקס", brand: "פוקס", type: "אופנה", image: "https://upload.wikimedia.org/wikipedia/he/3/3f/Fox_Israel_logo.png" },
-          { title: "אל על", brand: "אל על", type: "תעופה", image: "https://upload.wikimedia.org/wikipedia/en/thumb/9/9c/El_Al_logo.svg/1024px-El_Al_logo.svg.png" },
-          { title: "שופרסל", brand: "שופרסל", type: "קניות", image: "https://upload.wikimedia.org/wikipedia/he/thumb/4/45/Shufershal_logo.svg/1024px-Shufershal_logo.svg.png" }
-        ];
-        setAds(fallbackAds);
-        setLoadingAds(false);
-      }
-    };
-
-    generateAds();
+    const interval = setInterval(() => {
+      setCurrentAdIndex((prev) => (prev + 1) % bannerAds.length);
+    }, 5000);
+    return () => clearInterval(interval);
   }, []);
 
   // Promo animation effect
@@ -643,41 +635,35 @@ export default function LivePlayer({
 
       </div>
 
-      {/* Ads Strip */}
-      {!loadingAds && ads.length > 0 && (
-        <div className="absolute bottom-16 sm:bottom-20 left-0 right-0 bg-gradient-to-l from-black/80 via-black/60 to-black/80 backdrop-blur-sm overflow-hidden h-20 sm:h-24 border-t border-b border-yellow-400/30">
+      {/* Ads Carousel */}
+      <div className="absolute bottom-16 sm:bottom-20 left-12 sm:left-16 z-30 h-16 sm:h-20">
+        <AnimatePresence mode="wait">
           <motion.div
-            className="flex items-center h-full"
-            animate={{ x: ["0%", "100%"] }}
-            transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
+            key={currentAdIndex}
+            initial={{ opacity: 0, scale: 0.8, x: 50 }}
+            animate={{ opacity: 1, scale: 1, x: 0 }}
+            exit={{ opacity: 0, scale: 0.8, x: -50 }}
+            transition={{ duration: 0.5, ease: "easeInOut" }}
+            className="relative w-60 sm:w-80 h-16 sm:h-20 rounded-xl overflow-hidden shadow-2xl border-2 border-yellow-400/50"
           >
-            {Array(12).fill(ads).flat().map((ad, idx) => (
-              <div 
-                key={`ad-${idx}`}
-                className="flex-shrink-0 mx-4 relative group cursor-pointer"
-              >
-                <motion.div
-                  whileHover={{ scale: 1.05 }}
-                  className="relative w-60 sm:w-80 h-16 sm:h-20 rounded-xl overflow-hidden shadow-2xl"
-                >
-                  <img 
-                    src={ad.image} 
-                    alt={ad.title}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-2 sm:p-3">
-                    <span className="text-yellow-400 font-extrabold text-xs mb-0.5" style={{ fontFamily: 'Arial, sans-serif' }}>{ad.brand}</span>
-                    <span className="text-white font-black text-sm sm:text-base" style={{ fontFamily: 'system-ui, sans-serif' }}>{ad.title}</span>
-                  </div>
-                  <div className="absolute top-2 left-2 bg-red-600 text-white px-2 py-0.5 rounded text-[10px] sm:text-xs font-extrabold">
-                    פרסומת
-                  </div>
-                </motion.div>
-              </div>
-            ))}
+            <img 
+              src={bannerAds[currentAdIndex].image}
+              alt={bannerAds[currentAdIndex].brand}
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent flex items-end p-2">
+              <span className="text-yellow-300 font-black text-xs sm:text-sm drop-shadow-lg">{bannerAds[currentAdIndex].brand}</span>
+            </div>
+            <motion.div
+              className="absolute inset-0 border-2 border-yellow-300/50"
+              animate={{
+                boxShadow: ['0 0 20px rgba(253, 224, 71, 0.4)', '0 0 40px rgba(253, 224, 71, 0.8)', '0 0 20px rgba(253, 224, 71, 0.4)']
+              }}
+              transition={{ duration: 2, repeat: Infinity }}
+            />
           </motion.div>
-        </div>
-      )}
+        </AnimatePresence>
+      </div>
 
       {/* Controls Bar */}
       <motion.div
