@@ -52,12 +52,18 @@ export default function UserUploadedVideos({ onUploadClick }) {
               {/* Video Card */}
               <div className="relative rounded-2xl overflow-hidden bg-gray-900 border border-gray-700 hover:border-red-600 transition-all duration-300">
                 {/* Thumbnail */}
-                <div className="relative h-0 pb-[56.25%] overflow-hidden bg-black">
-                  <img
-                    src={video.thumbnail}
-                    alt={video.title}
-                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                  />
+                <div className="relative h-0 pb-[56.25%] overflow-hidden bg-gray-900">
+                  {video.thumbnail_url ? (
+                    <img
+                      src={video.thumbnail_url}
+                      alt={video.title}
+                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                      <Film className="w-12 h-12 text-gray-600" />
+                    </div>
+                  )}
                   {/* Overlay */}
                   <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-all duration-300 flex items-center justify-center">
                     <motion.div
