@@ -384,7 +384,7 @@ export default function LivePlayer({
             </div>
 
             {/* Schedule Strip */}
-            <div className="bg-black/60 backdrop-blur-sm overflow-hidden h-5 sm:h-6 border border-[#E31E24]/40 rounded-lg">
+            <div className="bg-black/60 backdrop-blur-sm overflow-hidden h-5 sm:h-6 border border-[#E31E24]/40 rounded-lg w-1/2 ml-auto">
               <motion.div
                 className="flex items-center h-full"
                 animate={{ x: ["0%", "-100%"] }}
