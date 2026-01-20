@@ -21,7 +21,7 @@ export default function NewsReels() {
   const newsReels = youtubeVideos.map((video, i) => ({
     ...video,
     subtitle: `הרשת החדשה - שידור חי`,
-    thumbnail: `https://img.youtube.com/vi/${video.videoId}/maxresdefault.jpg`,
+    thumbnail: `https://img.youtube.com/vi/${video.videoId}/hqdefault.jpg`,
     videoUrl: `https://www.youtube.com/embed/${video.videoId}?autoplay=1`,
     views: Math.floor(Math.random() * 100000) + 1000,
     timestamp: moment().subtract(i, 'hours').toDate(),
@@ -81,9 +81,9 @@ export default function NewsReels() {
                     <img
                       src={reel.thumbnail}
                       alt={reel.title}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover bg-gray-900"
                       onError={(e) => {
-                        e.target.src = `https://img.youtube.com/vi/${reel.videoId}/hqdefault.jpg`;
+                        e.target.src = `https://img.youtube.com/vi/${reel.videoId}/0.jpg`;
                       }}
                     />
 
