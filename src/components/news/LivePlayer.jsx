@@ -56,22 +56,22 @@ export default function LivePlayer({
   ];
 
   const bannerAds = [
-    { id: 1, image: "https://images.unsplash.com/photo-1556656793-08538906a9f8?w=300&h=100&fit=crop", brand: "Apple", title: "iPhone" },
-    { id: 2, image: "https://images.unsplash.com/photo-1511707267537-b85faf00021e?w=300&h=100&fit=crop", brand: "Samsung", title: "Galaxy" },
-    { id: 3, image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=300&h=100&fit=crop", brand: "Sony", title: "PlayStation" },
-    { id: 4, image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&h=100&fit=crop", brand: "Rolex", title: "Watches" },
-    { id: 5, image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&h=100&fit=crop", brand: "Nike", title: "Sports" },
-    { id: 6, image: "https://images.unsplash.com/photo-1587463366461-026f50cfbc87?w=300&h=100&fit=crop", brand: "Adidas", title: "Fashion" },
-    { id: 7, image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=100&fit=crop", brand: "Microsoft", title: "Surface" },
-    { id: 8, image: "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=300&h=100&fit=crop", brand: "LG", title: "Displays" },
-    { id: 9, image: "https://images.unsplash.com/photo-1489090360580-2c8e5e5e7c65?w=300&h=100&fit=crop", brand: "Canon", title: "Cameras" },
-    { id: 10, image: "https://images.unsplash.com/photo-1556821552-3a63f67cfaef?w=300&h=100&fit=crop", brand: "Audi", title: "Vehicles" },
-    { id: 11, image: "https://images.unsplash.com/photo-1606839118379-dda055fbb96f?w=300&h=100&fit=crop", brand: "Ferrari", title: "Luxury" },
-    { id: 12, image: "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=300&h=100&fit=crop", brand: "Emirates", title: "Travel" },
-    { id: 13, image: "https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=300&h=100&fit=crop", brand: "Prada", title: "Fashion" },
-    { id: 14, image: "https://images.unsplash.com/photo-1572365992253-3cb3e56dd362?w=300&h=100&fit=crop", brand: "Finance", title: "Banking" },
-    { id: 15, image: "https://images.unsplash.com/photo-1523206489230-c012066a6fb0?w=300&h=100&fit=crop", brand: "Cartier", title: "Jewelry" },
-    { id: 16, image: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=300&h=100&fit=crop", brand: "BMW", title: "Motors" }
+    { id: 1, gradient: "from-blue-600 to-blue-400", brand: "🍎 Apple", emoji: "📱" },
+    { id: 2, gradient: "from-indigo-600 to-blue-500", brand: "Samsung", emoji: "📱" },
+    { id: 3, gradient: "from-gray-900 to-gray-700", brand: "Sony", emoji: "🎮" },
+    { id: 4, gradient: "from-yellow-500 to-amber-600", brand: "Rolex", emoji: "⌚" },
+    { id: 5, gradient: "from-orange-500 to-red-500", brand: "Nike", emoji: "👟" },
+    { id: 6, gradient: "from-black to-gray-800", brand: "Adidas", emoji: "👟" },
+    { id: 7, gradient: "from-cyan-500 to-blue-600", brand: "Microsoft", emoji: "💻" },
+    { id: 8, gradient: "from-red-600 to-red-700", brand: "LG", emoji: "📺" },
+    { id: 9, gradient: "from-red-500 to-orange-500", brand: "Canon", emoji: "📷" },
+    { id: 10, gradient: "from-red-700 to-red-900", brand: "Audi", emoji: "🚗" },
+    { id: 11, gradient: "from-red-600 to-yellow-500", brand: "Ferrari", emoji: "🏎️" },
+    { id: 12, gradient: "from-blue-900 to-blue-700", brand: "Emirates", emoji: "✈️" },
+    { id: 13, gradient: "from-black to-gray-900", brand: "Prada", emoji: "👜" },
+    { id: 14, gradient: "from-blue-600 to-indigo-700", brand: "Finance", emoji: "💳" },
+    { id: 15, gradient: "from-amber-500 to-yellow-600", brand: "Cartier", emoji: "💎" },
+    { id: 16, gradient: "from-blue-800 to-blue-900", brand: "BMW", emoji: "🚙" }
   ];
 
   const scheduleItems = [
@@ -646,20 +646,14 @@ export default function LivePlayer({
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: -50, scale: 0.95 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className={`relative rounded-lg overflow-hidden shadow-lg h-16 sm:h-20 ${isWideAd ? 'w-full' : 'w-40 sm:w-48'}`}
+            className={`relative rounded-lg overflow-hidden shadow-lg h-16 sm:h-20 bg-gradient-to-br ${bannerAds[currentAdIndex].gradient} flex items-center justify-between px-3 sm:px-4 ${isWideAd ? 'w-full' : 'w-40 sm:w-48'}`}
             style={{
-              border: '1px solid rgba(227, 30, 36, 0.5)',
+              border: '1px solid rgba(255, 255, 255, 0.2)',
               boxShadow: '0 0 15px rgba(227, 30, 36, 0.3)'
             }}
           >
-            <img 
-              src={bannerAds[currentAdIndex].image}
-              alt={bannerAds[currentAdIndex].brand}
-              className="w-full h-full object-cover"
-            />
-            <div className={`absolute inset-0 ${isWideAd ? 'bg-gradient-to-r from-black/40 to-transparent flex items-center px-4' : 'bg-black/20 flex items-end p-1.5'}`}>
-              <span className={`text-white font-bold drop-shadow-lg ${isWideAd ? 'text-sm sm:text-base' : 'text-[10px] sm:text-xs truncate'}`}>{bannerAds[currentAdIndex].brand}</span>
-            </div>
+            <span className={`text-white text-2xl sm:text-3xl`}>{bannerAds[currentAdIndex].emoji}</span>
+            <span className={`text-white font-bold drop-shadow-lg ${isWideAd ? 'text-sm sm:text-base flex-1 ml-2' : 'text-[10px] sm:text-xs'}`}>{bannerAds[currentAdIndex].brand}</span>
           </motion.div>
         </AnimatePresence>
       </div>
