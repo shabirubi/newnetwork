@@ -74,14 +74,16 @@ export default function UserUploadedVideos({ onUploadClick }) {
                     </motion.div>
                   </div>
 
-                  {/* Views Count */}
-                  <div className="absolute bottom-2 right-2 bg-black/70 px-3 py-1 rounded-lg text-xs text-white font-bold">
-                    {video.views.toLocaleString('he-IL')} צפיות
-                  </div>
+                  {/* Duration Badge */}
+                  {video.duration && (
+                    <div className="absolute bottom-2 right-2 bg-black/70 px-3 py-1 rounded-lg text-xs text-white font-bold">
+                      {video.duration}s
+                    </div>
+                  )}
 
-                  {/* Badge */}
+                  {/* Status Badge */}
                   <div className="absolute top-2 right-2 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-lg">
-                    {video.badge}
+                    חדש
                   </div>
                 </div>
 
