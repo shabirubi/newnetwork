@@ -112,11 +112,11 @@ export default function Accessibility() {
       {/* Content */}
       <div className="max-w-5xl mx-auto px-4 py-12">
         {/* Haptic Settings */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-gradient-to-r from-purple-50 to-purple-100 dark:from-purple-900/20 dark:to-purple-800/20 rounded-2xl p-8 mb-12 shadow-lg border-l-4 border-purple-600"
-        >
+         <motion.div
+           initial={{ opacity: 0, y: 20 }}
+           animate={{ opacity: 1, y: 0 }}
+           className="bg-gradient-to-r from-black/80 to-[#E31E24]/40 dark:from-black/80 dark:to-[#E31E24]/30 rounded-2xl p-8 mb-12 shadow-lg border-l-4 border-[#E31E24] backdrop-blur-sm"
+         >
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
               <Vibrate className="w-6 h-6 text-purple-600" />
@@ -156,7 +156,7 @@ export default function Accessibility() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white dark:bg-gray-800 rounded-2xl p-8 mb-12 shadow-lg border-l-4 border-blue-600"
+          className="bg-gradient-to-r from-black/80 to-[#E31E24]/40 dark:from-black/80 dark:to-[#E31E24]/30 rounded-2xl p-8 mb-12 shadow-lg border-l-4 border-[#E31E24] backdrop-blur-sm"
         >
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">מחויבותנו לנגישות</h2>
           <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed mb-4">
@@ -178,7 +178,7 @@ export default function Accessibility() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow"
+                className="bg-gradient-to-br from-black/80 to-[#E31E24]/30 dark:from-black/80 dark:to-[#E31E24]/30 rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow backdrop-blur-sm border border-[#E31E24]/20"
               >
                 <div className="flex items-center gap-3 mb-4">
                   <div className="p-3 bg-gradient-to-br from-blue-100 to-blue-50 dark:from-blue-900/30 dark:to-blue-800/20 rounded-lg">
@@ -212,7 +212,7 @@ export default function Accessibility() {
             {improvements.map((section, index) => (
               <div
                 key={index}
-                className="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg"
+                className="bg-gradient-to-br from-black/80 to-[#E31E24]/30 dark:from-black/80 dark:to-[#E31E24]/30 rounded-xl p-6 shadow-lg backdrop-blur-sm border border-[#E31E24]/20"
               >
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 pb-2 border-b-2 border-blue-600">
                   {section.category}
@@ -235,7 +235,7 @@ export default function Accessibility() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8 }}
-          className="bg-gradient-to-r from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 rounded-xl p-8 mb-12 border border-blue-200 dark:border-blue-800"
+          className="bg-gradient-to-r from-black/80 to-[#E31E24]/40 dark:from-black/80 dark:to-[#E31E24]/30 rounded-xl p-8 mb-12 border border-[#E31E24]/30 backdrop-blur-sm"
         >
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">בדיקה ו-Compliance</h2>
           <p className="text-gray-700 dark:text-gray-300 mb-4">
@@ -263,7 +263,7 @@ export default function Accessibility() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1 }}
-          className="bg-white dark:bg-gray-800 rounded-2xl p-8 shadow-lg mb-12 border-l-4 border-blue-600"
+          className="bg-gradient-to-r from-black/80 to-[#E31E24]/40 dark:from-black/80 dark:to-[#E31E24]/30 rounded-2xl p-8 shadow-lg mb-12 border-l-4 border-[#E31E24] backdrop-blur-sm"
         >
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">דווח על בעיות נגישות</h2>
           <p className="text-gray-700 dark:text-gray-300 mb-6">
