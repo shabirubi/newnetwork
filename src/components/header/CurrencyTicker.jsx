@@ -85,56 +85,62 @@ CRITICAL: השתמש רק במקורות מהימנים. בנק ישראל הו�
 
   if (loading || currencies.length === 0) {
     return (
-      <div className="bg-gradient-to-r from-green-900 to-blue-900 dark:from-green-950 dark:to-blue-950 text-white py-1.5 overflow-hidden">
+      <div className="bg-gradient-to-r from-emerald-600 via-green-600 to-teal-600 text-white py-2 overflow-hidden shadow-lg">
         <div className="flex items-center justify-center gap-2">
-          <Loader2 className="w-3 h-3 animate-spin" />
-          <span className="text-xs">טוען שערי מטבע מבנק ישראל...</span>
+          <Loader2 className="w-4 h-4 animate-spin" />
+          <span className="text-sm font-bold">טוען שערי מטבע...</span>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="bg-gradient-to-r from-green-900 to-blue-900 dark:from-green-950 dark:to-blue-950 text-white py-1.5 overflow-hidden">
-      <div className="flex items-center gap-2 px-2">
-        <span className="bg-green-600 text-white px-2 py-0.5 font-bold text-[10px] shrink-0 flex items-center gap-1 rounded">
-          <DollarSign className="w-3 h-3" />
+    <div className="bg-gradient-to-r from-emerald-600 via-green-600 to-teal-600 text-white py-2 overflow-hidden shadow-lg border-y border-white/10">
+      <div className="flex items-center gap-3 px-4">
+        <motion.div 
+          className="bg-white/20 backdrop-blur-xl px-3 py-1.5 rounded-xl font-bold text-xs shrink-0 flex items-center gap-2 shadow-lg border border-white/20"
+          animate={{ scale: [1, 1.05, 1] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        >
+          <DollarSign className="w-4 h-4" />
           שערי מטבע
-        </span>
+        </motion.div>
 
         <div className="ticker-wrapper overflow-hidden flex-1">
           <motion.div
-            className="flex whitespace-nowrap text-xs items-center"
+            className="flex whitespace-nowrap text-sm items-center"
             animate={{ x: ["0%", "-50%"] }}
             transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
           >
             {[...currencies, ...currencies].map((currency, index) => (
-              <div
+              <motion.div
                 key={`${currency.code}-${index}`}
-                className="flex items-center gap-2 mx-6 bg-white/10 px-3 py-1 rounded-lg"
+                className="flex items-center gap-2 mx-4 bg-white/20 backdrop-blur-xl px-4 py-2 rounded-xl shadow-lg border border-white/20"
+                whileHover={{ scale: 1.05, y: -2 }}
               >
-                {currency.code === 'USD' && <DollarSign className="w-3 h-3 text-green-400" />}
-                {currency.code === 'EUR' && <Euro className="w-3 h-3 text-blue-400" />}
-                {currency.code === 'BTC' && <span className="text-orange-400 font-bold text-xs">₿</span>}
+                {currency.code === 'USD' && <DollarSign className="w-4 h-4 text-yellow-300" />}
+                {currency.code === 'EUR' && <Euro className="w-4 h-4 text-blue-300" />}
+                {currency.code === 'BTC' && <span className="text-orange-300 font-bold text-sm">₿</span>}
+                {currency.code === 'GBP' && <span className="text-purple-300 font-bold text-sm">£</span>}
                 
                 <span className="font-bold">{currency.name}</span>
-                <span className="text-yellow-300">
+                <span className="text-yellow-200 font-bold">
                   ₪{currency.code === 'BTC' ? currency.rate.toFixed(0) : currency.rate.toFixed(2)}
                 </span>
                 
-                <div className={`flex items-center gap-1 ${
-                  currency.change >= 0 ? 'text-green-400' : 'text-red-400'
+                <div className={`flex items-center gap-1 font-bold ${
+                  currency.change >= 0 ? 'text-lime-300' : 'text-red-300'
                 }`}>
                   {currency.change >= 0 ? (
-                    <TrendingUp className="w-3 h-3" />
+                    <TrendingUp className="w-4 h-4" />
                   ) : (
-                    <TrendingDown className="w-3 h-3" />
+                    <TrendingDown className="w-4 h-4" />
                   )}
-                  <span className="font-bold">
-                    {currency.changePercent >= 0 ? '+' : ''}{currency.changePercent.toFixed(2)}%
+                  <span>
+                    {currency.changePercent >= 0 ? '▲' : '▼'}{Math.abs(currency.changePercent).toFixed(2)}%
                   </span>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </motion.div>
         </div>

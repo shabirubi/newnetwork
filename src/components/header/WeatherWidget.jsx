@@ -59,9 +59,9 @@ export default function WeatherWidget() {
 
   if (loading) {
     return (
-      <div className="flex items-center gap-1 px-2 py-1 bg-gray-100 dark:bg-gray-700 rounded-full animate-pulse">
-        <div className="w-3 h-3 bg-gray-300 dark:bg-gray-600 rounded-full" />
-        <div className="w-8 h-3 bg-gray-300 dark:bg-gray-600 rounded" />
+      <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-br from-blue-500/90 to-cyan-500/90 rounded-2xl shadow-lg backdrop-blur-xl border border-white/20 animate-pulse">
+        <div className="w-4 h-4 bg-white/40 rounded-full" />
+        <div className="w-10 h-4 bg-white/40 rounded" />
       </div>
     );
   }
@@ -69,21 +69,21 @@ export default function WeatherWidget() {
   return (
     <>
       <motion.div 
-        initial={{ opacity: 0, y: -10 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="flex items-center gap-1"
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="relative group"
       >
         <button
           onClick={() => setModalOpen(true)}
-          className={`flex items-center gap-1 px-2 py-1 rounded-full transition-all hover:scale-105 hover:shadow-lg cursor-pointer ${getSeasonColor(weather?.season)}`}
+          className="flex items-center gap-2 px-4 py-2 bg-gradient-to-br from-blue-500/90 via-blue-600 to-cyan-600 rounded-2xl shadow-lg shadow-blue-500/30 backdrop-blur-xl border border-white/20 transition-all hover:scale-105 hover:shadow-xl hover:shadow-blue-500/40"
         >
           {getWeatherIcon(weather?.condition)}
-          <div className="flex items-center gap-0.5">
-            <span className="font-bold text-xs">{weather?.temperature || 25}°</span>
-          </div>
-          <div className="hidden sm:flex items-center gap-0.5 text-[10px] opacity-80">
-            <Droplets className="w-2.5 h-2.5" />
-            <span>{weather?.humidity || 50}%</span>
+          <div className="flex flex-col">
+            <span className="font-bold text-white text-sm leading-none">{weather?.temperature || 25}°</span>
+            <div className="flex items-center gap-1 text-white/80 text-[10px] leading-none mt-0.5">
+              <Droplets className="w-2.5 h-2.5" />
+              <span>{weather?.humidity || 50}%</span>
+            </div>
           </div>
         </button>
       </motion.div>
