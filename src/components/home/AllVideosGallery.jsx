@@ -5,10 +5,24 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Play, Eye, Clock, X, Film, Youtube } from "lucide-react";
 import moment from "moment";
 
+const VideoSkeleton = () => (
+  <div className="group cursor-pointer bg-gradient-to-br from-black/80 via-[#E31E24]/20 to-black/80 backdrop-blur-sm rounded-xl overflow-hidden border-2 border-[#E31E24]/40" style={{ boxShadow: '0 0 20px rgba(227, 30, 36, 0.3)' }}>
+    <div className="relative aspect-video bg-gradient-to-br from-gray-800 to-gray-900 animate-pulse"></div>
+    <div className="p-4 space-y-3">
+      <div className="h-4 bg-gray-800 rounded animate-pulse"></div>
+      <div className="h-3 bg-gray-800 rounded w-2/3 animate-pulse"></div>
+      <div className="flex justify-between">
+        <div className="h-3 bg-gray-800 rounded w-1/3 animate-pulse"></div>
+        <div className="h-3 bg-gray-800 rounded w-1/4 animate-pulse"></div>
+      </div>
+    </div>
+  </div>
+);
+
 export default function AllVideosGallery() {
   const [selectedVideo, setSelectedVideo] = useState(null);
 
-  const { data: userVideos = [] } = useQuery({
+  const { data: userVideos = [], isLoading } = useQuery({
     queryKey: ['all-user-videos'],
     queryFn: () => base44.entities.UserVideo.filter({ status: 'ready' }, '-created_date', 200),
     initialData: [],
@@ -54,6 +68,9 @@ export default function AllVideosGallery() {
 
       {/* Videos Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        {isLoading && Array.from({ length: 8 }).map((_, idx) => (
+          <VideoSkeleton key={`skeleton-${idx}`} />
+        ))}
         {allVideos.map((video, idx) => (
           <motion.div
             key={video.id}
