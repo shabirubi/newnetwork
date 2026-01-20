@@ -6,7 +6,8 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
 import { 
   Users, Mic, TrendingUp, ChevronLeft, Play,
-  Filter, Search, MessageCircle, MessageCircleQuestion
+  Filter, Search, MessageCircle, MessageCircleQuestion,
+  Video, Phone, Mic2
 } from "lucide-react";
 import AskReporterModal from "../components/reporter/AskReporterModal";
 import { Badge } from "@/components/ui/badge";
@@ -33,6 +34,7 @@ export default function Reporters() {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [chatReporter, setChatReporter] = useState(null);
   const [askReporter, setAskReporter] = useState(null);
+  const [hoveredReporter, setHoveredReporter] = useState(null);
 
   const { data: reporters = [], isLoading } = useQuery({
     queryKey: ['reporters'],
@@ -194,14 +196,18 @@ export default function Reporters() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: index * 0.05 }}
-                className="group bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 border border-gray-200 dark:border-gray-700 hover:border-[#E31E24] dark:hover:border-[#E31E24]"
+                onMouseEnter={() => setHoveredReporter(reporter.id)}
+                onMouseLeave={() => setHoveredReporter(null)}
+                className="group bg-white dark:bg-gray-800 rounded-2xl overflow-hidden shadow-md hover:shadow-2xl transition-all duration-300 border border-gray-200 dark:border-gray-700 hover:border-[#E31E24] dark:hover:border-[#E31E24] relative"
               >
                 {/* Reporter Image */}
                 <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800">
                   <img
                     src={reporter.image}
                     alt={reporter.name}
-                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                    className={`w-full h-full object-cover group-hover:scale-110 transition-all duration-500 ${
+                      hoveredReporter === reporter.id ? 'grayscale-0' : 'grayscale'
+                    }`}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                   
@@ -225,6 +231,62 @@ export default function Reporters() {
                       {reporter.role}
                     </p>
                   </div>
+
+                  {/* Hover Action Card */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ 
+                      opacity: hoveredReporter === reporter.id ? 1 : 0,
+                      y: hoveredReporter === reporter.id ? 0 : 20
+                    }}
+                    transition={{ duration: 0.3 }}
+                    className={`absolute inset-0 bg-gradient-to-br from-black/95 via-[#E31E24]/90 to-black/95 backdrop-blur-md flex flex-col items-center justify-center gap-3 p-6 ${
+                      hoveredReporter === reporter.id ? 'pointer-events-auto' : 'pointer-events-none'
+                    }`}
+                  >
+                    <h3 className="text-white font-bold text-xl mb-2">
+                      {reporter.name}
+                    </h3>
+                    
+                    {/* Action Grid */}
+                    <div className="grid grid-cols-2 gap-3 w-full">
+                      {/* Chat */}
+                      <button
+                        onClick={() => window.dispatchEvent(new CustomEvent('openReporterChat'))}
+                        className="flex flex-col items-center gap-2 p-4 bg-white/10 hover:bg-white/20 rounded-xl border border-white/20 transition-all group/btn"
+                      >
+                        <MessageCircle className="w-8 h-8 text-white group-hover/btn:scale-110 transition-transform" />
+                        <span className="text-white text-xs font-bold">צ׳אט</span>
+                      </button>
+
+                      {/* Video Call */}
+                      <button
+                        onClick={() => alert('שיחת וידאו - בקרוב!')}
+                        className="flex flex-col items-center gap-2 p-4 bg-white/10 hover:bg-white/20 rounded-xl border border-white/20 transition-all group/btn"
+                      >
+                        <Video className="w-8 h-8 text-white group-hover/btn:scale-110 transition-transform" />
+                        <span className="text-white text-xs font-bold">וידאו</span>
+                      </button>
+
+                      {/* Voice Message */}
+                      <button
+                        onClick={() => alert('הקלטת הודעה קולית - בקרוב!')}
+                        className="flex flex-col items-center gap-2 p-4 bg-white/10 hover:bg-white/20 rounded-xl border border-white/20 transition-all group/btn"
+                      >
+                        <Mic2 className="w-8 h-8 text-white group-hover/btn:scale-110 transition-transform" />
+                        <span className="text-white text-xs font-bold">הודעה קולית</span>
+                      </button>
+
+                      {/* Q&A */}
+                      <button
+                        onClick={() => setAskReporter(reporter)}
+                        className="flex flex-col items-center gap-2 p-4 bg-white/10 hover:bg-white/20 rounded-xl border border-white/20 transition-all group/btn"
+                      >
+                        <MessageCircleQuestion className="w-8 h-8 text-white group-hover/btn:scale-110 transition-transform" />
+                        <span className="text-white text-xs font-bold">שאלות ותשובות</span>
+                      </button>
+                    </div>
+                  </motion.div>
                 </div>
 
                 {/* Reporter Info */}
