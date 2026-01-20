@@ -353,31 +353,59 @@ export default function LivePlayer({
         {/* Frame Border - Covering YouTube Elements */}
         <div className="absolute inset-0 z-30 pointer-events-none">
           {/* Top Frame */}
-          <div className="absolute top-0 left-0 right-0 h-16 sm:h-20 bg-black flex items-center justify-between px-4 sm:px-6"
+          <div className="absolute top-0 left-0 right-0 h-28 sm:h-32 bg-black flex flex-col px-4 sm:px-6 py-2"
             style={{
               boxShadow: '0 4px 20px rgba(0, 0, 0, 0.8)'
             }}
           >
-            <motion.img 
-              src={LOGO_URL}
-              alt="הרשת החדשה"
-              className="h-14 sm:h-20 w-auto drop-shadow-2xl"
-              animate={{ 
-                scale: [1, 1.05, 1],
-                filter: ['brightness(1)', 'brightness(1.2)', 'brightness(1)']
-              }}
-              transition={{ 
-                duration: 3, 
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-            />
-            <div className="text-right flex-1 overflow-hidden">
-              <div className="text-white font-extrabold text-base sm:text-xl drop-shadow-lg mb-1" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>הרשת החדשה</div>
-              <div className="text-[#E31E24] font-black text-sm sm:text-lg tracking-wider min-h-[20px] sm:min-h-[28px] whitespace-nowrap" style={{ fontFamily: 'Arial Black, Arial, sans-serif', textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>
-                {displayedText}
-                <span className="animate-pulse">|</span>
+            {/* Logo and Title Row */}
+            <div className="flex items-center justify-between mb-2">
+              <motion.img 
+                src={LOGO_URL}
+                alt="הרשת החדשה"
+                className="h-12 sm:h-16 w-auto drop-shadow-2xl"
+                animate={{ 
+                  scale: [1, 1.05, 1],
+                  filter: ['brightness(1)', 'brightness(1.2)', 'brightness(1)']
+                }}
+                transition={{ 
+                  duration: 3, 
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              />
+              <div className="text-right flex-1 overflow-hidden">
+                <div className="text-white font-extrabold text-sm sm:text-lg drop-shadow-lg mb-1" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>הרשת החדשה</div>
+                <div className="text-[#E31E24] font-black text-xs sm:text-base tracking-wider whitespace-nowrap" style={{ fontFamily: 'Arial Black, Arial, sans-serif', textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>
+                  {displayedText}
+                  <span className="animate-pulse">|</span>
+                </div>
               </div>
+            </div>
+
+            {/* Schedule Strip */}
+            <div className="bg-black/60 backdrop-blur-sm overflow-hidden h-10 sm:h-12 border border-[#E31E24]/40 rounded-lg">
+              <motion.div
+                className="flex items-center h-full"
+                animate={{ x: ["0%", "-100%"] }}
+                transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
+              >
+                {Array(3).fill(scheduleItems).flat().map((item, idx) => {
+                  const IconComponent = item.Icon;
+                  return (
+                    <div 
+                      key={`schedule-${idx}`}
+                      className="flex-shrink-0 flex items-center gap-2 sm:gap-3 px-4 sm:px-6 border-l border-[#E31E24]/30"
+                    >
+                      <IconComponent className="w-4 h-4 sm:w-5 sm:h-5 text-[#E31E24]" />
+                      <div>
+                        <div className="text-[#E31E24] font-black text-[10px] sm:text-xs" style={{ fontFamily: 'Arial Black, sans-serif' }}>{item.time}</div>
+                        <div className="text-white font-bold text-xs sm:text-sm whitespace-nowrap" style={{ fontFamily: 'system-ui, sans-serif' }}>{item.title}</div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </motion.div>
             </div>
           </div>
 
@@ -400,14 +428,14 @@ export default function LivePlayer({
           </div>
 
           {/* Left Frame */}
-          <div className="absolute top-16 sm:top-20 bottom-12 sm:bottom-16 left-0 w-8 sm:w-12 bg-black"
+          <div className="absolute top-28 sm:top-32 bottom-12 sm:bottom-16 left-0 w-8 sm:w-12 bg-black"
             style={{
               boxShadow: '4px 0 20px rgba(0, 0, 0, 0.8)'
             }}
           />
 
           {/* Right Frame */}
-          <div className="absolute top-16 sm:top-20 bottom-12 sm:bottom-16 right-0 w-8 sm:w-12 bg-black"
+          <div className="absolute top-28 sm:top-32 bottom-12 sm:bottom-16 right-0 w-8 sm:w-12 bg-black"
             style={{
               boxShadow: '-4px 0 20px rgba(0, 0, 0, 0.8)'
             }}
@@ -470,7 +498,7 @@ export default function LivePlayer({
         {/* Live Badge */}
         {isLive && (
           <motion.div 
-            className="absolute top-24 sm:top-28 left-12 sm:left-16 z-30"
+            className="absolute top-36 sm:top-40 left-12 sm:left-16 z-30"
             animate={{
               scale: [1, 1.05, 1],
             }}
@@ -595,31 +623,6 @@ export default function LivePlayer({
           />
         )}
 
-      </div>
-
-      {/* Schedule Strip - Inside Frame */}
-      <div className="absolute top-[72px] sm:top-24 left-10 sm:left-14 right-10 sm:right-14 bg-black/80 backdrop-blur-md overflow-hidden h-10 sm:h-12 border border-[#E31E24]/40 rounded-lg shadow-2xl z-30">
-        <motion.div
-          className="flex items-center h-full"
-          animate={{ x: ["0%", "-100%"] }}
-          transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
-        >
-          {Array(3).fill(scheduleItems).flat().map((item, idx) => {
-            const IconComponent = item.Icon;
-            return (
-              <div 
-                key={`schedule-${idx}`}
-                className="flex-shrink-0 flex items-center gap-2 sm:gap-3 px-4 sm:px-6 border-l border-[#E31E24]/30"
-              >
-                <IconComponent className="w-4 h-4 sm:w-5 sm:h-5 text-[#E31E24]" />
-                <div>
-                  <div className="text-[#E31E24] font-black text-[10px] sm:text-xs" style={{ fontFamily: 'Arial Black, sans-serif' }}>{item.time}</div>
-                  <div className="text-white font-bold text-xs sm:text-sm whitespace-nowrap" style={{ fontFamily: 'system-ui, sans-serif' }}>{item.title}</div>
-                </div>
-              </div>
-            );
-          })}
-        </motion.div>
       </div>
 
       {/* Ads Strip */}
