@@ -212,7 +212,14 @@ export default function Reporters() {
                       WebkitFilter: hoveredReporter === reporter.id ? 'grayscale(0%) brightness(1)' : 'grayscale(100%) brightness(0.8)'
                     }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                  <div 
+                    className="absolute inset-0 transition-all duration-500"
+                    style={{
+                      background: hoveredReporter === reporter.id 
+                        ? 'linear-gradient(to top, rgba(0,0,0,0.6), transparent)' 
+                        : 'linear-gradient(to top, rgba(227,30,36,0.7), rgba(227,30,36,0.3))'
+                    }}
+                  />
                   
                   {/* Live Badge */}
                   <div className="absolute top-3 right-3">
