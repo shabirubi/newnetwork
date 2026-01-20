@@ -510,7 +510,7 @@ export default function LivePlayer({
         {/* Live Badge */}
         {isLive && (
           <motion.div 
-            className="absolute top-36 sm:top-40 left-12 sm:left-16 z-30"
+            className="absolute top-24 sm:top-28 left-12 sm:left-16 z-30"
             animate={{
               scale: [1, 1.05, 1],
             }}
