@@ -54,7 +54,7 @@ export default function WorldNewsReportersContainer() {
     return (
       <section className="px-4 sm:px-4 mt-8">
         <div className="flex items-center gap-2 mb-6">
-          <Globe className="w-5 h-5 text-blue-500" />
+          <Globe className="w-5 h-5 text-[#E31E24]" />
           <h2 className="text-xl font-bold dark:text-white">כתבנו בחדשות החוץ</h2>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -100,11 +100,11 @@ export default function WorldNewsReportersContainer() {
                 <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent group-hover:from-black/80 transition-all" />
               </div>
             ) : generatingImages[reporter.id] ? (
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-indigo-700 flex items-center justify-center">
+              <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-[#E31E24]/30 to-black/80 flex items-center justify-center">
                 <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white" />
               </div>
             ) : (
-              <div className="absolute inset-0 bg-gradient-to-br from-blue-600 to-indigo-700" />
+              <div className="absolute inset-0 bg-gradient-to-br from-black/80 via-[#E31E24]/30 to-black/80" />
             )}
 
             <div className="relative z-10 p-5 h-full flex flex-col">
@@ -153,7 +153,7 @@ export default function WorldNewsReportersContainer() {
               {/* Action Button */}
               <button
                 onClick={handleReporterClick}
-                className="w-full bg-white text-blue-600 font-bold py-2 rounded-lg hover:bg-white/90 transition-all flex items-center justify-center gap-2 mt-auto group/btn"
+                className="w-full bg-[#E31E24] text-white font-bold py-2 rounded-lg hover:bg-[#E31E24]/80 transition-all flex items-center justify-center gap-2 mt-auto group/btn"
               >
                 <MessageCircle className="w-4 h-4 group-hover/btn:scale-110 transition-transform" />
                 שאל על חדשות החוץ
@@ -161,7 +161,7 @@ export default function WorldNewsReportersContainer() {
 
               {/* Featured Badge */}
               {reporter.specialty && (
-                <div className="absolute top-3 right-3 bg-yellow-400 text-blue-700 p-1.5 rounded-full">
+                <div className="absolute top-3 right-3 bg-[#E31E24] text-white p-1.5 rounded-full">
                   <Star className="w-3 h-3 fill-current" />
                 </div>
               )}
