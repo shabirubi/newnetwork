@@ -664,7 +664,7 @@ export default function LivePlayer({
             </div>
             
             {/* Brand Text */}
-            <p className="text-white text-[9px] sm:text-[11px] font-bold text-center leading-tight px-1" style={{ fontFamily: "'Poppins', 'Inter', sans-serif", textShadow: '1px 1px 3px rgba(0,0,0,0.8)' }}>
+            <p className="text-white text-xs sm:text-sm font-black text-center leading-snug px-1.5 tracking-wide" style={{ fontFamily: "'Poppins', 'Montserrat', sans-serif", fontWeight: 900, textShadow: '2px 2px 8px rgba(0,0,0,0.9), 0 0 10px rgba(227, 30, 36, 0.4)' }}>
               {bannerAds[currentAdIndex].brand}
             </p>
           </motion.div>
