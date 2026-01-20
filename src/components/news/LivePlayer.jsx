@@ -358,7 +358,7 @@ export default function LivePlayer({
           />
 
           {/* Right Frame */}
-          <div className="absolute top-16 sm:top-20 bottom-12 sm:bottom-16 right-0 w-8 sm:w-12 bg-black border-l-4 border-gray-700"
+          <div className="absolute top-16 sm:top-20 bottom-12 sm:bottom-16 right-0 w-8 sm:w-12 bg-black"
             style={{
               boxShadow: '-4px 0 20px rgba(0, 0, 0, 0.8)'
             }}
