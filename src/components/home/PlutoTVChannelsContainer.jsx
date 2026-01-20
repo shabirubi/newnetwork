@@ -96,7 +96,10 @@ export default function PlutoTVChannelsContainer() {
             transition={{ delay: idx * 0.03 }}
             whileHover={{ scale: 1.05 }}
             onClick={() => setSelectedChannel(channel)}
-            className={`group relative rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all cursor-pointer h-40 bg-gradient-to-br ${getGenreColor(channel.genre)}`}
+            className="group relative rounded-xl overflow-hidden border-2 border-[#E31E24]/40 hover:border-[#E31E24]/80 transition-all cursor-pointer h-40 bg-gradient-to-br from-black/80 via-[#E31E24]/30 to-black/80 backdrop-blur-sm"
+            style={{
+              boxShadow: '0 0 20px rgba(227, 30, 36, 0.3), inset 0 0 20px rgba(227, 30, 36, 0.1)'
+            }}
           >
             {/* Background Image */}
             {channel.image_url ? (
@@ -139,10 +142,13 @@ export default function PlutoTVChannelsContainer() {
               animate={{ scale: 1 }}
               exit={{ scale: 0.9 }}
               onClick={(e) => e.stopPropagation()}
-              className="w-full max-w-6xl bg-black rounded-2xl overflow-hidden shadow-2xl"
+              className="w-full max-w-6xl bg-gradient-to-br from-black/90 via-[#E31E24]/20 to-black/90 backdrop-blur-xl rounded-2xl overflow-hidden border-2 border-[#E31E24]/40"
+              style={{
+                boxShadow: '0 0 60px rgba(227, 30, 36, 0.5)'
+              }}
             >
               {/* Header */}
-              <div className="bg-gradient-to-r from-gray-900 to-gray-800 p-4 flex items-center justify-between">
+              <div className="bg-gradient-to-br from-black/80 via-[#E31E24]/60 to-black/80 backdrop-blur-sm p-4 flex items-center justify-between border-b-2 border-[#E31E24]/40">
                 <div>
                   <h3 className="text-white font-bold text-lg">{selectedChannel.name}</h3>
                   <p className="text-gray-400 text-sm capitalize">{selectedChannel.genre}</p>

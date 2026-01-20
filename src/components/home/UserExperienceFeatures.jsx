@@ -68,10 +68,13 @@ export default function UserExperienceFeatures() {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 viewport={{ once: true }}
-                className="group relative overflow-hidden rounded-2xl bg-gray-900 dark:bg-gray-800 border border-gray-700 dark:border-gray-700 hover:border-gray-600 transition-all duration-300"
+                className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-black/80 via-[#E31E24]/20 to-black/80 backdrop-blur-sm border-2 border-[#E31E24]/40 hover:border-[#E31E24]/80 transition-all duration-300"
+                style={{
+                  boxShadow: '0 0 15px rgba(227, 30, 36, 0.3), inset 0 0 15px rgba(227, 30, 36, 0.1)'
+                }}
               >
                 {/* Background Gradient */}
-                <div className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-10 transition-opacity duration-300`}></div>
+                <div className="absolute inset-0 bg-gradient-to-br from-[#E31E24]/10 to-transparent opacity-0 group-hover:opacity-30 transition-opacity duration-300"></div>
 
                 {/* Content */}
                 <div className="relative p-6 flex flex-col h-full">

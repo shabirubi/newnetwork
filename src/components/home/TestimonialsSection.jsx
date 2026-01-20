@@ -85,7 +85,10 @@ export default function TestimonialsSection() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.1 }}
-                  className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 border border-gray-700 hover:border-[#E31E24]/50 transition-all"
+                  className="bg-gradient-to-br from-black/80 via-[#E31E24]/20 to-black/80 backdrop-blur-sm rounded-2xl p-6 border-2 border-[#E31E24]/40 hover:border-[#E31E24]/80 transition-all"
+                  style={{
+                    boxShadow: '0 0 20px rgba(227, 30, 36, 0.3), inset 0 0 20px rgba(227, 30, 36, 0.1)'
+                  }}
                 >
                   {/* Quote Icon */}
                   <Quote className="w-8 h-8 text-[#E31E24] mb-4 opacity-50" />
@@ -103,7 +106,7 @@ export default function TestimonialsSection() {
                   </p>
 
                   {/* Author */}
-                  <div className="flex items-center gap-3 border-t border-gray-700 pt-4">
+                  <div className="flex items-center gap-3 border-t border-[#E31E24]/30 pt-4">
                     <img
                       src={testimonial.image}
                       alt={testimonial.name}

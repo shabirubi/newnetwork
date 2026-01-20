@@ -90,7 +90,10 @@ export default function MoviesSeriesContainer() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.05 }}
-            className={`bg-gradient-to-br ${getGenreColor(movie.genre)} rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all group cursor-pointer h-full flex flex-col`}
+            className="bg-gradient-to-br from-black/80 via-[#E31E24]/30 to-black/80 backdrop-blur-sm rounded-2xl overflow-hidden border-2 border-[#E31E24]/40 hover:border-[#E31E24]/80 transition-all group cursor-pointer h-full flex flex-col"
+            style={{
+              boxShadow: '0 0 20px rgba(227, 30, 36, 0.3), inset 0 0 20px rgba(227, 30, 36, 0.1)'
+            }}
           >
             {/* Poster Image */}
             {movie.poster_url ? (

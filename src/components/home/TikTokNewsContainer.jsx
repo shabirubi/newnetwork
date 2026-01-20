@@ -70,7 +70,10 @@ export default function TikTokNewsContainer() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.1 }}
             whileHover={{ scale: 1.05 }}
-            className="group relative rounded-2xl overflow-hidden aspect-[9/16] bg-black cursor-pointer"
+            className="group relative rounded-2xl overflow-hidden aspect-[9/16] bg-black cursor-pointer border-2 border-[#E31E24]/40 hover:border-[#E31E24]/80 transition-all"
+            style={{
+              boxShadow: '0 0 20px rgba(227, 30, 36, 0.3), inset 0 0 20px rgba(227, 30, 36, 0.1)'
+            }}
           >
             {/* Video Thumbnail */}
             <img
