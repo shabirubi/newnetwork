@@ -82,6 +82,9 @@ export default function NewsReels() {
                       src={reel.thumbnail}
                       alt={reel.title}
                       className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.target.src = `https://img.youtube.com/vi/${reel.videoId}/hqdefault.jpg`;
+                      }}
                     />
 
                     {/* Gradient Overlay */}
