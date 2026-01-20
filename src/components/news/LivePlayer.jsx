@@ -36,9 +36,21 @@ export default function LivePlayer({
   const [dynamicViewerCount, setDynamicViewerCount] = useState(viewerCount || 2847);
   const [ads, setAds] = useState([]);
   const [loadingAds, setLoadingAds] = useState(true);
+  const [currentSlogan, setCurrentSlogan] = useState(0);
+  const [displayedText, setDisplayedText] = useState("");
   const videoRef = useRef(null);
   const containerRef = useRef(null);
   const playerRef = useRef(null);
+
+  const slogans = [
+    "שידור חי 24/7 - החדשות שלכם",
+    "כתבים בשטח - דיווח בזמן אמת",
+    "צוות הכתבים שלנו פועל ללא הפסקה",
+    "שעות של שידורים איכותיים",
+    "הכתבים המובילים בישראל",
+    "מייצרים תוכן. מייצרים חדשות",
+    "הערוץ היחיד שאתם צריכים"
+  ];
 
   const currentStreamUrl = streamUrl || DEFAULT_STREAM;
 
@@ -94,6 +106,27 @@ export default function LivePlayer({
 
     return () => clearInterval(interval);
   }, []);
+
+  // Typewriter animation for slogans
+  useEffect(() => {
+    const currentText = slogans[currentSlogan];
+    let charIndex = 0;
+    setDisplayedText("");
+
+    const typeInterval = setInterval(() => {
+      if (charIndex < currentText.length) {
+        setDisplayedText(currentText.substring(0, charIndex + 1));
+        charIndex++;
+      } else {
+        clearInterval(typeInterval);
+        setTimeout(() => {
+          setCurrentSlogan((prev) => (prev + 1) % slogans.length);
+        }, 3000);
+      }
+    }, 80);
+
+    return () => clearInterval(typeInterval);
+  }, [currentSlogan]);
 
   // YouTube IFrame API for controlling playback
     useEffect(() => {
@@ -315,7 +348,7 @@ export default function LivePlayer({
             <motion.img 
               src={LOGO_URL}
               alt="הרשת החדשה"
-              className="h-10 sm:h-14 w-auto drop-shadow-2xl"
+              className="h-14 sm:h-20 w-auto drop-shadow-2xl"
               animate={{ 
                 scale: [1, 1.05, 1],
                 filter: ['brightness(1)', 'brightness(1.2)', 'brightness(1)']
@@ -326,9 +359,12 @@ export default function LivePlayer({
                 ease: "easeInOut"
               }}
             />
-            <div className="text-right">
-              <div className="text-white font-bold text-sm sm:text-lg drop-shadow-lg">הרשת החדשה</div>
-              <div className="text-[#E31E24] font-bold text-xs sm:text-sm">מייצרים תוכן. מייצרים חדשות</div>
+            <div className="text-right max-w-xs">
+              <div className="text-white font-bold text-base sm:text-xl drop-shadow-lg mb-1">הרשת החדשה</div>
+              <div className="text-[#E31E24] font-black text-sm sm:text-base tracking-wide min-h-[20px] sm:min-h-[24px]">
+                {displayedText}
+                <span className="animate-pulse">|</span>
+              </div>
             </div>
           </div>
 
