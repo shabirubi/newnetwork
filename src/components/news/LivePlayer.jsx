@@ -648,18 +648,18 @@ export default function LivePlayer({
             transition={{ duration: 0.5, ease: "easeOut" }}
             className={`relative rounded-xl overflow-hidden shadow-2xl h-16 sm:h-20 flex flex-col items-center justify-between p-2 ${isWideAd ? 'w-full' : 'w-40 sm:w-48'}`}
             style={{
-              border: '1px solid rgba(227, 30, 36, 0.3)',
-              boxShadow: '0 8px 32px rgba(227, 30, 36, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.1)',
-              background: 'linear-gradient(135deg, rgba(30, 30, 30, 0.95) 0%, rgba(50, 30, 30, 0.95) 100%)',
-              backdropFilter: 'blur(10px)'
+              border: '1px solid rgba(227, 30, 36, 0.5)',
+              boxShadow: '0 8px 32px rgba(227, 30, 36, 0.3), inset 0 1px 0 rgba(227, 30, 36, 0.2)',
+              background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(227, 30, 36, 0.15) 100%)',
+              backdropFilter: 'blur(12px)'
             }}
           >
             {/* Logo - Large and Bold */}
-            <div className="h-10 sm:h-12 flex items-center justify-center">
+            <div className="h-12 sm:h-14 flex items-center justify-center">
               <img 
                 src={LOGO_URL}
                 alt="רשת החדשה"
-                className="h-full w-auto drop-shadow-lg"
+                className="h-full w-auto drop-shadow-xl"
               />
             </div>
             
