@@ -86,18 +86,15 @@ export default function TalkingAvatar() {
     setText("");
   };
 
+  // Floating button will be added to header via layout
+  React.useEffect(() => {
+    const handleAvatarCreator = () => setIsOpen(true);
+    window.addEventListener('openAvatarCreator', handleAvatarCreator);
+    return () => window.removeEventListener('openAvatarCreator', handleAvatarCreator);
+  }, []);
+
   return (
     <>
-      {/* Floating Button */}
-      <motion.button
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={() => setIsOpen(true)}
-        className="fixed bottom-40 left-4 sm:left-6 z-50 bg-gradient-to-br from-purple-600 to-purple-700 rounded-full p-4 sm:p-3.5 shadow-2xl border-2 border-white/30 hover:border-white/50 transition-all group"
-        title="צור דמות מדברת"
-      >
-        <Video className="w-6 h-6 sm:w-5 sm:h-5 text-white" />
-      </motion.button>
 
       {/* Modal */}
       <AnimatePresence>

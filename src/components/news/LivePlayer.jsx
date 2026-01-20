@@ -55,22 +55,22 @@ export default function LivePlayer({
   ];
 
   const bannerAds = [
-    { id: 1, image: "https://images.unsplash.com/photo-1556740738-b6a63e27c4df?w=300&h=100&fit=crop", brand: "Apple", title: "iPhone 15 Pro" },
-    { id: 2, image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=100&fit=crop", brand: "Samsung", title: "Galaxy S24" },
-    { id: 3, image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=300&h=100&fit=crop", brand: "Sony", title: "PlayStation 5" },
-    { id: 4, image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&h=100&fit=crop", brand: "Rolex", title: "Watches" },
-    { id: 5, image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=300&h=100&fit=crop", brand: "Nike", title: "Sports" },
-    { id: 6, image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&h=100&fit=crop", brand: "Adidas", title: "Fashion" },
-    { id: 7, image: "https://images.unsplash.com/photo-1587463366461-026f50cfbc87?w=300&h=100&fit=crop", brand: "Microsoft", title: "Surface" },
-    { id: 8, image: "https://images.unsplash.com/photo-1593642632823-8f785ba67e45?w=300&h=100&fit=crop", brand: "LG", title: "Displays" },
-    { id: 9, image: "https://images.unsplash.com/photo-1489090360580-2c8e5e5e7c65?w=300&h=100&fit=crop", brand: "Canon", title: "Cameras" },
-    { id: 10, image: "https://images.unsplash.com/photo-1511707267537-b85faf00021e?w=300&h=100&fit=crop", brand: "Audi", title: "Vehicles" },
-    { id: 11, image: "https://images.unsplash.com/photo-1556821552-3a63f67cfaef?w=300&h=100&fit=crop", brand: "Ferrari", title: "Luxury" },
-    { id: 12, image: "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=300&h=100&fit=crop", brand: "Travel", title: "Vacation" },
-    { id: 13, image: "https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=300&h=100&fit=crop", brand: "Fashion", title: "Prada" },
-    { id: 14, image: "https://images.unsplash.com/photo-1572365992253-3cb3e56dd362?w=300&h=100&fit=crop", brand: "Bank", title: "Finance" },
-    { id: 15, image: "https://images.unsplash.com/photo-1523206489230-c012066a6fb0?w=300&h=100&fit=crop", brand: "Jewelry", title: "Luxury" },
-    { id: 16, image: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=300&h=100&fit=crop", brand: "Motors", title: "BMW" }
+    { id: 1, image: "https://via.placeholder.com/300x100/1f2937/ffffff?text=Apple+iPhone", brand: "Apple", title: "iPhone 15" },
+    { id: 2, image: "https://via.placeholder.com/300x100/1f2937/ffffff?text=Samsung", brand: "Samsung", title: "Galaxy" },
+    { id: 3, image: "https://via.placeholder.com/300x100/1f2937/ffffff?text=Sony", brand: "Sony", title: "PlayStation" },
+    { id: 4, image: "https://via.placeholder.com/300x100/1f2937/ffffff?text=Rolex", brand: "Rolex", title: "Watches" },
+    { id: 5, image: "https://via.placeholder.com/300x100/1f2937/ffffff?text=Nike", brand: "Nike", title: "Sports" },
+    { id: 6, image: "https://via.placeholder.com/300x100/1f2937/ffffff?text=Adidas", brand: "Adidas", title: "Fashion" },
+    { id: 7, image: "https://via.placeholder.com/300x100/1f2937/ffffff?text=Microsoft", brand: "Microsoft", title: "Surface" },
+    { id: 8, image: "https://via.placeholder.com/300x100/1f2937/ffffff?text=LG", brand: "LG", title: "Displays" },
+    { id: 9, image: "https://via.placeholder.com/300x100/1f2937/ffffff?text=Canon", brand: "Canon", title: "Cameras" },
+    { id: 10, image: "https://via.placeholder.com/300x100/1f2937/ffffff?text=Audi", brand: "Audi", title: "Vehicles" },
+    { id: 11, image: "https://via.placeholder.com/300x100/1f2937/ffffff?text=Ferrari", brand: "Ferrari", title: "Luxury" },
+    { id: 12, image: "https://via.placeholder.com/300x100/1f2937/ffffff?text=Emirates", brand: "Emirates", title: "Travel" },
+    { id: 13, image: "https://via.placeholder.com/300x100/1f2937/ffffff?text=Prada", brand: "Prada", title: "Fashion" },
+    { id: 14, image: "https://via.placeholder.com/300x100/1f2937/ffffff?text=Bank+Leumi", brand: "Bank", title: "Finance" },
+    { id: 15, image: "https://via.placeholder.com/300x100/1f2937/ffffff?text=Cartier", brand: "Jewelry", title: "Luxury" },
+    { id: 16, image: "https://via.placeholder.com/300x100/1f2937/ffffff?text=BMW", brand: "BMW", title: "Motors" }
   ];
 
   const scheduleItems = [
@@ -635,29 +635,34 @@ export default function LivePlayer({
 
       </div>
 
-      {/* Ads Carousel */}
-      <div className="absolute bottom-16 sm:bottom-20 left-12 sm:left-16 z-30 h-16 sm:h-20">
+      {/* Ads Carousel - Top */}
+      <div className="absolute top-24 sm:top-28 left-1/2 -translate-x-1/2 z-30 h-16 sm:h-20">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentAdIndex}
-            initial={{ opacity: 0, scale: 0.8, x: 50 }}
-            animate={{ opacity: 1, scale: 1, x: 0 }}
-            exit={{ opacity: 0, scale: 0.8, x: -50 }}
-            transition={{ duration: 0.5, ease: "easeInOut" }}
-            className="relative w-60 sm:w-80 h-16 sm:h-20 rounded-xl overflow-hidden shadow-2xl border-2 border-yellow-400/50"
+            initial={{ opacity: 0, scale: 0.8, y: -50 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.8, y: -50 }}
+            transition={{ duration: 0.6, ease: "easeInOut" }}
+            className="relative w-72 sm:w-96 h-16 sm:h-20 rounded-xl overflow-hidden shadow-2xl"
+            style={{
+              background: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
+              border: '2px solid rgba(227, 30, 36, 0.6)',
+              boxShadow: '0 0 30px rgba(227, 30, 36, 0.4)'
+            }}
           >
             <img 
               src={bannerAds[currentAdIndex].image}
               alt={bannerAds[currentAdIndex].brand}
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover opacity-80"
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent flex items-end p-2">
-              <span className="text-yellow-300 font-black text-xs sm:text-sm drop-shadow-lg">{bannerAds[currentAdIndex].brand}</span>
+            <div className="absolute inset-0 bg-gradient-to-r from-[#E31E24]/40 via-transparent to-[#E31E24]/40 flex items-center justify-center p-2">
+              <span className="text-white font-black text-sm sm:text-base drop-shadow-lg">{bannerAds[currentAdIndex].brand}</span>
             </div>
             <motion.div
-              className="absolute inset-0 border-2 border-yellow-300/50"
+              className="absolute inset-0 rounded-xl"
               animate={{
-                boxShadow: ['0 0 20px rgba(253, 224, 71, 0.4)', '0 0 40px rgba(253, 224, 71, 0.8)', '0 0 20px rgba(253, 224, 71, 0.4)']
+                boxShadow: ['inset 0 0 20px rgba(227, 30, 36, 0.3)', 'inset 0 0 40px rgba(227, 30, 36, 0.6)', 'inset 0 0 20px rgba(227, 30, 36, 0.3)']
               }}
               transition={{ duration: 2, repeat: Infinity }}
             />
