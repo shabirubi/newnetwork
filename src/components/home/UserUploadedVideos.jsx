@@ -97,14 +97,14 @@ export default function UserUploadedVideos({ onUploadClick }) {
                   {/* Uploader Info */}
                   <div className="flex items-center gap-2">
                     <div className="w-8 h-8 rounded-full bg-gradient-to-r from-red-500 to-orange-500 flex items-center justify-center text-white text-xs font-bold">
-                      {video.uploader.charAt(0)}
+                      {video.uploader_email?.charAt(0).toUpperCase()}
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-bold text-white truncate">
-                        {video.uploader}
+                        {video.uploader_email}
                       </p>
                       <p className="text-xs text-gray-400">
-                        {video.uploadedAt}
+                        {new Date(video.created_date).toLocaleDateString('he-IL')}
                       </p>
                     </div>
                   </div>
