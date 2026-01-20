@@ -23,6 +23,7 @@ export default function VideosFeed() {
 
   // Real YouTube videos from the channel
   const youtubeVideos = [
+    { id: 'yt-EGxPXB-Kwuo', title: 'עדכון חדשות יומי - הרשת החדשה', url: 'https://www.youtube.com/embed/EGxPXB-Kwuo?autoplay=1&rel=0', thumbnail: 'https://img.youtube.com/vi/EGxPXB-Kwuo/maxresdefault.jpg' },
     { id: 'yt-yqfErzEHR0g', title: 'כתבים מהשטח - דיווח בזמן אמת', url: 'https://www.youtube.com/embed/yqfErzEHR0g?autoplay=1&rel=0', thumbnail: 'https://img.youtube.com/vi/yqfErzEHR0g/maxresdefault.jpg' },
     { id: 'yt-k7WPygB6GlI', title: 'סרטון ממוחשב - הרשת החדשה', url: 'https://www.youtube.com/embed/k7WPygB6GlI?autoplay=1&rel=0', thumbnail: 'https://img.youtube.com/vi/k7WPygB6GlI/maxresdefault.jpg' },
     { id: 'yt-4miQnYCTdS8', title: 'הרשת החדשה - שידור חי', url: 'https://www.youtube.com/embed/4miQnYCTdS8?autoplay=1&rel=0', thumbnail: 'https://img.youtube.com/vi/4miQnYCTdS8/maxresdefault.jpg' },
