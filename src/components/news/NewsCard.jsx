@@ -20,15 +20,15 @@ const categoryLabels = {
 };
 
 const categoryColors = {
-  breaking: "bg-[#E31E24] text-white",
-  security: "bg-orange-500 text-white",
-  economy: "bg-green-600 text-white",
-  politics: "bg-purple-600 text-white",
-  technology: "bg-blue-600 text-white",
-  sports: "bg-emerald-600 text-white",
-  entertainment: "bg-pink-500 text-white",
-  world: "bg-indigo-600 text-white",
-  health: "bg-teal-600 text-white"
+  breaking: "bg-gradient-to-r from-[#E31E24] to-[#B91C1C] text-white border border-red-400/50",
+  security: "bg-gradient-to-r from-black/80 to-[#E31E24]/40 text-white border border-[#E31E24]/50",
+  economy: "bg-gradient-to-r from-black/80 to-[#E31E24]/40 text-white border border-[#E31E24]/50",
+  politics: "bg-gradient-to-r from-black/80 to-[#E31E24]/40 text-white border border-[#E31E24]/50",
+  technology: "bg-gradient-to-r from-black/80 to-[#E31E24]/40 text-white border border-[#E31E24]/50",
+  sports: "bg-gradient-to-r from-black/80 to-[#E31E24]/40 text-white border border-[#E31E24]/50",
+  entertainment: "bg-gradient-to-r from-black/80 to-[#E31E24]/40 text-white border border-[#E31E24]/50",
+  world: "bg-gradient-to-r from-black/80 to-[#E31E24]/40 text-white border border-[#E31E24]/50",
+  health: "bg-gradient-to-r from-black/80 to-[#E31E24]/40 text-white border border-[#E31E24]/50"
 };
 
 export default function NewsCard({ 
@@ -44,7 +44,10 @@ export default function NewsCard({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: index * 0.1 }}
-        className="group relative overflow-hidden rounded-2xl bg-gray-900 shadow-xl"
+        className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-black/80 via-[#E31E24]/20 to-black/80 backdrop-blur-sm border-2 border-[#E31E24]/40"
+        style={{
+          boxShadow: '0 0 30px rgba(227, 30, 36, 0.3), inset 0 0 30px rgba(227, 30, 36, 0.1)'
+        }}
       >
         <Link to={createPageUrl(`Article?id=${id}`)} className="block active:scale-[0.99] transition-transform">
           <div className="relative aspect-[16/9] md:aspect-[21/9]">
@@ -150,7 +153,10 @@ export default function NewsCard({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1 }}
-      className="group bg-white dark:bg-gradient-to-br dark:from-gray-800 dark:to-gray-900 rounded-2xl overflow-hidden shadow-sm active:shadow-lg transition-all duration-300 border border-gray-200 dark:border-gray-700"
+      className="group bg-gradient-to-br from-black/80 via-[#E31E24]/20 to-black/80 backdrop-blur-sm rounded-2xl overflow-hidden border-2 border-[#E31E24]/40 hover:border-[#E31E24]/80 transition-all duration-300"
+      style={{
+        boxShadow: '0 0 20px rgba(227, 30, 36, 0.3), inset 0 0 20px rgba(227, 30, 36, 0.1)'
+      }}
     >
       <Link to={createPageUrl(`Article?id=${id}`)} className="block active:scale-[0.98] transition-transform">
         <div className="relative aspect-video overflow-hidden">
