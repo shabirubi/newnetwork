@@ -7,6 +7,12 @@ export default function TikTokNewsContainer() {
 
   const tiktokVideos = [
     {
+      id: 'youtube-EGxPXB-Kwuo',
+      title: "עדכון חדשות יומי",
+      username: "@hareshet_daily",
+      url: "https://www.youtube.com/embed/EGxPXB-Kwuo?autoplay=1"
+    },
+    {
       id: 'youtube-k7WPygB6GlI',
       title: "חדשות עכשיו - ביטחון",
       username: "@hareshet_live",

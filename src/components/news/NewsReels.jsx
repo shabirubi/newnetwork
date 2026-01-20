@@ -10,6 +10,7 @@ export default function NewsReels() {
 
   // סרטוני יוטיוב שלנו
   const youtubeVideos = [
+    { id: 'youtube-EGxPXB-Kwuo', videoId: 'EGxPXB-Kwuo', title: 'עדכון חדשות יומי', category: 'breaking' },
     { id: 'youtube-k7WPygB6GlI', videoId: 'k7WPygB6GlI', title: 'חדשות עכשיו', category: 'breaking' },
     { id: 'youtube-4miQnYCTdS8', videoId: '4miQnYCTdS8', title: 'עדכון חם', category: 'security' },
     { id: 'youtube-2q9lcnXBicQ', videoId: '2q9lcnXBicQ', title: 'ניתוח מעמיק', category: 'economy' },
