@@ -36,6 +36,23 @@ export default function Reporters() {
   const [askReporter, setAskReporter] = useState(null);
   const [hoveredReporter, setHoveredReporter] = useState(null);
 
+  // CSS for grayscale images
+  React.useEffect(() => {
+    const style = document.createElement('style');
+    style.innerHTML = `
+      .reporter-image-bw {
+        filter: grayscale(100%) !important;
+        -webkit-filter: grayscale(100%) !important;
+      }
+      .reporter-image-color {
+        filter: grayscale(0%) !important;
+        -webkit-filter: grayscale(0%) !important;
+      }
+    `;
+    document.head.appendChild(style);
+    return () => document.head.removeChild(style);
+  }, []);
+
   const { data: reporters = [], isLoading } = useQuery({
     queryKey: ['reporters'],
     queryFn: async () => {
@@ -205,11 +222,11 @@ export default function Reporters() {
                   <img
                     src={reporter.image}
                     alt={reporter.name}
-                    className="w-full h-full object-cover transition-all duration-500"
+                    className={`w-full h-full object-cover transition-all duration-500 ${
+                      hoveredReporter === reporter.id ? 'reporter-image-color' : 'reporter-image-bw'
+                    }`}
                     style={{
-                      filter: hoveredReporter === reporter.id ? 'grayscale(0%) brightness(1)' : 'grayscale(100%) brightness(0.8)',
-                      transform: hoveredReporter === reporter.id ? 'scale(1.1)' : 'scale(1)',
-                      WebkitFilter: hoveredReporter === reporter.id ? 'grayscale(0%) brightness(1)' : 'grayscale(100%) brightness(0.8)'
+                      transform: hoveredReporter === reporter.id ? 'scale(1.1)' : 'scale(1)'
                     }}
                   />
                   <div 
