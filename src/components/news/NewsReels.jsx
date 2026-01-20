@@ -8,25 +8,32 @@ export default function NewsReels() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedReel, setSelectedReel] = useState(null);
 
-  // מערך של 30 סרטוני חדשות דמה
-  const newsReels = Array.from({ length: 30 }, (_, i) => ({
-    id: i + 1,
-    title: `כותרת חדשה #${i + 1}`,
-    subtitle: `תיאור קצר של החדשה ה-${i + 1}`,
-    thumbnail: `https://picsum.photos/400/700?random=${i + 1}`,
-    videoUrl: `https://commondatastorage.googleapis.com/gtv-videos-library/sample/BigBuckBunny.mp4`,
-    category: ['breaking', 'security', 'economy', 'politics', 'technology'][i % 5],
+  // סרטוני יוטיוב שלנו
+  const youtubeVideos = [
+    { id: 'youtube-k7WPygB6GlI', videoId: 'k7WPygB6GlI', title: 'חדשות עכשיו', category: 'breaking' },
+    { id: 'youtube-4miQnYCTdS8', videoId: '4miQnYCTdS8', title: 'עדכון חם', category: 'security' },
+    { id: 'youtube-2q9lcnXBicQ', videoId: '2q9lcnXBicQ', title: 'ניתוח מעמיק', category: 'economy' },
+    { id: 'youtube-vecTR4YAf-w', videoId: 'vecTR4YAf-w', title: 'דיווח מיוחד', category: 'politics' },
+    { id: 'youtube-OE6Oj8pW0BU', videoId: 'OE6Oj8pW0BU', title: 'סיקור בלעדי', category: 'technology' },
+    { id: 'youtube-t60lrCbStcY', videoId: 't60lrCbStcY', title: 'חדשות חמות', category: 'breaking' }
+  ];
+
+  const newsReels = youtubeVideos.map((video, i) => ({
+    ...video,
+    subtitle: `הרשת החדשה - שידור חי`,
+    thumbnail: `https://img.youtube.com/vi/${video.videoId}/maxresdefault.jpg`,
+    videoUrl: `https://www.youtube.com/embed/${video.videoId}?autoplay=1`,
     views: Math.floor(Math.random() * 100000) + 1000,
     timestamp: moment().subtract(i, 'hours').toDate(),
     liked: false
   }));
 
   const handlePrevious = () => {
-    setCurrentIndex(prev => (prev > 0 ? prev - 1 : newsReels.length - 1));
+    setCurrentIndex(prev => (prev > 0 ? prev - 1 : youtubeVideos.length - 1));
   };
 
   const handleNext = () => {
-    setCurrentIndex(prev => (prev < newsReels.length - 1 ? prev + 1 : 0));
+    setCurrentIndex(prev => (prev < youtubeVideos.length - 1 ? prev + 1 : 0));
   };
 
   const categoryColors = {
@@ -64,7 +71,7 @@ export default function NewsReels() {
                 transition={{ type: "spring", damping: 25, stiffness: 200 }}
                 className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 p-6"
               >
-                {newsReels.slice(currentIndex, currentIndex + 5).map((reel) => (
+                {newsReels.slice(currentIndex, Math.min(currentIndex + 5, newsReels.length)).map((reel) => (
                   <motion.div
                     key={reel.id}
                     className="relative rounded-xl overflow-hidden aspect-[9/16] cursor-pointer group"
