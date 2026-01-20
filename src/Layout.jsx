@@ -107,17 +107,37 @@ export default function Layout({ children, currentPageName }) {
       </div>
 
       {/* Logo Header */}
-      <div className="bg-gradient-to-br from-black via-[#E31E24]/20 to-black border-b-2 border-[#E31E24]/40 py-3">
+      <div className="bg-gradient-to-br from-black via-[#E31E24]/20 to-black border-b-2 border-[#E31E24]/40 py-4">
         <div className="max-w-7xl mx-auto px-4 flex items-center gap-4">
-          <img 
+          <motion.img 
             src={LOGO_URL} 
             alt="הרשת החדשה" 
-            className="h-12 w-auto"
+            className="h-20 sm:h-24 w-auto drop-shadow-2xl"
+            animate={{ 
+              y: [0, -8, 0],
+              rotate: [0, 3, 0, -3, 0]
+            }}
+            transition={{ 
+              duration: 4, 
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
           />
-          <div className="flex flex-col">
-            <h1 className="text-xl font-bold text-white">הרשת החדשה</h1>
-            <p className="text-sm text-white/70">מיד מתחילים...</p>
-          </div>
+          <motion.div 
+            className="flex flex-col"
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <h1 className="text-2xl sm:text-3xl font-bold text-white">הרשת החדשה</h1>
+            <motion.p 
+              className="text-sm sm:text-base text-white/70"
+              animate={{ opacity: [0.7, 1, 0.7] }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              מיד מתחילים...
+            </motion.p>
+          </motion.div>
         </div>
       </div>
 
