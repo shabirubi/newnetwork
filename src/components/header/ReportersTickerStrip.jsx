@@ -8,8 +8,26 @@ import ReporterCardModal from "./ReporterCardModal";
 export default function ReportersTickerStrip() {
   const [selectedReporter, setSelectedReporter] = useState(null);
   const [scrollPosition, setScrollPosition] = useState(0);
+  const [hoveredReporter, setHoveredReporter] = useState(null);
   const containerRef = useRef(null);
   const scrollContainerRef = useRef(null);
+
+  // CSS for grayscale images
+  React.useEffect(() => {
+    const style = document.createElement('style');
+    style.innerHTML = `
+      .reporter-ticker-image-bw {
+        filter: grayscale(100%) !important;
+        -webkit-filter: grayscale(100%) !important;
+      }
+      .reporter-ticker-image-color {
+        filter: grayscale(0%) !important;
+        -webkit-filter: grayscale(0%) !important;
+      }
+    `;
+    document.head.appendChild(style);
+    return () => document.head.removeChild(style);
+  }, []);
 
   const { data: reporters = [] } = useQuery({
     queryKey: ['reporters-ticker'],
@@ -61,6 +79,8 @@ export default function ReportersTickerStrip() {
           <motion.div
             key={`${reporter.id}-${idx}`}
             onClick={() => setSelectedReporter(reporter)}
+            onMouseEnter={() => setHoveredReporter(reporter.id)}
+            onMouseLeave={() => setHoveredReporter(null)}
             className="flex-shrink-0 flex flex-col items-center gap-0.5 p-1 bg-black/60 backdrop-blur-xl rounded-lg border border-[#E31E24]/30 hover:border-[#E31E24]/60 hover:bg-[#E31E24]/20 transition-all cursor-pointer group shadow-lg hover:shadow-[#E31E24]/30"
             whileHover={{ scale: 1.05, y: -2 }}
             animate={{
@@ -82,7 +102,9 @@ export default function ReportersTickerStrip() {
             <motion.img
               src={reporter.image}
               alt={reporter.name}
-              className="w-20 h-20 rounded-lg object-cover border-2 border-[#E31E24]/20 group-hover:border-[#E31E24] transition-all"
+              className={`w-20 h-20 rounded-lg object-cover border-2 border-[#E31E24]/20 group-hover:border-[#E31E24] transition-all ${
+                hoveredReporter === reporter.id ? 'reporter-ticker-image-color' : 'reporter-ticker-image-bw'
+              }`}
               whileHover={{ rotate: [0, -2, 2, 0] }}
               transition={{ duration: 0.3 }}
             />
