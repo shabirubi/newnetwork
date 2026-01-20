@@ -32,7 +32,7 @@ export default function ClockWidget() {
       animate={{ opacity: 1, scale: 1 }}
       className="relative group"
     >
-      <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-br from-[#E31E24]/90 via-[#E31E24] to-[#B91C1C] rounded-2xl shadow-lg shadow-[#E31E24]/30 backdrop-blur-xl border border-white/20">
+      <div className="flex items-center gap-2 px-4 py-2 bg-black/60 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20">
         <Clock className="w-4 h-4 text-white" />
         <div className="flex flex-col">
           <span className="font-bold text-white text-sm leading-none">{formatTime(time)}</span>

@@ -59,7 +59,7 @@ export default function WeatherWidget() {
 
   if (loading) {
     return (
-      <div className="flex items-center gap-2 px-4 py-2 bg-gradient-to-br from-blue-500/90 to-cyan-500/90 rounded-2xl shadow-lg backdrop-blur-xl border border-white/20 animate-pulse">
+      <div className="flex items-center gap-2 px-4 py-2 bg-black/60 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 animate-pulse">
         <div className="w-4 h-4 bg-white/40 rounded-full" />
         <div className="w-10 h-4 bg-white/40 rounded" />
       </div>
@@ -75,7 +75,7 @@ export default function WeatherWidget() {
       >
         <button
           onClick={() => setModalOpen(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-gradient-to-br from-blue-500/90 via-blue-600 to-cyan-600 rounded-2xl shadow-lg shadow-blue-500/30 backdrop-blur-xl border border-white/20 transition-all hover:scale-105 hover:shadow-xl hover:shadow-blue-500/40"
+          className="flex items-center gap-2 px-4 py-2 bg-black/60 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 transition-all hover:scale-105 hover:bg-black/70"
         >
           {getWeatherIcon(weather?.condition)}
           <div className="flex flex-col">

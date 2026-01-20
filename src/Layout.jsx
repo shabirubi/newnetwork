@@ -5,7 +5,7 @@ import {
   Menu, X, Radio, Newspaper, Shield, TrendingUp, 
   Vote, Cpu, Trophy, Clapperboard, Globe, Heart,
   Clock, ChevronLeft, Users, Moon, Sun, Home, Flame,
-  Siren, AlertTriangle, MessageSquareWarning, Film, Tv
+  Siren, AlertTriangle, MessageSquareWarning, Film, Tv, User
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import NewsTicker from "./components/header/NewsTicker";
@@ -107,32 +107,42 @@ export default function Layout({ children, currentPageName }) {
       </div>
 
       {/* Logo Header */}
-      <div className="bg-gradient-to-br from-black via-[#E31E24]/20 to-black border-b border-[#E31E24]/30 py-2">
-        <div className="max-w-7xl mx-auto px-4 flex items-center gap-3">
-          <motion.img 
-            src={LOGO_URL} 
-            alt="הרשת החדשה" 
-            className="h-14 sm:h-16 w-auto drop-shadow-2xl"
-            animate={{ 
-              scale: [1, 1.05, 1],
-              filter: ['brightness(1)', 'brightness(1.2)', 'brightness(1)']
-            }}
-            transition={{ 
-              duration: 3, 
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          />
-          <div className="flex flex-col">
-            <h1 className="text-lg sm:text-xl font-bold text-white">הרשת החדשה</h1>
-            <motion.p 
-              className="text-xs sm:text-sm text-white/70"
-              animate={{ opacity: [0.7, 1, 0.7] }}
-              transition={{ duration: 2, repeat: Infinity }}
-            >
-              מיד מתחילים...
-            </motion.p>
+      <div className="bg-black/80 backdrop-blur-xl border-b border-white/10 py-2">
+        <div className="max-w-7xl mx-auto px-4 flex items-center justify-between gap-3">
+          <div className="flex items-center gap-3">
+            <motion.img 
+              src={LOGO_URL} 
+              alt="הרשת החדשה" 
+              className="h-14 sm:h-16 w-auto drop-shadow-2xl"
+              animate={{ 
+                scale: [1, 1.05, 1],
+                filter: ['brightness(1)', 'brightness(1.2)', 'brightness(1)']
+              }}
+              transition={{ 
+                duration: 3, 
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            />
+            <div className="flex flex-col">
+              <h1 className="text-lg sm:text-xl font-bold text-white">הרשת החדשה</h1>
+              <motion.p 
+                className="text-xs sm:text-sm text-white/70"
+                animate={{ opacity: [0.7, 1, 0.7] }}
+                transition={{ duration: 2, repeat: Infinity }}
+              >
+                מיד מתחילים...
+              </motion.p>
+            </div>
           </div>
+          
+          <Link 
+            to={createPageUrl("UserProfile")}
+            className="flex items-center gap-2 px-4 py-2 bg-black/60 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 transition-all hover:scale-105 hover:bg-black/70"
+          >
+            <User className="w-4 h-4 text-white" />
+            <span className="text-white text-sm font-bold hidden sm:inline">פרופיל</span>
+          </Link>
         </div>
       </div>
 
