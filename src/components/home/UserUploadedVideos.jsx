@@ -1,78 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Play, Heart, MessageCircle, Share2, Upload } from "lucide-react";
-
-const mockVideos = [
-  {
-    id: 1,
-    thumbnail: "https://images.unsplash.com/photo-1516251193007-45ef944ab9c9?w=400&h=300&fit=crop",
-    title: "דיווח חי מהשטח - ירושלים",
-    uploader: "דניאל כהן",
-    uploadedAt: "30 דקות",
-    views: 2341,
-    likes: 156,
-    comments: 23,
-    badge: "כתב חדש"
-  },
-  {
-    id: 2,
-    thumbnail: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=300&fit=crop",
-    title: "עדכון ממהיר - תאונה בכביש 1",
-    uploader: "ליאור רבינוביץ'",
-    uploadedAt: "1 שעה",
-    views: 5234,
-    likes: 412,
-    comments: 67,
-    badge: "כתב חדש"
-  },
-  {
-    id: 3,
-    thumbnail: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&h=300&fit=crop",
-    title: "הציבור מתערער - ראיונות רחוב",
-    uploader: "שרה לוי",
-    uploadedAt: "2 שעות",
-    views: 3145,
-    likes: 289,
-    comments: 45,
-    badge: "כתב חדש"
-  },
-  {
-    id: 4,
-    thumbnail: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400&h=300&fit=crop",
-    title: "כנס עיתונאים צעירים - תל אביב",
-    uploader: "אור גבריאל",
-    uploadedAt: "3 שעות",
-    views: 1876,
-    likes: 134,
-    comments: 28,
-    badge: "כתב חדש"
-  },
-  {
-    id: 5,
-    thumbnail: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=400&h=300&fit=crop",
-    title: "תיעוד מהפגנה בקריית אונו",
-    uploader: "מירון דוד",
-    uploadedAt: "4 שעות",
-    views: 4102,
-    likes: 356,
-    comments: 82,
-    badge: "כתב חדש"
-  },
-  {
-    id: 6,
-    thumbnail: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=400&h=300&fit=crop",
-    title: "טיול בעיתוןות - מאחורי הקלמרות",
-    uploader: "נתן שפיר",
-    uploadedAt: "5 שעות",
-    views: 6543,
-    likes: 521,
-    comments: 93,
-    badge: "כתב חדש"
-  }
-];
+import { Play, Heart, MessageCircle, Share2, Upload, Film } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { base44 } from "@/api/base44Client";
 
 export default function UserUploadedVideos({ onUploadClick }) {
   const [selectedVideo, setSelectedVideo] = useState(null);
+  
+  const { data: videos = [] } = useQuery({
+    queryKey: ['userVideos'],
+    queryFn: async () => {
+      const allVideos = await base44.entities.UserVideo.list();
+      return allVideos.filter(v => v.status === 'ready').slice(0, 6);
+    }
+  });
 
   return (
     <section className="py-12 px-4">
