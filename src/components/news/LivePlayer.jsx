@@ -381,31 +381,32 @@ export default function LivePlayer({
                   <span className="animate-pulse">|</span>
                 </div>
               </div>
-              {!loadingAds && ads.length > 0 && (
-                <div className="bg-black/60 backdrop-blur-sm overflow-hidden rounded-lg flex-1 max-w-xs h-6 sm:h-8">
+              {ads.length > 0 && (
+                <div className="bg-gradient-to-r from-yellow-600/80 via-yellow-500/80 to-yellow-600/80 backdrop-blur-sm overflow-hidden rounded-lg flex-1 max-w-sm h-7 sm:h-8 border border-yellow-400/50 shadow-lg" style={{ boxShadow: '0 0 15px rgba(234, 179, 8, 0.5)' }}>
                   <motion.div
-                    className="flex items-center h-full gap-1 sm:gap-2"
+                    className="flex items-center h-full gap-1 sm:gap-3 px-2"
                     animate={{ x: ["0%", "-100%"] }}
-                    transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
+                    transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
                   >
-                    {Array(4).fill(ads).flat().map((ad, idx) => (
+                    {Array(6).fill(ads).flat().map((ad, idx) => (
                       <div 
                         key={`topAd-${idx}`}
-                        className="flex-shrink-0 relative group h-full"
+                        className="flex-shrink-0 relative group h-full flex items-center"
                       >
                         <motion.div
-                          whileHover={{ scale: 1.05 }}
-                          className="relative h-full px-1.5 sm:px-2 rounded overflow-hidden flex items-center"
+                          whileHover={{ scale: 1.1 }}
+                          className="relative h-full px-1.5 rounded overflow-hidden flex items-center bg-white/20 backdrop-blur-sm"
                         >
                           <img 
                             src={ad.image} 
                             alt={ad.brand}
-                            className="h-full w-auto object-contain"
+                            className="h-full w-auto object-contain max-w-[120px]"
+                            onError={(e) => { e.target.style.display = 'none'; }}
                           />
                           <motion.div
-                            className="absolute inset-0 bg-gradient-to-r from-white via-transparent to-white opacity-20"
+                            className="absolute inset-0 bg-gradient-to-r from-white via-white to-transparent opacity-30"
                             animate={{ x: ["-100%", "100%"] }}
-                            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                            transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
                             style={{ mixBlendMode: 'screen' }}
                           />
                         </motion.div>
