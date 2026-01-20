@@ -6,12 +6,12 @@ export default function ShortVideosContainer() {
   const [selectedVideo, setSelectedVideo] = useState(null);
 
   const youtubeVideos = [
-    { id: 'youtube-dQw4w9WgXcQ', videoId: 'dQw4w9WgXcQ', title: 'עדכון חדשות בזק', category: 'breaking' },
-    { id: 'youtube-9bZkp7q19f0', videoId: '9bZkp7q19f0', title: 'ניתוח כלכלי שוק ההון', category: 'analysis' },
-    { id: 'youtube-jNQXAC9IVRw', videoId: 'jNQXAC9IVRw', title: 'ריאיון אקסקלוסיבי', category: 'special' },
-    { id: 'youtube-kJQP7kiw5Fk', videoId: 'kJQP7kiw5Fk', title: 'שידור חי מירושלים', category: 'live' },
-    { id: 'youtube-M7lc1UVf-VE', videoId: 'M7lc1UVf-VE', title: 'חדשות הספורט היום', category: 'news' },
-    { id: 'youtube-OPf0YbXqDm0', videoId: 'OPf0YbXqDm0', title: 'מהדורת ערב מיוחדת', category: 'breaking' }
+    { id: 'youtube-k7WPygB6GlI', videoId: 'k7WPygB6GlI', title: 'חדשה דחופה - הרשת החדשה', category: 'breaking' },
+    { id: 'youtube-4miQnYCTdS8', videoId: '4miQnYCTdS8', title: 'עדכון חם - שידור חי', category: 'news' },
+    { id: 'youtube-2q9lcnXBicQ', videoId: '2q9lcnXBicQ', title: 'ניתוח מעמיק', category: 'analysis' },
+    { id: 'youtube-vecTR4YAf-w', videoId: 'vecTR4YAf-w', title: 'דיווח מיוחד בלעדי', category: 'special' },
+    { id: 'youtube-OE6Oj8pW0BU', videoId: 'OE6Oj8pW0BU', title: 'סיקור חי מהשטח', category: 'live' },
+    { id: 'youtube-t60lrCbStcY', videoId: 't60lrCbStcY', title: 'חדשות חמות עכשיו', category: 'breaking' }
   ];
 
   const categoryEmojis = {
