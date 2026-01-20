@@ -52,6 +52,18 @@ export default function LivePlayer({
     "הערוץ היחיד שאתם צריכים"
   ];
 
+  const scheduleItems = [
+    { time: "06:00", title: "חדשות הבוקר עם רונית ויוסי", icon: "☀️" },
+    { time: "08:00", title: "סקירת עיתונות עם דני", icon: "📰" },
+    { time: "10:00", title: "פוליטיקה היום עם שרון", icon: "🏛️" },
+    { time: "12:00", title: "מהדורת הצהריים", icon: "📺" },
+    { time: "14:00", title: "כלכלה ושוק ההון", icon: "💰" },
+    { time: "16:00", title: "ספורט בשידור חי", icon: "⚽" },
+    { time: "18:00", title: "חדשות הערב המרכזיות", icon: "🌆" },
+    { time: "20:00", title: "ניתוח מעמיק עם המומחים", icon: "🎯" },
+    { time: "22:00", title: "סיכום יומי והצצה למחר", icon: "🌙" }
+  ];
+
   const currentStreamUrl = streamUrl || DEFAULT_STREAM;
 
   // Generate ads with AI
@@ -584,12 +596,34 @@ export default function LivePlayer({
 
       </div>
 
+      {/* Schedule Strip */}
+      <div className="absolute top-24 sm:top-28 left-12 sm:left-16 right-12 sm:right-16 bg-black/70 backdrop-blur-md overflow-hidden h-12 sm:h-14 border border-[#E31E24]/30 rounded-xl shadow-2xl z-30">
+        <motion.div
+          className="flex items-center h-full"
+          animate={{ x: ["0%", "-100%"] }}
+          transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+        >
+          {Array(3).fill(scheduleItems).flat().map((item, idx) => (
+            <div 
+              key={`schedule-${idx}`}
+              className="flex-shrink-0 flex items-center gap-3 sm:gap-4 px-6 sm:px-8 border-l border-[#E31E24]/20"
+            >
+              <span className="text-2xl sm:text-3xl">{item.icon}</span>
+              <div>
+                <div className="text-[#E31E24] font-black text-xs sm:text-sm" style={{ fontFamily: 'Arial Black, sans-serif' }}>{item.time}</div>
+                <div className="text-white font-bold text-xs sm:text-base whitespace-nowrap" style={{ fontFamily: 'system-ui, sans-serif' }}>{item.title}</div>
+              </div>
+            </div>
+          ))}
+        </motion.div>
+      </div>
+
       {/* Ads Strip */}
       {!loadingAds && ads.length > 0 && (
-        <div className="absolute bottom-16 sm:bottom-20 left-0 right-0 bg-gradient-to-r from-black/80 via-black/60 to-black/80 backdrop-blur-sm overflow-hidden h-20 sm:h-24 border-t border-b border-yellow-400/30">
+        <div className="absolute bottom-16 sm:bottom-20 left-0 right-0 bg-gradient-to-l from-black/80 via-black/60 to-black/80 backdrop-blur-sm overflow-hidden h-20 sm:h-24 border-t border-b border-yellow-400/30">
           <motion.div
             className="flex items-center h-full"
-            animate={{ x: [0, -3200] }}
+            animate={{ x: ["0%", "100%"] }}
             transition={{ duration: 80, repeat: Infinity, ease: "linear" }}
           >
             {Array(12).fill(ads).flat().map((ad, idx) => (
@@ -607,10 +641,10 @@ export default function LivePlayer({
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex flex-col justify-end p-2 sm:p-3">
-                    <span className="text-yellow-400 font-bold text-xs mb-0.5">{ad.brand}</span>
-                    <span className="text-white font-bold text-sm sm:text-base">{ad.title}</span>
+                    <span className="text-yellow-400 font-extrabold text-xs mb-0.5" style={{ fontFamily: 'Arial, sans-serif' }}>{ad.brand}</span>
+                    <span className="text-white font-black text-sm sm:text-base" style={{ fontFamily: 'system-ui, sans-serif' }}>{ad.title}</span>
                   </div>
-                  <div className="absolute top-2 left-2 bg-red-600 text-white px-2 py-0.5 rounded text-[10px] sm:text-xs font-bold">
+                  <div className="absolute top-2 left-2 bg-red-600 text-white px-2 py-0.5 rounded text-[10px] sm:text-xs font-extrabold">
                     פרסומת
                   </div>
                 </motion.div>
