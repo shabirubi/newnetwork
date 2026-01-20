@@ -114,11 +114,11 @@ export default function UserUploadedVideos({ onUploadClick }) {
                     <div className="flex items-center gap-4 text-gray-400 text-sm">
                       <button className="flex items-center gap-1 hover:text-red-500 transition-colors">
                         <Heart className="w-4 h-4" />
-                        {video.likes}
+                        {video.likes || 0}
                       </button>
                       <button className="flex items-center gap-1 hover:text-blue-500 transition-colors">
                         <MessageCircle className="w-4 h-4" />
-                        {video.comments}
+                        0
                       </button>
                       <button className="flex items-center gap-1 hover:text-green-500 transition-colors">
                         <Share2 className="w-4 h-4" />
