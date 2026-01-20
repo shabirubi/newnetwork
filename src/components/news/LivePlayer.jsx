@@ -646,27 +646,28 @@ export default function LivePlayer({
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: -50, scale: 0.95 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className={`relative rounded-xl overflow-hidden shadow-2xl h-16 sm:h-20 flex flex-col items-center justify-between p-2 ${isWideAd ? 'w-full' : 'w-40 sm:w-48'}`}
+            className={`relative rounded-xl overflow-hidden shadow-2xl h-16 sm:h-20 flex flex-row items-center justify-between gap-2 p-2 ${isWideAd ? 'w-full' : 'w-40 sm:w-48'}`}
             style={{
               border: '1px solid rgba(227, 30, 36, 0.5)',
               boxShadow: '0 8px 32px rgba(227, 30, 36, 0.3), inset 0 1px 0 rgba(227, 30, 36, 0.2)',
               background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(227, 30, 36, 0.15) 100%)',
-              backdropFilter: 'blur(12px)'
+              backdropFilter: 'blur(12px)',
+              direction: 'rtl'
             }}
           >
-            {/* Logo - Large and Bold */}
-            <div className="h-12 sm:h-14 flex items-center justify-center">
+            {/* Brand Text */}
+            <p className="text-white text-[10px] sm:text-xs font-bold leading-tight text-right flex-1 tracking-tight" style={{ fontFamily: "'Inter', 'Helvetica Neue', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', sans-serif", fontWeight: 700, textShadow: '1px 1px 4px rgba(0,0,0,0.9)' }}>
+              {bannerAds[currentAdIndex].brand}
+            </p>
+
+            {/* Logo */}
+            <div className="h-12 sm:h-14 flex-shrink-0 flex items-center justify-center">
               <img 
                 src={LOGO_URL}
                 alt="רשת החדשה"
                 className="h-full w-auto drop-shadow-xl"
               />
             </div>
-            
-            {/* Brand Text */}
-            <p className="text-white text-xs sm:text-sm font-black text-center leading-snug px-1.5 tracking-wide" style={{ fontFamily: "'Poppins', 'Montserrat', sans-serif", fontWeight: 900, textShadow: '2px 2px 8px rgba(0,0,0,0.9), 0 0 10px rgba(227, 30, 36, 0.4)' }}>
-              {bannerAds[currentAdIndex].brand}
-            </p>
           </motion.div>
         </AnimatePresence>
       </div>
