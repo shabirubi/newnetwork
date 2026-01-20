@@ -55,22 +55,22 @@ export default function LivePlayer({
   ];
 
   const bannerAds = [
-    { id: 1, image: "https://via.placeholder.com/300x100/1f2937/ffffff?text=Apple+iPhone", brand: "Apple", title: "iPhone 15" },
-    { id: 2, image: "https://via.placeholder.com/300x100/1f2937/ffffff?text=Samsung", brand: "Samsung", title: "Galaxy" },
-    { id: 3, image: "https://via.placeholder.com/300x100/1f2937/ffffff?text=Sony", brand: "Sony", title: "PlayStation" },
-    { id: 4, image: "https://via.placeholder.com/300x100/1f2937/ffffff?text=Rolex", brand: "Rolex", title: "Watches" },
-    { id: 5, image: "https://via.placeholder.com/300x100/1f2937/ffffff?text=Nike", brand: "Nike", title: "Sports" },
-    { id: 6, image: "https://via.placeholder.com/300x100/1f2937/ffffff?text=Adidas", brand: "Adidas", title: "Fashion" },
-    { id: 7, image: "https://via.placeholder.com/300x100/1f2937/ffffff?text=Microsoft", brand: "Microsoft", title: "Surface" },
-    { id: 8, image: "https://via.placeholder.com/300x100/1f2937/ffffff?text=LG", brand: "LG", title: "Displays" },
-    { id: 9, image: "https://via.placeholder.com/300x100/1f2937/ffffff?text=Canon", brand: "Canon", title: "Cameras" },
-    { id: 10, image: "https://via.placeholder.com/300x100/1f2937/ffffff?text=Audi", brand: "Audi", title: "Vehicles" },
-    { id: 11, image: "https://via.placeholder.com/300x100/1f2937/ffffff?text=Ferrari", brand: "Ferrari", title: "Luxury" },
-    { id: 12, image: "https://via.placeholder.com/300x100/1f2937/ffffff?text=Emirates", brand: "Emirates", title: "Travel" },
-    { id: 13, image: "https://via.placeholder.com/300x100/1f2937/ffffff?text=Prada", brand: "Prada", title: "Fashion" },
-    { id: 14, image: "https://via.placeholder.com/300x100/1f2937/ffffff?text=Bank+Leumi", brand: "Bank", title: "Finance" },
-    { id: 15, image: "https://via.placeholder.com/300x100/1f2937/ffffff?text=Cartier", brand: "Jewelry", title: "Luxury" },
-    { id: 16, image: "https://via.placeholder.com/300x100/1f2937/ffffff?text=BMW", brand: "BMW", title: "Motors" }
+    { id: 1, image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='100'%3E%3Crect fill='%23555FFF' width='300' height='100'/%3E%3Ctext x='150' y='50' font-size='24' font-weight='bold' fill='white' text-anchor='middle' dominant-baseline='middle'%3EApple%3C/text%3E%3C/svg%3E", brand: "🍎 Apple", title: "iPhone" },
+    { id: 2, image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='100'%3E%3Crect fill='%231428A0' width='300' height='100'/%3E%3Ctext x='150' y='50' font-size='24' font-weight='bold' fill='white' text-anchor='middle' dominant-baseline='middle'%3ESamsung%3C/text%3E%3C/svg%3E", brand: "Samsung", title: "Galaxy" },
+    { id: 3, image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='100'%3E%3Crect fill='%23000000' width='300' height='100'/%3E%3Ctext x='150' y='50' font-size='24' font-weight='bold' fill='%23FFFFFF' text-anchor='middle' dominant-baseline='middle'%3ESony%3C/text%3E%3C/svg%3E", brand: "Sony", title: "PlayStation" },
+    { id: 4, image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='100'%3E%3Crect fill='%23D4AF37' width='300' height='100'/%3E%3Ctext x='150' y='50' font-size='24' font-weight='bold' fill='%23000000' text-anchor='middle' dominant-baseline='middle'%3ERolex%3C/text%3E%3C/svg%3E", brand: "Rolex", title: "Luxury" },
+    { id: 5, image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='100'%3E%3Crect fill='%23FF6B35' width='300' height='100'/%3E%3Ctext x='150' y='50' font-size='24' font-weight='bold' fill='white' text-anchor='middle' dominant-baseline='middle'%3ENike%3C/text%3E%3C/svg%3E", brand: "Nike", title: "Sports" },
+    { id: 6, image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='100'%3E%3Crect fill='%23000000' width='300' height='100'/%3E%3Ctext x='150' y='50' font-size='24' font-weight='bold' fill='white' text-anchor='middle' dominant-baseline='middle'%3EAdidas%3C/text%3E%3C/svg%3E", brand: "Adidas", title: "Fashion" },
+    { id: 7, image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='100'%3E%3Crect fill='%2300A4EF' width='300' height='100'/%3E%3Ctext x='150' y='50' font-size='24' font-weight='bold' fill='white' text-anchor='middle' dominant-baseline='middle'%3EMicrosoft%3C/text%3E%3C/svg%3E", brand: "Microsoft", title: "Surface" },
+    { id: 8, image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='100'%3E%3Crect fill='%23CC0000' width='300' height='100'/%3E%3Ctext x='150' y='50' font-size='24' font-weight='bold' fill='white' text-anchor='middle' dominant-baseline='middle'%3ELG%3C/text%3E%3C/svg%3E", brand: "LG", title: "Tech" },
+    { id: 9, image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='100'%3E%3Crect fill='%23FF6B00' width='300' height='100'/%3E%3Ctext x='150' y='50' font-size='24' font-weight='bold' fill='white' text-anchor='middle' dominant-baseline='middle'%3ECanon%3C/text%3E%3C/svg%3E", brand: "Canon", title: "Cameras" },
+    { id: 10, image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='100'%3E%3Crect fill='%23DC0000' width='300' height='100'/%3E%3Ctext x='150' y='50' font-size='24' font-weight='bold' fill='white' text-anchor='middle' dominant-baseline='middle'%3EAudi%3C/text%3E%3C/svg%3E", brand: "Audi", title: "Cars" },
+    { id: 11, image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='100'%3E%3Crect fill='%23DC0000' width='300' height='100'/%3E%3Ctext x='150' y='50' font-size='24' font-weight='bold' fill='%23FFF500' text-anchor='middle' dominant-baseline='middle'%3EFerrari%3C/text%3E%3C/svg%3E", brand: "Ferrari", title: "Luxury" },
+    { id: 12, image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='100'%3E%3Crect fill='%23003D7A' width='300' height='100'/%3E%3Ctext x='150' y='50' font-size='24' font-weight='bold' fill='white' text-anchor='middle' dominant-baseline='middle'%3EEmirates%3C/text%3E%3C/svg%3E", brand: "Emirates", title: "Travel" },
+    { id: 13, image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='100'%3E%3Crect fill='%23000000' width='300' height='100'/%3E%3Ctext x='150' y='50' font-size='24' font-weight='bold' fill='white' text-anchor='middle' dominant-baseline='middle'%3EPrada%3C/text%3E%3C/svg%3E", brand: "Prada", title: "Fashion" },
+    { id: 14, image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='100'%3E%3Crect fill='%230066CC' width='300' height='100'/%3E%3Ctext x='150' y='50' font-size='24' font-weight='bold' fill='white' text-anchor='middle' dominant-baseline='middle'%3EBank%3C/text%3E%3C/svg%3E", brand: "Finance", title: "Banking" },
+    { id: 15, image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='100'%3E%3Crect fill='%23B8860B' width='300' height='100'/%3E%3Ctext x='150' y='50' font-size='24' font-weight='bold' fill='white' text-anchor='middle' dominant-baseline='middle'%3ECartier%3C/text%3E%3C/svg%3E", brand: "Jewelry", title: "Luxury" },
+    { id: 16, image: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='100'%3E%3Crect fill='%23004A87' width='300' height='100'/%3E%3Ctext x='150' y='50' font-size='24' font-weight='bold' fill='white' text-anchor='middle' dominant-baseline='middle'%3EBMW%3C/text%3E%3C/svg%3E", brand: "BMW", title: "Motors" }
   ];
 
   const scheduleItems = [
@@ -635,37 +635,29 @@ export default function LivePlayer({
 
       </div>
 
-      {/* Ads Carousel - Top */}
-      <div className="absolute top-24 sm:top-28 left-1/2 -translate-x-1/2 z-30 h-16 sm:h-20">
+      {/* Ads Carousel - Left Side */}
+      <div className="absolute top-32 sm:top-36 left-4 sm:left-6 z-30 h-16 sm:h-20 max-w-[160px] sm:max-w-[200px]">
         <AnimatePresence mode="wait">
           <motion.div
             key={currentAdIndex}
-            initial={{ opacity: 0, scale: 0.8, y: -50 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.8, y: -50 }}
-            transition={{ duration: 0.6, ease: "easeInOut" }}
-            className="relative w-72 sm:w-96 h-16 sm:h-20 rounded-xl overflow-hidden shadow-2xl"
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -50 }}
+            transition={{ duration: 0.4 }}
+            className="relative w-40 sm:w-48 h-16 sm:h-20 rounded-lg overflow-hidden shadow-lg"
             style={{
-              background: 'linear-gradient(135deg, #1f2937 0%, #111827 100%)',
-              border: '2px solid rgba(227, 30, 36, 0.6)',
-              boxShadow: '0 0 30px rgba(227, 30, 36, 0.4)'
+              border: '1px solid rgba(227, 30, 36, 0.5)',
+              boxShadow: '0 0 15px rgba(227, 30, 36, 0.3)'
             }}
           >
             <img 
               src={bannerAds[currentAdIndex].image}
               alt={bannerAds[currentAdIndex].brand}
-              className="w-full h-full object-cover opacity-80"
+              className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-gradient-to-r from-[#E31E24]/40 via-transparent to-[#E31E24]/40 flex items-center justify-center p-2">
-              <span className="text-white font-black text-sm sm:text-base drop-shadow-lg">{bannerAds[currentAdIndex].brand}</span>
+            <div className="absolute inset-0 bg-black/20 flex items-end p-1.5">
+              <span className="text-white font-bold text-[10px] sm:text-xs drop-shadow-lg truncate">{bannerAds[currentAdIndex].brand}</span>
             </div>
-            <motion.div
-              className="absolute inset-0 rounded-xl"
-              animate={{
-                boxShadow: ['inset 0 0 20px rgba(227, 30, 36, 0.3)', 'inset 0 0 40px rgba(227, 30, 36, 0.6)', 'inset 0 0 20px rgba(227, 30, 36, 0.3)']
-              }}
-              transition={{ duration: 2, repeat: Infinity }}
-            />
           </motion.div>
         </AnimatePresence>
       </div>
