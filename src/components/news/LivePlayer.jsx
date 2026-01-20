@@ -384,7 +384,7 @@ export default function LivePlayer({
             </div>
 
             {/* Schedule Strip */}
-            <div className="bg-black/60 backdrop-blur-sm overflow-hidden h-10 sm:h-12 border border-[#E31E24]/40 rounded-lg">
+            <div className="bg-black/60 backdrop-blur-sm overflow-hidden h-5 sm:h-6 border border-[#E31E24]/40 rounded-lg">
               <motion.div
                 className="flex items-center h-full"
                 animate={{ x: ["0%", "-100%"] }}
@@ -395,12 +395,12 @@ export default function LivePlayer({
                   return (
                     <div 
                       key={`schedule-${idx}`}
-                      className="flex-shrink-0 flex items-center gap-2 sm:gap-3 px-4 sm:px-6 border-l border-[#E31E24]/30"
+                      className="flex-shrink-0 flex items-center gap-1 sm:gap-2 px-2 sm:px-3 border-l border-[#E31E24]/30"
                     >
-                      <IconComponent className="w-4 h-4 sm:w-5 sm:h-5 text-[#E31E24]" />
-                      <div>
-                        <div className="text-[#E31E24] font-black text-[10px] sm:text-xs" style={{ fontFamily: 'Arial Black, sans-serif' }}>{item.time}</div>
-                        <div className="text-white font-bold text-xs sm:text-sm whitespace-nowrap" style={{ fontFamily: 'system-ui, sans-serif' }}>{item.title}</div>
+                      <IconComponent className="w-3 h-3 sm:w-4 sm:h-4 text-[#E31E24]" />
+                      <div className="flex items-center gap-1">
+                        <div className="text-[#E31E24] font-black text-[9px] sm:text-[10px]" style={{ fontFamily: 'Arial Black, sans-serif' }}>{item.time}</div>
+                        <div className="text-white font-bold text-[9px] sm:text-[10px] whitespace-nowrap" style={{ fontFamily: 'system-ui, sans-serif' }}>{item.title}</div>
                       </div>
                     </div>
                   );
