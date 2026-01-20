@@ -58,7 +58,11 @@ export default function TrendingTopicsContainer() {
             whileHover={{ scale: 1.05 }}
             className="relative group"
           >
-            <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-xl p-4 border border-gray-700 hover:border-[#E31E24]/50 transition-all h-full flex flex-col justify-between">
+            <div className="bg-gradient-to-br from-black/80 via-[#E31E24]/30 to-black/80 backdrop-blur-sm rounded-xl p-4 border-2 border-[#E31E24]/40 hover:border-[#E31E24]/80 transition-all h-full flex flex-col justify-between"
+              style={{
+                boxShadow: '0 0 15px rgba(227, 30, 36, 0.3), inset 0 0 15px rgba(227, 30, 36, 0.1)'
+              }}
+            >
               {/* Header */}
               <div>
                 <h3 className="text-white font-bold text-sm mb-2">
@@ -67,7 +71,7 @@ export default function TrendingTopicsContainer() {
               </div>
 
               {/* Stats */}
-              <div className="flex items-end justify-between pt-4 border-t border-gray-700">
+              <div className="flex items-end justify-between pt-4 border-t border-[#E31E24]/30">
                 <div>
                   <div className="text-[#E31E24] font-bold text-2xl">{item.count}</div>
                   <div className="text-gray-400 text-xs">כתבות</div>

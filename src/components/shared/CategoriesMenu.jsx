@@ -9,15 +9,15 @@ import {
 } from "lucide-react";
 
 const CATEGORIES = [
-  { id: "breaking", label: "חדשות עכשיו", icon: Radio, color: "from-red-600 to-red-700" },
-  { id: "security", label: "ביטחון ומדיניות", icon: Shield, color: "from-blue-600 to-blue-700" },
-  { id: "economy", label: "כלכלה ועסקים", icon: TrendingUp, color: "from-green-600 to-green-700" },
-  { id: "politics", label: "פוליטיקה", icon: Vote, color: "from-purple-600 to-purple-700" },
-  { id: "technology", label: "טכנולוגיה", icon: Cpu, color: "from-cyan-600 to-cyan-700" },
-  { id: "sports", label: "ספורט", icon: Trophy, color: "from-yellow-600 to-yellow-700" },
-  { id: "entertainment", label: "בידור ודרמה", icon: Clapperboard, color: "from-pink-600 to-pink-700" },
-  { id: "world", label: "חדשות עולם", icon: Globe, color: "from-indigo-600 to-indigo-700" },
-  { id: "health", label: "בריאות", icon: Heart, color: "from-orange-600 to-orange-700" },
+  { id: "breaking", label: "חדשות עכשיו", icon: Radio },
+  { id: "security", label: "ביטחון ומדיניות", icon: Shield },
+  { id: "economy", label: "כלכלה ועסקים", icon: TrendingUp },
+  { id: "politics", label: "פוליטיקה", icon: Vote },
+  { id: "technology", label: "טכנולוגיה", icon: Cpu },
+  { id: "sports", label: "ספורט", icon: Trophy },
+  { id: "entertainment", label: "בידור ודרמה", icon: Clapperboard },
+  { id: "world", label: "חדשות עולם", icon: Globe },
+  { id: "health", label: "בריאות", icon: Heart },
 ];
 
 export default function CategoriesMenu({ isOpen, onClose }) {
@@ -36,10 +36,13 @@ export default function CategoriesMenu({ isOpen, onClose }) {
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: "100%", opacity: 0 }}
             onClick={(e) => e.stopPropagation()}
-            className="w-full sm:w-[600px] max-h-[80vh] bg-gradient-to-b from-gray-900 to-black sm:rounded-2xl overflow-hidden shadow-2xl border-t sm:border border-red-600/50"
+            className="w-full sm:w-[600px] max-h-[80vh] bg-gradient-to-br from-black/90 via-[#E31E24]/20 to-black/90 backdrop-blur-xl sm:rounded-2xl overflow-hidden border-t sm:border-2 border-[#E31E24]/40"
+            style={{
+              boxShadow: '0 0 40px rgba(227, 30, 36, 0.4), inset 0 0 30px rgba(227, 30, 36, 0.1)'
+            }}
           >
             {/* Header */}
-            <div className="sticky top-0 bg-gradient-to-r from-red-900 via-red-800 to-red-900 p-4 flex items-center justify-between border-b border-red-600/30">
+            <div className="sticky top-0 bg-gradient-to-br from-black/80 via-[#E31E24]/60 to-black/80 backdrop-blur-sm p-4 flex items-center justify-between border-b-2 border-[#E31E24]/40">
               <div>
                 <h2 className="text-xl font-bold text-white">קטגוריות חדשות</h2>
                 <p className="text-sm text-red-200">{CATEGORIES.length} קטגוריות זמינות</p>
@@ -66,7 +69,10 @@ export default function CategoriesMenu({ isOpen, onClose }) {
                       <Link
                         to={createPageUrl(`Category?cat=${cat.id}`)}
                         onClick={onClose}
-                        className={`block bg-gradient-to-br ${cat.color} rounded-xl p-4 border border-white/10 hover:border-white/30 transition-all group h-full`}
+                        className="block bg-gradient-to-br from-black/80 via-[#E31E24]/30 to-black/80 backdrop-blur-sm rounded-xl p-4 border-2 border-[#E31E24]/40 hover:border-[#E31E24]/80 transition-all group h-full"
+                        style={{
+                          boxShadow: '0 0 15px rgba(227, 30, 36, 0.3), inset 0 0 15px rgba(227, 30, 36, 0.1)'
+                        }}
                       >
                         <div className="flex items-start justify-between mb-3">
                           <Icon className="w-6 h-6 text-white" />

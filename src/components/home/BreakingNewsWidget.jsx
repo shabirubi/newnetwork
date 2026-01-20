@@ -37,7 +37,10 @@ export default function BreakingNewsWidget() {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: idx * 0.1 }}
               whileHover={{ x: 5 }}
-              className="relative bg-gradient-to-r from-[#E31E24]/20 via-red-900/20 to-transparent rounded-xl p-4 border border-[#E31E24]/50 overflow-hidden group cursor-pointer"
+              className="relative bg-gradient-to-br from-black/80 via-[#E31E24]/30 to-black/80 backdrop-blur-sm rounded-xl p-4 border-2 border-[#E31E24]/40 overflow-hidden group cursor-pointer"
+              style={{
+                boxShadow: '0 0 20px rgba(227, 30, 36, 0.3), inset 0 0 20px rgba(227, 30, 36, 0.1)'
+              }}
             >
               {/* Animated Background */}
               <div className="absolute inset-0 bg-gradient-to-r from-[#E31E24]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
@@ -71,7 +74,7 @@ export default function BreakingNewsWidget() {
                 )}
 
                 {/* Footer */}
-                <div className="flex items-center justify-between pt-3 border-t border-gray-700/50">
+                <div className="flex items-center justify-between pt-3 border-t border-[#E31E24]/30">
                   {article.source && (
                     <span className="text-xs text-gray-400">מקור: {article.source}</span>
                   )}
@@ -89,8 +92,8 @@ export default function BreakingNewsWidget() {
       </div>
 
       {breakingNews.length === 0 && (
-        <div className="bg-gray-800 rounded-xl p-8 text-center">
-          <AlertTriangle className="w-12 h-12 text-gray-600 mx-auto mb-3" />
+        <div className="bg-gradient-to-br from-black/80 via-[#E31E24]/20 to-black/80 backdrop-blur-sm rounded-xl p-8 text-center border-2 border-[#E31E24]/40">
+          <AlertTriangle className="w-12 h-12 text-[#E31E24] mx-auto mb-3" />
           <p className="text-gray-400">אין חדשות חמות כרגע</p>
         </div>
       )}
