@@ -120,14 +120,26 @@ export default function LivePlayer({
     return () => clearInterval(interval);
   }, []);
 
-  // Slogans rotation animation
+  // Typewriter animation for slogans
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentSlogan((prev) => (prev + 1) % slogans.length);
-    }, 4000);
+    const currentText = slogans[currentSlogan];
+    let charIndex = 0;
+    setDisplayedText("");
 
-    return () => clearInterval(interval);
-  }, []);
+    const typeInterval = setInterval(() => {
+      if (charIndex < currentText.length) {
+        setDisplayedText(currentText.substring(0, charIndex + 1));
+        charIndex++;
+      } else {
+        clearInterval(typeInterval);
+        setTimeout(() => {
+          setCurrentSlogan((prev) => (prev + 1) % slogans.length);
+        }, 3000);
+      }
+    }, 80);
+
+    return () => clearInterval(typeInterval);
+  }, [currentSlogan]);
 
   // YouTube IFrame API for controlling playback
     useEffect(() => {
@@ -364,33 +376,14 @@ export default function LivePlayer({
               />
               <div className="text-right flex-1 overflow-hidden">
                 <div className="text-white font-extrabold text-sm sm:text-lg drop-shadow-lg mb-1" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>הרשת החדשה</div>
+                <div className="text-[#E31E24] font-black text-xs sm:text-base tracking-wider whitespace-nowrap" style={{ fontFamily: 'Arial Black, Arial, sans-serif', textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>
+                  {displayedText}
+                  <span className="animate-pulse">|</span>
+                </div>
               </div>
             </div>
 
-            {/* Schedule Strip */}
-            <div className="bg-black/60 backdrop-blur-sm overflow-hidden h-6 sm:h-8 rounded-lg w-1/2 mr-auto">
-              <motion.div
-                className="flex items-center h-full"
-                animate={{ x: ["0%", "-100%"] }}
-                transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
-              >
-                {Array(3).fill(scheduleItems).flat().map((item, idx) => {
-                  const IconComponent = item.Icon;
-                  return (
-                    <div 
-                      key={`schedule-${idx}`}
-                      className="flex-shrink-0 flex items-center gap-2 sm:gap-3 px-3 sm:px-4 border-l border-[#E31E24]/30"
-                    >
-                      <IconComponent className="w-4 h-4 sm:w-5 sm:h-5 text-[#E31E24]" />
-                      <div className="flex items-center gap-1.5">
-                        <div className="text-[#E31E24] font-black text-xs sm:text-sm" style={{ fontFamily: 'Arial Black, sans-serif' }}>{item.time}</div>
-                        <div className="text-white font-bold text-xs sm:text-sm whitespace-nowrap" style={{ fontFamily: 'system-ui, sans-serif' }}>{item.title}</div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </motion.div>
-            </div>
+
           </div>
 
           {/* Bottom Frame */}
@@ -425,31 +418,7 @@ export default function LivePlayer({
             }}
           />
 
-          {/* Center Slogan Display */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 pointer-events-none">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={currentSlogan}
-                initial={{ opacity: 0, scale: 0.8, y: 20 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.8, y: -20 }}
-                transition={{ duration: 0.6, ease: "easeOut" }}
-                className="text-center px-6 sm:px-12"
-              >
-                <div 
-                  className="text-white font-black text-2xl sm:text-4xl lg:text-5xl drop-shadow-2xl"
-                  style={{ 
-                    fontFamily: 'Arial Black, Arial, sans-serif',
-                    textShadow: '3px 3px 8px rgba(0,0,0,0.9), 0 0 20px rgba(227, 30, 36, 0.5)'
-                  }}
-                >
-                  {slogans[currentSlogan]}
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-
-          </div>
+        </div>
 
         {/* Logo Promo Animation */}
         {showPromo && (
