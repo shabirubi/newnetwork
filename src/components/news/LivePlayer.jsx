@@ -441,14 +441,14 @@ export default function LivePlayer({
            </div>
 
           {/* Left Frame */}
-          <div className="absolute top-28 sm:top-32 bottom-12 sm:bottom-16 left-0 w-8 sm:w-12 bg-black"
+          <div className="absolute top-20 sm:top-24 bottom-14 sm:bottom-16 left-0 w-8 sm:w-12 bg-black"
             style={{
               boxShadow: '4px 0 20px rgba(0, 0, 0, 0.8)'
             }}
           />
 
           {/* Right Frame */}
-          <div className="absolute top-28 sm:top-32 bottom-12 sm:bottom-16 right-0 w-8 sm:w-12 bg-black"
+          <div className="absolute top-20 sm:top-24 bottom-14 sm:bottom-16 right-0 w-8 sm:w-12 bg-black"
             style={{
               boxShadow: '-4px 0 20px rgba(0, 0, 0, 0.8)'
             }}
