@@ -344,7 +344,7 @@ export default function LivePlayer({
       <div className="relative w-full aspect-[9/16] sm:aspect-video rounded-t-2xl overflow-hidden">
         {/* YouTube Embed Player - MAIN */}
         <iframe
-          src="https://www.youtube.com/embed/k7WPygB6GlI?autoplay=1&rel=0"
+          src="https://www.youtube.com/embed/f40ydG9WB74?autoplay=1&rel=0"
           className="absolute inset-0 w-full h-full z-20"
           allow="autoplay; fullscreen; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
