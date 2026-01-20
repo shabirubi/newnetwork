@@ -307,7 +307,7 @@ export default function LivePlayer({
         {/* Frame Border - Covering YouTube Elements */}
         <div className="absolute inset-0 z-30 pointer-events-none">
           {/* Top Frame */}
-          <div className="absolute top-0 left-0 right-0 h-16 sm:h-20 bg-black border-b-4 border-gray-700 flex items-center justify-between px-4 sm:px-6"
+          <div className="absolute top-0 left-0 right-0 h-16 sm:h-20 bg-black flex items-center justify-between px-4 sm:px-6"
             style={{
               boxShadow: '0 4px 20px rgba(0, 0, 0, 0.8)'
             }}
@@ -333,7 +333,7 @@ export default function LivePlayer({
           </div>
 
           {/* Bottom Frame */}
-          <div className="absolute bottom-0 left-0 right-0 h-12 sm:h-16 bg-black border-t-4 border-gray-700 flex items-center justify-center px-4 sm:px-6"
+          <div className="absolute bottom-0 left-0 right-0 h-12 sm:h-16 bg-black flex items-center justify-center px-4 sm:px-6"
             style={{
               boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.8)'
             }}
@@ -351,7 +351,7 @@ export default function LivePlayer({
           </div>
 
           {/* Left Frame */}
-          <div className="absolute top-16 sm:top-20 bottom-12 sm:bottom-16 left-0 w-8 sm:w-12 bg-black border-r-4 border-gray-700"
+          <div className="absolute top-16 sm:top-20 bottom-12 sm:bottom-16 left-0 w-8 sm:w-12 bg-black"
             style={{
               boxShadow: '4px 0 20px rgba(0, 0, 0, 0.8)'
             }}
@@ -364,11 +364,7 @@ export default function LivePlayer({
             }}
           />
 
-          {/* Corner Decorations */}
-          <div className="absolute top-16 sm:top-20 right-8 sm:right-12 w-8 h-8 border-t-2 border-r-2 border-gray-600" />
-          <div className="absolute top-16 sm:top-20 left-8 sm:left-12 w-8 h-8 border-t-2 border-l-2 border-gray-600" />
-          <div className="absolute bottom-12 sm:bottom-16 right-8 sm:right-12 w-8 h-8 border-b-2 border-r-2 border-gray-600" />
-          <div className="absolute bottom-12 sm:bottom-16 left-8 sm:left-12 w-8 h-8 border-b-2 border-l-2 border-gray-600" />
+
         </div>
 
         {/* Logo Promo Animation */}
@@ -425,7 +421,7 @@ export default function LivePlayer({
         {/* Live Badge */}
         {isLive && (
           <motion.div 
-            className="absolute top-2 sm:top-4 left-2 sm:left-4 z-30"
+            className="absolute top-24 sm:top-28 left-12 sm:left-16 z-30"
             animate={{
               scale: [1, 1.05, 1],
             }}
