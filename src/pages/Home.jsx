@@ -370,10 +370,10 @@ export default function Home() {
 
       {/* YouTube Video Section */}
       <section className="px-4 mb-12">
-        <h2 className="text-3xl font-bold dark:text-white mb-6 text-center">וידאו מומלץ</h2>
+        <h2 className="text-3xl font-bold dark:text-white mb-6 text-center">שידור חי</h2>
         <div className="flex justify-center">
           <iframe 
-            src="https://www.youtube.com/embed/EGxPXB-Kwuo?autoplay=1"
+            src="https://www.youtube.com/embed/f40ydG9WB74?autoplay=1"
             width="100%" 
             height="400" 
             frameBorder="0" 
