@@ -139,58 +139,58 @@ export default function Layout({ children, currentPageName }) {
           <div className="flex items-center gap-2">
             <button
               onClick={() => setReportersModalOpen(true)}
-              className="flex items-center gap-2 px-3 py-2 bg-black/60 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 transition-all hover:scale-105 hover:bg-black/70"
+              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-black/60 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-white/20 transition-all hover:scale-105 hover:bg-black/70 text-xs sm:text-sm"
             >
               <Users className="w-4 h-4 text-white" />
-              <span className="text-white text-xs font-bold hidden sm:inline">כתבים</span>
+              <span className="text-white font-bold hidden sm:inline">כתבים</span>
             </button>
 
             <button
               onClick={() => window.dispatchEvent(new CustomEvent('openReporterChat'))}
-              className="flex items-center gap-2 px-3 py-2 bg-black/60 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 transition-all hover:scale-105 hover:bg-black/70"
+              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-black/60 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-white/20 transition-all hover:scale-105 hover:bg-black/70 text-xs sm:text-sm"
             >
               <MessageCircle className="w-4 h-4 text-white" />
-              <span className="text-white text-xs font-bold hidden sm:inline">צ'אט</span>
+              <span className="text-white font-bold hidden sm:inline">צ'אט</span>
             </button>
 
             <Link 
               to={createPageUrl("VODContent")}
-              className="flex items-center gap-2 px-3 py-2 bg-black/60 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 transition-all hover:scale-105 hover:bg-black/70"
+              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-black/60 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-white/20 transition-all hover:scale-105 hover:bg-black/70 text-xs sm:text-sm"
             >
               <Tv className="w-4 h-4 text-white" />
-              <span className="text-white text-xs font-bold hidden sm:inline">VOD</span>
+              <span className="text-white font-bold hidden sm:inline">VOD</span>
             </Link>
 
             <button
               onClick={() => setCategoriesSidebarOpen(true)}
-              className="flex items-center gap-2 px-3 py-2 bg-black/60 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 transition-all hover:scale-105 hover:bg-black/70"
+              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-black/60 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-white/20 transition-all hover:scale-105 hover:bg-black/70 text-xs sm:text-sm"
             >
               <Newspaper className="w-4 h-4 text-white" />
-              <span className="text-white text-xs font-bold hidden sm:inline">קטגוריות</span>
+              <span className="text-white font-bold hidden sm:inline">קטגוריות</span>
             </button>
 
             <Link 
               to={createPageUrl("Live")}
-              className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-[#E31E24] to-[#B91C1C] backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 transition-all hover:scale-105 animate-pulse"
+              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-gradient-to-r from-[#E31E24] to-[#B91C1C] backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-white/20 transition-all hover:scale-105 animate-pulse text-xs sm:text-sm"
             >
               <Radio className="w-4 h-4 text-white" />
-              <span className="text-white text-xs font-bold hidden sm:inline">שידור חי</span>
+              <span className="text-white font-bold hidden sm:inline">שידור חי</span>
             </Link>
 
             <Link 
               to={createPageUrl("UserProfile")}
-              className="flex items-center gap-2 px-3 py-2 bg-black/60 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 transition-all hover:scale-105 hover:bg-black/70"
+              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-black/60 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-white/20 transition-all hover:scale-105 hover:bg-black/70 text-xs sm:text-sm"
             >
               <User className="w-4 h-4 text-white" />
-              <span className="text-white text-xs font-bold hidden sm:inline">פרופיל</span>
+              <span className="text-white font-bold hidden sm:inline">פרופיל</span>
             </Link>
 
             <button
               onClick={() => window.dispatchEvent(new CustomEvent('openAvatarCreator'))}
-              className="flex items-center gap-2 px-3 py-2 bg-black/60 backdrop-blur-xl rounded-2xl shadow-lg border border-[#E31E24]/50 transition-all hover:scale-105 hover:bg-[#E31E24]/30"
+              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-black/60 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-[#E31E24]/50 transition-all hover:scale-105 hover:bg-[#E31E24]/30 text-xs sm:text-sm"
             >
               <Sparkles className="w-4 h-4 text-white" />
-              <span className="text-white text-xs font-bold hidden sm:inline">דמויות</span>
+              <span className="text-white font-bold hidden sm:inline">דמויות</span>
             </button>
           </div>
         </div>
