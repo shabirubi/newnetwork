@@ -205,9 +205,11 @@ export default function Reporters() {
                   <img
                     src={reporter.image}
                     alt={reporter.name}
-                    className={`w-full h-full object-cover transition-all duration-500 ${
-                      hoveredReporter === reporter.id ? 'grayscale-0 scale-110' : 'grayscale'
-                    }`}
+                    className="w-full h-full object-cover transition-all duration-500"
+                    style={{
+                      filter: hoveredReporter === reporter.id ? 'grayscale(0%)' : 'grayscale(100%)',
+                      transform: hoveredReporter === reporter.id ? 'scale(1.1)' : 'scale(1)'
+                    }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                   
