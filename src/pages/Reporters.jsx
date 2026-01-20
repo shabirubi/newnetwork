@@ -207,8 +207,9 @@ export default function Reporters() {
                     alt={reporter.name}
                     className="w-full h-full object-cover transition-all duration-500"
                     style={{
-                      filter: hoveredReporter === reporter.id ? 'grayscale(0%)' : 'grayscale(100%)',
-                      transform: hoveredReporter === reporter.id ? 'scale(1.1)' : 'scale(1)'
+                      filter: hoveredReporter === reporter.id ? 'grayscale(0%) brightness(1)' : 'grayscale(100%) brightness(0.8)',
+                      transform: hoveredReporter === reporter.id ? 'scale(1.1)' : 'scale(1)',
+                      WebkitFilter: hoveredReporter === reporter.id ? 'grayscale(0%) brightness(1)' : 'grayscale(100%) brightness(0.8)'
                     }}
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
