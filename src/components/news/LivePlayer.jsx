@@ -359,7 +359,7 @@ export default function LivePlayer({
             }}
           >
             {/* Logo and Title Row */}
-            <div className="flex items-center justify-between mb-2">
+            <div className="flex items-center justify-between mb-2 gap-3">
               <motion.img 
                 src={LOGO_URL}
                 alt="הרשת החדשה"
@@ -381,6 +381,39 @@ export default function LivePlayer({
                   <span className="animate-pulse">|</span>
                 </div>
               </div>
+              {!loadingAds && ads.length > 0 && (
+                <div className="bg-black/60 backdrop-blur-sm overflow-hidden rounded-lg flex-1 max-w-xs h-6 sm:h-8">
+                  <motion.div
+                    className="flex items-center h-full gap-1 sm:gap-2"
+                    animate={{ x: ["0%", "-100%"] }}
+                    transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
+                  >
+                    {Array(4).fill(ads).flat().map((ad, idx) => (
+                      <div 
+                        key={`topAd-${idx}`}
+                        className="flex-shrink-0 relative group h-full"
+                      >
+                        <motion.div
+                          whileHover={{ scale: 1.05 }}
+                          className="relative h-full px-1.5 sm:px-2 rounded overflow-hidden flex items-center"
+                        >
+                          <img 
+                            src={ad.image} 
+                            alt={ad.brand}
+                            className="h-full w-auto object-contain"
+                          />
+                          <motion.div
+                            className="absolute inset-0 bg-gradient-to-r from-white via-transparent to-white opacity-20"
+                            animate={{ x: ["-100%", "100%"] }}
+                            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+                            style={{ mixBlendMode: 'screen' }}
+                          />
+                        </motion.div>
+                      </div>
+                    ))}
+                  </motion.div>
+                </div>
+              )}
             </div>
 
 
