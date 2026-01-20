@@ -31,6 +31,7 @@ export default function AllVideosGallery() {
 
   // YouTube videos from the channel
   const youtubeVideos = [
+    { id: 'yt-yqfErzEHR0g', title: 'כתבים מהשטח - דיווח בזמן אמת', url: 'https://www.youtube.com/embed/yqfErzEHR0g', thumbnail: 'https://img.youtube.com/vi/yqfErzEHR0g/maxresdefault.jpg', type: 'youtube', created_date: new Date('2024-01-20') },
     { id: 'yt-k7WPygB6GlI', title: 'סרטון ממוחשב - הרשת החדשה', url: 'https://www.youtube.com/embed/k7WPygB6GlI', thumbnail: 'https://img.youtube.com/vi/k7WPygB6GlI/maxresdefault.jpg', type: 'youtube', created_date: new Date('2024-01-15') },
     { id: 'yt-4miQnYCTdS8', title: 'הרשת החדשה - שידור חי', url: 'https://www.youtube.com/embed/4miQnYCTdS8', thumbnail: 'https://img.youtube.com/vi/4miQnYCTdS8/maxresdefault.jpg', type: 'youtube', created_date: new Date('2024-01-14') },
     { id: 'yt-2q9lcnXBicQ', title: 'תוכן מיוחד הרשת', url: 'https://www.youtube.com/embed/2q9lcnXBicQ', thumbnail: 'https://img.youtube.com/vi/2q9lcnXBicQ/maxresdefault.jpg', type: 'youtube', created_date: new Date('2024-01-13') },

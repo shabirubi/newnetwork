@@ -6,6 +6,7 @@ export default function ShortVideosContainer() {
   const [selectedVideo, setSelectedVideo] = useState(null);
 
   const youtubeVideos = [
+    { id: 'youtube-yqfErzEHR0g', videoId: 'yqfErzEHR0g', title: 'כתבים מהשטח בדיווח חי', category: 'live' },
     { id: 'youtube-k7WPygB6GlI', videoId: 'k7WPygB6GlI', title: 'חדשה דחופה - הרשת החדשה', category: 'breaking' },
     { id: 'youtube-4miQnYCTdS8', videoId: '4miQnYCTdS8', title: 'עדכון חם - שידור חי', category: 'news' },
     { id: 'youtube-2q9lcnXBicQ', videoId: '2q9lcnXBicQ', title: 'ניתוח מעמיק', category: 'analysis' },
