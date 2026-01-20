@@ -17,7 +17,7 @@ import { base44 } from "@/api/base44Client";
 
 
 const DEFAULT_STREAM = "https://www.mako.co.il/AjaxPage?jspName=embedHTML5video.jsp&galleryChannelId=3bf5c3a8e967f510VgnVCM2000002a0c10acRCRD&videoChannelId=8bf955222beab610VgnVCM100000700a10acRCRD&vcmid=1e2258089b67f510VgnVCM2000002a0c10acRCRD";
-const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/a44ef2558_212.png";
+const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png";
 
 export default function LivePlayer({ 
   title = "שידור חי - הרשת החדשה",
@@ -307,9 +307,9 @@ export default function LivePlayer({
         {/* Frame Border - Covering YouTube Elements */}
         <div className="absolute inset-0 z-30 pointer-events-none">
           {/* Top Frame */}
-          <div className="absolute top-0 left-0 right-0 h-16 sm:h-20 bg-gradient-to-b from-black via-black/95 to-transparent border-b-4 border-[#E31E24] flex items-center justify-between px-4 sm:px-6"
+          <div className="absolute top-0 left-0 right-0 h-16 sm:h-20 bg-black border-b-4 border-gray-700 flex items-center justify-between px-4 sm:px-6"
             style={{
-              boxShadow: '0 4px 20px rgba(227, 30, 36, 0.5), inset 0 -4px 10px rgba(227, 30, 36, 0.3)'
+              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.8)'
             }}
           >
             <motion.img 
@@ -333,9 +333,9 @@ export default function LivePlayer({
           </div>
 
           {/* Bottom Frame */}
-          <div className="absolute bottom-0 left-0 right-0 h-12 sm:h-16 bg-gradient-to-t from-black via-black/95 to-transparent border-t-4 border-[#E31E24] flex items-center justify-center px-4 sm:px-6"
+          <div className="absolute bottom-0 left-0 right-0 h-12 sm:h-16 bg-black border-t-4 border-gray-700 flex items-center justify-center px-4 sm:px-6"
             style={{
-              boxShadow: '0 -4px 20px rgba(227, 30, 36, 0.5), inset 0 4px 10px rgba(227, 30, 36, 0.3)'
+              boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.8)'
             }}
           >
             <div className="flex items-center gap-3 sm:gap-4">
@@ -351,24 +351,24 @@ export default function LivePlayer({
           </div>
 
           {/* Left Frame */}
-          <div className="absolute top-16 sm:top-20 bottom-12 sm:bottom-16 left-0 w-8 sm:w-12 bg-gradient-to-r from-black via-black/95 to-transparent border-r-4 border-[#E31E24]"
+          <div className="absolute top-16 sm:top-20 bottom-12 sm:bottom-16 left-0 w-8 sm:w-12 bg-black border-r-4 border-gray-700"
             style={{
-              boxShadow: '4px 0 20px rgba(227, 30, 36, 0.5), inset -4px 0 10px rgba(227, 30, 36, 0.3)'
+              boxShadow: '4px 0 20px rgba(0, 0, 0, 0.8)'
             }}
           />
 
           {/* Right Frame */}
-          <div className="absolute top-16 sm:top-20 bottom-12 sm:bottom-16 right-0 w-8 sm:w-12 bg-gradient-to-l from-black via-black/95 to-transparent border-l-4 border-[#E31E24]"
+          <div className="absolute top-16 sm:top-20 bottom-12 sm:bottom-16 right-0 w-8 sm:w-12 bg-black border-l-4 border-gray-700"
             style={{
-              boxShadow: '-4px 0 20px rgba(227, 30, 36, 0.5), inset 4px 0 10px rgba(227, 30, 36, 0.3)'
+              boxShadow: '-4px 0 20px rgba(0, 0, 0, 0.8)'
             }}
           />
 
           {/* Corner Decorations */}
-          <div className="absolute top-16 sm:top-20 right-8 sm:right-12 w-8 h-8 border-t-2 border-r-2 border-[#E31E24]" />
-          <div className="absolute top-16 sm:top-20 left-8 sm:left-12 w-8 h-8 border-t-2 border-l-2 border-[#E31E24]" />
-          <div className="absolute bottom-12 sm:bottom-16 right-8 sm:right-12 w-8 h-8 border-b-2 border-r-2 border-[#E31E24]" />
-          <div className="absolute bottom-12 sm:bottom-16 left-8 sm:left-12 w-8 h-8 border-b-2 border-l-2 border-[#E31E24]" />
+          <div className="absolute top-16 sm:top-20 right-8 sm:right-12 w-8 h-8 border-t-2 border-r-2 border-gray-600" />
+          <div className="absolute top-16 sm:top-20 left-8 sm:left-12 w-8 h-8 border-t-2 border-l-2 border-gray-600" />
+          <div className="absolute bottom-12 sm:bottom-16 right-8 sm:right-12 w-8 h-8 border-b-2 border-r-2 border-gray-600" />
+          <div className="absolute bottom-12 sm:bottom-16 left-8 sm:left-12 w-8 h-8 border-b-2 border-l-2 border-gray-600" />
         </div>
 
         {/* Logo Promo Animation */}
