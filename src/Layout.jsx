@@ -106,6 +106,21 @@ export default function Layout({ children, currentPageName }) {
         <div className="absolute top-0 h-full w-32 bg-[#E31E24] animate-[slideRight_3s_ease-in-out_infinite]"></div>
       </div>
 
+      {/* Logo Header */}
+      <div className="bg-gradient-to-br from-black via-[#E31E24]/20 to-black border-b-2 border-[#E31E24]/40 py-3">
+        <div className="max-w-7xl mx-auto px-4 flex items-center gap-4">
+          <img 
+            src={LOGO_URL} 
+            alt="הרשת החדשה" 
+            className="h-12 w-auto"
+          />
+          <div className="flex flex-col">
+            <h1 className="text-xl font-bold text-white">הרשת החדשה</h1>
+            <p className="text-sm text-white/70">מיד מתחילים...</p>
+          </div>
+        </div>
+      </div>
+
       {/* Breaking News Ticker */}
       <NewsTicker darkMode={darkMode} setDarkMode={setDarkMode} onMenuClick={() => setCategoriesSidebarOpen(true)} />
 
