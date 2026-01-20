@@ -345,6 +345,13 @@ export default function LivePlayer({
               boxShadow: '0 4px 20px rgba(0, 0, 0, 0.8)'
             }}
           >
+            <div className="text-left max-w-md flex-1">
+              <div className="text-white font-extrabold text-base sm:text-xl drop-shadow-lg mb-1" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>הרשת החדשה</div>
+              <div className="text-[#E31E24] font-black text-sm sm:text-lg tracking-wider min-h-[20px] sm:min-h-[28px]" style={{ fontFamily: 'Arial Black, Arial, sans-serif', textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>
+                {displayedText}
+                <span className="animate-pulse">|</span>
+              </div>
+            </div>
             <motion.img 
               src={LOGO_URL}
               alt="הרשת החדשה"
@@ -359,13 +366,6 @@ export default function LivePlayer({
                 ease: "easeInOut"
               }}
             />
-            <div className="text-right max-w-xs">
-              <div className="text-white font-bold text-base sm:text-xl drop-shadow-lg mb-1">הרשת החדשה</div>
-              <div className="text-[#E31E24] font-black text-sm sm:text-base tracking-wide min-h-[20px] sm:min-h-[24px]">
-                {displayedText}
-                <span className="animate-pulse">|</span>
-              </div>
-            </div>
           </div>
 
           {/* Bottom Frame */}
