@@ -88,6 +88,14 @@ export default function LivePlayer({
         setLoadingAds(false);
       } catch (error) {
         console.error('Error generating ads:', error);
+        // Fallback to default brand logos
+        const fallbackAds = [
+          { title: "סופר פארם", brand: "סופר פארם", type: "קוסמטיקה", image: "https://upload.wikimedia.org/wikipedia/he/thumb/4/41/Super-pharm.svg/1024px-Super-pharm.svg.png" },
+          { title: "פוקס", brand: "פוקס", type: "אופנה", image: "https://upload.wikimedia.org/wikipedia/he/3/3f/Fox_Israel_logo.png" },
+          { title: "אל על", brand: "אל על", type: "תעופה", image: "https://upload.wikimedia.org/wikipedia/en/thumb/9/9c/El_Al_logo.svg/1024px-El_Al_logo.svg.png" },
+          { title: "שופרסל", brand: "שופרסל", type: "קניות", image: "https://upload.wikimedia.org/wikipedia/he/thumb/4/45/Shufershal_logo.svg/1024px-Shufershal_logo.svg.png" }
+        ];
+        setAds(fallbackAds);
         setLoadingAds(false);
       }
     };

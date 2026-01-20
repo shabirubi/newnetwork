@@ -5,7 +5,7 @@ import {
   Menu, X, Radio, Newspaper, Shield, TrendingUp, 
   Vote, Cpu, Trophy, Clapperboard, Globe, Heart,
   Clock, ChevronLeft, Users, Moon, Sun, Home, Flame,
-  Siren, AlertTriangle, MessageSquareWarning, Film, Tv, User, MessageCircle
+  Siren, AlertTriangle, MessageSquareWarning, Film, Tv, User, MessageCircle, Sparkles
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import NewsTicker from "./components/header/NewsTicker";
@@ -184,6 +184,14 @@ export default function Layout({ children, currentPageName }) {
               <User className="w-4 h-4 text-white" />
               <span className="text-white text-xs font-bold hidden sm:inline">פרופיל</span>
             </Link>
+
+            <button
+              onClick={() => window.dispatchEvent(new CustomEvent('openAvatarCreator'))}
+              className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-purple-600/80 to-pink-600/80 backdrop-blur-xl rounded-2xl shadow-lg border border-purple-400/30 transition-all hover:scale-105 hover:from-purple-600 hover:to-pink-600"
+            >
+              <Sparkles className="w-4 h-4 text-white" />
+              <span className="text-white text-xs font-bold hidden sm:inline">דמויות</span>
+            </button>
           </div>
         </div>
       </div>
