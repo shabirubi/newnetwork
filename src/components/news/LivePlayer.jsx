@@ -377,10 +377,10 @@ export default function LivePlayer({
                 }}
               />
               <div className="text-right flex-1 overflow-hidden">
-                <div className="text-white font-extrabold text-sm sm:text-lg drop-shadow-lg mb-1" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>הרשת החדשה</div>
-                <div className="text-[#E31E24] font-black text-xs sm:text-base tracking-wider whitespace-nowrap" style={{ fontFamily: 'Arial Black, Arial, sans-serif', textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>
+                <div className="text-white font-extrabold text-sm sm:text-lg drop-shadow-lg mb-1" style={{ fontFamily: "'Inter', 'Helvetica Neue', sans-serif" }}>הרשת החדשה</div>
+                <div className="text-[#E31E24] font-bold text-sm sm:text-lg tracking-wide" style={{ fontFamily: "'Poppins', 'Inter', sans-serif", textShadow: '2px 2px 4px rgba(0,0,0,0.5)', letterSpacing: '0.5px' }}>
                   {displayedText}
-                  <span className="animate-pulse">|</span>
+                  <span className="animate-pulse ml-1">|</span>
                 </div>
               </div>
               {ads.length > 0 && (
