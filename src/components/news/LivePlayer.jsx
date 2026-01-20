@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import videojs from "video.js";
 import "video.js/dist/video-js.css";
 import mpegts from "mpegts.js";
