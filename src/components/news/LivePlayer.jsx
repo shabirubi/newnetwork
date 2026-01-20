@@ -304,6 +304,73 @@ export default function LivePlayer({
           title={title}
         />
 
+        {/* Frame Border - Covering YouTube Elements */}
+        <div className="absolute inset-0 z-30 pointer-events-none">
+          {/* Top Frame */}
+          <div className="absolute top-0 left-0 right-0 h-16 sm:h-20 bg-gradient-to-b from-black via-black/95 to-transparent border-b-4 border-[#E31E24] flex items-center justify-between px-4 sm:px-6"
+            style={{
+              boxShadow: '0 4px 20px rgba(227, 30, 36, 0.5), inset 0 -4px 10px rgba(227, 30, 36, 0.3)'
+            }}
+          >
+            <motion.img 
+              src={LOGO_URL}
+              alt="הרשת החדשה"
+              className="h-10 sm:h-14 w-auto drop-shadow-2xl"
+              animate={{ 
+                scale: [1, 1.05, 1],
+                filter: ['brightness(1)', 'brightness(1.2)', 'brightness(1)']
+              }}
+              transition={{ 
+                duration: 3, 
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            />
+            <div className="text-right">
+              <div className="text-white font-bold text-sm sm:text-lg drop-shadow-lg">הרשת החדשה</div>
+              <div className="text-[#E31E24] font-bold text-xs sm:text-sm">מייצרים תוכן. מייצרים חדשות</div>
+            </div>
+          </div>
+
+          {/* Bottom Frame */}
+          <div className="absolute bottom-0 left-0 right-0 h-12 sm:h-16 bg-gradient-to-t from-black via-black/95 to-transparent border-t-4 border-[#E31E24] flex items-center justify-center px-4 sm:px-6"
+            style={{
+              boxShadow: '0 -4px 20px rgba(227, 30, 36, 0.5), inset 0 4px 10px rgba(227, 30, 36, 0.3)'
+            }}
+          >
+            <div className="flex items-center gap-3 sm:gap-4">
+              <div className="flex items-center gap-2 bg-[#E31E24]/20 backdrop-blur-sm px-3 py-1.5 rounded-full border border-[#E31E24]/50">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E31E24] opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#E31E24]"></span>
+                </span>
+                <span className="text-white font-bold text-xs sm:text-sm">שידור חי</span>
+              </div>
+              <div className="text-white/80 font-bold text-xs sm:text-sm">הערוץ היחיד שאתם צריכים</div>
+            </div>
+          </div>
+
+          {/* Left Frame */}
+          <div className="absolute top-16 sm:top-20 bottom-12 sm:bottom-16 left-0 w-8 sm:w-12 bg-gradient-to-r from-black via-black/95 to-transparent border-r-4 border-[#E31E24]"
+            style={{
+              boxShadow: '4px 0 20px rgba(227, 30, 36, 0.5), inset -4px 0 10px rgba(227, 30, 36, 0.3)'
+            }}
+          />
+
+          {/* Right Frame */}
+          <div className="absolute top-16 sm:top-20 bottom-12 sm:bottom-16 right-0 w-8 sm:w-12 bg-gradient-to-l from-black via-black/95 to-transparent border-l-4 border-[#E31E24]"
+            style={{
+              boxShadow: '-4px 0 20px rgba(227, 30, 36, 0.5), inset 4px 0 10px rgba(227, 30, 36, 0.3)'
+            }}
+          />
+
+          {/* Corner Decorations */}
+          <div className="absolute top-16 sm:top-20 right-8 sm:right-12 w-8 h-8 border-t-2 border-r-2 border-[#E31E24]" />
+          <div className="absolute top-16 sm:top-20 left-8 sm:left-12 w-8 h-8 border-t-2 border-l-2 border-[#E31E24]" />
+          <div className="absolute bottom-12 sm:bottom-16 right-8 sm:right-12 w-8 h-8 border-b-2 border-r-2 border-[#E31E24]" />
+          <div className="absolute bottom-12 sm:bottom-16 left-8 sm:left-12 w-8 h-8 border-b-2 border-l-2 border-[#E31E24]" />
+        </div>
+
         {/* Logo Promo Animation */}
         {showPromo && (
           <motion.div
