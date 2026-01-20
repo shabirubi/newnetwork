@@ -285,12 +285,15 @@ export default function LivePlayer({
       ref={containerRef}
       initial={{ opacity: 0, scale: 0.98 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="relative bg-black sm:rounded-b-lg overflow-hidden shadow-2xl group"
+      className="relative bg-gradient-to-br from-black via-[#0a0000] to-black sm:rounded-2xl overflow-hidden shadow-2xl group border-2 border-[#E31E24]/30"
+      style={{
+        boxShadow: '0 0 40px rgba(227, 30, 36, 0.4), inset 0 0 30px rgba(227, 30, 36, 0.1)'
+      }}
       onMouseEnter={() => setShowControls(true)}
       onMouseLeave={() => setShowControls(false)}
     >
       {/* Video Container */}
-      <div className="relative w-full aspect-[9/16] sm:aspect-video">
+      <div className="relative w-full aspect-[9/16] sm:aspect-video rounded-t-2xl overflow-hidden">
         {/* YouTube Embed Player - MAIN */}
         <iframe
           src="https://www.youtube.com/embed/k7WPygB6GlI?autoplay=1&rel=0"
@@ -354,15 +357,29 @@ export default function LivePlayer({
 
         {/* Live Badge */}
         {isLive && (
-          <div className="absolute top-2 sm:top-4 left-2 sm:left-4 z-10">
-            <div className="flex items-center gap-1 sm:gap-2 bg-[#E31E24] text-white px-2 sm:px-3 py-1 sm:py-1.5 rounded-full text-xs sm:text-sm font-bold">
-              <span className="relative flex h-1.5 w-1.5 sm:h-2 sm:w-2">
+          <motion.div 
+            className="absolute top-2 sm:top-4 left-2 sm:left-4 z-30"
+            animate={{
+              scale: [1, 1.05, 1],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          >
+            <div className="flex items-center gap-1 sm:gap-2 bg-gradient-to-r from-[#E31E24] to-[#B91C1C] text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-bold shadow-lg border border-red-400/50"
+              style={{
+                boxShadow: '0 0 20px rgba(227, 30, 36, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.1)'
+              }}
+            >
+              <span className="relative flex h-2 w-2 sm:h-2.5 sm:w-2.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-1.5 w-1.5 sm:h-2 sm:w-2 bg-white"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 sm:h-2.5 sm:w-2.5 bg-white"></span>
               </span>
-              LIVE
+              <span className="font-extrabold tracking-wide">LIVE</span>
             </div>
-          </div>
+          </motion.div>
         )}
 
         {/* Play Button Overlay */}
@@ -508,39 +525,53 @@ export default function LivePlayer({
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: showControls || !isPlaying ? 1 : 0, y: 0 }}
-        className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-2 sm:p-4"
+        className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/95 via-black/70 to-transparent p-3 sm:p-4 backdrop-blur-sm border-t border-[#E31E24]/20"
       >
         {/* Progress Bar (simulated for live) */}
-        <div className="w-full h-0.5 sm:h-1 bg-gray-700 rounded-full mb-2 sm:mb-4 overflow-hidden">
+        <div className="w-full h-1 sm:h-1.5 bg-gray-800/80 rounded-full mb-3 sm:mb-4 overflow-hidden shadow-inner border border-gray-700/50">
           <motion.div 
-            className="h-full bg-[#E31E24]"
-            animate={{ width: isPlaying ? "100%" : "0%" }}
-            transition={{ duration: 0.3 }}
+            className="h-full bg-gradient-to-r from-[#E31E24] via-red-500 to-[#E31E24]"
+            animate={{ 
+              width: isPlaying ? "100%" : "0%",
+              backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
+            }}
+            transition={{ 
+              width: { duration: 0.3 },
+              backgroundPosition: { duration: 3, repeat: Infinity, ease: "linear" }
+            }}
+            style={{
+              backgroundSize: '200% 100%',
+              boxShadow: '0 0 15px rgba(227, 30, 36, 0.8)'
+            }}
           />
         </div>
 
         <div className="flex items-center justify-between gap-1 sm:gap-0">
           <div className="flex items-center gap-1 sm:gap-3">
             {/* Play/Pause */}
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={togglePlay}
-              className="text-white hover:bg-white/20 h-8 w-8 sm:h-10 sm:w-10"
-            >
-              {isPlaying ? <Pause size={18} className="sm:w-6 sm:h-6" /> : <Play size={18} className="sm:w-6 sm:h-6" />}
-            </Button>
-
-            {/* Volume */}
-            <div className="flex items-center gap-1 sm:gap-2">
+            <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={toggleMute}
-                className="text-white hover:bg-white/20 h-8 w-8 sm:h-10 sm:w-10"
+                onClick={togglePlay}
+                className="text-white hover:bg-[#E31E24]/40 bg-black/40 backdrop-blur-sm h-9 w-9 sm:h-11 sm:w-11 rounded-xl border border-[#E31E24]/30 transition-all"
               >
-                {isMuted || volume === 0 ? <VolumeX size={16} className="sm:w-5 sm:h-5" /> : <Volume2 size={16} className="sm:w-5 sm:h-5" />}
+                {isPlaying ? <Pause size={18} className="sm:w-6 sm:h-6" /> : <Play size={18} className="sm:w-6 sm:h-6" />}
               </Button>
+            </motion.div>
+
+            {/* Volume */}
+            <div className="flex items-center gap-1 sm:gap-2">
+              <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={toggleMute}
+                  className="text-white hover:bg-[#E31E24]/40 bg-black/40 backdrop-blur-sm h-9 w-9 sm:h-11 sm:w-11 rounded-xl border border-[#E31E24]/30 transition-all"
+                >
+                  {isMuted || volume === 0 ? <VolumeX size={16} className="sm:w-5 sm:h-5" /> : <Volume2 size={16} className="sm:w-5 sm:h-5" />}
+                </Button>
+              </motion.div>
               <div className="w-16 sm:w-24 hidden md:block">
                 <Slider
                   value={[isMuted ? 0 : volume]}
@@ -556,30 +587,37 @@ export default function LivePlayer({
             </div>
 
             {/* Time/Live indicator */}
-            <span className="text-white text-xs sm:text-sm font-medium hidden lg:inline">
-              {isLive ? "● שידור חי" : "00:00 / 00:00"}
-            </span>
+            <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 bg-black/40 backdrop-blur-sm rounded-lg border border-[#E31E24]/30">
+              <span className="text-white text-xs sm:text-sm font-bold flex items-center gap-2">
+                {isLive && <span className="text-[#E31E24] animate-pulse">●</span>}
+                {isLive ? "שידור חי" : "00:00 / 00:00"}
+              </span>
+            </div>
           </div>
 
           <div className="flex items-center gap-1 sm:gap-2">
             {/* Reactions */}
-            <button
+            <motion.button
               onClick={() => setViewerReactions(viewerReactions + 1)}
-              className="hidden sm:flex items-center gap-1.5 px-3 py-1.5 bg-white/10 hover:bg-white/20 rounded-full text-white text-xs font-medium transition-colors"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-black/40 backdrop-blur-sm hover:bg-[#E31E24]/40 rounded-lg text-white text-xs font-bold transition-all border border-[#E31E24]/30"
             >
               <MessageCircle size={16} />
-              {viewerReactions}
-            </button>
+              <span>{viewerReactions}</span>
+            </motion.button>
 
             {/* Bookmark */}
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsBookmarked(!isBookmarked)}
-              className={`text-white hover:bg-white/20 h-8 w-8 sm:h-10 sm:w-10 hidden sm:flex ${isBookmarked ? 'text-yellow-400' : ''}`}
-            >
-              <Bookmark size={16} className="sm:w-5 sm:h-5" fill={isBookmarked ? 'currentColor' : 'none'} />
-            </Button>
+            <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsBookmarked(!isBookmarked)}
+                className={`text-white hover:bg-[#E31E24]/40 bg-black/40 backdrop-blur-sm h-9 w-9 sm:h-11 sm:w-11 rounded-xl border border-[#E31E24]/30 transition-all hidden sm:flex ${isBookmarked ? 'text-yellow-400' : ''}`}
+              >
+                <Bookmark size={16} className="sm:w-5 sm:h-5" fill={isBookmarked ? 'currentColor' : 'none'} />
+              </Button>
+            </motion.div>
 
             {/* Share with menu */}
             <div className="relative hidden sm:block">
@@ -592,23 +630,27 @@ export default function LivePlayer({
             </div>
 
             {/* Settings */}
-            <Button
-              variant="ghost"
-              size="icon"
-              className="text-white hover:bg-white/20 h-8 w-8 sm:h-10 sm:w-10 hidden md:flex"
-            >
-              <Settings size={16} className="sm:w-5 sm:h-5" />
-            </Button>
+            <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="text-white hover:bg-[#E31E24]/40 bg-black/40 backdrop-blur-sm h-9 w-9 sm:h-11 sm:w-11 rounded-xl border border-[#E31E24]/30 transition-all hidden md:flex"
+              >
+                <Settings size={16} className="sm:w-5 sm:h-5" />
+              </Button>
+            </motion.div>
 
             {/* Fullscreen */}
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={toggleFullscreen}
-              className="text-white hover:bg-white/20 h-8 w-8 sm:h-10 sm:w-10"
-            >
-              <Maximize size={16} className="sm:w-5 sm:h-5" />
-            </Button>
+            <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleFullscreen}
+                className="text-white hover:bg-[#E31E24]/40 bg-black/40 backdrop-blur-sm h-9 w-9 sm:h-11 sm:w-11 rounded-xl border border-[#E31E24]/30 transition-all"
+              >
+                <Maximize size={16} className="sm:w-5 sm:h-5" />
+              </Button>
+            </motion.div>
           </div>
         </div>
       </motion.div>
