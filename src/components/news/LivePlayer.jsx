@@ -355,7 +355,7 @@ export default function LivePlayer({
         {/* Frame Border - Covering YouTube Elements */}
         <div className="absolute inset-0 z-30 pointer-events-none">
           {/* Top Frame */}
-           <div className="absolute top-0 left-0 right-0 h-32 sm:h-40 bg-black flex flex-col px-2 sm:px-6 py-2 sm:py-3"
+           <div className="absolute top-0 left-0 right-0 h-20 sm:h-24 bg-black flex flex-col px-2 sm:px-6 py-1 sm:py-2"
              style={{
                boxShadow: '0 4px 20px rgba(0, 0, 0, 0.8)'
              }}
