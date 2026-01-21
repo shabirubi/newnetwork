@@ -17,7 +17,7 @@ import { base44 } from "@/api/base44Client";
 
 
 
-const DEFAULT_STREAM = "https://www.mako.co.il/AjaxPage?jspName=embedHTML5video.jsp&galleryChannelId=3bf5c3a8e967f510VgnVCM2000002a0c10acRCRD&videoChannelId=8bf955222beab610VgnVCM100000700a10acRCRD&vcmid=1e2258089b67f510VgnVCM2000002a0c10acRCRD";
+const DEFAULT_STREAM = "https://www.youtube.com/embed/pPRKdCHHlGI?autoplay=1&rel=0";
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png";
 
 export default function LivePlayer({ 
@@ -56,22 +56,22 @@ export default function LivePlayer({
   ];
 
   const bannerAds = [
-    { id: 1, image: "https://images.unsplash.com/photo-1495121553079-4c61bcce1894?w=400&h=160&fit=crop", brand: "ZARA - תערוקת אופנה בלעדית" },
-    { id: 2, image: "https://images.unsplash.com/photo-1469619644737-61910b0a8f33?w=400&h=160&fit=crop", brand: "H&M - קלקציה חדשה הגיעה" },
-    { id: 3, image: "https://images.unsplash.com/photo-1556821552-3a63f67cfaef?w=400&h=160&fit=crop", brand: "Forever 21 - מבחר ענק" },
-    { id: 4, image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=160&fit=crop", brand: "Shein - קנו בחכמה" },
-    { id: 5, image: "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&h=160&fit=crop", brand: "UNIQLO - איכות ופשוט" },
-    { id: 6, image: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=400&h=160&fit=crop", brand: "COS - עיצוב מינימליסטי" },
-    { id: 7, image: "https://images.unsplash.com/photo-1555529669-e69e7ea0bb9b?w=400&h=160&fit=crop", brand: "Mango - סטייל מדיטרני" },
-    { id: 8, image: "https://images.unsplash.com/photo-1490481651571-e89e0149fec0?w=400&h=160&fit=crop", brand: "Pull & Bear - קז'ואל שיק" },
-    { id: 9, image: "https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=400&h=160&fit=crop", brand: "Top Shop - ט्रנדים חדשים" },
-    { id: 10, image: "https://images.unsplash.com/photo-1514432324607-2e467f4af445?w=400&h=160&fit=crop", brand: "River Island - אופנה בריטית" },
-    { id: 11, image: "https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=400&h=160&fit=crop", brand: "Asos - הגדול בעולם" },
-    { id: 12, image: "https://images.unsplash.com/photo-1567449165295-25e45c2d4eaa?w=400&h=160&fit=crop", brand: "Boohoo - עצמאי יוקרתי" },
-    { id: 13, image: "https://images.unsplash.com/photo-1575260975783-b10b1ea7b046?w=400&h=160&fit=crop", brand: "PrettyLittleThing - בהבחירה" },
-    { id: 14, image: "https://images.unsplash.com/photo-1490216162932-2e7e2b4f1a6a?w=400&h=160&fit=crop", brand: "Revolve - דיוור הפאשן" },
-    { id: 15, image: "https://images.unsplash.com/photo-1479064555552-3ef4979005a1?w=400&h=160&fit=crop", brand: "Vestiaire Collective - יוקרה בחזקה" },
-    { id: 16, image: "https://images.unsplash.com/photo-1559631200-a1baa0fc6e0c?w=400&h=160&fit=crop", brand: "The Outnet - מותגים בחזקה" }
+    { id: 1, image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/cb296f8d5_image.png", brand: "ANNY Boutique Events - אירועים בוטיק" },
+    { id: 2, image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/7ef43efd7_image.png", brand: "מסעדת אווה - ארוחות ערב מיוחדות" },
+    { id: 3, image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/13fcdb80b_image.png", brand: "TADIRAN - שולטים במזג האוויר" },
+    { id: 4, image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/4829bca2e_image.png", brand: "H&M CAREERS - הצטרפו אלינו" },
+    { id: 5, image: "https://images.unsplash.com/photo-1495121553079-4c61bcce1894?w=400&h=160&fit=crop", brand: "ZARA - תערוקת אופנה בלעדית" },
+    { id: 6, image: "https://images.unsplash.com/photo-1469619644737-61910b0a8f33?w=400&h=160&fit=crop", brand: "H&M - קלקציה חדשה הגיעה" },
+    { id: 7, image: "https://images.unsplash.com/photo-1556821552-3a63f67cfaef?w=400&h=160&fit=crop", brand: "Forever 21 - מבחר ענק" },
+    { id: 8, image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=160&fit=crop", brand: "Shein - קנו בחכמה" },
+    { id: 9, image: "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&h=160&fit=crop", brand: "UNIQLO - איכות ופשוט" },
+    { id: 10, image: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=400&h=160&fit=crop", brand: "COS - עיצוב מינימליסטי" },
+    { id: 11, image: "https://images.unsplash.com/photo-1555529669-e69e7ea0bb9b?w=400&h=160&fit=crop", brand: "Mango - סטייל מדיטרני" },
+    { id: 12, image: "https://images.unsplash.com/photo-1490481651571-e89e0149fec0?w=400&h=160&fit=crop", brand: "Pull & Bear - קז'ואל שיק" },
+    { id: 13, image: "https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=400&h=160&fit=crop", brand: "Top Shop - ט्रנדים חדשים" },
+    { id: 14, image: "https://images.unsplash.com/photo-1514432324607-2e467f4af445?w=400&h=160&fit=crop", brand: "River Island - אופנה בריטית" },
+    { id: 15, image: "https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=400&h=160&fit=crop", brand: "Asos - הגדול בעולם" },
+    { id: 16, image: "https://images.unsplash.com/photo-1567449165295-25e45c2d4eaa?w=400&h=160&fit=crop", brand: "Boohoo - עצמאי יוקרתי" }
   ];
 
   const scheduleItems = [
@@ -344,7 +344,7 @@ export default function LivePlayer({
       <div className="relative w-full aspect-[9/16] sm:aspect-video rounded-t-2xl overflow-hidden">
         {/* YouTube Embed Player - MAIN */}
         <iframe
-          src="https://www.youtube.com/embed/f40ydG9WB74?autoplay=1&rel=0"
+          src="https://www.youtube.com/embed/pPRKdCHHlGI?autoplay=1&rel=0"
           className="absolute inset-0 w-full h-full z-20"
           allow="autoplay; fullscreen; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen

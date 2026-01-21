@@ -109,7 +109,7 @@ export default function Home() {
     initialData: []
   });
 
-  const defaultStreamUrl = "https://ok.ru/video/10508051226319";
+  const defaultStreamUrl = "https://www.youtube.com/embed/OeEDtjuqinU?autoplay=1&rel=0";
 
   const queryClient = useQueryClient();
 
@@ -373,7 +373,7 @@ export default function Home() {
         <h2 className="text-3xl font-bold dark:text-white mb-6 text-center">שידור חי</h2>
         <div className="flex justify-center">
           <iframe 
-            src="https://www.youtube.com/embed/f40ydG9WB74?autoplay=1"
+            src="https://www.youtube.com/embed/OeEDtjuqinU?autoplay=1&rel=0"
             width="100%" 
             height="400" 
             frameBorder="0" 
