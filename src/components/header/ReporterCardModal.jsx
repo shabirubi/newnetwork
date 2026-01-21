@@ -1,9 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Play, Pause } from "lucide-react";
+import { X, Play, Pause, MessageCircle } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { createPageUrl } from "../../utils";
 
 export default function ReporterCardModal({ reporter, isOpen, onClose }) {
   const [isPlaying, setIsPlaying] = useState(false);
+  const navigate = useNavigate();
+
+  const handleChatClick = () => {
+    localStorage.setItem('selectedReporter', JSON.stringify(reporter));
+    navigate(createPageUrl('ReporterStudio'));
+    onClose();
+  };
 
   const togglePlay = () => {
     if (!reporter) return;
@@ -126,10 +135,19 @@ export default function ReporterCardModal({ reporter, isOpen, onClose }) {
                 )}
               </div>
 
+              {/* Chat Button */}
+              <button
+                onClick={handleChatClick}
+                className="w-full bg-gradient-to-r from-[#E31E24] to-purple-600 hover:from-[#B91C1C] hover:to-purple-700 text-white font-bold py-3 px-4 rounded-lg transition-all flex items-center justify-center gap-2 mb-3"
+              >
+                <MessageCircle className="w-5 h-5" />
+                התחבר לצ'אט
+              </button>
+
               {/* Audio Player */}
               <button
                 onClick={togglePlay}
-                className="w-full bg-[#E31E24] hover:bg-red-700 text-white font-bold py-3 px-4 rounded-lg transition-all flex items-center justify-center gap-2"
+                className="w-full bg-gray-700 hover:bg-gray-600 text-white font-bold py-3 px-4 rounded-lg transition-all flex items-center justify-center gap-2"
               >
                 {isPlaying ? (
                   <>
