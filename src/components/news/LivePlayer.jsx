@@ -347,17 +347,17 @@ export default function LivePlayer({
         {/* Frame Border - Covering YouTube Elements */}
         <div className="absolute inset-0 z-30 pointer-events-none">
           {/* Top Frame */}
-           <div className="absolute top-0 left-0 right-0 h-20 sm:h-24 bg-black flex flex-col px-2 sm:px-6 py-1 sm:py-2"
+           <div className="absolute top-0 left-0 right-0 h-16 sm:h-20 bg-black flex flex-col px-2 sm:px-6 py-1 sm:py-2"
              style={{
                boxShadow: '0 4px 20px rgba(0, 0, 0, 0.8)'
              }}
            >
              {/* Logo and Title Row */}
-             <div className="flex items-center justify-between mb-1 sm:mb-2 gap-2 sm:gap-3">
+             <div className="flex items-center justify-between mb-0.5 sm:mb-1 gap-1 sm:gap-3">
                <motion.img 
                  src={LOGO_URL}
                  alt="הרשת החדשה"
-                 className="h-16 sm:h-20 w-auto drop-shadow-2xl"
+                 className="h-12 sm:h-16 w-auto drop-shadow-2xl"
                 animate={{ 
                   scale: [1, 1.05, 1],
                   filter: ['brightness(1)', 'brightness(1.2)', 'brightness(1)']
@@ -369,14 +369,14 @@ export default function LivePlayer({
                 }}
               />
               <div className="text-right flex-1 overflow-hidden min-w-0">
-                <div className="text-white font-bold text-xl sm:text-3xl drop-shadow-lg mb-0.5 sm:mb-1 leading-tight">הרשת החדשה</div>
-                <div className="text-[#E31E24] font-bold text-base sm:text-xl tracking-wide break-words" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.5)', letterSpacing: '0.5px' }}>
+                <div className="text-white font-bold text-sm sm:text-xl drop-shadow-lg mb-0.5 leading-tight hidden sm:block">הרשת החדשה</div>
+                <div className="text-[#E31E24] font-bold text-xs sm:text-base tracking-wide break-words" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.5)', letterSpacing: '0.5px' }}>
                   {displayedText}
                   <span className="animate-pulse ml-1">|</span>
                 </div>
               </div>
               {ads.length > 0 && (
-                <div className="bg-gradient-to-r from-yellow-600/80 via-yellow-500/80 to-yellow-600/80 backdrop-blur-sm overflow-hidden rounded-lg flex-1 max-w-xs h-8 sm:h-10 border border-yellow-400/50 shadow-lg hidden sm:block" style={{ boxShadow: '0 0 15px rgba(234, 179, 8, 0.5)' }}>
+                <div className="bg-gradient-to-r from-yellow-600/80 via-yellow-500/80 to-yellow-600/80 backdrop-blur-sm overflow-hidden rounded-lg flex-1 max-w-[200px] sm:max-w-xs h-6 sm:h-8 border border-yellow-400/50 shadow-lg" style={{ boxShadow: '0 0 15px rgba(234, 179, 8, 0.5)' }}>
                   <motion.div
                     className="flex items-center h-full gap-1 sm:gap-3 px-2"
                     animate={{ x: ["0%", "-100%"] }}
@@ -433,14 +433,14 @@ export default function LivePlayer({
            </div>
 
           {/* Left Frame */}
-          <div className="absolute top-20 sm:top-24 bottom-14 sm:bottom-16 left-0 w-8 sm:w-12 bg-black"
+          <div className="absolute top-16 sm:top-20 bottom-14 sm:bottom-16 left-0 w-8 sm:w-12 bg-black"
             style={{
               boxShadow: '4px 0 20px rgba(0, 0, 0, 0.8)'
             }}
           />
 
           {/* Right Frame */}
-          <div className="absolute top-20 sm:top-24 bottom-14 sm:bottom-16 right-0 w-8 sm:w-12 bg-black"
+          <div className="absolute top-16 sm:top-20 bottom-14 sm:bottom-16 right-0 w-8 sm:w-12 bg-black"
             style={{
               boxShadow: '-4px 0 20px rgba(0, 0, 0, 0.8)'
             }}
@@ -502,7 +502,7 @@ export default function LivePlayer({
         {/* Live Badge */}
         {isLive && (
           <motion.div 
-            className="absolute top-24 sm:top-28 left-12 sm:left-16 z-30"
+            className="absolute top-16 sm:top-20 right-2 sm:right-6 z-30"
             animate={{
               scale: [1, 1.05, 1],
             }}
@@ -660,7 +660,7 @@ export default function LivePlayer({
       </div>
 
       {/* Ads Carousel - Top Left */}
-      <div className={`absolute top-24 sm:top-26 left-4 sm:left-6 z-30 h-20 sm:h-24 transition-all duration-500 ${isWideAd ? 'w-80 sm:w-96' : 'w-48 sm:w-64'}`}>
+      <div className={`absolute top-16 sm:top-20 left-2 sm:left-6 z-30 h-14 sm:h-20 transition-all duration-500 ${isWideAd ? 'w-40 sm:w-80' : 'w-32 sm:w-56'}`}>
         <AnimatePresence mode="wait">
           <motion.div
             key={`${currentAdIndex}-${isWideAd}`}
