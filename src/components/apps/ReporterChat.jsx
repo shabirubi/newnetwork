@@ -177,12 +177,19 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
   };
 
   useEffect(() => {
+    const handleOpenChat = () => {
+      setOpenState(true);
+    };
+    
+    window.addEventListener('openReporterChat', handleOpenChat);
+    
     return () => {
+      window.removeEventListener('openReporterChat', handleOpenChat);
       if (localStreamRef.current) {
         localStreamRef.current.getTracks().forEach(track => track.stop());
       }
     };
-  }, []);
+  }, [setOpenState]);
 
   const startNewChat = (reporter) => {
     setSelectedReporter(reporter);
