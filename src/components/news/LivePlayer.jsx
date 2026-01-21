@@ -537,6 +537,54 @@ export default function LivePlayer({
           </motion.div>
         )}
 
+        {/* Unmute Button - Creative Floating Design */}
+        {isMuted && isPlaying && (
+          <motion.button
+            initial={{ scale: 0, rotate: -180 }}
+            animate={{ scale: 1, rotate: 0 }}
+            whileHover={{ scale: 1.1, rotate: 5 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setIsMuted(false)}
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 group"
+          >
+            <div className="relative">
+              {/* Pulsing Rings */}
+              <span className="absolute inset-0 rounded-full bg-[#E31E24] animate-ping opacity-75" style={{ animationDuration: '2s' }} />
+              <span className="absolute inset-0 rounded-full bg-[#E31E24] animate-ping opacity-50" style={{ animationDuration: '3s', animationDelay: '0.5s' }} />
+              
+              {/* Main Button */}
+              <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br from-[#E31E24] via-red-600 to-[#B91C1C] flex flex-col items-center justify-center shadow-2xl border-4 border-white/30 group-hover:border-white/60 transition-all"
+                style={{
+                  boxShadow: '0 0 40px rgba(227, 30, 36, 0.8), inset 0 0 20px rgba(255, 255, 255, 0.2)'
+                }}
+              >
+                <VolumeX className="w-8 h-8 sm:w-10 sm:h-10 text-white mb-1" strokeWidth={2.5} />
+                <span className="text-white text-[10px] sm:text-xs font-bold tracking-wide">הפעל קול</span>
+              </div>
+
+              {/* Animated Sound Waves */}
+              <motion.div
+                className="absolute -right-2 top-1/2 -translate-y-1/2"
+                animate={{ opacity: [0.3, 1, 0.3] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+              >
+                {[...Array(3)].map((_, i) => (
+                  <motion.div
+                    key={i}
+                    className="w-1 bg-white rounded-full mb-1"
+                    animate={{ height: [8, 16, 8] }}
+                    transition={{ 
+                      duration: 0.8, 
+                      repeat: Infinity, 
+                      delay: i * 0.2 
+                    }}
+                  />
+                ))}
+              </motion.div>
+            </div>
+          </motion.button>
+        )}
+
         {/* Play Button Overlay */}
         {!isPlaying && !showPromo && (
           <motion.button
