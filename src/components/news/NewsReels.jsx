@@ -10,13 +10,13 @@ export default function NewsReels() {
 
   // סרטוני יוטיוב שלנו
   const youtubeVideos = [
+    { id: 'youtube-pPRKdCHHlGI', videoId: 'pPRKdCHHlGI', title: 'שידור חי עכשיו', category: 'breaking' },
+    { id: 'youtube-OeEDtjuqinU', videoId: 'OeEDtjuqinU', title: 'חדשות הערב', category: 'breaking' },
     { id: 'youtube-EGxPXB-Kwuo', videoId: 'EGxPXB-Kwuo', title: 'עדכון חדשות יומי', category: 'breaking' },
     { id: 'youtube-k7WPygB6GlI', videoId: 'k7WPygB6GlI', title: 'חדשות עכשיו', category: 'breaking' },
     { id: 'youtube-4miQnYCTdS8', videoId: '4miQnYCTdS8', title: 'עדכון חם', category: 'security' },
     { id: 'youtube-2q9lcnXBicQ', videoId: '2q9lcnXBicQ', title: 'ניתוח מעמיק', category: 'economy' },
-    { id: 'youtube-vecTR4YAf-w', videoId: 'vecTR4YAf-w', title: 'דיווח מיוחד', category: 'politics' },
-    { id: 'youtube-OE6Oj8pW0BU', videoId: 'OE6Oj8pW0BU', title: 'סיקור בלעדי', category: 'technology' },
-    { id: 'youtube-t60lrCbStcY', videoId: 't60lrCbStcY', title: 'חדשות חמות', category: 'breaking' }
+    { id: 'youtube-vecTR4YAf-w', videoId: 'vecTR4YAf-w', title: 'דיווח מיוחד', category: 'politics' }
   ];
 
   const newsReels = youtubeVideos.map((video, i) => ({

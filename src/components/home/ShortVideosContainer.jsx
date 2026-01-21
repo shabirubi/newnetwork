@@ -6,14 +6,14 @@ export default function ShortVideosContainer() {
   const [selectedVideo, setSelectedVideo] = useState(null);
 
   const youtubeVideos = [
+    { id: 'youtube-pPRKdCHHlGI', videoId: 'pPRKdCHHlGI', title: 'שידור חי עכשיו - הרשת החדשה', category: 'breaking' },
+    { id: 'youtube-OeEDtjuqinU', videoId: 'OeEDtjuqinU', title: 'חדשות הערב - שידור חי', category: 'breaking' },
     { id: 'youtube-EGxPXB-Kwuo', videoId: 'EGxPXB-Kwuo', title: 'עדכון חדשות יומי', category: 'news' },
     { id: 'youtube-yqfErzEHR0g', videoId: 'yqfErzEHR0g', title: 'כתבים מהשטח בדיווח חי', category: 'live' },
     { id: 'youtube-k7WPygB6GlI', videoId: 'k7WPygB6GlI', title: 'חדשה דחופה - הרשת החדשה', category: 'breaking' },
     { id: 'youtube-4miQnYCTdS8', videoId: '4miQnYCTdS8', title: 'עדכון חם - שידור חי', category: 'news' },
     { id: 'youtube-2q9lcnXBicQ', videoId: '2q9lcnXBicQ', title: 'ניתוח מעמיק', category: 'analysis' },
-    { id: 'youtube-vecTR4YAf-w', videoId: 'vecTR4YAf-w', title: 'דיווח מיוחד בלעדי', category: 'special' },
-    { id: 'youtube-OE6Oj8pW0BU', videoId: 'OE6Oj8pW0BU', title: 'סיקור חי מהשטח', category: 'live' },
-    { id: 'youtube-t60lrCbStcY', videoId: 't60lrCbStcY', title: 'חדשות חמות עכשיו', category: 'breaking' }
+    { id: 'youtube-vecTR4YAf-w', videoId: 'vecTR4YAf-w', title: 'דיווח מיוחד בלעדי', category: 'special' }
   ];
 
   const categoryEmojis = {

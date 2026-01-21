@@ -7,6 +7,18 @@ export default function TikTokNewsContainer() {
 
   const tiktokVideos = [
     {
+      id: 'youtube-pPRKdCHHlGI',
+      title: "שידור חי עכשיו",
+      username: "@hareshet_live",
+      url: "https://www.youtube.com/embed/pPRKdCHHlGI?autoplay=1"
+    },
+    {
+      id: 'youtube-OeEDtjuqinU',
+      title: "חדשות הערב - עדכון",
+      username: "@hareshet_evening",
+      url: "https://www.youtube.com/embed/OeEDtjuqinU?autoplay=1"
+    },
+    {
       id: 'youtube-EGxPXB-Kwuo',
       title: "עדכון חדשות יומי",
       username: "@hareshet_daily",
@@ -23,18 +35,6 @@ export default function TikTokNewsContainer() {
       title: "כלכלה - אפדייט חם",
       username: "@hareshet_economy",
       url: "https://www.youtube.com/embed/4miQnYCTdS8?autoplay=1"
-    },
-    {
-      id: 'youtube-2q9lcnXBicQ',
-      title: "ספורט - התוקפת השעה",
-      username: "@hareshet_sports",
-      url: "https://www.youtube.com/embed/2q9lcnXBicQ?autoplay=1"
-    },
-    {
-      id: 'youtube-vecTR4YAf-w',
-      title: "טכנולוגיה - חידוש פורץ",
-      username: "@hareshet_tech",
-      url: "https://www.youtube.com/embed/vecTR4YAf-w?autoplay=1"
     }
   ];
 

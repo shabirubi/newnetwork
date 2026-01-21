@@ -23,14 +23,14 @@ export default function VideosFeed() {
 
   // Real YouTube videos from the channel
   const youtubeVideos = [
+    { id: 'yt-pPRKdCHHlGI', title: 'שידור חי עכשיו - הרשת החדשה', url: 'https://www.youtube.com/embed/pPRKdCHHlGI?autoplay=1&rel=0', thumbnail: 'https://img.youtube.com/vi/pPRKdCHHlGI/maxresdefault.jpg' },
+    { id: 'yt-OeEDtjuqinU', title: 'חדשות הערב - שידור חי', url: 'https://www.youtube.com/embed/OeEDtjuqinU?autoplay=1&rel=0', thumbnail: 'https://img.youtube.com/vi/OeEDtjuqinU/maxresdefault.jpg' },
     { id: 'yt-EGxPXB-Kwuo', title: 'עדכון חדשות יומי - הרשת החדשה', url: 'https://www.youtube.com/embed/EGxPXB-Kwuo?autoplay=1&rel=0', thumbnail: 'https://img.youtube.com/vi/EGxPXB-Kwuo/maxresdefault.jpg' },
     { id: 'yt-yqfErzEHR0g', title: 'כתבים מהשטח - דיווח בזמן אמת', url: 'https://www.youtube.com/embed/yqfErzEHR0g?autoplay=1&rel=0', thumbnail: 'https://img.youtube.com/vi/yqfErzEHR0g/maxresdefault.jpg' },
     { id: 'yt-k7WPygB6GlI', title: 'סרטון ממוחשב - הרשת החדשה', url: 'https://www.youtube.com/embed/k7WPygB6GlI?autoplay=1&rel=0', thumbnail: 'https://img.youtube.com/vi/k7WPygB6GlI/maxresdefault.jpg' },
     { id: 'yt-4miQnYCTdS8', title: 'הרשת החדשה - שידור חי', url: 'https://www.youtube.com/embed/4miQnYCTdS8?autoplay=1&rel=0', thumbnail: 'https://img.youtube.com/vi/4miQnYCTdS8/maxresdefault.jpg' },
     { id: 'yt-2q9lcnXBicQ', title: 'תוכן מיוחד הרשת', url: 'https://www.youtube.com/embed/2q9lcnXBicQ?autoplay=1&rel=0', thumbnail: 'https://img.youtube.com/vi/2q9lcnXBicQ/maxresdefault.jpg' },
     { id: 'yt-vecTR4YAf-w', title: 'חדשות בזמן אמת', url: 'https://www.youtube.com/embed/vecTR4YAf-w?autoplay=1&rel=0', thumbnail: 'https://img.youtube.com/vi/vecTR4YAf-w/maxresdefault.jpg' },
-    { id: 'yt-OE6Oj8pW0BU', title: 'עדכוני חדשות', url: 'https://www.youtube.com/embed/OE6Oj8pW0BU?autoplay=1&rel=0', thumbnail: 'https://img.youtube.com/vi/OE6Oj8pW0BU/maxresdefault.jpg' },
-    { id: 'yt-t60lrCbStcY', title: 'סיקור מיוחד', url: 'https://www.youtube.com/embed/t60lrCbStcY?autoplay=1&rel=0', thumbnail: 'https://img.youtube.com/vi/t60lrCbStcY/maxresdefault.jpg' },
   ];
 
   const videos = [
