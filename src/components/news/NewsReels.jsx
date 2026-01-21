@@ -23,7 +23,7 @@ export default function NewsReels() {
     ...video,
     subtitle: `הרשת החדשה - שידור חי`,
     thumbnail: `https://img.youtube.com/vi/${video.videoId}/hqdefault.jpg`,
-    videoUrl: `https://www.youtube.com/embed/${video.videoId}?autoplay=1`,
+    videoUrl: `https://www.youtube.com/embed/${video.videoId}?autoplay=1&mute=1`,
     views: Math.floor(Math.random() * 100000) + 1000,
     timestamp: moment().subtract(i, 'hours').toDate(),
     liked: false

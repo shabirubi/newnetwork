@@ -344,7 +344,7 @@ export default function LivePlayer({
       <div className="relative w-full aspect-[9/16] sm:aspect-video rounded-t-2xl overflow-hidden">
         {/* YouTube Embed Player - MAIN */}
         <iframe
-          src="https://www.youtube.com/embed/pPRKdCHHlGI?autoplay=1&rel=0"
+          src="https://www.youtube.com/embed/pPRKdCHHlGI?autoplay=1&mute=1&rel=0"
           className="absolute inset-0 w-full h-full z-20"
           allow="autoplay; fullscreen; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
@@ -403,7 +403,7 @@ export default function LivePlayer({
                             src={ad.image} 
                             alt={ad.brand}
                             className="h-full w-auto object-contain max-w-[120px]"
-                            onError={(e) => { e.target.style.display = 'none'; }}
+                            loading="eager"
                           />
                           <motion.div
                             className="absolute inset-0 bg-gradient-to-r from-white via-white to-transparent opacity-30"
