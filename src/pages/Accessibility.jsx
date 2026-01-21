@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
-import { AccessibilityIcon, Volume2, Eye, Keyboard, Zap, Users, ArrowRight, CheckCircle, Vibrate } from "lucide-react";
+import { AccessibilityIcon, Volume2, Eye, Keyboard, Zap, Users, ArrowRight, CheckCircle, Vibrate, CreditCard } from "lucide-react";
 import { motion } from "framer-motion";
 import { useHapticFeedback } from "../components/utils/useHapticFeedback";
 
@@ -256,6 +256,43 @@ export default function Accessibility() {
               </div>
             ))}
           </ul>
+        </motion.div>
+
+        {/* Upgrade Plan CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.9 }}
+          className="bg-gradient-to-r from-yellow-500/20 to-orange-500/20 dark:from-yellow-600/20 dark:to-orange-600/20 rounded-2xl p-8 shadow-lg mb-12 border-2 border-yellow-500/50 backdrop-blur-sm"
+        >
+          <div className="flex items-center gap-3 mb-4">
+            <CreditCard className="w-8 h-8 text-yellow-600" />
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">שדרג את התוכנית שלך</h2>
+          </div>
+          <p className="text-gray-700 dark:text-gray-300 mb-6 text-lg">
+            רוצה ליהנות מיכולות AI מלאות כמו צ'אט עם כתבים? שדרג את התוכנית שלך וקבל יותר קרדיטים לאינטגרציות.
+          </p>
+          <div className="bg-white/80 dark:bg-black/40 rounded-lg p-4 mb-6">
+            <p className="text-gray-700 dark:text-gray-300 text-sm mb-2">
+              <strong>כיצד לשדרג:</strong>
+            </p>
+            <ol className="list-decimal list-inside space-y-2 text-gray-600 dark:text-gray-400 text-sm">
+              <li>היכנס ל-<strong>Dashboard של Base44</strong></li>
+              <li>לחץ על <strong>Settings</strong> בתפריט הצד</li>
+              <li>בחר <strong>Billing / Subscription</strong></li>
+              <li>שדרג לתוכנית עם יותר קרדיטים</li>
+            </ol>
+          </div>
+          <a
+            href="https://app.base44.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-6 py-3 rounded-full font-bold hover:from-yellow-600 hover:to-orange-600 transition-all shadow-lg hover:shadow-xl"
+          >
+            <CreditCard className="w-5 h-5" />
+            עבור לדשבורד לשדרוג
+            <ArrowRight className="w-5 h-5" />
+          </a>
         </motion.div>
 
         {/* Contact */}
