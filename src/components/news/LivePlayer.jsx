@@ -56,8 +56,9 @@ export default function LivePlayer({
   ];
 
   const bannerAds = [
-    { id: 1, image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/cb296f8d5_image.png", brand: "ANNY Boutique Events - אירועים בוטיק" },
-    { id: 2, image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/7ef43efd7_image.png", brand: "מסעדת אווה - ארוחות ערב מיוחדות" },
+    { id: 1, image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c61500337_image.png", brand: "AWA Restaurant - מסעדה משובחת" },
+    { id: 2, image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/cb296f8d5_image.png", brand: "ANNY Boutique Events - אירועים בוטיק" },
+    { id: 3, image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/7ef43efd7_image.png", brand: "מסעדת אווה - ארוחות ערב מיוחדות" },
     { id: 3, image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/13fcdb80b_image.png", brand: "TADIRAN - שולטים במזג האוויר" },
     { id: 4, image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/4829bca2e_image.png", brand: "H&M CAREERS - הצטרפו אלינו" },
     { id: 5, image: "https://images.unsplash.com/photo-1495121553079-4c61bcce1894?w=400&h=160&fit=crop", brand: "ZARA - תערוקת אופנה בלעדית" },
