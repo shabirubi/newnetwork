@@ -368,7 +368,7 @@ export default function LivePlayer({
                 }}
               />
               <div className="text-right flex-1 overflow-hidden min-w-0">
-                <div className="text-white font-extrabold text-xl sm:text-3xl drop-shadow-lg mb-0.5 sm:mb-1 leading-tight" style={{ fontFamily: "'Varela Round', sans-serif" }}>הרשת החדשה</div>
+                <div className="text-white font-extrabold text-xl sm:text-3xl drop-shadow-lg mb-0.5 sm:mb-1 leading-tight">הרשת החדשה</div>
                 <div className="text-[#E31E24] font-bold text-base sm:text-xl tracking-wide break-words" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.5)', letterSpacing: '0.5px' }}>
                   {displayedText}
                   <span className="animate-pulse ml-1">|</span>
