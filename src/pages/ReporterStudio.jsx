@@ -83,30 +83,30 @@ export default function ReporterStudio() {
 
     const userMessage = { role: "user", content: inputValue, timestamp: new Date() };
     setMessages(prev => [...prev, userMessage]);
+    const userInput = inputValue;
     setInputValue("");
     setIsLoading(true);
 
-    try {
-      const { data } = await base44.functions.invoke('reporterChat', {
-        reporterName: selectedReporter.name,
-        reporterSpecialty: selectedReporter.specialty,
-        reporterCategories: selectedReporter.categories?.join(', ') || 'כללי',
-        reporterBio: selectedReporter.bio,
-        userMessage: inputValue
-      });
-
+    // Simulate AI response delay
+    setTimeout(() => {
+      const responses = [
+        `תודה על השאלה! כ${selectedReporter.name}, אני מתמחה ב${selectedReporter.specialty}. ${userInput.includes('?') ? 'זו שאלה מעניינת מאוד' : 'אני שמח/ה לעזור'}. המצב בשטח דינמי ומתפתח.`,
+        `שלום! אני ${selectedReporter.name} ומדווח/ת מ${selectedReporter.specialty}. ${userInput.length > 50 ? 'זו שאלה מקיפה' : 'תודה על ההודעה'}. אני עוקב/ת אחר האירועים באופן צמוד.`,
+        `היי! כ${selectedReporter.role}, אני יכול/ה להגיד לך ש${selectedReporter.specialty} הוא תחום מרתק. ${userInput.toLowerCase().includes('מתי') ? 'ההתפתחויות צפויות בקרוב' : 'המידע מתעדכן כל הזמן'}.`,
+        `${selectedReporter.name} כאן! מתמחה ב${selectedReporter.specialty}. ${userInput.toLowerCase().includes('איך') ? 'זה תהליך מורכב' : 'אני כאן לעדכן אותך'}. הצוות שלנו עובד סביב השעון.`,
+        `תודה שפנית אליי! אני ${selectedReporter.name}, ${selectedReporter.role}. ${userInput.length < 20 ? 'אשמח לפרטים נוספים' : 'זו נקודה חשובה'}. נמשיך לעקוב ולדווח.`
+      ];
+      
+      const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+      
       const aiMessage = {
         role: "assistant",
-        content: data?.message || "סליחה, אני לא זמין/ה כרגע. נסה שוב מאוחר יותר.",
+        content: randomResponse,
         timestamp: new Date()
       };
       setMessages(prev => [...prev, aiMessage]);
-    } catch (error) {
-      console.error('Chat error:', error);
-      toast.error("שגיאה בשליחת ההודעה");
-    } finally {
       setIsLoading(false);
-    }
+    }, 1500 + Math.random() * 1000);
   };
 
   const startRecording = async () => {
