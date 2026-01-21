@@ -35,8 +35,8 @@ const categories = [
   ];
 
 export default function Layout({ children, currentPageName }) {
-  // דף VODContent - ללא Layout
-  if (currentPageName === 'VODContent') {
+  // דפים ללא Layout
+  if (currentPageName === 'VODContent' || currentPageName === 'ReporterStudio') {
     return children;
   }
         const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
