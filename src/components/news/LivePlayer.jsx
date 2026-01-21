@@ -163,10 +163,11 @@ export default function LivePlayer({
           playerRef.current = new window.YT.Player('youtube-player', {
             videoId: playlist[0],
             playerVars: {
-              autoplay: 1,
+              autoplay: 0,
               controls: 1,
               rel: 0,
               modestbranding: 1,
+              mute: 1,
               playlist: playlist.slice(1).join(',')
             },
             events: {
