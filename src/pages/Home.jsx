@@ -15,58 +15,24 @@ import UpdatesFeed from "../components/news/UpdatesFeed";
 import EntertainmentUpdatesFeed from "../components/news/EntertainmentUpdatesFeed";
 
 import CategoriesMenu from "../components/shared/CategoriesMenu";
-import VideoHighlights from "../components/news/VideoHighlights";
 import TalkingAvatar from "../components/avatar/TalkingAvatar";
 
 import AutoNewsUpdater from "../components/news/AutoNewsUpdater";
 import AutoChannelsUpdater from "../components/news/AutoChannelsUpdater";
 
-import VideosFeed from "../components/home/VideosFeed";
 import TikTokNewsFeed from "../components/news/TikTokNewsFeed";
-import AIAnnouncer from "../components/news/AIAnnouncer";
-import TVAnchor from "../components/news/TVAnchor";
 import VODModal from "../components/vod/VODModal";
-import BroadcastStrip from "../components/news/BroadcastStrip";
 import AccessibilityPanel from "../components/accessibility/AccessibilityPanel";
-import NewsReels from "../components/news/NewsReels";
-import LiveReporterQA from "../components/news/LiveReporterQA";
-import TestimonialsSection from "../components/home/TestimonialsSection";
-import TikTokNewsContainer from "../components/home/TikTokNewsContainer";
-import TrendingTopicsContainer from "../components/home/TrendingTopicsContainer";
-import NewsletterSignup from "../components/home/NewsletterSignup";
-import ReportersSpotlight from "../components/home/ReportersSpotlight";
-import BreakingNewsWidget from "../components/home/BreakingNewsWidget";
-import ExpertAnalysisContainer from "../components/home/ExpertAnalysisContainer";
-import NewsStatisticsDashboard from "../components/home/NewsStatisticsDashboard";
-import UserExperienceFeatures from "../components/home/UserExperienceFeatures";
-import UserUploadedVideos from "../components/home/UserUploadedVideos";
 import UploadVideoModal from "../components/home/UploadVideoModal";
-import NewsSearch from "../components/apps/NewsSearch";
-import LiveStatsApp from "../components/apps/LiveStatsApp";
-import NewsQuiz from "../components/apps/NewsQuiz";
-import PersonalAlerts from "../components/apps/PersonalAlerts";
-import NewsMap from "../components/apps/NewsMap";
-import DailySummary from "../components/apps/DailySummary";
-import ArticleRating from "../components/apps/ArticleRating";
-import WeatherWidget from "../components/apps/WeatherWidget";
-import BreakingNotifications from "../components/apps/BreakingNotifications";
-import ReadingList from "../components/apps/ReadingList";
-import NewsTimeline from "../components/apps/NewsTimeline";
-import VoiceNews from "../components/apps/VoiceNews";
-import TodoList from "../components/apps/TodoList";
-import TrendingHashtags from "../components/apps/TrendingHashtags";
-import FavoriteCategories from "../components/apps/FavoriteCategories";
-import FactChecker from "../components/apps/FactChecker";
 import ReporterChat from "../components/apps/ReporterChat";
-import LiveStatisticsContainer from "../components/home/LiveStatisticsContainer";
-import MostViewedContainer from "../components/home/MostViewedContainer";
-import CategoriesHighlightContainer from "../components/home/CategoriesHighlightContainer";
-import WorldNewsContainer from "../components/home/WorldNewsContainer";
-import ShortVideosContainer from "../components/home/ShortVideosContainer";
-import WorldNewsReportersContainer from "../components/home/WorldNewsReportersContainer";
-import MoviesSeriesContainer from "../components/home/MoviesSeriesContainer";
-import PlutoTVChannelsContainer from "../components/home/PlutoTVChannelsContainer";
-import AllVideosGallery from "../components/home/AllVideosGallery";
+
+// Lazy loaded components
+const NewsReels = React.lazy(() => import("../components/news/NewsReels"));
+const TrendingTopicsContainer = React.lazy(() => import("../components/home/TrendingTopicsContainer"));
+const TikTokNewsContainer = React.lazy(() => import("../components/home/TikTokNewsContainer"));
+const ReportersSpotlight = React.lazy(() => import("../components/home/ReportersSpotlight"));
+const UserUploadedVideos = React.lazy(() => import("../components/home/UserUploadedVideos"));
+const AllVideosGallery = React.lazy(() => import("../components/home/AllVideosGallery"));
 
 
 
@@ -221,59 +187,25 @@ export default function Home() {
         })}
       </section>
 
-      {/* News Reels Section */}
-      <NewsReels />
+      {/* News Reels Section - Lazy Loaded */}
+      <React.Suspense fallback={<div className="h-96 bg-black animate-pulse rounded-2xl" />}>
+        <NewsReels />
+      </React.Suspense>
 
-      {/* Trending Topics Container */}
-      <TrendingTopicsContainer />
+      {/* Trending Topics Container - Lazy Loaded */}
+      <React.Suspense fallback={<div className="h-64 bg-black animate-pulse rounded-2xl mx-4" />}>
+        <TrendingTopicsContainer />
+      </React.Suspense>
 
-      {/* TikTok News Container */}
-      <TikTokNewsContainer />
+      {/* TikTok News Container - Lazy Loaded */}
+      <React.Suspense fallback={<div className="h-96 bg-black animate-pulse rounded-2xl mx-4" />}>
+        <TikTokNewsContainer />
+      </React.Suspense>
 
-      {/* Breaking News Widget */}
-      <BreakingNewsWidget />
-
-      {/* Reporters Spotlight */}
-      <ReportersSpotlight />
-
-      {/* Expert Analysis */}
-      <ExpertAnalysisContainer />
-
-      {/* News Statistics Dashboard */}
-      <NewsStatisticsDashboard />
-
-      {/* Live Statistics Container */}
-      <LiveStatisticsContainer />
-
-      {/* Most Viewed Container */}
-      <MostViewedContainer />
-
-      {/* Categories Highlight Container */}
-      <CategoriesHighlightContainer />
-
-      {/* World News Container */}
-      <WorldNewsContainer />
-
-      {/* Short Videos Container */}
-      <ShortVideosContainer />
-
-      {/* World News Reporters Container */}
-      <WorldNewsReportersContainer />
-
-      {/* Movies Series Container */}
-      <MoviesSeriesContainer />
-
-      {/* Pluto TV Channels Container */}
-      <PlutoTVChannelsContainer />
-
-      {/* Newsletter Signup */}
-      <NewsletterSignup />
-
-      {/* Live Reporter Q&A Section */}
-      <LiveReporterQA />
-
-      {/* Testimonials Section */}
-      <TestimonialsSection />
+      {/* Reporters Spotlight - Lazy Loaded */}
+      <React.Suspense fallback={<div className="h-96 bg-black animate-pulse rounded-2xl mx-4" />}>
+        <ReportersSpotlight />
+      </React.Suspense>
 
       {/* All News Section */}
        {articles.length > 0 && (
@@ -312,44 +244,20 @@ export default function Home() {
       {/* Talking Avatar */}
       <TalkingAvatar />
 
-      {/* User Experience Features */}
-      <UserExperienceFeatures />
-
-      {/* User Uploaded Videos */}
+      {/* User Uploaded Videos - Lazy Loaded */}
       <div id="user-videos-section">
-        <UserUploadedVideos onUploadClick={() => setUploadVideoModalOpen(true)} />
+        <React.Suspense fallback={<div className="h-96 bg-black animate-pulse rounded-2xl mx-4" />}>
+          <UserUploadedVideos onUploadClick={() => setUploadVideoModalOpen(true)} />
+        </React.Suspense>
       </div>
 
-      {/* All Videos Gallery */}
-      <AllVideosGallery />
+      {/* All Videos Gallery - Lazy Loaded */}
+      <React.Suspense fallback={<div className="h-96 bg-black animate-pulse rounded-2xl mx-4" />}>
+        <AllVideosGallery />
+      </React.Suspense>
 
-      {/* Apps Section */}
-      <section className="px-4 space-y-8 mb-12">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold dark:text-white mb-2">אפליקציות אינטראקטיביות</h2>
-          <p className="text-gray-400">כלים חכמים לחוויית משתמש משופרת</p>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-          <NewsSearch />
-          <LiveStatsApp />
-          <NewsQuiz />
-          <PersonalAlerts />
-          <NewsMap />
-          <DailySummary />
-          <ArticleRating />
-          <WeatherWidget />
-          <BreakingNotifications />
-          <ReadingList />
-          <NewsTimeline />
-          <VoiceNews />
-          <TodoList />
-          <TrendingHashtags />
-          <FavoriteCategories />
-          <FactChecker />
-          <ReporterChat externalIsOpen={reporterChatOpen} externalSetIsOpen={setReporterChatOpen} />
-        </div>
-      </section>
+      {/* Reporter Chat - Only essential app */}
+      <ReporterChat externalIsOpen={reporterChatOpen} externalSetIsOpen={setReporterChatOpen} />
 
       {/* Spotify Section */}
       <section className="px-4 mb-12">
