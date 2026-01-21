@@ -43,7 +43,6 @@ export default function NewsReelsModal({ reel, onClose }) {
           <video
             src={videoUrl}
             controls
-            autoPlay
             className="w-full h-full"
           />
         </div>
