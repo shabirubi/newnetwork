@@ -6,7 +6,6 @@ import {
   Pause, Volume2, VolumeX, Settings, Share2, Download,
   User, Clock, AlertCircle, CheckCircle, Heart, Smile, ThumbsUp, Zap
 } from "lucide-react";
-import { AnimatePresence } from "framer-motion";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { Input } from "@/components/ui/input";
