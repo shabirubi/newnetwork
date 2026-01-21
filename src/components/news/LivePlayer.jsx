@@ -335,12 +335,13 @@ export default function LivePlayer({
       <div className="relative w-full aspect-[9/16] sm:aspect-video rounded-t-2xl overflow-hidden">
         {/* YouTube Embed Player - MAIN */}
         <iframe
-          src="https://www.youtube.com/embed/pPRKdCHHlGI?autoplay=0&mute=1&rel=0"
+          src={`https://www.youtube.com/embed/pPRKdCHHlGI?autoplay=${isPlaying ? 1 : 0}&mute=${isMuted ? 1 : 0}&rel=0`}
           className="absolute inset-0 w-full h-full z-20"
           allow="autoplay; fullscreen; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
           frameBorder="0"
           title={title}
+          key={`youtube-${isMuted}-${isPlaying}`}
         />
 
         {/* Frame Border - Covering YouTube Elements */}
