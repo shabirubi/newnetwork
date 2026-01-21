@@ -56,23 +56,11 @@ export default function LivePlayer({
   ];
 
   const bannerAds = [
-    { id: 1, image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c61500337_image.png", brand: "AWA Restaurant - מסעדה משובחת" },
-    { id: 2, image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/cb296f8d5_image.png", brand: "ANNY Boutique Events - אירועים בוטיק" },
-    { id: 3, image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/7ef43efd7_image.png", brand: "מסעדת אווה - ארוחות ערב מיוחדות" },
-    { id: 3, image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/13fcdb80b_image.png", brand: "TADIRAN - שולטים במזג האוויר" },
-    { id: 4, image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/4829bca2e_image.png", brand: "H&M CAREERS - הצטרפו אלינו" },
-    { id: 5, image: "https://images.unsplash.com/photo-1495121553079-4c61bcce1894?w=400&h=160&fit=crop", brand: "ZARA - תערוקת אופנה בלעדית" },
-    { id: 6, image: "https://images.unsplash.com/photo-1469619644737-61910b0a8f33?w=400&h=160&fit=crop", brand: "H&M - קלקציה חדשה הגיעה" },
-    { id: 7, image: "https://images.unsplash.com/photo-1556821552-3a63f67cfaef?w=400&h=160&fit=crop", brand: "Forever 21 - מבחר ענק" },
-    { id: 8, image: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=160&fit=crop", brand: "Shein - קנו בחכמה" },
-    { id: 9, image: "https://images.unsplash.com/photo-1509631179647-0177331693ae?w=400&h=160&fit=crop", brand: "UNIQLO - איכות ופשוט" },
-    { id: 10, image: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=400&h=160&fit=crop", brand: "COS - עיצוב מינימליסטי" },
-    { id: 11, image: "https://images.unsplash.com/photo-1555529669-e69e7ea0bb9b?w=400&h=160&fit=crop", brand: "Mango - סטייל מדיטרני" },
-    { id: 12, image: "https://images.unsplash.com/photo-1490481651571-e89e0149fec0?w=400&h=160&fit=crop", brand: "Pull & Bear - קז'ואל שיק" },
-    { id: 13, image: "https://images.unsplash.com/photo-1523293182086-7651a899d37f?w=400&h=160&fit=crop", brand: "Top Shop - ט्रנדים חדשים" },
-    { id: 14, image: "https://images.unsplash.com/photo-1514432324607-2e467f4af445?w=400&h=160&fit=crop", brand: "River Island - אופנה בריטית" },
-    { id: 15, image: "https://images.unsplash.com/photo-1591195853828-11db59a44f6b?w=400&h=160&fit=crop", brand: "Asos - הגדול בעולם" },
-    { id: 16, image: "https://images.unsplash.com/photo-1567449165295-25e45c2d4eaa?w=400&h=160&fit=crop", brand: "Boohoo - עצמאי יוקרתי" }
+    { id: 1, image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c61500337_image.png", brand: "AWA Restaurant" },
+    { id: 2, image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/cb296f8d5_image.png", brand: "ANNY Boutique Events" },
+    { id: 3, image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/7ef43efd7_image.png", brand: "AWA Restaurant" },
+    { id: 4, image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/13fcdb80b_image.png", brand: "TADIRAN" },
+    { id: 5, image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/4829bca2e_image.png", brand: "H&M CAREERS" }
   ];
 
   const scheduleItems = [
@@ -537,50 +525,29 @@ export default function LivePlayer({
           </motion.div>
         )}
 
-        {/* Unmute Button - Creative Floating Design */}
+        {/* Unmute Button - Red-Black Transparent Design */}
         {isMuted && isPlaying && (
           <motion.button
-            initial={{ scale: 0, rotate: -180 }}
-            animate={{ scale: 1, rotate: 0 }}
-            whileHover={{ scale: 1.1, rotate: 5 }}
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setIsMuted(false)}
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 group"
           >
             <div className="relative">
-              {/* Pulsing Rings */}
-              <span className="absolute inset-0 rounded-full bg-[#E31E24] animate-ping opacity-75" style={{ animationDuration: '2s' }} />
-              <span className="absolute inset-0 rounded-full bg-[#E31E24] animate-ping opacity-50" style={{ animationDuration: '3s', animationDelay: '0.5s' }} />
-              
+              {/* Pulsing Ring */}
+              <span className="absolute inset-0 rounded-full bg-[#E31E24]/40 animate-ping" style={{ animationDuration: '2s' }} />
+
               {/* Main Button */}
-              <div className="relative w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-gradient-to-br from-[#E31E24] via-red-600 to-[#B91C1C] flex flex-col items-center justify-center shadow-2xl border-4 border-white/30 group-hover:border-white/60 transition-all"
+              <div className="relative px-8 py-4 rounded-2xl bg-gradient-to-br from-[#E31E24]/80 via-black/80 to-[#E31E24]/80 backdrop-blur-xl flex items-center gap-3 shadow-2xl border-2 border-[#E31E24]/50 group-hover:border-[#E31E24] transition-all"
                 style={{
-                  boxShadow: '0 0 40px rgba(227, 30, 36, 0.8), inset 0 0 20px rgba(255, 255, 255, 0.2)'
+                  boxShadow: '0 0 40px rgba(227, 30, 36, 0.6), inset 0 0 30px rgba(0, 0, 0, 0.5)'
                 }}
               >
-                <VolumeX className="w-8 h-8 sm:w-10 sm:h-10 text-white mb-1" strokeWidth={2.5} />
-                <span className="text-white text-[10px] sm:text-xs font-bold tracking-wide">הפעל קול</span>
+                <VolumeX className="w-8 h-8 text-white" strokeWidth={2.5} />
+                <span className="text-white text-xl font-bold tracking-wide">הפעל קול</span>
               </div>
-
-              {/* Animated Sound Waves */}
-              <motion.div
-                className="absolute -right-2 top-1/2 -translate-y-1/2"
-                animate={{ opacity: [0.3, 1, 0.3] }}
-                transition={{ duration: 1.5, repeat: Infinity }}
-              >
-                {[...Array(3)].map((_, i) => (
-                  <motion.div
-                    key={i}
-                    className="w-1 bg-white rounded-full mb-1"
-                    animate={{ height: [8, 16, 8] }}
-                    transition={{ 
-                      duration: 0.8, 
-                      repeat: Infinity, 
-                      delay: i * 0.2 
-                    }}
-                  />
-                ))}
-              </motion.div>
             </div>
           </motion.button>
         )}
