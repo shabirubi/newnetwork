@@ -4,8 +4,9 @@ import {
   X, Send, Mic, Video, VideoOff, MicOff, Phone, Loader, 
   Sparkles, Camera, MessageCircle, Users, Radio, Play, 
   Pause, Volume2, VolumeX, Settings, Share2, Download,
-  User, Clock, AlertCircle, CheckCircle
+  User, Clock, AlertCircle, CheckCircle, Heart, Smile, ThumbsUp, Zap
 } from "lucide-react";
+import { AnimatePresence } from "framer-motion";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { Input } from "@/components/ui/input";
@@ -26,10 +27,15 @@ export default function ReporterStudio() {
   const [audioEnabled, setAudioEnabled] = useState(true);
   const [isCallActive, setIsCallActive] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
+  const [isTyping, setIsTyping] = useState(false);
+  const [reporterStatus, setReporterStatus] = useState('online'); // online, typing, away
+  const [callDuration, setCallDuration] = useState(0);
+  const [messageReactions, setMessageReactions] = useState({});
   const messagesEndRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
   const recordingIntervalRef = useRef(null);
+  const callTimerRef = useRef(null);
 
   const { data: reporters = [] } = useQuery({
     queryKey: ['reporters-studio'],
@@ -65,48 +71,183 @@ export default function ReporterStudio() {
     };
   }, [isRecording]);
 
+  // Call timer
+  useEffect(() => {
+    if (isCallActive) {
+      callTimerRef.current = setInterval(() => {
+        setCallDuration(prev => prev + 1);
+      }, 1000);
+    } else {
+      setCallDuration(0);
+      if (callTimerRef.current) {
+        clearInterval(callTimerRef.current);
+      }
+    }
+    return () => {
+      if (callTimerRef.current) {
+        clearInterval(callTimerRef.current);
+      }
+    };
+  }, [isCallActive]);
+
+  const formatCallTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const addReaction = (messageId, emoji) => {
+    setMessageReactions(prev => ({
+      ...prev,
+      [messageId]: [...(prev[messageId] || []), emoji]
+    }));
+  };
+
   const startChat = (reporter) => {
     setSelectedReporter(reporter);
-    setMessages([
-      {
-        role: "assistant",
-        content: `שלום! אני ${reporter.name}, ${reporter.role}. אני מתמחה ב${reporter.specialty}. איך אני יכול/ה לעזור לך היום?`,
-        timestamp: new Date()
-      }
-    ]);
+    setMessages([]);
     setIsCallActive(true);
-    toast.success(`התחברת לשיחה עם ${reporter.name}`);
+    setCallDuration(0);
+    setReporterStatus('typing');
+    
+    // Simulate connection
+    toast.loading('מתחבר...', { id: 'connecting' });
+    
+    setTimeout(() => {
+      toast.success(`התחברת ל${reporter.name}`, { id: 'connecting' });
+      setReporterStatus('online');
+      
+      // Welcome message with typing effect
+      setTimeout(() => {
+        setIsTyping(true);
+        setTimeout(() => {
+          setIsTyping(false);
+          setMessages([
+            {
+              role: "system",
+              content: `🎥 שיחת וידאו התחילה עם ${reporter.name}`,
+              timestamp: new Date()
+            },
+            {
+              role: "assistant",
+              content: `שלום! אני ${reporter.name}, ${reporter.role}. אני כרגע ${reporter.specialty} ואני שמח/ה לעזור לך! מה מעניין אותך?`,
+              timestamp: new Date()
+            }
+          ]);
+        }, 1500);
+      }, 500);
+    }, 1000);
+  };
+
+  const generateSmartResponse = (userInput) => {
+    const input = userInput.toLowerCase();
+    const name = selectedReporter.name;
+    const specialty = selectedReporter.specialty;
+    const role = selectedReporter.role;
+    
+    // Contextual responses based on keywords
+    if (input.includes('מה קורה') || input.includes('עדכון') || input.includes('מצב')) {
+      return `היי! ${name} כאן מהשטח. כרגע אני ב${specialty} והמצב די דינמי. יש הרבה התפתחויות ואני עוקב/ת מקרוב. מה ספציפית מעניין אותך?`;
+    }
+    
+    if (input.includes('מתי') || input.includes('זמן')) {
+      return `שאלה מצוינת! כ${role} שעוקב/ת אחרי ${specialty}, אני יכול/ה לספר לך שההתפתחויות האחרונות מרתקות. הזמנים משתנים מהר, אבל אני כאן כדי לעדכן אותך בזמן אמת! 📡`;
+    }
+    
+    if (input.includes('איך') || input.includes('למה')) {
+      return `אהה, זו שאלה מורכבת! בתור ${role}, אני רואה את התמונה המלאה. ${specialty} זה תחום שדורש הבנה עמוקה, ואני אסביר לך בפירוט. יש לי מקורות בשטח שמספקים לי מידע עדכני! 🎯`;
+    }
+    
+    if (input.includes('תודה') || input.includes('יפה')) {
+      return `תמיד לשירותך! 😊 כ${name} אני כאן בשבילך. אם יש עוד שאלות על ${specialty} או כל נושא אחר - פשוט תשאל/י!`;
+    }
+    
+    if (input.includes('חדשות') || input.includes('דיווח')) {
+      return `בדיוק מה שאני עושה הכי טוב! 📰 אני ${name}, מומחה/ית ב${specialty}. יש לי דיווחים חמים מהשטח. תגיד/י לי, איזה היבט מעניין אותך?`;
+    }
+    
+    if (input.includes('דעה') || input.includes('חושב')) {
+      return `כ${role} עם ניסיון רב ב${specialty}, אני חושב/ת ש... למעשה, בואו אדבר מהשטח - המציאות מורכבת יותר ממה שנראה. יש לי זווית ייחודית על העניין! 💭`;
+    }
+    
+    if (input.length < 10) {
+      return `היי! ${name} פה 👋 מה שלומך? יש משהו ספציפי שאתה רוצה לשאול אותי על ${specialty}?`;
+    }
+    
+    if (input.length > 100) {
+      return `וואו, זו שאלה מקיפה! 📝 אני ${name} ואני מעריך/ה את העניין. בואו נפרק את זה: ${specialty} הוא תחום מורכב, ויש כאן כמה נקודות מעניינות שכדאי לדבר עליהן. מה הכי חשוב לך לדעת?`;
+    }
+    
+    // Default varied responses
+    const defaultResponses = [
+      `${name} כאן מהשטח! 🎤 כ${role} אני עוקב/ת אחרי ${specialty} מקרוב. "${userInput}" - זו נקודה מעניינת מאוד! תן/תני לי להסביר את התמונה המלאה.`,
+      `שלום! אני ${name}, מתמחה/ת ב${specialty}. שאלתך על "${userInput}" היא בדיוק מה שאני חוקר/ת השבוע. יש כאן הרבה שכבות! 🔍`,
+      `היי! ${role} ${name} בשידור חי 📡 המידע שלי על ${specialty} מתעדכן כל הזמן. לגבי "${userInput}" - יש לי כמה תובנות חדשות מהשטח!`,
+      `מה קורה! ${name} פה, דיווח/ת מ${specialty}. "${userInput}" זה בדיוק הנושא שהכי חם עכשיו! תיכף אני מסביר/ה לך מה קורה בפועל. 🔥`,
+      `שלום שלום! כ${role}, אני ${name} ואני כאן כדי לתת לך את ההקשר המלא על ${specialty}. "${userInput}" - שאלה מצוינת! 💡`
+    ];
+    
+    return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
   };
 
   const sendMessage = async () => {
     if (!inputValue.trim() || isLoading) return;
 
-    const userMessage = { role: "user", content: inputValue, timestamp: new Date() };
+    const userMessage = { 
+      role: "user", 
+      content: inputValue, 
+      timestamp: new Date(),
+      id: Date.now()
+    };
     setMessages(prev => [...prev, userMessage]);
     const userInput = inputValue;
     setInputValue("");
     setIsLoading(true);
+    setReporterStatus('typing');
+    
+    // Show typing indicator
+    setIsTyping(true);
 
-    // Simulate AI response delay
+    // Variable delay for realism
+    const delay = 800 + Math.random() * 1500 + (userInput.length * 20);
+    
     setTimeout(() => {
-      const responses = [
-        `תודה על השאלה! כ${selectedReporter.name}, אני מתמחה ב${selectedReporter.specialty}. ${userInput.includes('?') ? 'זו שאלה מעניינת מאוד' : 'אני שמח/ה לעזור'}. המצב בשטח דינמי ומתפתח.`,
-        `שלום! אני ${selectedReporter.name} ומדווח/ת מ${selectedReporter.specialty}. ${userInput.length > 50 ? 'זו שאלה מקיפה' : 'תודה על ההודעה'}. אני עוקב/ת אחר האירועים באופן צמוד.`,
-        `היי! כ${selectedReporter.role}, אני יכול/ה להגיד לך ש${selectedReporter.specialty} הוא תחום מרתק. ${userInput.toLowerCase().includes('מתי') ? 'ההתפתחויות צפויות בקרוב' : 'המידע מתעדכן כל הזמן'}.`,
-        `${selectedReporter.name} כאן! מתמחה ב${selectedReporter.specialty}. ${userInput.toLowerCase().includes('איך') ? 'זה תהליך מורכב' : 'אני כאן לעדכן אותך'}. הצוות שלנו עובד סביב השעון.`,
-        `תודה שפנית אליי! אני ${selectedReporter.name}, ${selectedReporter.role}. ${userInput.length < 20 ? 'אשמח לפרטים נוספים' : 'זו נקודה חשובה'}. נמשיך לעקוב ולדווח.`
-      ];
-      
-      const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+      setIsTyping(false);
+      const smartResponse = generateSmartResponse(userInput);
       
       const aiMessage = {
         role: "assistant",
-        content: randomResponse,
-        timestamp: new Date()
+        content: smartResponse,
+        timestamp: new Date(),
+        id: Date.now()
       };
+      
       setMessages(prev => [...prev, aiMessage]);
       setIsLoading(false);
-    }, 1500 + Math.random() * 1000);
+      setReporterStatus('online');
+      
+      // Random chance for follow-up
+      if (Math.random() > 0.7) {
+        setTimeout(() => {
+          setIsTyping(true);
+          setTimeout(() => {
+            setIsTyping(false);
+            const followUps = [
+              'יש לך עוד שאלות?',
+              'רוצה שאני אפרט יותר?',
+              'יש משהו ספציפי שמעניין אותך?',
+              'אני כאן אם צריך הבהרות נוספות!'
+            ];
+            setMessages(prev => [...prev, {
+              role: "assistant",
+              content: followUps[Math.floor(Math.random() * followUps.length)],
+              timestamp: new Date(),
+              id: Date.now()
+            }]);
+          }, 800);
+        }, 2000);
+      }
+    }, delay);
   };
 
   const startRecording = async () => {
@@ -120,16 +261,31 @@ export default function ReporterStudio() {
       };
 
       mediaRecorderRef.current.onstop = async () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
-        const userMessage = { 
-          role: "user", 
-          content: `🎤 הודעה קולית (${recordingTime} שניות)`, 
-          timestamp: new Date(),
-          isVoice: true
-        };
-        setMessages(prev => [...prev, userMessage]);
-        stream.getTracks().forEach(track => track.stop());
-        toast.success("הקלטה נשמרה");
+      const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+      const userMessage = { 
+      role: "user", 
+      content: `🎤 הודעה קולית (${recordingTime} שניות)`, 
+      timestamp: new Date(),
+      isVoice: true,
+      id: Date.now()
+      };
+      setMessages(prev => [...prev, userMessage]);
+      stream.getTracks().forEach(track => track.stop());
+      toast.success("הקלטה נשמרה");
+
+      // AI responds to voice
+      setTimeout(() => {
+      setIsTyping(true);
+      setTimeout(() => {
+      setIsTyping(false);
+      setMessages(prev => [...prev, {
+      role: "assistant",
+      content: `קיבלתי את ההודעה הקולית! ${selectedReporter.name} כאן - תודה על השיתוף. אשמח לענות לך! 🎧`,
+      timestamp: new Date(),
+      id: Date.now()
+      }]);
+      }, 1200);
+      }, 500);
       };
 
       mediaRecorderRef.current.start();
@@ -342,24 +498,60 @@ export default function ReporterStudio() {
               <div className="absolute top-0 left-0 right-0 p-4 bg-gradient-to-b from-black/90 to-transparent">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-[#E31E24]">
-                      <img
-                        src={selectedReporter.image}
-                        alt={selectedReporter.name}
-                        className="w-full h-full object-cover"
+                    <div className="relative">
+                      <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-[#E31E24]">
+                        <img
+                          src={selectedReporter.image}
+                          alt={selectedReporter.name}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                      <motion.div
+                        animate={{ scale: [1, 1.2, 1] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                        className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-black ${
+                          reporterStatus === 'online' ? 'bg-green-500' : 
+                          reporterStatus === 'typing' ? 'bg-yellow-500' : 'bg-gray-500'
+                        }`}
                       />
                     </div>
                     <div>
                       <h3 className="font-bold">{selectedReporter.name}</h3>
-                      <p className="text-xs text-gray-400">{selectedReporter.specialty}</p>
+                      <div className="flex items-center gap-2">
+                        <p className="text-xs text-gray-400">{selectedReporter.specialty}</p>
+                        {reporterStatus === 'typing' && (
+                          <span className="text-xs text-yellow-400 animate-pulse">מקליד/ה...</span>
+                        )}
+                      </div>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
                     {isCallActive && (
-                      <div className="flex items-center gap-2 px-3 py-1 bg-red-600/20 rounded-full">
-                        <Radio className="w-4 h-4 text-red-500 animate-pulse" />
-                        <span className="text-sm font-bold text-red-500">שיחה פעילה</span>
-                      </div>
+                      <>
+                        <div className="flex items-center gap-2 px-3 py-1 bg-red-600/20 rounded-full">
+                          <Radio className="w-4 h-4 text-red-500 animate-pulse" />
+                          <span className="text-sm font-bold text-red-500">{formatCallTime(callDuration)}</span>
+                        </div>
+                        <div className="flex items-center gap-1 px-2 py-1 bg-green-600/20 rounded-full">
+                          <div className="flex gap-0.5">
+                            <motion.div 
+                              animate={{ scaleY: [1, 1.5, 1] }}
+                              transition={{ duration: 0.5, repeat: Infinity }}
+                              className="w-0.5 h-2 bg-green-500 rounded-full"
+                            />
+                            <motion.div 
+                              animate={{ scaleY: [1, 1.8, 1] }}
+                              transition={{ duration: 0.5, repeat: Infinity, delay: 0.1 }}
+                              className="w-0.5 h-2 bg-green-500 rounded-full"
+                            />
+                            <motion.div 
+                              animate={{ scaleY: [1, 1.3, 1] }}
+                              transition={{ duration: 0.5, repeat: Infinity, delay: 0.2 }}
+                              className="w-0.5 h-2 bg-green-500 rounded-full"
+                            />
+                          </div>
+                        </div>
+                      </>
                     )}
                   </div>
                 </div>
@@ -455,59 +647,119 @@ export default function ReporterStudio() {
               <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gradient-to-b from-gray-900 to-black">
                 {messages.map((message, idx) => (
                   <motion.div
-                    key={idx}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
+                    key={message.id || idx}
+                    initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                    transition={{ type: "spring", stiffness: 300, damping: 25 }}
                     className={`flex gap-3 ${
                       message.role === "user" ? "flex-row-reverse" : "flex-row"
                     }`}
                   >
                     {message.role === "assistant" && (
-                      <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-[#E31E24] flex-shrink-0">
+                      <motion.div 
+                        animate={{ rotate: [0, 5, -5, 0] }}
+                        transition={{ duration: 0.5 }}
+                        className="w-8 h-8 rounded-full overflow-hidden border-2 border-[#E31E24] flex-shrink-0"
+                      >
+                        <img
+                          src={selectedReporter.image}
+                          alt={selectedReporter.name}
+                          className="w-full h-full object-cover"
+                        />
+                      </motion.div>
+                    )}
+                    {message.role === "system" && (
+                      <div className="w-full flex justify-center">
+                        <div className="px-4 py-2 bg-gray-800/50 rounded-full text-xs text-gray-400 border border-gray-700">
+                          {message.content}
+                        </div>
+                      </div>
+                    )}
+                    {message.role !== "system" && (
+                      <div className="flex-1">
+                        <motion.div
+                          whileHover={{ scale: 1.02 }}
+                          className={`max-w-[75%] px-4 py-3 rounded-2xl ${
+                            message.role === "user"
+                              ? "bg-gradient-to-r from-[#E31E24] to-purple-600 text-white ml-auto"
+                              : "bg-gray-800 text-white border border-gray-700"
+                          }`}
+                        >
+                          <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
+                          <div className="flex items-center justify-between mt-2 gap-2">
+                            <p className="text-xs opacity-70">
+                              {moment(message.timestamp).format("HH:mm")}
+                            </p>
+                            <div className="flex items-center gap-2">
+                              {message.role === "user" && (
+                                <CheckCircle className="w-3 h-3 text-white/70" />
+                              )}
+                              {message.role === "assistant" && (
+                                <div className="flex gap-1">
+                                  {['👍', '❤️', '😊', '🔥'].map(emoji => (
+                                    <button
+                                      key={emoji}
+                                      onClick={() => addReaction(message.id, emoji)}
+                                      className="text-xs hover:scale-125 transition-transform opacity-0 group-hover:opacity-100"
+                                    >
+                                      {emoji}
+                                    </button>
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                          {messageReactions[message.id] && messageReactions[message.id].length > 0 && (
+                            <div className="flex gap-1 mt-2">
+                              {messageReactions[message.id].map((emoji, i) => (
+                                <span key={i} className="text-xs">{emoji}</span>
+                              ))}
+                            </div>
+                          )}
+                        </motion.div>
+                      </div>
+                    )}
+                  </motion.div>
+                ))}
+                
+                {/* Typing Indicator */}
+                <AnimatePresence>
+                  {isTyping && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={{ opacity: 0, y: -10 }}
+                      className="flex gap-3"
+                    >
+                      <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-[#E31E24]">
                         <img
                           src={selectedReporter.image}
                           alt={selectedReporter.name}
                           className="w-full h-full object-cover"
                         />
                       </div>
-                    )}
-                    <div
-                      className={`max-w-[75%] px-4 py-3 rounded-2xl ${
-                        message.role === "user"
-                          ? "bg-gradient-to-r from-[#E31E24] to-purple-600 text-white"
-                          : "bg-gray-800 text-white border border-gray-700"
-                      }`}
-                    >
-                      <p className="text-sm leading-relaxed">{message.content}</p>
-                      <div className="flex items-center justify-between mt-2">
-                        <p className="text-xs opacity-70">
-                          {moment(message.timestamp).format("HH:mm")}
-                        </p>
-                        {message.role === "user" && (
-                          <CheckCircle className="w-3 h-3 text-white/70" />
-                        )}
+                      <div className="bg-gray-800 px-4 py-3 rounded-2xl border border-gray-700">
+                        <div className="flex gap-1">
+                          <motion.div 
+                            animate={{ y: [0, -5, 0] }}
+                            transition={{ duration: 0.6, repeat: Infinity }}
+                            className="w-2 h-2 bg-[#E31E24] rounded-full"
+                          />
+                          <motion.div 
+                            animate={{ y: [0, -5, 0] }}
+                            transition={{ duration: 0.6, repeat: Infinity, delay: 0.1 }}
+                            className="w-2 h-2 bg-purple-500 rounded-full"
+                          />
+                          <motion.div 
+                            animate={{ y: [0, -5, 0] }}
+                            transition={{ duration: 0.6, repeat: Infinity, delay: 0.2 }}
+                            className="w-2 h-2 bg-[#E31E24] rounded-full"
+                          />
+                        </div>
                       </div>
-                    </div>
-                  </motion.div>
-                ))}
-                {isLoading && (
-                  <div className="flex gap-3">
-                    <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-[#E31E24]">
-                      <img
-                        src={selectedReporter.image}
-                        alt={selectedReporter.name}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="bg-gray-800 px-4 py-3 rounded-2xl">
-                      <div className="flex gap-1">
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
-                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
-                      </div>
-                    </div>
-                  </div>
-                )}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
                 <div ref={messagesEndRef} />
               </div>
 
