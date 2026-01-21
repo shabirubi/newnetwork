@@ -526,7 +526,7 @@ export default function LivePlayer({
           </motion.div>
         )}
 
-        {/* Unmute Button - Enhanced Design */}
+        {/* Giant Unmute Button - Super Large Design */}
         {isMuted && isPlaying && (
           <motion.button
             initial={{ scale: 0, opacity: 0 }}
@@ -540,16 +540,17 @@ export default function LivePlayer({
               {/* Multi-layer Pulsing Rings */}
               <span className="absolute inset-0 rounded-full bg-[#E31E24]/50 animate-ping" style={{ animationDuration: '1.5s' }} />
               <span className="absolute inset-0 rounded-full bg-[#E31E24]/30 animate-ping" style={{ animationDuration: '2s', animationDelay: '0.5s' }} />
+              <span className="absolute inset-0 rounded-full bg-[#E31E24]/20 animate-ping" style={{ animationDuration: '2.5s', animationDelay: '1s' }} />
 
-              {/* Main Button with Enhanced Design */}
-              <div className="relative px-10 py-6 rounded-3xl bg-gradient-to-br from-[#E31E24] via-[#B91C1C] to-[#E31E24] backdrop-blur-xl flex flex-col items-center gap-3 shadow-2xl border-4 border-white/30 group-hover:border-white/50 transition-all animate-pulse"
+              {/* Giant Main Button */}
+              <div className="relative px-16 py-12 sm:px-24 sm:py-16 rounded-[3rem] bg-gradient-to-br from-[#E31E24] via-[#B91C1C] to-[#E31E24] backdrop-blur-2xl flex flex-col items-center gap-6 shadow-2xl border-8 border-white/40 group-hover:border-white/70 transition-all animate-pulse"
                 style={{
-                  boxShadow: '0 0 60px rgba(227, 30, 36, 0.8), inset 0 0 40px rgba(255, 255, 255, 0.1), 0 10px 50px rgba(0, 0, 0, 0.5)'
+                  boxShadow: '0 0 100px rgba(227, 30, 36, 1), inset 0 0 60px rgba(255, 255, 255, 0.2), 0 20px 80px rgba(0, 0, 0, 0.7)'
                 }}
               >
-                <Volume2 className="w-12 h-12 text-white drop-shadow-2xl" strokeWidth={3} />
-                <span className="text-white text-2xl font-black tracking-wider drop-shadow-lg">הפעל קול</span>
-                <span className="text-white/80 text-sm font-medium">לחץ כאן</span>
+                <Volume2 className="w-20 h-20 sm:w-32 sm:h-32 text-white drop-shadow-2xl" strokeWidth={4} />
+                <span className="text-white text-4xl sm:text-6xl font-black tracking-wider drop-shadow-2xl text-center">הפעל קול</span>
+                <span className="text-white text-xl sm:text-2xl font-bold">👆 לחץ כאן</span>
               </div>
             </div>
           </motion.button>
