@@ -109,7 +109,7 @@ export default function Home() {
     initialData: []
   });
 
-  const defaultStreamUrl = "https://www.youtube.com/embed/OeEDtjuqinU?autoplay=1&rel=0";
+  const defaultStreamUrl = "https://www.youtube.com/embed/OeEDtjuqinU?autoplay=0&mute=1&rel=0";
 
   const queryClient = useQueryClient();
 

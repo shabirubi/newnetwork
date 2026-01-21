@@ -17,7 +17,7 @@ import { base44 } from "@/api/base44Client";
 
 
 
-const DEFAULT_STREAM = "https://www.youtube.com/embed/pPRKdCHHlGI?autoplay=1&rel=0";
+const DEFAULT_STREAM = "https://www.youtube.com/embed/pPRKdCHHlGI?autoplay=0&mute=1&rel=0";
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png";
 
 export default function LivePlayer({ 
@@ -27,9 +27,9 @@ export default function LivePlayer({
   thumbnailUrl = null,
   streamUrl
 }) {
-  const [isPlaying, setIsPlaying] = useState(true);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [showPromo, setShowPromo] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
   const [volume, setVolume] = useState(80);
   const [showControls, setShowControls] = useState(true);
   const [isBookmarked, setIsBookmarked] = useState(false);
@@ -279,7 +279,8 @@ export default function LivePlayer({
     if (isHLS || isDASH || isMP4) {
       const player = videojs(videoRef.current, {
         controls: false,
-        autoplay: true,
+        autoplay: false,
+        muted: true,
         preload: 'auto',
         liveui: true,
         html5: {
