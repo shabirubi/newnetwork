@@ -11,7 +11,6 @@ export default function UpdatesFeed() {
   const { data: breakingNews = [] } = useQuery({
     queryKey: ['breaking-news-feed'],
     queryFn: () => base44.entities.NewsArticle.list('-created_date', 8),
-    refetchInterval: 120000,
     initialData: []
   });
 
