@@ -292,40 +292,48 @@ export default function ReporterStudio() {
             {/* Video Section */}
             <div className="flex-1 relative bg-gradient-to-br from-gray-900 to-black">
               {/* Video Feed */}
-              <div className="absolute inset-0 flex items-center justify-center">
+              <div className="absolute inset-0">
                 {videoEnabled ? (
                   <div className="relative w-full h-full">
+                    {/* Background Image */}
                     <img
                       src={selectedReporter.image}
                       alt={selectedReporter.name}
-                      className="w-full h-full object-cover opacity-50"
+                      className="w-full h-full object-cover"
                     />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="text-center">
-                        <motion.div
-                          animate={{ scale: [1, 1.1, 1] }}
-                          transition={{ duration: 2, repeat: Infinity }}
-                          className="w-32 h-32 mx-auto mb-6 rounded-full border-4 border-[#E31E24] overflow-hidden"
-                        >
-                          <img
-                            src={selectedReporter.image}
-                            alt={selectedReporter.name}
-                            className="w-full h-full object-cover"
-                          />
-                        </motion.div>
-                        <h2 className="text-3xl font-bold mb-2">{selectedReporter.name}</h2>
-                        <p className="text-gray-400 mb-4">{selectedReporter.role}</p>
-                        <div className="flex items-center justify-center gap-2 text-green-400">
-                          <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse" />
-                          <span className="font-bold">בשיחה</span>
-                        </div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+                    
+                    {/* Small Profile Picture - Bottom Right */}
+                    <div className="absolute bottom-24 right-8">
+                      <motion.div
+                        animate={{ scale: [1, 1.05, 1] }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                        className="w-24 h-24 rounded-full border-4 border-[#E31E24] overflow-hidden shadow-2xl"
+                      >
+                        <img
+                          src={selectedReporter.image}
+                          alt={selectedReporter.name}
+                          className="w-full h-full object-cover"
+                        />
+                      </motion.div>
+                    </div>
+
+                    {/* Reporter Info - Bottom Left */}
+                    <div className="absolute bottom-24 left-8">
+                      <h2 className="text-2xl font-bold mb-1 drop-shadow-lg">{selectedReporter.name}</h2>
+                      <p className="text-gray-300 mb-2 drop-shadow-md">{selectedReporter.role}</p>
+                      <div className="flex items-center gap-2 text-green-400">
+                        <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse shadow-lg shadow-green-500/50" />
+                        <span className="font-bold drop-shadow-md">בשיחה</span>
                       </div>
                     </div>
                   </div>
                 ) : (
-                  <div className="text-center">
-                    <VideoOff className="w-24 h-24 mx-auto mb-4 text-gray-600" />
-                    <p className="text-gray-500">המצלמה כבויה</p>
+                  <div className="flex items-center justify-center w-full h-full">
+                    <div className="text-center">
+                      <VideoOff className="w-24 h-24 mx-auto mb-4 text-gray-600" />
+                      <p className="text-gray-500">המצלמה כבויה</p>
+                    </div>
                   </div>
                 )}
               </div>
