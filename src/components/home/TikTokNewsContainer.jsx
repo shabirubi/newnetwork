@@ -10,31 +10,31 @@ export default function TikTokNewsContainer() {
       id: 'youtube-pPRKdCHHlGI',
       title: "שידור חי עכשיו",
       username: "@hareshet_live",
-      url: "https://www.youtube.com/embed/pPRKdCHHlGI?autoplay=1&mute=1"
+      url: "https://www.youtube.com/embed/pPRKdCHHlGI?autoplay=0&mute=1"
     },
     {
       id: 'youtube-OeEDtjuqinU',
       title: "חדשות הערב - עדכון",
       username: "@hareshet_evening",
-      url: "https://www.youtube.com/embed/OeEDtjuqinU?autoplay=1&mute=1"
+      url: "https://www.youtube.com/embed/OeEDtjuqinU?autoplay=0&mute=1"
     },
     {
       id: 'youtube-EGxPXB-Kwuo',
       title: "עדכון חדשות יומי",
       username: "@hareshet_daily",
-      url: "https://www.youtube.com/embed/EGxPXB-Kwuo?autoplay=1&mute=1"
+      url: "https://www.youtube.com/embed/EGxPXB-Kwuo?autoplay=0&mute=1"
     },
     {
       id: 'youtube-k7WPygB6GlI',
       title: "חדשות עכשיו - ביטחון",
       username: "@hareshet_live",
-      url: "https://www.youtube.com/embed/k7WPygB6GlI?autoplay=1&mute=1"
+      url: "https://www.youtube.com/embed/k7WPygB6GlI?autoplay=0&mute=1"
     },
     {
       id: 'youtube-4miQnYCTdS8',
       title: "כלכלה - אפדייט חם",
       username: "@hareshet_economy",
-      url: "https://www.youtube.com/embed/4miQnYCTdS8?autoplay=1&mute=1"
+      url: "https://www.youtube.com/embed/4miQnYCTdS8?autoplay=0&mute=1"
     }
   ];
 

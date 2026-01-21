@@ -8,12 +8,12 @@ export default function TikTokNewsFeed() {
   const touchStartRef = React.useRef(0);
 
   const youtubeVideos = [
-    { id: 'youtube-pPRKdCHHlGI', url: 'https://www.youtube.com/embed/pPRKdCHHlGI?autoplay=1&mute=1&loop=1&playlist=pPRKdCHHlGI', title: 'שידור חי עכשיו' },
-    { id: 'youtube-OeEDtjuqinU', url: 'https://www.youtube.com/embed/OeEDtjuqinU?autoplay=1&mute=1&loop=1&playlist=OeEDtjuqinU', title: 'חדשות הערב' },
-    { id: 'youtube-k7WPygB6GlI', url: 'https://www.youtube.com/embed/k7WPygB6GlI?autoplay=1&mute=1&loop=1&playlist=k7WPygB6GlI', title: 'חדשות עכשיו' },
-    { id: 'youtube-4miQnYCTdS8', url: 'https://www.youtube.com/embed/4miQnYCTdS8?autoplay=1&mute=1&loop=1&playlist=4miQnYCTdS8', title: 'עדכון חם' },
-    { id: 'youtube-2q9lcnXBicQ', url: 'https://www.youtube.com/embed/2q9lcnXBicQ?autoplay=1&mute=1&loop=1&playlist=2q9lcnXBicQ', title: 'ניתוח מעמיק' },
-    { id: 'youtube-vecTR4YAf-w', url: 'https://www.youtube.com/embed/vecTR4YAf-w?autoplay=1&mute=1&loop=1&playlist=vecTR4YAf-w', title: 'דיווח מיוחד' }
+    { id: 'youtube-pPRKdCHHlGI', url: 'https://www.youtube.com/embed/pPRKdCHHlGI?autoplay=0&mute=1&loop=1&playlist=pPRKdCHHlGI', title: 'שידור חי עכשיו' },
+    { id: 'youtube-OeEDtjuqinU', url: 'https://www.youtube.com/embed/OeEDtjuqinU?autoplay=0&mute=1&loop=1&playlist=OeEDtjuqinU', title: 'חדשות הערב' },
+    { id: 'youtube-k7WPygB6GlI', url: 'https://www.youtube.com/embed/k7WPygB6GlI?autoplay=0&mute=1&loop=1&playlist=k7WPygB6GlI', title: 'חדשות עכשיו' },
+    { id: 'youtube-4miQnYCTdS8', url: 'https://www.youtube.com/embed/4miQnYCTdS8?autoplay=0&mute=1&loop=1&playlist=4miQnYCTdS8', title: 'עדכון חם' },
+    { id: 'youtube-2q9lcnXBicQ', url: 'https://www.youtube.com/embed/2q9lcnXBicQ?autoplay=0&mute=1&loop=1&playlist=2q9lcnXBicQ', title: 'ניתוח מעמיק' },
+    { id: 'youtube-vecTR4YAf-w', url: 'https://www.youtube.com/embed/vecTR4YAf-w?autoplay=0&mute=1&loop=1&playlist=vecTR4YAf-w', title: 'דיווח מיוחד' }
   ];
 
   const currentVideo = youtubeVideos[currentIndex % youtubeVideos.length];

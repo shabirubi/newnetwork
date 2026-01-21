@@ -109,7 +109,7 @@ export default function ShortVideosContainer() {
               {/* Video Player */}
               <div className="relative aspect-[9/16] bg-black">
                 <iframe
-                  src={`https://www.youtube.com/embed/${selectedVideo.videoId}?autoplay=1&mute=1`}
+                  src={`https://www.youtube.com/embed/${selectedVideo.videoId}?autoplay=0&mute=1`}
                   className="w-full h-full"
                   frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
