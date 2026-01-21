@@ -14,7 +14,10 @@ import { toast } from "sonner";
 import moment from "moment";
 
 export default function ReporterStudio() {
-  const [selectedReporter, setSelectedReporter] = useState(null);
+  const [selectedReporter, setSelectedReporter] = useState(() => {
+    const saved = localStorage.getItem('selectedReporter');
+    return saved ? JSON.parse(saved) : null;
+  });
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -33,6 +36,12 @@ export default function ReporterStudio() {
     queryFn: () => base44.entities.Reporter.filter({ is_active: true }, 'name', 50),
     initialData: []
   });
+
+  useEffect(() => {
+    if (selectedReporter) {
+      localStorage.setItem('selectedReporter', JSON.stringify(selectedReporter));
+    }
+  }, [selectedReporter]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -150,6 +159,7 @@ export default function ReporterStudio() {
   };
 
   const endCall = () => {
+    localStorage.removeItem('selectedReporter');
     setSelectedReporter(null);
     setMessages([]);
     setIsCallActive(false);

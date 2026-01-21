@@ -3,7 +3,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Users, Mic, Star } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
-import ReporterVideoChat from "./ReporterVideoChat";
+import { useNavigate } from "react-router-dom";
+import { createPageUrl } from "../../utils";
 
 const categoryLabels = {
   security: "ביטחון",
@@ -21,7 +22,7 @@ const categoryLabels = {
 };
 
 export default function ReportersModal({ isOpen, onClose }) {
-  const [selectedReporter, setSelectedReporter] = React.useState(null);
+  const navigate = useNavigate();
 
   const { data: reporters = [], isLoading } = useQuery({
     queryKey: ['reporters-modal'],
@@ -37,7 +38,9 @@ export default function ReportersModal({ isOpen, onClose }) {
   });
 
   const handleReporterClick = (reporter) => {
-    setSelectedReporter(reporter);
+    localStorage.setItem('selectedReporter', JSON.stringify(reporter));
+    navigate(createPageUrl('ReporterStudio'));
+    onClose();
   };
 
   if (!isOpen) return null;
@@ -169,13 +172,6 @@ export default function ReportersModal({ isOpen, onClose }) {
             )}
           </div>
         </motion.div>
-
-        {/* Video Chat Modal */}
-        <ReporterVideoChat 
-          reporter={selectedReporter}
-          isOpen={!!selectedReporter}
-          onClose={() => setSelectedReporter(null)}
-        />
       </motion.div>
     </AnimatePresence>
   );
