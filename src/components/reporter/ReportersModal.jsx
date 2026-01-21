@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Users, Mic, Star } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
+import ReporterVideoChat from "./ReporterVideoChat";
 
 const categoryLabels = {
   security: "ביטחון",
@@ -20,6 +21,8 @@ const categoryLabels = {
 };
 
 export default function ReportersModal({ isOpen, onClose }) {
+  const [selectedReporter, setSelectedReporter] = React.useState(null);
+
   const { data: reporters = [], isLoading } = useQuery({
     queryKey: ['reporters-modal'],
     queryFn: async () => {
@@ -32,6 +35,10 @@ export default function ReportersModal({ isOpen, onClose }) {
     refetchOnMount: true,
     initialData: []
   });
+
+  const handleReporterClick = (reporter) => {
+    setSelectedReporter(reporter);
+  };
 
   if (!isOpen) return null;
 
@@ -103,7 +110,8 @@ export default function ReportersModal({ isOpen, onClose }) {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: index * 0.02 }}
-                    className="group bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 border border-gray-200 dark:border-gray-700 hover:border-[#E31E24] dark:hover:border-[#E31E24]"
+                    onClick={() => handleReporterClick(reporter)}
+                    className="group bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 border border-gray-200 dark:border-gray-700 hover:border-[#E31E24] dark:hover:border-[#E31E24] cursor-pointer"
                   >
                     {/* Image */}
                     <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800">
@@ -161,6 +169,13 @@ export default function ReportersModal({ isOpen, onClose }) {
             )}
           </div>
         </motion.div>
+
+        {/* Video Chat Modal */}
+        <ReporterVideoChat 
+          reporter={selectedReporter}
+          isOpen={!!selectedReporter}
+          onClose={() => setSelectedReporter(null)}
+        />
       </motion.div>
     </AnimatePresence>
   );
