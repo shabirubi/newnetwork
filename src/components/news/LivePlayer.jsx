@@ -525,28 +525,30 @@ export default function LivePlayer({
           </motion.div>
         )}
 
-        {/* Unmute Button - Red-Black Transparent Design */}
+        {/* Unmute Button - Enhanced Design */}
         {isMuted && isPlaying && (
           <motion.button
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            whileHover={{ scale: 1.1 }}
+            whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setIsMuted(false)}
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 group"
           >
             <div className="relative">
-              {/* Pulsing Ring */}
-              <span className="absolute inset-0 rounded-full bg-[#E31E24]/40 animate-ping" style={{ animationDuration: '2s' }} />
+              {/* Multi-layer Pulsing Rings */}
+              <span className="absolute inset-0 rounded-full bg-[#E31E24]/50 animate-ping" style={{ animationDuration: '1.5s' }} />
+              <span className="absolute inset-0 rounded-full bg-[#E31E24]/30 animate-ping" style={{ animationDuration: '2s', animationDelay: '0.5s' }} />
 
-              {/* Main Button */}
-              <div className="relative px-8 py-4 rounded-2xl bg-gradient-to-br from-[#E31E24]/80 via-black/80 to-[#E31E24]/80 backdrop-blur-xl flex items-center gap-3 shadow-2xl border-2 border-[#E31E24]/50 group-hover:border-[#E31E24] transition-all"
+              {/* Main Button with Enhanced Design */}
+              <div className="relative px-10 py-6 rounded-3xl bg-gradient-to-br from-[#E31E24] via-[#B91C1C] to-[#E31E24] backdrop-blur-xl flex flex-col items-center gap-3 shadow-2xl border-4 border-white/30 group-hover:border-white/50 transition-all animate-pulse"
                 style={{
-                  boxShadow: '0 0 40px rgba(227, 30, 36, 0.6), inset 0 0 30px rgba(0, 0, 0, 0.5)'
+                  boxShadow: '0 0 60px rgba(227, 30, 36, 0.8), inset 0 0 40px rgba(255, 255, 255, 0.1), 0 10px 50px rgba(0, 0, 0, 0.5)'
                 }}
               >
-                <VolumeX className="w-8 h-8 text-white" strokeWidth={2.5} />
-                <span className="text-white text-xl font-bold tracking-wide">הפעל קול</span>
+                <Volume2 className="w-12 h-12 text-white drop-shadow-2xl" strokeWidth={3} />
+                <span className="text-white text-2xl font-black tracking-wider drop-shadow-lg">הפעל קול</span>
+                <span className="text-white/80 text-sm font-medium">לחץ כאן</span>
               </div>
             </div>
           </motion.button>
