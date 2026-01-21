@@ -641,7 +641,7 @@ export default function LivePlayer({
       </div>
 
       {/* Ads Carousel - Top Left */}
-      <div className={`absolute top-24 sm:top-26 left-4 sm:left-6 z-30 h-16 sm:h-20 transition-all duration-500 ${isWideAd ? 'w-96 sm:w-[420px]' : 'max-w-[160px] sm:max-w-[200px]'}`}>
+      <div className={`absolute top-24 sm:top-26 left-4 sm:left-6 z-30 h-20 sm:h-24 transition-all duration-500 ${isWideAd ? 'w-80 sm:w-96' : 'w-48 sm:w-64'}`}>
         <AnimatePresence mode="wait">
           <motion.div
             key={`${currentAdIndex}-${isWideAd}`}
@@ -649,27 +649,29 @@ export default function LivePlayer({
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: -50, scale: 0.95 }}
             transition={{ duration: 0.5, ease: "easeOut" }}
-            className={`relative rounded-xl overflow-hidden shadow-2xl h-16 sm:h-20 flex flex-row items-center justify-between gap-2 p-2 ${isWideAd ? 'w-full' : 'w-40 sm:w-48'}`}
+            className="relative rounded-xl overflow-hidden shadow-2xl h-full w-full"
             style={{
-              border: '1px solid rgba(227, 30, 36, 0.5)',
-              boxShadow: '0 8px 32px rgba(227, 30, 36, 0.3), inset 0 1px 0 rgba(227, 30, 36, 0.2)',
-              background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.6) 0%, rgba(227, 30, 36, 0.15) 100%)',
-              backdropFilter: 'blur(12px)',
-              direction: 'rtl'
+              border: '2px solid rgba(227, 30, 36, 0.6)',
+              boxShadow: '0 8px 32px rgba(227, 30, 36, 0.4), inset 0 1px 0 rgba(227, 30, 36, 0.3)',
+              background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.8) 0%, rgba(227, 30, 36, 0.2) 100%)',
+              backdropFilter: 'blur(16px)'
             }}
           >
-            {/* Brand Text */}
-            <p className="text-white text-[10px] sm:text-xs font-bold leading-tight text-right flex-1 tracking-tight" style={{ fontFamily: "'Inter', 'Helvetica Neue', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', sans-serif", fontWeight: 700, textShadow: '1px 1px 4px rgba(0,0,0,0.9)' }}>
-              {bannerAds[currentAdIndex].brand}
-            </p>
+            {/* Ad Image */}
+            <img 
+              src={bannerAds[currentAdIndex].image}
+              alt={bannerAds[currentAdIndex].brand}
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                e.target.style.display = 'none';
+              }}
+            />
 
-            {/* Logo */}
-            <div className="h-12 sm:h-14 flex-shrink-0 flex items-center justify-center">
-              <img 
-                src={LOGO_URL}
-                alt="רשת החדשה"
-                className="h-full w-auto drop-shadow-xl"
-              />
+            {/* Overlay with Brand Text */}
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent p-2">
+              <p className="text-white text-[10px] sm:text-xs font-bold leading-tight text-center" style={{ fontFamily: "'Inter', 'Helvetica Neue', sans-serif", textShadow: '2px 2px 6px rgba(0,0,0,0.9)' }}>
+                {bannerAds[currentAdIndex].brand}
+              </p>
             </div>
           </motion.div>
         </AnimatePresence>
