@@ -714,13 +714,6 @@ export default function LivePlayer({
                 e.target.style.display = 'none';
               }}
             />
-
-            {/* Overlay with Brand Text */}
-            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/60 to-transparent p-2">
-              <p className="text-white text-[10px] sm:text-xs font-bold leading-tight text-center" style={{ fontFamily: "'Inter', 'Helvetica Neue', sans-serif", textShadow: '2px 2px 6px rgba(0,0,0,0.9)' }}>
-                {bannerAds[currentAdIndex].brand}
-              </p>
-            </div>
           </motion.div>
         </AnimatePresence>
       </div>
