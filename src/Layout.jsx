@@ -367,6 +367,23 @@ export default function Layout({ children, currentPageName }) {
         )}
       </AnimatePresence>
 
+      {/* Floating Accessibility Button */}
+      <Link
+        to={createPageUrl("Accessibility")}
+        className="fixed bottom-24 sm:bottom-8 left-4 z-[9998] p-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 rounded-full shadow-2xl transition-all hover:scale-110 border-2 border-white/20 group"
+        title="נגישות"
+      >
+        <motion.div
+          animate={{ rotate: [0, 10, -10, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
+        >
+          <User className="w-6 h-6 text-white" />
+        </motion.div>
+        <span className="absolute left-full ml-3 top-1/2 -translate-y-1/2 px-3 py-1 bg-black text-white text-sm font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+          נגישות
+        </span>
+      </Link>
+
       {/* Content with Sidebars */}
       <div className="flex flex-1">
         {/* Left Sidebar */}
