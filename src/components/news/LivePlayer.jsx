@@ -570,18 +570,18 @@ export default function LivePlayer({
 
 
         {/* Play Button Overlay */}
-        {!isPlaying && !showPromo && (
-          <motion.button
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={togglePlay}
-            className="absolute inset-0 flex items-center justify-center z-10 cursor-pointer"
-          >
-            <div className="w-20 h-20 rounded-full bg-[#E31E24] flex items-center justify-center shadow-lg hover:bg-[#B91C1C] transition-colors">
-              <Play className="w-8 h-8 text-white mr-[-4px]" fill="white" />
-            </div>
-          </motion.button>
-        )}
+         {displayThumbnail && !isPlaying && !showPromo && (
+           <motion.button
+             whileHover={{ scale: 1.1 }}
+             whileTap={{ scale: 0.95 }}
+             onClick={togglePlay}
+             className="absolute inset-0 flex items-center justify-center z-20 cursor-pointer"
+           >
+             <div className="w-20 h-20 rounded-full bg-[#E31E24] flex items-center justify-center shadow-lg hover:bg-[#B91C1C] transition-colors">
+               <Play className="w-8 h-8 text-white mr-[-4px]" fill="white" />
+             </div>
+           </motion.button>
+         )}
 
         {/* Logo Watermark */}
         {isPlaying && (
