@@ -523,7 +523,13 @@ export default function ReporterStudio() {
           }, 800);
         }, 2000);
       }
-    }, delay);
+    } catch (error) {
+      console.error('Chat error:', error);
+      setIsTyping(false);
+      setIsLoading(false);
+      setReporterStatus('online');
+      toast.error('שגיאה בשליחת ההודעה');
+    }
   };
 
   const handleQuickReply = (text) => {
