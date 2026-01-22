@@ -90,73 +90,57 @@ Deno.serve(async (req) => {
 
     console.log('📤 D-ID Response:', { id: talkId, status: result.status });
 
-    // Return early with polling on client side
-    if (result.status === 'processing' || result.status === 'pending' || result.status === 'queued') {
-      console.log(`⏳ Video processing started with ID: ${talkId}`);
+    // Poll for video completion on backend
+    let pollAttempts = 0;
+    const maxPollAttempts = 120;
+    let pollInterval = 2000;
 
-      // Start polling on backend but return immediately to client
-      setTimeout(async () => {
-        let pollAttempts = 0;
-        const pollMaxAttempts = 120;
-        let pollInterval = 2000;
+    while (pollAttempts < maxPollAttempts) {
+      await new Promise(resolve => setTimeout(resolve, pollInterval));
 
-        while (pollAttempts < pollMaxAttempts) {
-          await new Promise(resolve => setTimeout(resolve, pollInterval));
-
-          try {
-            const statusResponse = await fetch(`https://api.d-id.com/talks/${talkId}`, {
-              headers: {
-                'Authorization': `Basic ${DID_API_KEY}`,
-                'accept': 'application/json'
-              }
-            });
-
-            if (statusResponse.ok) {
-              const statusData = await statusResponse.json();
-              console.log(`📊 Backend poll attempt ${pollAttempts + 1}: status = ${statusData.status}`);
-
-              if (statusData.status === 'done' && statusData.result_url) {
-                console.log('✅ Video ready:', statusData.result_url);
-                break;
-              }
-
-              if (statusData.status === 'error') {
-                console.error('D-ID Backend Error:', statusData);
-                break;
-              }
-            }
-
-            if (pollAttempts > 20) pollInterval = 3000;
-            if (pollAttempts > 40) pollInterval = 5000;
-
-            pollAttempts++;
-          } catch (err) {
-            console.error('Backend poll error:', err.message);
-            pollAttempts++;
+      try {
+        const statusResponse = await fetch(`https://api.d-id.com/talks/${talkId}`, {
+          headers: {
+            'Authorization': `Basic ${DID_API_KEY}`,
+            'accept': 'application/json'
           }
+        });
+
+        if (!statusResponse.ok) {
+          console.error('Status check failed:', statusResponse.status);
+          pollAttempts++;
+          continue;
         }
-      }, 0);
 
-      // Return immediately with talk ID for client-side polling
-      return Response.json({
-        success: true,
-        talk_id: talkId,
-        status: result.status,
-        message: 'Video generation started. Client will poll for completion.'
-      });
+        const statusData = await statusResponse.json();
+        console.log(`📊 Poll attempt ${pollAttempts + 1}: status = ${statusData.status}`);
+
+        if (statusData.status === 'done' && statusData.result_url) {
+          console.log('✅ Video ready:', statusData.result_url);
+          return Response.json({
+            success: true,
+            video_url: statusData.result_url,
+            duration: statusData.duration || 0,
+            talk_id: talkId
+          });
+        }
+
+        if (statusData.status === 'error') {
+          console.error('D-ID Error:', statusData);
+          return Response.json({ error: `Video generation failed: ${statusData.error?.message || 'Unknown error'}` }, { status: 500 });
+        }
+
+        if (pollAttempts > 20) pollInterval = 3000;
+        if (pollAttempts > 40) pollInterval = 5000;
+
+        pollAttempts++;
+      } catch (pollError) {
+        console.error('Poll error:', pollError.message);
+        pollAttempts++;
+      }
     }
 
-    // If already done, return immediately
-    if (result.status === 'done' && result.result_url) {
-      return Response.json({
-        success: true,
-        video_url: result.result_url,
-        duration: result.duration || 0,
-        talk_id: talkId
-      });
-    }
-
-    return Response.json({ error: 'Unexpected response status' }, { status: 500 });
+    return Response.json({ error: 'Video generation timeout' }, { status: 504 });
 
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });
