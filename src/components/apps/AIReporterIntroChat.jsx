@@ -45,6 +45,33 @@ export default function AIReporterIntroChat({ preSelectedReporter = null, isOpen
     initialData: []
   });
 
+  const pollForVideo = async (talkId, maxAttempts = 60) => {
+    for (let attempt = 0; attempt < maxAttempts; attempt++) {
+      await new Promise(resolve => setTimeout(resolve, 2000));
+
+      try {
+        const response = await fetch(`https://api.d-id.com/talks/${talkId}`, {
+          headers: {
+            'accept': 'application/json'
+          }
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          if (data.status === 'done' && data.result_url) {
+            return data.result_url;
+          }
+          if (data.status === 'error') {
+            throw new Error('Video generation failed');
+          }
+        }
+      } catch (err) {
+        console.error('Poll error:', err);
+      }
+    }
+    throw new Error('Timeout waiting for video');
+  };
+
   const generateIntroVideo = async (reporter) => {
     // Check cache first
     const cached = getCachedIntroVideo(reporter.id);
@@ -68,8 +95,15 @@ export default function AIReporterIntroChat({ preSelectedReporter = null, isOpen
         language: 'he'
       });
 
-      if (response.data?.video_url) {
-        const videoUrl = response.data.video_url;
+      let videoUrl = response.data?.video_url;
+
+      // If we got a talk_id but no video_url yet, poll for it
+      if (!videoUrl && response.data?.talk_id) {
+        toast.loading("ממתין להכנת הוידאו...", { id: 'intro-gen' });
+        videoUrl = await pollForVideo(response.data.talk_id);
+      }
+
+      if (videoUrl) {
         setIntroVideo(videoUrl);
         cacheIntroVideo(reporter.id, videoUrl);
         toast.success("וידאו ההצגה מוכן! 🎥", { id: 'intro-gen' });
