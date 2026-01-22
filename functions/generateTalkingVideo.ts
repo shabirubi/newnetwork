@@ -36,21 +36,14 @@ Deno.serve(async (req) => {
       }
     };
 
-    if (audioUrl) {
-      didPayload.script = {
-        type: 'audio',
-        audio_url: audioUrl
-      };
-    } else {
-      didPayload.script = {
-        type: 'text',
-        input: text,
-        provider: {
-          type: 'microsoft',
-          voice_id: 'he-IL-AvriNeural'
-        }
-      };
-    }
+    didPayload.script = {
+      type: 'text',
+      input: text,
+      provider: {
+        type: 'microsoft',
+        voice_id: 'he-IL-AvriNeural'
+      }
+    };
 
     const response = await fetch('https://api.d-id.com/talks', {
       method: 'POST',
