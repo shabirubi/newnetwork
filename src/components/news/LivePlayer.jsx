@@ -382,7 +382,7 @@ export default function LivePlayer({
             />
           ) : (
             <iframe
-              src={`https://www.youtube.com/embed/pPRKdCHHlGI?autoplay=0&mute=0&rel=0&enablejsapi=1`}
+              src={currentStreamUrl.includes('youtube.com') || currentStreamUrl.includes('youtu.be') ? currentStreamUrl : `https://www.youtube.com/embed/pPRKdCHHlGI?autoplay=0&mute=0&rel=0&enablejsapi=1`}
               className="absolute inset-0 w-full h-full z-20"
               allow="fullscreen; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
