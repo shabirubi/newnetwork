@@ -76,7 +76,9 @@ export default function TalkingAvatar() {
         const response = await base44.functions.invoke('generateTalkingVideo', {
           text,
           avatarUrl,
-          gender
+          gender,
+          voiceProvider,
+          backgroundType
         });
 
         if (response.data?.video_url) {
