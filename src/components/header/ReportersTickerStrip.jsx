@@ -4,11 +4,14 @@ import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { Users, ChevronLeft, ChevronRight } from "lucide-react";
 import ReporterCardModal from "./ReporterCardModal";
+import AIReporterIntroChat from "../apps/AIReporterIntroChat";
 
 export default function ReportersTickerStrip() {
   const [selectedReporter, setSelectedReporter] = useState(null);
   const [scrollPosition, setScrollPosition] = useState(0);
   const [hoveredReporter, setHoveredReporter] = useState(null);
+  const [openAIChat, setOpenAIChat] = useState(false);
+  const [selectedReporterForChat, setSelectedReporterForChat] = useState(null);
   const containerRef = useRef(null);
   const scrollContainerRef = useRef(null);
 
@@ -78,7 +81,10 @@ export default function ReportersTickerStrip() {
         {reporters.map((reporter, idx) => (
           <motion.div
             key={`${reporter.id}-${idx}`}
-            onClick={() => setSelectedReporter(reporter)}
+            onClick={() => {
+              setSelectedReporterForChat(reporter);
+              setOpenAIChat(true);
+            }}
             onMouseEnter={() => setHoveredReporter(reporter.id)}
             onMouseLeave={() => setHoveredReporter(null)}
             className="flex-shrink-0 flex flex-col items-center gap-0.5 p-1 bg-black/60 backdrop-blur-xl rounded-lg border border-[#E31E24]/30 hover:border-[#E31E24]/60 hover:bg-[#E31E24]/20 transition-all cursor-pointer group shadow-lg hover:shadow-[#E31E24]/30"
@@ -118,11 +124,16 @@ export default function ReportersTickerStrip() {
           </div>
           </div>
 
-          <ReporterCardModal 
-          reporter={selectedReporter}
-          isOpen={!!selectedReporter}
-          onClose={() => setSelectedReporter(null)}
-          />
+          {selectedReporterForChat && openAIChat && (
+            <AIReporterIntroChat 
+              preSelectedReporter={selectedReporterForChat}
+              isOpen={openAIChat}
+              onClose={() => {
+                setOpenAIChat(false);
+                setSelectedReporterForChat(null);
+              }}
+            />
+          )}
           </>
           );
           }
