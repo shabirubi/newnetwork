@@ -206,16 +206,16 @@ export default function AllVideosGallery() {
                         height: '100%',
                         objectFit: 'contain'
                       }}
-                      onLoadStart={() => setIsLoading(true)}
+                      onLoadStart={() => setIsVideoLoading(true)}
                       onLoadedMetadata={(e) => {
                         e.target.volume = 1;
                       }}
-                      onCanPlay={() => setIsLoading(false)}
-                      onError={() => setIsLoading(false)}
-                    />
+                      onCanPlay={() => setIsVideoLoading(false)}
+                      onError={() => setIsVideoLoading(false)}
+                      />
 
-                    {/* Loading Indicator */}
-                    {isLoading && (
+                      {/* Loading Indicator */}
+                      {isVideoLoading && (
                       <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center gap-3">
                         <motion.div
                           animate={{ rotate: 360 }}
