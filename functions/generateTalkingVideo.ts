@@ -18,23 +18,14 @@ Deno.serve(async (req) => {
       // Voice configuration
       let voiceConfig;
       if (voiceProvider === 'elevenlabs') {
-        const voiceIdMap = {
-          male: 'pNInz6obpgDQGcFmaJgB',
-          female: 'EXAVITQu4EsNXjluf7xi'
-        };
         voiceConfig = {
           type: 'elevenlabs',
-          voice_id: voiceIdMap[gender] || voiceIdMap.male,
-          language: 'he'
+          voice_id: gender === 'male' ? 'pNInz6obpgDQGcFmaJgB' : 'EXAVITQu4EsNXjluf7xi'
         };
       } else {
-        const voiceIdMap = {
-          male: 'he-IL-AvriNeural',
-          female: 'he-IL-HilaNeural'
-        };
         voiceConfig = {
           type: 'microsoft',
-          voice_id: voiceIdMap[gender] || voiceIdMap.male
+          voice_id: gender === 'male' ? 'he-IL-AvriNeural' : 'he-IL-HilaNeural'
         };
       }
 
