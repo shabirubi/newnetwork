@@ -41,11 +41,12 @@ export default function LivePlayer({
   const [displayedText, setDisplayedText] = useState("");
   const [currentAdIndex, setCurrentAdIndex] = useState(0);
   const [isWideAd, setIsWideAd] = useState(false);
-  const [currentVideoUrl, setCurrentVideoUrl] = useState(null);
-  const [playerTitle, setPlayerTitle] = useState(title);
-  const videoRef = useRef(null);
-  const containerRef = useRef(null);
-  const playerRef = useRef(null);
+  const [currentVideoUrl, setCurrentVideoUrl] = useState(streamUrl);
+   const [playerTitle, setPlayerTitle] = useState(title);
+   const [displayThumbnail, setDisplayThumbnail] = useState(!!thumbnailUrl);
+   const videoRef = useRef(null);
+   const containerRef = useRef(null);
+   const playerRef = useRef(null);
 
   const slogans = [
     "שידור חי 24/7 - החדשות שלכם",
