@@ -523,6 +523,42 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
     };
   }, [setOpenState]);
 
+  const generateReporterIntroVideo = async () => {
+    if (!selectedReporter) {
+      toast.error("בחר כתב/כתבת קודם");
+      return;
+    }
+
+    toast.loading("יוצר וידאו הצגה...", { id: 'intro-video' });
+
+    try {
+      const introText = `שלום! אני ${selectedReporter.name}, כתב/כתבת חדשות. אני מתמחה ב-${selectedReporter.specialty}. נשמח לדון איתך בכל נושא שמעניין אותך.`;
+      
+      const response = await base44.functions.invoke('generateTalkingVideo', {
+        text: introText,
+        avatarUrl: selectedReporter.image,
+        gender: selectedReporter.gender || (selectedReporter.name.includes('ה') ? 'female' : 'male'),
+        voiceProvider: 'elevenlabs',
+        backgroundType: 'dynamic'
+      });
+
+      if (response.data?.video_url) {
+        window.dispatchEvent(new CustomEvent('playVideo', {
+          detail: {
+            url: response.data.video_url,
+            title: `${selectedReporter.name} מציג/ה את עצמו/ה`,
+            autoPlay: true
+          }
+        }));
+        
+        toast.success("וידאו ההצגה מוכן!", { id: 'intro-video' });
+      }
+    } catch (error) {
+      console.error('Error generating intro video:', error);
+      toast.error(`שגיאה: ${error.message}`, { id: 'intro-video' });
+    }
+  };
+
   const startNewChat = (reporter) => {
     setSelectedReporter(reporter);
     const replies = generateQuickReplies(reporter);
@@ -686,28 +722,36 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
                     <motion.div
                       initial={{ opacity: 0, x: 20 }}
                       animate={{ opacity: 1, x: 0 }}
-                      className="hidden lg:flex flex-col items-center gap-4 p-4 w-48 bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl border border-indigo-600/30"
+                      className="flex flex-col items-center gap-4 p-3 sm:p-4 w-32 sm:w-40 lg:w-48 bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl border border-indigo-600/30"
                     >
                       <div className="relative">
                         <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-full blur-xl opacity-50" />
                         <img
                           src={selectedReporter.image}
                           alt={selectedReporter.name}
-                          className="relative w-40 h-40 rounded-full object-cover border-4 border-indigo-600 shadow-2xl"
+                          className="relative w-28 sm:w-32 lg:w-40 h-28 sm:h-32 lg:h-40 rounded-full object-cover border-4 border-indigo-600 shadow-2xl"
                         />
                       </div>
                       <div className="text-center">
-                        <h3 className="text-xl font-bold text-white mb-1">{selectedReporter.name}</h3>
-                        <p className="text-sm text-indigo-300 font-semibold mb-2">{selectedReporter.role}</p>
-                        <p className="text-xs text-gray-400 mb-3">{selectedReporter.specialty}</p>
-                        <div className="flex items-center justify-center gap-1 bg-green-500/20 rounded-full px-3 py-1 border border-green-500/50">
-                          <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                        <h3 className="text-sm sm:text-lg lg:text-xl font-bold text-white mb-1">{selectedReporter.name}</h3>
+                        <p className="text-xs sm:text-sm text-indigo-300 font-semibold mb-2">{selectedReporter.role}</p>
+                        <p className="text-xs text-gray-400 mb-3 hidden sm:block">{selectedReporter.specialty}</p>
+                        <div className="flex items-center justify-center gap-1 bg-green-500/20 rounded-full px-2 sm:px-3 py-0.5 sm:py-1 border border-green-500/50">
+                          <span className="w-1.5 sm:w-2 h-1.5 sm:h-2 bg-green-500 rounded-full animate-pulse" />
                           <span className="text-xs text-green-400 font-bold">זמין</span>
                         </div>
                       </div>
                       {selectedReporter.bio && (
-                        <p className="text-xs text-gray-300 text-center leading-relaxed">{selectedReporter.bio}</p>
+                        <p className="text-xs text-gray-300 text-center leading-relaxed hidden lg:block">{selectedReporter.bio}</p>
                       )}
+                      <motion.button
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={generateReporterIntroVideo}
+                        className="w-full mt-2 px-3 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-lg text-xs sm:text-sm font-bold transition-all"
+                      >
+                        ⭐ הצגה
+                      </motion.button>
                     </motion.div>
 
                     {/* Chat Area */}
