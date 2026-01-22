@@ -46,6 +46,7 @@ export default function Home() {
     }
     return 'all';
   });
+  const [studioOpen, setStudioOpen] = React.useState(false);
 
   React.useEffect(() => {
     const handleChannelChange = (e) => {
