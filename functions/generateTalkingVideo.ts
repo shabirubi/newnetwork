@@ -26,7 +26,8 @@ Deno.serve(async (req) => {
       method: 'POST',
       headers: {
         'Authorization': `Basic ${DID_API_KEY}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
+        'accept': 'application/json'
       },
       body: JSON.stringify({
         script: {
@@ -63,7 +64,8 @@ Deno.serve(async (req) => {
       
       const statusResponse = await fetch(`https://api.d-id.com/talks/${talkId}`, {
         headers: {
-          'Authorization': `Basic ${DID_API_KEY}`
+          'Authorization': `Basic ${DID_API_KEY}`,
+          'accept': 'application/json'
         }
       });
       
