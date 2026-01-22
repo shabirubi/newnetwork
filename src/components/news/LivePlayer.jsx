@@ -41,6 +41,8 @@ export default function LivePlayer({
   const [displayedText, setDisplayedText] = useState("");
   const [currentAdIndex, setCurrentAdIndex] = useState(0);
   const [isWideAd, setIsWideAd] = useState(false);
+  const [currentVideoUrl, setCurrentVideoUrl] = useState(null);
+  const [playerTitle, setPlayerTitle] = useState(title);
   const videoRef = useRef(null);
   const containerRef = useRef(null);
   const playerRef = useRef(null);
@@ -132,9 +134,24 @@ export default function LivePlayer({
     return () => clearInterval(typeInterval);
   }, [currentSlogan]);
 
+  // Listen for playVideo events from generated videos
+  useEffect(() => {
+    const handlePlayVideo = (event) => {
+      const { url, title: videoTitle, autoPlay } = event.detail;
+      setCurrentVideoUrl(url);
+      setPlayerTitle(videoTitle || title);
+      setIsPlaying(autoPlay || true);
+      setIsMuted(false);
+      setVolume(80);
+    };
+
+    window.addEventListener('playVideo', handlePlayVideo);
+    return () => window.removeEventListener('playVideo', handlePlayVideo);
+  }, [title]);
+
   // YouTube IFrame API for controlling playback
     useEffect(() => {
-      if (currentStreamUrl !== "youtube" || !isPlaying) return; // Only load for default YouTube stream
+      if ((currentStreamUrl !== "youtube" && !currentVideoUrl) || !isPlaying) return; // Only load for default YouTube stream
 
       const playlist = ["7f6TVsLPUbQ", "hqb0D9gEEjU"];
 
@@ -333,15 +350,26 @@ export default function LivePlayer({
     >
       {/* Video Container */}
       <div className="relative w-full aspect-[9/16] sm:aspect-video rounded-t-2xl overflow-hidden">
-        {/* YouTube Embed Player - MAIN */}
-        <iframe
-          src={`https://www.youtube.com/embed/pPRKdCHHlGI?autoplay=0&mute=0&rel=0&enablejsapi=1`}
-          className="absolute inset-0 w-full h-full z-20"
-          allow="fullscreen; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowFullScreen
-          frameBorder="0"
-          title={title}
-        />
+        {/* Video Player - Shows generated videos or YouTube */}
+          {currentVideoUrl ? (
+            <video
+              src={currentVideoUrl}
+              className="absolute inset-0 w-full h-full z-20 bg-black"
+              controls
+              autoPlay
+              muted={isMuted}
+              controlsList="nodownload"
+            />
+          ) : (
+            <iframe
+              src={`https://www.youtube.com/embed/pPRKdCHHlGI?autoplay=0&mute=0&rel=0&enablejsapi=1`}
+              className="absolute inset-0 w-full h-full z-20"
+              allow="fullscreen; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              frameBorder="0"
+              title={playerTitle}
+            />
+          )}
 
         {/* Frame Border - Covering YouTube Elements */}
         <div className="absolute inset-0 z-30 pointer-events-none">
@@ -369,8 +397,8 @@ export default function LivePlayer({
               />
               <div className="text-right flex-1 overflow-hidden min-w-0">
                 <div className="text-white font-bold text-sm sm:text-xl drop-shadow-lg mb-0.5 leading-tight hidden sm:block">הרשת החדשה</div>
-                <div className="text-[#E31E24] font-bold text-xs sm:text-base tracking-wide break-words" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.5)', letterSpacing: '0.5px' }}>
-                  {displayedText}
+                <div className="text-[#E31E24] font-bold text-xs sm:text-base tracking-wide break-words line-clamp-2" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.5)', letterSpacing: '0.5px' }}>
+                  {currentVideoUrl ? playerTitle : displayedText}
                   <span className="animate-pulse ml-1">|</span>
                 </div>
               </div>
