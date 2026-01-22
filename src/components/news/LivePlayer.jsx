@@ -519,8 +519,8 @@ export default function LivePlayer({
           </motion.div>
         )}
 
-        {/* Placeholder/Thumbnail - Always visible when not playing */}
-         {!currentVideoUrl && !isPlaying && !showPromo && (
+        {/* Placeholder/Thumbnail - Show when there's a URL but not playing */}
+         {displayThumbnail && !isPlaying && !showPromo && (
            <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center z-10">
              {thumbnailUrl ? (
                <img 
