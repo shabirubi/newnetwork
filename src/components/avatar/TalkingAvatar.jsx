@@ -226,6 +226,35 @@ export default function TalkingAvatar() {
                       </p>
                     </div>
 
+                    {/* Gender Selection */}
+                    <div>
+                      <label className="block text-white font-bold mb-3">בחר קול</label>
+                      <div className="flex gap-4">
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="radio"
+                            name="gender"
+                            value="male"
+                            checked={gender === "male"}
+                            onChange={(e) => setGender(e.target.value)}
+                            className="w-4 h-4"
+                          />
+                          <span className="text-gray-300">קול גברי</span>
+                        </label>
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="radio"
+                            name="gender"
+                            value="female"
+                            checked={gender === "female"}
+                            onChange={(e) => setGender(e.target.value)}
+                            className="w-4 h-4"
+                          />
+                          <span className="text-gray-300">קול נשי</span>
+                        </label>
+                      </div>
+                    </div>
+
                     {/* Text Input */}
                     <div>
                       <label className="block text-white font-bold mb-3">מה הדמות תגיד?</label>
