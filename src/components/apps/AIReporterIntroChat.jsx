@@ -7,9 +7,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
-export default function AIReporterIntroChat() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedReporter, setSelectedReporter] = useState(null);
+export default function AIReporterIntroChat({ preSelectedReporter = null, isOpen: externalIsOpen = null, onClose = null }) {
+  const [isOpen, setIsOpen] = useState(externalIsOpen !== null ? externalIsOpen : false);
+  const [selectedReporter, setSelectedReporter] = useState(preSelectedReporter || null);
   const [showIntro, setShowIntro] = useState(true);
   const [introVideo, setIntroVideo] = useState(null);
   const [messages, setMessages] = useState([]);
@@ -51,6 +51,16 @@ export default function AIReporterIntroChat() {
       setGeneratingVideo(false);
     }
   };
+
+  useEffect(() => {
+    if (preSelectedReporter) {
+      setSelectedReporter(preSelectedReporter);
+      setShowIntro(true);
+      setIntroVideo(null);
+      setMessages([]);
+      generateIntroVideo(preSelectedReporter);
+    }
+  }, [preSelectedReporter]);
 
   const handleSelectReporter = async (reporter) => {
     setSelectedReporter(reporter);
@@ -154,6 +164,7 @@ export default function AIReporterIntroChat() {
                     setShowIntro(true);
                     setIntroVideo(null);
                     setMessages([]);
+                    if (onClose) onClose();
                   }}
                   className="hover:bg-white/20 p-2 rounded-full"
                 >
@@ -278,17 +289,19 @@ export default function AIReporterIntroChat() {
                           {loading ? <Loader className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
                         </Button>
                       </div>
-                      <button
-                        onClick={() => {
-                          setSelectedReporter(null);
-                          setShowIntro(true);
-                          setIntroVideo(null);
-                          setMessages([]);
-                        }}
-                        className="text-xs text-gray-600 dark:text-gray-400 hover:text-indigo-600"
-                      >
-                        ← בחר כתב/כתבת אחר
-                      </button>
+                      {!preSelectedReporter && (
+                        <button
+                          onClick={() => {
+                            setSelectedReporter(null);
+                            setShowIntro(true);
+                            setIntroVideo(null);
+                            setMessages([]);
+                          }}
+                          className="text-xs text-gray-600 dark:text-gray-400 hover:text-indigo-600"
+                        >
+                          ← בחר כתב/כתבת אחר
+                        </button>
+                      )}
                     </div>
                   </div>
                 )}
