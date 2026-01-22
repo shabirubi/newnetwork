@@ -21,7 +21,7 @@ const VideoSkeleton = () => (
 
 export default function AllVideosGallery() {
   const [selectedVideo, setSelectedVideo] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isVideoLoading, setIsVideoLoading] = useState(false);
 
   const { data: userVideos = [], isLoading } = useQuery({
     queryKey: ['all-user-videos'],
