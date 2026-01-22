@@ -74,7 +74,13 @@ export default function UploadVideoModal({ isOpen, onClose }) {
       }
       
       console.log('🎥 סרטון הועלה בהצלחה!');
-      window.dispatchEvent(new Event('videoUploaded'));
+      window.dispatchEvent(new CustomEvent('playVideo', {
+        detail: {
+          url: videoUrl,
+          title: formData.title,
+          autoPlay: true
+        }
+      }));
       
       setTimeout(() => {
         onClose();
