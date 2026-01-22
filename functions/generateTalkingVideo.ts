@@ -67,12 +67,13 @@ Deno.serve(async (req) => {
     // Create talk using D-ID API with enhanced body language
     const didPayload = {
       source_url: avatarUrl,
-      driver_url: 'bank://lively/',
+      driver_url: 'bank://talking-head/',
       config: {
         fluent: true,
         pad_audio: 0,
         stitch: true,
-        result_format: 'mp4'
+        result_format: 'mp4',
+        motion_factor: 1.5
       }
     };
 
