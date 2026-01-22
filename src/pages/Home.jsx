@@ -88,11 +88,21 @@ export default function Home() {
     queryClient.invalidateQueries({ queryKey: ['news-articles'] });
   }, [queryClient]);
 
-  const { data: liveStream } = useQuery({
+  const { data: liveStream, refetch: refetchLiveStream } = useQuery({
     queryKey: ['live-stream'],
     queryFn: () => base44.entities.LiveStream.filter({ is_active: true }),
-    initialData: []
+    initialData: [],
+    refetchInterval: 5000 // רענן כל 5 שניות
   });
+
+  // האזן לעדכונים בסרטונים להעלאה
+  React.useEffect(() => {
+    const handleVideoUploaded = () => {
+      refetchLiveStream();
+    };
+    window.addEventListener('videoUploaded', handleVideoUploaded);
+    return () => window.removeEventListener('videoUploaded', handleVideoUploaded);
+  }, [refetchLiveStream]);
 
   const featuredArticle = articles.find(a => a.is_featured || a.is_breaking) || articles[0];
   const breakingNews = articles.filter(a => a.is_breaking);

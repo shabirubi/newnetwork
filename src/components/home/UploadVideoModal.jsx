@@ -48,8 +48,11 @@ export default function UploadVideoModal({ isOpen, onClose }) {
       
       // רענן את ה-live-stream query כדי להציג את הסרטון החדש
       if (queryClient) {
-        queryClient.invalidateQueries({ queryKey: ['live-stream'] });
+        await queryClient.invalidateQueries({ queryKey: ['live-stream'] });
       }
+      
+      // שלח אירוע להודעה על העלאה
+      window.dispatchEvent(new Event('videoUploaded'));
       
       setTimeout(() => {
         onClose();
