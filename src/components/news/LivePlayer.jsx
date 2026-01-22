@@ -682,14 +682,6 @@ export default function LivePlayer({
           />
         )}
 
-        {/* YouTube Player */}
-        {isPlaying && !showPromo && currentStreamUrl === "youtube" && (
-          <div 
-            id="youtube-player"
-            className="absolute inset-0 w-full h-full bg-black"
-          />
-        )}
-        
         {/* Universal Video Player - supports all formats like VLC */}
         {isPlaying && !showPromo && (
           currentStreamUrl?.includes('.m3u8') || 
