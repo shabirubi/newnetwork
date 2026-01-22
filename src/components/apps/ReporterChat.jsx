@@ -46,13 +46,22 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
   // טעינת חדשות אחרונות
   const { data: newsArticles = [] } = useQuery({
     queryKey: ['breaking-news-ticker'],
-    queryFn: () => base44.entities.NewsArticle.filter({ is_breaking: true }, '-created_date', 5),
+    queryFn: () => base44.entities.NewsArticle.filter({ is_breaking: true }, '-created_date', 20),
     refetchInterval: 120000,
     initialData: []
   });
 
   useEffect(() => {
-    setLatestNews(newsArticles);
+    // סינון רק כתבות מה-48 שעות האחרונות
+    const twoDaysAgo = new Date();
+    twoDaysAgo.setHours(twoDaysAgo.getHours() - 48);
+    
+    const recentNews = newsArticles.filter(article => {
+      const articleDate = new Date(article.created_date);
+      return articleDate > twoDaysAgo;
+    }).slice(0, 5);
+    
+    setLatestNews(recentNews);
   }, [newsArticles]);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
