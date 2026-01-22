@@ -134,7 +134,7 @@ export default function LivePlayer({
     return () => clearInterval(typeInterval);
   }, [currentSlogan]);
 
-  // Listen for playVideo events from generated videos
+  // Listen for playVideo and uploadArticleToPlayer events
   useEffect(() => {
     const handlePlayVideo = (event) => {
       const { url, title: videoTitle, autoPlay } = event.detail;
@@ -145,8 +145,21 @@ export default function LivePlayer({
       setVolume(80);
     };
 
+    const handleUploadArticle = (event) => {
+      const { videoUrl, articleTitle, reporterName } = event.detail;
+      setCurrentVideoUrl(videoUrl);
+      setPlayerTitle(`${articleTitle} - ${reporterName}`);
+      setIsPlaying(true);
+      setIsMuted(false);
+      setVolume(80);
+    };
+
     window.addEventListener('playVideo', handlePlayVideo);
-    return () => window.removeEventListener('playVideo', handlePlayVideo);
+    window.addEventListener('uploadArticleToPlayer', handleUploadArticle);
+    return () => {
+      window.removeEventListener('playVideo', handlePlayVideo);
+      window.removeEventListener('uploadArticleToPlayer', handleUploadArticle);
+    };
   }, [title]);
 
   // YouTube IFrame API for controlling playback
