@@ -21,27 +21,35 @@ export default function TalkingAvatar() {
       return;
     }
 
-    console.log('File selected:', file.name, file.size, file.type);
+    // Validate file type
+    if (!file.type.startsWith('image/')) {
+      toast.error("אנא בחר קובץ תמונה");
+      return;
+    }
+
+    // Validate file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("הקובץ גדול מדי. מקסימום 5MB");
+      return;
+    }
+
     setUploadingImage(true);
+    toast.loading("מעלה תמונה...", { id: 'upload' });
 
     try {
-      console.log('Starting upload...');
       const result = await base44.integrations.Core.UploadFile({ file });
-      console.log('Upload result:', result);
       
-      const url = result.file_url || result.url || result;
-      console.log('Final URL:', url);
+      const url = result?.file_url || result?.url;
       
       if (!url) {
         throw new Error('לא התקבל URL מהשרת');
       }
       
       setAvatarUrl(url);
-      toast.success("התמונה הועלתה בהצלחה!");
-      console.log('Image URL saved:', url);
+      toast.success("התמונה הועלתה בהצלחה!", { id: 'upload' });
     } catch (error) {
       console.error('Upload error:', error);
-      toast.error(`שגיאה: ${error.message}`);
+      toast.error(`שגיאה בהעלאה: ${error.message}`, { id: 'upload' });
     } finally {
       setUploadingImage(false);
     }
