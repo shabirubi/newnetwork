@@ -90,7 +90,6 @@ Format as a dialogue with speaker names.`;
 
         const response = await base44.integrations.Core.InvokeLLM({
           prompt: prompt,
-          add_context_from_internet: true,
           response_json_schema: {
             type: "object",
             properties: {

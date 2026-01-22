@@ -17,8 +17,8 @@ export default function AIAnnouncer() {
   const { data: articles = [] } = useQuery({
     queryKey: ['announcer-articles'],
     queryFn: () => base44.entities.NewsArticle.list('-created_date', 10),
-    staleTime: 10000,
-    refetchInterval: 20000,
+    staleTime: 300000,
+    refetchInterval: false,
     initialData: [],
     retry: 2
   });
