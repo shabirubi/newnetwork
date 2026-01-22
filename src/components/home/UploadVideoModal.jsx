@@ -43,6 +43,7 @@ export default function UploadVideoModal({ isOpen, onClose }) {
       await base44.entities.UserVideo.create({
         title: formData.title,
         video_url: videoUrl,
+        thumbnail_url: videoUrl,
         description: formData.description || '',
         uploader_email: user.email,
         status: 'ready'
