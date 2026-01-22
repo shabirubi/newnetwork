@@ -191,25 +191,42 @@ export default function AllVideosGallery() {
                     allow="autoplay; encrypted-media"
                   />
                 ) : (
-                  <video
-                    key={selectedVideo.id}
-                    src={selectedVideo.url}
-                    className="w-full h-full bg-black"
-                    autoPlay
-                    loop
-                    controls
-                    playsInline
-                    style={{
-                      display: 'block',
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'contain'
-                    }}
-                    onLoadedMetadata={(e) => {
-                      e.target.volume = 1;
-                      e.target.muted = false;
-                    }}
-                  />
+                  <>
+                    <video
+                      key={selectedVideo.id}
+                      src={selectedVideo.url}
+                      className="w-full h-full bg-black"
+                      autoPlay
+                      loop
+                      controls
+                      playsInline
+                      style={{
+                        display: 'block',
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'contain'
+                      }}
+                      onLoadStart={() => setIsLoading(true)}
+                      onLoadedMetadata={(e) => {
+                        e.target.volume = 1;
+                      }}
+                      onCanPlay={() => setIsLoading(false)}
+                      onError={() => setIsLoading(false)}
+                    />
+
+                    {/* Loading Indicator */}
+                    {isLoading && (
+                      <div className="absolute inset-0 bg-black/60 flex flex-col items-center justify-center gap-3">
+                        <motion.div
+                          animate={{ rotate: 360 }}
+                          transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
+                        >
+                          <Loader className="w-8 h-8 text-[#E31E24]" />
+                        </motion.div>
+                        <p className="text-white font-bold text-lg">טוען...</p>
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
 
