@@ -135,12 +135,13 @@ export default function LivePlayer({
     return () => clearInterval(typeInterval);
   }, [currentSlogan]);
 
-  // Update currentStreamUrl when streamUrl prop changes
+  // Update currentVideoUrl when streamUrl prop changes
   useEffect(() => {
-    if (streamUrl && streamUrl !== currentStreamUrl) {
-      setCurrentVideoUrl(null); // Reset to let streamUrl take over
+    if (streamUrl && streamUrl !== currentVideoUrl) {
+      setCurrentVideoUrl(streamUrl);
+      setDisplayThumbnail(!!thumbnailUrl);
     }
-  }, [streamUrl]);
+  }, [streamUrl, thumbnailUrl]);
 
   // Listen for playVideo and uploadArticleToPlayer events
   useEffect(() => {
