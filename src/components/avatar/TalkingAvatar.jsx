@@ -230,6 +230,35 @@ export default function TalkingAvatar() {
                       </p>
                     </div>
 
+                    {/* Voice Provider Selection */}
+                    <div>
+                      <label className="block text-white font-bold mb-3">ספק קול</label>
+                      <div className="flex gap-4">
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="radio"
+                            name="voiceProvider"
+                            value="microsoft"
+                            checked={voiceProvider === "microsoft"}
+                            onChange={(e) => setVoiceProvider(e.target.value)}
+                            className="w-4 h-4"
+                          />
+                          <span className="text-gray-300">Microsoft Azure</span>
+                        </label>
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="radio"
+                            name="voiceProvider"
+                            value="elevenlabs"
+                            checked={voiceProvider === "elevenlabs"}
+                            onChange={(e) => setVoiceProvider(e.target.value)}
+                            className="w-4 h-4"
+                          />
+                          <span className="text-gray-300">Eleven Labs</span>
+                        </label>
+                      </div>
+                    </div>
+
                     {/* Gender Selection */}
                     <div>
                       <label className="block text-white font-bold mb-3">בחר קול</label>
@@ -255,6 +284,35 @@ export default function TalkingAvatar() {
                             className="w-4 h-4"
                           />
                           <span className="text-gray-300">קול נשי</span>
+                        </label>
+                      </div>
+                    </div>
+
+                    {/* Background Selection */}
+                    <div>
+                      <label className="block text-white font-bold mb-3">רקע</label>
+                      <div className="flex gap-4">
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="radio"
+                            name="backgroundType"
+                            value="static"
+                            checked={backgroundType === "static"}
+                            onChange={(e) => setBackgroundType(e.target.value)}
+                            className="w-4 h-4"
+                          />
+                          <span className="text-gray-300">רקע קבוע</span>
+                        </label>
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input
+                            type="radio"
+                            name="backgroundType"
+                            value="dynamic"
+                            checked={backgroundType === "dynamic"}
+                            onChange={(e) => setBackgroundType(e.target.value)}
+                            className="w-4 h-4"
+                          />
+                          <span className="text-gray-300">רקע דינמי</span>
                         </label>
                       </div>
                     </div>
