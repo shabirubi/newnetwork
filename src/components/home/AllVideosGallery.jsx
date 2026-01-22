@@ -191,17 +191,24 @@ export default function AllVideosGallery() {
                   />
                 ) : (
                   <video
+                    key={selectedVideo.id}
                     src={selectedVideo.url}
                     className="w-full h-full bg-black"
                     autoPlay
                     loop
-                    muted={false}
-                    playsInline
+                    volume={1}
                     style={{
                       display: 'block',
                       width: '100%',
                       height: '100%',
                       objectFit: 'contain'
+                    }}
+                    onLoadedMetadata={(e) => {
+                      e.target.volume = 1;
+                      console.log('Video loaded:', selectedVideo.url);
+                    }}
+                    onError={(e) => {
+                      console.error('Video error:', e, selectedVideo.url);
                     }}
                   />
                 )}
