@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Upload, Camera, Loader } from "lucide-react";
+import { base44 } from "@/api/base44Client";
+import { toast } from "sonner";
 
 export default function UploadVideoModal({ isOpen, onClose }) {
   const [step, setStep] = useState(1);
@@ -14,21 +16,45 @@ export default function UploadVideoModal({ isOpen, onClose }) {
 
   const handleUpload = async () => {
     if (!formData.title || !formData.videoFile) {
-      alert("אנא מלא את כל השדות");
+      toast.error("אנא מלא את כל השדות");
       return;
     }
 
     setUploading(true);
-    // סימולציה של העלאה
-    setTimeout(() => {
-      setUploading(false);
+    setStep(2);
+    toast.loading("מעלה סרטון...", { id: "upload" });
+
+    try {
+      // העלה את הקובץ
+      const uploadResponse = await base44.integrations.Core.UploadFile({ 
+        file: formData.videoFile 
+      });
+
+      const videoUrl = uploadResponse.file_url;
+
+      // שמור ב-LiveStream כדי שיופיע בנגן הראשי
+      await base44.entities.LiveStream.create({
+        title: formData.title,
+        stream_url: videoUrl,
+        is_active: true,
+        viewer_count: 0,
+        thumbnail_url: videoUrl
+      });
+
+      toast.dismiss("upload");
       setStep(3);
       setTimeout(() => {
         onClose();
         setStep(1);
         setFormData({ title: "", description: "", category: "breaking", videoFile: null });
+        toast.success("הסרטון מוצג בנגן הראשי! 🎥");
       }, 2000);
-    }, 2000);
+    } catch (error) {
+      toast.dismiss("upload");
+      toast.error("שגיאה בהעלאה: " + error.message);
+      setStep(1);
+      setUploading(false);
+    }
   };
 
   return (
