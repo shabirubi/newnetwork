@@ -71,49 +71,22 @@ export default function TalkingAvatar() {
       toast.loading("יוצר דמות מדברת...", { id: 'video-gen' });
 
       try {
-        // Convert image to base64 for better compatibility
-        const img = new Image();
-        img.crossOrigin = "anonymous";
+        const response = await base44.functions.invoke('generateTalkingVideo', {
+          text,
+          avatarUrl,
+          gender
+        });
 
-        img.onload = async () => {
-          const canvas = document.createElement('canvas');
-          canvas.width = img.width;
-          canvas.height = img.height;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0);
-          const base64 = canvas.toDataURL('image/jpeg', 0.9);
-
-          try {
-            const response = await base44.functions.invoke('generateTalkingVideo', {
-              text,
-              avatarUrl,
-              avatarBase64: base64,
-              gender
-            });
-
-            if (response.data?.video_url) {
-              setVideoUrl(response.data.video_url);
-              toast.success("הוידאו מוכן ונוסף לפיד החדשות! 🎥", { id: 'video-gen' });
-            } else {
-              throw new Error('לא הצלחתי ליצור וידאו');
-            }
-          } catch (error) {
-            console.error('Video error:', error);
-            toast.error(`שגיאה: ${error.message}`, { id: 'video-gen' });
-          } finally {
-            setIsGenerating(false);
-          }
-        };
-
-        img.onerror = () => {
-          toast.error("שגיאה בטעינת התמונה", { id: 'video-gen' });
-          setIsGenerating(false);
-        };
-
-        img.src = avatarUrl;
+        if (response.data?.video_url) {
+          setVideoUrl(response.data.video_url);
+          toast.success("הוידאו מוכן ונוסף לפיד החדשות! 🎥", { id: 'video-gen' });
+        } else {
+          throw new Error('לא הצלחתי ליצור וידאו');
+        }
       } catch (error) {
-        console.error('Video setup error:', error);
+        console.error('Video error:', error);
         toast.error(`שגיאה: ${error.message}`, { id: 'video-gen' });
+      } finally {
         setIsGenerating(false);
       }
     };
