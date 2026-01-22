@@ -17,11 +17,13 @@ export default function BroadcastStudio({ isOpen, onClose }) {
     if (!file) return;
 
     try {
-      const formData = new FormData();
-      formData.append("file", file);
-
       const response = await base44.integrations.Core.UploadFile({ file });
-      setAvatarImage(response.file_url);
+      const fileUrl = response.file_url;
+
+      // Ensure the URL ends with proper image extension
+      const cleanUrl = fileUrl.includes('?') ? fileUrl.split('?')[0] : fileUrl;
+
+      setAvatarImage(cleanUrl);
       toast.success("התמונה הועלתה בהצלחה ✓");
     } catch (error) {
       toast.error("שגיאה בהעלאת התמונה");
