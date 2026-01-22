@@ -57,39 +57,66 @@ export default function TalkingAvatar() {
   };
 
   const generateVideo = async () => {
-    if (!text.trim()) {
-      toast.error("אנא הזן טקסט");
-      return;
-    }
-
-    if (!avatarUrl) {
-      toast.error("אנא העלה תמונה");
-      return;
-    }
-
-    setIsGenerating(true);
-    toast.loading("יוצר דמות מדברת...", { id: 'video-gen' });
-
-    try {
-      const response = await base44.functions.invoke('generateTalkingVideo', {
-        text,
-        avatarUrl,
-        gender
-      });
-
-      if (response.data?.video_url) {
-        setVideoUrl(response.data.video_url);
-        toast.success("הוידאו מוכן ונוסף לפיד החדשות! 🎥", { id: 'video-gen' });
-      } else {
-        throw new Error('לא הצלחתי ליצור וידאו');
+      if (!text.trim()) {
+        toast.error("אנא הזן טקסט");
+        return;
       }
-    } catch (error) {
-      console.error('Video error:', error);
-      toast.error(`שגיאה: ${error.message}`, { id: 'video-gen' });
-    } finally {
-      setIsGenerating(false);
-    }
-  };
+
+      if (!avatarUrl) {
+        toast.error("אנא העלה תמונה");
+        return;
+      }
+
+      setIsGenerating(true);
+      toast.loading("יוצר דמות מדברת...", { id: 'video-gen' });
+
+      try {
+        // Convert image to base64 for better compatibility
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+
+        img.onload = async () => {
+          const canvas = document.createElement('canvas');
+          canvas.width = img.width;
+          canvas.height = img.height;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0);
+          const base64 = canvas.toDataURL('image/jpeg', 0.9);
+
+          try {
+            const response = await base44.functions.invoke('generateTalkingVideo', {
+              text,
+              avatarUrl,
+              avatarBase64: base64,
+              gender
+            });
+
+            if (response.data?.video_url) {
+              setVideoUrl(response.data.video_url);
+              toast.success("הוידאו מוכן ונוסף לפיד החדשות! 🎥", { id: 'video-gen' });
+            } else {
+              throw new Error('לא הצלחתי ליצור וידאו');
+            }
+          } catch (error) {
+            console.error('Video error:', error);
+            toast.error(`שגיאה: ${error.message}`, { id: 'video-gen' });
+          } finally {
+            setIsGenerating(false);
+          }
+        };
+
+        img.onerror = () => {
+          toast.error("שגיאה בטעינת התמונה", { id: 'video-gen' });
+          setIsGenerating(false);
+        };
+
+        img.src = avatarUrl;
+      } catch (error) {
+        console.error('Video setup error:', error);
+        toast.error(`שגיאה: ${error.message}`, { id: 'video-gen' });
+        setIsGenerating(false);
+      }
+    };
 
   const reset = () => {
     setVideoUrl(null);
