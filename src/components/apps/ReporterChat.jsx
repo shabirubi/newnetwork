@@ -625,11 +625,11 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
             onClick={() => setOpenState(false)}
           >
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white dark:bg-gray-900 rounded-3xl w-full max-w-6xl h-[85vh] flex flex-col overflow-hidden"
-              onClick={(e) => e.stopPropagation()}
+             initial={{ scale: 0.9, opacity: 0 }}
+             animate={{ scale: 1, opacity: 1 }}
+             exit={{ scale: 0.9, opacity: 0 }}
+             className="bg-white dark:bg-gray-900 rounded-3xl w-[95vw] h-[90vh] flex flex-col overflow-hidden"
+             onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}
               <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-6 flex items-center justify-between">
@@ -717,12 +717,12 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
                   </motion.div>
                 ) : (
                   // Chat Window with Reporter Profile Side by Side
-                  <div className="w-full flex h-full">
+                  <div className="w-full flex h-full gap-0">
                     {/* Reporter Profile Card - Left Side (Fixed) */}
                     <motion.div
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
-                      className="hidden lg:flex flex-col items-center gap-4 p-6 w-64 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 border-l border-indigo-600/30 flex-shrink-0"
+                      className="flex flex-col items-center gap-4 p-6 w-72 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 border-l border-indigo-600/30 flex-shrink-0 overflow-y-auto"
                     >
                       <div className="relative">
                         <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-full blur-2xl opacity-60" />
@@ -765,7 +765,7 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
                     </motion.div>
 
                     {/* Chat Area - Right Side */}
-                    <div className="flex-1 flex flex-col overflow-hidden">
+                    <div className="flex-1 flex flex-col overflow-hidden bg-gray-50 dark:bg-gray-800/50">
                     {/* Video Call Area */}
                      {isVideoCall && (
                       <div className="relative bg-black aspect-video">
