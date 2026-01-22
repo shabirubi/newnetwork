@@ -43,6 +43,12 @@ Deno.serve(async (req) => {
     console.log('Gender:', gender);
 
     // Create talk using D-ID API with enhanced body language
+    // Validate image URL format for D-ID
+    if (!avatarUrl.match(/\.(jpg|jpeg|png)$/i)) {
+      console.error('❌ Invalid image format:', avatarUrl);
+      return Response.json({ error: 'Image must be JPG or PNG format' }, { status: 400 });
+    }
+
     const didPayload = {
       source_url: avatarUrl,
       driver_url: 'bank://lively/',
