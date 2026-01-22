@@ -192,10 +192,17 @@ export default function AllVideosGallery() {
                 ) : (
                   <video
                     src={selectedVideo.url}
-                    className="w-full h-full"
-                    controls
+                    className="w-full h-full bg-black"
                     autoPlay
-                    controlsList="nodownload"
+                    loop
+                    muted={false}
+                    playsInline
+                    style={{
+                      display: 'block',
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'contain'
+                    }}
                   />
                 )}
               </div>
