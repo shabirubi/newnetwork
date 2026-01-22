@@ -100,6 +100,16 @@ export default function ReporterArticlePresentation({ article, reporter }) {
           </Button>
         </motion.div>
       )}
+      
+      {videoUrl && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mt-4"
+        >
+          <UploadArticleToPlayer article={article} reporter={reporter} />
+        </motion.div>
+      )}
     </motion.div>
   );
 }
