@@ -20,6 +20,9 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
   const [isVideoCall, setIsVideoCall] = useState(false);
   const [isAudioMuted, setIsAudioMuted] = useState(false);
   const [isVideoMuted, setIsVideoMuted] = useState(false);
+  const [quickReplies, setQuickReplies] = useState([]);
+  const [showQuickReplies, setShowQuickReplies] = useState(true);
+  const [pollAnswers, setPollAnswers] = useState({});
   const messagesEndRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
@@ -41,16 +44,52 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
     scrollToBottom();
   }, [messages]);
 
-  const sendMessage = async () => {
-    if (!inputValue.trim() || !selectedReporter || isLoading) return;
+  const generateQuickReplies = (reporter) => {
+    const specialty = reporter.specialty?.toLowerCase() || '';
+    const baseReplies = [
+      { text: '📰 מה החדשות האחרונות?' },
+      { text: '🔥 יש משהו חם?' },
+      { text: '💭 מה דעתך?' }
+    ];
 
-    const userMessage = { role: "user", content: inputValue, timestamp: new Date() };
+    if (specialty.includes('ביטחון') || specialty.includes('צבא')) {
+      return [...baseReplies, { text: '🛡️ מה המצב הביטחוני?' }, { text: '📡 עדכונים מהשטח?' }];
+    } else if (specialty.includes('כלכלה') || specialty.includes('עסקים')) {
+      return [...baseReplies, { text: '💰 מה קורה בשווקים?' }, { text: '📈 מה התחזיות?' }];
+    } else if (specialty.includes('ספורט')) {
+      return [...baseReplies, { text: '⚽ מה התוצאות?' }, { text: '🏆 מי מוביל?' }];
+    }
+    return baseReplies;
+  };
+
+  const handleQuickReply = (text) => {
+    sendMessage(text);
+  };
+
+  const handlePollVote = (pollId, option) => {
+    setPollAnswers(prev => ({ ...prev, [pollId]: option }));
+    toast.success('תשובתך נרשמה!');
+    setTimeout(() => {
+      setMessages(prev => [...prev, {
+        role: "assistant",
+        content: `תודה! ${option === '👍 חיובי' ? 'שמח לשמוע!' : option === '👎 שלילי' ? 'מבין.' : 'כן, מורכב.'}`,
+        reporter: selectedReporter.name,
+        timestamp: new Date()
+      }]);
+    }, 800);
+  };
+
+  const sendMessage = async (text = null) => {
+    const messageText = text || inputValue;
+    if (!messageText.trim() || !selectedReporter || isLoading) return;
+
+    const userMessage = { role: "user", content: messageText, timestamp: new Date() };
     setMessages(prev => [...prev, userMessage]);
-    const userInput = inputValue;
+    const userInput = messageText;
     setInputValue("");
+    setShowQuickReplies(false);
     setIsLoading(true);
 
-    // Simulate AI response
     setTimeout(() => {
       const responses = [
         `תודה על השאלה! כ${selectedReporter.name}, אני מתמחה ב${selectedReporter.specialty}. ${userInput.includes('?') ? 'זו שאלה מעניינת מאוד' : 'אני שמח/ה לעזור'}. המצב בשטח דינמי ומתפתח.`,
@@ -59,14 +98,40 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
         `${selectedReporter.name} כאן! מתמחה ב${selectedReporter.specialty}. ${userInput.toLowerCase().includes('איך') ? 'זה תהליך מורכב' : 'אני כאן לעדכן אותך'}. הצוות שלנו עובד סביב השעון.`
       ];
       
+      const rand = Math.random();
       const aiMessage = {
         role: "assistant",
         content: responses[Math.floor(Math.random() * responses.length)],
         reporter: selectedReporter.name,
         timestamp: new Date()
       };
+
+      if (rand > 0.7) {
+        aiMessage.media = { type: 'image', url: selectedReporter.image, caption: '📸 מהשטח עכשיו' };
+      }
+      if (rand > 0.6 && rand <= 0.7) {
+        aiMessage.location = `📍 ${selectedReporter.specialty}`;
+      }
+
       setMessages(prev => [...prev, aiMessage]);
       setIsLoading(false);
+
+      if (Math.random() > 0.85) {
+        setTimeout(() => {
+          const pollId = `poll-${Date.now()}`;
+          setMessages(prev => [...prev, {
+            role: "assistant",
+            content: 'שאלה מהירה:',
+            reporter: selectedReporter.name,
+            timestamp: new Date(),
+            poll: {
+              id: pollId,
+              question: 'מה דעתך על ההתפתחויות?',
+              options: ['👍 חיובי', '👎 שלילי', '🤷 לא בטוח/ה']
+            }
+          }]);
+        }, 2000);
+      }
     }, 1500 + Math.random() * 1000);
   };
 
@@ -193,12 +258,16 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
 
   const startNewChat = (reporter) => {
     setSelectedReporter(reporter);
+    const replies = generateQuickReplies(reporter);
+    setQuickReplies(replies);
+    setShowQuickReplies(true);
     setMessages([
       {
         role: "assistant",
         content: `שלום! אני ${reporter.name}, כתב/כתבת חדשות. אני כאן לדיון עם מומחיות ב-${reporter.specialty}. מה תרצה לדעת?`,
         reporter: reporter.name,
-        timestamp: new Date()
+        timestamp: new Date(),
+        location: `📍 ${reporter.specialty}`
       }
     ]);
   };
@@ -389,6 +458,46 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
                             }`}
                           >
                             <p className="text-sm leading-relaxed">{message.content}</p>
+                            
+                            {message.media && (
+                              <div className="mt-3 rounded-lg overflow-hidden border-2 border-gray-700">
+                                <img src={message.media.url} alt={message.media.caption} className="w-full h-32 object-cover" />
+                                <div className="bg-gray-900/50 px-2 py-1">
+                                  <p className="text-xs text-gray-300">{message.media.caption}</p>
+                                </div>
+                              </div>
+                            )}
+
+                            {message.location && (
+                              <div className="mt-2 text-xs text-gray-300 bg-gray-900/30 rounded px-2 py-1">
+                                {message.location}
+                              </div>
+                            )}
+
+                            {message.poll && (
+                              <div className="mt-3 space-y-2">
+                                <p className="text-sm font-bold">{message.poll.question}</p>
+                                <div className="space-y-1">
+                                  {message.poll.options.map((option, i) => (
+                                    <button
+                                      key={i}
+                                      onClick={() => handlePollVote(message.poll.id, option)}
+                                      disabled={!!pollAnswers[message.poll.id]}
+                                      className={`w-full text-left px-2 py-1.5 rounded text-xs transition-all ${
+                                        pollAnswers[message.poll.id] === option
+                                          ? 'bg-indigo-600 text-white'
+                                          : pollAnswers[message.poll.id]
+                                          ? 'bg-gray-700 text-gray-400'
+                                          : 'bg-gray-700 hover:bg-gray-600 text-white'
+                                      }`}
+                                    >
+                                      {option}
+                                    </button>
+                                  ))}
+                                </div>
+                              </div>
+                            )}
+
                             {message.audioUrl && (
                               <audio controls className="mt-2 w-full">
                                 <source src={message.audioUrl} type="audio/webm" />
@@ -425,6 +534,32 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
                       <div ref={messagesEndRef} />
                     </div>
 
+                    {/* Quick Replies */}
+                    {showQuickReplies && quickReplies.length > 0 && (
+                      <div className="px-4 pb-3 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+                        <div className="flex items-center gap-2 mb-2 pt-3">
+                          <Sparkles className="w-3 h-3 text-indigo-500" />
+                          <span className="text-xs text-gray-500 dark:text-gray-400">שאלות מוצעות:</span>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {quickReplies.map((reply, idx) => (
+                            <motion.button
+                              key={idx}
+                              initial={{ opacity: 0, scale: 0.8 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              transition={{ delay: idx * 0.1 }}
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                              onClick={() => handleQuickReply(reply.text)}
+                              className="px-3 py-1.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-full text-xs transition-all"
+                            >
+                              {reply.text}
+                            </motion.button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
                     {/* Input Area */}
                     <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
                       <div className="flex gap-2 mb-3">
@@ -455,7 +590,7 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
                           className="flex-1"
                         />
                         <Button
-                          onClick={sendMessage}
+                          onClick={() => sendMessage()}
                           disabled={isLoading || !inputValue.trim() || isRecording}
                           className="bg-indigo-600 hover:bg-indigo-700 px-4"
                         >
