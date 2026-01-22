@@ -56,21 +56,15 @@ Deno.serve(async (req) => {
       }
     }
 
-    // Create V3 Pro Avatar using D-ID Clips API (Full-HD + תנועות גוף)
+    // Create talk using D-ID API with enhanced expressions
     const didPayload = {
-      presenter_input: avatarUrl,
-      driver: {
-        expressions: {
-          expressions: [
-            { start_frame: 0, expression: 'neutral', intensity: 0.8 },
-            { start_frame: 30, expression: 'happy', intensity: 0.7 },
-            { start_frame: 60, expression: 'serious', intensity: 0.9 },
-            { start_frame: 90, expression: 'happy', intensity: 0.6 }
-          ]
-        }
-      },
-      background: {
-        color: '#00000000'
+      source_url: avatarUrl,
+      driver_url: 'bank://lively/',
+      config: {
+        fluent: true,
+        pad_audio: 0,
+        stitch: true,
+        result_format: 'mp4'
       }
     };
 
@@ -90,7 +84,7 @@ Deno.serve(async (req) => {
       };
     }
 
-    const response = await fetch('https://api.d-id.com/clips', {
+    const response = await fetch('https://api.d-id.com/talks', {
       method: 'POST',
       headers: {
         'Authorization': `Basic ${DID_API_KEY}`,
@@ -106,16 +100,16 @@ Deno.serve(async (req) => {
     }
 
     const result = await response.json();
-    const clipId = result.id;
+    const talkId = result.id;
 
     // Poll for video completion
     let attempts = 0;
     const maxAttempts = 90;
-    
+
     while (attempts < maxAttempts) {
       await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      const statusResponse = await fetch(`https://api.d-id.com/clips/${clipId}`, {
+
+      const statusResponse = await fetch(`https://api.d-id.com/talks/${talkId}`, {
         headers: {
           'Authorization': `Basic ${DID_API_KEY}`,
           'accept': 'application/json'
@@ -147,7 +141,7 @@ Deno.serve(async (req) => {
           success: true,
           video_url: statusData.result_url,
           duration: statusData.duration,
-          clip_id: clipId,
+          talk_id: talkId,
           saved_to_feed: true
         });
       }
