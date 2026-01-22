@@ -90,7 +90,7 @@ export default function Home() {
 
   const { data: liveStream, refetch: refetchLiveStream } = useQuery({
     queryKey: ['live-stream'],
-    queryFn: () => base44.entities.LiveStream.filter({ is_active: true }),
+    queryFn: () => base44.entities.LiveStream.list('-created_date', 1),
     initialData: [],
     refetchInterval: 5000 // רענן כל 5 שניות
   });
