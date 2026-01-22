@@ -180,29 +180,11 @@ export default function AutoNewsUpdater() {
       const articles = (typeof result === 'object' && result.articles) ? result.articles : (Array.isArray(result) ? result : []);
       
       // Generate images and add details
-      const enrichedArticles = await Promise.all(
-        articles.map(async (article) => {
-          try {
-            const imagePrompt = `Professional news photograph depicting: ${article.title}. High quality journalism image, realistic, professional photography. IMPORTANT: NO TEXT OR CAPTIONS in the image, only visual content.`;
-            const { url: image_url } = await base44.integrations.Core.GenerateImage({
-              prompt: imagePrompt
-            });
-
-            return {
-              ...article,
-              category: category.category,
-              image_url,
-              source: "הרשת החדשה"
-            };
-          } catch (error) {
-            return {
-              ...article,
-              category: category.category,
-              source: "הרשת החדשה"
-            };
-          }
-        })
-      );
+      const enrichedArticles = articles.map((article) => ({
+        ...article,
+        category: category.category,
+        source: "הרשת החדשה"
+      }));
 
       return enrichedArticles;
     } catch (error) {
