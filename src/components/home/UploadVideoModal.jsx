@@ -43,6 +43,18 @@ export default function UploadVideoModal({ isOpen, onClose }) {
         thumbnail_url: videoUrl
       });
 
+      // שמור גם ב-UserVideo כדי שיופיע בכל הקונטיינרים
+      const user = await base44.auth.me();
+      if (user) {
+        await base44.entities.UserVideo.create({
+          title: formData.title,
+          video_url: videoUrl,
+          thumbnail_url: videoUrl,
+          uploader_email: user.email,
+          status: "ready"
+        });
+      }
+
       toast.dismiss("upload");
       setStep(3);
       
