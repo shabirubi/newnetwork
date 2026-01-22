@@ -56,20 +56,22 @@ Deno.serve(async (req) => {
       }
     }
 
-    // Create talk using D-ID API
+    // Create V3 Pro Avatar using D-ID Clips API (Full-HD + תנועות גוף)
     const didPayload = {
-      source_url: avatarUrl,
-      driver_url: 'bank://lively/',
-      config: {
-        fluent: true,
-        pad_audio: 0,
-        stitch: true,
-        result_format: 'mp4',
-        align_driver: true,
-        align_expand_factor: 0.3,
-        auto_match: true,
-        motion_factor: 1.0,
-        normalization_factor: 1.0
+      presenter_id: avatarUrl.includes('http') ? null : avatarUrl,
+      presenter_input_url: avatarUrl.includes('http') ? avatarUrl : null,
+      driver: {
+        expressions: {
+          expressions: [
+            { start_frame: 0, expression: 'neutral', intensity: 0.8 },
+            { start_frame: 30, expression: 'happy', intensity: 0.7 },
+            { start_frame: 60, expression: 'serious', intensity: 0.9 },
+            { start_frame: 90, expression: 'happy', intensity: 0.6 }
+          ]
+        }
+      },
+      background: {
+        color: '#00000000'
       }
     };
 
@@ -89,7 +91,7 @@ Deno.serve(async (req) => {
       };
     }
 
-    const response = await fetch('https://api.d-id.com/talks', {
+    const response = await fetch('https://api.d-id.com/clips', {
       method: 'POST',
       headers: {
         'Authorization': `Basic ${DID_API_KEY}`,
@@ -105,7 +107,7 @@ Deno.serve(async (req) => {
     }
 
     const result = await response.json();
-    const talkId = result.id;
+    const clipId = result.id;
 
     // Poll for video completion
     let attempts = 0;
@@ -114,7 +116,7 @@ Deno.serve(async (req) => {
     while (attempts < maxAttempts) {
       await new Promise(resolve => setTimeout(resolve, 2000));
       
-      const statusResponse = await fetch(`https://api.d-id.com/talks/${talkId}`, {
+      const statusResponse = await fetch(`https://api.d-id.com/clips/${clipId}`, {
         headers: {
           'Authorization': `Basic ${DID_API_KEY}`,
           'accept': 'application/json'
@@ -146,7 +148,7 @@ Deno.serve(async (req) => {
           success: true,
           video_url: statusData.result_url,
           duration: statusData.duration,
-          talk_id: talkId,
+          clip_id: clipId,
           saved_to_feed: true
         });
       }
