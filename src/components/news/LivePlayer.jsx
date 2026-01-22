@@ -564,41 +564,7 @@ export default function LivePlayer({
           </motion.div>
         )}
 
-        {/* Giant Audio Button - Always Visible */}
-        {isPlaying && (
-          <motion.button
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => setIsMuted(!isMuted)}
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 group"
-          >
-            <div className="relative">
-              {/* Multi-layer Pulsing Rings */}
-              <span className="absolute inset-0 rounded-full bg-yellow-500/50 animate-ping" style={{ animationDuration: '1.5s' }} />
-              <span className="absolute inset-0 rounded-full bg-yellow-500/30 animate-ping" style={{ animationDuration: '2s', animationDelay: '0.5s' }} />
-              <span className="absolute inset-0 rounded-full bg-yellow-500/20 animate-ping" style={{ animationDuration: '2.5s', animationDelay: '1s' }} />
 
-              {/* Giant Main Button */}
-              <div className="relative px-16 py-12 sm:px-24 sm:py-16 rounded-[3rem] bg-gradient-to-br from-yellow-400 via-yellow-500 to-yellow-600 backdrop-blur-2xl flex flex-col items-center gap-6 shadow-2xl border-8 border-yellow-200/60 group-hover:border-yellow-100/90 transition-all animate-pulse"
-                style={{
-                  boxShadow: '0 0 100px rgba(234, 179, 8, 1), inset 0 0 60px rgba(255, 255, 255, 0.3), 0 20px 80px rgba(0, 0, 0, 0.7)'
-                }}
-              >
-                {isMuted ? (
-                  <VolumeX className="w-20 h-20 sm:w-32 sm:h-32 text-black drop-shadow-2xl" strokeWidth={4} />
-                ) : (
-                  <Volume2 className="w-20 h-20 sm:w-32 sm:h-32 text-black drop-shadow-2xl" strokeWidth={4} />
-                )}
-                <span className="text-black text-4xl sm:text-6xl font-black tracking-wider drop-shadow-xl text-center">
-                  {isMuted ? 'הפעל קול' : 'השתק קול'}
-                </span>
-                <span className="text-black text-xl sm:text-2xl font-bold">👆 לחץ כאן</span>
-              </div>
-            </div>
-          </motion.button>
-        )}
 
         {/* Play Button Overlay */}
         {!isPlaying && !showPromo && (
