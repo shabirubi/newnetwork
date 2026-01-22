@@ -13,6 +13,7 @@ export default function TalkingAvatar() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [videoUrl, setVideoUrl] = useState(null);
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [gender, setGender] = useState("male");
 
   const handleImageUpload = async (e) => {
     const file = e.target.files?.[0];
