@@ -372,18 +372,18 @@ export default function LivePlayer({
     >
       {/* Video Container */}
       <div className="relative w-full aspect-[9/16] sm:aspect-video rounded-t-2xl overflow-hidden">
-        {/* Video Player - Shows generated videos or YouTube */}
-            {currentVideoUrl && (
-              <video
-                src={currentVideoUrl}
-                className="absolute inset-0 w-full h-full z-20 bg-black"
-                controls
-                autoPlay
-                muted={false}
-                controlsList="nodownload"
-                style={{ display: 'block' }}
-              />
-            )}
+        {/* Video Player - Shows generated videos or uploaded content */}
+              {isPlaying && currentVideoUrl && (
+                <video
+                  src={currentVideoUrl}
+                  className="absolute inset-0 w-full h-full z-20 bg-black"
+                  controls
+                  autoPlay
+                  muted={false}
+                  controlsList="nodownload"
+                  style={{ display: 'block' }}
+                />
+              )}
 
         {/* Frame Border - Covering YouTube Elements */}
         <div className="absolute inset-0 z-30 pointer-events-none">
