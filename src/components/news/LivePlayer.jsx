@@ -371,25 +371,16 @@ export default function LivePlayer({
       {/* Video Container */}
       <div className="relative w-full aspect-[9/16] sm:aspect-video rounded-t-2xl overflow-hidden">
         {/* Video Player - Shows generated videos or YouTube */}
-          {currentVideoUrl ? (
-            <video
-              src={currentVideoUrl}
-              className="absolute inset-0 w-full h-full z-20 bg-black"
-              controls
-              autoPlay
-              muted={isMuted}
-              controlsList="nodownload"
-            />
-          ) : (
-            <iframe
-              src={currentStreamUrl.includes('youtube.com') || currentStreamUrl.includes('youtu.be') ? currentStreamUrl : `https://www.youtube.com/embed/pPRKdCHHlGI?autoplay=0&mute=0&rel=0&enablejsapi=1`}
-              className="absolute inset-0 w-full h-full z-20"
-              allow="fullscreen; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              frameBorder="0"
-              title={playerTitle}
-            />
-          )}
+            {currentVideoUrl && (
+              <video
+                src={currentVideoUrl}
+                className="absolute inset-0 w-full h-full z-20 bg-black"
+                controls
+                autoPlay
+                muted={isMuted}
+                controlsList="nodownload"
+              />
+            )}
 
         {/* Frame Border - Covering YouTube Elements */}
         <div className="absolute inset-0 z-30 pointer-events-none">
