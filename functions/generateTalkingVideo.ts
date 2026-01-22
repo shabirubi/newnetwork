@@ -47,7 +47,7 @@ Deno.serve(async (req) => {
       input: text,
       provider: {
         type: 'microsoft',
-        voice_id: 'he-IL-AvriNeural'
+        voice_id: voiceId
       }
     };
 
