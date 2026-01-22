@@ -276,10 +276,10 @@ export default function UploadVideoModal({ isOpen, onClose }) {
                       ממש טוב!
                     </h3>
                     <p className="text-gray-400 mb-4">
-                      הסרטון שלך הועלה בהצלחה והוא מצפה לאישור
+                      הסרטון שלך הועלה בהצלחה!
                     </p>
                     <p className="text-sm text-gray-500">
-                      בעוד שעה או כמה יום יוצג הסרטון בעמוד הבית
+                      הוא כבר מוצג בנגן המרכזי של העמוד הבית
                     </p>
                   </div>
 
