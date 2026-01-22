@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle, X, Send, Loader } from "lucide-react";
+import { MessageCircle, X, Send, Loader, Volume2, Pause, Play } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { Input } from "@/components/ui/input";
@@ -14,6 +14,12 @@ export default function SimpleReporterChat() {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [showIntro, setShowIntro] = useState(false);
+  const [isGeneratingIntro, setIsGeneratingIntro] = useState(false);
+  const [introVideoUrl, setIntroVideoUrl] = useState(null);
+  const [audioUrl, setAudioUrl] = useState(null);
+  const [isPlayingAudio, setIsPlayingAudio] = useState(false);
+  const audioRef = useRef(null);
   const messagesEndRef = useRef(null);
 
   const { data: reporters = [] } = useQuery({
@@ -65,8 +71,44 @@ export default function SimpleReporterChat() {
     }
   };
 
+  const generateIntroVideo = async (reporter) => {
+    if (isGeneratingIntro) return;
+    
+    setIsGeneratingIntro(true);
+    try {
+      const introText = `שלום! אני ${reporter.name}, כתב/כתבת חדשות. אני מתמחה ב${reporter.specialty}. נשמח לדון איתך בנושאים שמעניינים אותך.`;
+      
+      const response = await base44.functions.invoke('generateTalkingVideo', {
+        text: introText,
+        avatarUrl: reporter.image,
+        gender: reporter.gender || 'male'
+      });
+
+      if (response.data?.video_url) {
+        setIntroVideoUrl(response.data.video_url);
+        
+        // Generate audio
+        const audioResponse = await base44.functions.invoke('generateSpeech', {
+          text: introText,
+          voice: 'he-IL-AsafNeural'
+        });
+        
+        if (audioResponse.data?.audioUrl) {
+          setAudioUrl(audioResponse.data.audioUrl);
+        }
+      }
+    } catch (error) {
+      console.error('Error generating intro:', error);
+      toast.error('שגיאה בהכנת ההצגה');
+    } finally {
+      setIsGeneratingIntro(false);
+    }
+  };
+
   const startNewChat = (reporter) => {
     setSelectedReporter(reporter);
+    setShowIntro(true);
+    generateIntroVideo(reporter);
     setMessages([
       {
         role: "assistant",
@@ -158,9 +200,92 @@ export default function SimpleReporterChat() {
                     ))}
                   </motion.div>
                 ) : (
-                  // Chat Window
-                  <>
-                    {/* Messages */}
+                   // Chat Window
+                   <>
+                     {/* Intro Section */}
+                     {showIntro && (
+                       <motion.div
+                         initial={{ opacity: 0, y: -20 }}
+                         animate={{ opacity: 1, y: 0 }}
+                         exit={{ opacity: 0, y: -20 }}
+                         className="bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-gray-800 dark:to-gray-700 p-4 space-y-3 border-b border-gray-200 dark:border-gray-600"
+                       >
+                         <div className="flex items-center justify-between">
+                           <h3 className="font-bold dark:text-white text-sm">הצגה:</h3>
+                           <button
+                             onClick={() => setShowIntro(false)}
+                             className="text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400"
+                           >
+                             סגור
+                           </button>
+                         </div>
+
+                         {/* Reporter Profile */}
+                         <div className="flex items-center gap-3">
+                           <img
+                             src={selectedReporter.image}
+                             alt={selectedReporter.name}
+                             className="w-14 h-14 rounded-full object-cover border-2 border-blue-400"
+                           />
+                           <div>
+                             <p className="font-bold dark:text-white">{selectedReporter.name}</p>
+                             <p className="text-xs text-gray-600 dark:text-gray-400">{selectedReporter.role}</p>
+                           </div>
+                         </div>
+
+                         {/* Video */}
+                         {isGeneratingIntro ? (
+                           <div className="bg-black/30 rounded-lg aspect-video flex items-center justify-center">
+                             <Loader className="w-6 h-6 animate-spin text-blue-600" />
+                           </div>
+                         ) : introVideoUrl ? (
+                           <div className="rounded-lg overflow-hidden">
+                             <video
+                               src={introVideoUrl}
+                               autoPlay
+                               controls
+                               className="w-full max-h-48 object-cover rounded-lg"
+                             />
+                           </div>
+                         ) : null}
+
+                         {/* Audio Player */}
+                         {audioUrl && (
+                           <motion.div
+                             initial={{ opacity: 0 }}
+                             animate={{ opacity: 1 }}
+                             className="flex items-center gap-2 bg-white dark:bg-gray-800 p-2 rounded-lg"
+                           >
+                             <button
+                               onClick={() => {
+                                 if (isPlayingAudio) {
+                                   audioRef.current?.pause();
+                                 } else {
+                                   audioRef.current?.play();
+                                 }
+                                 setIsPlayingAudio(!isPlayingAudio);
+                               }}
+                               className="p-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-full"
+                             >
+                               {isPlayingAudio ? (
+                                 <Pause className="w-3 h-3" />
+                               ) : (
+                                 <Play className="w-3 h-3" />
+                               )}
+                             </button>
+                             <Volume2 className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+                             <audio
+                               ref={audioRef}
+                               src={audioUrl}
+                               onEnded={() => setIsPlayingAudio(false)}
+                             />
+                             <span className="text-xs text-gray-600 dark:text-gray-400">הקול של הכתב/כתבת</span>
+                           </motion.div>
+                         )}
+                       </motion.div>
+                     )}
+
+                     {/* Messages */}
                     <div className="flex-1 overflow-y-auto p-4 space-y-3">
                       {messages.map((message, idx) => (
                         <motion.div
