@@ -4,6 +4,7 @@ import { Play, Loader, AlertCircle } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import UploadArticleToPlayer from "./UploadArticleToPlayer";
 
 export default function ReporterArticlePresentation({ article, reporter }) {
   const [isGenerating, setIsGenerating] = useState(false);
