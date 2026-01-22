@@ -84,6 +84,8 @@ Deno.serve(async (req) => {
 
     const result = await response.json();
     const talkId = result.id;
+    
+    console.log('📤 D-ID Response:', { id: talkId, status: result.status });
 
     // Poll for video completion
     let attempts = 0;
@@ -102,32 +104,34 @@ Deno.serve(async (req) => {
       const statusData = await statusResponse.json();
       
       if (statusData.status === 'done') {
-        // שמירת הוידאו ב-NewsArticle
-        try {
-          const article = await base44.asServiceRole.entities.NewsArticle.create({
-            title: `דמות מדברת - ${text.substring(0, 50)}`,
-            subtitle: 'וידאו שנוצר על ידי טכנולוגיית D-ID',
-            content: text,
-            category: 'technology',
-            video_url: statusData.result_url,
-            image_url: avatarUrl,
-            is_featured: true,
-            is_breaking: false,
-            source: 'AI Avatar Generator'
-          });
-          console.log('✅ Video saved to NewsArticle:', article.id);
-        } catch (dbError) {
-          console.error('❌ Failed to save to database:', dbError.message);
-        }
+         console.log('✅ Video ready:', statusData.result_url);
 
-        return Response.json({
-          success: true,
-          video_url: statusData.result_url,
-          duration: statusData.duration,
-          talk_id: talkId,
-          saved_to_feed: true
-        });
-      }
+         // שמירת הוידאו ב-NewsArticle
+         try {
+           const article = await base44.asServiceRole.entities.NewsArticle.create({
+             title: `דמות מדברת - ${text.substring(0, 50)}`,
+             subtitle: 'וידאו שנוצר על ידי טכנולוגיית D-ID',
+             content: text,
+             category: 'technology',
+             video_url: statusData.result_url,
+             image_url: avatarUrl,
+             is_featured: true,
+             is_breaking: true,
+             source: 'AI Avatar Generator'
+           });
+           console.log('✅ Video saved to NewsArticle:', article.id);
+         } catch (dbError) {
+           console.error('❌ Failed to save to database:', dbError.message);
+         }
+
+         return Response.json({
+           success: true,
+           video_url: statusData.result_url,
+           duration: statusData.duration || 0,
+           talk_id: talkId,
+           saved_to_feed: true
+         });
+       }
       
       if (statusData.status === 'error') {
         console.error('D-ID Error:', JSON.stringify(statusData, null, 2));

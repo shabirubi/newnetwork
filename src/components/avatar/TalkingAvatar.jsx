@@ -83,7 +83,17 @@ export default function TalkingAvatar() {
 
         if (response.data?.video_url) {
           setVideoUrl(response.data.video_url);
-          toast.success("הוידאו מוכן ונוסף לפיד החדשות! 🎥", { id: 'video-gen' });
+
+          // Send to main player
+          window.dispatchEvent(new CustomEvent('playVideo', {
+            detail: {
+              url: response.data.video_url,
+              title: `דמות מדברת - ${text.substring(0, 40)}...`,
+              autoPlay: true
+            }
+          }));
+
+          toast.success("הוידאו מוכן ונוסף לפיד! 🎥", { id: 'video-gen' });
         } else {
           throw new Error('לא הצלחתי ליצור וידאו');
         }
@@ -188,32 +198,30 @@ export default function TalkingAvatar() {
                   /* Creation Form */
                   <div className="space-y-6">
                     {/* Image Upload - Redesigned */}
-                    <div>
-                      <label className="block text-white font-bold mb-2 text-sm sm:text-base">📸 העלה תמונה</label>
+                    <div className="w-full">
+                      <label className="block text-white font-bold mb-2 text-sm">📸 תמונה</label>
                       <div 
-                        onClick={() => document.getElementById('avatar-upload').click()}
-                        className="relative border-2 border-dashed border-purple-500/50 rounded-xl p-4 cursor-pointer hover:border-purple-400 hover:bg-purple-500/5 transition-all bg-purple-900/20"
+                        onClick={() => !uploadingImage && document.getElementById('avatar-upload').click()}
+                        className="w-full relative border-2 border-dashed border-purple-500/50 rounded-lg p-3 sm:p-4 cursor-pointer hover:border-purple-400 hover:bg-purple-500/5 transition-all bg-purple-900/20"
                       >
                         {avatarUrl ? (
-                          <div className="flex items-center gap-3">
-                            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden border-2 border-purple-500 flex-shrink-0">
-                              <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
-                            </div>
-                            <div className="flex-1">
-                              <p className="text-purple-300 font-bold text-sm">✓ הועלתה</p>
+                          <div className="flex items-center gap-2 sm:gap-3">
+                            <img src={avatarUrl} alt="Avatar" className="w-16 h-16 sm:w-20 sm:h-20 rounded-md border-2 border-purple-500 object-cover flex-shrink-0" />
+                            <div className="flex-1 min-w-0">
+                              <p className="text-purple-300 font-bold text-xs sm:text-sm truncate">✓ הועלתה</p>
                               <p className="text-gray-400 text-xs">לחץ להחלפה</p>
                             </div>
                           </div>
                         ) : (
-                          <div className="text-center py-3">
-                            <User className="w-8 h-8 mx-auto mb-2 text-purple-400" />
-                            <p className="text-white font-bold text-sm mb-1">בחר תמונה</p>
-                            <p className="text-gray-400 text-xs">PNG, JPG עד 5MB</p>
+                          <div className="text-center py-2 sm:py-3">
+                            <User className="w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-1 sm:mb-2 text-purple-400" />
+                            <p className="text-white font-bold text-xs sm:text-sm">בחר תמונה</p>
+                            <p className="text-gray-400 text-xs">עד 5MB</p>
                           </div>
                         )}
                         {uploadingImage && (
-                          <div className="absolute inset-0 bg-black/50 rounded-xl flex items-center justify-center">
-                            <Loader2 className="w-5 h-5 animate-spin text-purple-400" />
+                          <div className="absolute inset-0 bg-black/50 rounded-lg flex items-center justify-center">
+                            <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin text-purple-400" />
                           </div>
                         )}
                       </div>
