@@ -9,7 +9,7 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { text, avatarUrl, gender = 'male', voiceProvider = 'microsoft', backgroundType = 'static' } = await req.json();
+    const { text, avatarUrl, gender = 'male', voiceProvider = 'elevenlabs', backgroundType = 'static', language = 'he' } = await req.json();
 
       if (!text || !avatarUrl) {
         return Response.json({ error: 'Missing text or avatarUrl' }, { status: 400 });
@@ -20,12 +20,14 @@ Deno.serve(async (req) => {
       if (voiceProvider === 'elevenlabs') {
         voiceConfig = {
           type: 'elevenlabs',
-          voice_id: gender === 'male' ? 'pNInz6obpgDQGcFmaJgB' : 'EXAVITQu4EsNXjluf7xi'
+          voice_id: gender === 'male' ? 'pNInz6obpgDQGcFmaJgB' : 'EXAVITQu4EsNXjluf7xi',
+          language: language || 'he'
         };
       } else {
         voiceConfig = {
           type: 'microsoft',
-          voice_id: gender === 'male' ? 'he-IL-AvriNeural' : 'he-IL-HilaNeural'
+          voice_id: gender === 'male' ? 'he-IL-AvriNeural' : 'he-IL-HilaNeural',
+          language: language || 'he'
         };
       }
 
@@ -55,6 +57,7 @@ Deno.serve(async (req) => {
     didPayload.script = {
       type: 'text',
       input: text,
+      language: language || 'he',
       provider: voiceConfig
     };
 
