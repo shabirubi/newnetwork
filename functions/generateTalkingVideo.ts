@@ -43,16 +43,21 @@ Deno.serve(async (req) => {
           fluent: true,
           pad_audio: 0,
           stitch: true,
+          result_format: 'mp4',
+          logo: {
+            url: '',
+            position: [0, 0]
+          },
           driver_expressions: {
             expressions: [
-              { start_frame: 0, expression: 'neutral', intensity: 0.8 },
-              { start_frame: 30, expression: 'happy', intensity: 0.5 },
-              { start_frame: 60, expression: 'serious', intensity: 0.7 }
+              { start_frame: 0, expression: 'neutral', intensity: 1.0 },
+              { start_frame: 20, expression: 'happy', intensity: 0.8 },
+              { start_frame: 40, expression: 'serious', intensity: 0.9 },
+              { start_frame: 60, expression: 'surprise', intensity: 0.7 }
             ]
-          },
-          result_format: 'mp4'
+          }
         },
-        driver_url: 'bank://lively',
+        driver_url: 'bank://lively/',
         user_data: JSON.stringify({ created_by: user.email })
       })
     });
