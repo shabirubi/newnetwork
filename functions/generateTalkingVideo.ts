@@ -34,8 +34,14 @@ Deno.serve(async (req) => {
           type: 'text',
           input: text,
           provider: {
-            type: 'microsoft',
-            voice_id: 'he-IL-AvriNeural'
+            type: 'elevenlabs',
+            voice_id: 'pNInz6obpgDQGcFmaJgB',
+            voice_config: {
+              stability: 0.5,
+              similarity_boost: 0.75,
+              style: 0.0,
+              use_speaker_boost: true
+            }
           }
         },
         source_url: avatarUrl,

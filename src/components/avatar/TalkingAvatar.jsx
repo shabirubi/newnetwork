@@ -78,11 +78,6 @@ export default function TalkingAvatar() {
       if (response.data?.video_url) {
         setVideoUrl(response.data.video_url);
         toast.success("הוידאו מוכן ונוסף לפיד החדשות! 🎥", { id: 'video-gen' });
-        
-        // רענון הפיד
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000);
       } else {
         throw new Error('לא הצלחתי ליצור וידאו');
       }
