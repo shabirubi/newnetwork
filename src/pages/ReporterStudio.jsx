@@ -30,6 +30,9 @@ export default function ReporterStudio() {
   const [reporterStatus, setReporterStatus] = useState('online'); // online, typing, away
   const [callDuration, setCallDuration] = useState(0);
   const [messageReactions, setMessageReactions] = useState({});
+  const [quickReplies, setQuickReplies] = useState([]);
+  const [showQuickReplies, setShowQuickReplies] = useState(true);
+  const [pollAnswers, setPollAnswers] = useState({});
   const messagesEndRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
@@ -109,6 +112,11 @@ export default function ReporterStudio() {
     setCallDuration(0);
     setReporterStatus('typing');
     
+    // Generate quick replies based on specialty
+    const replies = generateQuickReplies(reporter);
+    setQuickReplies(replies);
+    setShowQuickReplies(true);
+    
     // Simulate connection
     toast.loading('מתחבר...', { id: 'connecting' });
     
@@ -130,12 +138,50 @@ export default function ReporterStudio() {
             {
               role: "assistant",
               content: `שלום! אני ${reporter.name}, ${reporter.role}. אני כרגע ${reporter.specialty} ואני שמח/ה לעזור לך! מה מעניין אותך?`,
-              timestamp: new Date()
+              timestamp: new Date(),
+              location: `📍 ${reporter.specialty}`
             }
           ]);
         }, 1500);
       }, 500);
     }, 1000);
+  };
+
+  const generateQuickReplies = (reporter) => {
+    const specialty = reporter.specialty.toLowerCase();
+    const baseReplies = [
+      { text: '📰 מה החדשות האחרונות?', icon: '📰' },
+      { text: '🔥 יש משהו חם?', icon: '🔥' },
+      { text: '💭 מה דעתך?', icon: '💭' }
+    ];
+
+    if (specialty.includes('ביטחון') || specialty.includes('צבא')) {
+      return [
+        ...baseReplies,
+        { text: '🛡️ מה המצב הביטחוני?', icon: '🛡️' },
+        { text: '📡 יש עדכונים מהשטח?', icon: '📡' }
+      ];
+    } else if (specialty.includes('כלכלה') || specialty.includes('עסקים')) {
+      return [
+        ...baseReplies,
+        { text: '💰 מה קורה בשווקים?', icon: '💰' },
+        { text: '📈 מה התחזיות?', icon: '📈' }
+      ];
+    } else if (specialty.includes('פוליטי') || specialty.includes('כנסת')) {
+      return [
+        ...baseReplies,
+        { text: '🗳️ מה קורה בכנסת?', icon: '🗳️' },
+        { text: '⚖️ מה עם החוק?', icon: '⚖️' }
+      ];
+    } else if (specialty.includes('ספורט')) {
+      return [
+        ...baseReplies,
+        { text: '⚽ מה התוצאות?', icon: '⚽' },
+        { text: '🏆 מי מוביל?', icon: '🏆' }
+      ];
+    }
+    
+    return baseReplies;
   };
 
   const generateSmartResponse = (userInput) => {
@@ -189,18 +235,20 @@ export default function ReporterStudio() {
     return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
   };
 
-  const sendMessage = async () => {
-    if (!inputValue.trim() || isLoading) return;
+  const sendMessage = async (text = null) => {
+    const messageText = text || inputValue;
+    if (!messageText.trim() || isLoading) return;
 
     const userMessage = { 
       role: "user", 
-      content: inputValue, 
+      content: messageText, 
       timestamp: new Date(),
       id: Date.now()
     };
     setMessages(prev => [...prev, userMessage]);
-    const userInput = inputValue;
+    const userInput = messageText;
     setInputValue("");
+    setShowQuickReplies(false);
     setIsLoading(true);
     setReporterStatus('typing');
     
@@ -214,19 +262,57 @@ export default function ReporterStudio() {
       setIsTyping(false);
       const smartResponse = generateSmartResponse(userInput);
       
+      // Decide if to add media/poll
+      const rand = Math.random();
       const aiMessage = {
         role: "assistant",
         content: smartResponse,
         timestamp: new Date(),
         id: Date.now()
       };
+
+      // Add image/video sometimes
+      if (rand > 0.7) {
+        aiMessage.media = {
+          type: 'image',
+          url: selectedReporter.image,
+          caption: '📸 מהשטח עכשיו'
+        };
+      }
+
+      // Add location update
+      if (rand > 0.6 && rand <= 0.7) {
+        aiMessage.location = `📍 ${selectedReporter.specialty}`;
+      }
       
       setMessages(prev => [...prev, aiMessage]);
       setIsLoading(false);
       setReporterStatus('online');
       
+      // Sometimes send a poll
+      if (Math.random() > 0.85) {
+        setTimeout(() => {
+          setIsTyping(true);
+          setTimeout(() => {
+            setIsTyping(false);
+            const pollId = `poll-${Date.now()}`;
+            setMessages(prev => [...prev, {
+              role: "assistant",
+              content: 'שאלה מהירה:',
+              timestamp: new Date(),
+              id: Date.now(),
+              poll: {
+                id: pollId,
+                question: 'מה דעתך על ההתפתחויות האחרונות?',
+                options: ['👍 חיובי', '👎 שלילי', '🤷 לא בטוח/ה']
+              }
+            }]);
+          }, 1000);
+        }, 2000);
+      }
+      
       // Random chance for follow-up
-      if (Math.random() > 0.7) {
+      else if (Math.random() > 0.7) {
         setTimeout(() => {
           setIsTyping(true);
           setTimeout(() => {
@@ -247,6 +333,29 @@ export default function ReporterStudio() {
         }, 2000);
       }
     }, delay);
+  };
+
+  const handleQuickReply = (text) => {
+    sendMessage(text);
+  };
+
+  const handlePollVote = (pollId, option) => {
+    setPollAnswers(prev => ({ ...prev, [pollId]: option }));
+    toast.success('תשובתך נרשמה!');
+    
+    // Reporter acknowledges
+    setTimeout(() => {
+      setIsTyping(true);
+      setTimeout(() => {
+        setIsTyping(false);
+        setMessages(prev => [...prev, {
+          role: "assistant",
+          content: `תודה על התשובה! ${option === '👍 חיובי' ? 'שמח לשמוע!' : option === '👎 שלילי' ? 'אני מבין את דעתך.' : 'כן, זה מורכב.'}`,
+          timestamp: new Date(),
+          id: Date.now()
+        }]);
+      }, 800);
+    }, 500);
   };
 
   const startRecording = async () => {
@@ -685,35 +794,82 @@ export default function ReporterStudio() {
                           }`}
                         >
                           <p className="text-sm leading-relaxed whitespace-pre-wrap">{message.content}</p>
+
+                          {/* Media Attachment */}
+                          {message.media && (
+                           <div className="mt-3 rounded-lg overflow-hidden border-2 border-gray-700">
+                             <img 
+                               src={message.media.url} 
+                               alt={message.media.caption}
+                               className="w-full h-48 object-cover"
+                             />
+                             <div className="bg-gray-900/50 px-3 py-2">
+                               <p className="text-xs text-gray-300">{message.media.caption}</p>
+                             </div>
+                           </div>
+                          )}
+
+                          {/* Location */}
+                          {message.location && (
+                           <div className="mt-2 flex items-center gap-2 text-xs text-gray-300 bg-gray-900/50 rounded-lg px-3 py-2">
+                             <span>{message.location}</span>
+                           </div>
+                          )}
+
+                          {/* Poll */}
+                          {message.poll && (
+                           <div className="mt-3 space-y-2">
+                             <p className="text-sm font-bold">{message.poll.question}</p>
+                             <div className="space-y-1">
+                               {message.poll.options.map((option, i) => (
+                                 <button
+                                   key={i}
+                                   onClick={() => handlePollVote(message.poll.id, option)}
+                                   disabled={!!pollAnswers[message.poll.id]}
+                                   className={`w-full text-left px-3 py-2 rounded-lg text-sm transition-all ${
+                                     pollAnswers[message.poll.id] === option
+                                       ? 'bg-[#E31E24] text-white'
+                                       : pollAnswers[message.poll.id]
+                                       ? 'bg-gray-700 text-gray-400'
+                                       : 'bg-gray-700 hover:bg-gray-600 text-white'
+                                   }`}
+                                 >
+                                   {option}
+                                 </button>
+                               ))}
+                             </div>
+                           </div>
+                          )}
+
                           <div className="flex items-center justify-between mt-2 gap-2">
-                            <p className="text-xs opacity-70">
-                              {moment(message.timestamp).format("HH:mm")}
-                            </p>
-                            <div className="flex items-center gap-2">
-                              {message.role === "user" && (
-                                <CheckCircle className="w-3 h-3 text-white/70" />
-                              )}
-                              {message.role === "assistant" && (
-                                <div className="flex gap-1">
-                                  {['👍', '❤️', '😊', '🔥'].map(emoji => (
-                                    <button
-                                      key={emoji}
-                                      onClick={() => addReaction(message.id, emoji)}
-                                      className="text-xs hover:scale-125 transition-transform opacity-0 group-hover:opacity-100"
-                                    >
-                                      {emoji}
-                                    </button>
-                                  ))}
-                                </div>
-                              )}
-                            </div>
+                           <p className="text-xs opacity-70">
+                             {moment(message.timestamp).format("HH:mm")}
+                           </p>
+                           <div className="flex items-center gap-2">
+                             {message.role === "user" && (
+                               <CheckCircle className="w-3 h-3 text-white/70" />
+                             )}
+                             {message.role === "assistant" && (
+                               <div className="flex gap-1">
+                                 {['👍', '❤️', '😊', '🔥'].map(emoji => (
+                                   <button
+                                     key={emoji}
+                                     onClick={() => addReaction(message.id, emoji)}
+                                     className="text-xs hover:scale-125 transition-transform opacity-0 group-hover:opacity-100"
+                                   >
+                                     {emoji}
+                                   </button>
+                                 ))}
+                               </div>
+                             )}
+                           </div>
                           </div>
                           {messageReactions[message.id] && messageReactions[message.id].length > 0 && (
-                            <div className="flex gap-1 mt-2">
-                              {messageReactions[message.id].map((emoji, i) => (
-                                <span key={i} className="text-xs">{emoji}</span>
-                              ))}
-                            </div>
+                           <div className="flex gap-1 mt-2">
+                             {messageReactions[message.id].map((emoji, i) => (
+                               <span key={i} className="text-xs">{emoji}</span>
+                             ))}
+                           </div>
                           )}
                         </motion.div>
                       </div>
@@ -775,6 +931,32 @@ export default function ReporterStudio() {
                 </div>
               )}
 
+              {/* Quick Replies */}
+              {showQuickReplies && quickReplies.length > 0 && (
+                <div className="px-4 pb-3 border-t border-gray-800 bg-gray-900">
+                  <div className="flex items-center gap-2 mb-2 pt-3">
+                    <Sparkles className="w-4 h-4 text-purple-400" />
+                    <span className="text-xs text-gray-400">שאלות מוצעות:</span>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {quickReplies.map((reply, idx) => (
+                      <motion.button
+                        key={idx}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        transition={{ delay: idx * 0.1 }}
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        onClick={() => handleQuickReply(reply.text)}
+                        className="px-3 py-2 bg-gray-800 hover:bg-gray-700 border border-gray-700 hover:border-[#E31E24] rounded-full text-xs transition-all"
+                      >
+                        {reply.text}
+                      </motion.button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
               {/* Input Area */}
               <div className="p-4 border-t border-gray-800 bg-gray-900">
                 <div className="flex gap-2">
@@ -805,7 +987,7 @@ export default function ReporterStudio() {
                     className="flex-1 bg-gray-800 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#E31E24] rounded-xl"
                   />
                   <Button
-                    onClick={sendMessage}
+                    onClick={() => sendMessage()}
                     disabled={isLoading || !inputValue.trim() || isRecording}
                     className="bg-gradient-to-r from-[#E31E24] to-purple-600 hover:from-[#B91C1C] hover:to-purple-700 px-4 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
                   >
