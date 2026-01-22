@@ -677,23 +677,7 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
                 </button>
               </div>
 
-              {/* News Ticker */}
-              {selectedReporter && latestNews.length > 0 && (
-                <div className="bg-gradient-to-r from-indigo-600/10 via-purple-600/10 to-indigo-600/10 border-b border-indigo-600/20 overflow-hidden">
-                  <motion.div
-                    animate={{ x: ['100%', '-100%'] }}
-                    transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
-                    className="flex items-center gap-8 py-2 px-4 whitespace-nowrap"
-                  >
-                    {latestNews.map((news, idx) => (
-                      <div key={idx} className="flex items-center gap-2">
-                        <span className="w-2 h-2 bg-indigo-600 rounded-full animate-pulse" />
-                        <span className="text-sm text-gray-700 dark:text-white/80">{news.title}</span>
-                      </div>
-                    ))}
-                  </motion.div>
-                </div>
-              )}
+
 
               {/* Content Area */}
               <div className="flex-1 flex overflow-hidden">
