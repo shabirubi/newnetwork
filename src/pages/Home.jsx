@@ -230,6 +230,20 @@ export default function Home() {
         <AIReporterIntroChat />
       </section>
 
+      {/* Upload Article Floating Button */}
+      <motion.button
+        onClick={() => setUploadVideoModalOpen(true)}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+        className="fixed bottom-24 sm:bottom-8 right-4 z-[9998] w-16 h-16 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 hover:from-blue-500 hover:to-blue-700 shadow-2xl flex items-center justify-center border-2 border-blue-200/50 transition-all group"
+        title="העלה את הכתבה שלך"
+      >
+        <Droplet className="w-7 h-7 text-white fill-white" />
+        <span className="absolute right-full mr-3 top-1/2 -translate-y-1/2 px-3 py-1 bg-blue-600 text-white text-sm font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+          העלה כתבה
+        </span>
+      </motion.button>
+
       {/* Spotify Section */}
       <section className="px-4 mb-12">
         <h2 className="text-3xl font-bold dark:text-white mb-6 text-center">שיר היום</h2>
