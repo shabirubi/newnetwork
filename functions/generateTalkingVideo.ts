@@ -58,8 +58,7 @@ Deno.serve(async (req) => {
 
     // Create V3 Pro Avatar using D-ID Clips API (Full-HD + תנועות גוף)
     const didPayload = {
-      presenter_id: avatarUrl.includes('http') ? null : avatarUrl,
-      presenter_input_url: avatarUrl.includes('http') ? avatarUrl : null,
+      presenter_input: avatarUrl,
       driver: {
         expressions: {
           expressions: [
