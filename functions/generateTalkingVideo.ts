@@ -29,6 +29,8 @@ Deno.serve(async (req) => {
     }
 
     console.log('🎤 Using Microsoft TTS via D-ID...');
+    console.log('Avatar URL:', avatarUrl);
+    console.log('Gender:', gender);
 
     // Create talk using D-ID API with enhanced body language
     const didPayload = {
