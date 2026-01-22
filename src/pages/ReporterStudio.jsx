@@ -43,7 +43,19 @@ export default function ReporterStudio() {
       lastInteraction: null
     };
   });
+  const [latestNews, setLatestNews] = useState([]);
   const messagesEndRef = useRef(null);
+
+  const { data: newsArticles = [] } = useQuery({
+    queryKey: ['breaking-news-ticker-studio'],
+    queryFn: () => base44.entities.NewsArticle.filter({ is_breaking: true }, '-created_date', 5),
+    refetchInterval: 120000,
+    initialData: []
+  });
+
+  useEffect(() => {
+    setLatestNews(newsArticles);
+  }, [newsArticles]);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
   const recordingIntervalRef = useRef(null);
@@ -422,21 +434,24 @@ export default function ReporterStudio() {
       id: Date.now()
     };
     setMessages(prev => [...prev, userMessage]);
-    const userInput = messageText;
     setInputValue("");
     setShowQuickReplies(false);
     setIsLoading(true);
     setReporterStatus('typing');
-    
-    // Show typing indicator
     setIsTyping(true);
 
-    // Variable delay for realism
-    const delay = 800 + Math.random() * 1500 + (userInput.length * 20);
-    
-    setTimeout(() => {
+    try {
+      const response = await base44.functions.invoke('reporterAIChat', {
+        message: messageText,
+        reporterName: selectedReporter.name,
+        reporterRole: selectedReporter.role,
+        reporterSpecialty: selectedReporter.specialty,
+        reporterBio: selectedReporter.bio,
+        userProfile: userProfile
+      });
+
       setIsTyping(false);
-      const smartResponse = generateSmartResponse(userInput);
+      const smartResponse = response.data.response;
       
       // Decide if to add media/poll
       const rand = Math.random();
@@ -878,6 +893,24 @@ export default function ReporterStudio() {
 
             {/* Chat Sidebar */}
             <div className="w-full lg:w-[380px] bg-gray-900 flex flex-col border-t lg:border-t-0 lg:border-l border-gray-800">
+              {/* News Ticker */}
+              {latestNews.length > 0 && (
+                <div className="bg-gradient-to-r from-[#E31E24]/10 via-purple-600/10 to-[#E31E24]/10 border-b border-[#E31E24]/20 overflow-hidden">
+                  <motion.div
+                    animate={{ x: ['100%', '-100%'] }}
+                    transition={{ duration: 30, repeat: Infinity, ease: 'linear' }}
+                    className="flex items-center gap-8 py-2 px-4 whitespace-nowrap"
+                  >
+                    {latestNews.map((news, idx) => (
+                      <div key={idx} className="flex items-center gap-2">
+                        <span className="w-2 h-2 bg-[#E31E24] rounded-full animate-pulse" />
+                        <span className="text-sm text-white/80">{news.title}</span>
+                      </div>
+                    ))}
+                  </motion.div>
+                </div>
+              )}
+
               {/* Chat Header */}
               <div className="p-4 border-b border-gray-800 bg-gradient-to-r from-[#E31E24]/20 to-purple-600/20">
                 <div className="flex items-center justify-between">

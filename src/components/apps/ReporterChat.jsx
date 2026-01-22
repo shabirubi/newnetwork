@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import moment from "moment";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -39,8 +40,21 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
       lastInteraction: null
     };
   });
+  const [latestNews, setLatestNews] = useState([]);
   const messagesEndRef = useRef(null);
   const recordingIntervalRef = useRef(null);
+
+  // טעינת חדשות אחרונות
+  const { data: newsArticles = [] } = useQuery({
+    queryKey: ['breaking-news-ticker'],
+    queryFn: () => base44.entities.NewsArticle.filter({ is_breaking: true }, '-created_date', 5),
+    refetchInterval: 120000,
+    initialData: []
+  });
+
+  useEffect(() => {
+    setLatestNews(newsArticles);
+  }, [newsArticles]);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
   const localVideoRef = useRef(null);
@@ -290,7 +304,6 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
 
     const userMessage = { role: "user", content: messageText, timestamp: new Date(), status: 'sent' };
     setMessages(prev => [...prev, userMessage]);
-    const userInput = messageText;
     setInputValue("");
     setShowQuickReplies(false);
     setIsLoading(true);
@@ -305,41 +318,22 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
       );
     }, 500);
 
-    const delay = 800 + Math.random() * 1500 + (userInput.length * 20);
-    setTimeout(() => {
+    try {
+      // קריאה ל-AI אמיתי
+      const response = await base44.functions.invoke('reporterAIChat', {
+        message: messageText,
+        reporterName: selectedReporter.name,
+        reporterRole: selectedReporter.role,
+        reporterSpecialty: selectedReporter.specialty,
+        reporterBio: selectedReporter.bio,
+        userProfile: userProfile
+      });
+
       setIsTyping(false);
-      
-      const rand = Math.random();
-      let content;
-      
-      // 60% סיכוי לשאלה נגדית!
-      if (rand > 0.4) {
-        const counterQuestion = generateCounterQuestion(userInput);
-        const personalIntro = getPersonalizedIntro();
-        const intros = [
-          `רגע רגע, ${selectedReporter.name} כאן. ${personalIntro}`,
-          `סליחה שאני קוטע, אבל ${personalIntro}`,
-          `תשמע/י, לפני שאני עונה - ${personalIntro}`,
-          `${selectedReporter.name} כאן מ${selectedReporter.specialty}. ${personalIntro}`,
-          `אוקיי, אבל ${personalIntro}`
-        ];
-        content = intros[Math.floor(Math.random() * intros.length)] + counterQuestion;
-        content = adaptResponseStyle(content);
-      } else {
-        // תשובה רגילה עם התאמה אישית
-        const personalIntro = getPersonalizedIntro();
-        const responses = [
-          `${personalIntro}תודה על השאלה! כ${selectedReporter.name}, אני מתמחה ב${selectedReporter.specialty}. ${userInput.includes('?') ? 'זו שאלה מעניינת מאוד' : 'אני שמח/ה לעזור'}. המצב בשטח דינמי ומתפתח.`,
-          `שלום! ${personalIntro}אני ${selectedReporter.name} ומדווח/ת מ${selectedReporter.specialty}. ${userInput.length > 50 ? 'זו שאלה מקיפה' : 'תודה על ההודעה'}. אני עוקב/ת אחר האירועים באופן צמוד.`,
-          `היי! ${personalIntro}כ${selectedReporter.role}, אני יכול/ה להגיד לך ש${selectedReporter.specialty} הוא תחום מרתק. ${userInput.toLowerCase().includes('מתי') ? 'ההתפתחויות צפויות בקרוב' : 'המידע מתעדכן כל הזמן'}.`,
-          `${selectedReporter.name} כאן! ${personalIntro}מתמחה ב${selectedReporter.specialty}. ${userInput.toLowerCase().includes('איך') ? 'זה תהליך מורכב' : 'אני כאן לעדכן אותך'}. הצוות שלנו עובד סביב השעון.`
-        ];
-        content = adaptResponseStyle(responses[Math.floor(Math.random() * responses.length)]);
-      }
       
       const aiMessage = {
         role: "assistant",
-        content: content,
+        content: response.data.response,
         reporter: selectedReporter.name,
         timestamp: new Date()
       };
