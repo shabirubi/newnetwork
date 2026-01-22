@@ -24,8 +24,9 @@ import VODModal from "../components/vod/VODModal";
 import AccessibilityPanel from "../components/accessibility/AccessibilityPanel";
 import UploadVideoModal from "../components/home/UploadVideoModal";
 import AIReporterIntroChat from "../components/apps/AIReporterIntroChat";
+import { Droplet } from "lucide-react";
 
-// Lazy loaded components
+      // Lazy loaded components
 const NewsReels = React.lazy(() => import("../components/news/NewsReels"));
 const TrendingTopicsContainer = React.lazy(() => import("../components/home/TrendingTopicsContainer"));
 const TikTokNewsContainer = React.lazy(() => import("../components/home/TikTokNewsContainer"));
