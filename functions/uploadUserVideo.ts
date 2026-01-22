@@ -9,33 +9,44 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const formData = await req.formData();
-    const file = formData.get('file');
-    const title = formData.get('title');
+    const body = await req.json();
+    const { file, title, description, category } = body;
 
     if (!file || !title) {
       return Response.json({ error: 'Missing file or title' }, { status: 400 });
     }
 
-    // Get file size
-    const fileSizeInMB = file.size / (1024 * 1024);
+    console.log('📥 Backend: התחיל להעלות קובץ...', title);
 
-    // Upload file as Blob using the service role
-    const uploadResponse = await base44.asServiceRole.integrations.Core.UploadFile({ file });
+    // Convert base64 or blob to file
+    let uploadFile = file;
+    if (typeof file === 'string') {
+      uploadFile = new Blob([Buffer.from(file.split(',')[1] || file, 'base64')], { type: 'video/mp4' });
+    }
+
+    // Upload file using the service role
+    console.log('📤 מעלה לשרת...');
+    const uploadResponse = await base44.asServiceRole.integrations.Core.UploadFile({ 
+      file: uploadFile 
+    });
     const videoUrl = uploadResponse.file_url;
+    console.log('✅ קובץ הועלה:', videoUrl);
 
     // Create UserVideo record
-    const userVideo = await base44.asServiceRole.entities.UserVideo.create({
+    console.log('💾 יוצר רשומה ב-UserVideo...');
+    const userVideo = await base44.entities.UserVideo.create({
       title,
       video_url: videoUrl,
-      file_size: fileSizeInMB,
+      description: description || '',
       status: 'ready',
       uploader_email: user.email
     });
+    
+    console.log('✅ UserVideo נוצר:', userVideo.id);
 
     return Response.json({ success: true, video: userVideo });
   } catch (error) {
-    console.error('Upload error:', error);
+    console.error('❌ Upload error:', error);
     return Response.json({ error: error.message }, { status: 500 });
   }
 });
