@@ -87,66 +87,76 @@ Deno.serve(async (req) => {
 
     const result = await response.json();
     const talkId = result.id;
-    
+
     console.log('📤 D-ID Response:', { id: talkId, status: result.status });
 
-    // Poll for video completion
-    let attempts = 0;
-    const maxAttempts = 120;
-    let pollInterval = 1000;
+    // Return early with polling on client side
+    if (result.status === 'processing' || result.status === 'pending' || result.status === 'queued') {
+      console.log(`⏳ Video processing started with ID: ${talkId}`);
 
-    while (attempts < maxAttempts) {
-      await new Promise(resolve => setTimeout(resolve, pollInterval));
+      // Start polling on backend but return immediately to client
+      setTimeout(async () => {
+        let pollAttempts = 0;
+        const pollMaxAttempts = 120;
+        let pollInterval = 2000;
 
-      try {
-        const statusResponse = await fetch(`https://api.d-id.com/talks/${talkId}`, {
-          headers: {
-            'Authorization': `Basic ${DID_API_KEY}`,
-            'accept': 'application/json'
+        while (pollAttempts < pollMaxAttempts) {
+          await new Promise(resolve => setTimeout(resolve, pollInterval));
+
+          try {
+            const statusResponse = await fetch(`https://api.d-id.com/talks/${talkId}`, {
+              headers: {
+                'Authorization': `Basic ${DID_API_KEY}`,
+                'accept': 'application/json'
+              }
+            });
+
+            if (statusResponse.ok) {
+              const statusData = await statusResponse.json();
+              console.log(`📊 Backend poll attempt ${pollAttempts + 1}: status = ${statusData.status}`);
+
+              if (statusData.status === 'done' && statusData.result_url) {
+                console.log('✅ Video ready:', statusData.result_url);
+                break;
+              }
+
+              if (statusData.status === 'error') {
+                console.error('D-ID Backend Error:', statusData);
+                break;
+              }
+            }
+
+            if (pollAttempts > 20) pollInterval = 3000;
+            if (pollAttempts > 40) pollInterval = 5000;
+
+            pollAttempts++;
+          } catch (err) {
+            console.error('Backend poll error:', err.message);
+            pollAttempts++;
           }
-        });
-
-        if (!statusResponse.ok) {
-          console.error('Status check failed:', statusResponse.status);
-          attempts++;
-          continue;
         }
+      }, 0);
 
-        const statusData = await statusResponse.json();
-        console.log(`📊 Poll attempt ${attempts + 1}: status = ${statusData.status}`);
-
-        if (statusData.status === 'done' && statusData.result_url) {
-           console.log('✅ Video ready:', statusData.result_url);
-
-          return Response.json({
-            success: true,
-            video_url: statusData.result_url,
-            duration: statusData.duration || 0,
-            talk_id: talkId,
-            saved_to_feed: true
-          });
-        }
-
-        if (statusData.status === 'error') {
-          console.error('D-ID Error:', JSON.stringify(statusData, null, 2));
-          return Response.json({ error: `Video generation failed: ${statusData.error?.message || 'Unknown error'}` }, { status: 500 });
-        }
-
-        // Gradually increase poll interval
-        if (attempts > 20) pollInterval = 2000;
-        if (attempts > 40) pollInterval = 3000;
-
-        attempts++;
-      } catch (pollError) {
-        console.error('Poll error:', pollError.message);
-        attempts++;
-        if (attempts >= maxAttempts) {
-          return Response.json({ error: 'Video generation timeout' }, { status: 504 });
-        }
-      }
+      // Return immediately with talk ID for client-side polling
+      return Response.json({
+        success: true,
+        talk_id: talkId,
+        status: result.status,
+        message: 'Video generation started. Client will poll for completion.'
+      });
     }
 
-    return Response.json({ error: 'Video generation timeout after multiple attempts' }, { status: 504 });
+    // If already done, return immediately
+    if (result.status === 'done' && result.result_url) {
+      return Response.json({
+        success: true,
+        video_url: result.result_url,
+        duration: result.duration || 0,
+        talk_id: talkId
+      });
+    }
+
+    return Response.json({ error: 'Unexpected response status' }, { status: 500 });
 
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });
