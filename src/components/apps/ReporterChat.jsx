@@ -680,10 +680,40 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
                     ))}
                   </motion.div>
                 ) : (
-                  // Chat Window
-                  <div className="w-full flex flex-col">
+                  // Chat Window with Reporter Profile
+                  <div className="w-full flex gap-0 sm:gap-4">
+                    {/* Reporter Profile Card - Right Side */}
+                    <motion.div
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      className="hidden lg:flex flex-col items-center gap-4 p-4 w-48 bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl border border-indigo-600/30"
+                    >
+                      <div className="relative">
+                        <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-full blur-xl opacity-50" />
+                        <img
+                          src={selectedReporter.image}
+                          alt={selectedReporter.name}
+                          className="relative w-40 h-40 rounded-full object-cover border-4 border-indigo-600 shadow-2xl"
+                        />
+                      </div>
+                      <div className="text-center">
+                        <h3 className="text-xl font-bold text-white mb-1">{selectedReporter.name}</h3>
+                        <p className="text-sm text-indigo-300 font-semibold mb-2">{selectedReporter.role}</p>
+                        <p className="text-xs text-gray-400 mb-3">{selectedReporter.specialty}</p>
+                        <div className="flex items-center justify-center gap-1 bg-green-500/20 rounded-full px-3 py-1 border border-green-500/50">
+                          <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                          <span className="text-xs text-green-400 font-bold">זמין</span>
+                        </div>
+                      </div>
+                      {selectedReporter.bio && (
+                        <p className="text-xs text-gray-300 text-center leading-relaxed">{selectedReporter.bio}</p>
+                      )}
+                    </motion.div>
+
+                    {/* Chat Area */}
+                    <div className="flex-1 flex flex-col">
                     {/* Video Call Area */}
-                    {isVideoCall && (
+                     {isVideoCall && (
                       <div className="relative bg-black aspect-video">
                         {/* Remote Video (Reporter) - Simulated */}
                         <div className="w-full h-full bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
@@ -986,6 +1016,7 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
                           )}
                         </Button>
                       </div>
+                    </div>
                     </div>
                   </div>
                 )}
