@@ -96,7 +96,7 @@ Deno.serve(async (req) => {
             category: 'technology',
             video_url: statusData.result_url,
             image_url: avatarUrl,
-            is_featured: false,
+            is_featured: true,
             is_breaking: false,
             source: 'AI Avatar Generator'
           });
