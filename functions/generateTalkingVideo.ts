@@ -64,11 +64,16 @@ Deno.serve(async (req) => {
     didPayload.script = {
       type: 'text',
       input: text,
-      provider: {
-        type: 'microsoft',
-        voice_id: voiceId
-      }
+      provider: voiceConfig
     };
+
+    // Add dynamic background if requested
+    if (backgroundType === 'dynamic') {
+      didPayload.config.background = {
+        type: 'video',
+        url: 'https://d-id-talks-prod.s3.us-west-2.amazonaws.com/default-bg.mp4'
+      };
+    }
 
     const response = await fetch('https://api.d-id.com/talks', {
       method: 'POST',
