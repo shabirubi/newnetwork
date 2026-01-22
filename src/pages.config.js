@@ -14,6 +14,7 @@ import RegenerateImages from './pages/RegenerateImages';
 import ReporterImageUpload from './pages/ReporterImageUpload';
 import ReporterImagesLibrary from './pages/ReporterImagesLibrary';
 import ReporterQA from './pages/ReporterQA';
+import ReporterStudio from './pages/ReporterStudio';
 import Reporters from './pages/Reporters';
 import Schedule from './pages/Schedule';
 import Terms from './pages/Terms';
@@ -24,7 +25,6 @@ import UserVideos from './pages/UserVideos';
 import VOD from './pages/VOD';
 import VODContent from './pages/VODContent';
 import WarRoom from './pages/WarRoom';
-import ReporterStudio from './pages/ReporterStudio';
 import __Layout from './Layout.jsx';
 
 
@@ -45,6 +45,7 @@ export const PAGES = {
     "ReporterImageUpload": ReporterImageUpload,
     "ReporterImagesLibrary": ReporterImagesLibrary,
     "ReporterQA": ReporterQA,
+    "ReporterStudio": ReporterStudio,
     "Reporters": Reporters,
     "Schedule": Schedule,
     "Terms": Terms,
@@ -55,7 +56,6 @@ export const PAGES = {
     "VOD": VOD,
     "VODContent": VODContent,
     "WarRoom": WarRoom,
-    "ReporterStudio": ReporterStudio,
 }
 
 export const pagesConfig = {

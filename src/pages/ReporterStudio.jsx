@@ -795,14 +795,19 @@ export default function ReporterStudio() {
                     placeholder="כתוב הודעה..."
                     value={inputValue}
                     onChange={(e) => setInputValue(e.target.value)}
-                    onKeyPress={(e) => e.key === "Enter" && sendMessage()}
-                    disabled={isLoading}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && !e.shiftKey) {
+                        e.preventDefault();
+                        sendMessage();
+                      }
+                    }}
+                    disabled={isLoading || isRecording}
                     className="flex-1 bg-gray-800 border-gray-700 text-white placeholder:text-gray-500 focus:border-[#E31E24] rounded-xl"
                   />
                   <Button
                     onClick={sendMessage}
-                    disabled={isLoading || !inputValue.trim()}
-                    className="bg-gradient-to-r from-[#E31E24] to-purple-600 hover:from-[#B91C1C] hover:to-purple-700 px-4 rounded-xl"
+                    disabled={isLoading || !inputValue.trim() || isRecording}
+                    className="bg-gradient-to-r from-[#E31E24] to-purple-600 hover:from-[#B91C1C] hover:to-purple-700 px-4 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {isLoading ? (
                       <Loader className="w-5 h-5 animate-spin" />
