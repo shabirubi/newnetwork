@@ -128,6 +128,7 @@ export default function Home() {
             isLive={!!activeLive?.is_active}
             viewerCount={activeLive?.viewer_count || 3456}
             streamUrl={activeLive?.stream_url || channelStreamUrl}
+            thumbnailUrl={activeLive?.thumbnail_url}
           />
         </div>
       </section>
