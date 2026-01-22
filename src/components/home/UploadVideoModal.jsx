@@ -49,7 +49,7 @@ export default function UploadVideoModal({ isOpen, onClose }) {
             initial={{ scale: 0.9, y: 20 }}
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.9, y: 20 }}
-            className="relative bg-gray-900 rounded-3xl max-w-lg w-full shadow-2xl border border-gray-700"
+            className="relative bg-gray-900 rounded-3xl max-w-md w-full max-h-[80vh] overflow-y-auto shadow-2xl border border-gray-700"
           >
             {/* Close Button */}
             <button
@@ -60,7 +60,7 @@ export default function UploadVideoModal({ isOpen, onClose }) {
             </button>
 
             {/* Content */}
-            <div className="p-8">
+            <div className="p-6">
               {/* Step 1: Upload */}
               {step === 1 && (
                 <motion.div
@@ -79,7 +79,7 @@ export default function UploadVideoModal({ isOpen, onClose }) {
                   </div>
 
                   {/* Video Upload Area */}
-                  <div className="border-2 border-dashed border-gray-600 rounded-2xl p-8 text-center hover:border-red-500 transition-colors cursor-pointer group">
+                  <div className="border-2 border-dashed border-gray-600 rounded-2xl p-4 text-center hover:border-red-500 transition-colors cursor-pointer group">
                     <input
                       type="file"
                       accept="video/*"

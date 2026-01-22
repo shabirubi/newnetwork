@@ -91,7 +91,7 @@ export default function BroadcastStudio({ isOpen, onClose }) {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.8, opacity: 0 }}
             onClick={(e) => e.stopPropagation()}
-            className="bg-gradient-to-br from-gray-900 to-black rounded-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-blue-500/30"
+            className="bg-gradient-to-br from-gray-900 to-black rounded-2xl w-full max-w-lg max-h-[80vh] overflow-y-auto border border-blue-500/30"
           >
             {/* Header */}
             <div className="bg-gradient-to-r from-black via-blue-600 to-black text-white p-6 flex justify-between items-center sticky top-0 z-10">
@@ -161,7 +161,7 @@ export default function BroadcastStudio({ isOpen, onClose }) {
                     </label>
                     <div
                       onClick={() => fileInputRef.current?.click()}
-                      className="relative w-full aspect-square rounded-lg border-2 border-dashed border-blue-500/50 hover:border-blue-500 bg-black/50 hover:bg-black/70 cursor-pointer transition-all flex items-center justify-center group"
+                      className="relative w-full aspect-video rounded-lg border-2 border-dashed border-blue-500/50 hover:border-blue-500 bg-black/50 hover:bg-black/70 cursor-pointer transition-all flex items-center justify-center group"
                     >
                       {avatarImage ? (
                         <>
@@ -178,11 +178,9 @@ export default function BroadcastStudio({ isOpen, onClose }) {
                         </>
                       ) : (
                         <div className="text-center">
-                          <Upload className="w-12 h-12 text-blue-400 mx-auto mb-2" />
-                          <p className="text-white font-bold">העלה תמונה</p>
-                          <p className="text-white/50 text-xs mt-1">
-                            PNG, JPG - עד 5MB
-                          </p>
+                          <Upload className="w-10 h-10 text-blue-400 mx-auto mb-2" />
+                          <p className="text-white font-bold text-sm">העלה תמונה</p>
+                          <p className="text-white/50 text-xs mt-1">PNG, JPG</p>
                         </div>
                       )}
                     </div>
@@ -203,8 +201,8 @@ export default function BroadcastStudio({ isOpen, onClose }) {
                     <textarea
                       value={articleText}
                       onChange={(e) => setArticleText(e.target.value)}
-                      placeholder="כתוב את הכתבה שלך כאן... השדרן יקרא אותה בשידור חי"
-                      className="w-full h-40 bg-black/50 border border-blue-500/30 rounded-lg p-4 text-white placeholder-white/30 focus:border-blue-500 focus:outline-none resize-none"
+                      placeholder="כתוב את הכתבה שלך כאן..."
+                      className="w-full h-28 bg-black/50 border border-blue-500/30 rounded-lg p-3 text-white text-sm placeholder-white/30 focus:border-blue-500 focus:outline-none resize-none"
                     />
                     <p className="text-white/50 text-xs">
                       {articleText.length} תווים
