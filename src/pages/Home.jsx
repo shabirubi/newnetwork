@@ -127,7 +127,7 @@ export default function Home() {
             title={currentChannel?.name || activeLive?.title || "הרשת החדשה - שידור חי"}
             isLive={!!activeLive?.is_active}
             viewerCount={activeLive?.viewer_count || 3456}
-            streamUrl={channelStreamUrl}
+            streamUrl={activeLive?.stream_url || channelStreamUrl}
           />
         </div>
       </section>
