@@ -16,7 +16,6 @@ import moment from "moment";
 
 import NewsCard from "../components/news/NewsCard";
 import CommentsSection from "../components/article/CommentsSection";
-import ReporterArticlePresentation from "../components/news/ReporterArticlePresentation";
 
 const categoryLabels = {
   breaking: "חדשות חמות",
