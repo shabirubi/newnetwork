@@ -60,8 +60,7 @@ ${personalContext}
 
     // קריאה ל-LLM
     const response = await base44.integrations.Core.InvokeLLM({
-      prompt: `${systemPrompt}\n\nהמשתמש שואל: "${message}"\n\nענה כ-${reporterName}:`,
-      add_context_from_internet: true
+      prompt: `${systemPrompt}\n\nהמשתמש שואל: "${message}"\n\nענה כ-${reporterName}:`
     });
 
     return Response.json({ 
