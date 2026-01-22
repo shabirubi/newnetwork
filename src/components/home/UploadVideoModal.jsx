@@ -28,43 +28,51 @@ export default function UploadVideoModal({ isOpen, onClose }) {
 
     try {
       // העלה את הקובץ
+      console.log('📤 מתחיל להעלות קובץ...', formData.videoFile.name);
       const uploadResponse = await base44.integrations.Core.UploadFile({ 
         file: formData.videoFile 
       });
 
+      console.log('✅ קובץ הועלה בהצלחה:', uploadResponse.file_url);
       const videoUrl = uploadResponse.file_url;
 
       // שמור ב-LiveStream כדי שיופיע בנגן הראשי
-      await base44.entities.LiveStream.create({
+      console.log('💾 שומר ב-LiveStream...');
+      const liveStreamRes = await base44.entities.LiveStream.create({
         title: formData.title,
         stream_url: videoUrl,
         is_active: true,
         viewer_count: 0,
         thumbnail_url: videoUrl
       });
+      console.log('✅ LiveStream נשמר:', liveStreamRes.id);
 
       // שמור גם ב-UserVideo כדי שיופיע בכל הקונטיינרים
+      console.log('💾 שומר ב-UserVideo...');
       const user = await base44.auth.me();
       if (user) {
-        await base44.entities.UserVideo.create({
+        const userVideoRes = await base44.entities.UserVideo.create({
           title: formData.title,
           video_url: videoUrl,
           thumbnail_url: videoUrl,
           uploader_email: user.email,
           status: "ready"
         });
+        console.log('✅ UserVideo נשמר:', userVideoRes.id);
       }
 
       toast.dismiss("upload");
       setStep(3);
+      setUploading(false);
       
-      // רענן את ה-live-stream query כדי להציג את הסרטון החדש
+      // רענן את כל ה-queries שיכולים להכיל סרטונים
       if (queryClient) {
         await queryClient.invalidateQueries({ queryKey: ['live-stream'] });
+        await queryClient.invalidateQueries({ queryKey: ['user-videos'] });
+        await queryClient.invalidateQueries({ queryKey: ['all-videos'] });
       }
       
-      // שלח אירוע להודעה על העלאה
-      window.dispatchEvent(new Event('videoUploaded'));
+      console.log('🎥 סרטון הועלה בהצלחה!');
       
       setTimeout(() => {
         onClose();
@@ -73,6 +81,7 @@ export default function UploadVideoModal({ isOpen, onClose }) {
         toast.success("הסרטון מוצג בנגן הראשי! 🎥");
       }, 2000);
     } catch (error) {
+      console.error('❌ שגיאה בהעלאה:', error);
       toast.dismiss("upload");
       toast.error("שגיאה בהעלאה: " + error.message);
       setStep(1);
