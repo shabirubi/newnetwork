@@ -628,7 +628,7 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white dark:bg-gray-900 rounded-3xl w-full max-w-2xl h-[80vh] flex flex-col overflow-hidden"
+              className="bg-white dark:bg-gray-900 rounded-3xl w-full max-w-6xl h-[85vh] flex flex-col overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}
@@ -716,46 +716,56 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
                     ))}
                   </motion.div>
                 ) : (
-                  // Chat Window with Reporter Profile
-                  <div className="w-full flex gap-0 sm:gap-4">
-                    {/* Reporter Profile Card - Right Side */}
+                  // Chat Window with Reporter Profile Side by Side
+                  <div className="w-full flex h-full">
+                    {/* Reporter Profile Card - Left Side (Fixed) */}
                     <motion.div
-                      initial={{ opacity: 0, x: 20 }}
+                      initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
-                      className="flex flex-col items-center gap-4 p-3 sm:p-4 w-32 sm:w-40 lg:w-48 bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl border border-indigo-600/30"
+                      className="hidden lg:flex flex-col items-center gap-4 p-6 w-64 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 border-l border-indigo-600/30 flex-shrink-0"
                     >
                       <div className="relative">
-                        <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-full blur-xl opacity-50" />
+                        <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-full blur-2xl opacity-60" />
                         <img
                           src={selectedReporter.image}
                           alt={selectedReporter.name}
-                          className="relative w-28 sm:w-32 lg:w-40 h-28 sm:h-32 lg:h-40 rounded-full object-cover border-4 border-indigo-600 shadow-2xl"
+                          className="relative w-48 h-48 rounded-full object-cover border-4 border-indigo-600 shadow-2xl"
                         />
                       </div>
-                      <div className="text-center">
-                        <h3 className="text-sm sm:text-lg lg:text-xl font-bold text-white mb-1">{selectedReporter.name}</h3>
-                        <p className="text-xs sm:text-sm text-indigo-300 font-semibold mb-2">{selectedReporter.role}</p>
-                        <p className="text-xs text-gray-400 mb-3 hidden sm:block">{selectedReporter.specialty}</p>
-                        <div className="flex items-center justify-center gap-1 bg-green-500/20 rounded-full px-2 sm:px-3 py-0.5 sm:py-1 border border-green-500/50">
-                          <span className="w-1.5 sm:w-2 h-1.5 sm:h-2 bg-green-500 rounded-full animate-pulse" />
+                      <div className="text-center w-full">
+                        <h3 className="text-2xl font-bold text-white mb-2">{selectedReporter.name}</h3>
+                        <p className="text-sm text-indigo-300 font-semibold mb-1">{selectedReporter.role}</p>
+                        <p className="text-xs text-gray-400 mb-4">{selectedReporter.specialty}</p>
+                        <div className="flex items-center justify-center gap-1 bg-green-500/20 rounded-full px-3 py-1 border border-green-500/50 mx-auto w-fit">
+                          <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
                           <span className="text-xs text-green-400 font-bold">זמין</span>
                         </div>
                       </div>
                       {selectedReporter.bio && (
-                        <p className="text-xs text-gray-300 text-center leading-relaxed hidden lg:block">{selectedReporter.bio}</p>
+                        <p className="text-sm text-gray-300 text-center leading-relaxed">{selectedReporter.bio}</p>
                       )}
-                      <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        onClick={generateReporterIntroVideo}
-                        className="w-full mt-2 px-3 py-2 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-lg text-xs sm:text-sm font-bold transition-all"
-                      >
-                        ⭐ הצגה
-                      </motion.button>
+                      <div className="w-full space-y-2">
+                        <motion.button
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                          onClick={generateReporterIntroVideo}
+                          className="w-full px-4 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl font-bold transition-all"
+                        >
+                          🎤 הצגה קולית
+                        </motion.button>
+                        <motion.button
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                          onClick={() => setSelectedReporter(null)}
+                          className="w-full px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-xl font-semibold transition-all text-sm"
+                        >
+                          ← חזור לרשימה
+                        </motion.button>
+                      </div>
                     </motion.div>
 
-                    {/* Chat Area */}
-                    <div className="flex-1 flex flex-col">
+                    {/* Chat Area - Right Side */}
+                    <div className="flex-1 flex flex-col overflow-hidden">
                     {/* Video Call Area */}
                      {isVideoCall && (
                       <div className="relative bg-black aspect-video">
