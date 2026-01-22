@@ -27,45 +27,46 @@ export default function UploadVideoModal({ isOpen, onClose }) {
     toast.loading("מעלה סרטון...", { id: "upload" });
 
     try {
-      // העלה את הקובץ
       console.log('📤 מתחיל להעלות קובץ...', formData.videoFile.name);
-      const uploadResponse = await base44.integrations.Core.UploadFile({ 
-        file: formData.videoFile 
+      
+      // יצור FormData עבור backend function
+      const uploadFormData = new FormData();
+      uploadFormData.append('file', formData.videoFile);
+      uploadFormData.append('title', formData.title);
+      uploadFormData.append('description', formData.description || '');
+      uploadFormData.append('category', formData.category);
+
+      // קרא ל-backend function שמעלה ואחסן בצורה נכונה
+      const response = await base44.functions.invoke('uploadUserVideo', {
+        file: formData.videoFile,
+        title: formData.title,
+        description: formData.description || '',
+        category: formData.category
       });
 
-      console.log('✅ קובץ הועלה בהצלחה:', uploadResponse.file_url);
-      const videoUrl = uploadResponse.file_url;
+      console.log('✅ קובץ הועלה בהצלחה:', response.data);
+      const videoUrl = response.data.video?.video_url;
 
-      // שמור ב-LiveStream כדי שיופיע בנגן הראשי
+      if (!videoUrl) {
+        throw new Error('לא התקבל קישור לסרטון');
+      }
+
+      // שמור גם ב-LiveStream כדי שיופיע בנגן הראשי
       console.log('💾 שומר ב-LiveStream...');
-      const liveStreamRes = await base44.entities.LiveStream.create({
+      await base44.entities.LiveStream.create({
         title: formData.title,
         stream_url: videoUrl,
         is_active: true,
         viewer_count: 0,
         thumbnail_url: videoUrl
       });
-      console.log('✅ LiveStream נשמר:', liveStreamRes.id);
-
-      // שמור גם ב-UserVideo כדי שיופיע בכל הקונטיינרים
-      console.log('💾 שומר ב-UserVideo...');
-      const user = await base44.auth.me();
-      if (user) {
-        const userVideoRes = await base44.entities.UserVideo.create({
-          title: formData.title,
-          video_url: videoUrl,
-          thumbnail_url: videoUrl,
-          uploader_email: user.email,
-          status: "ready"
-        });
-        console.log('✅ UserVideo נשמר:', userVideoRes.id);
-      }
+      console.log('✅ LiveStream נשמר');
 
       toast.dismiss("upload");
       setStep(3);
       setUploading(false);
       
-      // רענן את כל ה-queries שיכולים להכיל סרטונים
+      // רענן את כל ה-queries
       if (queryClient) {
         await queryClient.invalidateQueries({ queryKey: ['live-stream'] });
         await queryClient.invalidateQueries({ queryKey: ['user-videos'] });
@@ -73,6 +74,7 @@ export default function UploadVideoModal({ isOpen, onClose }) {
       }
       
       console.log('🎥 סרטון הועלה בהצלחה!');
+      window.dispatchEvent(new Event('videoUploaded'));
       
       setTimeout(() => {
         onClose();
@@ -83,7 +85,7 @@ export default function UploadVideoModal({ isOpen, onClose }) {
     } catch (error) {
       console.error('❌ שגיאה בהעלאה:', error);
       toast.dismiss("upload");
-      toast.error("שגיאה בהעלאה: " + error.message);
+      toast.error("שגיאה בהעלאה: " + (error.response?.data?.error || error.message));
       setStep(1);
       setUploading(false);
     }
