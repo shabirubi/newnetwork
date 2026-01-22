@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
-import { Play, Eye, Clock, X, Film, Youtube } from "lucide-react";
+import { Play, Eye, Clock, X, Film, Youtube, Loader } from "lucide-react";
 import moment from "moment";
 
 const VideoSkeleton = () => (
