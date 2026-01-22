@@ -111,6 +111,63 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
     }, 800);
   };
 
+  const generateCounterQuestion = (userInput) => {
+    const input = userInput.toLowerCase();
+    const specialty = selectedReporter.specialty;
+    const name = selectedReporter.name;
+
+    // שאלות אתגר לפי תוכן
+    if (input.includes('בטוח') || input.includes('חושב')) {
+      return [
+        `רגע, אבל למה אתה כל כך בטוח בזה? יש לך מקורות?`,
+        `מעניין. מה גרם לך לחשוב ככה? ראית משהו ספציפי?`,
+        `אוקיי, אבל האם שקלת את האפשרות ההפוכה?`
+      ][Math.floor(Math.random() * 3)];
+    }
+
+    if (input.includes('תמיד') || input.includes('אף פעם') || input.includes('כולם')) {
+      return [
+        `תמיד? זה טיעון די חזק. אתה יכול לתת דוגמה קונקרטית?`,
+        `"כולם"? באמת כולם? או שזו הכללה?`,
+        `רגע, אף פעם? תן לי לבחון את זה - באמת אף פעם?`
+      ][Math.floor(Math.random() * 3)];
+    }
+
+    if (input.includes('נכון') || input.includes('נראה לי')) {
+      return [
+        `למה זה נכון? מה התשתית העובדתית לטענה הזו?`,
+        `מעניין, אבל בוא נבדוק - על סמך מה?`,
+        `נשמע מעניין, אבל האם יש לך ראיות לכך?`
+      ][Math.floor(Math.random() * 3)];
+    }
+
+    // שאלות הבהרה
+    const clarifyQuestions = [
+      `רגע, תסביר לי משהו - בדיוק למה התכוונת כשאמרת "${userInput.slice(0, 30)}..."?`,
+      `מעניין מה שאמרת. אבל תגיד לי, מה הייתה המניע שלך לחשוב ככה?`,
+      `אוקיי, שמעתי אותך. אבל אני צריך הבהרה - מאיפה המידע הזה?`,
+      `כעיתונאי ב${specialty}, אני צריך לשאול - יש לך מקור לזה?`
+    ];
+
+    // שאלות עומק
+    const deepQuestions = [
+      `נניח שאתה צודק, מה זה אומר על התמונה הגדולה יותר?`,
+      `בסדר, אבל תגיד לי - מה הקשר בין זה לבין ${specialty}?`,
+      `שאלה מעניינת. אבל האם חשבת על ההשלכות ארוכות הטווח?`,
+      `רגע, בוא נחפור עמוק יותר - מה באמת מעניין אותך פה?`
+    ];
+
+    // שאלות אלטרנטיבה
+    const alternativeQuestions = [
+      `האם שקלת זווית אחרת? כי יש פה עוד איזו נקודת מבט...`,
+      `מה אם אני אגיד לך שיש גרסה אחרת לסיפור הזה?`,
+      `רגע רגע, אבל מה עם הצד השני של המטבע?`
+    ];
+
+    const allQuestions = [...clarifyQuestions, ...deepQuestions, ...alternativeQuestions];
+    return allQuestions[Math.floor(Math.random() * allQuestions.length)];
+  };
+
   const sendMessage = async (text = null) => {
     const messageText = text || inputValue;
     if (!messageText.trim() || !selectedReporter || isLoading) return;
@@ -135,17 +192,35 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
     const delay = 800 + Math.random() * 1500 + (userInput.length * 20);
     setTimeout(() => {
       setIsTyping(false);
-      const responses = [
-        `תודה על השאלה! כ${selectedReporter.name}, אני מתמחה ב${selectedReporter.specialty}. ${userInput.includes('?') ? 'זו שאלה מעניינת מאוד' : 'אני שמח/ה לעזור'}. המצב בשטח דינמי ומתפתח.`,
-        `שלום! אני ${selectedReporter.name} ומדווח/ת מ${selectedReporter.specialty}. ${userInput.length > 50 ? 'זו שאלה מקיפה' : 'תודה על ההודעה'}. אני עוקב/ת אחר האירועים באופן צמוד.`,
-        `היי! כ${selectedReporter.role}, אני יכול/ה להגיד לך ש${selectedReporter.specialty} הוא תחום מרתק. ${userInput.toLowerCase().includes('מתי') ? 'ההתפתחויות צפויות בקרוב' : 'המידע מתעדכן כל הזמן'}.`,
-        `${selectedReporter.name} כאן! מתמחה ב${selectedReporter.specialty}. ${userInput.toLowerCase().includes('איך') ? 'זה תהליך מורכב' : 'אני כאן לעדכן אותך'}. הצוות שלנו עובד סביב השעון.`
-      ];
       
       const rand = Math.random();
+      let content;
+      
+      // 60% סיכוי לשאלה נגדית!
+      if (rand > 0.4) {
+        const counterQuestion = generateCounterQuestion(userInput);
+        const intros = [
+          `רגע רגע, ${selectedReporter.name} כאן. `,
+          `סליחה שאני קוטע, אבל `,
+          `תשמע/י, לפני שאני עונה - `,
+          `${selectedReporter.name} כאן מ${selectedReporter.specialty}. `,
+          `אוקיי, אבל `
+        ];
+        content = intros[Math.floor(Math.random() * intros.length)] + counterQuestion;
+      } else {
+        // תשובה רגילה
+        const responses = [
+          `תודה על השאלה! כ${selectedReporter.name}, אני מתמחה ב${selectedReporter.specialty}. ${userInput.includes('?') ? 'זו שאלה מעניינת מאוד' : 'אני שמח/ה לעזור'}. המצב בשטח דינמי ומתפתח.`,
+          `שלום! אני ${selectedReporter.name} ומדווח/ת מ${selectedReporter.specialty}. ${userInput.length > 50 ? 'זו שאלה מקיפה' : 'תודה על ההודעה'}. אני עוקב/ת אחר האירועים באופן צמוד.`,
+          `היי! כ${selectedReporter.role}, אני יכול/ה להגיד לך ש${selectedReporter.specialty} הוא תחום מרתק. ${userInput.toLowerCase().includes('מתי') ? 'ההתפתחויות צפויות בקרוב' : 'המידע מתעדכן כל הזמן'}.`,
+          `${selectedReporter.name} כאן! מתמחה ב${selectedReporter.specialty}. ${userInput.toLowerCase().includes('איך') ? 'זה תהליך מורכב' : 'אני כאן לעדכן אותך'}. הצוות שלנו עובד סביב השעון.`
+        ];
+        content = responses[Math.floor(Math.random() * responses.length)];
+      }
+      
       const aiMessage = {
         role: "assistant",
-        content: responses[Math.floor(Math.random() * responses.length)],
+        content: content,
         reporter: selectedReporter.name,
         timestamp: new Date()
       };

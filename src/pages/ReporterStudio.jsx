@@ -182,13 +182,94 @@ export default function ReporterStudio() {
     return baseReplies;
   };
 
+  const generateCounterQuestion = (userInput) => {
+    const input = userInput.toLowerCase();
+    const specialty = selectedReporter.specialty;
+    const name = selectedReporter.name;
+
+    // שאלות אתגר לפי תוכן
+    if (input.includes('בטוח') || input.includes('חושב')) {
+      return [
+        `רגע, אבל למה אתה כל כך בטוח בזה? יש לך מקורות?`,
+        `מעניין. מה גרם לך לחשוב ככה? ראית משהו ספציפי?`,
+        `אוקיי, אבל האם שקלת את האפשרות ההפוכה?`,
+        `תשמע/י, איך אתה יכול/ה להיות כל כך בטוח/ה? זה טיעון חזק.`
+      ][Math.floor(Math.random() * 4)];
+    }
+
+    if (input.includes('תמיד') || input.includes('אף פעם') || input.includes('כולם')) {
+      return [
+        `תמיד? זה טיעון די חזק. אתה יכול לתת דוגמה קונקרטית?`,
+        `"כולם"? באמת כולם? או שזו הכללה רחבה מדי?`,
+        `רגע, אף פעם? תן לי לבחון את זה - באמת אף פעם?`,
+        `כולם? אני לא בטוח/ה. בוא נדייק - כמה בדיוק?`
+      ][Math.floor(Math.random() * 4)];
+    }
+
+    if (input.includes('נכון') || input.includes('נראה לי')) {
+      return [
+        `למה זה נכון? מה התשתית העובדתית לטענה הזו?`,
+        `מעניין, אבל בוא נבדוק - על סמך מה?`,
+        `נשמע מעניין, אבל האם יש לך ראיות לכך?`,
+        `"נכון"? תסביר לי איך הגעת למסקנה הזו.`
+      ][Math.floor(Math.random() * 4)];
+    }
+
+    // שאלות הבהרה
+    const clarifyQuestions = [
+      `רגע, תסביר לי משהו - בדיוק למה התכוונת כשאמרת "${userInput.slice(0, 30)}..."?`,
+      `מעניין מה שאמרת. אבל תגיד לי, מה הייתה המניע שלך לחשוב ככה?`,
+      `אוקיי, שמעתי אותך. אבל אני צריך הבהרה - מאיפה המידע הזה?`,
+      `כעיתונאי ב${specialty}, אני צריך לשאול - יש לך מקור לזה?`,
+      `סליחה שאני קוטע, אבל איך בדיוק אתה יודע/ת את זה?`,
+      `רגע רגע, תעצור/י שנייה. מאיפה הביטחון הזה?`
+    ];
+
+    // שאלות עומק
+    const deepQuestions = [
+      `נניח שאתה צודק, מה זה אומר על התמונה הגדולה יותר?`,
+      `בסדר, אבל תגיד לי - מה הקשר בין זה לבין ${specialty}?`,
+      `שאלה מעניינת. אבל האם חשבת על ההשלכות ארוכות הטווח?`,
+      `רגע, בוא נחפור עמוק יותר - מה באמת מעניין אותך פה?`,
+      `אוקיי, אבל למה זה חשוב? מה ההשפעה?`,
+      `בוא נעמיק - מה הסיפור מאחורי זה?`
+    ];
+
+    // שאלות אלטרנטיבה
+    const alternativeQuestions = [
+      `האם שקלת זווית אחרת? כי יש פה עוד איזו נקודת מבט...`,
+      `מה אם אני אגיד לך שיש גרסה אחרת לסיפור הזה?`,
+      `רגע רגע, אבל מה עם הצד השני של המטבע?`,
+      `תסתכל/י על זה מזווית אחרת - מה אתה אומר/ת?`,
+      `אבל יש פה עוד צד לסיפור, לא חשבת על זה?`
+    ];
+
+    const allQuestions = [...clarifyQuestions, ...deepQuestions, ...alternativeQuestions];
+    return allQuestions[Math.floor(Math.random() * allQuestions.length)];
+  };
+
   const generateSmartResponse = (userInput) => {
     const input = userInput.toLowerCase();
     const name = selectedReporter.name;
     const specialty = selectedReporter.specialty;
     const role = selectedReporter.role;
     
-    // Contextual responses based on keywords
+    // 65% סיכוי לשאלה נגדית מאתגרת!
+    if (Math.random() > 0.35) {
+      const counterQuestion = generateCounterQuestion(userInput);
+      const intros = [
+        `רגע רגע, ${name} כאן. `,
+        `סליחה שאני קוטע, אבל `,
+        `תשמע/י, לפני שאני עונה - `,
+        `${name} כאן מ${specialty}. `,
+        `אוקיי, אבל `,
+        `רגע, ${name} פה. `,
+        `תעצור/י שנייה. `
+      ];
+      return intros[Math.floor(Math.random() * intros.length)] + counterQuestion;
+    }
+    
+    // תשובה רגילה (35% מהזמן)
     if (input.includes('מה קורה') || input.includes('עדכון') || input.includes('מצב')) {
       return `היי! ${name} כאן מהשטח. כרגע אני ב${specialty} והמצב די דינמי. יש הרבה התפתחויות ואני עוקב/ת מקרוב. מה ספציפית מעניין אותך?`;
     }
