@@ -92,59 +92,61 @@ Deno.serve(async (req) => {
 
     // Poll for video completion
     let attempts = 0;
-    const maxAttempts = 90;
+    const maxAttempts = 120;
+    let pollInterval = 1000;
 
     while (attempts < maxAttempts) {
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await new Promise(resolve => setTimeout(resolve, pollInterval));
 
-      const statusResponse = await fetch(`https://api.d-id.com/talks/${talkId}`, {
-        headers: {
-          'Authorization': `Basic ${DID_API_KEY}`,
-          'accept': 'application/json'
+      try {
+        const statusResponse = await fetch(`https://api.d-id.com/talks/${talkId}`, {
+          headers: {
+            'Authorization': `Basic ${DID_API_KEY}`,
+            'accept': 'application/json'
+          }
+        });
+
+        if (!statusResponse.ok) {
+          console.error('Status check failed:', statusResponse.status);
+          attempts++;
+          continue;
         }
-      });
-      
-      const statusData = await statusResponse.json();
-      
-      if (statusData.status === 'done') {
-         console.log('✅ Video ready:', statusData.result_url);
 
-         // שמירת הוידאו ב-NewsArticle
-         try {
-           const article = await base44.asServiceRole.entities.NewsArticle.create({
-             title: `דמות מדברת - ${text.substring(0, 50)}`,
-             subtitle: 'וידאו שנוצר על ידי טכנולוגיית D-ID',
-             content: text,
-             category: 'technology',
-             video_url: statusData.result_url,
-             image_url: avatarUrl,
-             is_featured: true,
-             is_breaking: true,
-             source: 'AI Avatar Generator'
-           });
-           console.log('✅ Video saved to NewsArticle:', article.id);
-         } catch (dbError) {
-           console.error('❌ Failed to save to database:', dbError.message);
-         }
+        const statusData = await statusResponse.json();
+        console.log(`📊 Poll attempt ${attempts + 1}: status = ${statusData.status}`);
 
-         return Response.json({
-           success: true,
-           video_url: statusData.result_url,
-           duration: statusData.duration || 0,
-           talk_id: talkId,
-           saved_to_feed: true
-         });
-       }
-      
-      if (statusData.status === 'error') {
-        console.error('D-ID Error:', JSON.stringify(statusData, null, 2));
-        return Response.json({ error: `Video generation failed: ${JSON.stringify(statusData.error || statusData)}` }, { status: 500 });
+        if (statusData.status === 'done' && statusData.result_url) {
+           console.log('✅ Video ready:', statusData.result_url);
+
+          return Response.json({
+            success: true,
+            video_url: statusData.result_url,
+            duration: statusData.duration || 0,
+            talk_id: talkId,
+            saved_to_feed: true
+          });
+        }
+
+        if (statusData.status === 'error') {
+          console.error('D-ID Error:', JSON.stringify(statusData, null, 2));
+          return Response.json({ error: `Video generation failed: ${statusData.error?.message || 'Unknown error'}` }, { status: 500 });
+        }
+
+        // Gradually increase poll interval
+        if (attempts > 20) pollInterval = 2000;
+        if (attempts > 40) pollInterval = 3000;
+
+        attempts++;
+      } catch (pollError) {
+        console.error('Poll error:', pollError.message);
+        attempts++;
+        if (attempts >= maxAttempts) {
+          return Response.json({ error: 'Video generation timeout' }, { status: 504 });
+        }
       }
-      
-      attempts++;
     }
-    
-    return Response.json({ error: 'Video generation timeout' }, { status: 504 });
+
+    return Response.json({ error: 'Video generation timeout after multiple attempts' }, { status: 504 });
 
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });
