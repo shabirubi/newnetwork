@@ -453,15 +453,6 @@ export default function ReporterStudio() {
             {/* Header */}
             <div className="relative overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-r from-[#E31E24] via-purple-600 to-[#E31E24] opacity-20 animate-pulse" />
-              <div className="relative p-8 text-center">
-                <motion.div
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ type: "spring", stiffness: 200, damping: 15 }}
-                >
-                  <Sparkles className="w-16 h-16 mx-auto mb-4 text-[#E31E24]" />
-                </motion.div>
-              </div>
             </div>
 
             {/* Reporters Grid */}
