@@ -625,53 +625,7 @@ export default function LivePlayer({
           </div>
         )}
 
-        {/* OK.ru Embed Player */}
-        {isPlaying && !showPromo && currentStreamUrl?.includes('ok.ru') && (
-          <iframe
-            src={`https://ok.ru/videoembed/${currentStreamUrl.split('/video/')[1]}`}
-            className="absolute inset-0 w-full h-full"
-            allow="autoplay; fullscreen; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            frameBorder="0"
-            title={title}
-          />
-        )}
 
-        {/* Mako Embed Player */}
-        {isPlaying && !showPromo && currentStreamUrl?.includes('mako.co.il') && (
-          <iframe
-            src="https://www.mako.co.il/AjaxPage?jspName=embedHTML5video.jsp&galleryChannelId=3bf5c3a8e967f510VgnVCM2000002a0c10acRCRD&videoChannelId=8bf955222beab610VgnVCM100000700a10acRCRD&vcmid=1e2258089b67f510VgnVCM2000002a0c10acRCRD"
-            className="absolute inset-0 w-full h-full"
-            allow="autoplay; fullscreen; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            frameBorder="0"
-            title={title}
-          />
-        )}
-
-        {/* Stream iframe - for non-streamable URLs */}
-        {isPlaying && !showPromo && currentStreamUrl && 
-         !currentStreamUrl.includes('ok.ru') && 
-         !currentStreamUrl.includes('mako.co.il') &&
-         !currentStreamUrl.includes('.m3u8') && 
-         !currentStreamUrl.includes('.mpd') && 
-         !currentStreamUrl.includes('.ts') &&
-         !currentStreamUrl.includes('.mp4') &&
-         !currentStreamUrl.includes('.mkv') &&
-         !currentStreamUrl.includes('.webm') &&
-         !currentStreamUrl.includes('/live/') &&
-         !currentStreamUrl.includes('/stream/') &&
-         currentStreamUrl !== "youtube" && (
-          <iframe
-            src={currentStreamUrl}
-            className="absolute inset-0 w-full h-full"
-            allow="autoplay; fullscreen; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            allowFullScreen
-            referrerPolicy="no-referrer-when-downgrade"
-            sandbox="allow-scripts allow-same-origin allow-presentation allow-forms"
-            title={title}
-          />
-        )}
 
         {/* Universal Video Player - supports all formats like VLC */}
         {isPlaying && !showPromo && (
