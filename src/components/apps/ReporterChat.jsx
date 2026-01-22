@@ -987,6 +987,32 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
                       </div>
                     )}
 
+                    {/* Quick Replies */}
+                    {showQuickReplies && quickReplies.length > 0 && (
+                      <div className="px-4 pb-3 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+                        <div className="flex items-center gap-2 mb-2 pt-3">
+                          <Sparkles className="w-3 h-3 text-indigo-500" />
+                          <span className="text-xs text-gray-500 dark:text-gray-400">שאלות מוצעות:</span>
+                        </div>
+                        <div className="flex flex-wrap gap-2">
+                          {quickReplies.map((reply, idx) => (
+                            <motion.button
+                              key={idx}
+                              initial={{ opacity: 0, scale: 0.8 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              transition={{ delay: idx * 0.1 }}
+                              whileHover={{ scale: 1.05 }}
+                              whileTap={{ scale: 0.95 }}
+                              onClick={() => handleQuickReply(reply.text)}
+                              className="px-3 py-1.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-full text-xs transition-all"
+                            >
+                              {reply.text}
+                            </motion.button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+
                     {/* Input Area */}
                     <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
                       <div className="flex gap-2 mb-3">
