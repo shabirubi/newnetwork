@@ -16,12 +16,79 @@ Deno.serve(async (req) => {
     }
 
     const DID_API_KEY = Deno.env.get('DID_API_KEY');
+    const ELEVENLABS_API_KEY = Deno.env.get('ELEVENLABS_API_KEY');
     
     if (!DID_API_KEY) {
       return Response.json({ error: 'D-ID API Key not configured' }, { status: 500 });
     }
 
+    // Generate voice with ElevenLabs
+    let audioUrl = null;
+    if (ELEVENLABS_API_KEY) {
+      try {
+        const voiceResponse = await fetch('https://api.elevenlabs.io/v1/text-to-speech/pNInz6obpgDQGcFmaJgB', {
+          method: 'POST',
+          headers: {
+            'xi-api-key': ELEVENLABS_API_KEY,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            text: text,
+            model_id: 'eleven_multilingual_v2',
+            voice_settings: {
+              stability: 0.5,
+              similarity_boost: 0.75,
+              style: 0.0,
+              use_speaker_boost: true
+            }
+          })
+        });
+
+        if (voiceResponse.ok) {
+          const audioBlob = await voiceResponse.blob();
+          const uploadResult = await base44.integrations.Core.UploadFile({ 
+            file: audioBlob 
+          });
+          audioUrl = uploadResult.file_url;
+        }
+      } catch (e) {
+        console.error('ElevenLabs error:', e);
+      }
+    }
+
     // Create talk using D-ID API
+    const didPayload = {
+      source_url: avatarUrl,
+      driver_url: 'bank://lively/',
+      config: {
+        fluent: true,
+        pad_audio: 0,
+        stitch: true,
+        result_format: 'mp4',
+        align_driver: true,
+        align_expand_factor: 0.3,
+        auto_match: true,
+        motion_factor: 1.0,
+        normalization_factor: 1.0
+      }
+    };
+
+    if (audioUrl) {
+      didPayload.script = {
+        type: 'audio',
+        audio_url: audioUrl
+      };
+    } else {
+      didPayload.script = {
+        type: 'text',
+        input: text,
+        provider: {
+          type: 'microsoft',
+          voice_id: 'he-IL-AvriNeural'
+        }
+      };
+    }
+
     const response = await fetch('https://api.d-id.com/talks', {
       method: 'POST',
       headers: {
@@ -29,41 +96,7 @@ Deno.serve(async (req) => {
         'Content-Type': 'application/json',
         'accept': 'application/json'
       },
-      body: JSON.stringify({
-        script: {
-          type: 'text',
-          input: text,
-          provider: {
-            type: 'elevenlabs',
-            voice_id: 'pNInz6obpgDQGcFmaJgB',
-            voice_config: {
-              stability: 0.5,
-              similarity_boost: 0.75,
-              style: 0.0,
-              use_speaker_boost: true
-            }
-          }
-        },
-        source_url: avatarUrl,
-        config: {
-          fluent: true,
-          pad_audio: 0,
-          stitch: true,
-          result_format: 'mp4',
-          driver_expressions: {
-            expressions: [
-              { start_frame: 0, expression: 'neutral', intensity: 1.0 },
-              { start_frame: 20, expression: 'happy', intensity: 0.8 },
-              { start_frame: 40, expression: 'serious', intensity: 0.9 },
-              { start_frame: 60, expression: 'surprise', intensity: 0.7 },
-              { start_frame: 80, expression: 'happy', intensity: 0.6 }
-            ],
-            transition_frames: 10
-          }
-        },
-        driver_url: 'bank://lively',
-        user_data: JSON.stringify({ created_by: user.email })
-      })
+      body: JSON.stringify(didPayload)
     });
 
     if (!response.ok) {
