@@ -26,7 +26,7 @@ Deno.serve(async (req) => {
     let audioUrl = null;
     if (ELEVENLABS_API_KEY) {
       try {
-        const voiceResponse = await fetch('https://api.elevenlabs.io/v1/text-to-speech/pNInz6obpgDQGcFmaJgB', {
+        const voiceResponse = await fetch('https://api.elevenlabs.io/v1/text-to-speech/SOYHLrjzK2X432z7zXUx', {
           method: 'POST',
           headers: {
             'xi-api-key': ELEVENLABS_API_KEY,
@@ -36,9 +36,9 @@ Deno.serve(async (req) => {
             text: text,
             model_id: 'eleven_multilingual_v2',
             voice_settings: {
-              stability: 0.5,
-              similarity_boost: 0.75,
-              style: 0.0,
+              stability: 0.7,
+              similarity_boost: 0.9,
+              style: 0.5,
               use_speaker_boost: true
             }
           })
