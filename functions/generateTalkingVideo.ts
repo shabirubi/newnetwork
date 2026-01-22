@@ -22,47 +22,7 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'D-ID API Key not configured' }, { status: 500 });
     }
 
-    // Generate voice with ElevenLabs
-    let audioUrl = null;
-    if (ELEVENLABS_API_KEY) {
-      try {
-        console.log('🎤 Generating voice with ElevenLabs (Ohad)...');
-        const voiceResponse = await fetch('https://api.elevenlabs.io/v1/text-to-speech/SOYHLrjzK2X432z7zXUx', {
-          method: 'POST',
-          headers: {
-            'xi-api-key': ELEVENLABS_API_KEY,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            text: text,
-            model_id: 'eleven_multilingual_v2',
-            voice_settings: {
-              stability: 0.7,
-              similarity_boost: 0.9,
-              style: 0.5,
-              use_speaker_boost: true
-            }
-          })
-        });
-
-        if (voiceResponse.ok) {
-          console.log('✅ ElevenLabs response OK, uploading audio...');
-          const audioBlob = await voiceResponse.blob();
-          const uploadResult = await base44.integrations.Core.UploadFile({ 
-            file: audioBlob 
-          });
-          audioUrl = uploadResult.file_url;
-          console.log('✅ Audio uploaded:', audioUrl);
-        } else {
-          const errorText = await voiceResponse.text();
-          console.error('❌ ElevenLabs error:', voiceResponse.status, errorText);
-        }
-      } catch (e) {
-        console.error('❌ ElevenLabs exception:', e.message);
-      }
-    } else {
-      console.warn('⚠️ ELEVENLABS_API_KEY not configured');
-    }
+    console.log('🎤 Using Microsoft TTS via D-ID...');
 
     // Create talk using D-ID API with enhanced body language
     const didPayload = {
