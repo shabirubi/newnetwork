@@ -84,25 +84,28 @@ Deno.serve(async (req) => {
       if (statusData.status === 'done') {
         // שמירת הוידאו ב-NewsArticle
         try {
-          await base44.asServiceRole.entities.NewsArticle.create({
+          const article = await base44.asServiceRole.entities.NewsArticle.create({
             title: `דמות מדברת - ${text.substring(0, 50)}`,
-            subtitle: 'וידאו שנוצר על ידי AI',
+            subtitle: 'וידאו שנוצר על ידי טכנולוגיית D-ID',
             content: text,
             category: 'technology',
             video_url: statusData.result_url,
             image_url: avatarUrl,
-            is_featured: true,
-            source: 'D-ID AI Avatar'
+            is_featured: false,
+            is_breaking: false,
+            source: 'AI Avatar Generator'
           });
+          console.log('✅ Video saved to NewsArticle:', article.id);
         } catch (dbError) {
-          console.error('Failed to save to database:', dbError);
+          console.error('❌ Failed to save to database:', dbError.message);
         }
 
         return Response.json({
           success: true,
           video_url: statusData.result_url,
           duration: statusData.duration,
-          talk_id: talkId
+          talk_id: talkId,
+          saved_to_feed: true
         });
       }
       
