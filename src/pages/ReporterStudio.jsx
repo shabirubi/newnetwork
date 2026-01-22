@@ -2,9 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   X, Send, Mic, Video, VideoOff, MicOff, Phone, Loader, 
-  Sparkles, Camera, MessageCircle, Users, Radio, Play, 
-  Pause, Volume2, VolumeX, Settings, Share2, Download,
-  User, Clock, AlertCircle, CheckCircle, Heart, Smile, ThumbsUp, Zap
+  Sparkles, MessageCircle, Users, Radio, CheckCircle
 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
@@ -695,22 +693,6 @@ export default function ReporterStudio() {
                     className="p-5 rounded-full bg-red-600 hover:bg-red-700 transition-all"
                   >
                     <Phone className="w-7 h-7 transform rotate-[135deg]" />
-                  </motion.button>
-
-                  <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    className="p-4 rounded-full bg-gray-800 hover:bg-gray-700"
-                  >
-                    <Settings className="w-6 h-6" />
-                  </motion.button>
-
-                  <motion.button
-                    whileHover={{ scale: 1.1 }}
-                    whileTap={{ scale: 0.9 }}
-                    className="p-4 rounded-full bg-gray-800 hover:bg-gray-700"
-                  >
-                    <Share2 className="w-6 h-6" />
                   </motion.button>
                 </div>
               </div>
