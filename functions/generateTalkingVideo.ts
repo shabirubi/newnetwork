@@ -42,8 +42,18 @@ Deno.serve(async (req) => {
         config: {
           fluent: true,
           pad_audio: 0,
-          stitch: true
-        }
+          stitch: true,
+          driver_expressions: {
+            expressions: [
+              { start_frame: 0, expression: 'neutral', intensity: 0.8 },
+              { start_frame: 30, expression: 'happy', intensity: 0.5 },
+              { start_frame: 60, expression: 'serious', intensity: 0.7 }
+            ]
+          },
+          result_format: 'mp4'
+        },
+        driver_url: 'bank://lively',
+        user_data: JSON.stringify({ created_by: user.email })
       })
     });
 
@@ -72,6 +82,22 @@ Deno.serve(async (req) => {
       const statusData = await statusResponse.json();
       
       if (statusData.status === 'done') {
+        // שמירת הוידאו ב-NewsArticle
+        try {
+          await base44.asServiceRole.entities.NewsArticle.create({
+            title: `דמות מדברת - ${text.substring(0, 50)}`,
+            subtitle: 'וידאו שנוצר על ידי AI',
+            content: text,
+            category: 'technology',
+            video_url: statusData.result_url,
+            image_url: avatarUrl,
+            is_featured: true,
+            source: 'D-ID AI Avatar'
+          });
+        } catch (dbError) {
+          console.error('Failed to save to database:', dbError);
+        }
+
         return Response.json({
           success: true,
           video_url: statusData.result_url,
