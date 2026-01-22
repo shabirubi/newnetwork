@@ -29,27 +29,25 @@ export default function UploadVideoModal({ isOpen, onClose }) {
     try {
       console.log('📤 מתחיל להעלות קובץ...', formData.videoFile.name);
       
-      // יצור FormData עבור backend function
-      const uploadFormData = new FormData();
-      uploadFormData.append('file', formData.videoFile);
-      uploadFormData.append('title', formData.title);
-      uploadFormData.append('description', formData.description || '');
-      uploadFormData.append('category', formData.category);
-
-      // קרא ל-backend function שמעלה ואחסן בצורה נכונה
-      const response = await base44.functions.invoke('uploadUserVideo', {
-        file: formData.videoFile,
-        title: formData.title,
-        description: formData.description || '',
-        category: formData.category
+      // העלה את הקובץ ישירות דרך integrations
+      const uploadResponse = await base44.integrations.Core.UploadFile({ 
+        file: formData.videoFile 
       });
+      
+      const videoUrl = uploadResponse.file_url;
+      console.log('✅ קובץ הועלה:', videoUrl);
 
-      console.log('✅ קובץ הועלה בהצלחה:', response.data);
-      const videoUrl = response.data.video?.video_url;
-
-      if (!videoUrl) {
-        throw new Error('לא התקבל קישור לסרטון');
-      }
+      // שמור ב-UserVideo
+      console.log('💾 שומר ב-UserVideo...');
+      const user = await base44.auth.me();
+      await base44.entities.UserVideo.create({
+        title: formData.title,
+        video_url: videoUrl,
+        description: formData.description || '',
+        uploader_email: user.email,
+        status: 'ready'
+      });
+      console.log('✅ UserVideo נשמר');
 
       // שמור גם ב-LiveStream כדי שיופיע בנגן הראשי
       console.log('💾 שומר ב-LiveStream...');
@@ -85,7 +83,7 @@ export default function UploadVideoModal({ isOpen, onClose }) {
     } catch (error) {
       console.error('❌ שגיאה בהעלאה:', error);
       toast.dismiss("upload");
-      toast.error("שגיאה בהעלאה: " + (error.response?.data?.error || error.message));
+      toast.error("שגיאה בהעלאה: " + error.message);
       setStep(1);
       setUploading(false);
     }
