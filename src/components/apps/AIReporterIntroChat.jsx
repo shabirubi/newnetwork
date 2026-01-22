@@ -265,7 +265,15 @@ export default function AIReporterIntroChat({ preSelectedReporter = null, isOpen
                                    <p className="text-white text-sm">יוצר וידאו הצגה... זה מעט זמן ⏳</p>
                                  </div>
                                ) : (
-                                 <p className="text-gray-400 text-sm text-center">לא ניתן ליצור וידאו כעת</p>
+                                 <div className="flex flex-col items-center gap-3">
+                                   <p className="text-gray-400 text-sm text-center">וידאו לא נטען</p>
+                                   <button
+                                     onClick={() => generateIntroVideo(selectedReporter)}
+                                     className="px-4 py-2 bg-[#E31E24] text-white text-sm rounded-lg hover:bg-red-700 transition-colors"
+                                   >
+                                     🔄 נסה שוב
+                                   </button>
+                                 </div>
                                )}
                              </div>
                            )}
