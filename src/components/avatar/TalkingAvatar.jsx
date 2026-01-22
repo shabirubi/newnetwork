@@ -125,7 +125,7 @@ export default function TalkingAvatar() {
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-gradient-to-br from-gray-900 to-black rounded-2xl overflow-hidden max-w-2xl w-full shadow-2xl border border-purple-500/30"
+              className="bg-gradient-to-br from-gray-900 to-black rounded-2xl overflow-hidden w-full max-w-lg sm:max-w-2xl shadow-2xl border border-purple-500/30 max-h-[90vh] overflow-y-auto"
             >
               {/* Header */}
               <div className="bg-gradient-to-r from-purple-600 to-purple-800 p-6">
@@ -150,7 +150,7 @@ export default function TalkingAvatar() {
               </div>
 
               {/* Content */}
-              <div className="p-6 space-y-6">
+              <div className="p-4 sm:p-6 space-y-4 sm:space-y-5">
                 {videoUrl ? (
                   /* Video Result */
                   <div className="space-y-4">
@@ -189,163 +189,141 @@ export default function TalkingAvatar() {
                   <div className="space-y-6">
                     {/* Image Upload - Redesigned */}
                     <div>
-                      <label className="block text-white font-bold mb-4">📸 העלה תמונה של הדמות</label>
-                      <div className="space-y-3">
-                        <div 
-                          onClick={() => document.getElementById('avatar-upload').click()}
-                          className="relative border-2 border-dashed border-purple-500/50 rounded-2xl p-8 cursor-pointer hover:border-purple-400 hover:bg-purple-500/5 transition-all bg-purple-900/20"
-                        >
-                          {avatarUrl ? (
-                            <div className="flex items-center gap-4">
-                              <div className="w-32 h-32 rounded-xl overflow-hidden border-2 border-purple-500 flex-shrink-0">
-                                <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
-                              </div>
-                              <div className="flex-1">
-                                <p className="text-purple-300 font-bold mb-1">✓ התמונה הועלתה</p>
-                                <p className="text-gray-400 text-sm">לחץ כדי להחליף תמונה</p>
-                              </div>
+                      <label className="block text-white font-bold mb-2 text-sm sm:text-base">📸 העלה תמונה</label>
+                      <div 
+                        onClick={() => document.getElementById('avatar-upload').click()}
+                        className="relative border-2 border-dashed border-purple-500/50 rounded-xl p-4 cursor-pointer hover:border-purple-400 hover:bg-purple-500/5 transition-all bg-purple-900/20"
+                      >
+                        {avatarUrl ? (
+                          <div className="flex items-center gap-3">
+                            <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-lg overflow-hidden border-2 border-purple-500 flex-shrink-0">
+                              <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
                             </div>
-                          ) : (
-                            <div className="text-center py-4">
-                              <User className="w-12 h-12 mx-auto mb-3 text-purple-400" />
-                              <p className="text-white font-bold mb-1">בחר תמונה של דמות</p>
-                              <p className="text-gray-400 text-sm">לחץ כדי להעלות קובץ</p>
-                              <p className="text-xs text-purple-300 mt-3">PNG, JPG, עד 5MB</p>
+                            <div className="flex-1">
+                              <p className="text-purple-300 font-bold text-sm">✓ הועלתה</p>
+                              <p className="text-gray-400 text-xs">לחץ להחלפה</p>
                             </div>
-                          )}
-                          {uploadingImage && (
-                            <div className="absolute inset-0 bg-black/50 rounded-2xl flex items-center justify-center">
-                              <div className="flex flex-col items-center gap-2">
-                                <Loader2 className="w-6 h-6 animate-spin text-purple-400" />
-                                <span className="text-purple-300 text-sm">מעלה...</span>
-                              </div>
-                            </div>
-                          )}
-                        </div>
-                        <input
-                          id="avatar-upload"
-                          type="file"
-                          accept="image/*"
-                          onChange={handleImageUpload}
-                          className="hidden"
-                          disabled={uploadingImage}
-                        />
-                        <p className="text-xs text-gray-500">💡 טיפ: בחר תמונה ברורה של פנים עם תאורה טובה</p>
+                          </div>
+                        ) : (
+                          <div className="text-center py-3">
+                            <User className="w-8 h-8 mx-auto mb-2 text-purple-400" />
+                            <p className="text-white font-bold text-sm mb-1">בחר תמונה</p>
+                            <p className="text-gray-400 text-xs">PNG, JPG עד 5MB</p>
+                          </div>
+                        )}
+                        {uploadingImage && (
+                          <div className="absolute inset-0 bg-black/50 rounded-xl flex items-center justify-center">
+                            <Loader2 className="w-5 h-5 animate-spin text-purple-400" />
+                          </div>
+                        )}
                       </div>
+                      <input
+                        id="avatar-upload"
+                        type="file"
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        className="hidden"
+                        disabled={uploadingImage}
+                      />
                     </div>
 
                     {/* Voice Provider Selection */}
-                    <div className="bg-gray-800/50 rounded-xl p-4">
-                      <label className="block text-white font-bold mb-3">🎤 ספק קול</label>
-                      <div className="space-y-2">
-                        <label className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700/50 cursor-pointer">
+                    <div className="bg-gray-800/50 rounded-lg p-3">
+                      <label className="block text-white font-bold mb-2 text-sm">🎤 ספק קול</label>
+                      <div className="space-y-1.5">
+                        <label className="flex items-center gap-2 p-2 rounded hover:bg-gray-700/50 cursor-pointer">
                           <input
                             type="radio"
                             name="voiceProvider"
                             value="microsoft"
                             checked={voiceProvider === "microsoft"}
                             onChange={(e) => setVoiceProvider(e.target.value)}
-                            className="w-5 h-5"
+                            className="w-4 h-4"
                           />
-                          <div className="flex-1">
-                            <span className="text-white font-medium block">Microsoft Azure</span>
-                            <span className="text-xs text-gray-400">קול סטנדרטי ברור</span>
-                          </div>
+                          <span className="text-white text-sm">Microsoft Azure</span>
                         </label>
-                        <label className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700/50 cursor-pointer">
+                        <label className="flex items-center gap-2 p-2 rounded hover:bg-gray-700/50 cursor-pointer">
                           <input
                             type="radio"
                             name="voiceProvider"
                             value="elevenlabs"
                             checked={voiceProvider === "elevenlabs"}
                             onChange={(e) => setVoiceProvider(e.target.value)}
-                            className="w-5 h-5"
+                            className="w-4 h-4"
                           />
-                          <div className="flex-1">
-                            <span className="text-white font-medium block">Eleven Labs ⭐</span>
-                            <span className="text-xs text-gray-400">קול טבעי ואנושי יותר</span>
-                          </div>
+                          <span className="text-white text-sm">Eleven Labs ⭐</span>
                         </label>
                       </div>
                     </div>
 
                     {/* Gender Selection */}
-                    <div className="bg-gray-800/50 rounded-xl p-4">
-                      <label className="block text-white font-bold mb-3">👤 בחר קול</label>
-                      <div className="space-y-2">
-                        <label className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700/50 cursor-pointer">
+                    <div className="bg-gray-800/50 rounded-lg p-3">
+                      <label className="block text-white font-bold mb-2 text-sm">👤 קול</label>
+                      <div className="space-y-1.5">
+                        <label className="flex items-center gap-2 p-2 rounded hover:bg-gray-700/50 cursor-pointer">
                           <input
                             type="radio"
                             name="gender"
                             value="male"
                             checked={gender === "male"}
                             onChange={(e) => setGender(e.target.value)}
-                            className="w-5 h-5"
+                            className="w-4 h-4"
                           />
-                          <span className="text-white font-medium flex-1">♂️ קול גברי</span>
+                          <span className="text-white text-sm">♂️ גברי</span>
                         </label>
-                        <label className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700/50 cursor-pointer">
+                        <label className="flex items-center gap-2 p-2 rounded hover:bg-gray-700/50 cursor-pointer">
                           <input
                             type="radio"
                             name="gender"
                             value="female"
                             checked={gender === "female"}
                             onChange={(e) => setGender(e.target.value)}
-                            className="w-5 h-5"
+                            className="w-4 h-4"
                           />
-                          <span className="text-white font-medium flex-1">♀️ קול נשי</span>
+                          <span className="text-white text-sm">♀️ נשי</span>
                         </label>
                       </div>
                     </div>
 
                     {/* Background Selection */}
-                    <div className="bg-gray-800/50 rounded-xl p-4">
-                      <label className="block text-white font-bold mb-3">🎬 רקע</label>
-                      <div className="space-y-2">
-                        <label className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700/50 cursor-pointer">
+                    <div className="bg-gray-800/50 rounded-lg p-3">
+                      <label className="block text-white font-bold mb-2 text-sm">🎬 רקע</label>
+                      <div className="space-y-1.5">
+                        <label className="flex items-center gap-2 p-2 rounded hover:bg-gray-700/50 cursor-pointer">
                           <input
                             type="radio"
                             name="backgroundType"
                             value="static"
                             checked={backgroundType === "static"}
                             onChange={(e) => setBackgroundType(e.target.value)}
-                            className="w-5 h-5"
+                            className="w-4 h-4"
                           />
-                          <div className="flex-1">
-                            <span className="text-white font-medium block">רקע קבוע</span>
-                            <span className="text-xs text-gray-400">רקע קבוע, גוף יציב מלא</span>
-                          </div>
+                          <span className="text-white text-sm">קבוע</span>
                         </label>
-                        <label className="flex items-center gap-3 p-3 rounded-lg hover:bg-gray-700/50 cursor-pointer">
+                        <label className="flex items-center gap-2 p-2 rounded hover:bg-gray-700/50 cursor-pointer">
                           <input
                             type="radio"
                             name="backgroundType"
                             value="dynamic"
                             checked={backgroundType === "dynamic"}
                             onChange={(e) => setBackgroundType(e.target.value)}
-                            className="w-5 h-5"
+                            className="w-4 h-4"
                           />
-                          <div className="flex-1">
-                            <span className="text-white font-medium block">רקע דינמי</span>
-                            <span className="text-xs text-gray-400">רקע נע, ריאליזם עיתונאי</span>
-                          </div>
+                          <span className="text-white text-sm">דינמי</span>
                         </label>
                       </div>
                     </div>
 
                     {/* Text Input */}
                     <div>
-                      <label className="block text-white font-bold mb-3">📝 מה הדמות תגיד?</label>
+                      <label className="block text-white font-bold mb-2 text-sm sm:text-base">📝 הטקסט</label>
                       <Textarea
                         value={text}
                         onChange={(e) => setText(e.target.value)}
-                        placeholder="הזן את הטקסט שהדמות תדבר (בעברית)..."
-                        className="min-h-36 bg-gray-800 border-gray-700 text-white resize-none text-base leading-relaxed"
+                        placeholder="הזן את הטקסט שהדמות תדבר..."
+                        className="min-h-24 bg-gray-800 border-gray-700 text-white resize-none text-sm leading-relaxed"
                         disabled={isGenerating}
                       />
-                      <p className="text-xs text-gray-500 mt-2">
-                        💡 טיפ: לחץ על האפשרויות בהצד לשימוש בקסמים של כתיבה
-                      </p>
                     </div>
 
                     {/* Generate Button */}
