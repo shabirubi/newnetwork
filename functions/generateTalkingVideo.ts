@@ -72,8 +72,7 @@ Deno.serve(async (req) => {
         fluent: true,
         pad_audio: 0,
         stitch: true,
-        result_format: 'mp4',
-        motion_factor: 1.5
+        result_format: 'mp4'
       }
     };
 
