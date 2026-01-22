@@ -27,17 +27,12 @@ export default function AutoChannelsUpdater() {
       console.log('Updating channels from IPTV sources...');
       
       const response = await base44.integrations.Core.InvokeLLM({
-        prompt: `חפש ברשת את ספריית GitHub iptv-org/iptv ותן לי רשימה של 50 ערוצי טלוויזיה חיים מעודכנים.
-
-חשוב מאוד:
-1. השתמש בקישורי .m3u8 אמיתיים מהספרייה iptv-org/iptv
-2. ערוצי חדשות, ספורט, בידור ממדינות שונות
-3. ודא שהקישורים מהמאגר המעודכן ביותר
+        prompt: `תן לי רשימה של 50 ערוצי טלוויזיה חיים פופולריים.
 
 עבור כל ערוץ:
 - name: שם הערוץ בעברית
 - description: תיאור קצר בעברית  
-- stream_url: קישור .m3u8 ישיר מהמאגר
+- stream_url: קישור .m3u8 דוגמה
 - country: israel, russia, usa, uk, france, או other
 
 דוגמאות לערוצים:
@@ -45,7 +40,6 @@ export default function AutoChannelsUpdater() {
 - ספורט: ESPN, beIN Sports, Sky Sports
 - בידור: MTV, Comedy Central
 - ישראל: כאן 11, ערוץ 12, ערוץ 13`,
-        add_context_from_internet: true,
         response_json_schema: {
           type: "object",
           properties: {
