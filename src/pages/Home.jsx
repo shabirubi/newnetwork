@@ -232,6 +232,20 @@ export default function Home() {
         <AIReporterIntroChat />
       </section>
 
+      {/* Studio Floating Button */}
+      <motion.button
+        onClick={() => setStudioOpen(true)}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+        className="fixed bottom-40 sm:bottom-24 right-4 z-[9998] w-16 h-16 rounded-full bg-gradient-to-br from-purple-400 to-purple-600 hover:from-purple-500 hover:to-purple-700 shadow-2xl flex items-center justify-center border-2 border-purple-200/50 transition-all group"
+        title="סטודיו שידור"
+      >
+        <Mic className="w-7 h-7 text-white" />
+        <span className="absolute right-full mr-3 top-1/2 -translate-y-1/2 px-3 py-1 bg-purple-600 text-white text-sm font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+          סטודיו שידור
+        </span>
+      </motion.button>
+
       {/* Upload Article Floating Button */}
       <motion.button
         onClick={() => setUploadVideoModalOpen(true)}
@@ -245,6 +259,9 @@ export default function Home() {
           העלה כתבה
         </span>
       </motion.button>
+
+      {/* Broadcast Studio Modal */}
+      <BroadcastStudio isOpen={studioOpen} onClose={() => setStudioOpen(false)} />
 
       {/* Spotify Section */}
       <section className="px-4 mb-12">
