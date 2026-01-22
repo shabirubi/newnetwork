@@ -153,7 +153,8 @@ Deno.serve(async (req) => {
       }
       
       if (statusData.status === 'error') {
-        return Response.json({ error: `Video generation failed: ${statusData.error}` }, { status: 500 });
+        console.error('D-ID Error:', JSON.stringify(statusData, null, 2));
+        return Response.json({ error: `Video generation failed: ${JSON.stringify(statusData.error || statusData)}` }, { status: 500 });
       }
       
       attempts++;
