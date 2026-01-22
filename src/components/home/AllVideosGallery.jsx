@@ -196,7 +196,8 @@ export default function AllVideosGallery() {
                     className="w-full h-full bg-black"
                     autoPlay
                     loop
-                    volume={1}
+                    controls
+                    playsInline
                     style={{
                       display: 'block',
                       width: '100%',
@@ -205,10 +206,7 @@ export default function AllVideosGallery() {
                     }}
                     onLoadedMetadata={(e) => {
                       e.target.volume = 1;
-                      console.log('Video loaded:', selectedVideo.url);
-                    }}
-                    onError={(e) => {
-                      console.error('Video error:', e, selectedVideo.url);
+                      e.target.muted = false;
                     }}
                   />
                 )}
