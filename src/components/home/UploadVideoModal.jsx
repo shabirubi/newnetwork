@@ -7,6 +7,7 @@ import { toast } from "sonner";
 export default function UploadVideoModal({ isOpen, onClose }) {
   const [step, setStep] = useState(1);
   const [uploading, setUploading] = useState(false);
+  const queryClient = require("@tanstack/react-query").useQueryClient?.();
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -43,6 +44,12 @@ export default function UploadVideoModal({ isOpen, onClose }) {
 
       toast.dismiss("upload");
       setStep(3);
+      
+      // רענן את ה-live-stream query כדי להציג את הסרטון החדש
+      if (queryClient) {
+        queryClient.invalidateQueries({ queryKey: ['live-stream'] });
+      }
+      
       setTimeout(() => {
         onClose();
         setStep(1);
