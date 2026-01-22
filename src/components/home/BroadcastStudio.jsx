@@ -45,13 +45,9 @@ export default function BroadcastStudio({ isOpen, onClose }) {
     });
 
     try {
-      const cleanImageUrl = avatarImage.includes('?') 
-        ? avatarImage.split('?')[0] 
-        : avatarImage;
-
       const response = await base44.functions.invoke("generateTalkingVideo", {
         text: articleText,
-        avatarUrl: cleanImageUrl + '?auto=format&fit=crop&w=512',
+        avatarUrl: avatarImage,
         gender: "female",
         voiceProvider: "elevenlabs",
         backgroundType: "dynamic",
@@ -67,7 +63,8 @@ export default function BroadcastStudio({ isOpen, onClose }) {
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error("שגיאה: " + error.response?.data?.error || error.message, { id: "video-gen" });
+      const errorMsg = error.response?.data?.error || error.message;
+      toast.error("שגיאה: " + errorMsg, { id: "video-gen" });
     } finally {
       setLoading(false);
     }
