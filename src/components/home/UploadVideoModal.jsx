@@ -2,12 +2,13 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Upload, Camera, Loader } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 export default function UploadVideoModal({ isOpen, onClose }) {
   const [step, setStep] = useState(1);
   const [uploading, setUploading] = useState(false);
-  const queryClient = require("@tanstack/react-query").useQueryClient?.();
+  const queryClient = useQueryClient();
   const [formData, setFormData] = useState({
     title: "",
     description: "",
