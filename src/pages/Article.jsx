@@ -400,20 +400,7 @@ export default function Article() {
         </div>
       </motion.div>
 
-      {/* Reporter Presentation */}
-      <div className="mb-12">
-        <h3 className="font-bold text-xl mb-4 text-white">הצגת הכתבה</h3>
-        <ReporterArticlePresentation 
-          article={article}
-          reporter={{
-            id: 'reporter-1',
-            name: article.source || 'כתב/כתבת חדשות',
-            image: article.image_url || 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400',
-            specialty: article.category || 'כתב/כתבת חדשות',
-            gender: 'female'
-          }}
-        />
-      </div>
+
 
       {/* Comments Section */}
       <div className="border-t pt-8 mb-12">
