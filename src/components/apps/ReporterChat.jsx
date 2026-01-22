@@ -23,7 +23,12 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
   const [quickReplies, setQuickReplies] = useState([]);
   const [showQuickReplies, setShowQuickReplies] = useState(true);
   const [pollAnswers, setPollAnswers] = useState({});
+  const [isTyping, setIsTyping] = useState(false);
+  const [reporterStatus, setReporterStatus] = useState('online');
+  const [messageReactions, setMessageReactions] = useState({});
+  const [recordingTime, setRecordingTime] = useState(0);
   const messagesEndRef = useRef(null);
+  const recordingIntervalRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
   const localVideoRef = useRef(null);
@@ -43,6 +48,20 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  useEffect(() => {
+    if (isRecording) {
+      recordingIntervalRef.current = setInterval(() => {
+        setRecordingTime(prev => prev + 1);
+      }, 1000);
+    } else {
+      setRecordingTime(0);
+      if (recordingIntervalRef.current) clearInterval(recordingIntervalRef.current);
+    }
+    return () => {
+      if (recordingIntervalRef.current) clearInterval(recordingIntervalRef.current);
+    };
+  }, [isRecording]);
 
   const generateQuickReplies = (reporter) => {
     const specialty = reporter.specialty?.toLowerCase() || '';
@@ -66,6 +85,19 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
     sendMessage(text);
   };
 
+  const addReaction = (messageIdx, emoji) => {
+    setMessageReactions(prev => ({
+      ...prev,
+      [messageIdx]: [...(prev[messageIdx] || []), emoji]
+    }));
+  };
+
+  const formatRecordingTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
   const handlePollVote = (pollId, option) => {
     setPollAnswers(prev => ({ ...prev, [pollId]: option }));
     toast.success('תשובתך נרשמה!');
@@ -83,14 +115,26 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
     const messageText = text || inputValue;
     if (!messageText.trim() || !selectedReporter || isLoading) return;
 
-    const userMessage = { role: "user", content: messageText, timestamp: new Date() };
+    const userMessage = { role: "user", content: messageText, timestamp: new Date(), status: 'sent' };
     setMessages(prev => [...prev, userMessage]);
     const userInput = messageText;
     setInputValue("");
     setShowQuickReplies(false);
     setIsLoading(true);
+    setReporterStatus('typing');
+    setIsTyping(true);
 
     setTimeout(() => {
+      setMessages(prev => 
+        prev.map((msg, idx) => 
+          idx === prev.length - 1 && msg.role === 'user' ? {...msg, status: 'read'} : msg
+        )
+      );
+    }, 500);
+
+    const delay = 800 + Math.random() * 1500 + (userInput.length * 20);
+    setTimeout(() => {
+      setIsTyping(false);
       const responses = [
         `תודה על השאלה! כ${selectedReporter.name}, אני מתמחה ב${selectedReporter.specialty}. ${userInput.includes('?') ? 'זו שאלה מעניינת מאוד' : 'אני שמח/ה לעזור'}. המצב בשטח דינמי ומתפתח.`,
         `שלום! אני ${selectedReporter.name} ומדווח/ת מ${selectedReporter.specialty}. ${userInput.length > 50 ? 'זו שאלה מקיפה' : 'תודה על ההודעה'}. אני עוקב/ת אחר האירועים באופן צמוד.`,
@@ -115,6 +159,27 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
 
       setMessages(prev => [...prev, aiMessage]);
       setIsLoading(false);
+      setReporterStatus('online');
+
+      if (Math.random() > 0.8) {
+        setTimeout(() => {
+          setIsTyping(true);
+          setTimeout(() => {
+            setIsTyping(false);
+            const followUps = [
+              'יש לך עוד שאלות?',
+              'רוצה שאני אפרט יותר?',
+              'משהו ספציפי שמעניין אותך?'
+            ];
+            setMessages(prev => [...prev, {
+              role: "assistant",
+              content: followUps[Math.floor(Math.random() * followUps.length)],
+              reporter: selectedReporter.name,
+              timestamp: new Date()
+            }]);
+          }, 1000);
+        }, 2000);
+      }
 
       if (Math.random() > 0.85) {
         setTimeout(() => {
@@ -132,7 +197,7 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
           }]);
         }, 2000);
       }
-    }, 1500 + Math.random() * 1000);
+    }, delay);
   };
 
   const startRecording = async () => {
@@ -314,11 +379,34 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
               {/* Header */}
               <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-6 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <Sparkles className="w-6 h-6" />
+                  {selectedReporter ? (
+                    <div className="relative">
+                      <img
+                        src={selectedReporter.image}
+                        alt={selectedReporter.name}
+                        className="w-12 h-12 rounded-full object-cover border-2 border-white"
+                      />
+                      <motion.div
+                        animate={{ scale: reporterStatus === 'typing' ? [1, 1.2, 1] : 1 }}
+                        transition={{ duration: 1.5, repeat: reporterStatus === 'typing' ? Infinity : 0 }}
+                        className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white ${
+                          reporterStatus === 'online' ? 'bg-green-500' : 
+                          reporterStatus === 'typing' ? 'bg-yellow-500' : 'bg-gray-400'
+                        }`}
+                      />
+                    </div>
+                  ) : (
+                    <Sparkles className="w-6 h-6" />
+                  )}
                   <div>
                     <h2 className="text-2xl font-bold">צ'אט כתבים</h2>
                     {selectedReporter && (
-                      <p className="text-indigo-200 text-sm">עם {selectedReporter.name}</p>
+                      <div className="flex items-center gap-2">
+                        <p className="text-indigo-200 text-sm">{selectedReporter.name}</p>
+                        {reporterStatus === 'typing' && (
+                          <span className="text-xs text-yellow-300 animate-pulse">מקליד/ה...</span>
+                        )}
+                      </div>
                     )}
                   </div>
                 </div>
@@ -437,26 +525,31 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
                       {messages.map((message, idx) => (
                         <motion.div
                           key={idx}
-                          initial={{ opacity: 0, y: 10 }}
-                          animate={{ opacity: 1, y: 0 }}
+                          initial={{ opacity: 0, y: 10, scale: 0.95 }}
+                          animate={{ opacity: 1, y: 0, scale: 1 }}
+                          transition={{ type: "spring", stiffness: 300, damping: 25 }}
                           className={`flex gap-3 ${
                             message.role === "user" ? "justify-end" : "justify-start"
                           }`}
                         >
                           {message.role === "assistant" && (
-                            <img
+                            <motion.img
+                              animate={{ rotate: [0, 5, -5, 0] }}
+                              transition={{ duration: 0.5 }}
                               src={selectedReporter.image}
                               alt={selectedReporter.name}
                               className="w-8 h-8 rounded-full object-cover flex-shrink-0"
                             />
                           )}
-                          <div
-                            className={`max-w-xs lg:max-w-md px-4 py-3 rounded-2xl ${
-                              message.role === "user"
-                                ? "bg-indigo-600 text-white"
-                                : "bg-white dark:bg-gray-700 dark:text-white border border-gray-200 dark:border-gray-600"
-                            }`}
-                          >
+                          <div className="flex flex-col">
+                            <motion.div
+                              whileHover={{ scale: 1.02 }}
+                              className={`max-w-xs lg:max-w-md px-4 py-3 rounded-2xl ${
+                                message.role === "user"
+                                  ? "bg-indigo-600 text-white"
+                                  : "bg-white dark:bg-gray-700 dark:text-white border border-gray-200 dark:border-gray-600"
+                              }`}
+                            >
                             <p className="text-sm leading-relaxed">{message.content}</p>
                             
                             {message.media && (
@@ -503,36 +596,91 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
                                 <source src={message.audioUrl} type="audio/webm" />
                               </audio>
                             )}
-                            <p
-                              className={`text-xs mt-2 ${
-                                message.role === "user"
-                                  ? "text-indigo-100"
-                                  : "text-gray-500 dark:text-gray-400"
-                              }`}
-                            >
-                              {moment(message.timestamp).format("HH:mm")}
-                            </p>
+                            <div className="flex items-center justify-between mt-2">
+                              <p className={`text-xs ${message.role === "user" ? "text-indigo-100" : "text-gray-500 dark:text-gray-400"}`}>
+                                {moment(message.timestamp).format("HH:mm")}
+                              </p>
+                              {message.role === "user" && message.status && (
+                                <span className="text-xs text-indigo-200">
+                                  {message.status === 'sent' && '✓'}
+                                  {message.status === 'read' && '✓✓'}
+                                </span>
+                              )}
+                            </div>
+                            </motion.div>
+                            {message.role === "assistant" && (
+                              <div className="flex gap-1 mt-1 mr-2">
+                                {['❤️', '👍', '😊', '🔥'].map(emoji => (
+                                  <button
+                                    key={emoji}
+                                    onClick={() => addReaction(idx, emoji)}
+                                    className="text-xs hover:scale-125 transition-transform opacity-60 hover:opacity-100"
+                                  >
+                                    {emoji}
+                                  </button>
+                                ))}
+                              </div>
+                            )}
+                            {messageReactions[idx] && messageReactions[idx].length > 0 && (
+                              <div className="flex gap-1 mt-1 mr-2">
+                                {messageReactions[idx].map((emoji, i) => (
+                                  <span key={i} className="text-xs">{emoji}</span>
+                                ))}
+                              </div>
+                            )}
                           </div>
                         </motion.div>
                       ))}
-                      {isLoading && (
-                        <div className="flex gap-3">
-                          <img
-                            src={selectedReporter.image}
-                            alt={selectedReporter.name}
-                            className="w-8 h-8 rounded-full object-cover flex-shrink-0"
-                          />
-                          <div className="bg-white dark:bg-gray-700 px-4 py-3 rounded-2xl">
-                            <div className="flex gap-2">
-                              <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                              <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
-                              <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                      <AnimatePresence>
+                        {isTyping && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            className="flex gap-3"
+                          >
+                            <img
+                              src={selectedReporter.image}
+                              alt={selectedReporter.name}
+                              className="w-8 h-8 rounded-full object-cover flex-shrink-0"
+                            />
+                            <div className="bg-white dark:bg-gray-700 px-4 py-3 rounded-2xl border border-gray-200 dark:border-gray-600">
+                              <div className="flex gap-1">
+                                <motion.div 
+                                  animate={{ y: [0, -8, 0] }}
+                                  transition={{ duration: 0.6, repeat: Infinity }}
+                                  className="w-2 h-2 bg-indigo-500 rounded-full"
+                                />
+                                <motion.div 
+                                  animate={{ y: [0, -8, 0] }}
+                                  transition={{ duration: 0.6, repeat: Infinity, delay: 0.15 }}
+                                  className="w-2 h-2 bg-purple-500 rounded-full"
+                                />
+                                <motion.div 
+                                  animate={{ y: [0, -8, 0] }}
+                                  transition={{ duration: 0.6, repeat: Infinity, delay: 0.3 }}
+                                  className="w-2 h-2 bg-indigo-500 rounded-full"
+                                />
+                              </div>
                             </div>
-                          </div>
-                        </div>
-                      )}
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
                       <div ref={messagesEndRef} />
                     </div>
+
+                    {/* Recording Indicator */}
+                    {isRecording && (
+                      <div className="px-4 py-2 bg-red-50 dark:bg-red-900/20 border-t border-red-200 dark:border-red-800">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse" />
+                            <span className="text-sm font-bold text-red-600 dark:text-red-400">מקליט...</span>
+                          </div>
+                          <span className="text-sm font-mono text-red-600 dark:text-red-400">{formatRecordingTime(recordingTime)}</span>
+                        </div>
+                      </div>
+                    )}
 
                     {/* Quick Replies */}
                     {showQuickReplies && quickReplies.length > 0 && (
