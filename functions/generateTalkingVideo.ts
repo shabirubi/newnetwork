@@ -143,6 +143,7 @@ Deno.serve(async (req) => {
     return Response.json({ error: 'Video generation timeout' }, { status: 504 });
 
   } catch (error) {
+    console.error('🔴 Main error:', error);
     return Response.json({ error: error.message }, { status: 500 });
   }
 });
