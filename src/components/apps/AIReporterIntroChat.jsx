@@ -22,7 +22,8 @@ export default function AIReporterIntroChat({ preSelectedReporter = null, isOpen
   // Load cached intro video for reporter
   const getCachedIntroVideo = (reporterId) => {
     try {
-      return sessionStorage.getItem(`intro-video-${reporterId}`);
+      const cached = localStorage.getItem(`intro-video-${reporterId}`);
+      return cached;
     } catch {
       return null;
     }
@@ -31,7 +32,8 @@ export default function AIReporterIntroChat({ preSelectedReporter = null, isOpen
   // Save cached intro video for reporter
   const cacheIntroVideo = (reporterId, videoUrl) => {
     try {
-      sessionStorage.setItem(`intro-video-${reporterId}`, videoUrl);
+      localStorage.setItem(`intro-video-${reporterId}`, videoUrl);
+      localStorage.setItem(`intro-video-${reporterId}-time`, new Date().getTime());
     } catch (e) {
       console.warn('Cache save failed:', e);
     }
@@ -52,7 +54,7 @@ export default function AIReporterIntroChat({ preSelectedReporter = null, isOpen
     }
 
     setGeneratingVideo(true);
-    toast.loading("יוצר וידאו הצגה...", { id: 'intro-gen' });
+    toast.loading("יוצר וידאו הצגה, אנא המתן...", { id: 'intro-gen' });
     
     try {
       const introText = `שלום! אני ${reporter.name}, כתב/כתבת חדשות. אני מתמחה ב${reporter.specialty}. נשמח לדון איתך בכל נושא שמעניין אותך. בואו נשוחח!`;
@@ -67,13 +69,17 @@ export default function AIReporterIntroChat({ preSelectedReporter = null, isOpen
       });
 
       if (response.data?.video_url) {
-        setIntroVideo(response.data.video_url);
-        cacheIntroVideo(reporter.id, response.data.video_url);
-        toast.success("וידאו ההצגה מוכן!", { id: 'intro-gen' });
+        const videoUrl = response.data.video_url;
+        setIntroVideo(videoUrl);
+        cacheIntroVideo(reporter.id, videoUrl);
+        toast.success("וידאו ההצגה מוכן! 🎥", { id: 'intro-gen' });
+      } else {
+        throw new Error('לא התקבל URL של וידאו');
       }
     } catch (error) {
-      console.error('Error:', error);
-      toast.error("שגיאה ביצירת הוידאו", { id: 'intro-gen' });
+      console.error('Error generating intro video:', error);
+      toast.error("לא הצלחנו ליצור וידאו. נסה שוב בעוד דקה.", { id: 'intro-gen' });
+      setIntroVideo(null);
     } finally {
       setGeneratingVideo(false);
     }
@@ -230,34 +236,40 @@ export default function AIReporterIntroChat({ preSelectedReporter = null, isOpen
                         className="mb-4"
                       >
                         <div className="relative bg-gray-900 rounded-lg overflow-hidden aspect-video">
-                          {introVideo ? (
-                            <video
-                              ref={videoRef}
-                              src={introVideo}
-                              autoPlay
-                              controls
-                              className="w-full h-full object-cover"
-                            />
-                          ) : (
-                            <div className="w-full h-full flex flex-col items-center justify-center gap-3">
-                              <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-indigo-600">
-                                <img 
-                                  src={selectedReporter.image} 
-                                  alt={selectedReporter.name}
-                                  className="w-full h-full object-cover"
-                                />
-                              </div>
-                              {generatingVideo ? (
-                                <div className="flex flex-col items-center gap-2">
-                                  <Loader className="w-5 h-5 animate-spin text-indigo-600" />
-                                  <p className="text-white text-sm">יוצר וידאו הצגה...</p>
-                                </div>
-                              ) : (
-                                <p className="text-gray-400 text-sm text-center">לא ניתן ליצור וידאו כעת</p>
-                              )}
-                            </div>
-                          )}
-                        </div>
+                           {introVideo ? (
+                             <video
+                               ref={videoRef}
+                               src={introVideo}
+                               autoPlay
+                               controls
+                               onError={(e) => {
+                                 console.error('Video load error:', e);
+                                 toast.error("שגיאה בטעינת הוידאו");
+                               }}
+                               onLoadStart={() => toast.loading("טוען וידאו...", { id: 'video-load' })}
+                               onCanPlay={() => toast.dismiss('video-load')}
+                               className="w-full h-full object-cover"
+                             />
+                           ) : (
+                             <div className="w-full h-full flex flex-col items-center justify-center gap-3 bg-gradient-to-br from-gray-800 to-gray-900">
+                               <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-[#E31E24]">
+                                 <img 
+                                   src={selectedReporter.image} 
+                                   alt={selectedReporter.name}
+                                   className="w-full h-full object-cover"
+                                 />
+                               </div>
+                               {generatingVideo ? (
+                                 <div className="flex flex-col items-center gap-2">
+                                   <Loader className="w-5 h-5 animate-spin text-[#E31E24]" />
+                                   <p className="text-white text-sm">יוצר וידאו הצגה... זה מעט זמן ⏳</p>
+                                 </div>
+                               ) : (
+                                 <p className="text-gray-400 text-sm text-center">לא ניתן ליצור וידאו כעת</p>
+                               )}
+                             </div>
+                           )}
+                         </div>
                         <p className="text-sm text-gray-600 dark:text-gray-400 mt-2 text-center">
                           {selectedReporter.name} מציג/ה את עצמו/ה
                         </p>
