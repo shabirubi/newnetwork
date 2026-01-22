@@ -181,13 +181,23 @@ export default function AllVideosGallery() {
 
               {/* Video Player */}
               <div className="relative aspect-video">
-                <iframe
-                  src={`${selectedVideo.url}${selectedVideo.type === 'youtube' ? '?autoplay=0' : ''}`}
-                  className="w-full h-full"
-                  frameBorder="0"
-                  allowFullScreen
-                  allow="autoplay; encrypted-media"
-                />
+                {selectedVideo.type === 'youtube' ? (
+                  <iframe
+                    src={`${selectedVideo.url}?autoplay=0`}
+                    className="w-full h-full"
+                    frameBorder="0"
+                    allowFullScreen
+                    allow="autoplay; encrypted-media"
+                  />
+                ) : (
+                  <video
+                    src={selectedVideo.url}
+                    className="w-full h-full"
+                    controls
+                    autoPlay
+                    controlsList="nodownload"
+                  />
+                )}
               </div>
 
               {/* Video Info */}
