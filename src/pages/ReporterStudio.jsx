@@ -731,7 +731,7 @@ export default function ReporterStudio() {
             </div>
 
             {/* Chat Sidebar */}
-            <div className="w-full lg:w-[450px] bg-gray-900 flex flex-col border-t lg:border-t-0 lg:border-l border-gray-800">
+            <div className="w-full lg:w-[380px] bg-gray-900 flex flex-col border-t lg:border-t-0 lg:border-l border-gray-800">
               {/* Chat Header */}
               <div className="p-4 border-b border-gray-800 bg-gradient-to-r from-[#E31E24]/20 to-purple-600/20">
                 <div className="flex items-center justify-between">
