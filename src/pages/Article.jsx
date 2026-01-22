@@ -400,17 +400,20 @@ export default function Article() {
         </div>
       </motion.div>
 
-      {/* Video if exists */}
-      {article.video_url && (
+      {/* Reporter Presentation */}
+      {article.source && (
         <div className="mb-12">
-          <h3 className="font-bold text-xl mb-4 text-white">צפו בסרטון</h3>
-          <div className="aspect-video bg-gray-900 rounded-2xl overflow-hidden">
-            <iframe 
-              src={article.video_url}
-              className="w-full h-full"
-              allowFullScreen
-            />
-          </div>
+          <h3 className="font-bold text-xl mb-4 text-white">הצגת הכתבה</h3>
+          <ReporterArticlePresentation 
+            article={article}
+            reporter={{
+              id: article.source,
+              name: article.source,
+              image: article.image_url || 'https://via.placeholder.com/200',
+              specialty: article.category || 'כתב/כתבת חדשות',
+              gender: 'female'
+            }}
+          />
         </div>
       )}
 
