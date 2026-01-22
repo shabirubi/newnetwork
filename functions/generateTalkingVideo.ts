@@ -81,8 +81,11 @@ Deno.serve(async (req) => {
 
     if (!response.ok) {
       const error = await response.text();
-      console.error('D-ID Response Error:', error);
-      return Response.json({ error: `D-ID API error: ${error}` }, { status: 500 });
+      console.error('🔴 D-ID API Failed:', response.status, error);
+      return Response.json({ 
+        error: `D-ID API error: ${error}`,
+        status: response.status
+      }, { status: 500 });
     }
 
     const result = await response.json();
