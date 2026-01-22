@@ -24,7 +24,8 @@ import VODModal from "../components/vod/VODModal";
 import AccessibilityPanel from "../components/accessibility/AccessibilityPanel";
 import UploadVideoModal from "../components/home/UploadVideoModal";
 import AIReporterIntroChat from "../components/apps/AIReporterIntroChat";
-import { Droplet } from "lucide-react";
+import BroadcastStudio from "../components/home/BroadcastStudio";
+import { Droplet, Mic } from "lucide-react";
 
       // Lazy loaded components
 const NewsReels = React.lazy(() => import("../components/news/NewsReels"));
