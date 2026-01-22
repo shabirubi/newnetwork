@@ -7,6 +7,9 @@ export default function CurrencyRates() {
   const [loading, setLoading] = useState(true);
 
   const fetchRates = async () => {
+    // Disabled to save API credits
+    return;
+    
     try {
       const prompt = `תן לי את שערי המטבעות הנוכחיים של ישראל ביחס לשקל (ILS) ממקורות אמיתיים:
 

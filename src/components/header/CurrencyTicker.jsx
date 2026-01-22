@@ -8,6 +8,16 @@ export default function CurrencyTicker() {
   const [loading, setLoading] = useState(true);
 
   const fetchRates = async () => {
+    // Static data to save API credits
+    setCurrencies([
+      { code: "USD", name: "דולר אמריקאי", rate: 3.65, change: 0.02, changePercent: 0.55 },
+      { code: "EUR", name: "יורו", rate: 3.98, change: -0.01, changePercent: -0.23 },
+      { code: "GBP", name: "לירה שטרלינג", rate: 4.52, change: 0.01, changePercent: 0.12 },
+      { code: "BTC", name: "ביטקוין", rate: 365000, change: 7500, changePercent: 2.15 }
+    ]);
+    setLoading(false);
+    return;
+    
     try {
       const prompt = `תן לי את שערי המטבעות הנוכחיים של ישראל ביחס לשקל (ILS) ממקורות אמיתיים:
 
