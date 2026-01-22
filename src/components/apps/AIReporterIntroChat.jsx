@@ -19,6 +19,24 @@ export default function AIReporterIntroChat({ preSelectedReporter = null, isOpen
   const videoRef = useRef(null);
   const audioRef = useRef(null);
 
+  // Load cached intro video for reporter
+  const getCachedIntroVideo = (reporterId) => {
+    try {
+      return sessionStorage.getItem(`intro-video-${reporterId}`);
+    } catch {
+      return null;
+    }
+  };
+
+  // Save cached intro video for reporter
+  const cacheIntroVideo = (reporterId, videoUrl) => {
+    try {
+      sessionStorage.setItem(`intro-video-${reporterId}`, videoUrl);
+    } catch (e) {
+      console.warn('Cache save failed:', e);
+    }
+  };
+
   const { data: reporters = [] } = useQuery({
     queryKey: ['reporters-intro'],
     queryFn: () => base44.entities.Reporter.filter({ is_active: true }),
@@ -26,6 +44,13 @@ export default function AIReporterIntroChat({ preSelectedReporter = null, isOpen
   });
 
   const generateIntroVideo = async (reporter) => {
+    // Check cache first
+    const cached = getCachedIntroVideo(reporter.id);
+    if (cached) {
+      setIntroVideo(cached);
+      return;
+    }
+
     setGeneratingVideo(true);
     toast.loading("יוצר וידאו הצגה...", { id: 'intro-gen' });
     
@@ -37,11 +62,13 @@ export default function AIReporterIntroChat({ preSelectedReporter = null, isOpen
         avatarUrl: reporter.image,
         gender: reporter.gender || 'male',
         voiceProvider: 'elevenlabs',
-        backgroundType: 'dynamic'
+        backgroundType: 'dynamic',
+        language: 'he'
       });
 
       if (response.data?.video_url) {
         setIntroVideo(response.data.video_url);
+        cacheIntroVideo(reporter.id, response.data.video_url);
         toast.success("וידאו ההצגה מוכן!", { id: 'intro-gen' });
       }
     } catch (error) {
@@ -132,7 +159,7 @@ export default function AIReporterIntroChat({ preSelectedReporter = null, isOpen
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setIsOpen(true)}
-        className="w-full bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4 rounded-xl font-bold flex items-center gap-3 shadow-lg"
+        className="w-full bg-gradient-to-r from-black via-[#E31E24] to-black text-white p-4 rounded-xl font-bold flex items-center gap-3 shadow-lg shadow-[#E31E24]/30"
       >
         <MessageCircle className="w-5 h-5" />
         צ'אט וידאו עם כתבים
@@ -155,7 +182,7 @@ export default function AIReporterIntroChat({ preSelectedReporter = null, isOpen
               className="bg-white dark:bg-gray-900 rounded-2xl w-full max-w-2xl h-[90vh] flex flex-col overflow-hidden"
             >
               {/* Header */}
-              <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-4 flex justify-between items-center">
+              <div className="bg-gradient-to-r from-black via-[#E31E24] to-black text-white p-4 flex justify-between items-center">
                 <h2 className="font-bold text-lg">צ'אט וידאו עם כתבים</h2>
                 <button 
                   onClick={() => {
