@@ -9,11 +9,17 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { text, avatarUrl } = await req.json();
+    const { text, avatarUrl, gender = 'male' } = await req.json();
 
     if (!text || !avatarUrl) {
       return Response.json({ error: 'Missing text or avatarUrl' }, { status: 400 });
     }
+
+    const voiceIdMap = {
+      male: 'he-IL-AvriNeural',
+      female: 'he-IL-HilaNeural'
+    };
+    const voiceId = voiceIdMap[gender] || voiceIdMap.male;
 
     const DID_API_KEY = Deno.env.get('DID_API_KEY');
     const ELEVENLABS_API_KEY = Deno.env.get('ELEVENLABS_API_KEY');
