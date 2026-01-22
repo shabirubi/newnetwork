@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle, X, Send, Loader, User, Sparkles, Mic, MicOff, Video, VideoOff, Phone, PhoneOff, Star } from "lucide-react";
+import { MessageCircle, X, Send, Loader, User, Sparkles, Mic, MicOff, Video, VideoOff, Phone, PhoneOff } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { Input } from "@/components/ui/input";
@@ -40,7 +40,6 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
     };
   });
   const [latestNews, setLatestNews] = useState([]);
-  const [generatingIntroVideo, setGeneratingIntroVideo] = useState(false);
   const messagesEndRef = useRef(null);
   const recordingIntervalRef = useRef(null);
 
@@ -524,46 +523,6 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
     };
   }, [setOpenState]);
 
-  const generateReporterIntroVideo = async () => {
-    if (!selectedReporter) {
-      toast.error("בחר כתב/כתבת קודם");
-      return;
-    }
-
-    setGeneratingIntroVideo(true);
-    toast.loading("יוצר וידאו הצגה...", { id: 'intro-video' });
-
-    try {
-      const introText = `שלום! אני ${selectedReporter.name}, כתב/כתבת חדשות. אני מתמחה ב-${selectedReporter.specialty}. נשמח לדון איתך בכל נושא שמעניין אותך.`;
-      
-      const response = await base44.functions.invoke('generateTalkingVideo', {
-        text: introText,
-        avatarUrl: selectedReporter.image,
-        gender: selectedReporter.gender || (selectedReporter.name.includes('ה') ? 'female' : 'male'),
-        voiceProvider: 'elevenlabs',
-        backgroundType: 'dynamic'
-      });
-
-      if (response.data?.video_url) {
-        setMessages(prev => [...prev, {
-          role: "assistant",
-          content: "זו הצגת עצמי:",
-          reporter: selectedReporter.name,
-          timestamp: new Date(),
-          videoUrl: response.data.video_url,
-          videoCaption: `${selectedReporter.name} מציג/ה את עצמו/ה`
-        }]);
-        
-        toast.success("וידאו ההצגה מוכן!", { id: 'intro-video' });
-      }
-    } catch (error) {
-      console.error('Error generating intro video:', error);
-      toast.error(`שגיאה: ${error.message}`, { id: 'intro-video' });
-    } finally {
-      setGeneratingIntroVideo(false);
-    }
-  };
-
   const startNewChat = (reporter) => {
     setSelectedReporter(reporter);
     const replies = generateQuickReplies(reporter);
@@ -869,21 +828,6 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
                               </div>
                             )}
 
-                            {message.videoUrl && (
-                              <div className="mt-3 rounded-lg overflow-hidden border-2 border-gray-700">
-                                <video
-                                  src={message.videoUrl}
-                                  controls
-                                  className="w-full h-64 object-cover bg-black"
-                                />
-                                {message.videoCaption && (
-                                  <div className="bg-gray-900/50 px-2 py-1">
-                                    <p className="text-xs text-gray-300">{message.videoCaption}</p>
-                                  </div>
-                                )}
-                              </div>
-                            )}
-
                             {message.audioUrl && (
                               <audio controls className="mt-2 w-full">
                                 <source src={message.audioUrl} type="audio/webm" />
@@ -1004,15 +948,6 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
                     {/* Input Area */}
                     <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
                       <div className="flex gap-2 mb-3">
-                        <Button
-                          onClick={generateReporterIntroVideo}
-                          disabled={generatingIntroVideo}
-                          variant="outline"
-                          size="icon"
-                          title="הציגו את עצמכם עם תנועות גוף"
-                        >
-                          {generatingIntroVideo ? <Loader className="w-5 h-5 animate-spin" /> : <Star className="w-5 h-5" />}
-                        </Button>
                         <Button
                           onClick={isRecording ? stopRecording : startRecording}
                           variant={isRecording ? "destructive" : "outline"}
