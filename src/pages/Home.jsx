@@ -23,7 +23,7 @@ import TikTokNewsFeed from "../components/news/TikTokNewsFeed";
 import VODModal from "../components/vod/VODModal";
 import AccessibilityPanel from "../components/accessibility/AccessibilityPanel";
 import UploadVideoModal from "../components/home/UploadVideoModal";
-import SimpleReporterChat from "../components/apps/SimpleReporterChat";
+import ReporterChatModal from "../components/apps/ReporterChatModal";
 
 // Lazy loaded components
 const NewsReels = React.lazy(() => import("../components/news/NewsReels"));
@@ -235,7 +235,7 @@ export default function Home() {
 
       {/* Reporter Chat */}
       <section className="px-4 mt-8 mb-12">
-        <SimpleReporterChat />
+        <ReporterChatModal />
       </section>
 
       {/* Spotify Section */}
