@@ -9,17 +9,34 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { text, avatarUrl, gender = 'male' } = await req.json();
+    const { text, avatarUrl, gender = 'male', voiceProvider = 'microsoft', backgroundType = 'static' } = await req.json();
 
-    if (!text || !avatarUrl) {
-      return Response.json({ error: 'Missing text or avatarUrl' }, { status: 400 });
-    }
+      if (!text || !avatarUrl) {
+        return Response.json({ error: 'Missing text or avatarUrl' }, { status: 400 });
+      }
 
-    const voiceIdMap = {
-      male: 'he-IL-AvriNeural',
-      female: 'he-IL-HilaNeural'
-    };
-    const voiceId = voiceIdMap[gender] || voiceIdMap.male;
+      // Voice configuration
+      let voiceConfig;
+      if (voiceProvider === 'elevenlabs') {
+        const voiceIdMap = {
+          male: 'pNInz6obpgDQGcFmaJgB',
+          female: 'EXAVITQu4EsNXjluf7xi'
+        };
+        voiceConfig = {
+          type: 'elevenlabs',
+          voice_id: voiceIdMap[gender] || voiceIdMap.male,
+          language: 'he'
+        };
+      } else {
+        const voiceIdMap = {
+          male: 'he-IL-AvriNeural',
+          female: 'he-IL-HilaNeural'
+        };
+        voiceConfig = {
+          type: 'microsoft',
+          voice_id: voiceIdMap[gender] || voiceIdMap.male
+        };
+      }
 
     const DID_API_KEY = Deno.env.get('DID_API_KEY');
     
