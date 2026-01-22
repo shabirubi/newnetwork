@@ -31,6 +31,18 @@ export default function ReporterStudio() {
   const [quickReplies, setQuickReplies] = useState([]);
   const [showQuickReplies, setShowQuickReplies] = useState(true);
   const [pollAnswers, setPollAnswers] = useState({});
+  const [userProfile, setUserProfile] = useState(() => {
+    const saved = localStorage.getItem('userStudioProfile');
+    return saved ? JSON.parse(saved) : {
+      preferredTopics: {},
+      depthLevel: 'medium',
+      tonePreference: 'balanced',
+      interactionCount: 0,
+      avgMessageLength: 0,
+      questionFrequency: 0,
+      lastInteraction: null
+    };
+  });
   const messagesEndRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
@@ -101,6 +113,86 @@ export default function ReporterStudio() {
       ...prev,
       [messageId]: [...(prev[messageId] || []), emoji]
     }));
+  };
+
+  const updateUserProfile = (userMessage) => {
+    const newProfile = { ...userProfile };
+    newProfile.interactionCount += 1;
+    newProfile.lastInteraction = new Date().toISOString();
+    
+    const currentAvg = newProfile.avgMessageLength;
+    newProfile.avgMessageLength = (currentAvg * (newProfile.interactionCount - 1) + userMessage.length) / newProfile.interactionCount;
+    
+    if (newProfile.avgMessageLength > 80) {
+      newProfile.depthLevel = 'deep';
+    } else if (newProfile.avgMessageLength > 40) {
+      newProfile.depthLevel = 'medium';
+    } else {
+      newProfile.depthLevel = 'casual';
+    }
+    
+    if (userMessage.includes('?') || userMessage.includes('מה') || userMessage.includes('איך') || userMessage.includes('למה')) {
+      newProfile.questionFrequency += 1;
+    }
+    
+    const informalWords = ['מה קורה', 'וואו', 'אחלה', 'יאללה', 'בטוח', 'סבבה'];
+    const formalWords = ['בבקשה', 'האם', 'נראה לי', 'אני סבור', 'תודה רבה'];
+    const informal = informalWords.some(w => userMessage.toLowerCase().includes(w));
+    const formal = formalWords.some(w => userMessage.toLowerCase().includes(w));
+    
+    if (informal && !formal) newProfile.tonePreference = 'casual';
+    else if (formal && !informal) newProfile.tonePreference = 'formal';
+    else newProfile.tonePreference = 'balanced';
+    
+    const topics = {
+      'ביטחון': ['ביטחון', 'צבא', 'מלחמה', 'טרור'],
+      'כלכלה': ['כלכלה', 'שוק', 'מניות', 'דולר', 'כסף'],
+      'פוליטיקה': ['ממשלה', 'כנסת', 'בחירות', 'שר'],
+      'טכנולוגיה': ['טכנולוגיה', 'סטארטאפ', 'הייטק', 'AI'],
+      'ספורט': ['ספורט', 'כדורגל', 'ליגה', 'מכבי']
+    };
+    
+    Object.keys(topics).forEach(topic => {
+      const keywords = topics[topic];
+      if (keywords.some(k => userMessage.toLowerCase().includes(k))) {
+        newProfile.preferredTopics[topic] = (newProfile.preferredTopics[topic] || 0) + 1;
+      }
+    });
+    
+    setUserProfile(newProfile);
+    localStorage.setItem('userStudioProfile', JSON.stringify(newProfile));
+  };
+
+  const getPersonalizedIntro = () => {
+    if (userProfile.interactionCount < 3) return '';
+    
+    const topTopic = Object.keys(userProfile.preferredTopics).reduce((a, b) => 
+      userProfile.preferredTopics[a] > userProfile.preferredTopics[b] ? a : b, 
+      Object.keys(userProfile.preferredTopics)[0]
+    );
+    
+    if (topTopic && userProfile.preferredTopics[topTopic] >= 2) {
+      return `אני רואה שמעניין אותך ${topTopic}, אז `;
+    }
+    return '';
+  };
+
+  const adaptResponseStyle = (baseResponse) => {
+    let adapted = baseResponse;
+    
+    if (userProfile.tonePreference === 'casual') {
+      adapted = adapted.replace('שלום!', 'מה קורה!');
+      adapted = adapted.replace('תודה רבה', 'תודה!');
+    } else if (userProfile.tonePreference === 'formal') {
+      adapted = adapted.replace('היי!', 'שלום,');
+      adapted = adapted.replace('וואו', 'מרשים');
+    }
+    
+    if (userProfile.depthLevel === 'deep' && Math.random() > 0.5) {
+      adapted += ' יש כאן הרבה היבטים שכדאי לדבר עליהם.';
+    }
+    
+    return adapted;
   };
 
   const startChat = (reporter) => {
@@ -257,33 +349,36 @@ export default function ReporterStudio() {
     // 65% סיכוי לשאלה נגדית מאתגרת!
     if (Math.random() > 0.35) {
       const counterQuestion = generateCounterQuestion(userInput);
+      const personalIntro = getPersonalizedIntro();
       const intros = [
-        `רגע רגע, ${name} כאן. `,
-        `סליחה שאני קוטע, אבל `,
-        `תשמע/י, לפני שאני עונה - `,
-        `${name} כאן מ${specialty}. `,
-        `אוקיי, אבל `,
-        `רגע, ${name} פה. `,
-        `תעצור/י שנייה. `
+        `רגע רגע, ${name} כאן. ${personalIntro}`,
+        `סליחה שאני קוטע, אבל ${personalIntro}`,
+        `תשמע/י, לפני שאני עונה - ${personalIntro}`,
+        `${name} כאן מ${specialty}. ${personalIntro}`,
+        `אוקיי, אבל ${personalIntro}`,
+        `רגע, ${name} פה. ${personalIntro}`,
+        `תעצור/י שנייה. ${personalIntro}`
       ];
-      return intros[Math.floor(Math.random() * intros.length)] + counterQuestion;
+      return adaptResponseStyle(intros[Math.floor(Math.random() * intros.length)] + counterQuestion);
     }
     
-    // תשובה רגילה (35% מהזמן)
+    // תשובה רגילה (35% מהזמן) עם התאמה אישית
+    const personalIntro = getPersonalizedIntro();
+    
     if (input.includes('מה קורה') || input.includes('עדכון') || input.includes('מצב')) {
-      return `היי! ${name} כאן מהשטח. כרגע אני ב${specialty} והמצב די דינמי. יש הרבה התפתחויות ואני עוקב/ת מקרוב. מה ספציפית מעניין אותך?`;
+      return adaptResponseStyle(`היי! ${personalIntro}${name} כאן מהשטח. כרגע אני ב${specialty} והמצב די דינמי. יש הרבה התפתחויות ואני עוקב/ת מקרוב. מה ספציפית מעניין אותך?`);
     }
     
     if (input.includes('מתי') || input.includes('זמן')) {
-      return `שאלה מצוינת! כ${role} שעוקב/ת אחרי ${specialty}, אני יכול/ה לספר לך שההתפתחויות האחרונות מרתקות. הזמנים משתנים מהר, אבל אני כאן כדי לעדכן אותך בזמן אמת! 📡`;
+      return adaptResponseStyle(`${personalIntro}שאלה מצוינת! כ${role} שעוקב/ת אחרי ${specialty}, אני יכול/ה לספר לך שההתפתחויות האחרונות מרתקות. הזמנים משתנים מהר, אבל אני כאן כדי לעדכן אותך בזמן אמת! 📡`);
     }
     
     if (input.includes('איך') || input.includes('למה')) {
-      return `אהה, זו שאלה מורכבת! בתור ${role}, אני רואה את התמונה המלאה. ${specialty} זה תחום שדורש הבנה עמוקה, ואני אסביר לך בפירוט. יש לי מקורות בשטח שמספקים לי מידע עדכני! 🎯`;
+      return adaptResponseStyle(`${personalIntro}אהה, זו שאלה מורכבת! בתור ${role}, אני רואה את התמונה המלאה. ${specialty} זה תחום שדורש הבנה עמוקה, ואני אסביר לך בפירוט. יש לי מקורות בשטח שמספקים לי מידע עדכני! 🎯`);
     }
     
     if (input.includes('תודה') || input.includes('יפה')) {
-      return `תמיד לשירותך! 😊 כ${name} אני כאן בשבילך. אם יש עוד שאלות על ${specialty} או כל נושא אחר - פשוט תשאל/י!`;
+      return adaptResponseStyle(`תמיד לשירותך! 😊 ${personalIntro}כ${name} אני כאן בשבילך. אם יש עוד שאלות על ${specialty} או כל נושא אחר - פשוט תשאל/י!`);
     }
     
     if (input.includes('חדשות') || input.includes('דיווח')) {
@@ -317,6 +412,8 @@ export default function ReporterStudio() {
   const sendMessage = async (text = null) => {
     const messageText = text || inputValue;
     if (!messageText.trim() || isLoading) return;
+
+    updateUserProfile(messageText);
 
     const userMessage = { 
       role: "user", 
