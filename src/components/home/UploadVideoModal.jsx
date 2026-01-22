@@ -57,7 +57,8 @@ export default function UploadVideoModal({ isOpen, onClose }) {
         stream_url: videoUrl,
         is_active: true,
         viewer_count: 0,
-        thumbnail_url: videoUrl
+        thumbnail_url: videoUrl,
+        started_at: new Date().toISOString()
       });
       console.log('✅ LiveStream נשמר');
 
