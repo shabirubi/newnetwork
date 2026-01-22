@@ -8,7 +8,6 @@ import { createPageUrl } from "../utils";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import WelcomeVideoOverlay from "../components/home/WelcomeVideoOverlay";
 import LivePlayer from "../components/news/LivePlayer";
 import NewsCard from "../components/news/NewsCard";
 import UpdatesFeed from "../components/news/UpdatesFeed";
@@ -37,12 +36,6 @@ const AllVideosGallery = React.lazy(() => import("../components/home/AllVideosGa
 
 
 export default function Home() {
-  const [welcomeVideoShown, setWelcomeVideoShown] = React.useState(() => {
-    if (typeof window !== 'undefined') {
-      return !localStorage.getItem('welcomeVideoShown');
-    }
-    return true;
-  });
   const [vodModalOpen, setVodModalOpen] = React.useState(false);
   const [categoriesMenuOpen, setCategoriesMenuOpen] = React.useState(false);
   const [a11yOpen, setA11yOpen] = React.useState(false);
@@ -55,12 +48,6 @@ export default function Home() {
     return 'all';
   });
 
-  const handleWelcomeVideoEnd = () => {
-    setWelcomeVideoShown(false);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem('welcomeVideoShown', 'true');
-    }
-  };
   React.useEffect(() => {
     const handleChannelChange = (e) => {
       setSelectedChannel(e.detail);
@@ -119,11 +106,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-black space-y-0 sm:space-y-6">
-      {/* Welcome Video Overlay */}
-      {welcomeVideoShown && (
-        <WelcomeVideoOverlay onVideoEnd={handleWelcomeVideoEnd} />
-      )}
-
       <AutoNewsUpdater />
       <AutoChannelsUpdater />
 
