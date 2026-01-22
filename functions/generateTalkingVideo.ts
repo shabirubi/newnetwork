@@ -9,14 +9,10 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { text, avatarUrl, gender = 'male', avatarBase64 } = await req.json();
+    const { text, avatarUrl, gender = 'male' } = await req.json();
 
-    if (!text) {
-      return Response.json({ error: 'Missing text' }, { status: 400 });
-    }
-
-    if (!avatarUrl && !avatarBase64) {
-      return Response.json({ error: 'Missing avatarUrl or avatarBase64' }, { status: 400 });
+    if (!text || !avatarUrl) {
+      return Response.json({ error: 'Missing text or avatarUrl' }, { status: 400 });
     }
 
     const voiceIdMap = {
@@ -31,36 +27,14 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'D-ID API Key not configured' }, { status: 500 });
     }
 
-    console.log('🎤 Using Microsoft TTS via D-ID...');
+    console.log('🎤 Starting video generation...');
     console.log('Avatar URL:', avatarUrl);
+    console.log('Text:', text);
     console.log('Gender:', gender);
-    console.log('Has Base64:', !!avatarBase64);
-
-    let imageUrl = avatarUrl;
-    
-    // If Base64 provided, upload to private storage first
-    if (avatarBase64) {
-      try {
-        const base64Data = avatarBase64.split(',')[1] || avatarBase64;
-        const binaryString = atob(base64Data);
-        const bytes = new Uint8Array(binaryString.length);
-        for (let i = 0; i < binaryString.length; i++) {
-          bytes[i] = binaryString.charCodeAt(i);
-        }
-        const blob = new Blob([bytes], { type: 'image/jpeg' });
-        
-        const uploadResult = await base44.integrations.Core.UploadFile({ file: blob });
-        imageUrl = uploadResult.file_url || uploadResult.url;
-        console.log('✅ Image uploaded:', imageUrl);
-      } catch (uploadError) {
-        console.error('Upload error:', uploadError.message);
-        return Response.json({ error: `Failed to upload image: ${uploadError.message}` }, { status: 500 });
-      }
-    }
 
     // Create talk using D-ID API with enhanced body language
     const didPayload = {
-      source_url: imageUrl,
+      source_url: avatarUrl,
       driver_url: 'bank://presenters-v1/',
       config: {
         fluent: true,
