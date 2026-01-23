@@ -584,9 +584,9 @@ export default function BroadcastStudio() {
                             }}
                             className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${
                               customAvatarId === reporter.id
-                                ? "border-green-500 ring-2 ring-green-500/50"
-                                : "border-green-500/20 hover:border-green-500/50"
-                            }`}
+                                ? "border-[#E31E24] ring-2 ring-[#E31E24]/50"
+                                : "border-[#E31E24]/20 hover:border-[#E31E24]/50"
+                             }`}
                             title={reporter.name}
                           >
                             <img src={reporter.image} alt={reporter.name} className="w-full h-full object-cover" />
@@ -594,7 +594,7 @@ export default function BroadcastStudio() {
                               <p className="text-white text-[9px] font-bold line-clamp-1">{reporter.name}</p>
                             </div>
                             {customAvatarId === reporter.id && (
-                              <div className="absolute top-1 right-1 w-4 h-4 rounded-full bg-green-500 flex items-center justify-center">
+                               <div className="absolute top-1 right-1 w-4 h-4 rounded-full bg-[#E31E24] flex items-center justify-center">
                                 <Play className="w-2 h-2 text-white" />
                               </div>
                             )}
@@ -606,30 +606,30 @@ export default function BroadcastStudio() {
 
                   {/* Divider */}
                   <div className="flex items-center gap-2">
-                    <div className="flex-1 h-px bg-green-500/20"></div>
-                    <span className="text-green-400 text-xs font-semibold">או</span>
-                    <div className="flex-1 h-px bg-green-500/20"></div>
+                    <div className="flex-1 h-px bg-[#E31E24]/20"></div>
+                    <span className="text-[#E31E24] text-xs font-semibold">או</span>
+                    <div className="flex-1 h-px bg-[#E31E24]/20"></div>
                   </div>
 
                   {/* Custom Avatar Training */}
                   <div>
-                    <p className="text-green-300 text-xs font-semibold mb-2">צור אווטר חדש:</p>
-                    <div
-                      onClick={() => trainingVideoRef.current?.click()}
-                      className="relative aspect-video rounded-lg border-2 border-dashed border-green-500/30 hover:border-green-500 bg-black/30 hover:bg-black/50 cursor-pointer transition-all flex items-center justify-center group"
+                    <p className="text-white/70 text-xs font-semibold mb-2">צור אווטר חדש:</p>
+                     <div
+                       onClick={() => trainingVideoRef.current?.click()}
+                       className="relative aspect-video rounded-lg border-2 border-dashed border-[#E31E24]/30 hover:border-[#E31E24] bg-black/30 hover:bg-black/50 cursor-pointer transition-all flex items-center justify-center group"
                     >
                       {trainingVideo ? (
                         <>
                           <video src={trainingVideo} className="w-full h-full object-cover rounded-lg" />
                           <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
-                            <Upload className="w-8 h-8 text-green-400" />
+                            <Upload className="w-8 h-8 text-[#E31E24]" />
                           </div>
                         </>
                       ) : (
                         <div className="text-center p-4">
-                          <Video className="w-10 h-10 text-green-400 mx-auto mb-2" />
+                          <Video className="w-10 h-10 text-[#E31E24] mx-auto mb-2" />
                           <p className="text-white text-sm font-medium">העלה וידאו אימון (1-2 דקות)</p>
-                          <p className="text-green-300/50 text-xs mt-1">MP4 - דבר בצורה טבעית</p>
+                          <p className="text-white/50 text-xs mt-1">MP4 - דבר בצורה טבעית</p>
                         </div>
                       )}
                     </div>
@@ -637,20 +637,20 @@ export default function BroadcastStudio() {
                     
                     {trainingVideo && !customAvatarId && (
                       <Button
-                        onClick={async () => {
-                          toast.loading("מאמן אווטר... זה לוקח 4-10 דקות", { id: "train" });
-                          try {
-                            const response = await base44.functions.invoke("trainExpressAvatar", {
-                              videoUrl: trainingVideo
-                            });
-                            setCustomAvatarId(response.data.avatar_id);
-                            toast.success("אווטר מוכן!", { id: "train" });
-                          } catch (error) {
-                            toast.error("שגיאה באימון", { id: "train" });
-                          }
-                        }}
-                        className="w-full bg-green-600 hover:bg-green-700 mt-2"
-                      >
+                          onClick={async () => {
+                            toast.loading("מאמן אווטר... זה לוקח 4-10 דקות", { id: "train" });
+                            try {
+                              const response = await base44.functions.invoke("trainExpressAvatar", {
+                                videoUrl: trainingVideo
+                              });
+                              setCustomAvatarId(response.data.avatar_id);
+                              toast.success("אווטר מוכן!", { id: "train" });
+                            } catch (error) {
+                              toast.error("שגיאה באימון", { id: "train" });
+                            }
+                          }}
+                          className="w-full bg-[#E31E24] hover:bg-red-800 mt-2"
+                        >
                         <Sparkles className="w-4 h-4 mr-2" />
                         צור אווטר מהווידאו
                       </Button>
@@ -658,9 +658,9 @@ export default function BroadcastStudio() {
                   </div>
 
                   {customAvatarId && trainingVideo && (
-                    <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-2 flex items-center gap-2">
-                      <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                      <span className="text-green-300 text-xs">אווטר מותאם מוכן לשימוש</span>
+                    <div className="bg-[#E31E24]/10 border border-[#E31E24]/30 rounded-lg p-2 flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full bg-[#E31E24]"></div>
+                      <span className="text-[#E31E24] text-xs">אווטר מותאם מוכן לשימוש</span>
                     </div>
                   )}
                 </div>
@@ -673,9 +673,9 @@ export default function BroadcastStudio() {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-black/40 backdrop-blur-lg rounded-xl border border-blue-500/20 overflow-hidden"
+          className="bg-black/40 backdrop-blur-lg rounded-xl border border-[#E31E24]/30 overflow-hidden"
         >
-          <div className="bg-gradient-to-r from-blue-600/20 to-blue-800/20 px-4 py-2 border-b border-blue-500/20">
+          <div className="bg-gradient-to-r from-[#E31E24]/20 to-red-900/20 px-4 py-2 border-b border-[#E31E24]/30">
             <h2 className="text-white font-semibold text-sm">קלט</h2>
           </div>
           <div className="p-4 grid grid-cols-2 gap-2">
