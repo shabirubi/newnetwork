@@ -18,10 +18,17 @@ export default function ArticleEditor({ article, isOpen, onClose, onPublish }) {
   });
 
   const [newTag, setNewTag] = useState("");
-  const [preview, setPreview] = useState(false);
+  const [activeTab, setActiveTab] = useState("edit"); // edit | images | tags | history | preview
   const [publishing, setPublishing] = useState(false);
-  const [showHistorySearch, setShowHistorySearch] = useState(false);
   const imageInputRef = React.useRef(null);
+
+  const tabs = [
+    { id: "edit", label: "עריכה", icon: "✏️" },
+    { id: "images", label: "תמונות", icon: "🖼️" },
+    { id: "tags", label: "תגים והערות", icon: "🏷️" },
+    { id: "history", label: "היסטוריה", icon: "📚" },
+    { id: "preview", label: "תצוגה מקדימה", icon: "👁️" }
+  ];
 
   const handleImageUpload = async (e) => {
     const file = e.target.files?.[0];
