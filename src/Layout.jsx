@@ -48,11 +48,6 @@ export default function Layout({ children, currentPageName }) {
     return true;
   });
 
-  // דפים ללא Layout
-  if (currentPageName === 'VODContent' || currentPageName === 'ReporterStudio' || currentPageName === 'BroadcastStudio') {
-    return children;
-  }
-
   useEffect(() => {
     if (darkMode) {
       document.documentElement.classList.add('dark');
