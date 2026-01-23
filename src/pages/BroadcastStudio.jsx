@@ -378,6 +378,153 @@ export default function BroadcastStudio() {
         {/* CREATE TAB */}
         {tab === "create" && (
         <>
+        {/* Google Search */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-black/40 backdrop-blur-lg rounded-xl border border-[#E31E24]/30 overflow-hidden"
+        >
+          <div className="bg-gradient-to-r from-[#E31E24]/20 to-red-900/20 px-4 py-2 border-b border-[#E31E24]/30 flex items-center gap-2">
+            <Globe className="w-4 h-4 text-[#E31E24]" />
+            <h2 className="text-white font-semibold text-sm">חפש כתבות מהאינטרנט</h2>
+          </div>
+          <div className="p-4">
+            <form onSubmit={handleGoogleSearch} className="flex gap-2">
+              <input
+                type="text"
+                value={googleSearchQuery}
+                onChange={(e) => setGoogleSearchQuery(e.target.value)}
+                placeholder="חפש כתבות..."
+                className="flex-1 bg-black/30 border border-[#E31E24]/30 rounded-lg px-3 py-2 text-white text-sm placeholder-white/30 focus:border-[#E31E24] focus:outline-none"
+                dir="rtl"
+              />
+              <Button
+                type="submit"
+                disabled={searchingGoogle}
+                className="bg-[#E31E24] hover:bg-red-800 px-4"
+              >
+                {searchingGoogle ? <Loader className="w-4 h-4 animate-spin" /> : <Search className="w-4 h-4" />}
+              </Button>
+            </form>
+
+            {googleSearchResults.length > 0 && (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4 max-h-80 overflow-y-auto">
+                {googleSearchResults.map((article, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => {
+                      setSelectedGoogleArticle(article);
+                      setEditingGoogleArticle({ ...article, title: article.title, description: article.description });
+                    }}
+                    className="p-3 rounded-lg border-2 border-[#E31E24]/20 bg-black/20 hover:bg-black/40 hover:border-[#E31E24]/50 transition-all text-left"
+                  >
+                    {article.image_url && (
+                      <img src={article.image_url} alt={article.title} className="w-full h-24 object-cover rounded mb-2" />
+                    )}
+                    <h3 className="text-white font-semibold text-sm line-clamp-2">{article.title}</h3>
+                    <p className="text-white/50 text-xs mt-1 line-clamp-2">{article.description}</p>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        </motion.div>
+
+        {/* Google Article Editor */}
+        <AnimatePresence>
+          {editingGoogleArticle && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[10000] flex items-center justify-center p-4"
+              onClick={() => setEditingGoogleArticle(null)}
+            >
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                onClick={(e) => e.stopPropagation()}
+                className="bg-black/80 backdrop-blur-lg rounded-xl border border-[#E31E24]/30 w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+              >
+                <div className="flex items-center justify-between bg-gradient-to-r from-[#E31E24]/20 to-red-900/20 px-6 py-4 border-b border-[#E31E24]/30 sticky top-0 z-10">
+                  <h2 className="text-white font-bold">עריכת כתבה</h2>
+                  <button
+                    onClick={() => setEditingGoogleArticle(null)}
+                    className="p-2 rounded-lg hover:bg-white/10"
+                  >
+                    <X className="w-5 h-5 text-white" />
+                  </button>
+                </div>
+
+                <div className="p-6 space-y-4">
+                  <div>
+                    <label className="text-white/70 text-xs font-semibold block mb-2">כותרת</label>
+                    <input
+                      type="text"
+                      value={editingGoogleArticle.title}
+                      onChange={(e) => setEditingGoogleArticle({ ...editingGoogleArticle, title: e.target.value })}
+                      className="w-full bg-black/30 border border-[#E31E24]/30 rounded-lg px-3 py-2 text-white text-sm focus:border-[#E31E24] focus:outline-none"
+                      dir="rtl"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-white/70 text-xs font-semibold block mb-2">תיאור</label>
+                    <textarea
+                      value={editingGoogleArticle.description}
+                      onChange={(e) => setEditingGoogleArticle({ ...editingGoogleArticle, description: e.target.value })}
+                      className="w-full bg-black/30 border border-[#E31E24]/30 rounded-lg px-3 py-2 text-white text-sm focus:border-[#E31E24] focus:outline-none h-24 resize-none"
+                      dir="rtl"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="text-white/70 text-xs font-semibold block mb-2">URL של תמונה</label>
+                    <input
+                      type="text"
+                      value={editingGoogleArticle.image_url || ""}
+                      onChange={(e) => setEditingGoogleArticle({ ...editingGoogleArticle, image_url: e.target.value })}
+                      placeholder="https://..."
+                      className="w-full bg-black/30 border border-[#E31E24]/30 rounded-lg px-3 py-2 text-white text-sm focus:border-[#E31E24] focus:outline-none"
+                      dir="ltr"
+                    />
+                  </div>
+
+                  {editingGoogleArticle.image_url && (
+                    <div>
+                      <p className="text-white/70 text-xs font-semibold mb-2">תצוגה מקדימה:</p>
+                      <img src={editingGoogleArticle.image_url} alt="preview" className="w-full h-48 object-cover rounded-lg" />
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex gap-2 px-6 py-4 border-t border-[#E31E24]/30 sticky bottom-0 bg-black/40 backdrop-blur-sm">
+                  <button
+                    onClick={() => setEditingGoogleArticle(null)}
+                    className="flex-1 px-4 py-2 bg-black/50 border border-[#E31E24]/20 text-white rounded-lg text-sm font-semibold hover:bg-black/70 transition-all"
+                  >
+                    ביטול
+                  </button>
+                  <button
+                    onClick={() => {
+                      setArticleText(editingGoogleArticle.title + "\n\n" + editingGoogleArticle.description);
+                      if (editingGoogleArticle.image_url) {
+                        setSceneBackground(editingGoogleArticle.image_url);
+                      }
+                      setEditingGoogleArticle(null);
+                      toast.success("כתבה הועלתה לעורך");
+                    }}
+                    className="flex-1 px-4 py-2 bg-[#E31E24] hover:bg-red-800 text-white rounded-lg text-sm font-semibold transition-all"
+                  >
+                    העלה לעורך
+                  </button>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
         {/* Historical Sources */}
         <HistoricalSourceSelector 
           onSourceSelect={() => {}}
