@@ -196,8 +196,6 @@ export default function AllVideosGallery() {
                       key={selectedVideo.id}
                       src={selectedVideo.url}
                       className="w-full h-full bg-black"
-                      autoPlay
-                      loop
                       controls
                       playsInline
                       style={{
