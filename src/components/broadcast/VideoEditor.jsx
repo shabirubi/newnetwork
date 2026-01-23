@@ -3,9 +3,9 @@ import { motion } from "framer-motion";
 import { Upload, Type, Image, Zap, Settings, X, Play, Pause, Plus, Trash2, Layers } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import BackgroundOverlay from "./editor/BackgroundOverlay";
-import TextOverlay from "./editor/TextOverlay";
-import NewsStripOverlay from "./editor/NewsStripOverlay";
+import BackgroundOverlay from "../editor/BackgroundOverlay";
+import TextOverlay from "../editor/TextOverlay";
+import NewsStripOverlay from "../editor/NewsStripOverlay";
 import PreviewPlayer from "./editor/PreviewPlayer";
 
 export default function VideoEditor({ videoUrl, onSave, onClose }) {

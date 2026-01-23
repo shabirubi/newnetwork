@@ -1,5 +1,4 @@
 import React, { useRef, useEffect, useState } from "react";
-import { motion } from "framer-motion";
 
 export default function PreviewPlayer({ videoUrl, overlays, videoMetadata }) {
   const canvasRef = useRef(null);
