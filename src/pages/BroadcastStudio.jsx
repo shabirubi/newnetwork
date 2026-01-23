@@ -15,9 +15,12 @@ import { createPageUrl } from "../utils";
 export default function BroadcastStudio() {
   // Mode Selection
   const [mode, setMode] = useState("talks"); // talks | clips | express
+  const [inputType, setInputType] = useState("text"); // text | audio
 
   // Common States
   const [articleText, setArticleText] = useState("");
+  const [audioFile, setAudioFile] = useState(null);
+  const [sceneBackground, setSceneBackground] = useState(null);
   const [loading, setLoading] = useState(false);
   const [generatedVideo, setGeneratedVideo] = useState(null);
   const [selectedVoice, setSelectedVoice] = useState("he-IL-AvriNeural");
@@ -25,6 +28,8 @@ export default function BroadcastStudio() {
   // Talks Mode (V2 - Head Only)
   const [avatarImage, setAvatarImage] = useState(null);
   const fileInputRef = useRef(null);
+  const audioInputRef = useRef(null);
+  const bgInputRef = useRef(null);
 
   // Clips Mode - Load reporters
   const [selectedPresenter, setSelectedPresenter] = useState(null);
