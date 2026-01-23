@@ -936,10 +936,10 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                              )}
 
                             {message.location && (
-                              <div className="mt-2 text-xs text-gray-300 bg-gray-900/30 rounded px-2 py-1">
-                                {message.location}
-                              </div>
-                            )}
+                               <div className="mt-2 text-xs text-white/70 bg-black/60 rounded px-2 py-1 border border-[#E31E24]/20">
+                                 {message.location}
+                               </div>
+                             )}
 
                             {message.poll && (
                               <div className="mt-3 space-y-2">
