@@ -28,6 +28,7 @@ export default function BroadcastStudio() {
 
   // Talks Mode (V2 - Head Only)
   const [avatarImage, setAvatarImage] = useState(null);
+  const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
   const fileInputRef = useRef(null);
   const audioInputRef = useRef(null);
   const bgInputRef = useRef(null);
