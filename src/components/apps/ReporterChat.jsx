@@ -770,7 +770,7 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                          </div>
                        </div>
                       {selectedReporter.bio && (
-                        <p className="text-sm text-gray-300 text-center leading-relaxed">{selectedReporter.bio}</p>
+                        <p className="text-sm text-white/70 text-center leading-relaxed">{selectedReporter.bio}</p>
                       )}
                       <div className="w-full space-y-2">
                         <motion.button
