@@ -801,7 +801,7 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.95 }}
-                        className="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-gray-800 dark:to-gray-700 p-4 border-b border-gray-200 dark:border-gray-600"
+                        className="bg-gradient-to-r from-[#E31E24]/20 to-red-900/20 p-4 border-b border-[#E31E24]/30"
                       >
                         <div className="flex items-center justify-between mb-2">
                           <h3 className="font-bold dark:text-white text-sm flex items-center gap-2">
