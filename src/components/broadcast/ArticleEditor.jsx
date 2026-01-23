@@ -18,7 +18,7 @@ export default function ArticleEditor({ article, isOpen, onClose, onPublish }) {
   });
 
   const [newTag, setNewTag] = useState("");
-  const [activeTab, setActiveTab] = useState("edit"); // edit | images | tags | history | preview
+  const [activeTab, setActiveTab] = useState("edit");
   const [publishing, setPublishing] = useState(false);
   const imageInputRef = React.useRef(null);
 
@@ -161,84 +161,51 @@ export default function ArticleEditor({ article, isOpen, onClose, onPublish }) {
                     className="space-y-6"
                   >
                     {/* Title */}
-                  <div>
-                    <label className="text-white/70 text-xs font-semibold block mb-2">כותרת</label>
-                    <input
-                      type="text"
-                      value={editData.title}
-                      onChange={(e) => setEditData({ ...editData, title: e.target.value })}
-                      className="w-full bg-black/30 border border-[#E31E24]/30 rounded-lg px-4 py-3 text-white text-lg focus:border-[#E31E24] focus:outline-none font-bold"
-                      placeholder="כותרת הכתבה"
-                      dir="rtl"
-                    />
-                    <p className="text-white/50 text-xs mt-1">{editData.title.length} תווים</p>
-                  </div>
-
-                  {/* Description */}
-                  <div>
-                    <label className="text-white/70 text-xs font-semibold block mb-2">תיאור קצר</label>
-                    <input
-                      type="text"
-                      value={editData.description}
-                      onChange={(e) => setEditData({ ...editData, description: e.target.value })}
-                      className="w-full bg-black/30 border border-[#E31E24]/30 rounded-lg px-4 py-2 text-white text-sm focus:border-[#E31E24] focus:outline-none"
-                      placeholder="סיכום של משפט או שניים"
-                      dir="rtl"
-                    />
-                  </div>
-
-                  {/* Category */}
-                  <div>
-                    <label className="text-white/70 text-xs font-semibold block mb-2">קטגוריה</label>
-                    <select
-                      value={editData.category}
-                      onChange={(e) => setEditData({ ...editData, category: e.target.value })}
-                      className="w-full bg-black/30 border border-[#E31E24]/30 rounded-lg px-4 py-2 text-white text-sm focus:border-[#E31E24] focus:outline-none"
-                    >
-                      <option value="breaking">חדשות עכשיו</option>
-                      <option value="security">ביטחון ומדיניות</option>
-                      <option value="economy">כלכלה ועסקים</option>
-                      <option value="politics">פוליטיקה</option>
-                      <option value="technology">טכנולוגיה</option>
-                      <option value="sports">ספורט</option>
-                      <option value="entertainment">בידור ודרמה</option>
-                      <option value="world">חדשות עולם</option>
-                      <option value="health">בריאות</option>
-                    </select>
-                  </div>
-
-                  {/* Image Management */}
-                  <div>
-                    <label className="text-white/70 text-xs font-semibold block mb-2">תמונה</label>
-                    <div className="space-y-3">
-                      {editData.image_url && (
-                        <div className="relative group rounded-lg overflow-hidden">
-                          <img src={editData.image_url} alt="Article" className="w-full h-48 object-cover" />
-                          <button
-                            onClick={() => setEditData({ ...editData, image_url: "" })}
-                            className="absolute top-2 right-2 p-2 bg-red-600 hover:bg-red-700 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
-                          >
-                            <Trash2 className="w-4 h-4 text-white" />
-                          </button>
-                        </div>
-                      )}
-                      <button
-                        onClick={() => imageInputRef.current?.click()}
-                        className="w-full p-4 border-2 border-dashed border-[#E31E24]/30 rounded-lg hover:border-[#E31E24]/50 bg-black/20 hover:bg-black/40 transition-all flex flex-col items-center justify-center gap-2"
-                      >
-                        <ImageIcon className="w-6 h-6 text-[#E31E24]" />
-                        <span className="text-white text-sm font-medium">העלה או החלף תמונה</span>
-                        <span className="text-white/50 text-xs">PNG, JPG עד 10MB</span>
-                      </button>
+                    <div>
+                      <label className="text-white/70 text-xs font-semibold block mb-2">כותרת</label>
                       <input
-                        ref={imageInputRef}
-                        type="file"
-                        accept="image/*"
-                        onChange={handleImageUpload}
-                        className="hidden"
+                        type="text"
+                        value={editData.title}
+                        onChange={(e) => setEditData({ ...editData, title: e.target.value })}
+                        className="w-full bg-black/30 border border-[#E31E24]/30 rounded-lg px-4 py-3 text-white text-lg focus:border-[#E31E24] focus:outline-none font-bold"
+                        placeholder="כותרת הכתבה"
+                        dir="rtl"
+                      />
+                      <p className="text-white/50 text-xs mt-1">{editData.title.length} תווים</p>
+                    </div>
+
+                    {/* Description */}
+                    <div>
+                      <label className="text-white/70 text-xs font-semibold block mb-2">תיאור קצר</label>
+                      <input
+                        type="text"
+                        value={editData.description}
+                        onChange={(e) => setEditData({ ...editData, description: e.target.value })}
+                        className="w-full bg-black/30 border border-[#E31E24]/30 rounded-lg px-4 py-2 text-white text-sm focus:border-[#E31E24] focus:outline-none"
+                        placeholder="סיכום של משפט או שניים"
+                        dir="rtl"
                       />
                     </div>
-                  </div>
+
+                    {/* Category */}
+                    <div>
+                      <label className="text-white/70 text-xs font-semibold block mb-2">קטגוריה</label>
+                      <select
+                        value={editData.category}
+                        onChange={(e) => setEditData({ ...editData, category: e.target.value })}
+                        className="w-full bg-black/30 border border-[#E31E24]/30 rounded-lg px-4 py-2 text-white text-sm focus:border-[#E31E24] focus:outline-none"
+                      >
+                        <option value="breaking">חדשות עכשיו</option>
+                        <option value="security">ביטחון ומדיניות</option>
+                        <option value="economy">כלכלה ועסקים</option>
+                        <option value="politics">פוליטיקה</option>
+                        <option value="technology">טכנולוגיה</option>
+                        <option value="sports">ספורט</option>
+                        <option value="entertainment">בידור ודרמה</option>
+                        <option value="world">חדשות עולם</option>
+                        <option value="health">בריאות</option>
+                      </select>
+                    </div>
 
                     {/* Content */}
                     <div>
@@ -387,35 +354,36 @@ export default function ArticleEditor({ article, isOpen, onClose, onPublish }) {
                     exit={{ opacity: 0, y: -10 }}
                     className="space-y-4"
                   >
-                  {editData.image_url && (
-                    <img src={editData.image_url} alt="Preview" className="w-full h-64 object-cover rounded-lg" />
-                  )}
-                  <div>
-                    <h1 className="text-white text-2xl font-bold mb-2">{editData.title}</h1>
-                    <p className="text-white/70 text-sm mb-4">{editData.description}</p>
-                    <div className="flex gap-2 mb-4">
-                      <span className="px-3 py-1 bg-[#E31E24] text-white text-xs rounded-full font-bold">
-                        {editData.category}
-                      </span>
-                      {editData.tags.map((tag) => (
-                        <span key={tag} className="px-3 py-1 bg-white/10 text-white text-xs rounded-full">
-                          #{tag}
-                        </span>
-                      ))}
-                    </div>
-                    <p className="text-white/80 text-sm leading-relaxed whitespace-pre-line">
-                      {editData.content}
-                    </p>
-                    {editData.notes && (
-                      <div className="mt-6 p-4 bg-[#E31E24]/10 border border-[#E31E24]/30 rounded-lg">
-                        <p className="text-white/70 text-xs font-semibold mb-1">הערות עורך:</p>
-                        <p className="text-white/60 text-sm">{editData.notes}</p>
-                      </div>
+                    {editData.image_url && (
+                      <img src={editData.image_url} alt="Preview" className="w-full h-64 object-cover rounded-lg" />
                     )}
+                    <div>
+                      <h1 className="text-white text-2xl font-bold mb-2">{editData.title}</h1>
+                      <p className="text-white/70 text-sm mb-4">{editData.description}</p>
+                      <div className="flex gap-2 mb-4 flex-wrap">
+                        <span className="px-3 py-1 bg-[#E31E24] text-white text-xs rounded-full font-bold">
+                          {editData.category}
+                        </span>
+                        {editData.tags.map((tag) => (
+                          <span key={tag} className="px-3 py-1 bg-white/10 text-white text-xs rounded-full">
+                            #{tag}
+                          </span>
+                        ))}
+                      </div>
+                      <p className="text-white/80 text-sm leading-relaxed whitespace-pre-line">
+                        {editData.content}
+                      </p>
+                      {editData.notes && (
+                        <div className="mt-6 p-4 bg-[#E31E24]/10 border border-[#E31E24]/30 rounded-lg">
+                          <p className="text-white/70 text-xs font-semibold mb-1">הערות עורך:</p>
+                          <p className="text-white/60 text-sm">{editData.notes}</p>
+                        </div>
+                      )}
+                    </div>
                   </motion.div>
-                  )}
-                  </AnimatePresence>
-                  </div>
+                )}
+              </AnimatePresence>
+            </div>
 
             {/* Footer */}
             <div className="sticky bottom-0 bg-black/40 backdrop-blur-sm border-t border-[#E31E24]/30 px-6 py-4 flex gap-2">
