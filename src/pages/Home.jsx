@@ -12,6 +12,7 @@ import LivePlayer from "../components/news/LivePlayer";
 import NewsCard from "../components/news/NewsCard";
 import UpdatesFeed from "../components/news/UpdatesFeed";
 import EntertainmentUpdatesFeed from "../components/news/EntertainmentUpdatesFeed";
+import StudioSidebar from "../components/home/StudioSidebar";
 
 import CategoriesMenu from "../components/shared/CategoriesMenu";
 import TalkingAvatar from "../components/avatar/TalkingAvatar";
