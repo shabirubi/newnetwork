@@ -10,18 +10,20 @@ Deno.serve(async (req) => {
     }
 
     const { 
-      text, 
-      mode = 'talks', 
-      avatarUrl, 
-      presenterId, 
-      avatarId, 
-      voiceId = 'he-IL-AvriNeural',
-      language = 'he'
-    } = await req.json();
+        text, 
+        audioUrl,
+        mode = 'talks', 
+        avatarUrl, 
+        presenterId, 
+        avatarId, 
+        voiceId = 'he-IL-AvriNeural',
+        backgroundUrl,
+        language = 'he'
+      } = await req.json();
 
-    if (!text) {
-      return Response.json({ error: 'Missing text' }, { status: 400 });
-    }
+      if (!text && !audioUrl) {
+        return Response.json({ error: 'Missing text or audioUrl' }, { status: 400 });
+      }
 
     const DID_API_KEY = Deno.env.get('DID_API_KEY');
     const ELEVENLABS_API_KEY = Deno.env.get('ELEVENLABS_API_KEY');
