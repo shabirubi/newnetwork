@@ -1091,7 +1091,7 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                     )}
 
                     {/* Input Area */}
-                    <div className="p-4 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+                    <div className="p-4 border-t border-[#E31E24]/30 bg-gradient-to-r from-black/60 to-red-900/20">
                       <div className="flex gap-2 mb-3">
                         <Button
                           onClick={isRecording ? stopRecording : startRecording}
