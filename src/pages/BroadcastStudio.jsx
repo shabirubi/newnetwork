@@ -105,13 +105,13 @@ export default function BroadcastStudio() {
           mode: "talks"
         });
       } else if (mode === "clips") {
-        // V3 Talks API - Using reporter image
-        response = await base44.functions.invoke("generateTalkingVideo", {
-          text: articleText,
-          avatarUrl: selectedPresenter,
-          voiceId: selectedVoice,
-          mode: "talks"
-        });
+         // V3 Clips API - Using reporter presenter
+         response = await base44.functions.invoke("generateTalkingVideo", {
+           text: articleText,
+           presenterId: selectedPresenter,
+           voiceId: selectedVoice,
+           mode: "clips"
+         });
       } else if (mode === "express") {
         // V3 Express API - Custom avatar
         response = await base44.functions.invoke("generateTalkingVideo", {
@@ -326,9 +326,9 @@ export default function BroadcastStudio() {
                       {reporters.map((reporter) => (
                         <button
                           key={reporter.id}
-                          onClick={() => setSelectedPresenter(reporter.image)}
+                          onClick={() => setSelectedPresenter(reporter.id)}
                           className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${
-                            selectedPresenter === reporter.image
+                            selectedPresenter === reporter.id
                               ? "border-purple-500 ring-2 ring-purple-500/50"
                               : "border-purple-500/20 hover:border-purple-500/50"
                           }`}
@@ -338,7 +338,7 @@ export default function BroadcastStudio() {
                           <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent p-1">
                             <p className="text-white text-[10px] font-bold line-clamp-1">{reporter.name}</p>
                           </div>
-                          {selectedPresenter === reporter.image && (
+                          {selectedPresenter === reporter.id && (
                             <div className="absolute top-1 right-1 w-5 h-5 rounded-full bg-purple-500 flex items-center justify-center">
                               <Play className="w-2 h-2 text-white" />
                             </div>
