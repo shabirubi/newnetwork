@@ -285,6 +285,36 @@ export default function BroadcastStudio() {
         </div>
       </div>
 
+      {/* Tab Navigation */}
+      <div className="bg-black/40 backdrop-blur-lg border-b border-blue-500/20 sticky top-[120px] z-40">
+        <div className="max-w-5xl mx-auto px-6">
+          <div className="flex gap-0">
+            <button
+              onClick={() => setTab("create")}
+              className={`flex-1 py-4 px-4 font-semibold text-sm border-b-2 transition-all ${
+                tab === "create"
+                  ? "border-blue-500 text-blue-300"
+                  : "border-transparent text-blue-300/50 hover:text-blue-300"
+              }`}
+            >
+              <Sparkles className="w-4 h-4 inline mr-2" />
+              יצירת וידאו
+            </button>
+            <button
+              onClick={() => setTab("manage")}
+              className={`flex-1 py-4 px-4 font-semibold text-sm border-b-2 transition-all ${
+                tab === "manage"
+                  ? "border-blue-500 text-blue-300"
+                  : "border-transparent text-blue-300/50 hover:text-blue-300"
+              }`}
+            >
+              <Settings className="w-4 h-4 inline mr-2" />
+              ניהול וידאוים
+            </button>
+          </div>
+        </div>
+      </div>
+
       {/* Main Content */}
       <div className="max-w-5xl mx-auto px-6 py-6 space-y-4">
         
