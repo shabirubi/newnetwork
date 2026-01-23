@@ -222,7 +222,15 @@ export default function NewsTicker({ darkMode, setDarkMode, onMenuClick }) {
 function TickerContent({ news, currencies }) {
   const { data: articles = [] } = useQuery({
     queryKey: ['breaking-news-ticker'],
-    queryFn: () => base44.entities.NewsArticle.list('-created_date', 10),
+    queryFn: async () => {
+      try {
+        const user = await base44.auth.me();
+        if (!user) return [];
+        return base44.entities.NewsArticle.list('-created_date', 10);
+      } catch {
+        return [];
+      }
+    },
     refetchInterval: 120000,
     initialData: []
   });
