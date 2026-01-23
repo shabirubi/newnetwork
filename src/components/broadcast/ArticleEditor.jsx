@@ -20,6 +20,7 @@ export default function ArticleEditor({ article, isOpen, onClose, onPublish }) {
   const [newTag, setNewTag] = useState("");
   const [preview, setPreview] = useState(false);
   const [publishing, setPublishing] = useState(false);
+  const [showHistorySearch, setShowHistorySearch] = useState(false);
   const imageInputRef = React.useRef(null);
 
   const handleImageUpload = async (e) => {
