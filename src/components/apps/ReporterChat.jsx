@@ -983,18 +983,24 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                             </div>
                             </motion.div>
                             {message.role === "assistant" && (
-                              <div className="flex gap-1 mt-1 mr-2">
-                                {['❤️', '👍', '😊', '🔥'].map(emoji => (
-                                  <button
-                                    key={emoji}
-                                    onClick={() => addReaction(idx, emoji)}
-                                    className="text-xs hover:scale-125 transition-transform opacity-60 hover:opacity-100"
-                                  >
-                                    {emoji}
-                                    </button>
-                                    ))}
-                                    </div>
-                                    )}
+                               <div className="flex gap-1 mt-1 mr-2">
+                                 {[
+                                   { icon: '❤️', label: 'אהבתי' },
+                                   { icon: '👍', label: 'מעניין' },
+                                   { icon: '😊', label: 'הסכמה' },
+                                   { icon: '💡', label: 'דעה' }
+                                 ].map(item => (
+                                   <button
+                                     key={item.icon}
+                                     onClick={() => addReaction(idx, item.icon)}
+                                     className="text-xs hover:scale-125 transition-transform opacity-60 hover:opacity-100"
+                                     title={item.label}
+                                   >
+                                     {item.icon}
+                                   </button>
+                                 ))}
+                               </div>
+                             )}
                             {messageReactions[idx] && messageReactions[idx].length > 0 && (
                               <div className="flex gap-1 mt-1 mr-2">
                                 {messageReactions[idx].map((emoji, i) => (
