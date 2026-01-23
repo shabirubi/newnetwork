@@ -768,6 +768,41 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
 
                     {/* Chat Area - Right Side */}
                     <div className="flex-1 flex flex-col overflow-hidden bg-gray-50 dark:bg-gray-800/50">
+                    {/* Intro Video Section */}
+                    {showIntro && (
+                      <motion.div
+                        initial={{ opacity: 0, y: -20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -20 }}
+                        className="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-gray-800 dark:to-gray-700 p-4 border-b border-gray-200 dark:border-gray-600"
+                      >
+                        <div className="flex items-center justify-between mb-2">
+                          <h3 className="font-bold dark:text-white text-sm">הצגה:</h3>
+                          <button
+                            onClick={() => setShowIntro(false)}
+                            className="text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400"
+                          >
+                            סגור
+                          </button>
+                        </div>
+
+                        {isGeneratingIntro ? (
+                          <div className="bg-black/30 rounded-lg aspect-video flex items-center justify-center">
+                            <Loader className="w-6 h-6 animate-spin text-indigo-600" />
+                          </div>
+                        ) : introVideoUrl ? (
+                          <div className="rounded-lg overflow-hidden">
+                            <video
+                              src={introVideoUrl}
+                              autoPlay
+                              controls
+                              className="w-full max-h-48 object-cover rounded-lg"
+                            />
+                          </div>
+                        ) : null}
+                      </motion.div>
+                    )}
+
                     {/* Video Call Area */}
                      {isVideoCall && (
                       <div className="relative bg-black aspect-video">
