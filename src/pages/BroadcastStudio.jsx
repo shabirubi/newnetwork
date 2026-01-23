@@ -929,9 +929,9 @@ export default function BroadcastStudio() {
         </>
         )}
 
-        {/* MANAGE TAB - START */}
-
-
+        {/* MANAGE TAB */}
+        {tab === "manage" && (
+        <>
         {/* Search and Filter */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
