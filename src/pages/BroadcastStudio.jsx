@@ -115,64 +115,6 @@ export default function BroadcastStudio() {
       {/* Main Content - Single Column Scroll */}
       <div className="max-w-4xl mx-auto px-6 py-6 space-y-4">
         
-        {/* Video Preview - Compact */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-black/40 backdrop-blur-lg rounded-xl border border-blue-500/20 overflow-hidden"
-        >
-          <div className="bg-gradient-to-r from-blue-600/20 to-blue-800/20 px-4 py-2 border-b border-blue-500/20 flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Eye className="w-4 h-4 text-blue-400" />
-              <h2 className="text-white font-semibold text-sm">תצוגה מקדימה</h2>
-            </div>
-            {generatedVideo && <span className="text-green-400 text-xs">✓ מוכן</span>}
-          </div>
-          <div className="p-4">
-            {generatedVideo ? (
-              <div className="space-y-3">
-                <video
-                  src={generatedVideo}
-                  controls
-                  autoPlay
-                  className="w-full aspect-video rounded-lg bg-black"
-                />
-                <div className="grid grid-cols-2 gap-2">
-                  <Button
-                    onClick={handleReset}
-                    size="sm"
-                    variant="outline"
-                    className="bg-black/50 border-blue-500/30 text-white hover:bg-blue-600/20"
-                  >
-                    <Sparkles className="w-3 h-3 mr-1" />
-                    חדש
-                  </Button>
-                  <Button
-                    onClick={() => {
-                      const a = document.createElement("a");
-                      a.href = generatedVideo;
-                      a.download = "broadcast.mp4";
-                      a.click();
-                    }}
-                    size="sm"
-                    className="bg-blue-600 hover:bg-blue-700"
-                  >
-                    <Download className="w-3 h-3 mr-1" />
-                    הורדה
-                  </Button>
-                </div>
-              </div>
-            ) : (
-              <div className="aspect-video rounded-lg bg-gradient-to-br from-blue-900/20 to-slate-900/20 border-2 border-dashed border-blue-500/20 flex items-center justify-center">
-                <div className="text-center">
-                  <FileVideo className="w-12 h-12 text-blue-400/40 mx-auto mb-2" />
-                  <p className="text-white/70 text-sm">הוידאו יופיע כאן</p>
-                </div>
-              </div>
-            )}
-          </div>
-        </motion.div>
-
         {/* Two Column Section - Avatar + Text */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           
@@ -354,6 +296,64 @@ export default function BroadcastStudio() {
             <span>• קול AI בעברית</span>
             <span>• רקע מותאם</span>
             <span>• HD איכות</span>
+          </div>
+        </motion.div>
+
+        {/* Video Preview - Compact */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-black/40 backdrop-blur-lg rounded-xl border border-blue-500/20 overflow-hidden"
+        >
+          <div className="bg-gradient-to-r from-blue-600/20 to-blue-800/20 px-4 py-2 border-b border-blue-500/20 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Eye className="w-4 h-4 text-blue-400" />
+              <h2 className="text-white font-semibold text-sm">תצוגה מקדימה</h2>
+            </div>
+            {generatedVideo && <span className="text-green-400 text-xs">✓ מוכן</span>}
+          </div>
+          <div className="p-4">
+            {generatedVideo ? (
+              <div className="space-y-3">
+                <video
+                  src={generatedVideo}
+                  controls
+                  autoPlay
+                  className="w-full aspect-video rounded-lg bg-black"
+                />
+                <div className="grid grid-cols-2 gap-2">
+                  <Button
+                    onClick={handleReset}
+                    size="sm"
+                    variant="outline"
+                    className="bg-black/50 border-blue-500/30 text-white hover:bg-blue-600/20"
+                  >
+                    <Sparkles className="w-3 h-3 mr-1" />
+                    חדש
+                  </Button>
+                  <Button
+                    onClick={() => {
+                      const a = document.createElement("a");
+                      a.href = generatedVideo;
+                      a.download = "broadcast.mp4";
+                      a.click();
+                    }}
+                    size="sm"
+                    className="bg-blue-600 hover:bg-blue-700"
+                  >
+                    <Download className="w-3 h-3 mr-1" />
+                    הורדה
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <div className="aspect-video rounded-lg bg-gradient-to-br from-blue-900/20 to-slate-900/20 border-2 border-dashed border-blue-500/20 flex items-center justify-center">
+                <div className="text-center">
+                  <FileVideo className="w-12 h-12 text-blue-400/40 mx-auto mb-2" />
+                  <p className="text-white/70 text-sm">הוידאו יופיע כאן</p>
+                </div>
+              </div>
+            )}
           </div>
         </motion.div>
 
