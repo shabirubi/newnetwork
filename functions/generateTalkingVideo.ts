@@ -102,6 +102,7 @@ Deno.serve(async (req) => {
       apiUrl = 'https://api.d-id.com/clips';
       payload = {
         presenter_id: avatarId,
+        driver_id: 'mXra4jY38i',
         script: {
           type: 'text',
           input: text,
