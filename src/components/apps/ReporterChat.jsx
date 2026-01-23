@@ -21,6 +21,9 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
   const [isAudioMuted, setIsAudioMuted] = useState(false);
   const [isVideoMuted, setIsVideoMuted] = useState(false);
   const [quickReplies, setQuickReplies] = useState([]);
+  const [showIntro, setShowIntro] = useState(false);
+  const [isGeneratingIntro, setIsGeneratingIntro] = useState(false);
+  const [introVideoUrl, setIntroVideoUrl] = useState(null);
   const [showQuickReplies, setShowQuickReplies] = useState(true);
   const [pollAnswers, setPollAnswers] = useState({});
   const [isTyping, setIsTyping] = useState(false);
