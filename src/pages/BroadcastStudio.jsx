@@ -275,6 +275,49 @@ export default function BroadcastStudio() {
     setSelectedPresenter(null);
   };
 
+  const handleGoogleSearch = async (e) => {
+    e.preventDefault();
+    if (!googleSearchQuery.trim()) {
+      toast.error("אנא הקלד שאילתת חיפוש");
+      return;
+    }
+
+    setSearchingGoogle(true);
+    toast.loading("חוזר כתבות...", { id: "search" });
+
+    try {
+      const response = await base44.integrations.Core.InvokeLLM({
+        prompt: `חפש אתה כתבות חדשות בעברית על "${googleSearchQuery}". החזר רשימה של 5 כתבות עם כותרת, תיאור קצר, ותמונה (URL). החזר בפורמט JSON.`,
+        add_context_from_internet: true,
+        response_json_schema: {
+          type: "object",
+          properties: {
+            articles: {
+              type: "array",
+              items: {
+                type: "object",
+                properties: {
+                  title: { type: "string" },
+                  description: { type: "string" },
+                  image_url: { type: "string" },
+                  source_url: { type: "string" }
+                }
+              }
+            }
+          }
+        }
+      });
+
+      setGoogleSearchResults(response.articles || []);
+      toast.success(`נמצאו ${response.articles?.length || 0} כתבות`, { id: "search" });
+    } catch (error) {
+      toast.error("שגיאה בחיפוש", { id: "search" });
+      console.error("Search error:", error);
+    } finally {
+      setSearchingGoogle(false);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-red-900/50 to-slate-900" dir="rtl">
       {/* Header */}
