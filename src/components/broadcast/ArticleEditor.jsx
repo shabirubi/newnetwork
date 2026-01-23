@@ -150,47 +150,17 @@ export default function ArticleEditor({ article, isOpen, onClose, onPublish }) {
 
             {/* Content */}
             <div className="p-6 space-y-6">
-              {!preview ? (
-                <>
-                  {/* History Search */}
-                  {!showHistorySearch ? (
-                    <button
-                      onClick={() => setShowHistorySearch(true)}
-                      className="w-full px-4 py-3 border-2 border-dashed border-[#E31E24]/30 rounded-lg hover:border-[#E31E24]/50 bg-[#E31E24]/5 hover:bg-[#E31E24]/10 transition-all flex items-center justify-center gap-2 group"
-                    >
-                      <Archive className="w-5 h-5 text-[#E31E24] group-hover:scale-110 transition-transform" />
-                      <span className="text-white font-semibold text-sm">חפש בהיסטוריה של ישראל</span>
-                    </button>
-                  ) : (
-                    <motion.div
-                      initial={{ opacity: 0, height: 0 }}
-                      animate={{ opacity: 1, height: "auto" }}
-                      exit={{ opacity: 0, height: 0 }}
-                      className="border border-[#E31E24]/20 rounded-lg p-4 bg-black/20"
-                    >
-                      <div className="flex items-center justify-between mb-3">
-                        <h3 className="text-white font-semibold text-sm flex items-center gap-2">
-                          <Archive className="w-4 h-4 text-[#E31E24]" />
-                          חיפוש היסטורי
-                        </h3>
-                        <button
-                          onClick={() => setShowHistorySearch(false)}
-                          className="text-white/50 hover:text-white"
-                        >
-                          <X className="w-4 h-4" />
-                        </button>
-                      </div>
-                      <HistorySearch
-                        onSelect={(result) => {
-                          setEditData(result);
-                          setShowHistorySearch(false);
-                          toast.success("כתבה היסטורית נטענה בהצלחה");
-                        }}
-                      />
-                    </motion.div>
-                  )}
-
-                  {/* Title */}
+              <AnimatePresence mode="wait">
+                {/* Edit Tab */}
+                {activeTab === "edit" && (
+                  <motion.div
+                    key="edit"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="space-y-6"
+                  >
+                    {/* Title */}
                   <div>
                     <label className="text-white/70 text-xs font-semibold block mb-2">כותרת</label>
                     <input
