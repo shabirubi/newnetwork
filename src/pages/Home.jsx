@@ -239,9 +239,11 @@ export default function Home() {
       </div>
 
       {/* Kan Archive - עמוד האש */}
-      <React.Suspense fallback={<div className="h-96 bg-black animate-pulse rounded-2xl mx-4" />}>
-        <KanArchiveContainer />
-      </React.Suspense>
+      <div id="kan-archive-section">
+        <React.Suspense fallback={<div className="h-96 bg-black animate-pulse rounded-2xl mx-4" />}>
+          <KanArchiveContainer />
+        </React.Suspense>
+      </div>
 
       {/* All Videos Gallery - Lazy Loaded */}
       <React.Suspense fallback={<div className="h-96 bg-black animate-pulse rounded-2xl mx-4" />}>
@@ -264,6 +266,25 @@ export default function Home() {
         <Mic className="w-7 h-7 text-white" />
         <span className="absolute right-full mr-3 top-1/2 -translate-y-1/2 px-3 py-1 bg-purple-600 text-white text-sm font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
           סטודיו שידור
+        </span>
+      </motion.button>
+
+      {/* Kan Archive Floating Button */}
+      <motion.button
+        onClick={() => {
+          const section = document.getElementById('kan-archive-section');
+          if (section) {
+            section.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+        className="fixed bottom-56 sm:bottom-40 right-4 z-[9998] w-16 h-16 rounded-full bg-gradient-to-br from-orange-400 to-red-600 hover:from-orange-500 hover:to-red-700 shadow-2xl flex items-center justify-center border-2 border-orange-200/50 transition-all group"
+        title="עמוד האש - כאן"
+      >
+        <Flame className="w-7 h-7 text-white" />
+        <span className="absolute right-full mr-3 top-1/2 -translate-y-1/2 px-3 py-1 bg-red-600 text-white text-sm font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+          עמוד האש 🔥
         </span>
       </motion.button>
 
