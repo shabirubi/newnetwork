@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
+import VideoUploadConfirmation from "../components/broadcast/VideoUploadConfirmation";
 
 export default function BroadcastStudio() {
   // Mode Selection
