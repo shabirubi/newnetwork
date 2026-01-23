@@ -819,9 +819,9 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                         </div>
 
                         {isGeneratingIntro ? (
-                          <div className="bg-black/30 rounded-lg aspect-video flex flex-col items-center justify-center gap-3">
-                            <Loader className="w-8 h-8 animate-spin text-indigo-600" />
-                            <p className="text-sm text-gray-600 dark:text-gray-300">מייצר תשובה בוידאו...</p>
+                          <div className="bg-black/60 rounded-lg aspect-video flex flex-col items-center justify-center gap-3 border border-[#E31E24]/30">
+                            <Loader className="w-8 h-8 animate-spin text-[#E31E24]" />
+                            <p className="text-sm text-white/70">מייצר תשובה בוידאו...</p>
                           </div>
                         ) : introVideoUrl ? (
                           <div className="rounded-lg overflow-hidden shadow-xl">
