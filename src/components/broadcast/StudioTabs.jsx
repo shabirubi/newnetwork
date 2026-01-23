@@ -19,7 +19,7 @@ export default function StudioTabs({ activeTab, onTabChange }) {
   ];
 
   return (
-    <div className="hidden lg:flex flex-col sticky top-6 h-fit bg-black/40 backdrop-blur-lg rounded-xl border border-[#E31E24]/30 overflow-hidden">
+    <div className="flex flex-col sticky top-6 h-fit bg-black/40 backdrop-blur-lg rounded-xl border border-[#E31E24]/30 overflow-hidden">
       {/* Header */}
       <div className="bg-gradient-to-r from-[#E31E24]/20 to-red-900/20 px-4 py-3 border-b border-[#E31E24]/30">
         <h3 className="text-white font-bold text-sm">סטודיו שידור</h3>
