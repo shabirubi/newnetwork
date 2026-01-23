@@ -159,6 +159,17 @@ export default function KanArchiveContainer() {
                 <X className="w-6 h-6" />
               </button>
 
+              {/* iFrame Player */}
+              <div className="relative aspect-video bg-black">
+                <iframe
+                  src={selectedEpisode.url}
+                  className="w-full h-full"
+                  frameBorder="0"
+                  allow="autoplay; encrypted-media; fullscreen"
+                  title={selectedEpisode.title}
+                />
+              </div>
+
               {/* Episode Info */}
               <div className="p-6 bg-gradient-to-br from-black/80 via-[#E31E24]/20 to-black/80">
                 <div className="flex items-center gap-3 mb-2">
@@ -172,26 +183,7 @@ export default function KanArchiveContainer() {
                     </span>
                   )}
                 </div>
-                <h2 className="text-white text-2xl font-bold mb-4">{selectedEpisode.title}</h2>
-
-                <a
-                  href={selectedEpisode.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-[#E31E24] to-[#B91C1C] text-white rounded-full font-bold hover:scale-105 transition-transform"
-                >
-                  <Play className="w-5 h-5" fill="white" />
-                  צפה בפרק באתר כאן
-                </a>
-              </div>
-
-              {/* Thumbnail */}
-              <div className="relative aspect-video">
-                <img
-                  src={selectedEpisode.thumbnail}
-                  alt={selectedEpisode.title}
-                  className="w-full h-full object-cover"
-                />
+                <h2 className="text-white text-xl font-bold">{selectedEpisode.title}</h2>
               </div>
             </motion.div>
           </motion.div>
