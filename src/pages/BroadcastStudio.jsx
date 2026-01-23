@@ -84,174 +84,137 @@ export default function BroadcastStudio() {
   };
 
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-black via-blue-950 to-black overflow-hidden flex flex-col" dir="rtl">
-      {/* Professional Header */}
-      <div className="bg-gradient-to-r from-black via-blue-600 to-black border-b border-blue-500/30 z-50 backdrop-blur-xl shadow-2xl shadow-blue-500/20 flex-shrink-0">
-        <div className="px-6 py-4">
+    <div className="min-h-screen bg-gradient-to-br from-blue-950 via-blue-900 to-purple-900" dir="rtl">
+      {/* Header */}
+      <div className="bg-black/40 backdrop-blur-xl border-b border-blue-500/30 sticky top-0 z-50">
+        <div className="container mx-auto px-8 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Link to={createPageUrl("Home")}>
-                <Button variant="ghost" size="icon" className="text-white hover:bg-white/10">
-                  <ChevronLeft className="w-5 h-5" />
+                <Button variant="ghost" size="lg" className="text-white hover:bg-white/10">
+                  <ChevronLeft className="w-6 h-6" />
                 </Button>
               </Link>
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center shadow-lg">
-                  <Mic className="w-6 h-6 text-white" />
+              <div className="flex items-center gap-4">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-2xl">
+                  <Mic className="w-8 h-8 text-white" />
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold text-white">סטודיו שידור מקצועי</h1>
-                  <p className="text-sm text-blue-200">צור סרטוני חדשות עם AI</p>
+                  <h1 className="text-3xl font-bold text-white">סטודיו שידור</h1>
+                  <p className="text-lg text-blue-200">צור וידאו חדשות מקצועי</p>
                 </div>
               </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <span className="relative flex h-3 w-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-blue-500"></span>
-              </span>
-              <span className="text-white text-sm font-bold">מערכת פעילה</span>
             </div>
           </div>
         </div>
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 overflow-y-auto">
-        <div className="h-full px-6 py-6">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-full">
-          {/* Left Panel - Preview */}
-          <div className="lg:col-span-2 flex flex-col gap-6 h-full">
-            {/* Video Preview */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-blue-500/30 overflow-hidden shadow-2xl shadow-blue-500/20 flex-1 flex flex-col"
-            >
-              <div className="bg-gradient-to-r from-black via-blue-600/20 to-black p-4 border-b border-blue-500/30 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Eye className="w-5 h-5 text-blue-400" />
-                  <h2 className="text-white font-bold">תצוגה מקדימה</h2>
-                </div>
-                {generatedVideo && (
-                  <div className="flex items-center gap-2">
-                    <span className="text-green-400 text-sm font-bold">✓ מוכן</span>
+      <div className="container mx-auto px-8 py-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 max-w-7xl mx-auto">
+          {/* Left - Video Preview */}
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            className="bg-black/60 backdrop-blur-xl rounded-3xl border-2 border-blue-500/40 overflow-hidden shadow-2xl"
+          >
+            <div className="bg-gradient-to-r from-blue-600/30 to-purple-600/30 p-6 border-b border-blue-500/30">
+              <div className="flex items-center gap-3">
+                <Eye className="w-7 h-7 text-blue-300" />
+                <h2 className="text-2xl font-bold text-white">תצוגה מקדימה</h2>
+              </div>
+            </div>
+
+            <div className="p-8">
+              {generatedVideo ? (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="space-y-6"
+                >
+                  <div className="relative rounded-2xl overflow-hidden bg-black shadow-2xl">
+                    <video
+                      src={generatedVideo}
+                      controls
+                      autoPlay
+                      className="w-full aspect-video object-cover"
+                    />
                   </div>
-                )}
-              </div>
-
-              <div className="p-6 flex-1 flex items-center justify-center">
-                {generatedVideo ? (
-                  <motion.div
-                    initial={{ opacity: 0, scale: 0.95 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    className="space-y-4"
-                  >
-                    <div className="relative rounded-xl overflow-hidden bg-black">
-                      <video
-                        src={generatedVideo}
-                        controls
-                        autoPlay
-                        className="w-full aspect-video object-cover"
-                      />
-                    </div>
-                    <div className="grid grid-cols-2 gap-3">
-                      <Button
-                        onClick={handleReset}
-                        variant="outline"
-                        className="bg-black/50 border-blue-500/30 text-white hover:bg-blue-600/20"
-                      >
-                        <Sparkles className="w-4 h-4 mr-2" />
-                        צור וידאו חדש
-                      </Button>
-                      <Button
-                        onClick={() => {
-                          const a = document.createElement("a");
-                          a.href = generatedVideo;
-                          a.download = "broadcast.mp4";
-                          a.click();
-                        }}
-                        className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800"
-                      >
-                        <Download className="w-4 h-4 mr-2" />
-                        הורד וידאו
-                      </Button>
-                    </div>
-                  </motion.div>
-                ) : (
-                  <div className="aspect-video rounded-xl bg-gradient-to-br from-blue-950/30 to-black border-2 border-dashed border-blue-500/30 flex items-center justify-center">
-                    <div className="text-center">
-                      <FileVideo className="w-16 h-16 text-blue-400/50 mx-auto mb-4" />
-                      <h3 className="text-white font-bold text-lg mb-2">הוידאו יופיע כאן</h3>
-                      <p className="text-blue-300/70 text-sm">העלה תמונה וכתוב כתבה ליצירת השידור</p>
-                    </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <Button
+                      onClick={handleReset}
+                      size="lg"
+                      variant="outline"
+                      className="bg-black/50 border-2 border-blue-500/50 text-white hover:bg-blue-600/30 h-14 text-lg"
+                    >
+                      <Sparkles className="w-5 h-5 mr-2" />
+                      וידאו חדש
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        const a = document.createElement("a");
+                        a.href = generatedVideo;
+                        a.download = "broadcast.mp4";
+                        a.click();
+                      }}
+                      size="lg"
+                      className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 h-14 text-lg"
+                    >
+                      <Download className="w-5 h-5 mr-2" />
+                      הורדה
+                    </Button>
                   </div>
-                )}
-              </div>
-            </motion.div>
-
-            {/* Article Text Editor */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-blue-500/30 overflow-hidden shadow-2xl shadow-blue-500/20 flex-1 flex flex-col"
-            >
-              <div className="bg-gradient-to-r from-black via-blue-600/20 to-black p-4 border-b border-blue-500/30 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Type className="w-5 h-5 text-blue-400" />
-                  <h2 className="text-white font-bold">תוכן הכתבה</h2>
+                </motion.div>
+              ) : (
+                <div className="aspect-video rounded-2xl bg-gradient-to-br from-blue-900/30 to-purple-900/30 border-4 border-dashed border-blue-500/30 flex items-center justify-center">
+                  <div className="text-center px-6">
+                    <FileVideo className="w-24 h-24 text-blue-400/50 mx-auto mb-6" />
+                    <h3 className="text-white font-bold text-2xl mb-3">הוידאו שלך יופיע כאן</h3>
+                    <p className="text-blue-300/70 text-lg">העלה תמונה וכתוב כתבה</p>
+                  </div>
                 </div>
-                <span className="text-blue-300 text-sm">{articleText.length} תווים</span>
-              </div>
-              <div className="p-6 flex-1 flex flex-col">
-                <textarea
-                  value={articleText}
-                  onChange={(e) => setArticleText(e.target.value)}
-                  placeholder="כתוב את הכתבה שלך כאן... ספר את הסיפור בצורה מעניינת ומושכת תשומת לב."
-                  className="w-full flex-1 min-h-[200px] bg-black/50 border border-blue-500/30 rounded-xl p-4 text-white text-sm placeholder-blue-300/30 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 resize-none"
-                  dir="rtl"
-                />
-              </div>
-            </motion.div>
-          </div>
+              )}
+            </div>
+          </motion.div>
 
-          {/* Right Panel - Controls */}
-          <div className="flex flex-col gap-6 h-full overflow-y-auto">
+          {/* Right - Controls */}
+          <div className="space-y-8">
             {/* Avatar Upload */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
-              className="bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-blue-500/30 overflow-hidden shadow-2xl shadow-blue-500/20"
+              className="bg-black/60 backdrop-blur-xl rounded-3xl border-2 border-blue-500/40 overflow-hidden shadow-2xl"
             >
-              <div className="bg-gradient-to-r from-black via-blue-600/20 to-black p-4 border-b border-blue-500/30 flex items-center gap-2">
-                <Image className="w-5 h-5 text-blue-400" />
-                <h2 className="text-white font-bold">תמונת השדרן</h2>
+              <div className="bg-gradient-to-r from-blue-600/30 to-purple-600/30 p-6 border-b border-blue-500/30">
+                <div className="flex items-center gap-3">
+                  <Image className="w-7 h-7 text-blue-300" />
+                  <h2 className="text-2xl font-bold text-white">תמונת השדרן</h2>
+                </div>
               </div>
-              <div className="p-6">
+              <div className="p-8">
                 <div
                   onClick={() => fileInputRef.current?.click()}
-                  className="relative w-full aspect-square rounded-xl border-2 border-dashed border-blue-500/50 hover:border-blue-500 bg-black/50 hover:bg-black/70 cursor-pointer transition-all flex items-center justify-center group"
+                  className="relative w-full aspect-square rounded-2xl border-4 border-dashed border-blue-500/50 hover:border-blue-500 bg-black/50 hover:bg-black/70 cursor-pointer transition-all flex items-center justify-center group"
                 >
                   {avatarImage ? (
                     <>
                       <img
                         src={avatarImage}
                         alt="Avatar"
-                        className="w-full h-full object-cover rounded-xl"
+                        className="w-full h-full object-cover rounded-2xl"
                       />
-                      <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity rounded-xl flex items-center justify-center">
+                      <div className="absolute inset-0 bg-black/70 opacity-0 group-hover:opacity-100 transition-opacity rounded-2xl flex items-center justify-center">
                         <div className="text-center">
-                          <Upload className="w-8 h-8 text-blue-400 mx-auto mb-2" />
-                          <span className="text-white text-sm font-bold">שנה תמונה</span>
+                          <Upload className="w-12 h-12 text-blue-400 mx-auto mb-3" />
+                          <span className="text-white text-xl font-bold">שנה תמונה</span>
                         </div>
                       </div>
                     </>
                   ) : (
-                    <div className="text-center">
-                      <Upload className="w-12 h-12 text-blue-400 mx-auto mb-3" />
-                      <p className="text-white font-bold text-sm mb-1">העלה תמונת שדרן</p>
-                      <p className="text-blue-300/50 text-xs">PNG, JPG</p>
+                    <div className="text-center p-8">
+                      <Upload className="w-20 h-20 text-blue-400 mx-auto mb-4" />
+                      <p className="text-white font-bold text-xl mb-2">העלה תמונת שדרן</p>
+                      <p className="text-blue-300/70 text-lg">PNG, JPG, JPEG</p>
                     </div>
                   )}
                 </div>
@@ -265,37 +228,66 @@ export default function BroadcastStudio() {
               </div>
             </motion.div>
 
-            {/* Voice Settings */}
+            {/* Article Text */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.1 }}
-              className="bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-blue-500/30 overflow-hidden shadow-2xl shadow-blue-500/20"
+              className="bg-black/60 backdrop-blur-xl rounded-3xl border-2 border-blue-500/40 overflow-hidden shadow-2xl"
             >
-              <div className="bg-gradient-to-r from-black via-blue-600/20 to-black p-4 border-b border-blue-500/30 flex items-center gap-2">
-                <Volume2 className="w-5 h-5 text-blue-400" />
-                <h2 className="text-white font-bold">הגדרות קול</h2>
+              <div className="bg-gradient-to-r from-blue-600/30 to-purple-600/30 p-6 border-b border-blue-500/30">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <Type className="w-7 h-7 text-blue-300" />
+                    <h2 className="text-2xl font-bold text-white">טקסט הכתבה</h2>
+                  </div>
+                  <span className="text-blue-300 text-lg font-bold">{articleText.length} תווים</span>
+                </div>
               </div>
-              <div className="p-6 space-y-4">
+              <div className="p-8">
+                <textarea
+                  value={articleText}
+                  onChange={(e) => setArticleText(e.target.value)}
+                  placeholder="כתוב את הכתבה שלך כאן... ספר את הסיפור בצורה מעניינת ומושכת."
+                  className="w-full h-64 bg-black/50 border-2 border-blue-500/30 rounded-2xl p-6 text-white text-lg placeholder-blue-300/30 focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/20 resize-none"
+                  dir="rtl"
+                />
+              </div>
+            </motion.div>
+
+            {/* Settings */}
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+              className="bg-black/60 backdrop-blur-xl rounded-3xl border-2 border-blue-500/40 overflow-hidden shadow-2xl"
+            >
+              <div className="bg-gradient-to-r from-blue-600/30 to-purple-600/30 p-6 border-b border-blue-500/30">
+                <div className="flex items-center gap-3">
+                  <Settings className="w-7 h-7 text-blue-300" />
+                  <h2 className="text-2xl font-bold text-white">הגדרות</h2>
+                </div>
+              </div>
+              <div className="p-8 space-y-8">
                 <div>
-                  <label className="block text-blue-200 text-sm font-bold mb-2">מין השדרן</label>
-                  <div className="grid grid-cols-2 gap-3">
+                  <label className="block text-blue-200 text-xl font-bold mb-4">קול השדרן</label>
+                  <div className="grid grid-cols-2 gap-4">
                     <button
                       onClick={() => setSelectedVoice("female")}
-                      className={`p-3 rounded-xl font-bold text-sm transition-all ${
+                      className={`p-6 rounded-2xl font-bold text-lg transition-all ${
                         selectedVoice === "female"
-                          ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white border-2 border-blue-400"
-                          : "bg-black/50 text-blue-200 border border-blue-500/30 hover:bg-black/70"
+                          ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white border-4 border-blue-300"
+                          : "bg-black/50 text-blue-200 border-2 border-blue-500/30 hover:bg-black/70"
                       }`}
                     >
                       נקבה
                     </button>
                     <button
                       onClick={() => setSelectedVoice("male")}
-                      className={`p-3 rounded-xl font-bold text-sm transition-all ${
+                      className={`p-6 rounded-2xl font-bold text-lg transition-all ${
                         selectedVoice === "male"
-                          ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white border-2 border-blue-400"
-                          : "bg-black/50 text-blue-200 border border-blue-500/30 hover:bg-black/70"
+                          ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white border-4 border-blue-300"
+                          : "bg-black/50 text-blue-200 border-2 border-blue-500/30 hover:bg-black/70"
                       }`}
                     >
                       זכר
@@ -304,24 +296,24 @@ export default function BroadcastStudio() {
                 </div>
 
                 <div>
-                  <label className="block text-blue-200 text-sm font-bold mb-2">רקע</label>
-                  <div className="grid grid-cols-2 gap-3">
+                  <label className="block text-blue-200 text-xl font-bold mb-4">סוג רקע</label>
+                  <div className="grid grid-cols-2 gap-4">
                     <button
                       onClick={() => setBackgroundType("dynamic")}
-                      className={`p-3 rounded-xl font-bold text-sm transition-all ${
+                      className={`p-6 rounded-2xl font-bold text-lg transition-all ${
                         backgroundType === "dynamic"
-                          ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white border-2 border-blue-400"
-                          : "bg-black/50 text-blue-200 border border-blue-500/30 hover:bg-black/70"
+                          ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white border-4 border-blue-300"
+                          : "bg-black/50 text-blue-200 border-2 border-blue-500/30 hover:bg-black/70"
                       }`}
                     >
                       דינמי
                     </button>
                     <button
                       onClick={() => setBackgroundType("studio")}
-                      className={`p-3 rounded-xl font-bold text-sm transition-all ${
+                      className={`p-6 rounded-2xl font-bold text-lg transition-all ${
                         backgroundType === "studio"
-                          ? "bg-gradient-to-r from-blue-600 to-blue-700 text-white border-2 border-blue-400"
-                          : "bg-black/50 text-blue-200 border border-blue-500/30 hover:bg-black/70"
+                          ? "bg-gradient-to-r from-blue-600 to-purple-600 text-white border-4 border-blue-300"
+                          : "bg-black/50 text-blue-200 border-2 border-blue-500/30 hover:bg-black/70"
                       }`}
                     >
                       סטודיו
@@ -335,52 +327,26 @@ export default function BroadcastStudio() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.2 }}
+              transition={{ delay: 0.3 }}
             >
               <Button
                 onClick={handleGenerateVideo}
                 disabled={loading || !articleText.trim() || !avatarImage}
-                className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-6 text-lg flex items-center justify-center gap-3 shadow-2xl shadow-blue-500/30 disabled:opacity-50 disabled:cursor-not-allowed"
+                size="lg"
+                className="w-full bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 hover:from-blue-700 hover:via-purple-700 hover:to-blue-700 text-white font-bold py-8 text-2xl flex items-center justify-center gap-4 shadow-2xl shadow-blue-500/30 disabled:opacity-50 disabled:cursor-not-allowed rounded-3xl"
               >
                 {loading ? (
                   <>
-                    <Loader className="w-5 h-5 animate-spin" />
+                    <Loader className="w-8 h-8 animate-spin" />
                     יוצר וידאו...
                   </>
                 ) : (
                   <>
-                    <Zap className="w-5 h-5" />
+                    <Zap className="w-8 h-8" />
                     צור וידאו שידור
                   </>
                 )}
               </Button>
-            </motion.div>
-
-            {/* Features List */}
-            <motion.div
-              initial={{ opacity: 0, x: 20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ delay: 0.3 }}
-              className="bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-blue-500/30 overflow-hidden shadow-2xl shadow-blue-500/20"
-            >
-              <div className="bg-gradient-to-r from-black via-blue-600/20 to-black p-4 border-b border-blue-500/30 flex items-center gap-2">
-                <Sparkles className="w-5 h-5 text-blue-400" />
-                <h2 className="text-white font-bold">יכולות המערכת</h2>
-              </div>
-              <div className="p-6 space-y-3">
-                {[
-                  "יצירת וידאו מדובר מתמונה סטטית",
-                  "קול AI מתקדם בעברית",
-                  "רקעים מותאמים אישית",
-                  "איכות HD מקצועית",
-                  "עיבוד מהיר תוך דקות"
-                ].map((feature, idx) => (
-                  <div key={idx} className="flex items-center gap-3">
-                    <div className="w-2 h-2 rounded-full bg-gradient-to-r from-blue-400 to-blue-600"></div>
-                    <span className="text-blue-100 text-sm">{feature}</span>
-                  </div>
-                ))}
-              </div>
             </motion.div>
           </div>
           </div>
