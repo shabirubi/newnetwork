@@ -747,11 +747,11 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                   // Chat Window with Reporter Profile Side by Side
                   <div className="w-full flex h-full gap-0">
                     {/* Reporter Profile Card - Left Side (Fixed) */}
-                    <motion.div
-                      initial={{ opacity: 0, x: -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      className="flex flex-col items-center gap-4 p-6 w-72 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 border-l border-indigo-600/30 flex-shrink-0 overflow-y-auto"
-                    >
+                     <motion.div
+                       initial={{ opacity: 0, x: -20 }}
+                       animate={{ opacity: 1, x: 0 }}
+                       className="flex flex-col items-center gap-4 p-6 w-72 bg-gradient-to-b from-black/60 via-red-900/20 to-black border-l border-[#E31E24]/30 flex-shrink-0 overflow-y-auto"
+                     >
                       <div className="relative">
                         <div className="absolute inset-0 bg-gradient-to-br from-indigo-600 to-purple-600 rounded-full blur-2xl opacity-60" />
                         <img
