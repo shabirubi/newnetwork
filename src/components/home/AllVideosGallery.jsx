@@ -89,16 +89,19 @@ export default function AllVideosGallery() {
           >
             {/* Thumbnail */}
             <div className="relative aspect-video overflow-hidden">
-              {video.thumbnail ? (
+              {video.type === 'youtube' ? (
                 <img 
                   src={video.thumbnail}
                   alt={video.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
               ) : (
-                <div className="w-full h-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
-                  <Film className="w-12 h-12 text-gray-600" />
-                </div>
+                <video
+                  src={video.url}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  muted
+                  playsInline
+                />
               )}
               
               {/* Play Overlay */}
