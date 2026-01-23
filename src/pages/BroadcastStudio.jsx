@@ -929,6 +929,8 @@ export default function BroadcastStudio() {
         </>
         )}
 
+        {/* MANAGE TAB - START */}
+
         {/* MANAGE TAB */}
         {tab === "manage" && (
         <>
