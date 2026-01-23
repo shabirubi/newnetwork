@@ -434,13 +434,21 @@ export default function BroadcastStudio() {
                       setSelectedGoogleArticle(article);
                       setEditingGoogleArticle({ ...article, title: article.title, description: article.description });
                     }}
-                    className="p-3 rounded-lg border-2 border-[#E31E24]/20 bg-black/20 hover:bg-black/40 hover:border-[#E31E24]/50 transition-all text-left"
+                    className="p-3 rounded-lg border-2 border-[#E31E24]/20 bg-black/20 hover:bg-black/40 hover:border-[#E31E24]/50 transition-all text-left group"
                   >
                     {article.image_url && (
-                      <img src={article.image_url} alt={article.title} className="w-full h-24 object-cover rounded mb-2" />
+                      <img src={article.image_url} alt={article.title} className="w-full h-24 object-cover rounded mb-2 group-hover:scale-105 transition-transform" />
                     )}
                     <h3 className="text-white font-semibold text-sm line-clamp-2">{article.title}</h3>
+                    {article.content_type && (
+                      <span className="inline-block text-[#E31E24] text-[10px] font-bold mt-1 px-2 py-0.5 bg-[#E31E24]/20 rounded">
+                        {article.content_type}
+                      </span>
+                    )}
                     <p className="text-white/50 text-xs mt-1 line-clamp-2">{article.description}</p>
+                    {article.source && (
+                      <p className="text-white/30 text-[10px] mt-2">📍 {article.source}</p>
+                    )}
                   </button>
                 ))}
               </div>
