@@ -589,6 +589,7 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
 
   const startNewChat = (reporter) => {
     setSelectedReporter(reporter);
+    // אל תטעין את הוידאו כאן - זה יטען בـ useEffect כשהחלון נפתח
     setShowIntro(false);
     setIntroVideoUrl(null);
     const replies = generateQuickReplies(reporter);
