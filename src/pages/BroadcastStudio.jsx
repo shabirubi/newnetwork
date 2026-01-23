@@ -256,9 +256,9 @@ export default function BroadcastStudio() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900" dir="rtl">
+    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-red-900/50 to-slate-900" dir="rtl">
       {/* Header */}
-      <div className="bg-black/60 backdrop-blur-lg border-b border-blue-500/20 sticky top-0 z-50">
+      <div className="bg-black/60 backdrop-blur-lg border-b border-[#E31E24]/30 sticky top-0 z-50">
         <div className="max-w-6xl mx-auto px-6 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
@@ -286,15 +286,15 @@ export default function BroadcastStudio() {
       </div>
 
       {/* Tab Navigation */}
-      <div className="bg-black/40 backdrop-blur-lg border-b border-blue-500/20 sticky top-[120px] z-40">
+      <div className="bg-black/40 backdrop-blur-lg border-b border-[#E31E24]/30 sticky top-[120px] z-40">
         <div className="max-w-6xl mx-auto px-6">
           <div className="flex gap-0">
             <button
               onClick={() => setTab("create")}
               className={`flex-1 py-4 px-4 font-semibold text-sm border-b-2 transition-all ${
                 tab === "create"
-                  ? "border-blue-500 text-blue-300"
-                  : "border-transparent text-blue-300/50 hover:text-blue-300"
+                  ? "border-[#E31E24] text-[#E31E24]"
+                  : "border-transparent text-white/50 hover:text-white"
               }`}
             >
               <Sparkles className="w-4 h-4 inline mr-2" />
@@ -304,8 +304,8 @@ export default function BroadcastStudio() {
               onClick={() => setTab("manage")}
               className={`flex-1 py-4 px-4 font-semibold text-sm border-b-2 transition-all ${
                 tab === "manage"
-                  ? "border-blue-500 text-blue-300"
-                  : "border-transparent text-blue-300/50 hover:text-blue-300"
+                  ? "border-[#E31E24] text-[#E31E24]"
+                  : "border-transparent text-white/50 hover:text-white"
               }`}
             >
               <Settings className="w-4 h-4 inline mr-2" />
@@ -325,9 +325,9 @@ export default function BroadcastStudio() {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-black/40 backdrop-blur-lg rounded-xl border border-blue-500/20 overflow-hidden"
+          className="bg-black/40 backdrop-blur-lg rounded-xl border border-[#E31E24]/30 overflow-hidden"
         >
-          <div className="bg-gradient-to-r from-blue-600/20 to-blue-800/20 px-4 py-2 border-b border-blue-500/20">
+          <div className="bg-gradient-to-r from-[#E31E24]/20 to-red-900/20 px-4 py-2 border-b border-[#E31E24]/30">
             <h2 className="text-white font-semibold text-sm">בחר סוג אווטר</h2>
           </div>
           <div className="p-4 grid grid-cols-1 md:grid-cols-3 gap-3">
@@ -336,18 +336,18 @@ export default function BroadcastStudio() {
               onClick={() => setMode("talks")}
               className={`p-4 rounded-lg border-2 transition-all text-right ${
                 mode === "talks"
-                  ? "border-blue-500 bg-blue-500/20"
-                  : "border-blue-500/20 bg-black/20 hover:bg-black/40"
+                  ? "border-[#E31E24] bg-[#E31E24]/20"
+                  : "border-[#E31E24]/20 bg-black/20 hover:bg-black/40"
               }`}
             >
               <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-lg bg-blue-600/30 flex items-center justify-center flex-shrink-0">
-                  <User className="w-5 h-5 text-blue-400" />
+                <div className="w-10 h-10 rounded-lg bg-[#E31E24]/30 flex items-center justify-center flex-shrink-0">
+                  <User className="w-5 h-5 text-[#E31E24]" />
                 </div>
                 <div>
                   <h3 className="text-white font-bold text-sm mb-1">Talks - ראש בלבד</h3>
-                  <p className="text-blue-200/70 text-xs">תמונה סטטית → וידאו מדבר</p>
-                  <p className="text-blue-300/50 text-xs mt-1">V2 API</p>
+                   <p className="text-white/70 text-xs">תמונה סטטית → וידאו מדבר</p>
+                   <p className="text-white/50 text-xs mt-1">V2 API</p>
                 </div>
               </div>
             </button>
@@ -357,18 +357,18 @@ export default function BroadcastStudio() {
               onClick={() => setMode("clips")}
               className={`p-4 rounded-lg border-2 transition-all text-right ${
                 mode === "clips"
-                  ? "border-blue-500 bg-blue-500/20"
-                  : "border-blue-500/20 bg-black/20 hover:bg-black/40"
+                  ? "border-[#E31E24] bg-[#E31E24]/20"
+                  : "border-[#E31E24]/20 bg-black/20 hover:bg-black/40"
               }`}
             >
               <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-lg bg-purple-600/30 flex items-center justify-center flex-shrink-0">
-                  <Users className="w-5 h-5 text-purple-400" />
+                <div className="w-10 h-10 rounded-lg bg-[#E31E24]/30 flex items-center justify-center flex-shrink-0">
+                  <Users className="w-5 h-5 text-[#E31E24]" />
                 </div>
                 <div>
                   <h3 className="text-white font-bold text-sm mb-1">Clips - גוף מלא</h3>
-                  <p className="text-blue-200/70 text-xs">שדרנים מוכנים + ידיים</p>
-                  <p className="text-purple-300/50 text-xs mt-1">V3 Pro API</p>
+                   <p className="text-white/70 text-xs">שדרנים מוכנים + ידיים</p>
+                   <p className="text-white/50 text-xs mt-1">V3 Pro API</p>
                 </div>
               </div>
             </button>
@@ -378,18 +378,18 @@ export default function BroadcastStudio() {
               onClick={() => setMode("express")}
               className={`p-4 rounded-lg border-2 transition-all text-right ${
                 mode === "express"
-                  ? "border-blue-500 bg-blue-500/20"
-                  : "border-blue-500/20 bg-black/20 hover:bg-black/40"
+                  ? "border-[#E31E24] bg-[#E31E24]/20"
+                  : "border-[#E31E24]/20 bg-black/20 hover:bg-black/40"
               }`}
             >
               <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-lg bg-green-600/30 flex items-center justify-center flex-shrink-0">
-                  <Video className="w-5 h-5 text-green-400" />
+                <div className="w-10 h-10 rounded-lg bg-[#E31E24]/30 flex items-center justify-center flex-shrink-0">
+                  <Video className="w-5 h-5 text-[#E31E24]" />
                 </div>
                 <div>
                   <h3 className="text-white font-bold text-sm mb-1">Express - מותאם</h3>
-                  <p className="text-blue-200/70 text-xs">אווטר אישי + ידיים</p>
-                  <p className="text-green-300/50 text-xs mt-1">V3 Instant API</p>
+                   <p className="text-white/70 text-xs">אווטר אישי + ידיים</p>
+                   <p className="text-white/50 text-xs mt-1">V3 Instant API</p>
                 </div>
               </div>
             </button>
