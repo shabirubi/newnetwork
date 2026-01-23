@@ -1051,13 +1051,15 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
 
                     {/* Recording Indicator */}
                     {isRecording && (
-                      <div className="px-4 py-2 bg-red-50 dark:bg-red-900/20 border-t border-red-200 dark:border-red-800">
+                      <div className="px-4 py-2 bg-[#E31E24]/20 border-t border-[#E31E24]/30">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
-                            <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse" />
-                            <span className="text-sm font-bold text-red-600 dark:text-red-400">מקליט...</span>
+                            <div className="w-3 h-3 bg-[#E31E24] rounded-full animate-pulse" />
+                            <span className="text-sm font-bold text-[#E31E24] flex items-center gap-1">
+                              <Mic className="w-3 h-3" /> מקליט...
+                            </span>
                           </div>
-                          <span className="text-sm font-mono text-red-600 dark:text-red-400">{formatRecordingTime(recordingTime)}</span>
+                          <span className="text-sm font-mono text-[#E31E24]">{formatRecordingTime(recordingTime)}</span>
                         </div>
                       </div>
                     )}
