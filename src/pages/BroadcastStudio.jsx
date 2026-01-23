@@ -287,7 +287,7 @@ export default function BroadcastStudio() {
 
       {/* Tab Navigation */}
       <div className="bg-black/40 backdrop-blur-lg border-b border-blue-500/20 sticky top-[120px] z-40">
-        <div className="max-w-5xl mx-auto px-6">
+        <div className="max-w-6xl mx-auto px-6">
           <div className="flex gap-0">
             <button
               onClick={() => setTab("create")}
@@ -316,7 +316,7 @@ export default function BroadcastStudio() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-5xl mx-auto px-6 py-6 space-y-4">
+      <div className="max-w-6xl mx-auto px-6 py-6 space-y-4">
         
         {/* CREATE TAB */}
         {tab === "create" && (
