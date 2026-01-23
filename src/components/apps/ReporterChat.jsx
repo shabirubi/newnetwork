@@ -559,6 +559,8 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
 
   const startNewChat = (reporter) => {
     setSelectedReporter(reporter);
+    setShowIntro(true);
+    generateReporterIntroVideo();
     const replies = generateQuickReplies(reporter);
     setQuickReplies(replies);
     setShowQuickReplies(true);
