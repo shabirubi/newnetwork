@@ -920,8 +920,8 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                               whileHover={{ scale: 1.02 }}
                               className={`max-w-xs lg:max-w-md px-4 py-3 rounded-2xl ${
                                 message.role === "user"
-                                  ? "bg-indigo-600 text-white"
-                                  : "bg-white dark:bg-gray-700 dark:text-white border border-gray-200 dark:border-gray-600"
+                                  ? "bg-[#E31E24] text-white"
+                                  : "bg-black/40 text-white border border-[#E31E24]/30"
                               }`}
                             >
                             <p className="text-sm leading-relaxed">{message.content}</p>
