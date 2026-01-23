@@ -761,14 +761,14 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                          />
                        </div>
                       <div className="text-center w-full">
-                        <h3 className="text-2xl font-bold text-white mb-2">{selectedReporter.name}</h3>
-                        <p className="text-sm text-indigo-300 font-semibold mb-1">{selectedReporter.role}</p>
-                        <p className="text-xs text-gray-400 mb-4">{selectedReporter.specialty}</p>
-                        <div className="flex items-center justify-center gap-1 bg-green-500/20 rounded-full px-3 py-1 border border-green-500/50 mx-auto w-fit">
-                          <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                          <span className="text-xs text-green-400 font-bold">זמין</span>
-                        </div>
-                      </div>
+                         <h3 className="text-2xl font-bold text-white mb-2">{selectedReporter.name}</h3>
+                         <p className="text-sm text-white/80 font-semibold mb-1">{selectedReporter.role}</p>
+                         <p className="text-xs text-white/60 mb-4">{selectedReporter.specialty}</p>
+                         <div className="flex items-center justify-center gap-1 bg-[#E31E24]/20 rounded-full px-3 py-1 border border-[#E31E24]/50 mx-auto w-fit">
+                           <span className="w-2 h-2 bg-[#E31E24] rounded-full animate-pulse" />
+                           <span className="text-xs text-[#E31E24] font-bold">זמין</span>
+                         </div>
+                       </div>
                       {selectedReporter.bio && (
                         <p className="text-sm text-gray-300 text-center leading-relaxed">{selectedReporter.bio}</p>
                       )}
