@@ -41,6 +41,8 @@ export default function BroadcastStudio() {
   const [searchingGoogle, setSearchingGoogle] = useState(false);
   const [selectedGoogleArticle, setSelectedGoogleArticle] = useState(null);
   const [editingGoogleArticle, setEditingGoogleArticle] = useState(null);
+  const [articleEditorOpen, setArticleEditorOpen] = useState(false);
+  const [articleToEdit, setArticleToEdit] = useState(null);
 
   // Talks Mode (V2 - Head Only)
   const [avatarImage, setAvatarImage] = useState(null);
