@@ -313,28 +313,40 @@ export default function BroadcastStudio() {
                     <h2 className="text-white font-semibold text-sm">בחר שדרן מקצועי (גוף מלא)</h2>
                   </div>
                 </div>
-                <div className="p-4 grid grid-cols-3 gap-3">
-                  {presenters.map((presenter) => (
-                    <button
-                      key={presenter.id}
-                      onClick={() => setSelectedPresenter(presenter.id)}
-                      className={`relative aspect-[3/4] rounded-lg overflow-hidden border-2 transition-all ${
-                        selectedPresenter === presenter.id
-                          ? "border-purple-500 ring-2 ring-purple-500/50"
-                          : "border-purple-500/20 hover:border-purple-500/50"
-                      }`}
-                    >
-                      <img src={presenter.thumbnail} alt={presenter.name} className="w-full h-full object-cover" />
-                      <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent p-2">
-                        <p className="text-white text-xs font-bold">{presenter.name}</p>
-                      </div>
-                      {selectedPresenter === presenter.id && (
-                        <div className="absolute top-2 right-2 w-6 h-6 rounded-full bg-purple-500 flex items-center justify-center">
-                          <Play className="w-3 h-3 text-white" />
-                        </div>
-                      )}
-                    </button>
-                  ))}
+                <div className="p-4">
+                  {reporters.length === 0 ? (
+                    <div className="text-center py-8">
+                      <Loader className="w-8 h-8 animate-spin mx-auto mb-2 text-purple-400" />
+                      <p className="text-purple-300 text-sm">טוען כתבים...</p>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-auto-fit gap-3" style={{
+                      gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))'
+                    }}>
+                      {reporters.map((reporter) => (
+                        <button
+                          key={reporter.id}
+                          onClick={() => setSelectedPresenter(reporter.image)}
+                          className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${
+                            selectedPresenter === reporter.image
+                              ? "border-purple-500 ring-2 ring-purple-500/50"
+                              : "border-purple-500/20 hover:border-purple-500/50"
+                          }`}
+                          title={reporter.name}
+                        >
+                          <img src={reporter.image} alt={reporter.name} className="w-full h-full object-cover" />
+                          <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent p-1">
+                            <p className="text-white text-[10px] font-bold line-clamp-1">{reporter.name}</p>
+                          </div>
+                          {selectedPresenter === reporter.image && (
+                            <div className="absolute top-1 right-1 w-5 h-5 rounded-full bg-purple-500 flex items-center justify-center">
+                              <Play className="w-2 h-2 text-white" />
+                            </div>
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
             </motion.div>
