@@ -23,7 +23,6 @@ import TikTokNewsFeed from "../components/news/TikTokNewsFeed";
 import VODModal from "../components/vod/VODModal";
 import AccessibilityPanel from "../components/accessibility/AccessibilityPanel";
 import UploadVideoModal from "../components/home/UploadVideoModal";
-import AIReporterIntroChat from "../components/apps/AIReporterIntroChat";
 import BroadcastStudio from "../components/home/BroadcastStudio";
 import { Droplet, Mic } from "lucide-react";
 
@@ -250,10 +249,7 @@ export default function Home() {
         <AllVideosGallery />
       </React.Suspense>
 
-      {/* AI Reporter Intro Chat */}
-      <section className="px-4 mt-8 mb-12">
-        <AIReporterIntroChat />
-      </section>
+
 
       {/* Studio Floating Button */}
       <motion.button
