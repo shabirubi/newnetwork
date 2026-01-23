@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
 import VideoUploadConfirmation from "../components/broadcast/VideoUploadConfirmation";
 import HistoricalSourceSelector from "../components/broadcast/HistoricalSourceSelector";
+import ArticleEditor from "../components/broadcast/ArticleEditor";
 
 export default function BroadcastStudio() {
   // Tab Selection
