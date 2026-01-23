@@ -804,8 +804,8 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                         className="bg-gradient-to-r from-[#E31E24]/20 to-red-900/20 p-4 border-b border-[#E31E24]/30"
                       >
                         <div className="flex items-center justify-between mb-2">
-                          <h3 className="font-bold dark:text-white text-sm flex items-center gap-2">
-                            🎥 {selectedReporter.name} עונה לך:
+                           <h3 className="font-bold text-white text-sm flex items-center gap-2">
+                             <Video className="w-4 h-4 text-[#E31E24]" /> {selectedReporter.name} עונה לך:
                           </h3>
                           <button
                             onClick={() => {
