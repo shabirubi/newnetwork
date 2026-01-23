@@ -24,12 +24,18 @@ Deno.serve(async (req) => {
     }
 
     const DID_API_KEY = Deno.env.get('DID_API_KEY');
+    const ELEVENLABS_API_KEY = Deno.env.get('ELEVENLABS_API_KEY');
+    
     if (!DID_API_KEY) {
       return Response.json({ error: 'D-ID API Key not configured' }, { status: 500 });
+    }
+    if (!ELEVENLABS_API_KEY) {
+      return Response.json({ error: 'ElevenLabs API Key not configured' }, { status: 500 });
     }
 
     console.log('🎬 Mode:', mode);
     console.log('📝 Text:', text.substring(0, 50) + '...');
+    console.log('🔊 Voice Provider:', 'ElevenLabs');
 
     let apiUrl, payload, jobId;
 
