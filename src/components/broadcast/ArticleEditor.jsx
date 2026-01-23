@@ -65,7 +65,7 @@ export default function ArticleEditor({ article, isOpen, onClose, onPublish }) {
     toast.loading("פורסם לפידים...", { id: "publish" });
 
     try {
-      await base44.entities.NewsArticle.create({
+      const articleData = {
         title: editData.title,
         subtitle: editData.description,
         content: editData.content,
@@ -73,8 +73,12 @@ export default function ArticleEditor({ article, isOpen, onClose, onPublish }) {
         category: editData.category,
         is_featured: false,
         is_breaking: editData.category === "breaking",
-        source: "Editor"
-      });
+        source: editData.category === "history" ? "History Archive" : "Editor",
+        tags: editData.tags || [],
+        notes: editData.notes || ""
+      };
+
+      await base44.entities.NewsArticle.create(articleData);
 
       toast.success("הכתבה פורסמה בהצלחה!", { id: "publish" });
       if (onPublish) onPublish();
