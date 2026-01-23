@@ -30,6 +30,10 @@ export default function BroadcastStudio() {
   const [generatedVideo, setGeneratedVideo] = useState(null);
   const [selectedVoice, setSelectedVoice] = useState("he-IL-AvriNeural");
 
+  // Historical Sources
+  const [historicalArticles, setHistoricalArticles] = useState([]);
+  const [selectedHistoricalArticle, setSelectedHistoricalArticle] = useState(null);
+
   // Talks Mode (V2 - Head Only)
   const [avatarImage, setAvatarImage] = useState(null);
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
