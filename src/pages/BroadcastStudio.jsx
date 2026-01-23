@@ -997,8 +997,9 @@ export default function BroadcastStudio() {
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#E31E24]/20 to-red-900/20">
-                        <Play className="w-12 h-12 text-[#E31E24]/30" />
+                      <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-[#E31E24]/20 to-red-900/20 gap-2">
+                        <Play className="w-16 h-16 text-[#E31E24]/50" />
+                        <p className="text-white/50 text-xs">אין תמונה</p>
                       </div>
                     )}
                     
