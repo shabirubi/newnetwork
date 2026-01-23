@@ -360,61 +360,113 @@ export default function BroadcastStudio() {
               exit={{ opacity: 0, x: 20 }}
               className="space-y-4"
             >
-              {/* Training Video Upload */}
+              {/* Choose from existing reporters OR create custom */}
               <div className="bg-black/40 backdrop-blur-lg rounded-xl border border-green-500/20 overflow-hidden">
                 <div className="bg-gradient-to-r from-green-600/20 to-green-800/20 px-4 py-2 border-b border-green-500/20">
                   <div className="flex items-center gap-2">
-                    <Video className="w-4 h-4 text-green-400" />
-                    <h2 className="text-white font-semibold text-sm">צור אווטר מותאם אישית (גוף מלא)</h2>
+                    <Users className="w-4 h-4 text-green-400" />
+                    <h2 className="text-white font-semibold text-sm">בחר אווטר (גוף מלא)</h2>
                   </div>
                 </div>
-                <div className="p-4 space-y-3">
-                  <div
-                    onClick={() => trainingVideoRef.current?.click()}
-                    className="relative aspect-video rounded-lg border-2 border-dashed border-green-500/30 hover:border-green-500 bg-black/30 hover:bg-black/50 cursor-pointer transition-all flex items-center justify-center group"
-                  >
-                    {trainingVideo ? (
-                      <>
-                        <video src={trainingVideo} className="w-full h-full object-cover rounded-lg" />
-                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
-                          <Upload className="w-8 h-8 text-green-400" />
-                        </div>
-                      </>
+                <div className="p-4 space-y-4">
+                  {/* Existing Reporters */}
+                  <div>
+                    <p className="text-green-300 text-xs font-semibold mb-2">כתבים קיימים:</p>
+                    {reporters.length === 0 ? (
+                      <div className="text-center py-4">
+                        <Loader className="w-6 h-6 animate-spin mx-auto mb-2 text-green-400" />
+                        <p className="text-green-300 text-sm">טוען כתבים...</p>
+                      </div>
                     ) : (
-                      <div className="text-center p-4">
-                        <Video className="w-10 h-10 text-green-400 mx-auto mb-2" />
-                        <p className="text-white text-sm font-medium">העלה וידאו אימון (1-2 דקות)</p>
-                        <p className="text-green-300/50 text-xs mt-1">MP4 - דבר בצורה טבעית</p>
+                      <div className="grid grid-cols-auto-fit gap-2" style={{
+                        gridTemplateColumns: 'repeat(auto-fill, minmax(80px, 1fr))'
+                      }}>
+                        {reporters.map((reporter) => (
+                          <button
+                            key={reporter.id}
+                            onClick={() => {
+                              setCustomAvatarId(reporter.id);
+                              setTrainingVideo(null);
+                            }}
+                            className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${
+                              customAvatarId === reporter.id
+                                ? "border-green-500 ring-2 ring-green-500/50"
+                                : "border-green-500/20 hover:border-green-500/50"
+                            }`}
+                            title={reporter.name}
+                          >
+                            <img src={reporter.image} alt={reporter.name} className="w-full h-full object-cover" />
+                            <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent p-0.5">
+                              <p className="text-white text-[9px] font-bold line-clamp-1">{reporter.name}</p>
+                            </div>
+                            {customAvatarId === reporter.id && (
+                              <div className="absolute top-1 right-1 w-4 h-4 rounded-full bg-green-500 flex items-center justify-center">
+                                <Play className="w-2 h-2 text-white" />
+                              </div>
+                            )}
+                          </button>
+                        ))}
                       </div>
                     )}
                   </div>
-                  <input ref={trainingVideoRef} type="file" accept="video/*" onChange={handleTrainingVideoUpload} className="hidden" />
-                  
-                  {trainingVideo && !customAvatarId && (
-                    <Button
-                      onClick={async () => {
-                        toast.loading("מאמן אווטר... זה לוקח 4-10 דקות", { id: "train" });
-                        try {
-                          const response = await base44.functions.invoke("trainExpressAvatar", {
-                            videoUrl: trainingVideo
-                          });
-                          setCustomAvatarId(response.data.avatar_id);
-                          toast.success("אווטר מוכן!", { id: "train" });
-                        } catch (error) {
-                          toast.error("שגיאה באימון", { id: "train" });
-                        }
-                      }}
-                      className="w-full bg-green-600 hover:bg-green-700"
-                    >
-                      <Sparkles className="w-4 h-4 mr-2" />
-                      צור אווטר מהווידאו
-                    </Button>
-                  )}
 
-                  {customAvatarId && (
-                    <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-3 flex items-center gap-2">
+                  {/* Divider */}
+                  <div className="flex items-center gap-2">
+                    <div className="flex-1 h-px bg-green-500/20"></div>
+                    <span className="text-green-400 text-xs font-semibold">או</span>
+                    <div className="flex-1 h-px bg-green-500/20"></div>
+                  </div>
+
+                  {/* Custom Avatar Training */}
+                  <div>
+                    <p className="text-green-300 text-xs font-semibold mb-2">צור אווטר חדש:</p>
+                    <div
+                      onClick={() => trainingVideoRef.current?.click()}
+                      className="relative aspect-video rounded-lg border-2 border-dashed border-green-500/30 hover:border-green-500 bg-black/30 hover:bg-black/50 cursor-pointer transition-all flex items-center justify-center group"
+                    >
+                      {trainingVideo ? (
+                        <>
+                          <video src={trainingVideo} className="w-full h-full object-cover rounded-lg" />
+                          <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
+                            <Upload className="w-8 h-8 text-green-400" />
+                          </div>
+                        </>
+                      ) : (
+                        <div className="text-center p-4">
+                          <Video className="w-10 h-10 text-green-400 mx-auto mb-2" />
+                          <p className="text-white text-sm font-medium">העלה וידאו אימון (1-2 דקות)</p>
+                          <p className="text-green-300/50 text-xs mt-1">MP4 - דבר בצורה טבעית</p>
+                        </div>
+                      )}
+                    </div>
+                    <input ref={trainingVideoRef} type="file" accept="video/*" onChange={handleTrainingVideoUpload} className="hidden" />
+                    
+                    {trainingVideo && !customAvatarId && (
+                      <Button
+                        onClick={async () => {
+                          toast.loading("מאמן אווטר... זה לוקח 4-10 דקות", { id: "train" });
+                          try {
+                            const response = await base44.functions.invoke("trainExpressAvatar", {
+                              videoUrl: trainingVideo
+                            });
+                            setCustomAvatarId(response.data.avatar_id);
+                            toast.success("אווטר מוכן!", { id: "train" });
+                          } catch (error) {
+                            toast.error("שגיאה באימון", { id: "train" });
+                          }
+                        }}
+                        className="w-full bg-green-600 hover:bg-green-700 mt-2"
+                      >
+                        <Sparkles className="w-4 h-4 mr-2" />
+                        צור אווטר מהווידאו
+                      </Button>
+                    )}
+                  </div>
+
+                  {customAvatarId && trainingVideo && (
+                    <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-2 flex items-center gap-2">
                       <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                      <span className="text-green-300 text-sm">אווטר מותאם מוכן לשימוש</span>
+                      <span className="text-green-300 text-xs">אווטר מותאם מוכן לשימוש</span>
                     </div>
                   )}
                 </div>

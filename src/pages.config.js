@@ -1,6 +1,7 @@
 import Accessibility from './pages/Accessibility';
 import Archive from './pages/Archive';
 import Article from './pages/Article';
+import BroadcastStudio from './pages/BroadcastStudio';
 import Category from './pages/Category';
 import ChannelsManager from './pages/ChannelsManager';
 import DownloadReporterImages from './pages/DownloadReporterImages';
@@ -25,7 +26,6 @@ import UserVideos from './pages/UserVideos';
 import VOD from './pages/VOD';
 import VODContent from './pages/VODContent';
 import WarRoom from './pages/WarRoom';
-import BroadcastStudio from './pages/BroadcastStudio';
 import __Layout from './Layout.jsx';
 
 
@@ -33,6 +33,7 @@ export const PAGES = {
     "Accessibility": Accessibility,
     "Archive": Archive,
     "Article": Article,
+    "BroadcastStudio": BroadcastStudio,
     "Category": Category,
     "ChannelsManager": ChannelsManager,
     "DownloadReporterImages": DownloadReporterImages,
@@ -57,7 +58,6 @@ export const PAGES = {
     "VOD": VOD,
     "VODContent": VODContent,
     "WarRoom": WarRoom,
-    "BroadcastStudio": BroadcastStudio,
 }
 
 export const pagesConfig = {
