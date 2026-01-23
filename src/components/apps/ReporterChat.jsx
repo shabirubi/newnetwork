@@ -623,7 +623,7 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
       <motion.div
         whileHover={{ scale: 1.02 }}
         whileTap={{ scale: 0.98 }}
-        className="bg-gradient-to-br from-indigo-600 to-purple-600 rounded-2xl p-8 cursor-pointer shadow-2xl"
+        className="bg-gradient-to-br from-[#E31E24] to-red-900 rounded-2xl p-8 cursor-pointer shadow-2xl"
         onClick={() => setOpenState(true)}
       >
         <div className="flex items-center gap-4 mb-4">
@@ -633,7 +633,7 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
           </div>
           <div>
             <h3 className="text-2xl font-bold text-white">צ'אט כתבים חכם</h3>
-            <p className="text-indigo-100">שוחח עם כתבים מומחים</p>
+            <p className="text-white/80">שוחח עם כתבים מומחים</p>
           </div>
         </div>
         <p className="text-white/90 text-sm">
