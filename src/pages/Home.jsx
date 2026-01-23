@@ -275,17 +275,17 @@ export default function Home() {
         </span>
       </motion.button>
 
-      {/* Video Manager Button */}
-      <Link to={createPageUrl("VideoManager")}>
+      {/* Studio with Manage Tab */}
+      <Link to={createPageUrl("BroadcastStudio")}>
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           className="fixed bottom-8 right-4 z-[9998] w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-purple-700 hover:from-purple-600 hover:to-purple-800 shadow-2xl flex items-center justify-center border-2 border-purple-300/50 transition-all group"
-          title="ניהול וידאוים"
+          title="סטודיו מקצועי"
         >
           <Settings className="w-7 h-7 text-white" />
           <span className="absolute right-full mr-3 top-1/2 -translate-y-1/2 px-3 py-1 bg-purple-600 text-white text-sm font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-            ניהול וידאוים
+            סטודיו מקצועי
           </span>
         </motion.button>
       </Link>
