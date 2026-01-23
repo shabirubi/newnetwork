@@ -1,4 +1,5 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   Mic, Upload, Loader, FileVideo, Image, Type, 
@@ -25,13 +26,13 @@ export default function BroadcastStudio() {
   const [avatarImage, setAvatarImage] = useState(null);
   const fileInputRef = useRef(null);
 
-  // Clips Mode (V3 Pro - Pre-made Full Body)
+  // Clips Mode - Load reporters
   const [selectedPresenter, setSelectedPresenter] = useState(null);
-  const [presenters] = useState([
-    { id: "amy-jcwCkr1grs", name: "איימי", thumbnail: "https://create-images-results.d-id.com/DefaultPresenters/Amy_F_Lobby_1_image/image.jpeg" },
-    { id: "anna-Ld5lI2nYWl", name: "אנה", thumbnail: "https://create-images-results.d-id.com/DefaultPresenters/Anna_F_Park_1_image/image.jpeg" },
-    { id: "michael-q2ReBeYHYg", name: "מייקל", thumbnail: "https://create-images-results.d-id.com/DefaultPresenters/Michael_M_Lobby_1_image/image.jpeg" }
-  ]);
+  const { data: reporters = [] } = useQuery({
+    queryKey: ['reporters-for-studio'],
+    queryFn: () => base44.entities.Reporter.filter({ is_active: true }, 'name'),
+    initialData: []
+  });
 
   // Express Mode (V3 Instant - Custom Full Body)
   const [trainingVideo, setTrainingVideo] = useState(null);
