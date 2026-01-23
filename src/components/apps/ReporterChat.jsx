@@ -927,13 +927,13 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                             <p className="text-sm leading-relaxed">{message.content}</p>
                             
                             {message.media && (
-                              <div className="mt-3 rounded-lg overflow-hidden border-2 border-gray-700">
-                                <img src={message.media.url} alt={message.media.caption} className="w-full h-32 object-cover" />
-                                <div className="bg-gray-900/50 px-2 py-1">
-                                  <p className="text-xs text-gray-300">{message.media.caption}</p>
-                                </div>
-                              </div>
-                            )}
+                               <div className="mt-3 rounded-lg overflow-hidden border-2 border-[#E31E24]/30">
+                                 <img src={message.media.url} alt={message.media.caption} className="w-full h-32 object-cover" />
+                                 <div className="bg-black/60 px-2 py-1 border-t border-[#E31E24]/20">
+                                   <p className="text-xs text-white/70">{message.media.caption}</p>
+                                 </div>
+                               </div>
+                             )}
 
                             {message.location && (
                               <div className="mt-2 text-xs text-gray-300 bg-gray-900/30 rounded px-2 py-1">
