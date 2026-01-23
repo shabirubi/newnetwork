@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { 
   Mic, Upload, Loader, FileVideo, Image, Type, 
   Sparkles, Zap, Download, ChevronLeft, Eye, Settings, 
-  Volume2, User, Users, Video, Play
+  Volume2, User, Users, Video, Play, Search, Filter, Edit2, Trash2, ThumbsUp, Save, X
 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
