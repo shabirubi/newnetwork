@@ -162,10 +162,11 @@ export default function KanArchiveContainer() {
               {/* iFrame Player */}
               <div className="relative aspect-video bg-black">
                 <iframe
+                  key={selectedEpisode.id}
                   src={selectedEpisode.url}
                   className="w-full h-full"
                   frameBorder="0"
-                  allow="autoplay; encrypted-media; fullscreen"
+                  allow="fullscreen"
                   title={selectedEpisode.title}
                 />
               </div>
