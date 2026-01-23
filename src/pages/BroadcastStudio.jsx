@@ -84,10 +84,10 @@ export default function BroadcastStudio() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-black via-blue-950 to-black" dir="rtl">
+    <div className="fixed inset-0 bg-gradient-to-br from-black via-blue-950 to-black overflow-hidden flex flex-col" dir="rtl">
       {/* Professional Header */}
-      <div className="bg-gradient-to-r from-black via-blue-600 to-black border-b border-blue-500/30 sticky top-0 z-50 backdrop-blur-xl shadow-2xl shadow-blue-500/20">
-        <div className="max-w-7xl mx-auto px-6 py-4">
+      <div className="bg-gradient-to-r from-black via-blue-600 to-black border-b border-blue-500/30 z-50 backdrop-blur-xl shadow-2xl shadow-blue-500/20 flex-shrink-0">
+        <div className="px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Link to={createPageUrl("Home")}>
@@ -117,15 +117,16 @@ export default function BroadcastStudio() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="flex-1 overflow-y-auto">
+        <div className="h-full px-6 py-6">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 h-full">
           {/* Left Panel - Preview */}
-          <div className="lg:col-span-2 space-y-6">
+          <div className="lg:col-span-2 flex flex-col gap-6 h-full">
             {/* Video Preview */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              className="bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-blue-500/30 overflow-hidden shadow-2xl shadow-blue-500/20"
+              className="bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-blue-500/30 overflow-hidden shadow-2xl shadow-blue-500/20 flex-1 flex flex-col"
             >
               <div className="bg-gradient-to-r from-black via-blue-600/20 to-black p-4 border-b border-blue-500/30 flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -139,7 +140,7 @@ export default function BroadcastStudio() {
                 )}
               </div>
 
-              <div className="p-6">
+              <div className="p-6 flex-1 flex items-center justify-center">
                 {generatedVideo ? (
                   <motion.div
                     initial={{ opacity: 0, scale: 0.95 }}
@@ -194,7 +195,7 @@ export default function BroadcastStudio() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 }}
-              className="bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-blue-500/30 overflow-hidden shadow-2xl shadow-blue-500/20"
+              className="bg-gradient-to-br from-gray-900 to-black rounded-2xl border border-blue-500/30 overflow-hidden shadow-2xl shadow-blue-500/20 flex-1 flex flex-col"
             >
               <div className="bg-gradient-to-r from-black via-blue-600/20 to-black p-4 border-b border-blue-500/30 flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -203,12 +204,12 @@ export default function BroadcastStudio() {
                 </div>
                 <span className="text-blue-300 text-sm">{articleText.length} תווים</span>
               </div>
-              <div className="p-6">
+              <div className="p-6 flex-1 flex flex-col">
                 <textarea
                   value={articleText}
                   onChange={(e) => setArticleText(e.target.value)}
                   placeholder="כתוב את הכתבה שלך כאן... ספר את הסיפור בצורה מעניינת ומושכת תשומת לב."
-                  className="w-full h-48 bg-black/50 border border-blue-500/30 rounded-xl p-4 text-white text-sm placeholder-blue-300/30 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 resize-none"
+                  className="w-full flex-1 min-h-[200px] bg-black/50 border border-blue-500/30 rounded-xl p-4 text-white text-sm placeholder-blue-300/30 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500/20 resize-none"
                   dir="rtl"
                 />
               </div>
@@ -216,7 +217,7 @@ export default function BroadcastStudio() {
           </div>
 
           {/* Right Panel - Controls */}
-          <div className="space-y-6">
+          <div className="flex flex-col gap-6 h-full overflow-y-auto">
             {/* Avatar Upload */}
             <motion.div
               initial={{ opacity: 0, x: 20 }}
@@ -381,6 +382,7 @@ export default function BroadcastStudio() {
                 ))}
               </div>
             </motion.div>
+          </div>
           </div>
         </div>
       </div>
