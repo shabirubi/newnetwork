@@ -714,15 +714,15 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                     animate={{ opacity: 1 }}
                     className="w-full overflow-y-auto p-6 space-y-3"
                   >
-                    <h3 className="text-xl font-bold dark:text-white mb-4">בחר כתב/כתבת</h3>
-                    {reporters.map((reporter) => (
-                      <motion.button
-                        key={reporter.id}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        onClick={() => startNewChat(reporter)}
-                        className="w-full text-left p-4 bg-gray-50 dark:bg-gray-800 rounded-2xl hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors border border-gray-200 dark:border-gray-700"
-                      >
+                    <h3 className="text-xl font-bold text-white mb-4">בחר כתב/כתבת</h3>
+                      {reporters.map((reporter) => (
+                        <motion.button
+                          key={reporter.id}
+                          whileHover={{ scale: 1.02 }}
+                          whileTap={{ scale: 0.98 }}
+                          onClick={() => startNewChat(reporter)}
+                          className="w-full text-left p-4 bg-black/40 rounded-2xl hover:bg-black/60 transition-colors border border-[#E31E24]/30 hover:border-[#E31E24]/50"
+                        >
                         <div className="flex items-start gap-4">
                           <img
                             src={reporter.image}
