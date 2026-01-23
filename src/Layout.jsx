@@ -65,6 +65,11 @@ export default function Layout({ children, currentPageName }) {
     }
   }, []);
 
+  // דפים ללא Layout
+  if (currentPageName === 'VODContent' || currentPageName === 'ReporterStudio' || currentPageName === 'BroadcastStudio') {
+    return children;
+  }
+
   return (
     <div className="min-h-screen bg-black transition-colors duration-300 flex flex-col overflow-x-hidden" dir="rtl">
       <style>{`
