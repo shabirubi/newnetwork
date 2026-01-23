@@ -10,11 +10,19 @@ import { createPageUrl } from "../../utils";
 export default function RightSidebarUpdates() {
   const { data: updates = [] } = useQuery({
     queryKey: ['sidebar-updates'],
-    queryFn: () => base44.entities.NewsArticle.filter(
-      { is_breaking: true },
-      '-created_date',
-      12
-    ),
+    queryFn: async () => {
+      try {
+        const user = await base44.auth.me();
+        if (!user) return [];
+        return base44.entities.NewsArticle.filter(
+          { is_breaking: true },
+          '-created_date',
+          12
+        );
+      } catch {
+        return [];
+      }
+    },
     initialData: [],
     refetchInterval: 60000
   });

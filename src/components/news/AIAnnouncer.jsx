@@ -23,7 +23,15 @@ export default function AIAnnouncer() {
 
   const { data: articles = [] } = useQuery({
     queryKey: ['announcer-articles'],
-    queryFn: () => base44.entities.NewsArticle.list('-created_date', 10),
+    queryFn: async () => {
+      try {
+        const user = await base44.auth.me();
+        if (!user) return [];
+        return base44.entities.NewsArticle.list('-created_date', 10);
+      } catch {
+        return [];
+      }
+    },
     staleTime: 300000,
     refetchInterval: false,
     initialData: [],
