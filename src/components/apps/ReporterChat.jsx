@@ -971,11 +971,11 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                               </audio>
                             )}
                             <div className="flex items-center justify-between mt-2">
-                              <p className={`text-xs ${message.role === "user" ? "text-indigo-100" : "text-gray-500 dark:text-gray-400"}`}>
+                              <p className={`text-xs ${message.role === "user" ? "text-white/70" : "text-white/50"}`}>
                                 {moment(message.timestamp).format("HH:mm")}
                               </p>
                               {message.role === "user" && message.status && (
-                                <span className="text-xs text-indigo-200">
+                                <span className="text-xs text-white/70">
                                   {message.status === 'sent' && '✓'}
                                   {message.status === 'read' && '✓✓'}
                                 </span>
