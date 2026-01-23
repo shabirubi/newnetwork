@@ -1066,10 +1066,10 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
 
                     {/* Quick Replies */}
                     {showQuickReplies && quickReplies.length > 0 && (
-                      <div className="px-4 pb-3 border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900">
+                      <div className="px-4 pb-3 border-t border-[#E31E24]/30 bg-gradient-to-r from-black/40 to-red-900/20">
                         <div className="flex items-center gap-2 mb-2 pt-3">
-                          <Sparkles className="w-3 h-3 text-indigo-500" />
-                          <span className="text-xs text-gray-500 dark:text-gray-400">שאלות מוצעות:</span>
+                          <MessageSquare className="w-3 h-3 text-[#E31E24]" />
+                          <span className="text-xs text-white/70">שאלות מוצעות:</span>
                         </div>
                         <div className="flex flex-wrap gap-2">
                           {quickReplies.map((reply, idx) => (
@@ -1081,7 +1081,7 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                               whileHover={{ scale: 1.05 }}
                               whileTap={{ scale: 0.95 }}
                               onClick={() => handleQuickReply(reply.text)}
-                              className="px-3 py-1.5 bg-gray-100 dark:bg-gray-800 hover:bg-gray-200 dark:hover:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-full text-xs transition-all"
+                              className="px-3 py-1.5 bg-[#E31E24]/10 hover:bg-[#E31E24]/20 border border-[#E31E24]/30 rounded-full text-xs text-white transition-all"
                             >
                               {reply.text}
                             </motion.button>
