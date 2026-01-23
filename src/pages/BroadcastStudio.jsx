@@ -777,7 +777,7 @@ export default function BroadcastStudio() {
             <div className="p-4">
               <div className="space-y-3">
                 <video src={generatedVideo} controls autoPlay className="w-full aspect-video rounded-lg bg-black" />
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-3 gap-2">
                   <Button
                     onClick={handleReset}
                     size="sm"
@@ -795,10 +795,18 @@ export default function BroadcastStudio() {
                       a.click();
                     }}
                     size="sm"
-                    className="bg-blue-600 hover:bg-blue-700"
+                    className="bg-slate-600 hover:bg-slate-700"
                   >
                     <Download className="w-3 h-3 mr-1" />
                     הורדה
+                  </Button>
+                  <Button
+                    onClick={() => setUploadDialogOpen(true)}
+                    size="sm"
+                    className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800"
+                  >
+                    <Upload className="w-3 h-3 mr-1" />
+                    העלה
                   </Button>
                 </div>
               </div>
