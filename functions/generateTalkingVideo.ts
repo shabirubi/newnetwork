@@ -55,8 +55,7 @@ Deno.serve(async (req) => {
           input: text,
           provider: {
             type: 'elevenlabs',
-            voice_id: voiceId,
-            api_key: ELEVENLABS_API_KEY
+            voice_id: voiceId
           }
         },
         config: {
@@ -84,8 +83,7 @@ Deno.serve(async (req) => {
           input: text,
           provider: {
             type: 'elevenlabs',
-            voice_id: voiceId,
-            api_key: ELEVENLABS_API_KEY
+            voice_id: voiceId
           }
         },
         config: {
@@ -109,8 +107,7 @@ Deno.serve(async (req) => {
           input: text,
           provider: {
             type: 'elevenlabs',
-            voice_id: voiceId,
-            api_key: ELEVENLABS_API_KEY
+            voice_id: voiceId
           }
         },
         config: {
@@ -128,7 +125,8 @@ Deno.serve(async (req) => {
       headers: {
         'Authorization': `Basic ${DID_API_KEY}`,
         'Content-Type': 'application/json',
-        'accept': 'application/json'
+        'accept': 'application/json',
+        'X-Elevenlabs-Api-Key': ELEVENLABS_API_KEY
       },
       body: JSON.stringify(payload)
     });
