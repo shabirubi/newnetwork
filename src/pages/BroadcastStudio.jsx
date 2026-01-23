@@ -143,9 +143,40 @@ export default function BroadcastStudio() {
     }
   };
 
+  const handleAudioUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const response = await base44.integrations.Core.UploadFile({ file });
+      const fileUrl = response.file_url;
+      const cleanUrl = fileUrl.includes('?') ? fileUrl.split('?')[0] : fileUrl;
+      setAudioFile(cleanUrl);
+      toast.success("קובץ אודיו הועלה ✓");
+    } catch (error) {
+      toast.error("שגיאה בהעלאת אודיו");
+    }
+  };
+
+  const handleBgUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    try {
+      const response = await base44.integrations.Core.UploadFile({ file });
+      const fileUrl = response.file_url;
+      const cleanUrl = fileUrl.includes('?') ? fileUrl.split('?')[0] : fileUrl;
+      setSceneBackground(cleanUrl);
+      toast.success("רקע הועלה ✓");
+    } catch (error) {
+      toast.error("שגיאה בהעלאת רקע");
+    }
+  };
+
   const handleReset = () => {
     setGeneratedVideo(null);
     setArticleText("");
+    setAudioFile(null);
     setAvatarImage(null);
     setSelectedPresenter(null);
   };
