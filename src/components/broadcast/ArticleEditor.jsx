@@ -412,10 +412,10 @@ export default function ArticleEditor({ article, isOpen, onClose, onPublish }) {
                         <p className="text-white/60 text-sm">{editData.notes}</p>
                       </div>
                     )}
+                  </motion.div>
+                  )}
+                  </AnimatePresence>
                   </div>
-                </div>
-              )}
-            </div>
 
             {/* Footer */}
             <div className="sticky bottom-0 bg-black/40 backdrop-blur-sm border-t border-[#E31E24]/30 px-6 py-4 flex gap-2">
