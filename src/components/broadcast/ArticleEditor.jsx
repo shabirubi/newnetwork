@@ -115,24 +115,36 @@ export default function ArticleEditor({ article, isOpen, onClose, onPublish }) {
             className="bg-black/90 backdrop-blur-lg rounded-xl border border-[#E31E24]/30 w-full max-w-4xl max-h-[90vh] overflow-y-auto"
           >
             {/* Header */}
-            <div className="sticky top-0 z-20 flex items-center justify-between bg-gradient-to-r from-[#E31E24]/20 to-red-900/20 px-6 py-4 border-b border-[#E31E24]/30">
-              <div>
-                <h2 className="text-white font-bold text-lg">עורך כתבות</h2>
-                <p className="text-white/50 text-xs">ערוך, הוסף תמונות, הערות ופרסם</p>
-              </div>
-              <div className="flex gap-2">
-                <button
-                  onClick={() => setPreview(!preview)}
-                  className={`p-2 rounded-lg transition-all ${preview ? "bg-[#E31E24]/30 text-[#E31E24]" : "bg-white/10 text-white/70 hover:text-white"}`}
-                >
-                  <Eye className="w-5 h-5" />
-                </button>
+            <div className="sticky top-0 z-20 bg-gradient-to-r from-[#E31E24]/20 to-red-900/20 border-b border-[#E31E24]/30">
+              <div className="px-6 py-4 flex items-center justify-between border-b border-[#E31E24]/30">
+                <div>
+                  <h2 className="text-white font-bold text-lg">עורך כתבות</h2>
+                  <p className="text-white/50 text-xs">ערוך, הוסף תמונות, היסטוריה ופרסם</p>
+                </div>
                 <button
                   onClick={onClose}
                   className="p-2 rounded-lg hover:bg-white/10 text-white"
                 >
                   <X className="w-5 h-5" />
                 </button>
+              </div>
+
+              {/* Tabs Navigation */}
+              <div className="flex gap-1 px-4 overflow-x-auto scrollbar-hide">
+                {tabs.map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`px-4 py-3 whitespace-nowrap font-semibold text-sm transition-all border-b-2 ${
+                      activeTab === tab.id
+                        ? "border-[#E31E24] text-[#E31E24]"
+                        : "border-transparent text-white/70 hover:text-white"
+                    }`}
+                  >
+                    <span className="mr-2">{tab.icon}</span>
+                    {tab.label}
+                  </button>
+                ))}
               </div>
             </div>
 
