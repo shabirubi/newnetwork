@@ -155,9 +155,9 @@ export default function Home() {
       </section>
 
       {/* TikTok News with Sidebars */}
-      <section className="grid grid-cols-1 lg:grid-cols-12 gap-0 -mx-0 sm:mx-0 px-0 sm:px-4 mt-6">
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-4 -mx-0 sm:mx-0 px-0 sm:px-4 mt-6">
         {/* Left Sidebar - Entertainment Updates Feed */}
-        <aside className="lg:col-span-3 hidden lg:block bg-black">
+        <aside className="lg:col-span-3 hidden lg:block bg-black space-y-4">
           <EntertainmentUpdatesFeed />
         </aside>
 
@@ -166,9 +166,9 @@ export default function Home() {
           <TikTokNewsFeed articles={articles} />
         </div>
 
-        {/* Right Sidebar - Updates Feed */}
-        <aside className="lg:col-span-3 hidden lg:block bg-black">
-          <UpdatesFeed />
+        {/* Right Sidebar - Studio Options */}
+        <aside className="lg:col-span-3">
+          <StudioSidebar />
         </aside>
       </section>
 
