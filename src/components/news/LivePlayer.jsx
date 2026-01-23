@@ -47,6 +47,7 @@ export default function LivePlayer({
    const videoRef = useRef(null);
    const containerRef = useRef(null);
    const playerRef = useRef(null);
+   const currentVideoRef = useRef(null);
 
   const slogans = [
     "שידור חי 24/7 - החדשות שלכם",
@@ -221,6 +222,13 @@ export default function LivePlayer({
     }, [currentStreamUrl, isPlaying]);
 
   const togglePlay = () => {
+    if (currentVideoRef.current) {
+      if (isPlaying) {
+        currentVideoRef.current.pause();
+      } else {
+        currentVideoRef.current.play();
+      }
+    }
     setIsPlaying(!isPlaying);
   };
 
@@ -373,8 +381,9 @@ export default function LivePlayer({
       {/* Video Container */}
       <div className="relative w-full aspect-[9/16] sm:aspect-video rounded-t-2xl overflow-hidden">
         {/* Video Player - Shows generated videos or uploaded content */}
-              {isPlaying && currentVideoUrl && (
+              {currentVideoUrl && (
                 <video
+                  ref={currentVideoRef}
                   src={currentVideoUrl}
                   className="absolute inset-0 w-full h-full z-20 bg-black"
                   controls
