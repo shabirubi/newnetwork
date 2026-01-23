@@ -991,10 +991,10 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                                     className="text-xs hover:scale-125 transition-transform opacity-60 hover:opacity-100"
                                   >
                                     {emoji}
-                                  </button>
-                                ))}
-                              </div>
-                            )}
+                                    </button>
+                                    ))}
+                                    </div>
+                                    )}
                             {messageReactions[idx] && messageReactions[idx].length > 0 && (
                               <div className="flex gap-1 mt-1 mr-2">
                                 {messageReactions[idx].map((emoji, i) => (
