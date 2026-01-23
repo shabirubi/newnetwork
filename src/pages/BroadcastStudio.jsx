@@ -797,31 +797,31 @@ export default function BroadcastStudio() {
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-black/40 backdrop-blur-lg rounded-xl border border-blue-500/20 overflow-hidden"
+          className="bg-black/40 backdrop-blur-lg rounded-xl border border-[#E31E24]/30 overflow-hidden"
         >
-          <div className="bg-gradient-to-r from-blue-600/20 to-blue-800/20 px-4 py-2 border-b border-blue-500/20">
+          <div className="bg-gradient-to-r from-[#E31E24]/20 to-red-900/20 px-4 py-2 border-b border-[#E31E24]/30">
             <div className="flex items-center gap-2">
-              <Image className="w-4 h-4 text-blue-400" />
+              <Image className="w-4 h-4 text-[#E31E24]" />
               <h2 className="text-white font-semibold text-sm">רקע סצנה (אופציונלי)</h2>
             </div>
           </div>
           <div className="p-4">
             <div
-              onClick={() => bgInputRef.current?.click()}
-              className="relative rounded-lg border-2 border-dashed border-blue-500/30 hover:border-blue-500 bg-black/30 hover:bg-black/50 cursor-pointer transition-all flex items-center justify-center p-4 group"
+               onClick={() => bgInputRef.current?.click()}
+               className="relative rounded-lg border-2 border-dashed border-[#E31E24]/30 hover:border-[#E31E24] bg-black/30 hover:bg-black/50 cursor-pointer transition-all flex items-center justify-center p-4 group"
             >
               {sceneBackground ? (
                 <>
                   <img src={sceneBackground} alt="Background" className="w-full h-32 object-cover rounded-lg" />
                   <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
-                    <Upload className="w-6 h-6 text-blue-400" />
+                    <Upload className="w-6 h-6 text-[#E31E24]" />
                   </div>
                 </>
               ) : (
                 <div className="text-center">
-                  <Image className="w-8 h-8 text-blue-400 mx-auto mb-1" />
+                  <Image className="w-8 h-8 text-[#E31E24] mx-auto mb-1" />
                   <p className="text-white text-xs font-medium">בחר רקע</p>
-                  <p className="text-blue-300/50 text-[10px] mt-1">PNG, JPG</p>
+                  <p className="text-white/50 text-[10px] mt-1">PNG, JPG</p>
                 </div>
               )}
             </div>
@@ -831,13 +831,13 @@ export default function BroadcastStudio() {
 
         {/* Generate Button */}
         <Button
-          onClick={handleGenerateVideo}
-          disabled={loading || (inputType === "text" && !articleText.trim()) || (inputType === "audio" && !audioFile)}
-          className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-5 text-base disabled:opacity-50 rounded-xl"
+           onClick={handleGenerateVideo}
+           disabled={loading || (inputType === "text" && !articleText.trim()) || (inputType === "audio" && !audioFile)}
+           className="w-full bg-gradient-to-r from-[#E31E24] to-red-800 hover:from-red-800 hover:to-red-900 text-white font-bold py-5 text-base disabled:opacity-50 rounded-xl"
         >
           {loading ? (
             <>
-              <Loader className="w-5 h-5 animate-spin mr-2" />
+              <Zap className="w-5 h-5 animate-spin mr-2" />
               יוצר וידאו...
             </>
           ) : (
@@ -852,9 +852,9 @@ export default function BroadcastStudio() {
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="bg-blue-500/10 border border-blue-500/20 rounded-lg p-3"
+          className="bg-[#E31E24]/10 border border-[#E31E24]/20 rounded-lg p-3"
         >
-          <div className="text-xs text-blue-200 space-y-1">
+          <div className="text-xs text-white/70 space-y-1">
             {mode === "talks" && <p>• V2 API - רק הראש ידבר מתמונה סטטית</p>}
             {mode === "clips" && <p>• V3 Pro API - שדרן בגוף מלא עם תנועות ידיים</p>}
             {mode === "express" && <p>• V3 Instant API - אווטר אישי בגוף מלא עם תנועות ידיים</p>}
@@ -865,17 +865,17 @@ export default function BroadcastStudio() {
 
         {/* Video Preview */}
         {generatedVideo && (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="bg-black/40 backdrop-blur-lg rounded-xl border border-green-500/20 overflow-hidden"
-          >
-            <div className="bg-gradient-to-r from-green-600/20 to-green-800/20 px-4 py-2 border-b border-green-500/20 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Eye className="w-4 h-4 text-green-400" />
+           <motion.div
+             initial={{ opacity: 0, y: 10 }}
+             animate={{ opacity: 1, y: 0 }}
+             className="bg-black/40 backdrop-blur-lg rounded-xl border border-[#E31E24]/30 overflow-hidden"
+           >
+             <div className="bg-gradient-to-r from-[#E31E24]/20 to-red-900/20 px-4 py-2 border-b border-[#E31E24]/30 flex items-center justify-between">
+               <div className="flex items-center gap-2">
+                 <Eye className="w-4 h-4 text-[#E31E24]" />
                 <h2 className="text-white font-semibold text-sm">תצוגה מקדימה</h2>
               </div>
-              <span className="text-green-400 text-xs">✓ מוכן</span>
+              <span className="text-[#E31E24] text-xs">✓ מוכן</span>
             </div>
             <div className="p-4">
               <div className="space-y-3">
@@ -885,7 +885,7 @@ export default function BroadcastStudio() {
                     onClick={handleReset}
                     size="sm"
                     variant="outline"
-                    className="bg-black/50 border-blue-500/30 text-white hover:bg-blue-600/20"
+                    className="bg-black/50 border-[#E31E24]/30 text-white hover:bg-[#E31E24]/20"
                   >
                     <Sparkles className="w-3 h-3 mr-1" />
                     חדש
@@ -906,7 +906,7 @@ export default function BroadcastStudio() {
                   <Button
                     onClick={() => setUploadDialogOpen(true)}
                     size="sm"
-                    className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800"
+                    className="bg-gradient-to-r from-[#E31E24] to-red-800 hover:from-red-800 hover:to-red-900"
                   >
                     <Upload className="w-3 h-3 mr-1" />
                     העלה
@@ -934,19 +934,19 @@ export default function BroadcastStudio() {
         <>
         {/* Search and Filter */}
         <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-black/40 backdrop-blur-lg rounded-xl border border-blue-500/20 p-4 mb-6"
+           initial={{ opacity: 0, y: 10 }}
+           animate={{ opacity: 1, y: 0 }}
+           className="bg-black/40 backdrop-blur-lg rounded-xl border border-[#E31E24]/30 p-4 mb-6"
         >
           <div className="flex flex-col sm:flex-row gap-3">
             <div className="flex-1 relative">
-              <Search className="absolute right-3 top-3 w-4 h-4 text-blue-400" />
+              <Search className="absolute right-3 top-3 w-4 h-4 text-[#E31E24]" />
               <input
                 type="text"
                 placeholder="חפש וידאו..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full bg-black/30 border border-blue-500/20 rounded-lg px-4 py-2 pr-10 text-white text-sm placeholder-blue-300/30 focus:border-blue-500 focus:outline-none"
+                className="w-full bg-black/30 border border-[#E31E24]/30 rounded-lg px-4 py-2 pr-10 text-white text-sm placeholder-white/30 focus:border-[#E31E24] focus:outline-none"
               />
             </div>
             <div className="flex gap-2">
