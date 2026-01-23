@@ -549,10 +549,11 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
   useEffect(() => {
     if (preSelectedReporter && openState) {
       startNewChat(preSelectedReporter);
-      // טעינה אוטומטית של וידאו הצגה כשהחלון נפתח
+      // הצג את מצב הטעינה ואז טען את הווידאו כדי שהמשתמש יראה את זה
+      setShowIntro(true);
       setTimeout(() => {
         generateReporterIntroVideo();
-      }, 800);
+      }, 500);
     }
   }, [preSelectedReporter, openState]);
 
