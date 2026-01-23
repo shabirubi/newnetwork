@@ -25,6 +25,7 @@ import UserVideos from './pages/UserVideos';
 import VOD from './pages/VOD';
 import VODContent from './pages/VODContent';
 import WarRoom from './pages/WarRoom';
+import BroadcastStudio from './pages/BroadcastStudio';
 import __Layout from './Layout.jsx';
 
 
@@ -56,6 +57,7 @@ export const PAGES = {
     "VOD": VOD,
     "VODContent": VODContent,
     "WarRoom": WarRoom,
+    "BroadcastStudio": BroadcastStudio,
 }
 
 export const pagesConfig = {

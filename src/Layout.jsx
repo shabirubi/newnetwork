@@ -37,7 +37,7 @@ const categories = [
 
 export default function Layout({ children, currentPageName }) {
   // דפים ללא Layout
-  if (currentPageName === 'VODContent' || currentPageName === 'ReporterStudio') {
+  if (currentPageName === 'VODContent' || currentPageName === 'ReporterStudio' || currentPageName === 'BroadcastStudio') {
     return children;
   }
         const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
