@@ -527,12 +527,12 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
   }, [setOpenState]);
 
   const generateReporterIntroVideo = async () => {
-    if (!selectedReporter) {
-      toast.error("בחר כתב/כתבת קודם");
+    if (!selectedReporter || isGeneratingIntro) {
       return;
     }
 
-    toast.loading("יוצר וידאו הצגה...", { id: 'intro-video' });
+    setIsGeneratingIntro(true);
+    setShowIntro(true);
 
     try {
       const introText = `שלום! אני ${selectedReporter.name}, כתב/כתבת חדשות. אני מתמחה ב-${selectedReporter.specialty}. נשמח לדון איתך בכל נושא שמעניין אותך.`;
@@ -546,19 +546,14 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
       });
 
       if (response.data?.video_url) {
-        window.dispatchEvent(new CustomEvent('playVideo', {
-          detail: {
-            url: response.data.video_url,
-            title: `${selectedReporter.name} מציג/ה את עצמו/ה`,
-            autoPlay: true
-          }
-        }));
-        
-        toast.success("וידאו ההצגה מוכן!", { id: 'intro-video' });
+        setIntroVideoUrl(response.data.video_url);
+        toast.success("וידאו ההצגה מוכן!");
       }
     } catch (error) {
       console.error('Error generating intro video:', error);
-      toast.error(`שגיאה: ${error.message}`, { id: 'intro-video' });
+      toast.error(`שגיאה בהכנת ההצגה`);
+    } finally {
+      setIsGeneratingIntro(false);
     }
   };
 
