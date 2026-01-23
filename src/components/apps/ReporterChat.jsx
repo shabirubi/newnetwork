@@ -342,13 +342,33 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
 
       setIsTyping(false);
       
+      // Generate talking video with the AI response
+      setIsGeneratingIntro(true);
+      setShowIntro(true);
+      
+      const videoResponse = await base44.functions.invoke('generateTalkingVideo', {
+        text: response.data.response,
+        avatarUrl: selectedReporter.image,
+        gender: selectedReporter.gender || (selectedReporter.name.includes('ה') ? 'female' : 'male'),
+        voiceProvider: 'elevenlabs',
+        backgroundType: 'dynamic'
+      });
+
+      setIsGeneratingIntro(false);
+
+      if (videoResponse.data?.video_url) {
+        setIntroVideoUrl(videoResponse.data.video_url);
+      }
+      
       const aiMessage = {
         role: "assistant",
         content: response.data.response,
         reporter: selectedReporter.name,
-        timestamp: new Date()
+        timestamp: new Date(),
+        videoUrl: videoResponse.data?.video_url
       };
 
+      const rand = Math.random();
       if (rand > 0.7) {
         aiMessage.media = { type: 'image', url: selectedReporter.image, caption: '📸 מהשטח עכשיו' };
       }
@@ -559,8 +579,8 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
 
   const startNewChat = (reporter) => {
     setSelectedReporter(reporter);
-    setShowIntro(true);
-    generateReporterIntroVideo();
+    setShowIntro(false);
+    setIntroVideoUrl(null);
     const replies = generateQuickReplies(reporter);
     setQuickReplies(replies);
     setShowQuickReplies(true);
@@ -768,18 +788,24 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
 
                     {/* Chat Area - Right Side */}
                     <div className="flex-1 flex flex-col overflow-hidden bg-gray-50 dark:bg-gray-800/50">
-                    {/* Intro Video Section */}
+                    {/* Response Video Section */}
+                    <AnimatePresence>
                     {showIntro && (
                       <motion.div
-                        initial={{ opacity: 0, y: -20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -20 }}
+                        initial={{ opacity: 0, scale: 0.95 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.95 }}
                         className="bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-gray-800 dark:to-gray-700 p-4 border-b border-gray-200 dark:border-gray-600"
                       >
                         <div className="flex items-center justify-between mb-2">
-                          <h3 className="font-bold dark:text-white text-sm">הצגה:</h3>
+                          <h3 className="font-bold dark:text-white text-sm flex items-center gap-2">
+                            🎥 {selectedReporter.name} עונה לך:
+                          </h3>
                           <button
-                            onClick={() => setShowIntro(false)}
+                            onClick={() => {
+                              setShowIntro(false);
+                              setIntroVideoUrl(null);
+                            }}
                             className="text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400"
                           >
                             סגור
@@ -787,21 +813,23 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
                         </div>
 
                         {isGeneratingIntro ? (
-                          <div className="bg-black/30 rounded-lg aspect-video flex items-center justify-center">
-                            <Loader className="w-6 h-6 animate-spin text-indigo-600" />
+                          <div className="bg-black/30 rounded-lg aspect-video flex flex-col items-center justify-center gap-3">
+                            <Loader className="w-8 h-8 animate-spin text-indigo-600" />
+                            <p className="text-sm text-gray-600 dark:text-gray-300">מייצר תשובה בוידאו...</p>
                           </div>
                         ) : introVideoUrl ? (
-                          <div className="rounded-lg overflow-hidden">
+                          <div className="rounded-lg overflow-hidden shadow-xl">
                             <video
                               src={introVideoUrl}
                               autoPlay
                               controls
-                              className="w-full max-h-48 object-cover rounded-lg"
+                              className="w-full aspect-video object-cover rounded-lg"
                             />
                           </div>
                         ) : null}
                       </motion.div>
                     )}
+                    </AnimatePresence>
 
                     {/* Video Call Area */}
                      {isVideoCall && (
