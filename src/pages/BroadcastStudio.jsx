@@ -956,8 +956,8 @@ export default function BroadcastStudio() {
                   onClick={() => setFilterStatus(status)}
                   className={`px-3 py-2 rounded-lg text-xs font-semibold transition-all ${
                     filterStatus === status
-                      ? "bg-blue-600 text-white"
-                      : "bg-black/30 border border-blue-500/20 text-blue-300 hover:bg-blue-500/20"
+                      ? "bg-[#E31E24] text-white"
+                      : "bg-black/30 border border-[#E31E24]/20 text-white/70 hover:bg-[#E31E24]/20"
                   }`}
                 >
                   {status === "all" ? "הכל" : status === "ready" ? "מוכן" : status === "processing" ? "בעיבוד" : "שגיאה"}
@@ -970,17 +970,17 @@ export default function BroadcastStudio() {
         {/* Videos Grid */}
         {videosLoading ? (
           <div className="text-center py-12">
-            <div className="w-12 h-12 rounded-full border-4 border-blue-500/20 border-t-blue-500 animate-spin mx-auto mb-4"></div>
-            <p className="text-blue-300">טוען וידאוים...</p>
+            <div className="w-12 h-12 rounded-full border-4 border-[#E31E24]/20 border-t-[#E31E24] animate-spin mx-auto mb-4"></div>
+            <p className="text-white/70">טוען וידאוים...</p>
           </div>
         ) : filteredVideos.length === 0 ? (
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-black/40 backdrop-blur-lg rounded-xl border border-blue-500/20 p-12 text-center"
+            className="bg-black/40 backdrop-blur-lg rounded-xl border border-[#E31E24]/30 p-12 text-center"
           >
-            <Play className="w-12 h-12 text-blue-400/50 mx-auto mb-3" />
-            <p className="text-blue-300 text-sm">אין וידאוים עדיין</p>
+            <Play className="w-12 h-12 text-[#E31E24]/50 mx-auto mb-3" />
+            <p className="text-white/70 text-sm">אין וידאוים עדיין</p>
           </motion.div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -991,7 +991,7 @@ export default function BroadcastStudio() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
-                  className="bg-black/40 backdrop-blur-lg rounded-lg border border-blue-500/20 overflow-hidden hover:border-blue-500/50 transition-all cursor-pointer group"
+                  className="bg-black/40 backdrop-blur-lg rounded-lg border border-[#E31E24]/20 overflow-hidden hover:border-[#E31E24]/50 transition-all cursor-pointer group"
                   onClick={() => setSelectedVideo(video)}
                 >
                   {/* Thumbnail */}
@@ -1003,8 +1003,8 @@ export default function BroadcastStudio() {
                         className="w-full h-full object-cover group-hover:scale-105 transition-transform"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-blue-600/20 to-purple-600/20">
-                        <Play className="w-12 h-12 text-blue-400/30" />
+                      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#E31E24]/20 to-red-900/20">
+                        <Play className="w-12 h-12 text-[#E31E24]/30" />
                       </div>
                     )}
                     
@@ -1031,7 +1031,7 @@ export default function BroadcastStudio() {
                     <h3 className="text-white font-semibold text-sm line-clamp-2 mb-2">{video.title}</h3>
                     
                     {/* Stats */}
-                    <div className="flex items-center justify-between text-xs text-blue-300/70 mb-3">
+                    <div className="flex items-center justify-between text-xs text-white/70 mb-3">
                       <div className="flex items-center gap-1">
                         <Eye className="w-3 h-3" />
                         <span>{video.views || 0}</span>
@@ -1052,7 +1052,7 @@ export default function BroadcastStudio() {
                           e.stopPropagation();
                           handleStartEdit(video);
                         }}
-                        className="flex-1 px-2 py-1.5 bg-blue-600/30 hover:bg-blue-600/50 border border-blue-500/30 rounded text-xs font-semibold text-blue-300 transition-all"
+                        className="flex-1 px-2 py-1.5 bg-[#E31E24]/30 hover:bg-[#E31E24]/50 border border-[#E31E24]/30 rounded text-xs font-semibold text-[#E31E24] transition-all"
                       >
                         <Edit2 className="w-3 h-3 inline mr-1" />
                         עריכה
@@ -1085,16 +1085,16 @@ export default function BroadcastStudio() {
               exit={{ opacity: 0 }}
               className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9999] flex items-center justify-center p-4"
               onClick={() => setSelectedVideo(null)}
-            >
+              >
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 onClick={(e) => e.stopPropagation()}
-                className="bg-black/80 backdrop-blur-lg rounded-xl border border-blue-500/20 w-full max-w-2xl overflow-hidden"
+                className="bg-black/80 backdrop-blur-lg rounded-xl border border-[#E31E24]/30 w-full max-w-2xl overflow-hidden"
               >
                 {/* Modal Header */}
-                <div className="flex items-center justify-between bg-gradient-to-r from-blue-600/20 to-blue-800/20 px-6 py-4 border-b border-blue-500/20">
+                <div className="flex items-center justify-between bg-gradient-to-r from-[#E31E24]/20 to-red-900/20 px-6 py-4 border-b border-[#E31E24]/30">
                   <h2 className="text-white font-bold">פרטי וידאו</h2>
                   <button
                     onClick={() => setSelectedVideo(null)}
@@ -1114,13 +1114,13 @@ export default function BroadcastStudio() {
 
                   <div className="space-y-3">
                     <div>
-                      <p className="text-blue-300 text-xs font-semibold mb-1">כותרת</p>
+                      <p className="text-white/70 text-xs font-semibold mb-1">כותרת</p>
                       <p className="text-white text-sm">{selectedVideo.title}</p>
                     </div>
 
                     {selectedVideo.description && (
                       <div>
-                        <p className="text-blue-300 text-xs font-semibold mb-1">תיאור</p>
+                        <p className="text-white/70 text-xs font-semibold mb-1">תיאור</p>
                         <p className="text-white/80 text-sm">{selectedVideo.description}</p>
                       </div>
                     )}
@@ -1128,31 +1128,31 @@ export default function BroadcastStudio() {
                     {/* Stats Grid */}
                     <div className="grid grid-cols-3 gap-3 bg-black/40 rounded-lg p-3">
                       <div className="text-center">
-                        <Eye className="w-4 h-4 text-blue-400 mx-auto mb-1" />
+                        <Eye className="w-4 h-4 text-[#E31E24] mx-auto mb-1" />
                         <p className="text-white font-bold">{selectedVideo.views || 0}</p>
-                        <p className="text-blue-300 text-xs">צפיות</p>
+                        <p className="text-white/70 text-xs">צפיות</p>
                       </div>
                       <div className="text-center">
-                        <ThumbsUp className="w-4 h-4 text-blue-400 mx-auto mb-1" />
+                        <ThumbsUp className="w-4 h-4 text-[#E31E24] mx-auto mb-1" />
                         <p className="text-white font-bold">{selectedVideo.likes || 0}</p>
-                        <p className="text-blue-300 text-xs">לייקים</p>
+                        <p className="text-white/70 text-xs">לייקים</p>
                       </div>
                       <div className="text-center">
-                        <Settings className="w-4 h-4 text-blue-400 mx-auto mb-1" />
+                        <Settings className="w-4 h-4 text-[#E31E24] mx-auto mb-1" />
                         <p className="text-white font-bold text-sm">{selectedVideo.status}</p>
-                        <p className="text-blue-300 text-xs">סטטוס</p>
+                        <p className="text-white/70 text-xs">סטטוס</p>
                       </div>
                     </div>
                   </div>
                 </div>
 
                 {/* Modal Actions */}
-                <div className="flex gap-2 bg-black/40 px-6 py-4 border-t border-blue-500/20">
+                <div className="flex gap-2 bg-black/40 px-6 py-4 border-t border-[#E31E24]/30">
                   <button
                     onClick={() => {
                       handleStartEdit(selectedVideo);
                     }}
-                    className="flex-1 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-sm font-semibold transition-all flex items-center justify-center gap-2"
+                    className="flex-1 px-4 py-2 bg-[#E31E24] hover:bg-red-800 text-white rounded-lg text-sm font-semibold transition-all flex items-center justify-center gap-2"
                   >
                     <Edit2 className="w-4 h-4" />
                     עריכה
@@ -1189,9 +1189,9 @@ export default function BroadcastStudio() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 onClick={(e) => e.stopPropagation()}
-                className="bg-black/80 backdrop-blur-lg rounded-xl border border-blue-500/20 w-full max-w-md"
-              >
-                <div className="flex items-center justify-between bg-gradient-to-r from-blue-600/20 to-blue-800/20 px-6 py-4 border-b border-blue-500/20">
+                className="bg-black/80 backdrop-blur-lg rounded-xl border border-[#E31E24]/30 w-full max-w-md"
+                >
+                <div className="flex items-center justify-between bg-gradient-to-r from-[#E31E24]/20 to-red-900/20 px-6 py-4 border-b border-[#E31E24]/30">
                   <h2 className="text-white font-bold">עריכת וידאו</h2>
                   <button
                     onClick={() => setEditingVideo(null)}
@@ -1203,38 +1203,38 @@ export default function BroadcastStudio() {
 
                 <div className="p-6 space-y-4">
                   <div>
-                    <label className="text-blue-300 text-xs font-semibold block mb-2">כותרת</label>
+                    <label className="text-white/70 text-xs font-semibold block mb-2">כותרת</label>
                     <input
                       type="text"
                       value={editTitle}
                       onChange={(e) => setEditTitle(e.target.value)}
-                      className="w-full bg-black/30 border border-blue-500/20 rounded-lg px-3 py-2 text-white text-sm focus:border-blue-500 focus:outline-none"
+                      className="w-full bg-black/30 border border-[#E31E24]/30 rounded-lg px-3 py-2 text-white text-sm focus:border-[#E31E24] focus:outline-none"
                       dir="rtl"
                     />
                   </div>
 
                   <div>
-                    <label className="text-blue-300 text-xs font-semibold block mb-2">תיאור (אופציונלי)</label>
+                    <label className="text-white/70 text-xs font-semibold block mb-2">תיאור (אופציונלי)</label>
                     <textarea
                       value={editDescription}
                       onChange={(e) => setEditDescription(e.target.value)}
-                      className="w-full bg-black/30 border border-blue-500/20 rounded-lg px-3 py-2 text-white text-sm focus:border-blue-500 focus:outline-none h-24 resize-none"
+                      className="w-full bg-black/30 border border-[#E31E24]/30 rounded-lg px-3 py-2 text-white text-sm focus:border-[#E31E24] focus:outline-none h-24 resize-none"
                       dir="rtl"
                     />
                   </div>
                 </div>
 
-                <div className="flex gap-2 px-6 py-4 border-t border-blue-500/20">
+                <div className="flex gap-2 px-6 py-4 border-t border-[#E31E24]/30">
                   <button
                     onClick={() => setEditingVideo(null)}
-                    className="flex-1 px-4 py-2 bg-black/50 border border-blue-500/20 text-white rounded-lg text-sm font-semibold hover:bg-black/70 transition-all"
+                    className="flex-1 px-4 py-2 bg-black/50 border border-[#E31E24]/20 text-white rounded-lg text-sm font-semibold hover:bg-black/70 transition-all"
                   >
                     ביטול
                   </button>
                   <button
                     onClick={handleSaveEdit}
                     disabled={updateMutation.isPending}
-                    className="flex-1 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg text-sm font-semibold transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                    className="flex-1 px-4 py-2 bg-[#E31E24] hover:bg-red-800 text-white rounded-lg text-sm font-semibold transition-all disabled:opacity-50 flex items-center justify-center gap-2"
                   >
                     <Save className="w-4 h-4" />
                     {updateMutation.isPending ? "שומר..." : "שמור"}
