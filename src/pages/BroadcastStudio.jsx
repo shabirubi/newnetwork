@@ -344,7 +344,7 @@ export default function BroadcastStudio() {
     <div className="min-h-screen bg-gradient-to-br from-slate-900 via-red-900/50 to-slate-900" dir="rtl">
       {/* Header */}
       <div className="bg-black/60 backdrop-blur-lg border-b border-[#E31E24]/30 sticky top-0 z-50">
-        <div className="max-w-6xl mx-auto px-6 py-3">
+        <div className="max-w-7xl mx-auto px-6 py-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <Link to={createPageUrl("Home")}>
@@ -362,29 +362,7 @@ export default function BroadcastStudio() {
                 </div>
               </div>
             </div>
-            <div className="flex items-center gap-4">
-              <button
-                onClick={() => setTab("create")}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-sm transition-all ${
-                  tab === "create"
-                    ? "bg-[#E31E24]/30 border border-[#E31E24] text-[#E31E24]"
-                    : "bg-black/30 border border-white/20 text-white/70 hover:text-white"
-                }`}
-              >
-                <Sparkles className="w-4 h-4" />
-                יצירת וידאו
-              </button>
-              <button
-                onClick={() => setTab("manage")}
-                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-sm transition-all ${
-                  tab === "manage"
-                    ? "bg-[#E31E24]/30 border border-[#E31E24] text-[#E31E24]"
-                    : "bg-black/30 border border-white/20 text-white/70 hover:text-white"
-                }`}
-              >
-                <Settings className="w-4 h-4" />
-                ניהול וידאוים
-              </button>
+            <div className="flex items-center gap-2">
               <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
               <span className="text-white text-sm">פעיל</span>
             </div>
