@@ -34,6 +34,7 @@ const TikTokNewsContainer = React.lazy(() => import("../components/home/TikTokNe
 const ReportersSpotlight = React.lazy(() => import("../components/home/ReportersSpotlight"));
 const UserUploadedVideos = React.lazy(() => import("../components/home/UserUploadedVideos"));
 const AllVideosGallery = React.lazy(() => import("../components/home/AllVideosGallery"));
+const KanArchiveContainer = React.lazy(() => import("../components/home/KanArchiveContainer"));
 
 export default function Home() {
   const [vodModalOpen, setVodModalOpen] = React.useState(false);
@@ -236,6 +237,11 @@ export default function Home() {
           <UserUploadedVideos onUploadClick={() => setUploadVideoModalOpen(true)} />
         </React.Suspense>
       </div>
+
+      {/* Kan Archive - עמוד האש */}
+      <React.Suspense fallback={<div className="h-96 bg-black animate-pulse rounded-2xl mx-4" />}>
+        <KanArchiveContainer />
+      </React.Suspense>
 
       {/* All Videos Gallery - Lazy Loaded */}
       <React.Suspense fallback={<div className="h-96 bg-black animate-pulse rounded-2xl mx-4" />}>
