@@ -4,7 +4,6 @@ import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { Users, ChevronLeft, ChevronRight } from "lucide-react";
 import ReporterCardModal from "./ReporterCardModal";
-import AIReporterIntroChat from "../apps/AIReporterIntroChat";
 import ReporterChat from "../apps/ReporterChat";
 
 export default function ReportersTickerStrip() {
