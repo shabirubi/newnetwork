@@ -148,6 +148,14 @@ export default function Layout({ children, currentPageName }) {
             </button>
 
             <button
+              onClick={() => window.dispatchEvent(new CustomEvent('openAIRadio'))}
+              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-black/60 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-white/20 transition-all hover:scale-105 hover:bg-black/70 text-xs sm:text-sm"
+            >
+              <Radio className="w-4 h-4 text-white" />
+              <span className="text-white font-bold hidden sm:inline">רדיו AI</span>
+            </button>
+
+            <button
               onClick={() => window.dispatchEvent(new CustomEvent('openReporterChat'))}
               className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-black/60 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-white/20 transition-all hover:scale-105 hover:bg-black/70 text-xs sm:text-sm"
             >
