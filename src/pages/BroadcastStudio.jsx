@@ -283,16 +283,32 @@ export default function BroadcastStudio() {
     }
 
     setSearchingGoogle(true);
-    toast.loading("חוזר כתבות...", { id: "search" });
+    toast.loading("מחפש בעולם...", { id: "search" });
 
     try {
       const response = await base44.integrations.Core.InvokeLLM({
-        prompt: `חפש אתה כתבות חדשות בעברית על "${googleSearchQuery}". החזר רשימה של 5 כתבות עם כותרת, תיאור קצר, ותמונה (URL). החזר בפורמט JSON.`,
+        prompt: `עשה חיפוש מקיף וגלובלי על "${googleSearchQuery}". 
+        
+חפש:
+1. כתבות חדשות ותקשורת
+2. מידע על אנשים (ביוגרפיה, ניוזות)
+3. מידע על עסקים וחברות
+4. אירועים ודברים שקורים כרגע
+5. קישורים לעמודים רלוונטיים
+
+עבור כל תוצאה, תן:
+- כותרת (מושך, בעברית)
+- תיאור מפורט (3-4 משפטים)
+- תמונה (URL אמיתית אם קיימת)
+- סוג התוכן (כתבה/אדם/עסק/אירוע)
+- מקור המידע
+
+החזר עד 8 תוצאות מהחזקות ביותר. בפורמט JSON.`,
         add_context_from_internet: true,
         response_json_schema: {
           type: "object",
           properties: {
-            articles: {
+            results: {
               type: "array",
               items: {
                 type: "object",
@@ -300,7 +316,9 @@ export default function BroadcastStudio() {
                   title: { type: "string" },
                   description: { type: "string" },
                   image_url: { type: "string" },
-                  source_url: { type: "string" }
+                  source_url: { type: "string" },
+                  content_type: { type: "string" },
+                  source: { type: "string" }
                 }
               }
             }
@@ -308,8 +326,8 @@ export default function BroadcastStudio() {
         }
       });
 
-      setGoogleSearchResults(response.articles || []);
-      toast.success(`נמצאו ${response.articles?.length || 0} כתבות`, { id: "search" });
+      setGoogleSearchResults(response.results || []);
+      toast.success(`נמצאו ${response.results?.length || 0} תוצאות`, { id: "search" });
     } catch (error) {
       toast.error("שגיאה בחיפוש", { id: "search" });
       console.error("Search error:", error);
