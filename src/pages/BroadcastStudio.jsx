@@ -813,6 +813,16 @@ export default function BroadcastStudio() {
             </div>
           </motion.div>
         )}
+
+        {/* Upload Confirmation Modal */}
+        <VideoUploadConfirmation
+          videoUrl={generatedVideo}
+          isOpen={uploadDialogOpen}
+          onClose={() => setUploadDialogOpen(false)}
+          onSuccess={() => {
+            handleReset();
+          }}
+        />
       </div>
     </div>
   );
