@@ -407,21 +407,21 @@ export default function BroadcastStudio() {
               className="space-y-4"
             >
               {/* Choose from existing reporters OR upload custom */}
-              <div className="bg-black/40 backdrop-blur-lg rounded-xl border border-blue-500/20 overflow-hidden">
-                <div className="bg-gradient-to-r from-blue-600/20 to-blue-800/20 px-4 py-2 border-b border-blue-500/20">
+              <div className="bg-black/40 backdrop-blur-lg rounded-xl border border-[#E31E24]/30 overflow-hidden">
+                <div className="bg-gradient-to-r from-[#E31E24]/20 to-red-900/20 px-4 py-2 border-b border-[#E31E24]/30">
                   <div className="flex items-center gap-2">
-                    <Image className="w-4 h-4 text-blue-400" />
+                    <Image className="w-4 h-4 text-[#E31E24]" />
                     <h2 className="text-white font-semibold text-sm">תמונת שדרן</h2>
                   </div>
                 </div>
                 <div className="p-4 space-y-4">
                   {/* Existing Reporters */}
                   <div>
-                    <p className="text-blue-300 text-xs font-semibold mb-2">כתבים קיימים:</p>
+                    <p className="text-white/70 text-xs font-semibold mb-2">כתבים קיימים:</p>
                     {reporters.length === 0 ? (
                       <div className="text-center py-3">
-                        <Loader className="w-6 h-6 animate-spin mx-auto mb-2 text-blue-400" />
-                        <p className="text-blue-300 text-sm">טוען כתבים...</p>
+                        <Loader className="w-6 h-6 animate-spin mx-auto mb-2 text-[#E31E24]" />
+                         <p className="text-white/70 text-sm">טוען כתבים...</p>
                       </div>
                     ) : (
                       <div className="grid grid-cols-auto-fit gap-2" style={{
@@ -435,8 +435,8 @@ export default function BroadcastStudio() {
                             }}
                             className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${
                               avatarImage === reporter.image
-                                ? "border-blue-500 ring-2 ring-blue-500/50"
-                                : "border-blue-500/20 hover:border-blue-500/50"
+                                ? "border-[#E31E24] ring-2 ring-[#E31E24]/50"
+                                : "border-[#E31E24]/20 hover:border-[#E31E24]/50"
                             }`}
                             title={reporter.name}
                           >
@@ -445,7 +445,7 @@ export default function BroadcastStudio() {
                               <p className="text-white text-[9px] font-bold line-clamp-1">{reporter.name}</p>
                             </div>
                             {avatarImage === reporter.image && (
-                              <div className="absolute top-1 right-1 w-4 h-4 rounded-full bg-blue-500 flex items-center justify-center">
+                              <div className="absolute top-1 right-1 w-4 h-4 rounded-full bg-[#E31E24] flex items-center justify-center">
                                 <Play className="w-2 h-2 text-white" />
                               </div>
                             )}
@@ -457,28 +457,28 @@ export default function BroadcastStudio() {
 
                   {/* Divider */}
                   <div className="flex items-center gap-2">
-                    <div className="flex-1 h-px bg-blue-500/20"></div>
-                    <span className="text-blue-400 text-xs font-semibold">או</span>
-                    <div className="flex-1 h-px bg-blue-500/20"></div>
+                    <div className="flex-1 h-px bg-[#E31E24]/20"></div>
+                    <span className="text-[#E31E24] text-xs font-semibold">או</span>
+                    <div className="flex-1 h-px bg-[#E31E24]/20"></div>
                   </div>
 
                   {/* Custom Avatar Upload */}
                   <div>
-                    <p className="text-blue-300 text-xs font-semibold mb-2">העלה תמונה משלך:</p>
-                    <div
-                      onClick={() => fileInputRef.current?.click()}
-                      className="relative aspect-video rounded-lg border-2 border-dashed border-blue-500/30 hover:border-blue-500 bg-black/30 hover:bg-black/50 cursor-pointer transition-all flex items-center justify-center group"
+                    <p className="text-white/70 text-xs font-semibold mb-2">העלה תמונה משלך:</p>
+                     <div
+                       onClick={() => fileInputRef.current?.click()}
+                       className="relative aspect-video rounded-lg border-2 border-dashed border-[#E31E24]/30 hover:border-[#E31E24] bg-black/30 hover:bg-black/50 cursor-pointer transition-all flex items-center justify-center group"
                     >
                       {avatarImage && !reporters.some(r => r.image === avatarImage) ? (
                         <>
                           <img src={avatarImage} alt="Avatar" className="w-full h-full object-cover rounded-lg" />
                           <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
-                            <Upload className="w-8 h-8 text-blue-400" />
+                            <Upload className="w-8 h-8 text-[#E31E24]" />
                           </div>
                         </>
                       ) : (
                         <div className="text-center p-4">
-                          <Upload className="w-10 h-10 text-blue-400 mx-auto mb-2" />
+                          <Upload className="w-10 h-10 text-[#E31E24] mx-auto mb-2" />
                           <p className="text-white text-sm font-medium">העלה תמונה</p>
                           <p className="text-blue-300/50 text-xs mt-1">PNG, JPG - רק הראש ידבר</p>
                         </div>
@@ -500,18 +500,18 @@ export default function BroadcastStudio() {
               className="space-y-4"
             >
               {/* Presenter Selection */}
-              <div className="bg-black/40 backdrop-blur-lg rounded-xl border border-purple-500/20 overflow-hidden">
-                <div className="bg-gradient-to-r from-purple-600/20 to-purple-800/20 px-4 py-2 border-b border-purple-500/20">
+              <div className="bg-black/40 backdrop-blur-lg rounded-xl border border-[#E31E24]/30 overflow-hidden">
+                <div className="bg-gradient-to-r from-[#E31E24]/20 to-red-900/20 px-4 py-2 border-b border-[#E31E24]/30">
                   <div className="flex items-center gap-2">
-                    <Users className="w-4 h-4 text-purple-400" />
+                    <Users className="w-4 h-4 text-[#E31E24]" />
                     <h2 className="text-white font-semibold text-sm">בחר שדרן מקצועי (גוף מלא)</h2>
                   </div>
                 </div>
                 <div className="p-4">
                   {reporters.length === 0 ? (
                     <div className="text-center py-8">
-                      <Loader className="w-8 h-8 animate-spin mx-auto mb-2 text-purple-400" />
-                      <p className="text-purple-300 text-sm">טוען כתבים...</p>
+                      <Loader className="w-8 h-8 animate-spin mx-auto mb-2 text-[#E31E24]" />
+                      <p className="text-white/70 text-sm">טוען כתבים...</p>
                     </div>
                   ) : (
                     <div className="grid grid-cols-auto-fit gap-3" style={{
@@ -523,8 +523,8 @@ export default function BroadcastStudio() {
                           onClick={() => setSelectedPresenter(reporter.id)}
                           className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${
                             selectedPresenter === reporter.id
-                              ? "border-purple-500 ring-2 ring-purple-500/50"
-                              : "border-purple-500/20 hover:border-purple-500/50"
+                              ? "border-[#E31E24] ring-2 ring-[#E31E24]/50"
+                              : "border-[#E31E24]/20 hover:border-[#E31E24]/50"
                           }`}
                           title={reporter.name}
                         >
@@ -533,7 +533,7 @@ export default function BroadcastStudio() {
                             <p className="text-white text-[10px] font-bold line-clamp-1">{reporter.name}</p>
                           </div>
                           {selectedPresenter === reporter.id && (
-                            <div className="absolute top-1 right-1 w-5 h-5 rounded-full bg-purple-500 flex items-center justify-center">
+                            <div className="absolute top-1 right-1 w-5 h-5 rounded-full bg-[#E31E24] flex items-center justify-center">
                               <Play className="w-2 h-2 text-white" />
                             </div>
                           )}
@@ -555,21 +555,21 @@ export default function BroadcastStudio() {
               className="space-y-4"
             >
               {/* Choose from existing reporters OR create custom */}
-              <div className="bg-black/40 backdrop-blur-lg rounded-xl border border-green-500/20 overflow-hidden">
-                <div className="bg-gradient-to-r from-green-600/20 to-green-800/20 px-4 py-2 border-b border-green-500/20">
+              <div className="bg-black/40 backdrop-blur-lg rounded-xl border border-[#E31E24]/30 overflow-hidden">
+                <div className="bg-gradient-to-r from-[#E31E24]/20 to-red-900/20 px-4 py-2 border-b border-[#E31E24]/30">
                   <div className="flex items-center gap-2">
-                    <Users className="w-4 h-4 text-green-400" />
+                    <Users className="w-4 h-4 text-[#E31E24]" />
                     <h2 className="text-white font-semibold text-sm">בחר אווטר (גוף מלא)</h2>
                   </div>
                 </div>
                 <div className="p-4 space-y-4">
                   {/* Existing Reporters */}
                   <div>
-                    <p className="text-green-300 text-xs font-semibold mb-2">כתבים קיימים:</p>
+                    <p className="text-white/70 text-xs font-semibold mb-2">כתבים קיימים:</p>
                     {reporters.length === 0 ? (
                       <div className="text-center py-4">
-                        <Loader className="w-6 h-6 animate-spin mx-auto mb-2 text-green-400" />
-                        <p className="text-green-300 text-sm">טוען כתבים...</p>
+                        <Loader className="w-6 h-6 animate-spin mx-auto mb-2 text-[#E31E24]" />
+                        <p className="text-white/70 text-sm">טוען כתבים...</p>
                       </div>
                     ) : (
                       <div className="grid grid-cols-auto-fit gap-2" style={{
