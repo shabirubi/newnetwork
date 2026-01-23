@@ -45,7 +45,15 @@ export default function BroadcastStudio() {
   const [selectedPresenter, setSelectedPresenter] = useState(null);
   const { data: reporters = [] } = useQuery({
     queryKey: ['reporters-for-studio'],
-    queryFn: () => base44.entities.Reporter.filter({ is_active: true }, 'name'),
+    queryFn: async () => {
+      try {
+        const user = await base44.auth.me();
+        if (!user) return [];
+        return base44.entities.Reporter.filter({ is_active: true }, 'name');
+      } catch {
+        return [];
+      }
+    },
     initialData: []
   });
 
