@@ -50,16 +50,24 @@ Deno.serve(async (req) => {
       console.log('🖼️ Avatar URL:', avatarUrl);
 
       apiUrl = 'https://api.d-id.com/talks';
+
+      // Build script based on input type
+      let script = {
+        type: audioUrl ? 'audio' : 'text',
+        input: audioUrl || text,
+      };
+
+      // Only add provider for text input
+      if (!audioUrl) {
+        script.provider = {
+          type: 'elevenlabs',
+          voice_id: voiceId
+        };
+      }
+
       payload = {
         source_url: avatarUrl,
-        script: {
-          type: 'text',
-          input: text,
-          provider: {
-            type: 'elevenlabs',
-            voice_id: voiceId
-          }
-        },
+        script: script,
         config: {
           fluent: true,
           pad_audio: 0,
@@ -67,6 +75,13 @@ Deno.serve(async (req) => {
           result_format: 'mp4'
         }
       };
+
+      if (backgroundUrl) {
+        payload.background = {
+          type: 'image',
+          image_url: backgroundUrl
+        };
+      }
     }
     // Mode 2: V3 Clips API - Pre-made Full Body Presenters
     else if (mode === 'clips') {
