@@ -163,13 +163,23 @@ export default function TikTokNewsContainer() {
               >
                 <X className="w-6 h-6 text-white" />
               </button>
-              <iframe
-                src={selectedVideo.url}
-                className="w-full h-full"
-                frameBorder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-              />
+              {selectedVideo.type === 'youtube' ? (
+                <iframe
+                  src={selectedVideo.url}
+                  className="w-full h-full"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              ) : (
+                <video
+                  src={selectedVideo.url}
+                  className="w-full h-full bg-black"
+                  controls
+                  playsInline
+                  style={{ objectFit: 'contain' }}
+                />
+              )}
             </motion.div>
           </motion.div>
         )}
