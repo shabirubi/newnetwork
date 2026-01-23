@@ -103,16 +103,13 @@ export default function TikTokNewsContainer() {
                 className="w-full h-full object-cover pointer-events-none"
                 frameBorder="0"
               />
-            ) : video.thumbnail ? (
-              <img 
-                src={video.thumbnail}
-                alt={video.title}
-                className="w-full h-full object-cover"
-              />
             ) : (
-              <div className="w-full h-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
-                <Music className="w-16 h-16 text-gray-600" />
-              </div>
+              <video
+                src={video.url}
+                className="w-full h-full object-cover pointer-events-none"
+                muted
+                playsInline
+              />
             )}
 
             {/* Overlay Gradient */}
