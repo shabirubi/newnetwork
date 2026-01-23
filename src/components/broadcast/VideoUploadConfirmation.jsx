@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { base44 } from "@/api/base44Client";
 import { toast } from "sonner";
 
-export default function VideoUploadConfirmation({ videoUrl, onClose, onSuccess }) {
+export default function VideoUploadConfirmation({ videoUrl, isOpen, onClose, onSuccess }) {
   const [step, setStep] = useState("options"); // options | uploading | success
   const [addToFeedKid, setAddToFeedKid] = useState(true);
   const [addToLivePlayer, setAddToLivePlayer] = useState(false);
