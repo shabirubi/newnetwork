@@ -34,6 +34,13 @@ export default function BroadcastStudio() {
   const [historicalArticles, setHistoricalArticles] = useState([]);
   const [selectedHistoricalArticle, setSelectedHistoricalArticle] = useState(null);
 
+  // Google Search
+  const [googleSearchQuery, setGoogleSearchQuery] = useState("");
+  const [googleSearchResults, setGoogleSearchResults] = useState([]);
+  const [searchingGoogle, setSearchingGoogle] = useState(false);
+  const [selectedGoogleArticle, setSelectedGoogleArticle] = useState(null);
+  const [editingGoogleArticle, setEditingGoogleArticle] = useState(null);
+
   // Talks Mode (V2 - Head Only)
   const [avatarImage, setAvatarImage] = useState(null);
   const [uploadDialogOpen, setUploadDialogOpen] = useState(false);
