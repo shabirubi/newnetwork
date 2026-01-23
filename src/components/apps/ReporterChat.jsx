@@ -661,12 +661,12 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
               <div className="bg-gradient-to-r from-[#E31E24]/30 via-red-900/20 to-black text-white p-6 flex items-center justify-between border-b border-[#E31E24]/30">
                 <div className="flex items-center gap-3">
                   {selectedReporter ? (
-                    <div className="relative">
-                      <img
-                        src={selectedReporter.image}
-                        alt={selectedReporter.name}
-                        className="w-12 h-12 rounded-full object-cover border-2 border-white"
-                      />
+                  <div className="relative">
+                    <img
+                      src={selectedReporter.image}
+                      alt={selectedReporter.name}
+                      className="w-12 h-12 rounded-full object-cover border-2 border-[#E31E24]"
+                    />
                       <motion.div
                         animate={{ scale: reporterStatus === 'typing' ? [1, 1.2, 1] : 1 }}
                         transition={{ duration: 1.5, repeat: reporterStatus === 'typing' ? Infinity : 0 }}
