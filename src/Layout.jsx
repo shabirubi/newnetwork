@@ -36,21 +36,22 @@ const categories = [
   ];
 
 export default function Layout({ children, currentPageName }) {
-  // דפים ללא Layout
-  if (currentPageName === 'VODContent' || currentPageName === 'ReporterStudio' || currentPageName === 'BroadcastStudio') {
-    return children;
-  }
-        const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-        const [categoriesSidebarOpen, setCategoriesSidebarOpen] = useState(false);
-        const [reportersModalOpen, setReportersModalOpen] = useState(false);
-        const [kanArchiveOpen, setKanArchiveOpen] = useState(false);
-        const [darkMode, setDarkMode] = useState(() => {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [categoriesSidebarOpen, setCategoriesSidebarOpen] = useState(false);
+  const [reportersModalOpen, setReportersModalOpen] = useState(false);
+  const [kanArchiveOpen, setKanArchiveOpen] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => {
     if (typeof window !== 'undefined') {
       const saved = localStorage.getItem('darkMode');
       return saved === null ? true : saved === 'true';
     }
     return true;
   });
+
+  // דפים ללא Layout
+  if (currentPageName === 'VODContent' || currentPageName === 'ReporterStudio' || currentPageName === 'BroadcastStudio') {
+    return children;
+  }
 
   useEffect(() => {
     if (darkMode) {
