@@ -793,7 +793,7 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                     </motion.div>
 
                     {/* Chat Area - Right Side */}
-                    <div className="flex-1 flex flex-col overflow-hidden bg-gray-50 dark:bg-gray-800/50">
+                     <div className="flex-1 flex flex-col overflow-hidden bg-gradient-to-b from-gray-900/40 to-black/40">
                     {/* Response Video Section */}
                     <AnimatePresence>
                     {showIntro && (
