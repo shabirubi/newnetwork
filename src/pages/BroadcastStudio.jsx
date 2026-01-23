@@ -349,7 +349,6 @@ export default function BroadcastStudio() {
               </Button>
             </motion.div>
           </div>
-          </div>
         </div>
       </div>
     </div>
