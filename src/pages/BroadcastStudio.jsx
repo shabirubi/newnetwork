@@ -686,10 +686,46 @@ export default function BroadcastStudio() {
           </motion.div>
         )}
 
+        {/* Scene Background (Optional) */}
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-black/40 backdrop-blur-lg rounded-xl border border-blue-500/20 overflow-hidden"
+        >
+          <div className="bg-gradient-to-r from-blue-600/20 to-blue-800/20 px-4 py-2 border-b border-blue-500/20">
+            <div className="flex items-center gap-2">
+              <Image className="w-4 h-4 text-blue-400" />
+              <h2 className="text-white font-semibold text-sm">רקע סצנה (אופציונלי)</h2>
+            </div>
+          </div>
+          <div className="p-4">
+            <div
+              onClick={() => bgInputRef.current?.click()}
+              className="relative rounded-lg border-2 border-dashed border-blue-500/30 hover:border-blue-500 bg-black/30 hover:bg-black/50 cursor-pointer transition-all flex items-center justify-center p-4 group"
+            >
+              {sceneBackground ? (
+                <>
+                  <img src={sceneBackground} alt="Background" className="w-full h-32 object-cover rounded-lg" />
+                  <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
+                    <Upload className="w-6 h-6 text-blue-400" />
+                  </div>
+                </>
+              ) : (
+                <div className="text-center">
+                  <Image className="w-8 h-8 text-blue-400 mx-auto mb-1" />
+                  <p className="text-white text-xs font-medium">בחר רקע</p>
+                  <p className="text-blue-300/50 text-[10px] mt-1">PNG, JPG</p>
+                </div>
+              )}
+            </div>
+            <input ref={bgInputRef} type="file" accept="image/*" onChange={handleBgUpload} className="hidden" />
+          </div>
+        </motion.div>
+
         {/* Generate Button */}
         <Button
           onClick={handleGenerateVideo}
-          disabled={loading || !articleText.trim()}
+          disabled={loading || (inputType === "text" && !articleText.trim()) || (inputType === "audio" && !audioFile)}
           className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-bold py-5 text-base disabled:opacity-50 rounded-xl"
         >
           {loading ? (
