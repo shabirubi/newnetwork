@@ -164,14 +164,6 @@ export default function Layout({ children, currentPageName }) {
             </Link>
 
             <button
-              onClick={() => setKanArchiveOpen(true)}
-              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-gradient-to-r from-orange-500 to-red-600 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-orange-300/50 transition-all hover:scale-105 animate-pulse text-xs sm:text-sm"
-            >
-              <Flame className="w-4 h-4 text-white" />
-              <span className="text-white font-bold hidden sm:inline">עמוד האש</span>
-            </button>
-
-            <button
               onClick={() => setCategoriesSidebarOpen(true)}
               className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-black/60 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-white/20 transition-all hover:scale-105 hover:bg-black/70 text-xs sm:text-sm"
             >
