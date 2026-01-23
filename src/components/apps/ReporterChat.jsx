@@ -1024,25 +1024,25 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                               alt={selectedReporter.name}
                               className="w-8 h-8 rounded-full object-cover flex-shrink-0"
                             />
-                            <div className="bg-white dark:bg-gray-700 px-4 py-3 rounded-2xl border border-gray-200 dark:border-gray-600">
-                              <div className="flex gap-1">
-                                <motion.div 
-                                  animate={{ y: [0, -8, 0] }}
-                                  transition={{ duration: 0.6, repeat: Infinity }}
-                                  className="w-2 h-2 bg-indigo-500 rounded-full"
-                                />
-                                <motion.div 
-                                  animate={{ y: [0, -8, 0] }}
-                                  transition={{ duration: 0.6, repeat: Infinity, delay: 0.15 }}
-                                  className="w-2 h-2 bg-purple-500 rounded-full"
-                                />
-                                <motion.div 
-                                  animate={{ y: [0, -8, 0] }}
-                                  transition={{ duration: 0.6, repeat: Infinity, delay: 0.3 }}
-                                  className="w-2 h-2 bg-indigo-500 rounded-full"
-                                />
-                              </div>
-                            </div>
+                            <div className="bg-black/40 px-4 py-3 rounded-2xl border border-[#E31E24]/30">
+                               <div className="flex gap-1">
+                                 <motion.div 
+                                   animate={{ y: [0, -8, 0] }}
+                                   transition={{ duration: 0.6, repeat: Infinity }}
+                                   className="w-2 h-2 bg-[#E31E24] rounded-full"
+                                 />
+                                 <motion.div 
+                                   animate={{ y: [0, -8, 0] }}
+                                   transition={{ duration: 0.6, repeat: Infinity, delay: 0.15 }}
+                                   className="w-2 h-2 bg-red-700 rounded-full"
+                                 />
+                                 <motion.div 
+                                   animate={{ y: [0, -8, 0] }}
+                                   transition={{ duration: 0.6, repeat: Infinity, delay: 0.3 }}
+                                   className="w-2 h-2 bg-[#E31E24] rounded-full"
+                                 />
+                               </div>
+                             </div>
                           </motion.div>
                         )}
                       </AnimatePresence>
