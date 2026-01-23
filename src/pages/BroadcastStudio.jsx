@@ -44,6 +44,73 @@ export default function BroadcastStudio() {
     initialData: []
   });
 
+  // Manage Tab States
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedVideo, setSelectedVideo] = useState(null);
+  const [editingVideo, setEditingVideo] = useState(null);
+  const [editTitle, setEditTitle] = useState("");
+  const [editDescription, setEditDescription] = useState("");
+  const [filterStatus, setFilterStatus] = useState("all");
+
+  const queryClient = useQueryClient();
+
+  // Fetch user's videos
+  const { data: userVideos = [], isLoading: videosLoading } = useQuery({
+    queryKey: ['user-videos-manage'],
+    queryFn: async () => {
+      const user = await base44.auth.me();
+      if (!user) return [];
+      return base44.entities.UserVideo.filter({ uploader_email: user.email }, '-created_date', 100);
+    },
+    initialData: [],
+    enabled: tab === "manage"
+  });
+
+  // Delete mutation
+  const deleteMutation = useMutation({
+    mutationFn: (videoId) => base44.entities.UserVideo.delete(videoId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['user-videos-manage'] });
+      toast.success("וידאו נמחק בהצלחה");
+      setSelectedVideo(null);
+    },
+    onError: () => toast.error("שגיאה במחיקה")
+  });
+
+  // Update mutation
+  const updateMutation = useMutation({
+    mutationFn: ({ videoId, data }) => base44.entities.UserVideo.update(videoId, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['user-videos-manage'] });
+      toast.success("וידאו עודכן בהצלחה");
+      setEditingVideo(null);
+    },
+    onError: () => toast.error("שגיאה בעדכון")
+  });
+
+  const handleStartEdit = (video) => {
+    setEditingVideo(video.id);
+    setEditTitle(video.title);
+    setEditDescription(video.description || "");
+  };
+
+  const handleSaveEdit = () => {
+    if (!editTitle.trim()) {
+      toast.error("כותרת חובה");
+      return;
+    }
+    updateMutation.mutate({
+      videoId: editingVideo,
+      data: { title: editTitle, description: editDescription }
+    });
+  };
+
+  const filteredVideos = userVideos.filter(video => {
+    const matchesSearch = video.title.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus = filterStatus === "all" || video.status === filterStatus;
+    return matchesSearch && matchesStatus;
+  });
+
   // Express Mode (V3 Instant - Custom Full Body)
   const [trainingVideo, setTrainingVideo] = useState(null);
   const [customAvatarId, setCustomAvatarId] = useState(null);
