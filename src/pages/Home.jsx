@@ -185,6 +185,13 @@ export default function Home() {
         <TrendingTopicsContainer />
       </React.Suspense>
 
+      {/* Kan Archive - עמוד האש */}
+      <div id="kan-archive-section">
+        <React.Suspense fallback={<div className="h-96 bg-black animate-pulse rounded-2xl mx-4" />}>
+          <KanArchiveContainer />
+        </React.Suspense>
+      </div>
+
       {/* TikTok News Container - Lazy Loaded */}
       <React.Suspense fallback={<div className="h-96 bg-black animate-pulse rounded-2xl mx-4" />}>
         <TikTokNewsContainer />
@@ -235,13 +242,6 @@ export default function Home() {
       <div id="user-videos-section">
         <React.Suspense fallback={<div className="h-96 bg-black animate-pulse rounded-2xl mx-4" />}>
           <UserUploadedVideos onUploadClick={() => setUploadVideoModalOpen(true)} />
-        </React.Suspense>
-      </div>
-
-      {/* Kan Archive - עמוד האש */}
-      <div id="kan-archive-section">
-        <React.Suspense fallback={<div className="h-96 bg-black animate-pulse rounded-2xl mx-4" />}>
-          <KanArchiveContainer />
         </React.Suspense>
       </div>
 
