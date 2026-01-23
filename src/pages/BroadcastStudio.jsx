@@ -99,16 +99,18 @@ export default function BroadcastStudio() {
     toast.loading("יוצר וידאו... ⏳", { id: "video-gen" });
 
     try {
-      let response;
+       let response;
 
-      if (mode === "talks") {
-        // V2 Talks API - Head only
-        response = await base44.functions.invoke("generateTalkingVideo", {
-          text: articleText,
-          avatarUrl: avatarImage,
-          voiceId: selectedVoice,
-          mode: "talks"
-        });
+       if (mode === "talks") {
+         // V2 Talks API - Head only
+         response = await base44.functions.invoke("generateTalkingVideo", {
+           text: inputType === "text" ? articleText : undefined,
+           audioUrl: inputType === "audio" ? audioFile : undefined,
+           avatarUrl: avatarImage,
+           voiceId: selectedVoice,
+           backgroundUrl: sceneBackground,
+           mode: "talks"
+         });
       } else if (mode === "clips") {
          // V3 Clips API - Using reporter presenter
          response = await base44.functions.invoke("generateTalkingVideo", {
