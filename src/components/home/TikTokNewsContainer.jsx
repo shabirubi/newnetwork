@@ -97,11 +97,23 @@ export default function TikTokNewsContainer() {
             }}
           >
             {/* Video Preview */}
-            <iframe
-              src={`https://www.youtube.com/embed/${video.id.replace('youtube-', '')}?controls=0&mute=1`}
-              className="w-full h-full object-cover pointer-events-none"
-              frameBorder="0"
-            />
+            {video.type === 'youtube' ? (
+              <iframe
+                src={`https://www.youtube.com/embed/${video.id.replace('youtube-', '')}?controls=0&mute=1`}
+                className="w-full h-full object-cover pointer-events-none"
+                frameBorder="0"
+              />
+            ) : video.thumbnail ? (
+              <img 
+                src={video.thumbnail}
+                alt={video.title}
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center">
+                <Music className="w-16 h-16 text-gray-600" />
+              </div>
+            )}
 
             {/* Overlay Gradient */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent group-hover:via-black/40 transition-all" />
