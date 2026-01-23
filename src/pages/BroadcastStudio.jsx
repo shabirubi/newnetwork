@@ -374,14 +374,14 @@ export default function BroadcastStudio() {
 
       {/* Main Content */}
       <div className="max-w-7xl mx-auto px-6 py-6">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
           {/* Left Sidebar - Tabs */}
-          <div className="lg:col-span-1">
+          <div className="md:col-span-3 lg:col-span-2">
             <StudioTabs activeTab={tab} onTabChange={setTab} />
           </div>
 
           {/* Right Content - Main */}
-          <div className="lg:col-span-3 space-y-4">
+          <div className="md:col-span-9 lg:col-span-10 space-y-4">
         
         {/* CREATE TAB */}
         {tab === "create" && (
