@@ -562,31 +562,66 @@ export default function BroadcastStudio() {
           )}
         </AnimatePresence>
 
-        {/* Voice Settings */}
+        {/* Input Type Selection */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
           className="bg-black/40 backdrop-blur-lg rounded-xl border border-blue-500/20 overflow-hidden"
         >
           <div className="bg-gradient-to-r from-blue-600/20 to-blue-800/20 px-4 py-2 border-b border-blue-500/20">
-            <div className="flex items-center gap-2">
-              <Volume2 className="w-4 h-4 text-blue-400" />
-              <h2 className="text-white font-semibold text-sm">קול</h2>
-            </div>
+            <h2 className="text-white font-semibold text-sm">קלט</h2>
           </div>
-          <div className="p-4">
-            <select
-              value={selectedVoice}
-              onChange={(e) => setSelectedVoice(e.target.value)}
-              className="w-full bg-black/30 border border-blue-500/20 rounded-lg px-3 py-2 text-white text-sm focus:border-blue-500 focus:outline-none"
+          <div className="p-4 grid grid-cols-2 gap-2">
+            <button
+              onClick={() => setInputType("text")}
+              className={`p-3 rounded-lg border-2 transition-all text-sm font-semibold ${
+                inputType === "text"
+                  ? "border-blue-500 bg-blue-500/20 text-blue-300"
+                  : "border-blue-500/20 bg-black/20 text-white hover:bg-black/40"
+              }`}
             >
-              <option value="he-IL-AvriNeural">עברי - אברי (זכר)</option>
-              <option value="he-IL-HilaNeural">עברית - הילה (נקבה)</option>
-            </select>
+              📝 טקסט
+            </button>
+            <button
+              onClick={() => setInputType("audio")}
+              className={`p-3 rounded-lg border-2 transition-all text-sm font-semibold ${
+                inputType === "audio"
+                  ? "border-blue-500 bg-blue-500/20 text-blue-300"
+                  : "border-blue-500/20 bg-black/20 text-white hover:bg-black/40"
+              }`}
+            >
+              🎵 אודיו
+            </button>
           </div>
         </motion.div>
 
-        {/* Article Text */}
+        {/* Voice Settings (only for text) */}
+        {inputType === "text" && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-black/40 backdrop-blur-lg rounded-xl border border-blue-500/20 overflow-hidden"
+          >
+            <div className="bg-gradient-to-r from-blue-600/20 to-blue-800/20 px-4 py-2 border-b border-blue-500/20">
+              <div className="flex items-center gap-2">
+                <Volume2 className="w-4 h-4 text-blue-400" />
+                <h2 className="text-white font-semibold text-sm">קול</h2>
+              </div>
+            </div>
+            <div className="p-4">
+              <select
+                value={selectedVoice}
+                onChange={(e) => setSelectedVoice(e.target.value)}
+                className="w-full bg-black/30 border border-blue-500/20 rounded-lg px-3 py-2 text-white text-sm focus:border-blue-500 focus:outline-none"
+              >
+                <option value="he-IL-AvriNeural">עברי - אברי (זכר)</option>
+                <option value="he-IL-HilaNeural">עברית - הילה (נקבה)</option>
+              </select>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Article Text (for text input) */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}
