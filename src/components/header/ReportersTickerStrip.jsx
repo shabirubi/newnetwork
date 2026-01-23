@@ -15,17 +15,19 @@ export default function ReportersTickerStrip() {
   const containerRef = useRef(null);
   const scrollContainerRef = useRef(null);
 
-  // CSS for grayscale images
+  // CSS for grayscale images with smooth transition
   React.useEffect(() => {
     const style = document.createElement('style');
     style.innerHTML = `
       .reporter-ticker-image-bw {
         filter: grayscale(100%) !important;
         -webkit-filter: grayscale(100%) !important;
+        transition: filter 0.4s ease-in-out !important;
       }
       .reporter-ticker-image-color {
         filter: grayscale(0%) !important;
         -webkit-filter: grayscale(0%) !important;
+        transition: filter 0.4s ease-in-out !important;
       }
     `;
     document.head.appendChild(style);
