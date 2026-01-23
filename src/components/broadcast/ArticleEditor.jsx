@@ -240,73 +240,153 @@ export default function ArticleEditor({ article, isOpen, onClose, onPublish }) {
                     </div>
                   </div>
 
-                  {/* Content */}
-                  <div>
-                    <label className="text-white/70 text-xs font-semibold block mb-2">תוכן</label>
-                    <textarea
-                      value={editData.content}
-                      onChange={(e) => setEditData({ ...editData, content: e.target.value })}
-                      className="w-full h-40 bg-black/30 border border-[#E31E24]/30 rounded-lg px-4 py-3 text-white text-sm focus:border-[#E31E24] focus:outline-none resize-none"
-                      placeholder="כתוב את התוכן המלא של הכתבה..."
-                      dir="rtl"
-                    />
-                    <p className="text-white/50 text-xs mt-1">{editData.content.length} תווים</p>
-                  </div>
-
-                  {/* Tags */}
-                  <div>
-                    <label className="text-white/70 text-xs font-semibold block mb-2">תגים</label>
-                    <div className="flex gap-2 mb-3">
-                      <input
-                        type="text"
-                        value={newTag}
-                        onChange={(e) => setNewTag(e.target.value)}
-                        onKeyPress={(e) => e.key === "Enter" && handleAddTag()}
-                        placeholder="הוסף תג"
-                        className="flex-1 bg-black/30 border border-[#E31E24]/30 rounded-lg px-3 py-2 text-white text-sm focus:border-[#E31E24] focus:outline-none"
+                    {/* Content */}
+                    <div>
+                      <label className="text-white/70 text-xs font-semibold block mb-2">תוכן</label>
+                      <textarea
+                        value={editData.content}
+                        onChange={(e) => setEditData({ ...editData, content: e.target.value })}
+                        className="w-full h-40 bg-black/30 border border-[#E31E24]/30 rounded-lg px-4 py-3 text-white text-sm focus:border-[#E31E24] focus:outline-none resize-none"
+                        placeholder="כתוב את התוכן המלא של הכתבה..."
                         dir="rtl"
                       />
-                      <button
-                        onClick={handleAddTag}
-                        className="p-2 bg-[#E31E24] hover:bg-red-800 rounded-lg text-white transition-all"
-                      >
-                        <Plus className="w-4 h-4" />
-                      </button>
+                      <p className="text-white/50 text-xs mt-1">{editData.content.length} תווים</p>
                     </div>
-                    <div className="flex flex-wrap gap-2">
-                      {editData.tags.map((tag) => (
-                        <div
-                          key={tag}
-                          className="px-3 py-1 bg-[#E31E24]/20 border border-[#E31E24]/30 rounded-full text-[#E31E24] text-xs font-semibold flex items-center gap-1"
-                        >
-                          <Tag className="w-3 h-3" />
-                          {tag}
-                          <button
-                            onClick={() => handleRemoveTag(tag)}
-                            className="ml-1 hover:opacity-70"
-                          >
-                            <X className="w-3 h-3" />
-                          </button>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+                  </motion.div>
+                )}
 
-                  {/* Notes */}
-                  <div>
-                    <label className="text-white/70 text-xs font-semibold block mb-2">הערות עורך</label>
-                    <textarea
-                      value={editData.notes}
-                      onChange={(e) => setEditData({ ...editData, notes: e.target.value })}
-                      className="w-full h-20 bg-black/30 border border-[#E31E24]/30 rounded-lg px-4 py-3 text-white text-sm focus:border-[#E31E24] focus:outline-none resize-none"
-                      placeholder="הערות אישיות לכתבה זו..."
-                      dir="rtl"
+                {/* Images Tab */}
+                {activeTab === "images" && (
+                  <motion.div
+                    key="images"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="space-y-4"
+                  >
+                    <div>
+                      <label className="text-white/70 text-xs font-semibold block mb-2">תמונה ראשית</label>
+                      <div className="space-y-3">
+                        {editData.image_url && (
+                          <div className="relative group rounded-lg overflow-hidden">
+                            <img src={editData.image_url} alt="Article" className="w-full h-48 object-cover" />
+                            <button
+                              onClick={() => setEditData({ ...editData, image_url: "" })}
+                              className="absolute top-2 right-2 p-2 bg-red-600 hover:bg-red-700 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity"
+                            >
+                              <Trash2 className="w-4 h-4 text-white" />
+                            </button>
+                          </div>
+                        )}
+                        <button
+                          onClick={() => imageInputRef.current?.click()}
+                          className="w-full p-4 border-2 border-dashed border-[#E31E24]/30 rounded-lg hover:border-[#E31E24]/50 bg-black/20 hover:bg-black/40 transition-all flex flex-col items-center justify-center gap-2"
+                        >
+                          <ImageIcon className="w-6 h-6 text-[#E31E24]" />
+                          <span className="text-white text-sm font-medium">העלה או החלף תמונה</span>
+                          <span className="text-white/50 text-xs">PNG, JPG עד 10MB</span>
+                        </button>
+                        <input
+                          ref={imageInputRef}
+                          type="file"
+                          accept="image/*"
+                          onChange={handleImageUpload}
+                          className="hidden"
+                        />
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* Tags & Notes Tab */}
+                {activeTab === "tags" && (
+                  <motion.div
+                    key="tags"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="space-y-6"
+                  >
+                    {/* Tags */}
+                    <div>
+                      <label className="text-white/70 text-xs font-semibold block mb-2">תגים</label>
+                      <div className="flex gap-2 mb-3">
+                        <input
+                          type="text"
+                          value={newTag}
+                          onChange={(e) => setNewTag(e.target.value)}
+                          onKeyPress={(e) => e.key === "Enter" && handleAddTag()}
+                          placeholder="הוסף תג"
+                          className="flex-1 bg-black/30 border border-[#E31E24]/30 rounded-lg px-3 py-2 text-white text-sm focus:border-[#E31E24] focus:outline-none"
+                          dir="rtl"
+                        />
+                        <button
+                          onClick={handleAddTag}
+                          className="p-2 bg-[#E31E24] hover:bg-red-800 rounded-lg text-white transition-all"
+                        >
+                          <Plus className="w-4 h-4" />
+                        </button>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        {editData.tags.map((tag) => (
+                          <div
+                            key={tag}
+                            className="px-3 py-1 bg-[#E31E24]/20 border border-[#E31E24]/30 rounded-full text-[#E31E24] text-xs font-semibold flex items-center gap-1"
+                          >
+                            <Tag className="w-3 h-3" />
+                            {tag}
+                            <button
+                              onClick={() => handleRemoveTag(tag)}
+                              className="ml-1 hover:opacity-70"
+                            >
+                              <X className="w-3 h-3" />
+                            </button>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Notes */}
+                    <div>
+                      <label className="text-white/70 text-xs font-semibold block mb-2">הערות עורך</label>
+                      <textarea
+                        value={editData.notes}
+                        onChange={(e) => setEditData({ ...editData, notes: e.target.value })}
+                        className="w-full h-32 bg-black/30 border border-[#E31E24]/30 rounded-lg px-4 py-3 text-white text-sm focus:border-[#E31E24] focus:outline-none resize-none"
+                        placeholder="הערות אישיות לכתבה זו..."
+                        dir="rtl"
+                      />
+                    </div>
+                  </motion.div>
+                )}
+
+                {/* History Tab */}
+                {activeTab === "history" && (
+                  <motion.div
+                    key="history"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                  >
+                    <HistorySearch
+                      onSelect={(result) => {
+                        setEditData(result);
+                        setActiveTab("edit");
+                        toast.success("כתבה היסטורית נטענה בהצלחה");
+                      }}
                     />
-                  </div>
-                </>
-              ) : (
-                /* Preview Mode */
-                <div className="space-y-4">
+                  </motion.div>
+                )}
+
+                {/* Preview Tab */}
+                {activeTab === "preview" && (
+                  <motion.div
+                    key="preview"
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    className="space-y-4"
+                  >
                   {editData.image_url && (
                     <img src={editData.image_url} alt="Preview" className="w-full h-64 object-cover rounded-lg" />
                   )}
