@@ -670,9 +670,9 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                       <motion.div
                         animate={{ scale: reporterStatus === 'typing' ? [1, 1.2, 1] : 1 }}
                         transition={{ duration: 1.5, repeat: reporterStatus === 'typing' ? Infinity : 0 }}
-                        className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white ${
+                        className={`absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-[#E31E24] ${
                           reporterStatus === 'online' ? 'bg-green-500' : 
-                          reporterStatus === 'typing' ? 'bg-yellow-500' : 'bg-gray-400'
+                          reporterStatus === 'typing' ? 'bg-[#E31E24]' : 'bg-white/40'
                         }`}
                       />
                     </div>
