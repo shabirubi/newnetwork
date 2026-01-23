@@ -67,8 +67,12 @@ export default function UploadVideoModal({ isOpen, onClose }) {
       setUploading(false);
       
       // רענן את כל ה-queries
+      console.log('🔄 מרענן פידים...');
       queryClient.invalidateQueries({ queryKey: ['userVideos'] });
       queryClient.invalidateQueries({ queryKey: ['all-user-videos'] });
+      await queryClient.refetchQueries({ queryKey: ['userVideos'] });
+      await queryClient.refetchQueries({ queryKey: ['all-user-videos'] });
+      console.log('✅ פידים עודכנו!');
 
       console.log('🎥 סרטון הועלה בהצלחה!');
       window.dispatchEvent(new CustomEvent('playVideo', {
