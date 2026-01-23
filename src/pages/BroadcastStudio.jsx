@@ -1205,6 +1205,21 @@ export default function BroadcastStudio() {
             handleReset();
           }}
         />
+
+        {/* Article Editor */}
+        <ArticleEditor
+          article={articleToEdit}
+          isOpen={articleEditorOpen}
+          onClose={() => {
+            setArticleEditorOpen(false);
+            setArticleToEdit(null);
+            setEditingGoogleArticle(null);
+          }}
+          onPublish={() => {
+            toast.success("הכתבה פורסמה בהצלחה!");
+            setArticleToEdit(null);
+          }}
+        />
         </>
         )}
 
