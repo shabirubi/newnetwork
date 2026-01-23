@@ -65,6 +65,8 @@ export default function VideoUploadConfirmation({ videoUrl, isOpen, onClose, onS
     }
   };
 
+  if (!isOpen) return null;
+
   return (
     <AnimatePresence>
       <motion.div
