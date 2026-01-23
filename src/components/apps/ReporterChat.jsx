@@ -647,18 +647,18 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-[99999]"
+            className="fixed inset-0 bg-black/60 backdrop-blur-lg flex items-center justify-center p-4 z-[99999]"
             onClick={() => setOpenState(false)}
-          >
+            >
             <motion.div
              initial={{ scale: 0.9, opacity: 0 }}
              animate={{ scale: 1, opacity: 1 }}
              exit={{ scale: 0.9, opacity: 0 }}
-             className="bg-white dark:bg-gray-900 rounded-3xl w-[95vw] h-[90vh] flex flex-col overflow-hidden"
+             className="bg-gradient-to-br from-black via-gray-900 to-black border border-[#E31E24]/30 rounded-2xl w-[95vw] h-[90vh] flex flex-col overflow-hidden"
              onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}
-              <div className="bg-gradient-to-r from-indigo-600 to-purple-600 text-white p-6 flex items-center justify-between">
+              <div className="bg-gradient-to-r from-[#E31E24]/30 via-red-900/20 to-black text-white p-6 flex items-center justify-between border-b border-[#E31E24]/30">
                 <div className="flex items-center gap-3">
                   {selectedReporter ? (
                     <div className="relative">
