@@ -57,7 +57,15 @@ export default function Home() {
 
   const { data: channels = [] } = useQuery({
     queryKey: ['channels'],
-    queryFn: () => base44.entities.NewsChannel.filter({ is_active: true }, 'name'),
+    queryFn: async () => {
+      try {
+        const user = await base44.auth.me();
+        if (!user) return [];
+        return base44.entities.NewsChannel.filter({ is_active: true }, 'name');
+      } catch {
+        return [];
+      }
+    },
     initialData: []
   });
 
@@ -67,11 +75,17 @@ export default function Home() {
 
   const { data: articles = [], isLoading } = useQuery({
     queryKey: ['news-articles', selectedChannel],
-    queryFn: () => {
-      if (selectedChannel === 'all') {
-        return base44.entities.NewsArticle.list('-created_date', 50);
+    queryFn: async () => {
+      try {
+        const user = await base44.auth.me();
+        if (!user) return [];
+        if (selectedChannel === 'all') {
+          return base44.entities.NewsArticle.list('-created_date', 50);
+        }
+        return base44.entities.NewsArticle.filter({ channel_id: selectedChannel }, '-created_date', 50);
+      } catch {
+        return [];
       }
-      return base44.entities.NewsArticle.filter({ channel_id: selectedChannel }, '-created_date', 50);
     },
     staleTime: 8 * 60 * 60 * 1000,
     gcTime: 8 * 60 * 60 * 1000,
@@ -88,7 +102,15 @@ export default function Home() {
 
   const { data: liveStream, refetch: refetchLiveStream } = useQuery({
     queryKey: ['live-stream'],
-    queryFn: () => base44.entities.LiveStream.list('-created_date', 1),
+    queryFn: async () => {
+      try {
+        const user = await base44.auth.me();
+        if (!user) return [];
+        return base44.entities.LiveStream.list('-created_date', 1);
+      } catch {
+        return [];
+      }
+    },
     initialData: [],
     refetchInterval: 5000 // רענן כל 5 שניות
   });
