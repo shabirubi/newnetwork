@@ -727,17 +727,17 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                           <img
                             src={reporter.image}
                             alt={reporter.name}
-                            className="w-12 h-12 rounded-xl object-cover"
+                            className="w-12 h-12 rounded-xl object-cover border border-[#E31E24]/50"
                           />
                           <div className="flex-1">
-                            <h4 className="font-bold dark:text-white">{reporter.name}</h4>
-                            <p className="text-sm text-gray-600 dark:text-gray-400">{reporter.role}</p>
-                            <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                            <h4 className="font-bold text-white">{reporter.name}</h4>
+                            <p className="text-sm text-white/70">{reporter.role}</p>
+                            <p className="text-xs text-white/50 mt-1">
                               {reporter.specialty}
                             </p>
                           </div>
                           <div className="text-right text-xs">
-                            <p className="text-green-600 dark:text-green-400">● זמין</p>
+                            <p className="text-green-400 flex items-center gap-1">● זמין</p>
                           </div>
                         </div>
                       </motion.button>
