@@ -774,21 +774,21 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                       )}
                       <div className="w-full space-y-2">
                         <motion.button
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
-                          onClick={generateReporterIntroVideo}
-                          className="w-full px-4 py-3 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-xl font-bold transition-all"
-                        >
-                          🎤 הצגה קולית
-                        </motion.button>
-                        <motion.button
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
-                          onClick={() => setSelectedReporter(null)}
-                          className="w-full px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-xl font-semibold transition-all text-sm"
-                        >
-                          ← חזור לרשימה
-                        </motion.button>
+                           whileHover={{ scale: 1.02 }}
+                           whileTap={{ scale: 0.98 }}
+                           onClick={generateReporterIntroVideo}
+                           className="w-full px-4 py-3 bg-gradient-to-r from-[#E31E24] to-red-800 hover:from-red-700 hover:to-red-900 text-white rounded-xl font-bold transition-all flex items-center justify-center gap-2"
+                         >
+                           <Mic className="w-4 h-4" /> הצגה קולית
+                         </motion.button>
+                         <motion.button
+                           whileHover={{ scale: 1.02 }}
+                           whileTap={{ scale: 0.98 }}
+                           onClick={() => setSelectedReporter(null)}
+                           className="w-full px-4 py-2 bg-[#E31E24]/20 hover:bg-[#E31E24]/30 border border-[#E31E24]/30 text-white rounded-xl font-semibold transition-all text-sm flex items-center justify-center gap-2"
+                         >
+                           <X className="w-4 h-4" /> חזור
+                         </motion.button>
                       </div>
                     </motion.div>
 
