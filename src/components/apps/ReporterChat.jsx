@@ -680,12 +680,12 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                     <Sparkles className="w-6 h-6" />
                   )}
                   <div>
-                    <h2 className="text-2xl font-bold">צ'אט כתבים</h2>
+                    <h2 className="text-2xl font-bold text-white">צ'אט כתבים</h2>
                     {selectedReporter && (
                       <div className="flex items-center gap-2">
-                        <p className="text-indigo-200 text-sm">{selectedReporter.name}</p>
+                        <p className="text-white/80 text-sm">{selectedReporter.name}</p>
                         {reporterStatus === 'typing' && (
-                          <span className="text-xs text-yellow-300 animate-pulse">מקליד/ה...</span>
+                          <span className="text-xs text-[#E31E24] animate-pulse flex items-center gap-1"><Clock className="w-2 h-2" /> מקליד/ה...</span>
                         )}
                       </div>
                     )}
