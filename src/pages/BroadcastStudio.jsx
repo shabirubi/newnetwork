@@ -537,16 +537,19 @@ export default function BroadcastStudio() {
                   </button>
                   <button
                     onClick={() => {
-                      setArticleText(editingGoogleArticle.title + "\n\n" + editingGoogleArticle.description);
-                      if (editingGoogleArticle.image_url) {
-                        setSceneBackground(editingGoogleArticle.image_url);
-                      }
+                      setArticleToEdit({
+                        title: editingGoogleArticle.title,
+                        description: editingGoogleArticle.description || "",
+                        content: editingGoogleArticle.description || "",
+                        image_url: editingGoogleArticle.image_url || "",
+                        category: "breaking"
+                      });
+                      setArticleEditorOpen(true);
                       setEditingGoogleArticle(null);
-                      toast.success("כתבה הועלתה לעורך");
                     }}
                     className="flex-1 px-4 py-2 bg-[#E31E24] hover:bg-red-800 text-white rounded-lg text-sm font-semibold transition-all"
                   >
-                    העלה לעורך
+                    עורך מקצועי
                   </button>
                 </div>
               </motion.div>
