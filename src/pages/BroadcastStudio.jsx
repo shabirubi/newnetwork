@@ -268,16 +268,38 @@ export default function BroadcastStudio() {
                 </Button>
               </Link>
               <div className="flex items-center gap-2">
-                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-blue-700 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-[#E31E24] to-red-800 flex items-center justify-center">
                   <Mic className="w-5 h-5 text-white" />
                 </div>
                 <div>
                   <h1 className="text-lg font-bold text-white">סטודיו שידור מקצועי</h1>
-                  <p className="text-xs text-blue-300">D-ID Video Studio</p>
+                  <p className="text-xs text-white/70">D-ID Video Studio</p>
                 </div>
               </div>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-4">
+              <button
+                onClick={() => setTab("create")}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-sm transition-all ${
+                  tab === "create"
+                    ? "bg-[#E31E24]/30 border border-[#E31E24] text-[#E31E24]"
+                    : "bg-black/30 border border-white/20 text-white/70 hover:text-white"
+                }`}
+              >
+                <Sparkles className="w-4 h-4" />
+                יצירת וידאו
+              </button>
+              <button
+                onClick={() => setTab("manage")}
+                className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-sm transition-all ${
+                  tab === "manage"
+                    ? "bg-[#E31E24]/30 border border-[#E31E24] text-[#E31E24]"
+                    : "bg-black/30 border border-white/20 text-white/70 hover:text-white"
+                }`}
+              >
+                <Settings className="w-4 h-4" />
+                ניהול וידאוים
+              </button>
               <span className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
               <span className="text-white text-sm">פעיל</span>
             </div>
@@ -285,35 +307,7 @@ export default function BroadcastStudio() {
         </div>
       </div>
 
-      {/* Tab Navigation */}
-      <div className="bg-black/40 backdrop-blur-lg border-b border-[#E31E24]/30 sticky top-[120px] z-40">
-        <div className="max-w-6xl mx-auto px-6">
-          <div className="flex gap-0">
-            <button
-              onClick={() => setTab("create")}
-              className={`flex-1 py-4 px-4 font-semibold text-sm border-b-2 transition-all ${
-                tab === "create"
-                  ? "border-[#E31E24] text-[#E31E24]"
-                  : "border-transparent text-white/50 hover:text-white"
-              }`}
-            >
-              <Sparkles className="w-4 h-4 inline mr-2" />
-              יצירת וידאו
-            </button>
-            <button
-              onClick={() => setTab("manage")}
-              className={`flex-1 py-4 px-4 font-semibold text-sm border-b-2 transition-all ${
-                tab === "manage"
-                  ? "border-[#E31E24] text-[#E31E24]"
-                  : "border-transparent text-white/50 hover:text-white"
-              }`}
-            >
-              <Settings className="w-4 h-4 inline mr-2" />
-              ניהול וידאוים
-            </button>
-          </div>
-        </div>
-      </div>
+
 
       {/* Main Content */}
       <div className="max-w-6xl mx-auto px-6 py-6 space-y-4">
