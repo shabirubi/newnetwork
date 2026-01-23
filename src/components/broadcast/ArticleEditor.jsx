@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Upload, Trash2, Plus, Eye, Send, Image as ImageIcon, Tag, Clock, User } from "lucide-react";
+import { X, Upload, Trash2, Plus, Eye, Send, Image as ImageIcon, Tag, Clock, User, Archive } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import HistorySearch from "./HistorySearch";
 
 export default function ArticleEditor({ article, isOpen, onClose, onPublish }) {
   const [editData, setEditData] = useState({
