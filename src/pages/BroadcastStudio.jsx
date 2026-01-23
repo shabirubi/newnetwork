@@ -14,6 +14,7 @@ import { createPageUrl } from "../utils";
 import VideoUploadConfirmation from "../components/broadcast/VideoUploadConfirmation";
 import HistoricalSourceSelector from "../components/broadcast/HistoricalSourceSelector";
 import ArticleEditor from "../components/broadcast/ArticleEditor";
+import StudioTabs from "../components/broadcast/StudioTabs";
 
 export default function BroadcastStudio() {
   // Tab Selection
