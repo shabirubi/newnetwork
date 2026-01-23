@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
 import VideoUploadConfirmation from "../components/broadcast/VideoUploadConfirmation";
+import HistoricalSourceSelector from "../components/broadcast/HistoricalSourceSelector";
 
 export default function BroadcastStudio() {
   // Tab Selection
@@ -315,6 +316,49 @@ export default function BroadcastStudio() {
         {/* CREATE TAB */}
         {tab === "create" && (
         <>
+        {/* Historical Sources */}
+        <HistoricalSourceSelector 
+          onSourceSelect={() => {}}
+          onArticlesLoad={(articles) => {
+            setHistoricalArticles(articles);
+            toast.success("נטענו כתבות מהארכיון");
+          }}
+        />
+
+        {/* Historical Articles Selection */}
+        {historicalArticles.length > 0 && (
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="bg-black/40 backdrop-blur-lg rounded-xl border border-[#E31E24]/30 overflow-hidden"
+          >
+            <div className="bg-gradient-to-r from-[#E31E24]/20 to-red-900/20 px-4 py-2 border-b border-[#E31E24]/30">
+              <h2 className="text-white font-semibold text-sm">כתבות מהארכיון</h2>
+            </div>
+            <div className="p-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-64 overflow-y-auto">
+                {historicalArticles.map((article, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => {
+                      setSelectedHistoricalArticle(article);
+                      setArticleText(article.title + "\n\n" + (article.content || article.description || ""));
+                    }}
+                    className={`p-3 rounded-lg border-2 transition-all text-left ${
+                      selectedHistoricalArticle?.title === article.title
+                        ? "border-[#E31E24] bg-[#E31E24]/20"
+                        : "border-[#E31E24]/20 bg-black/20 hover:bg-black/40"
+                    }`}
+                  >
+                    <h3 className="text-white font-semibold text-sm line-clamp-2">{article.title}</h3>
+                    <p className="text-white/50 text-xs mt-1">{article.year || article.date}</p>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        )}
+
         {/* Mode Selection */}
         <motion.div
           initial={{ opacity: 0, y: 10 }}
