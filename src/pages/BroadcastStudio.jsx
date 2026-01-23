@@ -14,6 +14,9 @@ import { createPageUrl } from "../utils";
 import VideoUploadConfirmation from "../components/broadcast/VideoUploadConfirmation";
 
 export default function BroadcastStudio() {
+  // Tab Selection
+  const [tab, setTab] = useState("create"); // create | manage
+  
   // Mode Selection
   const [mode, setMode] = useState("talks"); // talks | clips | express
   const [inputType, setInputType] = useState("text"); // text | audio
