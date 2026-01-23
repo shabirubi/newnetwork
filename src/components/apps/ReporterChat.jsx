@@ -1097,7 +1097,8 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                           onClick={isRecording ? stopRecording : startRecording}
                           variant={isRecording ? "destructive" : "outline"}
                           size="icon"
-                          className={isRecording ? "animate-pulse" : ""}
+                          className={`${isRecording ? "animate-pulse bg-[#E31E24]" : "border-[#E31E24]/30 hover:bg-[#E31E24]/20"}`}
+                          title="הקלטה קולית"
                         >
                           {isRecording ? <MicOff className="w-5 h-5" /> : <Mic className="w-5 h-5" />}
                         </Button>
@@ -1105,6 +1106,8 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                           onClick={isVideoCall ? endVideoCall : startVideoCall}
                           variant={isVideoCall ? "destructive" : "outline"}
                           size="icon"
+                          className={isVideoCall ? "bg-[#E31E24]" : "border-[#E31E24]/30 hover:bg-[#E31E24]/20"}
+                          title="שיחת וידאו"
                         >
                           {isVideoCall ? <PhoneOff className="w-5 h-5" /> : <Video className="w-5 h-5" />}
                         </Button>
