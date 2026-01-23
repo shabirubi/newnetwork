@@ -5,12 +5,13 @@ import { useQuery } from "@tanstack/react-query";
 import { Users, ChevronLeft, ChevronRight } from "lucide-react";
 import ReporterCardModal from "./ReporterCardModal";
 import AIReporterIntroChat from "../apps/AIReporterIntroChat";
+import ReporterChat from "../apps/ReporterChat";
 
 export default function ReportersTickerStrip() {
   const [selectedReporter, setSelectedReporter] = useState(null);
   const [scrollPosition, setScrollPosition] = useState(0);
   const [hoveredReporter, setHoveredReporter] = useState(null);
-  const [openAIChat, setOpenAIChat] = useState(false);
+  const [openReporterChat, setOpenReporterChat] = useState(false);
   const [selectedReporterForChat, setSelectedReporterForChat] = useState(null);
   const containerRef = useRef(null);
   const scrollContainerRef = useRef(null);
@@ -83,7 +84,7 @@ export default function ReportersTickerStrip() {
             key={`${reporter.id}-${idx}`}
             onClick={() => {
               setSelectedReporterForChat(reporter);
-              setOpenAIChat(true);
+              setOpenReporterChat(true);
             }}
             onMouseEnter={() => setHoveredReporter(reporter.id)}
             onMouseLeave={() => setHoveredReporter(null)}
@@ -124,14 +125,14 @@ export default function ReportersTickerStrip() {
           </div>
           </div>
 
-          {selectedReporterForChat && openAIChat && (
-            <AIReporterIntroChat 
-              preSelectedReporter={selectedReporterForChat}
-              isOpen={openAIChat}
-              onClose={() => {
-                setOpenAIChat(false);
-                setSelectedReporterForChat(null);
+          {selectedReporterForChat && openReporterChat && (
+            <ReporterChat 
+              externalIsOpen={openReporterChat}
+              externalSetIsOpen={(isOpen) => {
+                setOpenReporterChat(isOpen);
+                if (!isOpen) setSelectedReporterForChat(null);
               }}
+              preSelectedReporter={selectedReporterForChat}
             />
           )}
           </>
