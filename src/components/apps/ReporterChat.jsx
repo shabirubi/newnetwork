@@ -952,10 +952,10 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                                       disabled={!!pollAnswers[message.poll.id]}
                                       className={`w-full text-left px-2 py-1.5 rounded text-xs transition-all ${
                                         pollAnswers[message.poll.id] === option
-                                          ? 'bg-indigo-600 text-white'
+                                          ? 'bg-[#E31E24] text-white'
                                           : pollAnswers[message.poll.id]
-                                          ? 'bg-gray-700 text-gray-400'
-                                          : 'bg-gray-700 hover:bg-gray-600 text-white'
+                                          ? 'bg-black/40 text-white/50 border border-[#E31E24]/20'
+                                          : 'bg-black/40 hover:bg-black/60 text-white border border-[#E31E24]/30'
                                       }`}
                                     >
                                       {option}
