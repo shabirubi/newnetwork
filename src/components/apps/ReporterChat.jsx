@@ -1120,12 +1120,12 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                           onChange={(e) => setInputValue(e.target.value)}
                           onKeyPress={(e) => e.key === "Enter" && sendMessage()}
                           disabled={isLoading || isRecording}
-                          className="flex-1"
+                          className="flex-1 bg-black/40 border-[#E31E24]/30 text-white placeholder-white/50"
                         />
                         <Button
                           onClick={() => sendMessage()}
                           disabled={isLoading || !inputValue.trim() || isRecording}
-                          className="bg-indigo-600 hover:bg-indigo-700 px-4"
+                          className="bg-[#E31E24] hover:bg-red-700 px-4"
                         >
                           {isLoading ? (
                             <Loader className="w-5 h-5 animate-spin" />
