@@ -8,11 +8,11 @@ import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import moment from "moment";
 
-export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
+export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSelectedReporter }) {
   const [isOpen, setIsOpen] = useState(false);
   const openState = externalIsOpen !== undefined ? externalIsOpen : isOpen;
   const setOpenState = externalSetIsOpen || setIsOpen;
-  const [selectedReporter, setSelectedReporter] = useState(null);
+  const [selectedReporter, setSelectedReporter] = useState(preSelectedReporter || null);
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -545,6 +545,12 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen }) {
       }
     };
   }, [setOpenState]);
+
+  useEffect(() => {
+    if (preSelectedReporter && openState) {
+      startNewChat(preSelectedReporter);
+    }
+  }, [preSelectedReporter, openState]);
 
   const generateReporterIntroVideo = async () => {
     if (!selectedReporter || isGeneratingIntro) {
