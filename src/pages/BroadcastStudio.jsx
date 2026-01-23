@@ -404,7 +404,7 @@ export default function BroadcastStudio() {
         >
           <div className="bg-gradient-to-r from-[#E31E24]/20 to-red-900/20 px-4 py-2 border-b border-[#E31E24]/30 flex items-center gap-2">
             <Globe className="w-4 h-4 text-[#E31E24]" />
-            <h2 className="text-white font-semibold text-sm">חפש כתבות מהאינטרנט</h2>
+            <h2 className="text-white font-semibold text-sm">חיפוש גלובלי - כתבות, אנשים, עסקים</h2>
           </div>
           <div className="p-4">
             <form onSubmit={handleGoogleSearch} className="flex gap-2">
