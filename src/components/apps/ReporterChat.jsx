@@ -812,9 +812,9 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                               setShowIntro(false);
                               setIntroVideoUrl(null);
                             }}
-                            className="text-xs text-gray-500 hover:text-gray-700 dark:text-gray-400"
+                            className="text-xs text-white/70 hover:text-white/90"
                           >
-                            סגור
+                            <X className="w-4 h-4" />
                           </button>
                         </div>
 
