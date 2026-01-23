@@ -105,12 +105,12 @@ export default function BroadcastStudio() {
           mode: "talks"
         });
       } else if (mode === "clips") {
-        // V3 Clips API - Full body presenter
+        // V3 Talks API - Using reporter image
         response = await base44.functions.invoke("generateTalkingVideo", {
           text: articleText,
-          presenterId: selectedPresenter,
+          avatarUrl: selectedPresenter,
           voiceId: selectedVoice,
-          mode: "clips"
+          mode: "talks"
         });
       } else if (mode === "express") {
         // V3 Express API - Custom avatar
