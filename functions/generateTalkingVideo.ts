@@ -108,8 +108,9 @@ Deno.serve(async (req) => {
           type: 'text',
           input: text,
           provider: {
-            type: 'microsoft',
-            voice_id: voiceId
+            type: 'elevenlabs',
+            voice_id: voiceId,
+            api_key: ELEVENLABS_API_KEY
           }
         },
         config: {
