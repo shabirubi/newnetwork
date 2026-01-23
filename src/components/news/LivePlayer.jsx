@@ -378,8 +378,7 @@ export default function LivePlayer({
                   src={currentVideoUrl}
                   className="absolute inset-0 w-full h-full z-20 bg-black"
                   controls
-                  autoPlay
-                  muted={false}
+                  muted
                   controlsList="nodownload"
                   style={{ display: 'block' }}
                 />
