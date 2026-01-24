@@ -334,10 +334,25 @@ export default function ArticleEditor({ article, isOpen, onClose, onPublish }) {
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
+                    className="space-y-4"
                   >
+                    <div className="bg-[#E31E24]/10 border border-[#E31E24]/30 rounded-lg p-4">
+                      <div className="flex items-center gap-2 mb-2">
+                        <Archive className="w-5 h-5 text-[#E31E24]" />
+                        <h3 className="text-white font-bold">חיפוש היסטורי</h3>
+                      </div>
+                      <p className="text-white/70 text-sm">חפש אירועים היסטוריים והוסף אותם לכתבה</p>
+                    </div>
                     <HistorySearch
                       onSelect={(result) => {
-                        setEditData(result);
+                        setEditData({
+                          ...editData,
+                          title: result.title || editData.title,
+                          description: result.description || editData.description,
+                          content: result.content || editData.content,
+                          image_url: result.image_url || editData.image_url,
+                          category: result.category || editData.category
+                        });
                         setActiveTab("edit");
                         toast.success("כתבה היסטורית נטענה בהצלחה");
                       }}
