@@ -269,22 +269,7 @@ export default function Home() {
 
 
 
-      {/* Studio Floating Button */}
-      <Link to={createPageUrl("BroadcastStudio")}>
-        <motion.button
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-          className="fixed bottom-32 sm:bottom-24 right-4 z-[9998] w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-blue-700 hover:from-blue-600 hover:to-blue-800 shadow-2xl flex items-center justify-center border-2 border-blue-300/50 transition-all group"
-          title="סטודיו שידור"
-        >
-          <Mic className="w-7 h-7 text-white" />
-          <span className="absolute right-full mr-3 top-1/2 -translate-y-1/2 px-3 py-1 bg-blue-600 text-white text-sm font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-            סטודיו שידור
-          </span>
-        </motion.button>
-      </Link>
-
-      {/* Upload Video Floating Button */}
+      {/* Upload Video Floating Button - העלאה פשוטה */}
       <motion.button
         onClick={() => setUploadVideoModalOpen(true)}
         whileHover={{ scale: 1.1 }}
@@ -298,7 +283,7 @@ export default function Home() {
         </span>
       </motion.button>
 
-      {/* Studio with Manage Tab */}
+      {/* Broadcast Studio - סטודיו מקצועי */}
       <Link to={createPageUrl("BroadcastStudio")}>
         <motion.button
           whileHover={{ scale: 1.1 }}
