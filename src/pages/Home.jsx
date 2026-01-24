@@ -274,7 +274,7 @@ export default function Home() {
         onClick={() => setUploadVideoModalOpen(true)}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
-        className="fixed bottom-24 sm:bottom-8 right-4 z-[9998] w-16 h-16 rounded-full bg-gradient-to-br from-red-500 to-orange-600 hover:from-red-600 hover:to-orange-700 shadow-2xl flex items-center justify-center border-2 border-red-300/50 transition-all group"
+        className="fixed bottom-24 right-4 z-[9998] w-16 h-16 rounded-full bg-gradient-to-br from-red-500 to-orange-600 hover:from-red-600 hover:to-orange-700 shadow-2xl flex items-center justify-center border-2 border-red-300/50 transition-all group"
         title="העלה סרטון לנגן הראשי"
       >
         <Droplet className="w-7 h-7 text-white fill-white" />
