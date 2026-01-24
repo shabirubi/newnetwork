@@ -18,8 +18,8 @@ Deno.serve(async (req) => {
 
     for (const article of articles) {
       try {
-        // Generate new image with English prompt
-        const imagePrompt = `Professional news photograph depicting: ${article.title}. High quality journalism image, realistic, professional photography. IMPORTANT: NO TEXT OR CAPTIONS in the image, only visual content.`;
+        // Generate new image with English prompt only (Hebrew appears reversed)
+        const imagePrompt = `Professional news photograph depicting: ${article.title}. High quality journalism image, realistic, professional photography, dramatic lighting. CRITICAL: NO TEXT, NO HEBREW LETTERS, NO CAPTIONS in the image - only visual photographic content.`;
         
         const { url: image_url } = await base44.asServiceRole.integrations.Core.GenerateImage({
           prompt: imagePrompt

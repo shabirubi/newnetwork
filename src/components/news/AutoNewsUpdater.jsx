@@ -38,8 +38,8 @@ export default function AutoNewsUpdater() {
       const lastUpdateTime = localStorage.getItem('newsLastUpdate');
       const now = Date.now();
       
-      // Update immediately on first load, then every 30 minutes
-      if (!lastUpdateTime || now - parseInt(lastUpdateTime) > 1800000) {
+      // Update once a day (24 hours)
+      if (!lastUpdateTime || now - parseInt(lastUpdateTime) > 86400000) {
         await updateNews();
       }
     };
@@ -47,8 +47,8 @@ export default function AutoNewsUpdater() {
     // Run immediately on mount
     checkAndUpdate();
 
-    // Check every 30 minutes
-    const interval = setInterval(checkAndUpdate, 1800000);
+    // Check every 24 hours
+    const interval = setInterval(checkAndUpdate, 86400000);
     return () => clearInterval(interval);
   }, []);
 
@@ -179,11 +179,30 @@ export default function AutoNewsUpdater() {
 
       const articles = (typeof result === 'object' && result.articles) ? result.articles : (Array.isArray(result) ? result : []);
       
-      // Generate images and add details
-      const enrichedArticles = articles.map((article) => ({
-        ...article,
-        category: category.category,
-        source: "הרשת החדשה"
+      // Generate images with English text only
+      const enrichedArticles = await Promise.all(articles.map(async (article) => {
+        try {
+          // Generate image with English prompt (Hebrew text appears reversed in images)
+          const imagePrompt = `Professional news photograph: ${article.title}. High quality journalism image, realistic, professional photography, dramatic lighting. IMPORTANT: NO TEXT OR HEBREW LETTERS in the image.`;
+          
+          const { url: image_url } = await base44.integrations.Core.GenerateImage({
+            prompt: imagePrompt
+          });
+
+          return {
+            ...article,
+            category: category.category,
+            source: "הרשת החדשה",
+            image_url
+          };
+        } catch (error) {
+          console.error('Error generating image:', error);
+          return {
+            ...article,
+            category: category.category,
+            source: "הרשת החדשה"
+          };
+        }
       }));
 
       return enrichedArticles;
