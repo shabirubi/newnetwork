@@ -70,9 +70,15 @@ export default function UploadVideoModal({ isOpen, onClose }) {
       console.log('🔄 מרענן פידים...');
       queryClient.invalidateQueries({ queryKey: ['userVideos'] });
       queryClient.invalidateQueries({ queryKey: ['all-user-videos'] });
+      queryClient.invalidateQueries({ queryKey: ['live-stream'] });
+      queryClient.invalidateQueries({ queryKey: ['user-videos-manage'] });
       await queryClient.refetchQueries({ queryKey: ['userVideos'] });
       await queryClient.refetchQueries({ queryKey: ['all-user-videos'] });
+      await queryClient.refetchQueries({ queryKey: ['live-stream'] });
       console.log('✅ פידים עודכנו!');
+      
+      // שלח אירוע שסרטון הועלה
+      window.dispatchEvent(new CustomEvent('videoUploaded'));
 
       console.log('🎥 סרטון הועלה בהצלחה!');
       window.dispatchEvent(new CustomEvent('playVideo', {
@@ -149,8 +155,15 @@ export default function UploadVideoModal({ isOpen, onClose }) {
                   <div className="border-2 border-dashed border-gray-600 rounded-2xl p-4 text-center hover:border-red-500 transition-colors cursor-pointer group">
                     <input
                       type="file"
-                      accept="video/*"
-                      onChange={(e) => setFormData({ ...formData, videoFile: e.target.files?.[0] })}
+                      accept="video/*,image/*"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file && file.size > 35 * 1024 * 1024) {
+                          toast.error("הקובץ גדול מדי! מקסימום 35MB");
+                          return;
+                        }
+                        setFormData({ ...formData, videoFile: file });
+                      }}
                       className="hidden"
                       id="videoInput"
                     />
@@ -168,8 +181,8 @@ export default function UploadVideoModal({ isOpen, onClose }) {
                       </p>
                       <p className="text-gray-400 text-sm">
                         {formData.videoFile
-                          ? formData.videoFile.name
-                          : "MP4, WebM או MOV (עד 500MB)"}
+                          ? `${formData.videoFile.name} (${(formData.videoFile.size / (1024 * 1024)).toFixed(1)}MB)`
+                          : "MP4, WebM או MOV (עד 35MB)"}
                       </p>
                     </label>
                   </div>
