@@ -915,10 +915,17 @@ export default function BroadcastStudio() {
                               const response = await base44.functions.invoke("trainExpressAvatar", {
                                 videoUrl: trainingVideo
                               });
-                              setCustomAvatarId(response.data.avatar_id);
-                              toast.success("אווטר מוכן!", { id: "train" });
+                              console.log("Training response:", response);
+                              const avatarId = response?.data?.avatar_id || response?.avatar_id;
+                              if (avatarId) {
+                                setCustomAvatarId(avatarId);
+                                toast.success("אווטר מוכן!", { id: "train" });
+                              } else {
+                                throw new Error("לא התקבל avatar_id");
+                              }
                             } catch (error) {
-                              toast.error("שגיאה באימון", { id: "train" });
+                              console.error("Training error:", error);
+                              toast.error(`שגיאה: ${error.message}`, { id: "train" });
                             }
                           }}
                           className="w-full bg-[#E31E24] hover:bg-red-800 mt-2"
