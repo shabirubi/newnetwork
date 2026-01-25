@@ -371,7 +371,7 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
         backgroundUrl: studioBackground
       });
 
-      // עדכן את ההודעה האחרונה עם הוידאו
+      // עדכן את ההודעה האחרונה עם הוידאו ופתח אוטומטית
       setMessages(prev => {
         const updated = [...prev];
         const lastMsg = updated[updated.length - 1];
@@ -381,6 +381,11 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
         }
         return updated;
       });
+      
+      // פתח אוטומטית במסך מלא
+      if (videoResponse.data?.video_url) {
+        setFullscreenVideo(videoResponse.data.video_url);
+      }
       
       const aiMessage = {
         role: "assistant",
@@ -1174,6 +1179,31 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
             exit={{ opacity: 0 }}
             className="fixed inset-0 bg-black z-[100000] flex flex-col"
           >
+            {/* Header Info Bar - Mobile Optimized */}
+            <div className="bg-gradient-to-b from-black/80 to-transparent px-4 py-3 flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                {selectedReporter && (
+                  <>
+                    <img
+                      src={selectedReporter.image}
+                      alt={selectedReporter.name}
+                      className="w-8 h-8 rounded-full border border-[#E31E24]"
+                    />
+                    <div>
+                      <p className="text-white text-sm font-bold">{selectedReporter.name}</p>
+                      <p className="text-white/70 text-xs">{selectedReporter.role}</p>
+                    </div>
+                  </>
+                )}
+              </div>
+              <button
+                onClick={() => setFullscreenVideo(null)}
+                className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center hover:bg-white/20 transition-colors active:scale-95"
+              >
+                <X className="w-5 h-5 text-white" />
+              </button>
+            </div>
+
             {/* Video Area */}
             <div className="flex-1 relative flex items-center justify-center">
               <video
@@ -1183,19 +1213,11 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                 className="w-full h-full object-contain"
                 onEnded={() => setFullscreenVideo(null)}
               />
-              
-              {/* Close Button */}
-              <button
-                onClick={() => setFullscreenVideo(null)}
-                className="absolute top-4 left-4 w-12 h-12 rounded-full bg-black/60 backdrop-blur-sm border border-white/20 flex items-center justify-center hover:bg-black/80 transition-colors z-10"
-              >
-                <X className="w-6 h-6 text-white" />
-              </button>
             </div>
 
-            {/* Chat Input Overlay */}
-            <div className="bg-gradient-to-t from-black via-black/95 to-transparent p-4 border-t border-white/10">
-              <div className="max-w-2xl mx-auto">
+            {/* Chat Input Overlay - Mobile Optimized */}
+            <div className="bg-gradient-to-t from-black via-black/95 to-transparent px-3 sm:px-4 py-3 sm:py-4 border-t border-white/10 safe-area-inset-bottom">
+              <div className="max-w-3xl mx-auto">
                 <div className="flex gap-2">
                   <Input
                     type="text"
@@ -1204,12 +1226,12 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                     onChange={(e) => setInputValue(e.target.value)}
                     onKeyPress={(e) => e.key === "Enter" && sendMessage()}
                     disabled={isLoading}
-                    className="flex-1 bg-white/10 border-white/20 text-white placeholder-white/50 backdrop-blur-sm"
+                    className="flex-1 bg-white/10 border-white/20 text-white placeholder-white/50 backdrop-blur-sm h-12 px-4 text-base"
                   />
                   <Button
                     onClick={() => sendMessage()}
                     disabled={isLoading || !inputValue.trim()}
-                    className="bg-[#E31E24] hover:bg-red-700 px-6"
+                    className="bg-[#E31E24] hover:bg-red-700 h-12 w-12 sm:w-auto sm:px-6 flex-shrink-0"
                   >
                     {isLoading ? (
                       <Loader className="w-5 h-5 animate-spin" />
@@ -1217,6 +1239,28 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                       <Send className="w-5 h-5" />
                     )}
                   </Button>
+                </div>
+                
+                {/* Quick Actions - Mobile */}
+                <div className="flex gap-2 mt-2 overflow-x-auto pb-1">
+                  <button
+                    onClick={() => setInputValue('ספר לי עוד')}
+                    className="px-3 py-1.5 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-xs text-white whitespace-nowrap backdrop-blur-sm transition-colors"
+                  >
+                    📖 ספר עוד
+                  </button>
+                  <button
+                    onClick={() => setInputValue('מה עוד חדש?')}
+                    className="px-3 py-1.5 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-xs text-white whitespace-nowrap backdrop-blur-sm transition-colors"
+                  >
+                    🔥 מה חדש?
+                  </button>
+                  <button
+                    onClick={() => setInputValue('תודה!')}
+                    className="px-3 py-1.5 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-xs text-white whitespace-nowrap backdrop-blur-sm transition-colors"
+                  >
+                    👍 תודה
+                  </button>
                 </div>
               </div>
             </div>
