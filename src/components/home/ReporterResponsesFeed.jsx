@@ -8,19 +8,19 @@ import moment from "moment";
 export default function ReporterResponsesFeed() {
   const [fullscreenVideo, setFullscreenVideo] = useState(null);
 
-  // טעינת תשובות כתבים
+  // טעינת תשובות כתבים - מכל המשתמשים
   const { data: responses = [], isLoading } = useQuery({
     queryKey: ['reporter-responses'],
     queryFn: async () => {
       const data = await base44.entities.ReporterChat.filter(
         { sender_type: 'reporter' },
         '-created_date',
-        20
+        50
       );
       // סינון רק תשובות עם וידאו
       return data.filter(r => r.voice_url);
     },
-    refetchInterval: 30000,
+    refetchInterval: 10000, // רענון כל 10 שניות
     initialData: []
   });
 
@@ -110,10 +110,15 @@ export default function ReporterResponsesFeed() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <h3 className="text-white font-bold text-sm line-clamp-1">{response.reporter_name}</h3>
-                    <p className="text-white/50 text-xs flex items-center gap-1">
-                      <Clock className="w-3 h-3" />
-                      {moment(response.created_date).fromNow()}
-                    </p>
+                    <div className="flex items-center gap-2">
+                      <p className="text-white/50 text-xs flex items-center gap-1">
+                        <Clock className="w-3 h-3" />
+                        {moment(response.created_date).fromNow()}
+                      </p>
+                      {response.user_name && (
+                        <p className="text-white/40 text-xs">• {response.user_name}</p>
+                      )}
+                    </div>
                   </div>
                 </div>
                 <p className="text-white/80 text-xs sm:text-sm line-clamp-2 leading-relaxed">
