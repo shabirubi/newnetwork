@@ -625,26 +625,19 @@ export default function BroadcastStudio() {
               </div>
             </button>
 
-            {/* Clips Mode */}
-            <button
-              onClick={() => setMode("clips")}
-              className={`p-4 rounded-lg border-2 transition-all text-right ${
-                mode === "clips"
-                  ? "border-[#E31E24] bg-[#E31E24]/20"
-                  : "border-[#E31E24]/20 bg-black/20 hover:bg-black/40"
-              }`}
-            >
+            {/* Clips Mode - DISABLED */}
+            <div className="p-4 rounded-lg border-2 border-[#E31E24]/10 bg-black/10 opacity-50 text-right">
               <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-lg bg-[#E31E24]/30 flex items-center justify-center flex-shrink-0">
-                  <Users className="w-5 h-5 text-[#E31E24]" />
+                <div className="w-10 h-10 rounded-lg bg-[#E31E24]/20 flex items-center justify-center flex-shrink-0">
+                  <Users className="w-5 h-5 text-[#E31E24]/50" />
                 </div>
                 <div>
-                  <h3 className="text-white font-bold text-sm mb-1">Clips - גוף מלא</h3>
-                   <p className="text-white/70 text-xs">שדרנים מוכנים + ידיים</p>
-                   <p className="text-white/50 text-xs mt-1">V3 Pro API</p>
+                  <h3 className="text-white/50 font-bold text-sm mb-1">Clips - גוף מלא</h3>
+                   <p className="text-white/30 text-xs">דורש presenters מאומנים</p>
+                   <p className="text-white/30 text-xs mt-1">לא זמין כרגע</p>
                 </div>
               </div>
-            </button>
+            </div>
 
             {/* Express Mode */}
             <button
