@@ -97,7 +97,7 @@ export default function ReportersTickerStrip() {
             }}
             onMouseEnter={() => setHoveredReporter(reporter.id)}
             onMouseLeave={() => setHoveredReporter(null)}
-            className="flex-shrink-0 flex flex-col items-center gap-0.5 p-1 bg-black/60 backdrop-blur-xl rounded-lg border border-[#E31E24]/30 hover:border-[#E31E24]/60 hover:bg-[#E31E24]/20 transition-all cursor-pointer group shadow-lg hover:shadow-[#E31E24]/30"
+            className="flex-shrink-0 flex flex-col items-center gap-1 p-1.5 bg-black/60 backdrop-blur-xl rounded-lg border border-[#E31E24]/30 hover:border-[#E31E24]/60 hover:bg-[#E31E24]/20 transition-all cursor-pointer group shadow-lg hover:shadow-[#E31E24]/30 active:scale-95 sm:active:scale-100"
             whileHover={{ scale: 1.05, y: -2 }}
             animate={{
               boxShadow: [
@@ -118,16 +118,16 @@ export default function ReportersTickerStrip() {
             <img
               src={reporter.image || 'https://via.placeholder.com/80?text=' + reporter.name.charAt(0)}
               alt={reporter.name}
-              className={`w-20 h-20 rounded-lg object-cover border-2 border-[#E31E24]/20 group-hover:border-[#E31E24] transition-all shadow-lg bg-gray-700 ${
+              className={`w-16 h-16 sm:w-20 sm:h-20 rounded-lg object-cover border-2 border-[#E31E24]/20 group-hover:border-[#E31E24] transition-all shadow-lg bg-gray-700 ${
                 hoveredReporter === reporter.id ? 'reporter-ticker-image-color' : 'reporter-ticker-image-bw'
               }`}
               onError={(e) => {
                 e.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="80" height="80"%3E%3Crect fill="%23333" width="80" height="80"/%3E%3Ctext x="40" y="40" font-size="40" fill="white" text-anchor="middle" dy=".3em"%3E' + reporter.name.charAt(0) + '%3C/text%3E%3C/svg%3E';
               }}
             />
-            <div className="text-center min-w-[60px]">
-              <div className="text-white font-bold text-[9px] line-clamp-1">{reporter.name}</div>
-              <div className="text-[#E31E24] text-[8px] font-medium line-clamp-1">{reporter.specialty}</div>
+            <div className="text-center min-w-[50px] sm:min-w-[60px]">
+              <div className="text-white font-bold text-[8px] sm:text-[9px] line-clamp-2">{reporter.name}</div>
+              <div className="text-[#E31E24] text-[7px] sm:text-[8px] font-medium line-clamp-1 hidden sm:block">{reporter.specialty}</div>
             </div>
           </motion.div>
           ))}
