@@ -69,7 +69,7 @@ export default function ReportersTickerStrip() {
 
   return (
     <>
-      <div ref={containerRef} className="relative bg-black/90 backdrop-blur-xl border-b border-[#E31E24]/30 shadow-xl shadow-[#E31E24]/20 py-1">
+      <div ref={containerRef} className="relative bg-black/90 backdrop-blur-xl border-b border-[#E31E24]/30 shadow-xl shadow-[#E31E24]/20 py-1 block">
         {/* Left Arrow */}
         <button
           onClick={() => scroll('left')}
@@ -86,8 +86,8 @@ export default function ReportersTickerStrip() {
           <ChevronRight className="w-5 h-5 text-[#E31E24]" />
         </button>
 
-        <div ref={scrollContainerRef} className="overflow-x-auto scrollbar-hide" onScroll={handleScroll} style={{ touchAction: 'pan-x' }}>
-          <div className="flex gap-1 items-center px-1.5 lg:px-10">
+        <div ref={scrollContainerRef} className="overflow-x-auto scrollbar-hide block" onScroll={handleScroll} style={{ touchAction: 'pan-x' }}>
+          <div className="flex gap-1 items-center px-1.5 lg:px-10 min-h-[100px]">
         {reporters.map((reporter, idx) => (
           <motion.div
             key={`${reporter.id}-${idx}`}
