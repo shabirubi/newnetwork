@@ -208,10 +208,19 @@ export default function BroadcastStudio() {
            mode: "talks"
          });
       } else if (mode === "clips") {
-         // V3 Clips API - Using reporter presenter
+         // V3 Clips API - Using D-ID's built-in presenters
+         const didPresenters = [
+           'amy-jcwCkr1grs',
+           'anna-Ug3eJ5AKB',
+           'jessica-Ug3eJ5AKB',
+           'eric-Ug3eJ5AKB',
+           'james-Ug3eJ5AKB'
+         ];
+         const randomPresenter = didPresenters[Math.floor(Math.random() * didPresenters.length)];
+
          response = await base44.functions.invoke("generateTalkingVideo", {
            text: articleText,
-           presenterId: selectedPresenter,
+           presenterId: randomPresenter,
            voiceId: selectedVoice,
            mode: "clips"
          });
@@ -765,48 +774,20 @@ export default function BroadcastStudio() {
               exit={{ opacity: 0, x: 20 }}
               className="space-y-4"
             >
-              {/* Presenter Selection */}
+              {/* Info about Clips mode */}
               <div className="bg-black/40 backdrop-blur-lg rounded-xl border border-[#E31E24]/30 overflow-hidden">
                 <div className="bg-gradient-to-r from-[#E31E24]/20 to-red-900/20 px-4 py-2 border-b border-[#E31E24]/30">
                   <div className="flex items-center gap-2">
                     <Users className="w-4 h-4 text-[#E31E24]" />
-                    <h2 className="text-white font-semibold text-sm">בחר שדרן מקצועי (גוף מלא)</h2>
+                    <h2 className="text-white font-semibold text-sm">שדרנים מקצועיים (גוף מלא)</h2>
                   </div>
                 </div>
                 <div className="p-4">
-                  {reporters.length === 0 ? (
-                    <div className="text-center py-8">
-                      <Loader className="w-8 h-8 animate-spin mx-auto mb-2 text-[#E31E24]" />
-                      <p className="text-white/70 text-sm">טוען כתבים...</p>
-                    </div>
-                  ) : (
-                    <div className="grid grid-cols-auto-fit gap-3" style={{
-                      gridTemplateColumns: 'repeat(auto-fill, minmax(100px, 1fr))'
-                    }}>
-                      {reporters.map((reporter) => (
-                        <button
-                          key={reporter.id}
-                          onClick={() => setSelectedPresenter(reporter.id)}
-                          className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${
-                            selectedPresenter === reporter.id
-                              ? "border-[#E31E24] ring-2 ring-[#E31E24]/50"
-                              : "border-[#E31E24]/20 hover:border-[#E31E24]/50"
-                          }`}
-                          title={reporter.name}
-                        >
-                          <img src={reporter.image} alt={reporter.name} className="w-full h-full object-cover" />
-                          <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/80 to-transparent p-1">
-                            <p className="text-white text-[10px] font-bold line-clamp-1">{reporter.name}</p>
-                          </div>
-                          {selectedPresenter === reporter.id && (
-                            <div className="absolute top-1 right-1 w-5 h-5 rounded-full bg-[#E31E24] flex items-center justify-center">
-                              <Play className="w-2 h-2 text-white" />
-                            </div>
-                          )}
-                        </button>
-                      ))}
-                    </div>
-                  )}
+                  <div className="bg-[#E31E24]/10 border border-[#E31E24]/30 rounded-lg p-4 text-center">
+                    <Video className="w-12 h-12 text-[#E31E24] mx-auto mb-3" />
+                    <p className="text-white font-semibold mb-2">שדרנים מובנים של D-ID</p>
+                    <p className="text-white/70 text-sm">השדרן ייבחר אוטומטית מבין 5 שדרנים מקצועיים עם גוף מלא ותנועות ידיים</p>
+                  </div>
                 </div>
               </div>
             </motion.div>
