@@ -159,6 +159,14 @@ export default function BroadcastStudio() {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    // Check file size (max 50MB)
+    const maxSize = 50 * 1024 * 1024; // 50MB
+    if (file.size > maxSize) {
+      toast.error("הוידאו גדול מדי! מקסימום 50MB. נסה וידאו קצר יותר (30-60 שניות)");
+      e.target.value = '';
+      return;
+    }
+
     toast.loading("מעלה וידאו...", { id: "upload-video" });
     
     try {
@@ -169,7 +177,11 @@ export default function BroadcastStudio() {
       toast.success("וידאו אימון הועלה ✓", { id: "upload-video" });
     } catch (error) {
       console.error("Upload error:", error);
-      toast.error(`שגיאה: ${error.message}`, { id: "upload-video" });
+      if (error.message?.includes('413') || error.message?.includes('too large')) {
+        toast.error("הוידאו גדול מדי! נסה וידאו קצר יותר (30-60 שניות)", { id: "upload-video" });
+      } else {
+        toast.error(`שגיאה: ${error.message}`, { id: "upload-video" });
+      }
     }
   };
 
