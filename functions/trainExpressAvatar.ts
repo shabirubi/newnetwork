@@ -27,7 +27,7 @@ Deno.serve(async (req) => {
     const createResponse = await fetch('https://api.d-id.com/agents/avatars', {
       method: 'POST',
       headers: {
-        'Authorization': `Basic ${btoa(DID_API_KEY)}`,
+        'Authorization': `Basic ${btoa(DID_API_KEY + ':')}`,
         'Content-Type': 'application/json',
         'accept': 'application/json'
       },
