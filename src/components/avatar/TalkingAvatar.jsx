@@ -84,6 +84,21 @@ export default function TalkingAvatar() {
         if (response.data?.video_url) {
           setVideoUrl(response.data.video_url);
 
+          // Save to UserVideo entity for feeds
+          try {
+            const user = await base44.auth.me();
+            await base44.entities.UserVideo.create({
+              title: `דמות מדברת - ${text.substring(0, 40)}...`,
+              video_url: response.data.video_url,
+              thumbnail_url: avatarUrl,
+              status: "ready",
+              uploader_email: user.email,
+              duration: response.data.duration || 0
+            });
+          } catch (err) {
+            console.log('Failed to save to entity:', err);
+          }
+
           // Send to main player
           window.dispatchEvent(new CustomEvent('playVideo', {
             detail: {
@@ -92,6 +107,9 @@ export default function TalkingAvatar() {
               autoPlay: true
             }
           }));
+
+          // Trigger video uploaded event for feeds refresh
+          window.dispatchEvent(new CustomEvent('videoUploaded'));
 
           toast.success("הוידאו מוכן ונוסף לפיד! 🎥", { id: 'video-gen' });
         } else {
