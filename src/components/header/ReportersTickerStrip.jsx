@@ -20,13 +20,13 @@ export default function ReportersTickerStrip() {
     const style = document.createElement('style');
     style.innerHTML = `
       .reporter-ticker-image-bw {
-        filter: saturate(0%) brightness(100%) !important;
-        -webkit-filter: saturate(0%) brightness(100%) !important;
+        filter: grayscale(100%) !important;
+        -webkit-filter: grayscale(100%) !important;
         transition: filter 0.4s ease-in-out !important;
       }
       .reporter-ticker-image-color {
-        filter: saturate(70%) hue-rotate(350deg) brightness(110%) !important;
-        -webkit-filter: saturate(70%) hue-rotate(350deg) brightness(110%) !important;
+        filter: grayscale(0%) !important;
+        -webkit-filter: grayscale(0%) !important;
         transition: filter 0.4s ease-in-out !important;
       }
     `;
