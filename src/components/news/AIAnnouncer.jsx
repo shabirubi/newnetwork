@@ -47,19 +47,7 @@ export default function AIAnnouncer() {
     try {
       const textToSpeak = `דיווח עדכני מהרשת החדשה: ${article.title}${article.subtitle ? '. ' + article.subtitle : ''}`;
       
-      // Try ElevenLabs first
-      const audioUrl = await generateElevenLabsAudio(textToSpeak);
-      
-      if (audioUrl) {
-        const audioElement = new Audio(audioUrl);
-        audioElement.onended = () => {
-          setIsSpeaking(false);
-          setCurrentArticleIndex(prev => (prev + 1) % articles.length);
-        };
-        audioElement.play();
-      }
-
-      // Use Web Speech API directly
+      // Use Web Speech API
       const utterance = new SpeechSynthesisUtterance(textToSpeak);
       utterance.lang = 'he-IL';
       utterance.rate = 0.95;
@@ -68,7 +56,9 @@ export default function AIAnnouncer() {
 
       utterance.onend = () => {
         setIsSpeaking(false);
-        setCurrentArticleIndex(prev => (prev + 1) % articles.length);
+        if (shouldContinuePlaying.current) {
+          setCurrentArticleIndex(prev => (prev + 1) % articles.length);
+        }
       };
 
       utterance.onerror = (e) => {
@@ -101,22 +91,7 @@ export default function AIAnnouncer() {
     playArticle(currentArticleIndex);
   };
 
-  const generateElevenLabsAudio = async (text) => {
-    try {
-      const response = await base44.functions.invoke('generateSpeech', {
-        text: text,
-        voice_id: 'nPczCjzI2devNBz1zQrH'
-      });
 
-      if (response?.data) {
-        const audioBlob = new Blob([response.data], { type: 'audio/mpeg' });
-        return URL.createObjectURL(audioBlob);
-      }
-    } catch (error) {
-      console.error('ElevenLabs error:', error);
-    }
-    return null;
-  };
 
   const handleStop = () => {
     shouldContinuePlaying.current = false;
