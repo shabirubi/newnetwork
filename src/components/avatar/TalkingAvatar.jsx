@@ -75,10 +75,12 @@ export default function TalkingAvatar() {
       try {
         const response = await base44.functions.invoke('generateTalkingVideo', {
           text,
+          mode: 'talks',
           avatarUrl,
           gender,
           voiceProvider,
-          backgroundType
+          voiceId: gender === 'male' ? 'he-IL-AvriNeural' : 'he-IL-HilaNeural',
+          backgroundUrl: backgroundType === 'dynamic' ? avatarUrl : null
         });
 
         if (response.data?.video_url) {
