@@ -208,20 +208,18 @@ export default function BroadcastStudio() {
            mode: "talks"
          });
       } else if (mode === "clips") {
-         // V3 Clips API - Using D-ID's built-in presenters
-         const didPresenters = [
-           'amy-jcwCkr1grs',
-           'anna-Ug3eJ5AKB',
-           'jessica-Ug3eJ5AKB',
-           'eric-Ug3eJ5AKB',
-           'james-Ug3eJ5AKB'
-         ];
-         const randomPresenter = didPresenters[Math.floor(Math.random() * didPresenters.length)];
+         // V3 Clips API - Using selected presenter
+         if (!selectedPresenter) {
+           toast.error("אנא בחר שדרן", { id: "video-gen" });
+           setLoading(false);
+           return;
+         }
 
          response = await base44.functions.invoke("generateTalkingVideo", {
            text: articleText,
-           presenterId: randomPresenter,
+           presenterId: selectedPresenter,
            voiceId: selectedVoice,
+           voiceProvider: 'microsoft',
            mode: "clips"
          });
       } else if (mode === "express") {
@@ -774,19 +772,38 @@ export default function BroadcastStudio() {
               exit={{ opacity: 0, x: 20 }}
               className="space-y-4"
             >
-              {/* Info about Clips mode */}
+              {/* D-ID Built-in Presenters */}
               <div className="bg-black/40 backdrop-blur-lg rounded-xl border border-[#E31E24]/30 overflow-hidden">
                 <div className="bg-gradient-to-r from-[#E31E24]/20 to-red-900/20 px-4 py-2 border-b border-[#E31E24]/30">
                   <div className="flex items-center gap-2">
                     <Users className="w-4 h-4 text-[#E31E24]" />
-                    <h2 className="text-white font-semibold text-sm">שדרנים מקצועיים (גוף מלא)</h2>
+                    <h2 className="text-white font-semibold text-sm">בחר שדרן (גוף מלא + ידיים)</h2>
                   </div>
                 </div>
                 <div className="p-4">
-                  <div className="bg-[#E31E24]/10 border border-[#E31E24]/30 rounded-lg p-4 text-center">
-                    <Video className="w-12 h-12 text-[#E31E24] mx-auto mb-3" />
-                    <p className="text-white font-semibold mb-2">שדרנים מובנים של D-ID</p>
-                    <p className="text-white/70 text-sm">השדרן ייבחר אוטומטית מבין 5 שדרנים מקצועיים עם גוף מלא ותנועות ידיים</p>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                    {[
+                      { id: 'amy-jcwCkr1grs', name: 'Amy', gender: 'female' },
+                      { id: 'anna-Ug3eJ5AKB', name: 'Anna', gender: 'female' },
+                      { id: 'eric-Ug3eJ5AKB', name: 'Eric', gender: 'male' },
+                      { id: 'james-Ug3eJ5AKB', name: 'James', gender: 'male' }
+                    ].map((presenter) => (
+                      <button
+                        key={presenter.id}
+                        onClick={() => setSelectedPresenter(presenter.id)}
+                        className={`p-3 rounded-lg border-2 transition-all text-center ${
+                          selectedPresenter === presenter.id
+                            ? "border-[#E31E24] bg-[#E31E24]/20"
+                            : "border-[#E31E24]/20 bg-black/20 hover:bg-black/40"
+                        }`}
+                      >
+                        <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#E31E24]/30 to-red-900/30 flex items-center justify-center mx-auto mb-2">
+                          <User className="w-6 h-6 text-[#E31E24]" />
+                        </div>
+                        <p className="text-white font-semibold text-sm">{presenter.name}</p>
+                        <p className="text-white/50 text-xs">{presenter.gender === 'male' ? '♂️ זכר' : '♀️ נקבה'}</p>
+                      </button>
+                    ))}
                   </div>
                 </div>
               </div>
