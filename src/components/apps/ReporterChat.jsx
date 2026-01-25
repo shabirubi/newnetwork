@@ -41,6 +41,7 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
     };
   });
   const [latestNews, setLatestNews] = useState([]);
+  const [fullscreenVideo, setFullscreenVideo] = useState(null);
   const messagesEndRef = useRef(null);
   const recordingIntervalRef = useRef(null);
 
@@ -927,32 +928,23 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                             )}
                             
                             {message.videoUrl && (
-                              <div className="mt-3 rounded-lg overflow-hidden border-2 border-[#E31E24]/30 relative group">
+                              <button
+                                onClick={() => setFullscreenVideo(message.videoUrl)}
+                                className="mt-3 rounded-lg overflow-hidden border-2 border-[#E31E24]/30 relative group cursor-pointer block"
+                              >
                                 <video
                                   src={message.videoUrl}
-                                  autoPlay
-                                  playsInline
                                   className="w-full rounded-lg"
-                                  onEnded={(e) => {
-                                    e.target.classList.add('opacity-90');
-                                  }}
+                                  playsInline
                                 />
-                                <button
-                                  onClick={(e) => {
-                                    const video = e.target.parentElement.querySelector('video');
-                                    video.currentTime = 0;
-                                    video.play();
-                                    video.classList.remove('opacity-90');
-                                  }}
-                                  className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
-                                >
-                                  <div className="w-12 h-12 rounded-full bg-[#E31E24] flex items-center justify-center">
-                                    <svg className="w-6 h-6 text-white mr-1" fill="currentColor" viewBox="0 0 24 24">
+                                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors flex items-center justify-center">
+                                  <div className="w-16 h-16 rounded-full bg-[#E31E24] flex items-center justify-center">
+                                    <svg className="w-8 h-8 text-white mr-1" fill="currentColor" viewBox="0 0 24 24">
                                       <path d="M8 5v14l11-7z"/>
                                     </svg>
                                   </div>
-                                </button>
-                              </div>
+                                </div>
+                              </button>
                             )}
                             
                             {message.media && (
@@ -1169,6 +1161,65 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                 )}
               </div>
             </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Fullscreen Video Modal */}
+      <AnimatePresence>
+        {fullscreenVideo && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black z-[100000] flex flex-col"
+          >
+            {/* Video Area */}
+            <div className="flex-1 relative flex items-center justify-center">
+              <video
+                src={fullscreenVideo}
+                autoPlay
+                playsInline
+                className="w-full h-full object-contain"
+                onEnded={() => setFullscreenVideo(null)}
+              />
+              
+              {/* Close Button */}
+              <button
+                onClick={() => setFullscreenVideo(null)}
+                className="absolute top-4 left-4 w-12 h-12 rounded-full bg-black/60 backdrop-blur-sm border border-white/20 flex items-center justify-center hover:bg-black/80 transition-colors z-10"
+              >
+                <X className="w-6 h-6 text-white" />
+              </button>
+            </div>
+
+            {/* Chat Input Overlay */}
+            <div className="bg-gradient-to-t from-black via-black/95 to-transparent p-4 border-t border-white/10">
+              <div className="max-w-2xl mx-auto">
+                <div className="flex gap-2">
+                  <Input
+                    type="text"
+                    placeholder="המשך את השיחה..."
+                    value={inputValue}
+                    onChange={(e) => setInputValue(e.target.value)}
+                    onKeyPress={(e) => e.key === "Enter" && sendMessage()}
+                    disabled={isLoading}
+                    className="flex-1 bg-white/10 border-white/20 text-white placeholder-white/50 backdrop-blur-sm"
+                  />
+                  <Button
+                    onClick={() => sendMessage()}
+                    disabled={isLoading || !inputValue.trim()}
+                    className="bg-[#E31E24] hover:bg-red-700 px-6"
+                  >
+                    {isLoading ? (
+                      <Loader className="w-5 h-5 animate-spin" />
+                    ) : (
+                      <Send className="w-5 h-5" />
+                    )}
+                  </Button>
+                </div>
+              </div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>
