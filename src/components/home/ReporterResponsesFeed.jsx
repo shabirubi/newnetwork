@@ -111,7 +111,7 @@ export default function ReporterResponsesFeed() {
 
               {/* Content */}
               <div className="p-3 sm:p-4">
-                <div className="flex items-start gap-2 mb-2">
+                <div className="flex items-start gap-2 mb-3">
                   <div className="w-8 h-8 rounded-full bg-[#E31E24]/20 flex items-center justify-center flex-shrink-0">
                     <User className="w-4 h-4 text-[#E31E24]" />
                   </div>
@@ -128,6 +128,17 @@ export default function ReporterResponsesFeed() {
                     </div>
                   </div>
                 </div>
+                
+                {/* Response Text */}
+                {response.response_text && (
+                  <div className="bg-[#E31E24]/10 rounded-lg p-2 mb-2 border border-[#E31E24]/20">
+                    <p className="text-xs text-white/70 mb-1 font-bold">תשובה:</p>
+                    <p className="text-white/90 text-xs line-clamp-3 leading-relaxed">
+                      {response.response_text}
+                    </p>
+                  </div>
+                )}
+                
                 <p className="text-white/80 text-xs sm:text-sm line-clamp-2 leading-relaxed">
                   {response.message}
                 </p>
@@ -185,10 +196,21 @@ export default function ReporterResponsesFeed() {
               )}
             </div>
 
-            {/* Message */}
+            {/* Message & Response */}
             <div className="bg-gradient-to-t from-black via-black/95 to-transparent px-4 py-4 border-t border-white/10">
-              <div className="max-w-3xl mx-auto">
-                <p className="text-white/90 text-sm sm:text-base leading-relaxed">
+              <div className="max-w-3xl mx-auto space-y-3">
+                {fullscreenVideo.response_text && (
+                  <div className="bg-[#E31E24]/10 rounded-xl p-4 border border-[#E31E24]/30">
+                    <p className="text-xs text-[#E31E24] mb-2 font-bold flex items-center gap-2">
+                      <MessageCircle className="w-4 h-4" />
+                      תשובת הכתב:
+                    </p>
+                    <p className="text-white text-sm sm:text-base leading-relaxed">
+                      {fullscreenVideo.response_text}
+                    </p>
+                  </div>
+                )}
+                <p className="text-white/70 text-xs sm:text-sm leading-relaxed">
                   {fullscreenVideo.message}
                 </p>
               </div>
