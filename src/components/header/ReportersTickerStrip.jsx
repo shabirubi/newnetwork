@@ -118,15 +118,15 @@ export default function ReportersTickerStrip() {
             <motion.img
               src={reporter.image}
               alt={reporter.name}
-              className={`w-16 h-16 sm:w-20 sm:h-20 rounded-lg object-cover border-2 border-[#E31E24]/20 group-hover:border-[#E31E24] transition-all ${
+              className={`w-20 h-20 rounded-lg object-cover border-2 border-[#E31E24]/20 group-hover:border-[#E31E24] transition-all ${
                 hoveredReporter === reporter.id ? 'reporter-ticker-image-color' : 'reporter-ticker-image-bw'
               }`}
               whileHover={{ rotate: [0, -2, 2, 0] }}
               transition={{ duration: 0.3 }}
             />
             <div className="text-center min-w-[60px]">
-              <div className="text-white font-bold text-[10px] sm:text-[9px] line-clamp-1">{reporter.name}</div>
-              <div className="text-[#E31E24] text-[9px] sm:text-[8px] font-medium line-clamp-1">{reporter.specialty}</div>
+              <div className="text-white font-bold text-[9px] line-clamp-1">{reporter.name}</div>
+              <div className="text-[#E31E24] text-[8px] font-medium line-clamp-1">{reporter.specialty}</div>
             </div>
           </motion.div>
           ))}
