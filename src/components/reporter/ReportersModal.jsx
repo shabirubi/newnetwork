@@ -21,7 +21,8 @@ const categoryLabels = {
 };
 
 export default function ReportersModal({ isOpen, onClose }) {
-  const navigate = useNavigate();
+  const [selectedReporterForChat, setSelectedReporterForChat] = useState(null);
+  const [chatOpen, setChatOpen] = useState(false);
 
   const { data: reporters = [], isLoading } = useQuery({
     queryKey: ['reporters-modal'],
@@ -37,9 +38,8 @@ export default function ReportersModal({ isOpen, onClose }) {
   });
 
   const handleReporterClick = (reporter) => {
-    localStorage.setItem('selectedReporter', JSON.stringify(reporter));
-    navigate(createPageUrl('ReporterStudio'));
-    onClose();
+    setSelectedReporterForChat(reporter);
+    setChatOpen(true);
   };
 
   if (!isOpen) return null;
