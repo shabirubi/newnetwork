@@ -167,7 +167,7 @@ Deno.serve(async (req) => {
     const response = await fetch(apiUrl, {
       method: 'POST',
       headers: {
-        'Authorization': `Basic ${DID_API_KEY}`,
+        'Authorization': `Basic ${btoa(DID_API_KEY + ':')}`,
         'Content-Type': 'application/json',
         'accept': 'application/json',
         'X-Elevenlabs-Api-Key': ELEVENLABS_API_KEY
@@ -203,7 +203,7 @@ Deno.serve(async (req) => {
       try {
         const statusResponse = await fetch(pollUrl, {
           headers: {
-            'Authorization': `Basic ${DID_API_KEY}`,
+            'Authorization': `Basic ${btoa(DID_API_KEY + ':')}`,
             'accept': 'application/json'
           }
         });
