@@ -69,7 +69,7 @@ export default function ReportersTickerStrip() {
 
   return (
     <>
-      <div ref={containerRef} className="relative bg-black/90 backdrop-blur-xl border-b border-[#E31E24]/30 shadow-xl shadow-[#E31E24]/20 py-2 z-10">
+      <div ref={containerRef} className="relative bg-black/90 backdrop-blur-xl border-b border-[#E31E24]/30 shadow-xl shadow-[#E31E24]/20 py-3 z-10">
         {/* Left Arrow */}
         <button
           onClick={() => scroll('left')}
@@ -86,8 +86,8 @@ export default function ReportersTickerStrip() {
           <ChevronRight className="w-5 h-5 text-[#E31E24]" />
         </button>
 
-        <div ref={scrollContainerRef} className="overflow-x-auto scrollbar-hide block" onScroll={handleScroll} style={{ touchAction: 'pan-x' }}>
-          <div className="flex gap-1 items-center px-1.5 lg:px-10 min-h-[100px]">
+        <div ref={scrollContainerRef} className="overflow-x-auto scrollbar-hide" onScroll={handleScroll} style={{ touchAction: 'pan-x' }}>
+          <div className="flex gap-2 items-center px-2 lg:px-10 py-1">
         {reporters.map((reporter, idx) => (
           <motion.div
             key={`${reporter.id}-${idx}`}
@@ -115,14 +115,12 @@ export default function ReportersTickerStrip() {
               }
             }}
           >
-            <motion.img
+            <img
               src={reporter.image}
               alt={reporter.name}
-              className={`w-20 h-20 rounded-lg object-cover border-2 border-[#E31E24]/20 group-hover:border-[#E31E24] transition-all ${
+              className={`w-20 h-20 rounded-lg object-cover border-2 border-[#E31E24]/20 group-hover:border-[#E31E24] transition-all shadow-lg ${
                 hoveredReporter === reporter.id ? 'reporter-ticker-image-color' : 'reporter-ticker-image-bw'
               }`}
-              whileHover={{ rotate: [0, -2, 2, 0] }}
-              transition={{ duration: 0.3 }}
             />
             <div className="text-center min-w-[60px]">
               <div className="text-white font-bold text-[9px] line-clamp-1">{reporter.name}</div>
