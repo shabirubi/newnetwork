@@ -3,38 +3,49 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Play, Pause, Share2, Heart } from "lucide-react";
 import moment from "moment";
 import NewsReelsModal from "./NewsReelsModal";
+import { useQuery } from "@tanstack/react-query";
+import { base44 } from "@/api/base44Client";
 
 export default function NewsReels() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedReel, setSelectedReel] = useState(null);
 
-  // סרטוני יוטיוב שלנו
-  const youtubeVideos = [
-    { id: 'youtube-pPRKdCHHlGI', videoId: 'pPRKdCHHlGI', title: 'שידור חי עכשיו', category: 'breaking' },
-    { id: 'youtube-OeEDtjuqinU', videoId: 'OeEDtjuqinU', title: 'חדשות הערב', category: 'breaking' },
-    { id: 'youtube-EGxPXB-Kwuo', videoId: 'EGxPXB-Kwuo', title: 'עדכון חדשות יומי', category: 'breaking' },
-    { id: 'youtube-k7WPygB6GlI', videoId: 'k7WPygB6GlI', title: 'חדשות עכשיו', category: 'breaking' },
-    { id: 'youtube-4miQnYCTdS8', videoId: '4miQnYCTdS8', title: 'עדכון חם', category: 'security' },
-    { id: 'youtube-2q9lcnXBicQ', videoId: '2q9lcnXBicQ', title: 'ניתוח מעמיק', category: 'economy' },
-    { id: 'youtube-vecTR4YAf-w', videoId: 'vecTR4YAf-w', title: 'דיווח מיוחד', category: 'politics' }
-  ];
+  // Fetch user uploaded videos only
+  const { data: userVideos = [] } = useQuery({
+    queryKey: ['news-reels-videos'],
+    queryFn: async () => {
+      try {
+        const videos = await base44.entities.UserVideo.filter(
+          { status: 'ready' },
+          '-created_date',
+          20
+        );
+        return videos;
+      } catch {
+        return [];
+      }
+    },
+    initialData: []
+  });
 
-  const newsReels = youtubeVideos.map((video, i) => ({
-    ...video,
-    subtitle: `הרשת החדשה - שידור חי`,
-    thumbnail: `https://img.youtube.com/vi/${video.videoId}/hqdefault.jpg`,
-    videoUrl: `https://www.youtube.com/embed/${video.videoId}?autoplay=0&mute=1`,
-    views: Math.floor(Math.random() * 100000) + 1000,
-    timestamp: moment().subtract(i, 'hours').toDate(),
+  const newsReels = userVideos.map((video, i) => ({
+    id: video.id,
+    videoUrl: video.video_url,
+    title: video.title,
+    category: 'חדשות',
+    subtitle: `הרשת החדשה`,
+    thumbnail: video.thumbnail_url,
+    views: video.views || 0,
+    timestamp: new Date(video.created_date),
     liked: false
   }));
 
   const handlePrevious = () => {
-    setCurrentIndex(prev => (prev > 0 ? prev - 1 : youtubeVideos.length - 1));
+    setCurrentIndex(prev => (prev > 0 ? prev - 1 : newsReels.length - 1));
   };
 
   const handleNext = () => {
-    setCurrentIndex(prev => (prev < youtubeVideos.length - 1 ? prev + 1 : 0));
+    setCurrentIndex(prev => (prev < newsReels.length - 1 ? prev + 1 : 0));
   };
 
   const categoryColors = {
@@ -79,19 +90,27 @@ export default function NewsReels() {
                     whileHover={{ scale: 1.02 }}
                   >
 
-                    {/* Category Badge */}
-                    <div className={`absolute top-3 right-3 px-2 py-1 rounded-full text-xs font-bold text-white ${categoryColors[reel.category]} z-10`}>
-                      {reel.category}
+                    {/* Video preview */}
+                    <video
+                      src={reel.videoUrl}
+                      className="absolute inset-0 w-full h-full object-cover"
+                      playsInline
+                      muted
+                    />
+
+                    {/* Watermark */}
+                    <div className="absolute bottom-2 right-2 opacity-20 pointer-events-none z-20">
+                      <img 
+                        src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png" 
+                        alt="הרשת החדשה" 
+                        className="h-6 w-auto"
+                      />
                     </div>
 
-                    {/* YouTube iframe embed */}
-                    <iframe
-                      src={`https://www.youtube.com/embed/${reel.videoId}`}
-                      title={reel.title}
-                      className="absolute inset-0 w-full h-full"
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                      allowFullScreen
-                    />
+                    {/* Category Badge */}
+                    <div className={`absolute top-3 right-3 px-2 py-1 rounded-full text-xs font-bold text-white bg-[#E31E24] z-10`}>
+                      {reel.category}
+                    </div>
 
                     {/* Content overlay - only title */}
                     <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black/80 to-transparent z-10">

@@ -14,56 +14,15 @@ export default function TikTokNewsContainer() {
     initialData: []
   });
 
-  const youtubeVideos = [
-    {
-      id: 'youtube-pPRKdCHHlGI',
-      title: "שידור חי עכשיו",
-      username: "@hareshet_live",
-      url: "https://www.youtube.com/embed/pPRKdCHHlGI?autoplay=0&mute=1",
-      type: 'youtube'
-    },
-    {
-      id: 'youtube-OeEDtjuqinU',
-      title: "חדשות הערב - עדכון",
-      username: "@hareshet_evening",
-      url: "https://www.youtube.com/embed/OeEDtjuqinU?autoplay=0&mute=1",
-      type: 'youtube'
-    },
-    {
-      id: 'youtube-EGxPXB-Kwuo',
-      title: "עדכון חדשות יומי",
-      username: "@hareshet_daily",
-      url: "https://www.youtube.com/embed/EGxPXB-Kwuo?autoplay=0&mute=1",
-      type: 'youtube'
-    },
-    {
-      id: 'youtube-k7WPygB6GlI',
-      title: "חדשות עכשיו - ביטחון",
-      username: "@hareshet_live",
-      url: "https://www.youtube.com/embed/k7WPygB6GlI?autoplay=0&mute=1",
-      type: 'youtube'
-    },
-    {
-      id: 'youtube-4miQnYCTdS8',
-      title: "כלכלה - אפדייט חם",
-      username: "@hareshet_economy",
-      url: "https://www.youtube.com/embed/4miQnYCTdS8?autoplay=0&mute=1",
-      type: 'youtube'
-    }
-  ];
-
-  // Combine user videos with YouTube videos
-  const tiktokVideos = [
-    ...userVideos.map(v => ({
-      id: v.id,
-      title: v.title,
-      username: `@${v.uploader_email?.split('@')[0] || 'user'}`,
-      url: v.video_url,
-      thumbnail: v.thumbnail_url,
-      type: 'user'
-    })),
-    ...youtubeVideos
-  ];
+  // Only use user videos
+  const tiktokVideos = userVideos.map(v => ({
+    id: v.id,
+    title: v.title,
+    username: `@${v.uploader_email?.split('@')[0] || 'user'}`,
+    url: v.video_url,
+    thumbnail: v.thumbnail_url,
+    type: 'user'
+  }));
 
   return (
     <section className="px-4 sm:px-4 mt-8">
@@ -97,20 +56,20 @@ export default function TikTokNewsContainer() {
             }}
           >
             {/* Video Preview */}
-            {video.type === 'youtube' ? (
-              <iframe
-                src={`https://www.youtube.com/embed/${video.id.replace('youtube-', '')}?controls=0&mute=1`}
-                className="w-full h-full object-cover pointer-events-none"
-                frameBorder="0"
+            <video
+              src={video.url}
+              className="w-full h-full object-cover pointer-events-none"
+              muted
+              playsInline
+            />
+            {/* Watermark */}
+            <div className="absolute bottom-2 right-2 opacity-20 pointer-events-none z-20">
+              <img 
+                src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png" 
+                alt="הרשת החדשה" 
+                className="h-6 w-auto"
               />
-            ) : (
-              <video
-                src={video.url}
-                className="w-full h-full object-cover pointer-events-none"
-                muted
-                playsInline
-              />
-            )}
+            </div>
 
             {/* Overlay Gradient */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent group-hover:via-black/40 transition-all" />
@@ -160,23 +119,21 @@ export default function TikTokNewsContainer() {
               >
                 <X className="w-6 h-6 text-white" />
               </button>
-              {selectedVideo.type === 'youtube' ? (
-                <iframe
-                  src={selectedVideo.url}
-                  className="w-full h-full"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
+              <video
+                src={selectedVideo.url}
+                className="w-full h-full bg-black"
+                controls
+                playsInline
+                style={{ objectFit: 'contain' }}
+              />
+              {/* Watermark */}
+              <div className="absolute bottom-4 right-4 opacity-30 pointer-events-none">
+                <img 
+                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png" 
+                  alt="הרשת החדשה" 
+                  className="h-12 w-auto drop-shadow-2xl"
                 />
-              ) : (
-                <video
-                  src={selectedVideo.url}
-                  className="w-full h-full bg-black"
-                  controls
-                  playsInline
-                  style={{ objectFit: 'contain' }}
-                />
-              )}
+              </div>
             </motion.div>
           </motion.div>
         )}
