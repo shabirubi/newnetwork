@@ -352,12 +352,13 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
       setMessages(prev => [...prev, tempAiMessage]);
       
       // Generate talking video with the AI response
+      const reporterGender = selectedReporter.gender || 'male';
       const videoResponse = await base44.functions.invoke('generateTalkingVideo', {
         text: response.data.response,
         avatarUrl: selectedReporter.image,
-        gender: selectedReporter.gender || (selectedReporter.name.includes('ה') ? 'female' : 'male'),
+        gender: reporterGender,
         voiceProvider: 'microsoft',
-        voiceId: selectedReporter.gender === 'male' ? 'he-IL-AvriNeural' : 'he-IL-HilaNeural',
+        voiceId: reporterGender === 'male' ? 'he-IL-AvriNeural' : 'he-IL-HilaNeural',
         backgroundType: 'dynamic'
       });
 
