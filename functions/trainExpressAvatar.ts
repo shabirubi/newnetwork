@@ -61,7 +61,7 @@ Deno.serve(async (req) => {
       try {
         const statusResponse = await fetch(`https://api.d-id.com/agents/avatars/${avatarId}`, {
           headers: {
-            'Authorization': `Basic ${DID_API_KEY}`,
+            'Authorization': `Basic ${btoa(DID_API_KEY)}`,
             'accept': 'application/json'
           }
         });
