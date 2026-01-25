@@ -86,8 +86,8 @@ export default function ReportersTickerStrip() {
           <ChevronRight className="w-5 h-5 text-[#E31E24]" />
         </button>
 
-        <div ref={scrollContainerRef} className="overflow-x-auto scrollbar-hide" onScroll={handleScroll} style={{ touchAction: 'pan-x' }}>
-          <div className="flex gap-2 items-center px-2 lg:px-10 py-1">
+        <div ref={scrollContainerRef} className="overflow-x-auto scrollbar-hide block" onScroll={handleScroll} style={{ touchAction: 'pan-x' }}>
+          <div className="flex gap-2 items-center px-2 lg:px-10 py-1 min-h-[120px]">
         {reporters.map((reporter, idx) => (
           <motion.div
             key={`${reporter.id}-${idx}`}
