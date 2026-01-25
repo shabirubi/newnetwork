@@ -44,6 +44,19 @@ export default function ReportersModal({ isOpen, onClose }) {
 
   if (!isOpen) return null;
 
+  if (chatOpen && selectedReporterForChat) {
+    return (
+      <ReporterChat
+        externalIsOpen={chatOpen}
+        externalSetIsOpen={(isOpen) => {
+          setChatOpen(isOpen);
+          if (!isOpen) setSelectedReporterForChat(null);
+        }}
+        preSelectedReporter={selectedReporterForChat}
+      />
+    );
+  }
+
   return (
     <AnimatePresence>
       <motion.div
