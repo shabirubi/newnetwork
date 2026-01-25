@@ -16,6 +16,7 @@ import StudioSidebar from "../components/home/StudioSidebar";
 
 import CategoriesMenu from "../components/shared/CategoriesMenu";
 import TalkingAvatar from "../components/avatar/TalkingAvatar";
+import ReportersModal from "../components/reporter/ReportersModal";
 
 import AutoNewsUpdater from "../components/news/AutoNewsUpdater";
 import AutoChannelsUpdater from "../components/news/AutoChannelsUpdater";
