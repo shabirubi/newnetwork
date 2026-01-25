@@ -116,11 +116,14 @@ export default function ReportersTickerStrip() {
             }}
           >
             <img
-              src={reporter.image}
+              src={reporter.image || 'https://via.placeholder.com/80?text=' + reporter.name.charAt(0)}
               alt={reporter.name}
-              className={`w-20 h-20 rounded-lg object-cover border-2 border-[#E31E24]/20 group-hover:border-[#E31E24] transition-all shadow-lg ${
+              className={`w-20 h-20 rounded-lg object-cover border-2 border-[#E31E24]/20 group-hover:border-[#E31E24] transition-all shadow-lg bg-gray-700 ${
                 hoveredReporter === reporter.id ? 'reporter-ticker-image-color' : 'reporter-ticker-image-bw'
               }`}
+              onError={(e) => {
+                e.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="80" height="80"%3E%3Crect fill="%23333" width="80" height="80"/%3E%3Ctext x="40" y="40" font-size="40" fill="white" text-anchor="middle" dy=".3em"%3E' + reporter.name.charAt(0) + '%3C/text%3E%3C/svg%3E';
+              }}
             />
             <div className="text-center min-w-[60px]">
               <div className="text-white font-bold text-[9px] line-clamp-1">{reporter.name}</div>
