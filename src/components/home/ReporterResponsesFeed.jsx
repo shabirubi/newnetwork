@@ -17,8 +17,7 @@ export default function ReporterResponsesFeed() {
         '-created_date',
         50
       );
-      // סינון רק תשובות עם וידאו
-      return data.filter(r => r.voice_url);
+      return data;
     },
     refetchInterval: 10000, // רענון כל 10 שניות
     initialData: []
@@ -66,7 +65,7 @@ export default function ReporterResponsesFeed() {
           </div>
           <div>
             <h2 className="text-xl sm:text-2xl font-bold text-white">תשובות הכתבים</h2>
-            <p className="text-white/60 text-xs sm:text-sm">תשובות מקצועיות עם וידאו</p>
+            <p className="text-white/60 text-xs sm:text-sm">תשובות מקצועיות מהכתבים</p>
           </div>
         </div>
 
@@ -81,25 +80,33 @@ export default function ReporterResponsesFeed() {
               onClick={() => setFullscreenVideo(response)}
               className="group relative bg-black/40 rounded-xl overflow-hidden border border-[#E31E24]/30 hover:border-[#E31E24]/60 transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
-              {/* Video Thumbnail */}
+              {/* Video/Text Thumbnail */}
               <div className="relative aspect-video bg-gradient-to-br from-gray-900 to-black">
-                <video
-                  src={response.voice_url}
-                  className="w-full h-full object-cover"
-                  playsInline
-                />
-                
-                {/* Play Overlay */}
-                <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-colors flex items-center justify-center">
-                  <div className="w-14 h-14 rounded-full bg-[#E31E24] flex items-center justify-center group-hover:scale-110 transition-transform">
-                    <Play className="w-6 h-6 text-white mr-1" fill="white" />
-                  </div>
-                </div>
+                {response.voice_url ? (
+                  <>
+                    <video
+                      src={response.voice_url}
+                      className="w-full h-full object-cover"
+                      playsInline
+                    />
+                    
+                    {/* Play Overlay */}
+                    <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-colors flex items-center justify-center">
+                      <div className="w-14 h-14 rounded-full bg-[#E31E24] flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <Play className="w-6 h-6 text-white mr-1" fill="white" />
+                      </div>
+                    </div>
 
-                {/* Duration Badge */}
-                <div className="absolute top-2 left-2 bg-black/80 backdrop-blur-sm px-2 py-1 rounded text-xs text-white font-bold">
-                  וידאו
-                </div>
+                    {/* Duration Badge */}
+                    <div className="absolute top-2 left-2 bg-black/80 backdrop-blur-sm px-2 py-1 rounded text-xs text-white font-bold">
+                      וידאו
+                    </div>
+                  </>
+                ) : (
+                  <div className="absolute inset-0 flex items-center justify-center p-4">
+                    <MessageCircle className="w-12 h-12 text-[#E31E24]/30" />
+                  </div>
+                )}
               </div>
 
               {/* Content */}
@@ -158,16 +165,24 @@ export default function ReporterResponsesFeed() {
               </button>
             </div>
 
-            {/* Video */}
-            <div className="flex-1 relative flex items-center justify-center">
-              <video
-                src={fullscreenVideo.voice_url}
-                autoPlay
-                playsInline
-                controls
-                className="w-full h-full object-contain"
-                onEnded={() => setFullscreenVideo(null)}
-              />
+            {/* Video/Text */}
+            <div className="flex-1 relative flex items-center justify-center p-4">
+              {fullscreenVideo.voice_url ? (
+                <video
+                  src={fullscreenVideo.voice_url}
+                  autoPlay
+                  playsInline
+                  controls
+                  className="w-full h-full object-contain"
+                  onEnded={() => setFullscreenVideo(null)}
+                />
+              ) : (
+                <div className="max-w-2xl bg-black/40 backdrop-blur-sm rounded-2xl p-8 border border-[#E31E24]/30">
+                  <p className="text-white text-lg leading-relaxed">
+                    {fullscreenVideo.response_text || fullscreenVideo.message}
+                  </p>
+                </div>
+              )}
             </div>
 
             {/* Message */}
