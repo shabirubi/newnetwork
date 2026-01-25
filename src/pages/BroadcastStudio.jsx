@@ -851,8 +851,8 @@ export default function BroadcastStudio() {
                           <button
                             key={reporter.id}
                             onClick={() => {
-                              setCustomAvatarId(reporter.id);
-                              setTrainingVideo(null);
+                              // Don't use reporter.id - Express mode needs actual D-ID avatar_id
+                              toast.error("כתבים קיימים לא נתמכים במצב Express. אנא העלה וידאו אימון חדש.");
                             }}
                             className={`relative aspect-square rounded-lg overflow-hidden border-2 transition-all ${
                               customAvatarId === reporter.id
