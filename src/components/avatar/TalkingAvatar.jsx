@@ -155,7 +155,7 @@ export default function TalkingAvatar() {
               animate={{ scale: 1, y: 0 }}
               exit={{ scale: 0.9, y: 20 }}
               onClick={(e) => e.stopPropagation()}
-              className="bg-gradient-to-br from-gray-900 to-black rounded-2xl overflow-hidden w-full max-w-lg sm:max-w-2xl shadow-2xl border border-purple-500/30 max-h-[90vh] overflow-y-auto"
+              className="bg-gradient-to-br from-gray-900 to-black rounded-2xl overflow-hidden w-full max-w-2xl shadow-2xl border border-purple-500/30 max-h-[85vh] flex flex-col"
             >
               {/* Header */}
               <div className="bg-gradient-to-r from-purple-600 to-purple-800 p-6">
@@ -180,7 +180,7 @@ export default function TalkingAvatar() {
               </div>
 
               {/* Content */}
-              <div className="p-4 sm:p-6 space-y-4 sm:space-y-5">
+              <div className="p-4 sm:p-6 overflow-y-auto flex-1">
                 {videoUrl ? (
                   /* Video Result */
                   <div className="space-y-4">
@@ -215,33 +215,36 @@ export default function TalkingAvatar() {
                     </div>
                   </div>
                 ) : (
-                  /* Creation Form */
-                  <div className="space-y-6">
-                    {/* Image Upload - Redesigned */}
-                    <div className="w-full">
-                      <label className="block text-white font-bold mb-2 text-sm">📸 תמונה</label>
+                  /* Creation Form - No Scroll */
+                  <div className="space-y-4">
+                    {/* Step 1: Image Upload */}
+                    <div className="bg-gradient-to-br from-purple-900/40 to-purple-800/20 rounded-xl p-4 border border-purple-500/30">
+                      <div className="flex items-center gap-2 mb-3">
+                        <div className="w-8 h-8 rounded-full bg-purple-600 flex items-center justify-center text-white font-bold text-sm">1</div>
+                        <h3 className="text-white font-bold">העלה תמונה</h3>
+                      </div>
                       <div 
                         onClick={() => !uploadingImage && document.getElementById('avatar-upload').click()}
-                        className="w-full relative border-2 border-dashed border-purple-500/50 rounded-lg p-3 sm:p-4 cursor-pointer hover:border-purple-400 hover:bg-purple-500/5 transition-all bg-purple-900/20"
+                        className="relative border-2 border-dashed border-purple-400 rounded-lg p-4 cursor-pointer hover:border-purple-300 hover:bg-purple-500/10 transition-all"
                       >
                         {avatarUrl ? (
-                          <div className="flex items-center gap-2 sm:gap-3">
-                            <img src={avatarUrl} alt="Avatar" className="w-16 h-16 sm:w-20 sm:h-20 rounded-md border-2 border-purple-500 object-cover flex-shrink-0" />
-                            <div className="flex-1 min-w-0">
-                              <p className="text-purple-300 font-bold text-xs sm:text-sm truncate">✓ הועלתה</p>
-                              <p className="text-gray-400 text-xs">לחץ להחלפה</p>
+                          <div className="flex items-center gap-3">
+                            <img src={avatarUrl} alt="Avatar" className="w-20 h-20 rounded-lg border-2 border-purple-500 object-cover" />
+                            <div className="flex-1">
+                              <p className="text-purple-300 font-bold">✓ תמונה נבחרה</p>
+                              <p className="text-gray-400 text-xs mt-1">לחץ להחלפה</p>
                             </div>
                           </div>
                         ) : (
-                          <div className="text-center py-2 sm:py-3">
-                            <User className="w-6 h-6 sm:w-8 sm:h-8 mx-auto mb-1 sm:mb-2 text-purple-400" />
-                            <p className="text-white font-bold text-xs sm:text-sm">בחר תמונה</p>
-                            <p className="text-gray-400 text-xs">עד 5MB</p>
+                          <div className="text-center py-4">
+                            <User className="w-12 h-12 mx-auto mb-2 text-purple-400" />
+                            <p className="text-white font-bold">לחץ לבחירת תמונה</p>
+                            <p className="text-gray-400 text-xs mt-1">JPG, PNG - עד 5MB</p>
                           </div>
                         )}
                         {uploadingImage && (
-                          <div className="absolute inset-0 bg-black/50 rounded-lg flex items-center justify-center">
-                            <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin text-purple-400" />
+                          <div className="absolute inset-0 bg-black/70 rounded-lg flex items-center justify-center">
+                            <Loader2 className="w-8 h-8 animate-spin text-purple-400" />
                           </div>
                         )}
                       </div>
@@ -255,134 +258,71 @@ export default function TalkingAvatar() {
                       />
                     </div>
 
-                    {/* Voice Provider Selection */}
-                    <div className="bg-gray-800/50 rounded-lg p-3">
-                      <label className="block text-white font-bold mb-2 text-sm">🎤 ספק קול</label>
-                      <div className="space-y-1.5">
-                        <label className="flex items-center gap-2 p-2 rounded hover:bg-gray-700/50 cursor-pointer">
-                          <input
-                            type="radio"
-                            name="voiceProvider"
-                            value="microsoft"
-                            checked={voiceProvider === "microsoft"}
-                            onChange={(e) => setVoiceProvider(e.target.value)}
-                            className="w-4 h-4"
-                          />
-                          <span className="text-white text-sm">Microsoft Azure</span>
-                        </label>
-                        <label className="flex items-center gap-2 p-2 rounded hover:bg-gray-700/50 cursor-pointer">
-                          <input
-                            type="radio"
-                            name="voiceProvider"
-                            value="elevenlabs"
-                            checked={voiceProvider === "elevenlabs"}
-                            onChange={(e) => setVoiceProvider(e.target.value)}
-                            className="w-4 h-4"
-                          />
-                          <span className="text-white text-sm">Eleven Labs ⭐</span>
-                        </label>
+                    {/* Step 2: Text Input */}
+                    <div className="bg-gradient-to-br from-blue-900/40 to-blue-800/20 rounded-xl p-4 border border-blue-500/30">
+                      <div className="flex items-center gap-2 mb-3">
+                        <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-sm">2</div>
+                        <h3 className="text-white font-bold">כתוב טקסט</h3>
                       </div>
-                    </div>
-
-                    {/* Gender Selection */}
-                    <div className="bg-gray-800/50 rounded-lg p-3">
-                      <label className="block text-white font-bold mb-2 text-sm">👤 קול</label>
-                      <div className="space-y-1.5">
-                        <label className="flex items-center gap-2 p-2 rounded hover:bg-gray-700/50 cursor-pointer">
-                          <input
-                            type="radio"
-                            name="gender"
-                            value="male"
-                            checked={gender === "male"}
-                            onChange={(e) => setGender(e.target.value)}
-                            className="w-4 h-4"
-                          />
-                          <span className="text-white text-sm">♂️ גברי</span>
-                        </label>
-                        <label className="flex items-center gap-2 p-2 rounded hover:bg-gray-700/50 cursor-pointer">
-                          <input
-                            type="radio"
-                            name="gender"
-                            value="female"
-                            checked={gender === "female"}
-                            onChange={(e) => setGender(e.target.value)}
-                            className="w-4 h-4"
-                          />
-                          <span className="text-white text-sm">♀️ נשי</span>
-                        </label>
-                      </div>
-                    </div>
-
-                    {/* Background Selection */}
-                    <div className="bg-gray-800/50 rounded-lg p-3">
-                      <label className="block text-white font-bold mb-2 text-sm">🎬 רקע</label>
-                      <div className="space-y-1.5">
-                        <label className="flex items-center gap-2 p-2 rounded hover:bg-gray-700/50 cursor-pointer">
-                          <input
-                            type="radio"
-                            name="backgroundType"
-                            value="static"
-                            checked={backgroundType === "static"}
-                            onChange={(e) => setBackgroundType(e.target.value)}
-                            className="w-4 h-4"
-                          />
-                          <span className="text-white text-sm">קבוע</span>
-                        </label>
-                        <label className="flex items-center gap-2 p-2 rounded hover:bg-gray-700/50 cursor-pointer">
-                          <input
-                            type="radio"
-                            name="backgroundType"
-                            value="dynamic"
-                            checked={backgroundType === "dynamic"}
-                            onChange={(e) => setBackgroundType(e.target.value)}
-                            className="w-4 h-4"
-                          />
-                          <span className="text-white text-sm">דינמי</span>
-                        </label>
-                      </div>
-                    </div>
-
-                    {/* Text Input */}
-                    <div>
-                      <label className="block text-white font-bold mb-2 text-sm sm:text-base">📝 הטקסט</label>
                       <Textarea
                         value={text}
                         onChange={(e) => setText(e.target.value)}
-                        placeholder="הזן את הטקסט שהדמות תדבר..."
-                        className="min-h-24 bg-gray-800 border-gray-700 text-white resize-none text-sm leading-relaxed"
+                        placeholder="מה הדמות תגיד? (למשל: שלום! ברוכים הבאים לחדשות הערב...)"
+                        className="min-h-32 bg-gray-900/50 border-blue-500/30 text-white resize-none text-sm"
                         disabled={isGenerating}
                       />
                     </div>
 
-                    {/* Generate Button */}
+                    {/* Step 3: Voice & Settings - Compact */}
+                    <div className="bg-gradient-to-br from-green-900/40 to-green-800/20 rounded-xl p-4 border border-green-500/30">
+                      <div className="flex items-center gap-2 mb-3">
+                        <div className="w-8 h-8 rounded-full bg-green-600 flex items-center justify-center text-white font-bold text-sm">3</div>
+                        <h3 className="text-white font-bold">הגדרות</h3>
+                      </div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div>
+                          <label className="text-white text-xs font-semibold mb-1 block">קול</label>
+                          <select 
+                            value={gender}
+                            onChange={(e) => setGender(e.target.value)}
+                            className="w-full bg-gray-900/50 border border-green-500/30 rounded px-2 py-2 text-white text-sm"
+                          >
+                            <option value="male">♂️ גברי</option>
+                            <option value="female">♀️ נשי</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="text-white text-xs font-semibold mb-1 block">רקע</label>
+                          <select 
+                            value={backgroundType}
+                            onChange={(e) => setBackgroundType(e.target.value)}
+                            className="w-full bg-gray-900/50 border border-green-500/30 rounded px-2 py-2 text-white text-sm"
+                          >
+                            <option value="static">🖼️ קבוע</option>
+                            <option value="dynamic">✨ דינמי</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Generate Button - Large and Clear */}
                     <Button
                       onClick={generateVideo}
                       disabled={isGenerating || !text.trim() || !avatarUrl}
-                      className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white py-6 text-lg font-bold"
+                      className="w-full bg-gradient-to-r from-purple-600 via-purple-700 to-purple-800 hover:from-purple-700 hover:via-purple-800 hover:to-purple-900 text-white py-6 text-xl font-bold shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {isGenerating ? (
                         <>
-                          <Loader2 className="w-5 h-5 ml-2 animate-spin" />
-                          יוצר דמות מדברת... אנא המתן
+                          <Loader2 className="w-6 h-6 ml-2 animate-spin" />
+                          יוצר... {Math.floor(Math.random() * 60) + 10} שניות
                         </>
                       ) : (
                         <>
-                          <Sparkles className="w-5 h-5 ml-2" />
-                          צור דמות מדברת
+                          <Sparkles className="w-6 h-6 ml-2" />
+                          צור דמות מדברת עכשיו
                         </>
                       )}
                     </Button>
-
-                    {/* Info */}
-                    <div className="bg-purple-900/30 border border-purple-500/30 rounded-xl p-4">
-                      <h4 className="text-purple-300 font-bold mb-2 text-sm">איך זה עובד?</h4>
-                      <ul className="text-xs text-purple-200 space-y-1">
-                        <li>✨ טכנולוגיית AI מתקדמת של D-ID</li>
-                        <li>🎭 סנכרון שפתיים מציאותי</li>
-                        <li>🎤 קול עברי טבעי</li>
-                        <li>⚡ תוצאה תוך כדקה</li>
-                      </ul>
-                    </div>
                   </div>
                 )}
               </div>
