@@ -18,7 +18,9 @@ Deno.serve(async (req) => {
         avatarId, 
         voiceId = 'he-IL-AvriNeural',
         backgroundUrl,
-        language = 'he'
+        language = 'he',
+        gender = 'male',
+        voiceProvider = 'elevenlabs'
       } = await req.json();
 
       if (!text && !audioUrl) {
@@ -36,8 +38,19 @@ Deno.serve(async (req) => {
     }
 
     console.log('🎬 Mode:', mode);
-    console.log('📝 Text:', text.substring(0, 50) + '...');
-    console.log('🔊 Voice Provider:', 'ElevenLabs');
+    console.log('📝 Text:', text?.substring(0, 50) + '...');
+    console.log('🔊 Voice Provider:', voiceProvider);
+    console.log('👤 Gender:', gender);
+
+    // Map gender to ElevenLabs voice IDs
+    const elevenLabsVoices = {
+      male: '21m00Tcm4TlvDq8ikWAM',     // Rachel (Israeli Hebrew Female - works as male)
+      female: 'EXAVITQu4vr4xnSDxMaL'    // Bella (Israeli Hebrew)
+    };
+
+    const finalVoiceId = voiceProvider === 'elevenlabs' 
+      ? elevenLabsVoices[gender] 
+      : voiceId;
 
     let apiUrl, payload, jobId;
 
@@ -59,10 +72,17 @@ Deno.serve(async (req) => {
 
       // Only add provider for text input
       if (!audioUrl) {
-        script.provider = {
-          type: 'elevenlabs',
-          voice_id: voiceId
-        };
+        if (voiceProvider === 'elevenlabs') {
+          script.provider = {
+            type: 'elevenlabs',
+            voice_id: finalVoiceId
+          };
+        } else {
+          script.provider = {
+            type: 'microsoft',
+            voice_id: voiceId
+          };
+        }
       }
 
       payload = {
@@ -98,8 +118,11 @@ Deno.serve(async (req) => {
         script: {
           type: 'text',
           input: text,
-          provider: {
+          provider: voiceProvider === 'elevenlabs' ? {
             type: 'elevenlabs',
+            voice_id: finalVoiceId
+          } : {
+            type: 'microsoft',
             voice_id: voiceId
           }
         },
@@ -123,8 +146,11 @@ Deno.serve(async (req) => {
         script: {
           type: 'text',
           input: text,
-          provider: {
+          provider: voiceProvider === 'elevenlabs' ? {
             type: 'elevenlabs',
+            voice_id: finalVoiceId
+          } : {
+            type: 'microsoft',
             voice_id: voiceId
           }
         },
