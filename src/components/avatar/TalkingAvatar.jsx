@@ -78,7 +78,7 @@ export default function TalkingAvatar() {
           mode: 'talks',
           avatarUrl,
           gender,
-          voiceProvider,
+          voiceProvider: 'microsoft',
           voiceId: gender === 'male' ? 'he-IL-AvriNeural' : 'he-IL-HilaNeural',
           backgroundUrl: backgroundType === 'dynamic' ? avatarUrl : null
         });
