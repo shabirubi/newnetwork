@@ -33,7 +33,9 @@ Deno.serve(async (req) => {
     if (!DID_API_KEY) {
       return Response.json({ error: 'D-ID API Key not configured' }, { status: 500 });
     }
-    if (!ELEVENLABS_API_KEY) {
+    
+    // ElevenLabs is optional - only needed if voiceProvider is 'elevenlabs'
+    if (voiceProvider === 'elevenlabs' && !ELEVENLABS_API_KEY) {
       return Response.json({ error: 'ElevenLabs API Key not configured' }, { status: 500 });
     }
 
@@ -164,14 +166,20 @@ Deno.serve(async (req) => {
 
     // Create video
     console.log('📤 Sending to D-ID:', apiUrl);
+    const headers = {
+      'Authorization': `Basic ${btoa(DID_API_KEY + ':')}`,
+      'Content-Type': 'application/json',
+      'accept': 'application/json'
+    };
+    
+    // Only add ElevenLabs key if using ElevenLabs
+    if (voiceProvider === 'elevenlabs' && ELEVENLABS_API_KEY) {
+      headers['X-Elevenlabs-Api-Key'] = ELEVENLABS_API_KEY;
+    }
+    
     const response = await fetch(apiUrl, {
       method: 'POST',
-      headers: {
-        'Authorization': `Basic ${btoa(DID_API_KEY + ':')}`,
-        'Content-Type': 'application/json',
-        'accept': 'application/json',
-        'X-Elevenlabs-Api-Key': ELEVENLABS_API_KEY
-      },
+      headers,
       body: JSON.stringify(payload)
     });
 
