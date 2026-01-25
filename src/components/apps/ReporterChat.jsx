@@ -21,9 +21,7 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
   const [isAudioMuted, setIsAudioMuted] = useState(false);
   const [isVideoMuted, setIsVideoMuted] = useState(false);
   const [quickReplies, setQuickReplies] = useState([]);
-  const [showIntro, setShowIntro] = useState(false);
-  const [isGeneratingIntro, setIsGeneratingIntro] = useState(false);
-  const [introVideoUrl, setIntroVideoUrl] = useState(null);
+  const [currentConversationId, setCurrentConversationId] = useState(null);
   const [showQuickReplies, setShowQuickReplies] = useState(true);
   const [pollAnswers, setPollAnswers] = useState({});
   const [isTyping, setIsTyping] = useState(false);
@@ -342,23 +340,37 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
 
       setIsTyping(false);
       
-      // Generate talking video with the AI response
-      setIsGeneratingIntro(true);
-      setShowIntro(true);
+      // הוסף הודעה זמנית
+      const tempAiMessage = {
+        role: "assistant",
+        content: response.data.response,
+        reporter: selectedReporter.name,
+        timestamp: new Date(),
+        isGeneratingVideo: true
+      };
       
+      setMessages(prev => [...prev, tempAiMessage]);
+      
+      // Generate talking video with the AI response
       const videoResponse = await base44.functions.invoke('generateTalkingVideo', {
         text: response.data.response,
         avatarUrl: selectedReporter.image,
         gender: selectedReporter.gender || (selectedReporter.name.includes('ה') ? 'female' : 'male'),
-        voiceProvider: 'elevenlabs',
+        voiceProvider: 'microsoft',
+        voiceId: selectedReporter.gender === 'male' ? 'he-IL-AvriNeural' : 'he-IL-HilaNeural',
         backgroundType: 'dynamic'
       });
 
-      setIsGeneratingIntro(false);
-
-      if (videoResponse.data?.video_url) {
-        setIntroVideoUrl(videoResponse.data.video_url);
-      }
+      // עדכן את ההודעה האחרונה עם הוידאו
+      setMessages(prev => {
+        const updated = [...prev];
+        const lastMsg = updated[updated.length - 1];
+        if (lastMsg.isGeneratingVideo) {
+          lastMsg.videoUrl = videoResponse.data?.video_url;
+          lastMsg.isGeneratingVideo = false;
+        }
+        return updated;
+      });
       
       const aiMessage = {
         role: "assistant",
@@ -367,16 +379,32 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
         timestamp: new Date(),
         videoUrl: videoResponse.data?.video_url
       };
-
-      const rand = Math.random();
-      if (rand > 0.7) {
-        aiMessage.media = { type: 'image', url: selectedReporter.image, caption: '📸 מהשטח עכשיו' };
+      
+      // שמירת הודעות במסד נתונים
+      try {
+        await base44.entities.ReporterChat.create({
+          reporter_id: selectedReporter.id,
+          reporter_name: selectedReporter.name,
+          user_email: user.email,
+          user_name: user.full_name,
+          message: messageText,
+          sender_type: 'user'
+        });
+        
+        await base44.entities.ReporterChat.create({
+          reporter_id: selectedReporter.id,
+          reporter_name: selectedReporter.name,
+          user_email: user.email,
+          user_name: user.full_name,
+          message: response.data.response,
+          sender_type: 'reporter',
+          response_text: response.data.response,
+          voice_url: videoResponse.data?.video_url
+        });
+      } catch (saveError) {
+        console.error('Failed to save chat:', saveError);
       }
-      if (rand > 0.6 && rand <= 0.7) {
-        aiMessage.location = `📍 ${selectedReporter.specialty}`;
-      }
 
-      setMessages(prev => [...prev, aiMessage]);
       setIsLoading(false);
       setReporterStatus('online');
 
@@ -549,57 +577,38 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
   useEffect(() => {
     if (preSelectedReporter && openState) {
       startNewChat(preSelectedReporter);
-      // הצג את מצב הטעינה ואז טען את הווידאו כדי שהמשתמש יראה את זה
-      setShowIntro(true);
-      setTimeout(() => {
-        generateReporterIntroVideo();
-      }, 500);
     }
   }, [preSelectedReporter, openState]);
 
-  const generateReporterIntroVideo = async () => {
-    if (!selectedReporter || isGeneratingIntro) {
-      return;
-    }
-
-    setIsGeneratingIntro(true);
-    setShowIntro(true);
-
+  const loadChatHistory = async (reporter) => {
     try {
-      const introText = `שלום! אני ${selectedReporter.name}, כתב/כתבת חדשות. אני מתמחה ב-${selectedReporter.specialty}. נשמח לדון איתך בכל נושא שמעניין אותך.`;
+      const history = await base44.entities.ReporterChat.filter({
+        reporter_id: reporter.id,
+        user_email: (await base44.auth.me()).email
+      }, '-created_date', 50);
       
-      const response = await base44.functions.invoke('generateTalkingVideo', {
-        text: introText,
-        avatarUrl: selectedReporter.image,
-        gender: selectedReporter.gender || (selectedReporter.name.includes('ה') ? 'female' : 'male'),
-        voiceProvider: 'elevenlabs',
-        backgroundType: 'dynamic'
-      });
-
-      if (response.data?.video_url) {
-        setIntroVideoUrl(response.data.video_url);
-        toast.success("וידאו ההצגה מוכן!");
+      if (history && history.length > 0) {
+        const formattedMessages = history.reverse().map(msg => ({
+          role: msg.sender_type === 'user' ? 'user' : 'assistant',
+          content: msg.message,
+          reporter: reporter.name,
+          timestamp: new Date(msg.created_date),
+          videoUrl: msg.voice_url
+        }));
+        setMessages(formattedMessages);
+      } else {
+        // אין היסטוריה - הודעת ברוכים הבאים
+        startWelcomeMessage(reporter);
       }
     } catch (error) {
-      console.error('Error generating intro video:', error);
-      toast.error(`שגיאה בהכנת ההצגה`);
-    } finally {
-      setIsGeneratingIntro(false);
+      console.error('Failed to load history:', error);
+      startWelcomeMessage(reporter);
     }
   };
 
-  const startNewChat = (reporter) => {
-    setSelectedReporter(reporter);
-    // אל תטעין את הוידאו כאן - זה יטען בـ useEffect כשהחלון נפתח
-    setShowIntro(false);
-    setIntroVideoUrl(null);
-    const replies = generateQuickReplies(reporter);
-    setQuickReplies(replies);
-    setShowQuickReplies(true);
-    
+  const startWelcomeMessage = (reporter) => {
     let welcomeMsg = `שלום! אני ${reporter.name}, כתב/כתבת חדשות. אני כאן לדיון עם מומחיות ב-${reporter.specialty}.`;
     
-    // הודעת ברוכים השבים למשתמשים חוזרים
     if (userProfile.interactionCount >= 5) {
       const topTopic = Object.keys(userProfile.preferredTopics).reduce((a, b) => 
         userProfile.preferredTopics[a] > userProfile.preferredTopics[b] ? a : b, 
@@ -622,6 +631,16 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
         location: `📍 ${reporter.specialty}`
       }
     ]);
+  };
+
+  const startNewChat = async (reporter) => {
+    setSelectedReporter(reporter);
+    const replies = generateQuickReplies(reporter);
+    setQuickReplies(replies);
+    setShowQuickReplies(true);
+    
+    // טעינת היסטוריית צ'אט
+    await loadChatHistory(reporter);
   };
 
   return (
@@ -782,14 +801,6 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                         <motion.button
                            whileHover={{ scale: 1.02 }}
                            whileTap={{ scale: 0.98 }}
-                           onClick={generateReporterIntroVideo}
-                           className="w-full px-4 py-3 bg-gradient-to-r from-[#E31E24] to-red-800 hover:from-red-700 hover:to-red-900 text-white rounded-xl font-bold transition-all flex items-center justify-center gap-2"
-                         >
-                           <Mic className="w-4 h-4" /> הצגה קולית
-                         </motion.button>
-                         <motion.button
-                           whileHover={{ scale: 1.02 }}
-                           whileTap={{ scale: 0.98 }}
                            onClick={() => setSelectedReporter(null)}
                            className="w-full px-4 py-2 bg-[#E31E24]/20 hover:bg-[#E31E24]/30 border border-[#E31E24]/30 text-white rounded-xl font-semibold transition-all text-sm flex items-center justify-center gap-2"
                          >
@@ -799,50 +810,7 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                     </motion.div>
 
                     {/* Chat Area - Right Side */}
-                     <div className="flex-1 flex flex-col overflow-hidden bg-gradient-to-b from-gray-900/40 to-black/40">
-                    {/* Response Video Section */}
-                    <AnimatePresence>
-                    {showIntro && (
-                      <motion.div
-                        initial={{ opacity: 0, scale: 0.95 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        exit={{ opacity: 0, scale: 0.95 }}
-                        className="bg-gradient-to-r from-[#E31E24]/20 to-red-900/20 p-4 border-b border-[#E31E24]/30"
-                      >
-                        <div className="flex items-center justify-between mb-2">
-                           <h3 className="font-bold text-white text-sm flex items-center gap-2">
-                             <Video className="w-4 h-4 text-[#E31E24]" /> {selectedReporter.name} עונה לך:
-                          </h3>
-                          <button
-                            onClick={() => {
-                              setShowIntro(false);
-                              setIntroVideoUrl(null);
-                            }}
-                            className="text-xs text-white/70 hover:text-white/90"
-                          >
-                            <X className="w-4 h-4" />
-                          </button>
-                        </div>
-
-                        {isGeneratingIntro ? (
-                          <div className="bg-black/60 rounded-lg aspect-video flex flex-col items-center justify-center gap-3 border border-[#E31E24]/30">
-                            <Loader className="w-8 h-8 animate-spin text-[#E31E24]" />
-                            <p className="text-sm text-white/70">מייצר תשובה בוידאו...</p>
-                          </div>
-                        ) : introVideoUrl ? (
-                          <div className="rounded-lg overflow-hidden shadow-xl">
-                            <video
-                              src={introVideoUrl}
-                              autoPlay
-                              controls
-                              className="w-full aspect-video object-cover rounded-lg"
-                            />
-                          </div>
-                        ) : null}
-                      </motion.div>
-                    )}
-                    </AnimatePresence>
-
+                    <div className="flex-1 flex flex-col overflow-hidden bg-gradient-to-b from-gray-900/40 to-black/40">
                     {/* Video Call Area */}
                      {isVideoCall && (
                       <div className="relative bg-black aspect-video">
@@ -931,6 +899,23 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                               }`}
                             >
                             <p className="text-sm leading-relaxed">{message.content}</p>
+                            
+                            {message.isGeneratingVideo && (
+                              <div className="mt-3 flex items-center gap-2 text-xs text-[#E31E24]">
+                                <Loader className="w-3 h-3 animate-spin" />
+                                <span>מייצר וידאו...</span>
+                              </div>
+                            )}
+                            
+                            {message.videoUrl && (
+                              <div className="mt-3 rounded-lg overflow-hidden border-2 border-[#E31E24]/30">
+                                <video
+                                  src={message.videoUrl}
+                                  controls
+                                  className="w-full rounded-lg"
+                                />
+                              </div>
+                            )}
                             
                             {message.media && (
                                <div className="mt-3 rounded-lg overflow-hidden border-2 border-[#E31E24]/30">
