@@ -910,9 +910,19 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                             <p className="text-sm leading-relaxed">{message.content}</p>
                             
                             {message.isGeneratingVideo && (
-                              <div className="mt-3 flex items-center gap-2 text-xs text-[#E31E24]">
-                                <Loader className="w-3 h-3 animate-spin" />
-                                <span>מייצר וידאו...</span>
+                              <div className="mt-3 p-3 bg-[#E31E24]/10 rounded-lg border border-[#E31E24]/30">
+                                <div className="flex items-center gap-2 text-sm text-[#E31E24] mb-2">
+                                  <Loader className="w-4 h-4 animate-spin" />
+                                  <span className="font-semibold">מכין וידאו מקצועי...</span>
+                                </div>
+                                <div className="w-full bg-black/40 rounded-full h-1.5 overflow-hidden">
+                                  <motion.div
+                                    className="h-full bg-gradient-to-r from-[#E31E24] to-red-700"
+                                    animate={{ width: ["0%", "100%"] }}
+                                    transition={{ duration: 30, ease: "linear" }}
+                                  />
+                                </div>
+                                <p className="text-xs text-white/60 mt-2">⏱️ זה לוקח כ-30 שניות</p>
                               </div>
                             )}
                             
