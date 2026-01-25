@@ -158,10 +158,6 @@ export default function UploadVideoModal({ isOpen, onClose }) {
                       accept="video/*,image/*"
                       onChange={(e) => {
                         const file = e.target.files?.[0];
-                        if (file && file.size > 35 * 1024 * 1024) {
-                          toast.error("הקובץ גדול מדי! מקסימום 35MB");
-                          return;
-                        }
                         setFormData({ ...formData, videoFile: file });
                       }}
                       className="hidden"
@@ -182,7 +178,7 @@ export default function UploadVideoModal({ isOpen, onClose }) {
                       <p className="text-gray-400 text-sm">
                         {formData.videoFile
                           ? `${formData.videoFile.name} (${(formData.videoFile.size / (1024 * 1024)).toFixed(1)}MB)`
-                          : "MP4, WebM או MOV (עד 35MB)"}
+                          : "MP4, WebM או MOV"}
                       </p>
                     </label>
                   </div>

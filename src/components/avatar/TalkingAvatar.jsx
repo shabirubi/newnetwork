@@ -30,12 +30,6 @@ export default function TalkingAvatar() {
       return;
     }
 
-    // Validate file size (max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error("הקובץ גדול מדי. מקסימום 5MB");
-      return;
-    }
-
     setUploadingImage(true);
     toast.loading("מעלה תמונה...", { id: 'upload' });
 
@@ -239,7 +233,7 @@ export default function TalkingAvatar() {
                           <div className="text-center py-4">
                             <User className="w-12 h-12 mx-auto mb-2 text-purple-400" />
                             <p className="text-white font-bold">לחץ לבחירת תמונה</p>
-                            <p className="text-gray-400 text-xs mt-1">JPG, PNG - עד 5MB</p>
+                            <p className="text-gray-400 text-xs mt-1">JPG, PNG</p>
                           </div>
                         )}
                         {uploadingImage && (
