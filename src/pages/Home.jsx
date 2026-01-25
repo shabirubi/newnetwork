@@ -258,6 +258,9 @@ export default function Home() {
       {/* Upload Video Modal */}
       <UploadVideoModal isOpen={uploadVideoModalOpen} onClose={() => setUploadVideoModalOpen(false)} />
 
+      {/* Reporters Modal */}
+      <ReportersModal isOpen={reportersModalOpen} onClose={() => setReportersModalOpen(false)} />
+
       {/* Accessibility Panel */}
       <AccessibilityPanel isOpen={a11yOpen} onClose={() => setA11yOpen(false)} />
 
