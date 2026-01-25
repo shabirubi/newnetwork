@@ -34,6 +34,7 @@ const ReportersSpotlight = React.lazy(() => import("../components/home/Reporters
 const UserUploadedVideos = React.lazy(() => import("../components/home/UserUploadedVideos"));
 const AllVideosGallery = React.lazy(() => import("../components/home/AllVideosGallery"));
 const KanArchiveContainer = React.lazy(() => import("../components/home/KanArchiveContainer"));
+const ReporterResponsesFeed = React.lazy(() => import("../components/home/ReporterResponsesFeed"));
 
 export default function Home() {
   const [vodModalOpen, setVodModalOpen] = React.useState(false);
@@ -221,6 +222,13 @@ export default function Home() {
       <React.Suspense fallback={<div className="h-96 bg-black animate-pulse rounded-2xl mx-4" />}>
         <ReportersSpotlight />
       </React.Suspense>
+
+      {/* Reporter Responses Feed - Lazy Loaded */}
+      <section className="px-4 sm:px-4 mt-8">
+        <React.Suspense fallback={<div className="h-96 bg-black animate-pulse rounded-2xl" />}>
+          <ReporterResponsesFeed />
+        </React.Suspense>
+      </section>
 
       {/* All News Section */}
       {articles.length > 0 && (
