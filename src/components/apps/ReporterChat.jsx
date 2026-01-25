@@ -353,13 +353,14 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
       
       // Generate talking video with the AI response
       const reporterGender = selectedReporter.gender || 'male';
+      const studioBackground = 'https://images.unsplash.com/photo-1598550487956-4238a7359cd5?w=1920&h=1080&fit=crop';
       const videoResponse = await base44.functions.invoke('generateTalkingVideo', {
         text: response.data.response,
         avatarUrl: selectedReporter.image,
         gender: reporterGender,
         voiceProvider: 'microsoft',
         voiceId: reporterGender === 'male' ? 'he-IL-AvriNeural' : 'he-IL-HilaNeural',
-        backgroundType: 'dynamic'
+        backgroundUrl: studioBackground
       });
 
       // עדכן את ההודעה האחרונה עם הוידאו
@@ -909,12 +910,31 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                             )}
                             
                             {message.videoUrl && (
-                              <div className="mt-3 rounded-lg overflow-hidden border-2 border-[#E31E24]/30">
+                              <div className="mt-3 rounded-lg overflow-hidden border-2 border-[#E31E24]/30 relative group">
                                 <video
                                   src={message.videoUrl}
-                                  controls
+                                  autoPlay
+                                  playsInline
                                   className="w-full rounded-lg"
+                                  onEnded={(e) => {
+                                    e.target.classList.add('opacity-90');
+                                  }}
                                 />
+                                <button
+                                  onClick={(e) => {
+                                    const video = e.target.parentElement.querySelector('video');
+                                    video.currentTime = 0;
+                                    video.play();
+                                    video.classList.remove('opacity-90');
+                                  }}
+                                  className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"
+                                >
+                                  <div className="w-12 h-12 rounded-full bg-[#E31E24] flex items-center justify-center">
+                                    <svg className="w-6 h-6 text-white mr-1" fill="currentColor" viewBox="0 0 24 24">
+                                      <path d="M8 5v14l11-7z"/>
+                                    </svg>
+                                  </div>
+                                </button>
                               </div>
                             )}
                             
