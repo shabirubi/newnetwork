@@ -16,15 +16,15 @@ Deno.serve(async (req) => {
     }
 
     const DID_API_KEY = Deno.env.get('DID_API_KEY');
+    
     if (!DID_API_KEY) {
       return Response.json({ error: 'D-ID API Key not configured' }, { status: 500 });
     }
 
-    console.log('🎓 Training Express Avatar...');
-    console.log('📹 Video URL:', videoUrl);
+    console.log('🎬 Training Express Avatar from video:', videoUrl);
 
-    // V3 Express - Train custom avatar
-    const response = await fetch('https://api.d-id.com/clips/actors', {
+    // Step 1: Create avatar (this starts the training process)
+    const createResponse = await fetch('https://api.d-id.com/agents/avatars', {
       method: 'POST',
       headers: {
         'Authorization': `Basic ${DID_API_KEY}`,
@@ -32,34 +32,34 @@ Deno.serve(async (req) => {
         'accept': 'application/json'
       },
       body: JSON.stringify({
-        video_url: videoUrl
+        source_url: videoUrl,
+        name: `Avatar_${user.email}_${Date.now()}`
       })
     });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('❌ D-ID Training Error:', response.status, errorText);
+    if (!createResponse.ok) {
+      const errorText = await createResponse.text();
+      console.error('❌ D-ID Create Error:', createResponse.status, errorText);
       return Response.json({ 
-        error: `D-ID Training error: ${errorText}`,
-        status: response.status
+        error: `D-ID API error: ${errorText}`,
+        status: createResponse.status
       }, { status: 500 });
     }
 
-    const result = await response.json();
-    const actorId = result.id;
+    const createResult = await createResponse.json();
+    const avatarId = createResult.id;
+    console.log('✅ Avatar training started:', avatarId);
 
-    console.log('✅ Training started:', actorId);
-
-    // Poll for training completion (4-10 minutes)
+    // Step 2: Poll for training completion
     let pollAttempts = 0;
-    const maxPollAttempts = 200; // ~16 minutes max
-    const pollInterval = 5000; // Check every 5 seconds
+    const maxPollAttempts = 180; // 15 minutes max (5 seconds interval)
+    const pollInterval = 5000; // 5 seconds
 
     while (pollAttempts < maxPollAttempts) {
       await new Promise(resolve => setTimeout(resolve, pollInterval));
 
       try {
-        const statusResponse = await fetch(`https://api.d-id.com/clips/actors/${actorId}`, {
+        const statusResponse = await fetch(`https://api.d-id.com/agents/avatars/${avatarId}`, {
           headers: {
             'Authorization': `Basic ${DID_API_KEY}`,
             'accept': 'application/json'
@@ -73,18 +73,18 @@ Deno.serve(async (req) => {
         }
 
         const statusData = await statusResponse.json();
-        console.log(`📊 Training poll ${pollAttempts + 1}: ${statusData.status}`);
+        console.log(`📊 Poll ${pollAttempts + 1}: ${statusData.status}`);
 
         if (statusData.status === 'done') {
-          console.log('🎉 Avatar trained successfully!');
+          console.log('🎉 Avatar ready:', avatarId);
           return Response.json({
             success: true,
-            avatar_id: actorId,
+            avatar_id: avatarId,
             status: 'done'
           });
         }
 
-        if (statusData.status === 'error' || statusData.status === 'rejected') {
+        if (statusData.status === 'error' || statusData.status === 'failed') {
           console.error('❌ Training failed:', statusData);
           return Response.json({ 
             error: `Training failed: ${statusData.error?.message || 'Unknown error'}` 
@@ -98,7 +98,7 @@ Deno.serve(async (req) => {
       }
     }
 
-    return Response.json({ error: 'Avatar training timeout' }, { status: 504 });
+    return Response.json({ error: 'Avatar training timeout (15 minutes)' }, { status: 504 });
 
   } catch (error) {
     console.error('🔴 Error:', error);
