@@ -24,7 +24,7 @@ import TikTokNewsFeed from "../components/news/TikTokNewsFeed";
 import VODModal from "../components/vod/VODModal";
 import AccessibilityPanel from "../components/accessibility/AccessibilityPanel";
 import UploadVideoModal from "../components/home/UploadVideoModal";
-import { Droplet, Mic } from "lucide-react";
+import { Droplet, Mic, Users } from "lucide-react";
 
       // Lazy loaded components
 const NewsReels = React.lazy(() => import("../components/news/NewsReels"));
