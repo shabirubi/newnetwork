@@ -159,14 +159,17 @@ export default function BroadcastStudio() {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    toast.loading("מעלה וידאו...", { id: "upload-video" });
+    
     try {
       const response = await base44.integrations.Core.UploadFile({ file });
-      const fileUrl = response.file_url;
-      const cleanUrl = fileUrl.includes('?') ? fileUrl.split('?')[0] : fileUrl;
-      setTrainingVideo(cleanUrl);
-      toast.success("וידאו אימון הועלה ✓");
+      const fileUrl = response.file_url || response.url;
+      console.log("Video uploaded:", fileUrl);
+      setTrainingVideo(fileUrl);
+      toast.success("וידאו אימון הועלה ✓", { id: "upload-video" });
     } catch (error) {
-      toast.error("שגיאה בהעלאת וידאו");
+      console.error("Upload error:", error);
+      toast.error(`שגיאה: ${error.message}`, { id: "upload-video" });
     }
   };
 
