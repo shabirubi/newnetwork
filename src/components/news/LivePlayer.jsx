@@ -331,7 +331,7 @@ export default function LivePlayer({
       onMouseLeave={() => setShowControls(false)}
     >
       {/* Video Container */}
-      <div className="relative w-full aspect-video rounded-t-2xl overflow-hidden">
+      <div className="relative w-full aspect-video rounded-t-2xl overflow-hidden" style={{ aspectRatio: '16/9' }}>
         {/* Video Player - Shows generated videos or uploaded content */}
               {currentVideoUrl && (
                 <video
