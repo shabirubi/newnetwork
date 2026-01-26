@@ -15,12 +15,15 @@ export default function ReporterResponsesFeed() {
   const { data: responses = [], isLoading } = useQuery({
     queryKey: ['reporter-responses'],
     queryFn: async () => {
-      const data = await base44.entities.ReporterChat.filter(
-        { sender_type: 'reporter' },
-        '-created_date',
-        20
-      );
-      return data;
+      try {
+        return await base44.entities.ReporterChat.filter(
+          { sender_type: 'reporter' },
+          '-created_date',
+          20
+        );
+      } catch {
+        return [];
+      }
     },
     refetchInterval: false,
     staleTime: 5 * 60 * 1000,
@@ -29,7 +32,13 @@ export default function ReporterResponsesFeed() {
 
   const { data: reporters = [] } = useQuery({
     queryKey: ['reporters-for-feed'],
-    queryFn: () => base44.entities.Reporter.filter({ is_active: true }),
+    queryFn: async () => {
+      try {
+        return await base44.entities.Reporter.filter({ is_active: true });
+      } catch {
+        return [];
+      }
+    },
     initialData: []
   });
 
