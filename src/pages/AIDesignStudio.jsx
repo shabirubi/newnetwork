@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Wand2, Upload, Loader, Download, Copy, Share2, Trash2, X } from "lucide-react";
+import { Wand2, Upload, Loader, Download, Copy, Share2, Trash2, X, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { base44 } from "@/api/base44Client";
+import AnimatedCharacter from "../components/avatar/AnimatedCharacter";
 
 export default function AIDesignStudio() {
   const [prompt, setPrompt] = useState("");
@@ -14,6 +15,8 @@ export default function AIDesignStudio() {
   const [history, setHistory] = useState([]);
   const [selectedDesign, setSelectedDesign] = useState(null);
   const [designTitle, setDesignTitle] = useState("");
+  const [animationScript, setAnimationScript] = useState("");
+  const [showAnimator, setShowAnimator] = useState(false);
 
   const generateDesign = async () => {
     if (!prompt.trim()) {
@@ -233,7 +236,7 @@ export default function AIDesignStudio() {
                     </div>
 
                     <div className="flex gap-2 flex-wrap">
-                      <Button
+                       <Button
                         onClick={() => downloadImage(generatedImage)}
                         variant="outline"
                         className="flex-1 border-purple-500/50 text-purple-400 hover:bg-purple-500/20"
@@ -248,6 +251,14 @@ export default function AIDesignStudio() {
                       >
                         <Copy className="w-4 h-4 mr-2" />
                         העתק Prompt
+                      </Button>
+                      <Button
+                        onClick={() => setShowAnimator(true)}
+                        variant="outline"
+                        className="flex-1 border-purple-500/50 text-purple-400 hover:bg-purple-500/20"
+                      >
+                        <Sparkles className="w-4 h-4 mr-2" />
+                        הנפיש
                       </Button>
                       <Button
                         onClick={() => setGeneratedImage(null)}
@@ -333,6 +344,62 @@ export default function AIDesignStudio() {
           </motion.div>
         </div>
       </div>
+
+      {/* Character Animation Modal */}
+      <AnimatePresence>
+        {showAnimator && generatedImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            onClick={() => setShowAnimator(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-gradient-to-br from-purple-900/40 to-black border border-purple-500/30 rounded-2xl p-6 max-w-3xl w-full max-h-[90vh] overflow-y-auto"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-2xl font-bold text-white flex items-center gap-2">
+                  <Sparkles className="w-6 h-6 text-purple-400" />
+                  הנפשת דמות
+                </h3>
+                <button
+                  onClick={() => setShowAnimator(false)}
+                  className="p-2 hover:bg-white/10 rounded-full transition-colors"
+                >
+                  <X className="w-6 h-6 text-white" />
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-semibold text-white mb-2">
+                    🎤 טקסט לדיבור
+                  </label>
+                  <Textarea
+                    value={animationScript}
+                    onChange={(e) => setAnimationScript(e.target.value)}
+                    placeholder="כתוב את הטקסט שהדמות תדבר..."
+                    className="bg-black/60 border-purple-500/30 text-white placeholder-white/40 resize-none"
+                    rows={3}
+                  />
+                </div>
+
+                {animationScript && (
+                  <AnimatedCharacter
+                    imageUrl={generatedImage}
+                    script={animationScript}
+                  />
+                )}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Design Details Modal */}
       <AnimatePresence>
