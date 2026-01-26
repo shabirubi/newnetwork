@@ -68,12 +68,11 @@ Deno.serve(async (req) => {
           
           // יצור תמונה עם טקסט משולב - עברית בכותרת ואנגלית בתמונה
           if (article.title) {
+            const topic = article.image_topic || article.title;
+            const shortText = topic.length > 35 ? topic.substring(0, 35) + "..." : topic;
+            
             try {
-              // תיאור מתאים לתוכן הכתבה
-              const topic = article.image_topic || article.title;
-              const englishKeyword = topic.length > 40 ? topic.substring(0, 40) : topic;
-              
-              const imagePrompt = `Create a professional news article image. Topic: ${topic}. Style: modern news banner with typography. Include English text: "${englishKeyword}". High quality, vibrant, professional journalism aesthetic.`;
+              const imagePrompt = `Professional news article thumbnail image. Bold English text: "${shortText}" centered. Topic: ${topic}. Modern design, high contrast, journalism style, vibrant colors. 16:9 aspect.`;
               
               const imgResponse = await base44.asServiceRole.integrations.Core.GenerateImage({
                 prompt: imagePrompt
@@ -83,7 +82,18 @@ Deno.serve(async (req) => {
                 final_image = imgResponse.url;
               }
             } catch (imgErr) {
-              console.error(`Image failed for ${article.title}:`, imgErr.message || imgErr);
+              console.log(`Generating backup image for: ${topic}`);
+              try {
+                const backupPrompt = `News article image for: ${topic}. Professional, modern, high quality.`;
+                const backupImg = await base44.asServiceRole.integrations.Core.GenerateImage({
+                  prompt: backupPrompt
+                });
+                if (backupImg && backupImg.url) {
+                  final_image = backupImg.url;
+                }
+              } catch (e) {
+                console.error(`Both image generations failed for ${article.title}`);
+              }
             }
           }
           
