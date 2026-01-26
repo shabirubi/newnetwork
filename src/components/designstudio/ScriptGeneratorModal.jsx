@@ -29,12 +29,24 @@ export function ScriptGeneratorModal({ isOpen, onClose, imageUrl }) {
 
     setIsGenerating(true);
     try {
-      const response = await base44.functions.invoke("generateAIDesign", {
-        description: description.trim(),
+      const response = await base44.integrations.Core.InvokeLLM({
+        prompt: `You are a professional video script writer. Create a clear, engaging script based on this description:
+
+${description.trim()}
+
+Requirements:
+- Write in Hebrew (עברית)
+- Script should be 200-400 words (3-5 minutes when spoken)
+- Use clear, simple language
+- Include natural pauses and emphasis points
+- Make it engaging and informative
+- Structure: Opening hook → Main content → Call to action/conclusion
+
+Return ONLY the script text in Hebrew, nothing else.`,
       });
 
-      if (response.data?.script) {
-        setGeneratedScript(response.data.script);
+      if (response) {
+        setGeneratedScript(response);
         toast.success("✅ סקריפט נוצר בהצלחה");
       }
     } catch (error) {
