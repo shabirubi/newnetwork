@@ -18,11 +18,12 @@ export default function ReporterResponsesFeed() {
       const data = await base44.entities.ReporterChat.filter(
         { sender_type: 'reporter' },
         '-created_date',
-        50
+        20
       );
       return data;
     },
-    refetchInterval: 10000, // רענון כל 10 שניות
+    refetchInterval: false,
+    staleTime: 5 * 60 * 1000,
     initialData: []
   });
 
@@ -102,11 +103,15 @@ export default function ReporterResponsesFeed() {
               <div className="relative aspect-video bg-gradient-to-br from-gray-900 to-black">
                 {response.voice_url ? (
                   <>
-                    <video
-                      src={response.voice_url}
-                      className="w-full h-full object-cover"
-                      playsInline
-                    />
+                    <div className="relative w-full h-full">
+                      <video
+                        src={response.voice_url}
+                        className="w-full h-full object-cover"
+                        playsInline
+                        preload="metadata"
+                        poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='300'%3E%3Crect fill='%23111' width='400' height='300'/%3E%3C/svg%3E"
+                      />
+                    </div>
                     
                     {/* Play Overlay */}
                     <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-colors flex items-center justify-center">
@@ -121,7 +126,7 @@ export default function ReporterResponsesFeed() {
                     </div>
                   </>
                 ) : (
-                  <div className="absolute inset-0 flex items-center justify-center p-4">
+                  <div className="absolute inset-0 flex items-center justify-center p-4 bg-gradient-to-br from-gray-900 to-gray-800">
                     <MessageCircle className="w-12 h-12 text-[#E31E24]/30" />
                   </div>
                 )}
@@ -206,14 +211,24 @@ export default function ReporterResponsesFeed() {
             {/* Video/Text */}
             <div className="flex-1 relative flex items-center justify-center p-4">
               {fullscreenVideo.voice_url ? (
-                <video
-                  src={fullscreenVideo.voice_url}
-                  autoPlay
-                  playsInline
-                  controls
-                  className="w-full h-full object-contain"
-                  onEnded={() => handleOpenChat(fullscreenVideo)}
-                />
+                <>
+                  <video
+                    src={fullscreenVideo.voice_url}
+                    autoPlay
+                    playsInline
+                    controls
+                    className="w-full h-full object-contain"
+                    onEnded={() => handleOpenChat(fullscreenVideo)}
+                  />
+                  {!fullscreenVideo.voice_url.includes('http') && (
+                    <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
+                      <div className="text-center">
+                        <Play className="w-16 h-16 text-white/40 mx-auto mb-2" />
+                        <p className="text-white/60">טוען וידאו...</p>
+                      </div>
+                    </div>
+                  )}
+                </>
               ) : (
                 <div className="max-w-2xl bg-black/40 backdrop-blur-sm rounded-2xl p-8 border border-[#E31E24]/30">
                   <p className="text-white text-lg leading-relaxed">

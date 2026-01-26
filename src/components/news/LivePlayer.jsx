@@ -379,15 +379,16 @@ export default function LivePlayer({
       onMouseLeave={() => setShowControls(false)}
     >
       {/* Video Container */}
-      <div className="relative w-full aspect-[9/16] sm:aspect-video rounded-t-2xl overflow-hidden">
+      <div className="relative w-full aspect-video rounded-t-2xl overflow-hidden">
         {/* Video Player - Shows generated videos or uploaded content */}
               {currentVideoUrl && (
                 <video
                   ref={currentVideoRef}
                   src={currentVideoUrl}
-                  className="absolute inset-0 w-full h-full z-20 bg-black"
+                  className="absolute inset-0 w-full h-full z-20 bg-black object-contain"
                   controls
-                  muted
+                  playsInline
+                  preload="metadata"
                   controlsList="nodownload"
                   style={{ display: 'block' }}
                 />

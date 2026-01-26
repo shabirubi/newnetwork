@@ -43,6 +43,8 @@ export default function Home() {
   const [a11yOpen, setA11yOpen] = React.useState(false);
   const [uploadVideoModalOpen, setUploadVideoModalOpen] = React.useState(false);
   const [reportersModalOpen, setReportersModalOpen] = React.useState(false);
+  const [page, setPage] = React.useState(1);
+  const [hasMore, setHasMore] = React.useState(true);
   const [selectedChannel, setSelectedChannel] = React.useState(() => {
     if (typeof window !== 'undefined') {
       return localStorage.getItem('selectedChannel') || 'all';
@@ -77,16 +79,27 @@ export default function Home() {
 
   const queryClient = useQueryClient();
 
-  const { data: articles = [], isLoading } = useQuery({
-    queryKey: ['news-articles', selectedChannel],
+  const { data: articles = [], isLoading, fetchNextPage, isFetchingNextPage } = useQuery({
+    queryKey: ['news-articles', selectedChannel, page],
     queryFn: async () => {
       try {
         const user = await base44.auth.me();
         if (!user) return [];
+        const limit = 30;
+        const skip = (page - 1) * limit;
+        
+        let allArticles = [];
         if (selectedChannel === 'all') {
-          return base44.entities.NewsArticle.list('-created_date', 100);
+          allArticles = await base44.entities.NewsArticle.list('-created_date', 1000);
+        } else {
+          allArticles = await base44.entities.NewsArticle.filter({ channel_id: selectedChannel }, '-created_date', 1000);
         }
-        return base44.entities.NewsArticle.filter({ channel_id: selectedChannel }, '-created_date', 100);
+        
+        const paginated = allArticles.slice(skip, skip + limit);
+        if (paginated.length < limit) {
+          setHasMore(false);
+        }
+        return paginated;
       } catch {
         return [];
       }
@@ -95,10 +108,26 @@ export default function Home() {
     gcTime: 10 * 60 * 1000,
     refetchInterval: false,
     refetchOnWindowFocus: false,
-    refetchOnMount: 'always',
     initialData: [],
-    placeholderData: (prev) => prev
+    keepPreviousData: true
   });
+
+  // Infinite scroll handler
+  React.useEffect(() => {
+    const handleScroll = () => {
+      if (
+        window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 500 &&
+        !isLoading &&
+        !isFetchingNextPage &&
+        hasMore
+      ) {
+        setPage(prev => prev + 1);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isLoading, isFetchingNextPage, hasMore]);
 
   React.useEffect(() => {
     queryClient.invalidateQueries({ queryKey: ['news-articles'] });
@@ -254,6 +283,19 @@ export default function Home() {
               <NewsCard key={article.id} article={article} index={index} />
             ))}
           </div>
+
+          {isFetchingNextPage && (
+            <div className="text-center py-8">
+              <div className="w-12 h-12 border-4 border-[#E31E24]/20 border-t-[#E31E24] rounded-full animate-spin mx-auto"></div>
+              <p className="text-white/60 mt-4">טוען עוד חדשות...</p>
+            </div>
+          )}
+
+          {!hasMore && articles.length > 0 && (
+            <div className="text-center py-8">
+              <p className="text-white/40 text-sm">אין עוד חדשות להצגה</p>
+            </div>
+          )}
         </section>
       )}
 
