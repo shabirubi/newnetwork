@@ -27,19 +27,14 @@ Deno.serve(async (req) => {
 
     const results = [];
     
-    for (const cat of categories) {
+    // רק שתי קטגוריות בכל פעם להימנע מ-timeout
+    const categoriesToProcess = categories.slice(0, 4);
+    
+    for (const cat of categoriesToProcess) {
       try {
         const response = await base44.asServiceRole.integrations.Core.InvokeLLM({
-          prompt: `Search for ${cat.count} REAL, TODAY's news articles about: "${cat.query}". 
-          Use ONLY reliable, free news sources (BBC, Reuters, AP, Haaretz, Ynet, etc).
-          
-          For EACH article provide:
-          - Compelling Hebrew title (1 sentence)
-          - 2-3 paragraph detailed Hebrew content
-          - Topic/subject for image generation
-          - Source name (real news organization)
-          
-          Return ONLY real news from TODAY or this week. Return as JSON.`,
+          prompt: `Find ${cat.count} REAL news articles from today about: ${cat.query}.
+          Return JSON with articles array. Each article has: title, subtitle, content (3 paragraphs), source.`,
           add_context_from_internet: true,
           response_json_schema: {
             type: "object",
@@ -52,7 +47,6 @@ Deno.serve(async (req) => {
                     title: { type: "string" },
                     subtitle: { type: "string" },
                     content: { type: "string" },
-                    image_topic: { type: "string" },
                     source: { type: "string" }
                   }
                 }
@@ -62,47 +56,36 @@ Deno.serve(async (req) => {
         });
 
         const articles = response.articles || [];
+        let created = 0;
         
         for (const article of articles) {
-          // יצור כתבה עם תמונה ברקע (ללא המתנה)
-          const shortText = (article.image_topic || article.title).substring(0, 35);
-          
-          // שמור כתבה מיד בלי להמתין לתמונה
-          await base44.asServiceRole.entities.NewsArticle.create({
-            title: article.title,
-            subtitle: article.subtitle || '',
-            content: article.content,
-            image_url: '',
-            category: cat.category,
-            source: article.source || 'News Source',
-            is_breaking: cat.category === 'breaking' ? Math.random() > 0.7 : false,
-            is_featured: cat.category === 'breaking' || cat.category === 'security' ? Math.random() > 0.6 : false
-          });
-          
-          results.push({
-            category: cat.category,
-            title: article.title,
-            status: 'created'
-          });
-          
-          // יצור תמונה ברקע (לא מחכים)
           try {
-            const imagePrompt = `Professional news article banner. Bold English text: "${shortText}". Topic: ${article.image_topic || article.title}. Journalism style, modern design, vibrant colors.`;
-            base44.asServiceRole.integrations.Core.GenerateImage({
-              prompt: imagePrompt
-            }).catch(e => console.log(`BG Image: ${article.title.substring(0, 30)}`));
+            await base44.asServiceRole.entities.NewsArticle.create({
+              title: article.title,
+              subtitle: article.subtitle || '',
+              content: article.content,
+              image_url: '',
+              category: cat.category,
+              source: article.source || 'News',
+              is_breaking: cat.category === 'breaking',
+              is_featured: Math.random() > 0.7
+            });
+            created++;
           } catch (e) {
-            // ממשיך ללא תמונה
+            console.log(`Save error: ${e.message}`);
           }
         }
-
-        await new Promise(resolve => setTimeout(resolve, 2000));
         
-      } catch (error) {
-        console.error(`Error in category ${cat.category}:`, error);
         results.push({
           category: cat.category,
-          error: error.message
+          created: created,
+          status: 'done'
+        });
+        
+      } catch (error) {
+        results.push({
+          category: cat.category,
+          error: error.message || 'Failed'
         });
       }
     }
