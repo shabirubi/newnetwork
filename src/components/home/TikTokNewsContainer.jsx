@@ -56,12 +56,24 @@ export default function TikTokNewsContainer() {
             }}
           >
             {/* Video Preview */}
-            <video
-              src={video.url}
-              className="w-full h-full object-cover pointer-events-none"
-              muted
-              playsInline
-            />
+            {video.thumbnail ? (
+              <div className="relative w-full h-full">
+                <video
+                  src={video.url}
+                  className="w-full h-full object-cover pointer-events-none"
+                  muted
+                  playsInline
+                  poster={video.thumbnail}
+                />
+              </div>
+            ) : (
+              <div className="relative w-full h-full bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
+                <div className="text-center">
+                  <Play className="w-16 h-16 text-white/40 mx-auto mb-2" />
+                  <p className="text-white/60 text-sm">וידאו</p>
+                </div>
+              </div>
+            )}
             {/* Watermark */}
             <div className="absolute bottom-2 right-2 opacity-20 pointer-events-none z-20">
               <img 
@@ -119,13 +131,20 @@ export default function TikTokNewsContainer() {
               >
                 <X className="w-6 h-6 text-white" />
               </button>
-              <video
-                src={selectedVideo.url}
-                className="w-full h-full bg-black"
-                controls
-                playsInline
-                style={{ objectFit: 'contain' }}
-              />
+              {selectedVideo.url ? (
+                <video
+                  src={selectedVideo.url}
+                  className="w-full h-full bg-black"
+                  controls
+                  autoPlay
+                  playsInline
+                  style={{ objectFit: 'contain' }}
+                />
+              ) : (
+                <div className="w-full h-full bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
+                  <p className="text-white/60">הוידאו לא זמין</p>
+                </div>
+              )}
               {/* Watermark */}
               <div className="absolute bottom-4 right-4 opacity-30 pointer-events-none">
                 <img 
