@@ -12,13 +12,17 @@ Deno.serve(async (req) => {
 
     const categories = [
       { category: 'breaking', count: 5, query: 'חדשות חמות בישראל עכשיו' },
-      { category: 'security', count: 3, query: 'חדשות ביטחון ומדיניות ישראל' },
-      { category: 'economy', count: 3, query: 'חדשות כלכלה ועסקים ישראל' },
-      { category: 'politics', count: 2, query: 'חדשות פוליטיקה ישראל' },
-      { category: 'technology', count: 2, query: 'חדשות טכנולוגיה והייטק ישראל' },
-      { category: 'sports', count: 2, query: 'חדשות ספורט ישראל' },
-      { category: 'entertainment', count: 2, query: 'חדשות בידור ותרבות ישראל' },
-      { category: 'world', count: 2, query: 'חדשות עולם בינלאומיות' }
+      { category: 'security', count: 5, query: 'חדשות ביטחון ומדיניות ישראל' },
+      { category: 'economy', count: 5, query: 'חדשות כלכלה ועסקים ישראל' },
+      { category: 'politics', count: 5, query: 'חדשות פוליטיקה ישראל' },
+      { category: 'technology', count: 5, query: 'חדשות טכנולוגיה והייטק ישראל' },
+      { category: 'sports', count: 5, query: 'חדשות ספורט ישראל' },
+      { category: 'entertainment', count: 5, query: 'חדשות בידור ותרבות ישראל' },
+      { category: 'world', count: 5, query: 'חדשות עולם בינלאומיות' },
+      { category: 'health', count: 5, query: 'חדשות בריאות וכללי בריאות' },
+      { category: 'music', count: 5, query: 'חדשות מוזיקה וזמרים ישראליים' },
+      { category: 'horoscope', count: 3, query: 'הורוסקופ ותחזוקות אסטרולוגיות' },
+      { category: 'finance', count: 5, query: 'חדשות בורסה ופיננסים' }
     ];
 
     const results = [];
