@@ -86,7 +86,7 @@ Deno.serve(async (req) => {
             try {
               console.log(`Generating image for: ${hebrewTitle}`);
               const imageResponse = await base44.asServiceRole.integrations.Core.GenerateImage({
-                prompt: `Professional Hebrew news thumbnail for category ${cat.category}. Title text: "${hebrewTitle}". High quality, modern news studio style, vibrant colors. Must include Hebrew text overlay.`
+                prompt: `Professional news thumbnail for category ${cat.category}. High quality, modern news studio style, vibrant colors. No text, no Hebrew text overlay, just visual imagery.`
               });
               imageUrl = imageResponse.url || '';
               console.log(`Image created: ${imageUrl}`);
