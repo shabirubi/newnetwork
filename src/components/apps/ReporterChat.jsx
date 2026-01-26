@@ -425,26 +425,47 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
       })
       
       // שמירת הודעות במסד נתונים ברקע
-      base44.auth.me().then(currentUser => {
-        base44.entities.ReporterChat.create({
-          reporter_id: selectedReporter.id,
-          reporter_name: selectedReporter.name,
-          user_email: currentUser.email,
-          user_name: currentUser.full_name,
-          message: messageText,
-          sender_type: 'user'
-        });
-        
-        base44.entities.ReporterChat.create({
-          reporter_id: selectedReporter.id,
-          reporter_name: selectedReporter.name,
-          user_email: currentUser.email,
-          user_name: currentUser.full_name,
-          message: response.data.response,
-          sender_type: 'reporter',
-          response_text: response.data.response
-        });
-      }).catch(err => console.error('Failed to save chat:', err));
+      try {
+        const currentUser = await base44.auth.me();
+        if (currentUser) {
+          await base44.entities.ReporterChat.create({
+            reporter_id: selectedReporter.id,
+            reporter_name: selectedReporter.name,
+            user_email: currentUser.email,
+            user_name: currentUser.full_name,
+            message: messageText,
+            sender_type: 'user'
+          });
+          
+          await base44.entities.ReporterChat.create({
+            reporter_id: selectedReporter.id,
+            reporter_name: selectedReporter.name,
+            user_email: currentUser.email,
+            user_name: currentUser.full_name,
+            message: response.data.response,
+            sender_type: 'reporter',
+            response_text: response.data.response
+          });
+        } else {
+          // Save without user email if not logged in
+          await base44.entities.ReporterChat.create({
+            reporter_id: selectedReporter.id,
+            reporter_name: selectedReporter.name,
+            message: messageText,
+            sender_type: 'user'
+          });
+          
+          await base44.entities.ReporterChat.create({
+            reporter_id: selectedReporter.id,
+            reporter_name: selectedReporter.name,
+            message: response.data.response,
+            sender_type: 'reporter',
+            response_text: response.data.response
+          });
+        }
+      } catch (err) {
+        console.error('Failed to save chat:', err);
+      }
 
       if (Math.random() > 0.8) {
         setTimeout(() => {
