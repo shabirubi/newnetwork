@@ -4,130 +4,175 @@ import { motion } from "framer-motion";
 export default function AnimatedCharacter({ imageUrl, script }) {
   const [isPlaying, setIsPlaying] = useState(false);
   const [words, setWords] = useState([]);
-  const canvasRef = useRef(null);
+  const [currentWordIndex, setCurrentWordIndex] = useState(-1);
 
   useEffect(() => {
     if (!script) return;
-    // פיצול הטקסט למילים לשם timing של התנועות
     const wordList = script.split(" ");
     setWords(wordList);
   }, [script]);
 
-  const getHeadRotation = (index) => {
-    const patterns = [-5, 5, -3, 3, 0, -4, 4];
-    return patterns[index % patterns.length];
+  // Simulate word-by-word playback
+  useEffect(() => {
+    if (!isPlaying || words.length === 0) {
+      setCurrentWordIndex(-1);
+      return;
+    }
+
+    let index = 0;
+    const interval = setInterval(() => {
+      setCurrentWordIndex(index);
+      index++;
+      if (index >= words.length) {
+        setIsPlaying(false);
+        setCurrentWordIndex(-1);
+      }
+    }, 150);
+
+    return () => clearInterval(interval);
+  }, [isPlaying, words]);
+
+  // Get mouth opening based on word
+  const getMouthOpening = (word) => {
+    const vowels = /[aeiouאאוaeiouיe]/i;
+    return vowels.test(word) ? 1 : 0;
   };
 
-  const getEyeBlinkFrame = (index) => {
-    return index % 8 === 7 ? 1 : 0; // שקיעת עיניים כל 8 מילים
+  // Get head tilt pattern
+  const getHeadTilt = (index) => {
+    const pattern = [0, 2, -2, 1, -1, 0, 3, -3];
+    return pattern[index % pattern.length];
   };
 
-  const getHandMovement = (index) => {
-    const movements = [
+  // Get eye focus shift
+  const getEyeShift = (index) => {
+    const shifts = [
       { x: 0, y: 0 },
-      { x: 10, y: -5 },
-      { x: -10, y: -8 },
-      { x: 15, y: -3 },
-      { x: -8, y: -10 },
+      { x: 3, y: -1 },
+      { x: -3, y: -1 },
+      { x: 2, y: 1 },
+      { x: -2, y: 1 },
     ];
-    return movements[index % movements.length];
+    return shifts[index % shifts.length];
   };
 
   return (
     <div className="relative w-full max-w-2xl mx-auto">
-      <div className="relative rounded-2xl overflow-hidden bg-gradient-to-b from-black to-slate-900 border border-purple-500/30">
+      <div className="relative rounded-2xl overflow-hidden bg-gradient-to-b from-black to-slate-900 border-2 border-purple-500/40">
         {/* Character Container */}
-        <div className="relative w-full aspect-video flex items-center justify-center bg-black">
-          <img
-            src={imageUrl}
-            alt="Character"
-            className="w-full h-full object-cover"
-          />
-
-          {/* Head Movement Layer */}
+        <div className="relative w-full aspect-video flex items-center justify-center bg-black overflow-hidden">
+          {/* Main Image */}
           <motion.div
-            className="absolute inset-0 pointer-events-none"
+            className="absolute inset-0"
             animate={
-              isPlaying && words.length > 0
+              isPlaying && currentWordIndex >= 0
                 ? {
-                    rotateZ: words.map((_, i) => getHeadRotation(i)),
+                    rotateZ: getHeadTilt(currentWordIndex),
+                    rotateX: 0,
+                    scale: 1.02,
                   }
-                : {}
+                : { rotateZ: 0, rotateX: 0, scale: 1 }
             }
-            transition={{
-              duration: words.length * 0.15,
-              ease: "easeInOut",
-            }}
-            style={{ transformOrigin: "center 30%" }}
-          />
+            transition={{ duration: 0.1, ease: "easeInOut" }}
+            style={{ transformOrigin: "center center" }}
+          >
+            <img
+              src={imageUrl}
+              alt="Character"
+              className="w-full h-full object-cover"
+            />
+          </motion.div>
 
-          {/* Eye Blink Overlay */}
-          {isPlaying && (
+          {/* Mouth Movement Layer */}
+          {isPlaying && currentWordIndex >= 0 && (
             <motion.div
-              className="absolute inset-0 bg-gradient-to-b from-transparent via-black/5 to-transparent pointer-events-none"
+              className="absolute bottom-[15%] left-1/2 -translate-x-1/2 w-8 h-6 bg-black/40 rounded-full pointer-events-none"
               animate={{
-                opacity: words.map((_, i) => (getEyeBlinkFrame(i) ? 0.7 : 0)),
+                scaleY: getMouthOpening(words[currentWordIndex]) ? [1, 1.4, 1] : 0.8,
+                scaleX: [1, 1.2, 1],
               }}
-              transition={{
-                duration: words.length * 0.15,
-                ease: "easeInOut",
-              }}
+              transition={{ duration: 0.1 }}
             />
           )}
 
-          {/* Hand Movement Indicators */}
-          {isPlaying && (
-            <div className="absolute inset-0 pointer-events-none">
-              {words.map((word, index) => (
-                <motion.div
-                  key={index}
-                  className="absolute w-8 h-8 rounded-full bg-purple-400/20"
-                  style={{
-                    right: "15%",
-                    top: "35%",
-                  }}
-                  animate={{
-                    x: getHandMovement(index).x,
-                    y: getHandMovement(index).y,
-                    opacity: index % 3 === 0 ? [0, 0.5, 0] : 0,
-                  }}
-                  transition={{
-                    duration: 0.15,
-                    delay: index * 0.15,
-                  }}
-                />
-              ))}
-            </div>
+          {/* Eye Movement Highlights */}
+          {isPlaying && currentWordIndex >= 0 && (
+            <>
+              <motion.div
+                className="absolute top-[28%] left-[35%] w-3 h-3 rounded-full bg-white/30 pointer-events-none"
+                animate={{
+                  x: getEyeShift(currentWordIndex).x,
+                  y: getEyeShift(currentWordIndex).y,
+                }}
+                transition={{ duration: 0.1 }}
+              />
+              <motion.div
+                className="absolute top-[28%] right-[35%] w-3 h-3 rounded-full bg-white/30 pointer-events-none"
+                animate={{
+                  x: -getEyeShift(currentWordIndex).x,
+                  y: getEyeShift(currentWordIndex).y,
+                }}
+                transition={{ duration: 0.1 }}
+              />
+            </>
           )}
+
+          {/* Breathing Effect */}
+          <motion.div
+            className="absolute inset-0 bg-gradient-to-b from-white/5 via-transparent to-transparent pointer-events-none"
+            animate={{
+              opacity: isPlaying ? [0.3, 0.6, 0.3] : 0,
+            }}
+            transition={{
+              duration: 0.5,
+              repeat: isPlaying ? Infinity : 0,
+              ease: "easeInOut",
+            }}
+          />
         </div>
 
-        {/* Text Display */}
-        <div className="bg-black/80 backdrop-blur-sm p-4 min-h-24">
-          <div className="flex flex-wrap gap-2">
-            {words.map((word, index) => (
-              <motion.span
-                key={index}
-                className="px-3 py-1 bg-purple-600/20 text-purple-300 rounded-full text-sm border border-purple-500/30"
-                animate={
-                  isPlaying
-                    ? {
-                        backgroundColor: [
-                          "rgba(147, 51, 234, 0.2)",
-                          "rgba(168, 85, 247, 0.5)",
-                          "rgba(147, 51, 234, 0.2)",
-                        ],
-                        scale: [1, 1.05, 1],
-                      }
-                    : {}
-                }
-                transition={{
-                  duration: 0.15,
-                  delay: index * 0.15,
-                }}
+        {/* Word Display with Timing */}
+        <div className="bg-black/90 backdrop-blur-sm p-4 min-h-24">
+          <div className="space-y-3">
+            {/* Current Word (Large) */}
+            {currentWordIndex >= 0 && (
+              <motion.div
+                key={`current-${currentWordIndex}`}
+                initial={{ scale: 0.8, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.8, opacity: 0 }}
+                transition={{ duration: 0.1 }}
+                className="text-center"
               >
-                {word}
-              </motion.span>
-            ))}
+                <span className="text-2xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+                  {words[currentWordIndex]}
+                </span>
+              </motion.div>
+            )}
+
+            {/* Word List */}
+            <div className="flex flex-wrap gap-2 justify-center">
+              {words.map((word, index) => (
+                <motion.span
+                  key={index}
+                  className={`px-3 py-1 rounded-full text-xs font-semibold border transition-all ${
+                    index === currentWordIndex
+                      ? "bg-purple-600 text-white border-purple-400 scale-110"
+                      : index < currentWordIndex
+                      ? "bg-purple-600/30 text-purple-300 border-purple-500/30"
+                      : "bg-slate-700/40 text-gray-400 border-slate-600/30"
+                  }`}
+                  animate={
+                    index === currentWordIndex
+                      ? { scale: [1, 1.1, 1] }
+                      : {}
+                  }
+                  transition={{ duration: 0.15 }}
+                >
+                  {word}
+                </motion.span>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -135,16 +180,33 @@ export default function AnimatedCharacter({ imageUrl, script }) {
       {/* Controls */}
       <div className="flex gap-2 mt-4">
         <button
-          onClick={() => setIsPlaying(!isPlaying)}
-          className="flex-1 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg font-semibold transition-colors"
+          onClick={() => {
+            setIsPlaying(!isPlaying);
+            if (!isPlaying) setCurrentWordIndex(-1);
+          }}
+          className="flex-1 px-4 py-3 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white rounded-lg font-semibold transition-all active:scale-95"
         >
           {isPlaying ? "⏸ עצור" : "▶ שחק"}
+        </button>
+        <button
+          onClick={() => {
+            setIsPlaying(false);
+            setCurrentWordIndex(-1);
+          }}
+          className="px-4 py-3 bg-slate-700 hover:bg-slate-600 text-white rounded-lg font-semibold transition-colors"
+        >
+          ⟲ איפוס
         </button>
       </div>
 
       {/* Info */}
-      <p className="text-xs text-gray-400 mt-2 text-center">
+      <p className="text-xs text-gray-400 mt-3 text-center">
         {words.length} מילים • {(words.length * 0.15).toFixed(1)} שניות
+        {currentWordIndex >= 0 && (
+          <span className="ml-2 text-purple-400">
+            ({currentWordIndex + 1}/{words.length})
+          </span>
+        )}
       </p>
     </div>
   );
