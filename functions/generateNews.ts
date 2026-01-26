@@ -30,15 +30,16 @@ Deno.serve(async (req) => {
     for (const cat of categories) {
       try {
         const response = await base44.asServiceRole.integrations.Core.InvokeLLM({
-          prompt: `Find ${cat.count} REAL, recent news articles about: "${cat.query}". Get them from current news sources.
+          prompt: `Search for ${cat.count} REAL, TODAY's news articles about: "${cat.query}". 
+          Use ONLY reliable, free news sources (BBC, Reuters, AP, Haaretz, Ynet, etc).
           
           For EACH article provide:
-          - Compelling Hebrew title
-          - 2-3 paragraph detailed content in Hebrew
-          - Professional image URL (real image from the article)
-          - News source name
+          - Compelling Hebrew title (1 sentence)
+          - 2-3 paragraph detailed Hebrew content
+          - Topic/subject for image generation
+          - Source name (real news organization)
           
-          Return ${cat.count} articles in JSON format with real, current information.`,
+          Return ONLY real news from TODAY or this week. Return as JSON.`,
           add_context_from_internet: true,
           response_json_schema: {
             type: "object",
@@ -51,7 +52,7 @@ Deno.serve(async (req) => {
                     title: { type: "string" },
                     subtitle: { type: "string" },
                     content: { type: "string" },
-                    image_url: { type: "string" },
+                    image_topic: { type: "string" },
                     source: { type: "string" }
                   }
                 }
