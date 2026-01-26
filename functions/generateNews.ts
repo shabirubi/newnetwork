@@ -69,19 +69,21 @@ Deno.serve(async (req) => {
           // יצור תמונה עם טקסט משולב - עברית בכותרת ואנגלית בתמונה
           if (article.title) {
             try {
-              // קח את הכותרת והתמונה הנושא
-              const imagePrompt = `Professional news banner image for: "${article.image_topic || article.title}". 
-              Modern design, high quality, suitable for news article.
-              Include bold English text overlay with: "${(article.image_topic || article.title).substring(0, 40)}"
-              Professional journalism style, vibrant colors, engaging layout.`;
+              // תיאור מתאים לתוכן הכתבה
+              const topic = article.image_topic || article.title;
+              const englishKeyword = topic.length > 40 ? topic.substring(0, 40) : topic;
+              
+              const imagePrompt = `Create a professional news article image. Topic: ${topic}. Style: modern news banner with typography. Include English text: "${englishKeyword}". High quality, vibrant, professional journalism aesthetic.`;
               
               const imgResponse = await base44.asServiceRole.integrations.Core.GenerateImage({
                 prompt: imagePrompt
               });
               
-              final_image = imgResponse.url;
+              if (imgResponse && imgResponse.url) {
+                final_image = imgResponse.url;
+              }
             } catch (imgErr) {
-              console.error(`Image generation failed for ${article.title}:`, imgErr.message);
+              console.error(`Image failed for ${article.title}:`, imgErr.message || imgErr);
             }
           }
           
@@ -99,7 +101,7 @@ Deno.serve(async (req) => {
           results.push({
             category: cat.category,
             title: article.title,
-            image: final_image ? 'generated' : 'failed',
+            image: final_image ? 'generated' : 'none',
             status: 'created'
           });
         }
