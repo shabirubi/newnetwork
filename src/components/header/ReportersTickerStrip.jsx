@@ -20,11 +20,13 @@ export default function ReportersTickerStrip() {
     const style = document.createElement('style');
     style.innerHTML = `
       @keyframes colorPulse {
-        0%, 100% { filter: grayscale(100%); -webkit-filter: grayscale(100%); }
-        50% { filter: grayscale(0%); -webkit-filter: grayscale(0%); }
+        0%, 100% { filter: grayscale(0%); -webkit-filter: grayscale(0%); }
+        50% { filter: grayscale(100%); -webkit-filter: grayscale(100%); }
       }
       .reporter-ticker-image-animate {
         animation: colorPulse 4s ease-in-out infinite;
+        filter: grayscale(0%);
+        -webkit-filter: grayscale(0%);
       }
     `;
     document.head.appendChild(style);
