@@ -93,23 +93,17 @@ Deno.serve(async (req) => {
 
     const audioBuffer = await speechResponse.arrayBuffer();
     
-    // Convert ArrayBuffer to base64 string for upload
-    const audioBase64 = btoa(String.fromCharCode(...new Uint8Array(audioBuffer)));
+    // Convert ArrayBuffer to base64 string
+    const uint8View = new Uint8Array(audioBuffer);
+    let audioBase64 = '';
+    for (let i = 0; i < uint8View.length; i++) {
+      audioBase64 += String.fromCharCode(uint8View[i]);
+    }
+    audioBase64 = btoa(audioBase64);
     const audioDataUrl = `data:audio/mpeg;base64,${audioBase64}`;
     
-    // Upload audio file
-    const audioBlob = new Blob([audioBuffer], { type: 'audio/mpeg' });
-    const audioFile = new File([audioBlob], `audio-${Date.now()}.mp3`, { type: 'audio/mpeg' });
-    
-    let audioUrl;
-    try {
-      const audioUpload = await base44.integrations.Core.UploadFile({ file: audioFile });
-      audioUrl = audioUpload.file_url;
-    } catch (uploadError) {
-      console.error('Audio upload error, using data URL:', uploadError);
-      // Fallback to data URL if upload fails
-      audioUrl = audioDataUrl;
-    }
+    // Use data URL directly for audio
+    const audioUrl = audioDataUrl;
 
     // 2. Create animated video with D-ID using expressive driver
     const didResponse = await fetch('https://api.d-id.com/talks', {
