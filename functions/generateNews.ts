@@ -34,7 +34,8 @@ Deno.serve(async (req) => {
       try {
         const response = await base44.asServiceRole.integrations.Core.InvokeLLM({
           prompt: `Find ${cat.count} REAL news articles from today about: ${cat.query}.
-          Return JSON with articles array. Each article has: title, subtitle, content (3 paragraphs), source.`,
+          IMPORTANT: Return ALL text (title, subtitle, content, source) in HEBREW ONLY. 
+          Return JSON with articles array. Each article has: title (Hebrew), subtitle (Hebrew), content (Hebrew, 3 paragraphs), source (Hebrew).`,
           add_context_from_internet: true,
           response_json_schema: {
             type: "object",
