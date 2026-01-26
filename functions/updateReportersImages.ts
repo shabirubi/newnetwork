@@ -20,18 +20,19 @@ Deno.serve(async (req) => {
     for (const reporter of reporters) {
       try {
         // Create a detailed prompt for studio setting with microphone and logo
-        const prompt = `Professional TV news reporter ${reporter.name} in a modern broadcast news studio. 
-The reporter is ${reporter.gender === 'male' ? 'a man' : 'a woman'} holding a microphone with a visible red logo on it. 
-Behind them is a professional news studio background with screens, lights, and modern broadcast equipment.
-The reporter is wearing professional business attire, looking confident and professional.
-Photorealistic style, high quality, professional lighting, TV broadcast quality.
-The microphone should be prominently visible in their hand with the red branding logo clearly shown.
-Studio background should include: news desk, multiple monitors, professional lighting setup, modern design.`;
+        const prompt = `Professional news reporter ${reporter.gender === 'male' ? 'male' : 'female'} standing in a TV broadcast studio.
+The reporter is holding a large professional microphone in their hand. The microphone has a RED CIRCULAR LOGO on top (the "הרשת החדשה" logo).
+Behind the reporter: modern news studio with LED screens, professional broadcast lighting, news desk, multiple monitors showing graphics.
+The reporter is wearing formal business attire (suit/blazer), looking directly at camera, confident pose.
+Studio has blue/red accent lighting, very professional TV news environment.
+Photorealistic, high quality, professional broadcast photography, 4K quality.
+The microphone with red logo must be clearly visible and prominent in the frame.
+Israeli TV news studio aesthetic.`;
 
-        // Generate new image
+        // Generate new image with logo reference
         const imageResult = await base44.asServiceRole.integrations.Core.GenerateImage({
           prompt: prompt,
-          existing_image_urls: [reporter.image, logoUrl]
+          existing_image_urls: [logoUrl]
         });
 
         if (imageResult && imageResult.url) {
