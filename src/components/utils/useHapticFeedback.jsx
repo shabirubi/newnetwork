@@ -35,6 +35,17 @@ export function useHapticFeedback() {
 
       oscillator.start(audioContext.currentTime);
       oscillator.stop(audioContext.currentTime + duration / 1000);
+
+      // Clean up audio context after playback
+      oscillator.onended = () => {
+        try {
+          oscillator.disconnect();
+          gainNode.disconnect();
+          audioContext.close();
+        } catch (e) {
+          // Already cleaned up
+        }
+      };
     } catch (e) {
       // Audio context not available
     }
