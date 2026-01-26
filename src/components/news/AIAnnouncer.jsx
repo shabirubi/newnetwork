@@ -178,12 +178,17 @@ export default function AIAnnouncer() {
 
               {/* Radio Station Header */}
               <div className="mb-6 text-center">
+                <img 
+                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png" 
+                  alt="הרשת החדשה" 
+                  className="h-20 w-auto mx-auto mb-4 drop-shadow-2xl"
+                />
                 <div className="flex items-center justify-center gap-2 mb-3">
                   <div className="w-3 h-3 rounded-full bg-[#E31E24] animate-pulse" />
                   <h2 className="text-2xl font-bold">הרשת החדשה</h2>
                   <div className="w-3 h-3 rounded-full bg-[#E31E24] animate-pulse" />
                 </div>
-                <p className="text-sm text-gray-400">רדיו חדשות עם קריינית צעירה</p>
+                <p className="text-sm text-gray-400">כתבי ערוץ הרשת החדשה</p>
                 <p className="text-xs text-[#E31E24] font-bold mt-2">שידור חי 24/7</p>
               </div>
 
