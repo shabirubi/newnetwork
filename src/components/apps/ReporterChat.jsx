@@ -371,12 +371,13 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
         backgroundUrl: studioBackground
       });
 
-      // עדכן את ההודעה האחרונה עם הוידאו ופתח אוטומטית
+      // עדכן את ההודעה האחרונה עם הוידאו
       setMessages(prev => {
         const updated = [...prev];
         const lastMsg = updated[updated.length - 1];
-        if (lastMsg.isGeneratingVideo) {
+        if (lastMsg && lastMsg.isGeneratingVideo) {
           lastMsg.videoUrl = videoResponse.data?.video_url;
+          lastMsg.voice_url = videoResponse.data?.video_url;
           lastMsg.isGeneratingVideo = false;
         }
         return updated;
@@ -384,16 +385,10 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
       
       // פתח אוטומטית במסך מלא
       if (videoResponse.data?.video_url) {
-        setFullscreenVideo(videoResponse.data.video_url);
+        setTimeout(() => {
+          setFullscreenVideo(videoResponse.data.video_url);
+        }, 500);
       }
-      
-      const aiMessage = {
-        role: "assistant",
-        content: response.data.response,
-        reporter: selectedReporter.name,
-        timestamp: new Date(),
-        videoUrl: videoResponse.data?.video_url
-      };
       
       // שמירת הודעות במסד נתונים
       try {
