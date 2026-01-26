@@ -8,11 +8,13 @@ import { base44 } from "@/api/base44Client";
 import AnimatedCharacter from "../components/avatar/AnimatedCharacter";
 import { SaveDesignModal, AddToVideoModal, AddToArticleModal, AddToBroadcastModal } from "../components/designstudio/DesignUsageModals";
 import { VoiceOverModal } from "../components/designstudio/VoiceOverModal";
+import { TextOverlayEditor, FiltersPanel, ExportOptions, ShareDesign } from "../components/designstudio/DesignEditor";
 
 export default function AIDesignStudio() {
   const [prompt, setPrompt] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedImage, setGeneratedImage] = useState(null);
+  const [editedImage, setEditedImage] = useState(null);
   const [uploadedImage, setUploadedImage] = useState(null);
   const [history, setHistory] = useState([]);
   const [selectedDesign, setSelectedDesign] = useState(null);
@@ -47,6 +49,7 @@ export default function AIDesignStudio() {
           createdAt: new Date().toISOString()
         };
         setGeneratedImage(imageUrl);
+        setEditedImage(imageUrl);
         setHistory([newDesign, ...history]);
         toast.success("🎨 דיזיין נוצר בהצלחה!");
       }
@@ -202,6 +205,22 @@ export default function AIDesignStudio() {
               </div>
             </div>
 
+            {/* Design Tools */}
+            {generatedImage && (
+              <div className="bg-black/40 border border-purple-500/20 rounded-2xl p-4 space-y-4">
+                <TextOverlayEditor
+                  imageUrl={editedImage || generatedImage}
+                  onImageUpdate={setEditedImage}
+                />
+                <FiltersPanel
+                  imageUrl={editedImage || generatedImage}
+                  onImageUpdate={setEditedImage}
+                />
+                <ExportOptions imageUrl={editedImage || generatedImage} designTitle={prompt} />
+                <ShareDesign imageUrl={editedImage || generatedImage} designTitle={prompt} />
+              </div>
+            )}
+
             {/* Suggested Prompts */}
             <div className="bg-black/40 border border-purple-500/20 rounded-2xl p-4">
               <p className="text-xs font-semibold text-purple-300 mb-3">
@@ -244,7 +263,7 @@ export default function AIDesignStudio() {
                   >
                     <div className="relative bg-black rounded-xl overflow-hidden border border-purple-500/30">
                       <img
-                        src={generatedImage}
+                        src={editedImage || generatedImage}
                         alt="Generated Design"
                         className="w-full h-auto"
                       />
