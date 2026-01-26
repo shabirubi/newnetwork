@@ -263,20 +263,20 @@ export default function Accessibility() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.9 }}
-          className="bg-gradient-to-r from-yellow-500/20 to-orange-500/20 dark:from-yellow-600/20 dark:to-orange-600/20 rounded-2xl p-8 shadow-lg mb-12 border-2 border-yellow-500/50 backdrop-blur-sm"
+          className="bg-gradient-to-r from-yellow-500/20 to-orange-500/20 dark:from-yellow-600/20 dark:to-orange-600/20 rounded-2xl p-4 sm:p-8 shadow-lg mb-12 border-2 border-yellow-500/50 backdrop-blur-sm"
         >
-          <div className="flex items-center gap-3 mb-4">
-            <CreditCard className="w-8 h-8 text-yellow-600" />
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white">שדרג את התוכנית שלך</h2>
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3 mb-4">
+            <CreditCard className="w-6 sm:w-8 h-6 sm:h-8 text-yellow-600 flex-shrink-0" />
+            <h2 className="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">שדרג את התוכנית שלך</h2>
           </div>
-          <p className="text-gray-700 dark:text-gray-300 mb-6 text-lg">
+          <p className="text-gray-700 dark:text-gray-300 mb-4 sm:mb-6 text-sm sm:text-base leading-relaxed">
             רוצה ליהנות מיכולות AI מלאות כמו צ'אט עם כתבים? שדרג את התוכנית שלך וקבל יותר קרדיטים לאינטגרציות.
           </p>
-          <div className="bg-white/80 dark:bg-black/40 rounded-lg p-4 mb-6">
-            <p className="text-gray-700 dark:text-gray-300 text-sm mb-2">
+          <div className="bg-white/80 dark:bg-black/40 rounded-lg p-3 sm:p-4 mb-4 sm:mb-6">
+            <p className="text-gray-700 dark:text-gray-300 text-xs sm:text-sm mb-2">
               <strong>כיצד לשדרג:</strong>
             </p>
-            <ol className="list-decimal list-inside space-y-2 text-gray-600 dark:text-gray-400 text-sm">
+            <ol className="list-decimal list-inside space-y-1.5 sm:space-y-2 text-gray-600 dark:text-gray-400 text-xs sm:text-sm">
               <li>היכנס ל-<strong>Dashboard של Base44</strong></li>
               <li>לחץ על <strong>Settings</strong> בתפריט הצד</li>
               <li>בחר <strong>Billing / Subscription</strong></li>
@@ -287,11 +287,11 @@ export default function Accessibility() {
             href="https://app.base44.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-6 py-3 rounded-full font-bold hover:from-yellow-600 hover:to-orange-600 transition-all shadow-lg hover:shadow-xl"
+            className="inline-flex flex-col sm:flex-row items-center justify-center sm:justify-start gap-1.5 sm:gap-2 w-full sm:w-auto bg-gradient-to-r from-yellow-500 to-orange-500 text-white px-4 sm:px-6 py-2.5 sm:py-3 rounded-full font-bold hover:from-yellow-600 hover:to-orange-600 transition-all shadow-lg hover:shadow-xl text-sm sm:text-base"
           >
-            <CreditCard className="w-5 h-5" />
+            <CreditCard className="w-4 sm:w-5 h-4 sm:h-5" />
             עבור לדשבורד לשדרוג
-            <ArrowRight className="w-5 h-5" />
+            <ArrowRight className="w-4 sm:w-5 h-4 sm:h-5" />
           </a>
         </motion.div>
 
