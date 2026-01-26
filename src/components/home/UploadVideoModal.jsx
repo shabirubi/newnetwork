@@ -13,6 +13,7 @@ export default function UploadVideoModal({ isOpen, onClose }) {
     title: "",
     description: "",
     category: "breaking",
+    feed: "all",
     videoFile: null
   });
 
@@ -47,7 +48,8 @@ export default function UploadVideoModal({ isOpen, onClose }) {
         description: formData.description || '',
         uploader_email: user.email,
         status: 'ready',
-        category: formData.category
+        category: formData.category,
+        feed: formData.feed
       });
       console.log('✅ UserVideo נשמר');
 
@@ -93,7 +95,7 @@ export default function UploadVideoModal({ isOpen, onClose }) {
       setTimeout(() => {
         onClose();
         setStep(1);
-        setFormData({ title: "", description: "", category: "breaking", videoFile: null });
+        setFormData({ title: "", description: "", category: "breaking", feed: "all", videoFile: null });
         toast.success("הסרטון מוצג בנגן הראשי! 🎥");
       }, 2000);
     } catch (error) {
@@ -239,6 +241,28 @@ export default function UploadVideoModal({ isOpen, onClose }) {
                       <option value="music">מוזיקה</option>
                       <option value="horoscope">אסטרולוגיה</option>
                       <option value="finance">פיננסים</option>
+                    </select>
+                  </div>
+
+                  {/* Feed Selection */}
+                  <div>
+                    <label className="block text-white font-bold mb-2">
+                      פיד תצוגה
+                    </label>
+                    <select
+                      value={formData.feed}
+                      onChange={(e) =>
+                        setFormData({ ...formData, feed: e.target.value })
+                      }
+                      className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-white focus:border-red-500 focus:outline-none transition-colors"
+                    >
+                      <option value="all">כל הפידים</option>
+                      <option value="tiktok">TikTok News Feed</option>
+                      <option value="kan-archive">ארכיון כאן - עמוד האש</option>
+                      <option value="reporters-spotlight">Reporters Spotlight</option>
+                      <option value="user-videos">User Uploaded Videos</option>
+                      <option value="all-videos">All Videos Gallery</option>
+                      <option value="reporter-responses">תשובות הכתבים</option>
                     </select>
                   </div>
 
