@@ -323,15 +323,16 @@ export default function LivePlayer({
       ref={containerRef}
       initial={{ opacity: 0, scale: 0.98 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="relative bg-gradient-to-br from-black via-[#0a0000] to-black sm:rounded-2xl overflow-hidden shadow-2xl group border-2 border-[#E31E24]/30"
+      className="relative bg-gradient-to-br from-black via-[#0a0000] to-black sm:rounded-2xl overflow-hidden shadow-2xl group border-0 sm:border-2 border-[#E31E24]/30"
       style={{
-        boxShadow: '0 0 40px rgba(227, 30, 36, 0.4), inset 0 0 30px rgba(227, 30, 36, 0.1)'
+        boxShadow: '0 0 40px rgba(227, 30, 36, 0.4), inset 0 0 30px rgba(227, 30, 36, 0.1)',
+        minHeight: '56.25vw'
       }}
       onMouseEnter={() => setShowControls(true)}
       onMouseLeave={() => setShowControls(false)}
     >
       {/* Video Container */}
-      <div className="relative w-full aspect-video rounded-t-2xl overflow-hidden" style={{ aspectRatio: '16/9' }}>
+      <div className="relative w-full aspect-video overflow-hidden" style={{ aspectRatio: '16/9' }}>
         {/* Video Player - Shows generated videos or uploaded content */}
               {currentVideoUrl && (
                 <video

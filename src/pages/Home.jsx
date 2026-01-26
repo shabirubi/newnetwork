@@ -170,8 +170,8 @@ export default function Home() {
 
 
       {/* Live Player Section */}
-      <section className="px-0 sm:px-0 mb-0">
-        <div className="bg-black/40 backdrop-blur-sm rounded-lg p-4">
+      <section className="px-0 mb-0 -mx-4 sm:mx-0 sm:px-0">
+        <div className="bg-black sm:bg-black/40 sm:backdrop-blur-sm sm:rounded-lg sm:p-4">
           <LivePlayer 
             title={currentChannel?.name || activeLive?.title || "הרשת החדשה - שידור חי"}
             isLive={!!activeLive?.is_active}
