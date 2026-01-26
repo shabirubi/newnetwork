@@ -1208,6 +1208,7 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                 autoPlay
                 playsInline
                 controls
+                onEnded={() => setFullscreenVideo(null)}
                 className="w-full h-full object-contain"
               />
             </div>
