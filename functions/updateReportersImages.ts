@@ -19,15 +19,16 @@ Deno.serve(async (req) => {
 
     for (const reporter of reporters) {
       try {
-        // Create a detailed prompt for studio setting with microphone and logo
-        const prompt = `Professional news reporter ${reporter.gender === 'male' ? 'male' : 'female'} standing in a TV broadcast studio.
-The reporter is holding a large professional microphone in their hand. The microphone has a RED CIRCULAR LOGO on top (the "הרשת החדשה" logo).
-Behind the reporter: modern news studio with LED screens, professional broadcast lighting, news desk, multiple monitors showing graphics.
-The reporter is wearing formal business attire (suit/blazer), looking directly at camera, confident pose.
-Studio has blue/red accent lighting, very professional TV news environment.
-Photorealistic, high quality, professional broadcast photography, 4K quality.
-The microphone with red logo must be clearly visible and prominent in the frame.
-Israeli TV news studio aesthetic.`;
+        // Create an extremely detailed prompt focusing on the microphone with logo
+        const prompt = `A professional Israeli TV news reporter standing in a modern broadcast studio, holding a large TV news microphone prominently in front of them. 
+The microphone must have a bright RED CIRCULAR LOGO FLAG/CUBE on top - this is the station's branding, similar to CNN or BBC microphones.
+The reporter is ${reporter.gender === 'male' ? 'a confident young man' : 'a confident young woman'} wearing elegant business attire (dark suit/blazer).
+Background: Professional Israeli news studio with LED video walls displaying news graphics, studio lights, modern anchor desk, multiple flat screen monitors.
+The reporter is looking at the camera with a professional expression, in a classic news reporter pose.
+Lighting: Professional TV studio lighting - key light, fill light, rim light - creating a polished broadcast look.
+The red branded microphone is the focal point - held at chest level, clearly visible with the red logo/flag on top.
+Style: Photorealistic, high-end broadcast photography, sharp focus, professional color grading, TV production quality.
+Israeli broadcast news aesthetic - modern, clean, professional.`;
 
         // Generate new image with logo reference
         const imageResult = await base44.asServiceRole.integrations.Core.GenerateImage({
