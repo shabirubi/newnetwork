@@ -10,7 +10,13 @@ export default function TikTokNewsContainer() {
   // Fetch user uploaded videos
   const { data: userVideos = [] } = useQuery({
     queryKey: ['userVideos'],
-    queryFn: () => base44.entities.UserVideo.filter({ status: 'ready' }, '-created_date', 20),
+    queryFn: async () => {
+      try {
+        return await base44.entities.UserVideo.filter({ status: 'ready' }, '-created_date', 20);
+      } catch {
+        return [];
+      }
+    },
     initialData: []
   });
 

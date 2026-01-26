@@ -10,7 +10,13 @@ import { useQuery } from "@tanstack/react-query";
 export default function UpdatesFeed() {
   const { data: breakingNews = [] } = useQuery({
     queryKey: ['breaking-news-feed'],
-    queryFn: () => base44.entities.NewsArticle.list('-created_date', 8),
+    queryFn: async () => {
+      try {
+        return await base44.entities.NewsArticle.list('-created_date', 8);
+      } catch {
+        return [];
+      }
+    },
     initialData: []
   });
 

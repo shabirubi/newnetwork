@@ -11,7 +11,13 @@ export default function ReportersSpotlight() {
 
   const { data: reporters = [] } = useQuery({
     queryKey: ['reporters-spotlight'],
-    queryFn: () => base44.entities.Reporter.filter({ is_active: true }),
+    queryFn: async () => {
+      try {
+        return await base44.entities.Reporter.filter({ is_active: true });
+      } catch {
+        return [];
+      }
+    },
     initialData: []
   });
 
