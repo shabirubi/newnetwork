@@ -34,8 +34,9 @@ const categories = [
   ];
 
   const additionalPages = [
-  { id: "archive", label: "ארכיון", icon: Clock, href: "Archive" }
-  ];
+    { id: "archive", label: "ארכיון", icon: Clock, href: "Archive" },
+    { id: "design", label: "AI Design", icon: Sparkles, href: "AIDesignStudio" }
+    ];
 
 export default function Layout({ children, currentPageName }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
