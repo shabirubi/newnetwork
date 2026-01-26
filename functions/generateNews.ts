@@ -66,14 +66,13 @@ Deno.serve(async (req) => {
         for (const article of articles) {
           let final_image = null;
           
-          // יצור תמונה עבור כל כתבה
-          try {
-            const imageResponse = await base44.asServiceRole.integrations.Core.GenerateImage({
-              prompt: `Professional news photo for: ${article.image_topic || article.title}. High quality, realistic, modern design, news-worthy image.`
-            });
-            final_image = imageResponse.url;
-          } catch (imgErr) {
-            console.error('Image generation failed:', imgErr);
+          // יצור תמונה עבור כל כתבה (ללא המתנה, ברקע)
+          if (article.image_topic || article.title) {
+            base44.asServiceRole.integrations.Core.GenerateImage({
+              prompt: `News photo: ${article.image_topic || article.title}. Professional, high quality.`
+            }).then(img => {
+              final_image = img.url;
+            }).catch(err => console.error('Image:', err.message));
           }
           
           await base44.asServiceRole.entities.NewsArticle.create({
