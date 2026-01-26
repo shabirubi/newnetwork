@@ -47,27 +47,52 @@ export default function AIAnnouncer() {
     try {
       const textToSpeak = `דיווח עדכני מהרשת החדשה: ${article.title}${article.subtitle ? '. ' + article.subtitle : ''}`;
       
-      // Use Web Speech API
+      // Get all available voices
+      const voices = window.speechSynthesis.getVoices();
+      
+      // Try to find a young female Hebrew voice
+      let selectedVoice = voices.find(voice => 
+        voice.lang.includes('he') && voice.name.toLowerCase().includes('female')
+      );
+      
+      // Fallback: any Hebrew voice
+      if (!selectedVoice) {
+        selectedVoice = voices.find(voice => voice.lang.includes('he'));
+      }
+      
       const utterance = new SpeechSynthesisUtterance(textToSpeak);
       utterance.lang = 'he-IL';
-      utterance.rate = 0.95;
-      utterance.pitch = 1;
+      utterance.rate = 1.05; // Slightly faster, youthful pace
+      utterance.pitch = 1.2; // Higher pitch for younger female voice
       utterance.volume = 1;
+      
+      if (selectedVoice) {
+        utterance.voice = selectedVoice;
+      }
 
       utterance.onend = () => {
         setIsSpeaking(false);
         if (shouldContinuePlaying.current) {
-          setCurrentArticleIndex(prev => (prev + 1) % articles.length);
+          setTimeout(() => {
+            setCurrentArticleIndex(prev => (prev + 1) % articles.length);
+          }, 1000);
         }
       };
 
       utterance.onerror = (e) => {
         console.error('Speech synthesis error:', e);
         setIsSpeaking(false);
+        if (shouldContinuePlaying.current) {
+          setTimeout(() => {
+            setCurrentArticleIndex(prev => (prev + 1) % articles.length);
+          }, 1000);
+        }
       };
 
       window.speechSynthesis.cancel();
-      window.speechSynthesis.speak(utterance);
+      setTimeout(() => {
+        window.speechSynthesis.speak(utterance);
+      }, 100);
     } catch (error) {
       console.error('Error generating speech:', error);
       setIsSpeaking(false);
@@ -77,18 +102,27 @@ export default function AIAnnouncer() {
   const handlePlayArticle = async () => {
     if (articles.length === 0) return;
     
+    // Load voices if not loaded yet
+    if (window.speechSynthesis.getVoices().length === 0) {
+      window.speechSynthesis.addEventListener('voiceschanged', () => {
+        console.log('Voices loaded:', window.speechSynthesis.getVoices().length);
+      });
+    }
+    
     shouldContinuePlaying.current = true;
     setIsPlaying(true);
     
     // Start background music
     if (!backgroundMusic.current) {
       backgroundMusic.current = new Audio('https://cdn.pixabay.com/download/audio/2022/03/10/audio_4f0137bf85.mp3');
-      backgroundMusic.current.volume = 0.2;
+      backgroundMusic.current.volume = 0.15;
       backgroundMusic.current.loop = true;
     }
     backgroundMusic.current.play().catch(() => {});
     
-    playArticle(currentArticleIndex);
+    setTimeout(() => {
+      playArticle(currentArticleIndex);
+    }, 300);
   };
 
 
@@ -149,8 +183,8 @@ export default function AIAnnouncer() {
                   <h2 className="text-2xl font-bold">הרשת החדשה</h2>
                   <div className="w-3 h-3 rounded-full bg-[#E31E24] animate-pulse" />
                 </div>
-                <p className="text-sm text-gray-400">רדיו שדרון חדשות לייב 24/7</p>
-                <p className="text-xs text-[#E31E24] font-bold mt-2">ON AIR</p>
+                <p className="text-sm text-gray-400">רדיו חדשות עם קריינית צעירה</p>
+                <p className="text-xs text-[#E31E24] font-bold mt-2">שידור חי 24/7</p>
               </div>
 
               {/* Current Article */}
