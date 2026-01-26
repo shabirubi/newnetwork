@@ -84,18 +84,18 @@ export default function Home() {
         const user = await base44.auth.me();
         if (!user) return [];
         if (selectedChannel === 'all') {
-          return base44.entities.NewsArticle.list('-created_date', 50);
+          return base44.entities.NewsArticle.list('-created_date', 100);
         }
-        return base44.entities.NewsArticle.filter({ channel_id: selectedChannel }, '-created_date', 50);
+        return base44.entities.NewsArticle.filter({ channel_id: selectedChannel }, '-created_date', 100);
       } catch {
         return [];
       }
     },
-    staleTime: 8 * 60 * 60 * 1000,
-    gcTime: 8 * 60 * 60 * 1000,
-    refetchInterval: 8 * 60 * 60 * 1000,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+    refetchInterval: false,
     refetchOnWindowFocus: false,
-    refetchOnMount: false,
+    refetchOnMount: 'always',
     initialData: [],
     placeholderData: (prev) => prev
   });
@@ -141,8 +141,7 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-black space-y-0 sm:space-y-6">
-      <AutoNewsUpdater />
-      <AutoChannelsUpdater />
+
 
       {/* Live Player Section */}
       <section className="px-0 sm:px-0 mb-0">
