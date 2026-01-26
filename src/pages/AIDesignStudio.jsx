@@ -6,6 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { base44 } from "@/api/base44Client";
 import AnimatedCharacter from "../components/avatar/AnimatedCharacter";
+import { SaveDesignModal, AddToVideoModal, AddToArticleModal, AddToBroadcastModal } from "../components/designstudio/DesignUsageModals";
 
 export default function AIDesignStudio() {
   const [prompt, setPrompt] = useState("");
@@ -18,6 +19,10 @@ export default function AIDesignStudio() {
   const [animationScript, setAnimationScript] = useState("");
   const [showAnimator, setShowAnimator] = useState(false);
   const [showUsageOptions, setShowUsageOptions] = useState(false);
+  const [showSaveModal, setShowSaveModal] = useState(false);
+  const [showVideoModal, setShowVideoModal] = useState(false);
+  const [showArticleModal, setShowArticleModal] = useState(false);
+  const [showBroadcastModal, setShowBroadcastModal] = useState(false);
 
   const generateDesign = async () => {
     if (!prompt.trim()) {
@@ -96,10 +101,10 @@ export default function AIDesignStudio() {
   };
 
   const usageOptions = [
-    { id: "video", icon: Play, label: "הכנס לוידאו", desc: "overlay על וידאו", color: "bg-blue-600" },
-    { id: "article", icon: Send, label: "הכנס לכתבה", desc: "צמוד בתוך המאמר", color: "bg-cyan-600" },
-    { id: "broadcast", icon: Grid3X3, label: "שדר בשידור", desc: "הוסף לשידור חי", color: "bg-red-600" },
-    { id: "save", icon: Bookmark, label: "שמור דיזיין", desc: "לספריית התכנים שלי", color: "bg-purple-600" },
+    { id: "video", icon: Play, label: "הכנס לוידאו", desc: "overlay על וידאו", color: "bg-blue-600", action: () => setShowVideoModal(true) },
+    { id: "article", icon: Send, label: "הכנס לכתבה", desc: "צמוד בתוך המאמר", color: "bg-cyan-600", action: () => setShowArticleModal(true) },
+    { id: "broadcast", icon: Grid3X3, label: "שדר בשידור", desc: "הוסף לשידור חי", color: "bg-red-600", action: () => setShowBroadcastModal(true) },
+    { id: "save", icon: Bookmark, label: "שמור דיזיין", desc: "לספריית התכנים שלי", color: "bg-purple-600", action: () => setShowSaveModal(true) },
   ];
 
   return (
@@ -344,6 +349,29 @@ export default function AIDesignStudio() {
         </div>
       </div>
 
+      {/* Usage Modals */}
+      <SaveDesignModal
+        isOpen={showSaveModal}
+        onClose={() => setShowSaveModal(false)}
+        imageUrl={generatedImage}
+        prompt={prompt}
+      />
+      <AddToVideoModal
+        isOpen={showVideoModal}
+        onClose={() => setShowVideoModal(false)}
+        imageUrl={generatedImage}
+      />
+      <AddToArticleModal
+        isOpen={showArticleModal}
+        onClose={() => setShowArticleModal(false)}
+        imageUrl={generatedImage}
+      />
+      <AddToBroadcastModal
+        isOpen={showBroadcastModal}
+        onClose={() => setShowBroadcastModal(false)}
+        imageUrl={generatedImage}
+      />
+
       {/* Character Animation Modal */}
       <AnimatePresence>
         {showAnimator && generatedImage && (
@@ -439,7 +467,7 @@ export default function AIDesignStudio() {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                       onClick={() => {
-                        toast.success(`✅ ${option.label} - בקרוב יהיה זמין`);
+                        option.action();
                         setShowUsageOptions(false);
                       }}
                       className={`${option.color} p-6 rounded-xl text-white hover:shadow-lg transition-all text-center group`}
