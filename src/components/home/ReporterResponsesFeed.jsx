@@ -212,7 +212,7 @@ export default function ReporterResponsesFeed() {
                   playsInline
                   controls
                   className="w-full h-full object-contain"
-                  onEnded={() => setFullscreenVideo(null)}
+                  onEnded={() => handleOpenChat(fullscreenVideo)}
                 />
               ) : (
                 <div className="max-w-2xl bg-black/40 backdrop-blur-sm rounded-2xl p-8 border border-[#E31E24]/30">
