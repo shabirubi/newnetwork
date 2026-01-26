@@ -597,73 +597,7 @@ export default function BroadcastStudio() {
           </motion.div>
         )}
 
-        {/* Mode Selection */}
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="bg-black/40 backdrop-blur-lg rounded-xl border border-[#E31E24]/30 overflow-hidden"
-        >
-          <div className="bg-gradient-to-r from-[#E31E24]/20 to-red-900/20 px-4 py-2 border-b border-[#E31E24]/30">
-            <h2 className="text-white font-semibold text-sm">בחר סוג אווטר</h2>
-          </div>
-          <div className="p-4 grid grid-cols-1 md:grid-cols-3 gap-3">
-            {/* Talks Mode */}
-            <button
-              onClick={() => setMode("talks")}
-              className={`p-4 rounded-lg border-2 transition-all text-right ${
-                mode === "talks"
-                  ? "border-[#E31E24] bg-[#E31E24]/20"
-                  : "border-[#E31E24]/20 bg-black/20 hover:bg-black/40"
-              }`}
-            >
-              <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-lg bg-[#E31E24]/30 flex items-center justify-center flex-shrink-0">
-                  <User className="w-5 h-5 text-[#E31E24]" />
-                </div>
-                <div>
-                  <h3 className="text-white font-bold text-sm mb-1">Talks - ראש בלבד</h3>
-                   <p className="text-white/70 text-xs">תמונה סטטית → וידאו מדבר</p>
-                   <p className="text-white/50 text-xs mt-1">V2 API</p>
-                </div>
-              </div>
-            </button>
 
-            {/* Clips Mode - DISABLED */}
-            <div className="p-4 rounded-lg border-2 border-[#E31E24]/10 bg-black/10 opacity-50 text-right">
-              <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-lg bg-[#E31E24]/20 flex items-center justify-center flex-shrink-0">
-                  <Users className="w-5 h-5 text-[#E31E24]/50" />
-                </div>
-                <div>
-                  <h3 className="text-white/50 font-bold text-sm mb-1">Clips - גוף מלא</h3>
-                   <p className="text-white/30 text-xs">דורש presenters מאומנים</p>
-                   <p className="text-white/30 text-xs mt-1">לא זמין כרגע</p>
-                </div>
-              </div>
-            </div>
-
-            {/* Express Mode */}
-            <button
-              onClick={() => setMode("express")}
-              className={`p-4 rounded-lg border-2 transition-all text-right ${
-                mode === "express"
-                  ? "border-[#E31E24] bg-[#E31E24]/20"
-                  : "border-[#E31E24]/20 bg-black/20 hover:bg-black/40"
-              }`}
-            >
-              <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-lg bg-[#E31E24]/30 flex items-center justify-center flex-shrink-0">
-                  <Video className="w-5 h-5 text-[#E31E24]" />
-                </div>
-                <div>
-                  <h3 className="text-white font-bold text-sm mb-1">Express - מותאם</h3>
-                   <p className="text-white/70 text-xs">אווטר אישי + ידיים</p>
-                   <p className="text-white/50 text-xs mt-1">V3 Instant API</p>
-                </div>
-              </div>
-            </button>
-          </div>
-        </motion.div>
 
         {/* Mode Content */}
         <AnimatePresence mode="wait">
