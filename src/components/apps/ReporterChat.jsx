@@ -932,13 +932,13 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                               </div>
                             )}
                             
-                            {message.videoUrl && (
+                            {(message.videoUrl || message.voice_url) && (
                               <button
-                                onClick={() => setFullscreenVideo(message.videoUrl)}
+                                onClick={() => setFullscreenVideo(message.videoUrl || message.voice_url)}
                                 className="mt-3 rounded-lg overflow-hidden border-2 border-[#E31E24]/30 relative group cursor-pointer block"
                               >
                                 <video
-                                  src={message.videoUrl}
+                                  src={message.videoUrl || message.voice_url}
                                   className="w-full rounded-lg"
                                   playsInline
                                 />
