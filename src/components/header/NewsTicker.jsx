@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "../../utils";
 import { base44 } from "@/api/base44Client";
 import { motion } from "framer-motion";
-import { Flame, Siren, MessageSquareWarning, Moon, Sun, TrendingUp, TrendingDown, DollarSign, Euro, Menu, Clock } from "lucide-react";
+import { Flame, Siren, MessageSquareWarning, Moon, Sun, TrendingUp, TrendingDown, DollarSign, Euro, Menu, Clock, Radio } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import ClockWidget from "./ClockWidget";
 import WeatherWidget from "./WeatherWidget";
@@ -112,18 +112,34 @@ export default function NewsTicker({ darkMode, setDarkMode, onMenuClick }) {
           </div>
         </button>
 
+        {/* Logo + Radio Button */}
+        <div className="flex items-center gap-2 shrink-0">
+          <img 
+            src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png" 
+            alt="הרשת החדשה" 
+            className="h-8 sm:h-10 w-auto"
+          />
+          <button
+            onClick={() => window.dispatchEvent(new CustomEvent('openAIRadio'))}
+            className="flex items-center gap-1.5 px-2 sm:px-3 py-1.5 bg-gradient-to-r from-[#E31E24]/80 to-red-800/80 hover:from-[#E31E24] hover:to-red-800 rounded-lg text-white text-xs sm:text-sm font-bold transition-all active:scale-95"
+          >
+            <Radio className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <span className="hidden sm:inline">רדיו</span>
+          </button>
+        </div>
+
         {/* Broadcast Strip */}
-        <div className="overflow-hidden w-40 sm:w-56 md:w-80 shrink-0">
+        <div className="overflow-hidden w-32 sm:w-40 md:w-60 shrink-0">
           <motion.div
             className="flex whitespace-nowrap"
             animate={{ x: ["0%", "-50%"] }}
             transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
           >
-            <span className="font-bold text-sm sm:text-base md:text-lg text-white">
-              מהדורת החדשות בשידור חי - כל יום בשעה 21:00 • עדכוני חדשות 24/7 • הרשת החדשה • 
+            <span className="font-bold text-xs sm:text-sm md:text-base text-white">
+              מהדורת החדשות בשידור חי - כל יום בשעה 21:00 • עדכוני חדשות 24/7 • 
             </span>
-            <span className="font-bold text-sm sm:text-base md:text-lg text-white">
-              מהדורת החדשות בשידור חי - כל יום בשעה 21:00 • עדכוני חדשות 24/7 • הרשת החדשה • 
+            <span className="font-bold text-xs sm:text-sm md:text-base text-white">
+              מהדורת החדשות בשידור חי - כל יום בשעה 21:00 • עדכוני חדשות 24/7 • 
             </span>
           </motion.div>
         </div>
