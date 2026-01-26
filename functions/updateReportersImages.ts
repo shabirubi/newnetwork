@@ -70,6 +70,7 @@ Israeli broadcast news aesthetic - modern, clean, professional.`;
     return Response.json({
       success: true,
       totalReporters: reporters.length,
+      updated: results.filter(r => r.status === 'success').length,
       results: results
     });
 
