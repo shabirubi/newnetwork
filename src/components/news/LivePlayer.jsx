@@ -325,14 +325,13 @@ export default function LivePlayer({
       animate={{ opacity: 1, scale: 1 }}
       className="relative bg-gradient-to-br from-black via-[#0a0000] to-black sm:rounded-2xl overflow-hidden shadow-2xl group border-0 sm:border-2 border-[#E31E24]/30"
       style={{
-        boxShadow: '0 0 40px rgba(227, 30, 36, 0.4), inset 0 0 30px rgba(227, 30, 36, 0.1)',
-        minHeight: '56.25vw'
+        boxShadow: '0 0 40px rgba(227, 30, 36, 0.4), inset 0 0 30px rgba(227, 30, 36, 0.1)'
       }}
       onMouseEnter={() => setShowControls(true)}
       onMouseLeave={() => setShowControls(false)}
     >
       {/* Video Container */}
-      <div className="relative w-full aspect-video overflow-hidden" style={{ aspectRatio: '16/9' }}>
+      <div className="relative w-full h-[100vh] sm:h-auto sm:aspect-video overflow-hidden">
         {/* Video Player - Shows generated videos or uploaded content */}
               {currentVideoUrl && (
                 <video
