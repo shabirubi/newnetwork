@@ -15,19 +15,16 @@ export default function ReportersTickerStrip() {
   const containerRef = useRef(null);
   const scrollContainerRef = useRef(null);
 
-  // CSS for grayscale images with smooth transition
+  // CSS for grayscale images with animated transition
   React.useEffect(() => {
     const style = document.createElement('style');
     style.innerHTML = `
-      .reporter-ticker-image-bw {
-        filter: grayscale(100%) !important;
-        -webkit-filter: grayscale(100%) !important;
-        transition: filter 0.4s ease-in-out !important;
+      @keyframes colorPulse {
+        0%, 100% { filter: grayscale(100%); -webkit-filter: grayscale(100%); }
+        50% { filter: grayscale(0%); -webkit-filter: grayscale(0%); }
       }
-      .reporter-ticker-image-color {
-        filter: grayscale(0%) !important;
-        -webkit-filter: grayscale(0%) !important;
-        transition: filter 0.4s ease-in-out !important;
+      .reporter-ticker-image-animate {
+        animation: colorPulse 4s ease-in-out infinite;
       }
     `;
     document.head.appendChild(style);
@@ -106,8 +103,13 @@ export default function ReportersTickerStrip() {
               <img
                 src={reporter.image}
                 alt={reporter.name}
-                className="w-16 h-16 sm:w-16 sm:h-16 rounded-lg object-cover border border-[#E31E24]/30 transition-all shadow-lg reporter-ticker-image-color"
-                style={{ display: 'block', minWidth: '64px', minHeight: '64px' }}
+                className="w-16 h-16 sm:w-16 sm:h-16 rounded-lg object-cover border border-[#E31E24]/30 shadow-lg reporter-ticker-image-animate"
+                style={{ 
+                  display: 'block', 
+                  minWidth: '64px', 
+                  minHeight: '64px',
+                  animationDelay: `${idx * 0.3}s`
+                }}
                 onError={(e) => {
                   e.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="80" height="80"%3E%3Crect fill="%23333" width="80" height="80"/%3E%3Ctext x="40" y="40" font-size="40" fill="white" text-anchor="middle" dy=".3em"%3E' + reporter.name.charAt(0) + '%3C/text%3E%3C/svg%3E';
                 }}
