@@ -608,7 +608,8 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
           content: msg.message,
           reporter: reporter.name,
           timestamp: new Date(msg.created_date),
-          videoUrl: msg.voice_url
+          videoUrl: msg.voice_url,
+          voice_url: msg.voice_url
         }));
         setMessages(formattedMessages);
       } else {
