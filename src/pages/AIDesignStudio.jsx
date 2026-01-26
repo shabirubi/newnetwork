@@ -296,7 +296,7 @@ export default function AIDesignStudio() {
                         הנפיש
                       </Button>
                       <Button
-                        onClick={() => downloadImage(generatedImage)}
+                        onClick={() => downloadImage(editedImage || generatedImage)}
                         variant="outline"
                         className="flex-1 border-purple-500/50 text-purple-400 hover:bg-purple-500/20"
                       >
@@ -384,34 +384,34 @@ export default function AIDesignStudio() {
       <SaveDesignModal
         isOpen={showSaveModal}
         onClose={() => setShowSaveModal(false)}
-        imageUrl={generatedImage}
+        imageUrl={editedImage || generatedImage}
         prompt={prompt}
       />
       <AddToVideoModal
         isOpen={showVideoModal}
         onClose={() => setShowVideoModal(false)}
-        imageUrl={generatedImage}
+        imageUrl={editedImage || generatedImage}
       />
       <AddToArticleModal
         isOpen={showArticleModal}
         onClose={() => setShowArticleModal(false)}
-        imageUrl={generatedImage}
+        imageUrl={editedImage || generatedImage}
       />
       <AddToBroadcastModal
         isOpen={showBroadcastModal}
         onClose={() => setShowBroadcastModal(false)}
-        imageUrl={generatedImage}
+        imageUrl={editedImage || generatedImage}
       />
       <VoiceOverModal
         isOpen={showVoiceOverModal}
         onClose={() => setShowVoiceOverModal(false)}
-        imageUrl={generatedImage}
+        imageUrl={editedImage || generatedImage}
         designTitle={prompt}
       />
       <UploadDesignModal
         isOpen={showUploadModal}
         onClose={() => setShowUploadModal(false)}
-        imageUrl={generatedImage}
+        imageUrl={editedImage || generatedImage}
         designTitle={prompt}
       />
 
