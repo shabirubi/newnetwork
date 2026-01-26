@@ -32,15 +32,19 @@ Deno.serve(async (req) => {
     const videoUrl = uploadResponse.file_url;
     console.log('✅ קובץ הועלה:', videoUrl);
 
-    // Create UserVideo record
+    // Create UserVideo record with category and feed if provided
     console.log('💾 יוצר רשומה ב-UserVideo...');
-    const userVideo = await base44.entities.UserVideo.create({
+    const videoData = {
       title,
       video_url: videoUrl,
       description: description || '',
       status: 'ready',
-      uploader_email: user.email
-    });
+      uploader_email: user.email,
+      category: body.category || 'breaking',
+      feed: body.feed || 'user-videos'
+    };
+    
+    const userVideo = await base44.entities.UserVideo.create(videoData);
     
     console.log('✅ UserVideo נוצר:', userVideo.id);
 

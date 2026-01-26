@@ -9,7 +9,8 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { message, reporterName, reporterRole, reporterSpecialty, reporterBio, userProfile } = await req.json();
+    const body = await req.json();
+    const { message, reporterName, reporterRole, reporterSpecialty, reporterBio, userProfile } = body;
 
     if (!message || !reporterName) {
       return Response.json({ error: 'Missing required fields' }, { status: 400 });
