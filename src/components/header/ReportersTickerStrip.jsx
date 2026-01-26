@@ -64,10 +64,9 @@ export default function ReportersTickerStrip() {
     }
   };
 
-  if (reporters.length === 0) return null;
-
   return (
     <>
+      {reporters.length > 0 && (
       <div ref={containerRef} className="relative bg-black/90 backdrop-blur-xl border-b border-[#E31E24]/30 shadow-xl shadow-[#E31E24]/20 z-[35] block">
         {/* Left Arrow */}
         <button
@@ -124,6 +123,7 @@ export default function ReportersTickerStrip() {
           </div>
           </div>
           </div>
+          )}
 
           {selectedReporterForChat && openReporterChat && (
             <ReporterChat 
