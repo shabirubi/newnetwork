@@ -204,8 +204,9 @@ export default function ReportersSpotlight() {
       {/* Reporter Chat */}
       {selectedReporter && (
         <ReporterChat
-          reporter={selectedReporter}
-          onClose={() => setSelectedReporter(null)}
+          externalIsOpen={!!selectedReporter}
+          externalSetIsOpen={(open) => !open && setSelectedReporter(null)}
+          preSelectedReporter={selectedReporter}
         />
       )}
     </section>
