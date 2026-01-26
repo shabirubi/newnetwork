@@ -17,7 +17,6 @@ import { base44 } from "@/api/base44Client";
 
 
 
-const DEFAULT_STREAM = "https://www.youtube.com/embed/pPRKdCHHlGI?autoplay=0&mute=1&rel=0";
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png";
 
 export default function LivePlayer({ 
@@ -79,7 +78,7 @@ export default function LivePlayer({
     { time: "22:00", title: "סיכום יומי והצצה למחר", Icon: Moon }
   ];
 
-  const currentStreamUrl = streamUrl || DEFAULT_STREAM;
+  const currentStreamUrl = streamUrl;
 
   // Rotate ads and toggle wide view
   useEffect(() => {
@@ -172,54 +171,7 @@ export default function LivePlayer({
     };
   }, [title]);
 
-  // YouTube IFrame API for controlling playback
-    useEffect(() => {
-      if ((currentStreamUrl !== "youtube" && !currentVideoUrl) || !isPlaying) return; // Only load for default YouTube stream
 
-      const playlist = ["7f6TVsLPUbQ", "hqb0D9gEEjU"];
-
-      // Load YouTube IFrame API
-      if (!window.YT) {
-        const tag = document.createElement('script');
-        tag.src = 'https://www.youtube.com/iframe_api';
-        const firstScriptTag = document.getElementsByTagName('script')[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-      }
-
-      const initPlayer = () => {
-        if (window.YT && window.YT.Player && !playerRef.current) {
-          playerRef.current = new window.YT.Player('youtube-player', {
-            videoId: playlist[0],
-            playerVars: {
-              autoplay: 0,
-              controls: 1,
-              rel: 0,
-              modestbranding: 1,
-              mute: 1,
-              playlist: playlist.slice(1).join(',')
-            },
-            events: {
-              onStateChange: (event) => {
-                console.log('Player state:', event.data, 'Current video:', event.target.getVideoData().video_id);
-              }
-            }
-          });
-        }
-      };
-
-      if (window.YT && window.YT.Player) {
-        initPlayer();
-      } else {
-        window.onYouTubeIframeAPIReady = initPlayer;
-      }
-
-      return () => {
-        if (playerRef.current && playerRef.current.destroy) {
-          playerRef.current.destroy();
-          playerRef.current = null;
-        }
-      };
-    }, [currentStreamUrl, isPlaying]);
 
   const togglePlay = () => {
     if (currentVideoRef.current) {
@@ -248,10 +200,10 @@ export default function LivePlayer({
 
   // Universal Player - mpegts.js for TS/FLV, video.js for HLS/DASH
   useEffect(() => {
-    if (!videoRef.current || currentStreamUrl === "youtube" || !isPlaying) return;
+    if (!videoRef.current || !currentStreamUrl || !isPlaying) return;
 
     // Skip for embedded players
-    if (currentStreamUrl?.includes('ok.ru') || currentStreamUrl?.includes('youtube.com') || currentStreamUrl?.includes('youtu.be')) {
+    if (currentStreamUrl?.includes('ok.ru')) {
       return;
     }
 

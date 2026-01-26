@@ -361,52 +361,6 @@ export default function Home() {
 
 
 
-      {/* Spotify Section */}
-      <section className="px-4 mb-12">
-        <div className="flex items-center justify-between mb-6">
-          <h2 className="text-3xl font-bold dark:text-white">שיר היום</h2>
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => window.open('https://open.spotify.com/track/6EhmyOolO1ZeqI8LU2nk8g?si=8449e73641204841', '_blank')}
-            className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-full font-bold flex items-center gap-2 transition-all"
-          >
-            <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.6 0 12 0zm5.6 17.5c-.4.6-1.1.8-1.7.4-4.7-2.9-10.6-3.5-17.6-1.9-.7.2-1.4-.2-1.6-.8-.2-.7.2-1.4.8-1.6 7.7-1.8 14.2-1.1 19.6 2.2.6.4.8 1.1.4 1.7zm1.5-3.3c-.5.7-1.3 1-2.1.5-5.4-3.3-13.5-4.3-19.8-2.3-.8.2-1.6-.2-1.8-1-.2-.8.2-1.6 1-1.8 7.1-2.3 16.2-1.2 22.3 2.6.7.4 1 1.3.5 2z"/>
-            </svg>
-            הפעל בספוטיפיי
-          </motion.button>
-        </div>
-        <div className="flex justify-center">
-          <iframe 
-            src="https://open.spotify.com/embed/track/6EhmyOolO1ZeqI8LU2nk8g?utm_source=generator" 
-            width="100%" 
-            height="152" 
-            frameBorder="0" 
-            allowFullScreen="" 
-            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-            loading="lazy"
-            className="rounded-2xl max-w-2xl"
-          />
-        </div>
-      </section>
-
-      {/* YouTube Video Section */}
-      <section className="px-4 mb-12">
-        <h2 className="text-3xl font-bold dark:text-white mb-6 text-center">שידור חי</h2>
-        <div className="flex justify-center">
-          <iframe 
-            src="https://www.youtube.com/embed/OeEDtjuqinU?autoplay=0&mute=1&rel=0"
-            width="100%" 
-            height="400" 
-            frameBorder="0" 
-            allowFullScreen="" 
-            allow="autoplay"
-            className="rounded-2xl max-w-4xl"
-          />
-        </div>
-      </section>
-
       {/* CTA Section */}
       <section className="bg-[#E31E24]/90 backdrop-blur-sm rounded-2xl p-8 text-white text-center">
         <h2 className="text-2xl md:text-3xl font-bold mb-4">
