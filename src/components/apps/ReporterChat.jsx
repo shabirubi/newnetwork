@@ -593,20 +593,26 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
 
   const loadChatHistory = async (reporter) => {
     try {
+      const currentUser = await base44.auth.me();
       const history = await base44.entities.ReporterChat.filter({
         reporter_id: reporter.id,
-        user_email: (await base44.auth.me()).email
+        user_email: currentUser.email
       }, '-created_date', 50);
       
+      console.log('📚 היסטוריה:', history); // Debug
+      
       if (history && history.length > 0) {
-        const formattedMessages = history.reverse().map(msg => ({
-          role: msg.sender_type === 'user' ? 'user' : 'assistant',
-          content: msg.message,
-          reporter: reporter.name,
-          timestamp: new Date(msg.created_date),
-          videoUrl: msg.voice_url,
-          voice_url: msg.voice_url
-        }));
+        const formattedMessages = history.reverse().map(msg => {
+          console.log('הודעה:', msg.message, 'יש וידאו?', !!msg.voice_url); // Debug
+          return {
+            role: msg.sender_type === 'user' ? 'user' : 'assistant',
+            content: msg.message,
+            reporter: reporter.name,
+            timestamp: new Date(msg.created_date),
+            videoUrl: msg.voice_url || null,
+            voice_url: msg.voice_url || null
+          };
+        });
         setMessages(formattedMessages);
       } else {
         // אין היסטוריה - הודעת ברוכים הבאים
