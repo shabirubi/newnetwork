@@ -30,7 +30,7 @@ export default function AIDesignStudio() {
   const [showBroadcastModal, setShowBroadcastModal] = useState(false);
   const [showVoiceOverModal, setShowVoiceOverModal] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
-  const [showArticleModal, setShowArticleModal] = useState(false);
+  const [showArticlePresentationModal, setShowArticlePresentationModal] = useState(false);
 
   const generateDesign = async () => {
     if (!prompt.trim()) {
@@ -282,7 +282,7 @@ export default function AIDesignStudio() {
                         הוסף
                       </Button>
                       <Button
-                        onClick={() => setShowArticleModal(true)}
+                        onClick={() => setShowArticlePresentationModal(true)}
                         variant="outline"
                         className="flex-1 border-blue-500/50 text-blue-400 hover:bg-blue-500/20 text-xs sm:text-sm"
                       >
@@ -417,8 +417,8 @@ export default function AIDesignStudio() {
         designTitle={prompt}
       />
       <ArticlePresenterModal
-        isOpen={showArticleModal}
-        onClose={() => setShowArticleModal(false)}
+        isOpen={showArticlePresentationModal}
+        onClose={() => setShowArticlePresentationModal(false)}
         imageUrl={editedImage || generatedImage}
       />
 
