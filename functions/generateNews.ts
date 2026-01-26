@@ -64,27 +64,23 @@ Deno.serve(async (req) => {
         const articles = response.articles || [];
         
         for (const article of articles) {
-          let final_image = article.image_url;
+          let final_image = null;
           
-          // אם אין תמונה או שהיא לא תקינה, ייצור תמונה
-          if (!final_image || final_image.includes('placeholder') || final_image.includes('default')) {
-            try {
-              const imageResponse = await base44.asServiceRole.integrations.Core.GenerateImage({
-                prompt: `Professional news article image for: "${article.title}". High quality, modern design, relevant to the news topic. Hebrew context.`,
-                existing_image_urls: article.image_url ? [article.image_url] : []
-              });
-              final_image = imageResponse.url || article.image_url;
-            } catch (imgErr) {
-              console.error('Image generation failed:', imgErr);
-              final_image = article.image_url || 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&h=600&fit=crop';
-            }
+          // יצור תמונה עבור כל כתבה
+          try {
+            const imageResponse = await base44.asServiceRole.integrations.Core.GenerateImage({
+              prompt: `Professional news photo for: ${article.image_topic || article.title}. High quality, realistic, modern design, news-worthy image.`
+            });
+            final_image = imageResponse.url;
+          } catch (imgErr) {
+            console.error('Image generation failed:', imgErr);
           }
           
           await base44.asServiceRole.entities.NewsArticle.create({
             title: article.title,
             subtitle: article.subtitle || '',
             content: article.content,
-            image_url: final_image,
+            image_url: final_image || '',
             category: cat.category,
             source: article.source || 'News Source',
             is_breaking: cat.category === 'breaking' ? Math.random() > 0.7 : false,
@@ -94,7 +90,7 @@ Deno.serve(async (req) => {
           results.push({
             category: cat.category,
             title: article.title,
-            image: final_image ? 'generated' : 'original',
+            image: final_image ? 'generated' : 'failed',
             status: 'created'
           });
         }
