@@ -240,9 +240,7 @@ function TickerContent({ news, currencies }) {
     queryKey: ['breaking-news-ticker'],
     queryFn: async () => {
       try {
-        const user = await base44.auth.me();
-        if (!user) return [];
-        return base44.entities.NewsArticle.list('-created_date', 10);
+        return await base44.entities.NewsArticle.list('-created_date', 10);
       } catch {
         return [];
       }
