@@ -29,7 +29,7 @@ export function ScriptGeneratorModal({ isOpen, onClose, imageUrl }) {
 
     setIsGenerating(true);
     try {
-      const response = await base44.functions.invoke("generateVideoScript", {
+      const response = await base44.functions.invoke("generateAIDesign", {
         description: description.trim(),
       });
 
