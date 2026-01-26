@@ -15,6 +15,7 @@ import AIAnnouncer from "./components/news/AIAnnouncer";
 import RightSidebarUpdates from "./components/sidebar/RightSidebarUpdates";
 import LeftSidebarCategories from "./components/sidebar/LeftSidebarCategories";
 import KanArchiveModal from "./components/home/KanArchiveModal";
+import TalkingAvatar from "./components/avatar/TalkingAvatar";
 
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png";
 
@@ -231,6 +232,9 @@ export default function Layout({ children, currentPageName }) {
 
       {/* AI Announcer */}
       <AIAnnouncer />
+
+      {/* Talking Avatar Creator */}
+      <TalkingAvatar />
 
 
 
