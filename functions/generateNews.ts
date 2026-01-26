@@ -60,11 +60,33 @@ Deno.serve(async (req) => {
         
         for (const article of articles) {
           try {
+            // תרגום הכותרת לאנגלית להשתמש בתמונות
+            let englishTitle = article.title;
+            try {
+              const translationResponse = await base44.asServiceRole.integrations.Core.InvokeLLM({
+                prompt: `Translate this Hebrew text to English ONLY. Do not add anything else. Just the translation:\n\n${article.title}`
+              });
+              englishTitle = translationResponse || article.title;
+            } catch (transErr) {
+              console.log('Translation failed, using original:', transErr.message);
+            }
+
+            // יצירת תמונה עם הטקסט באנגלית
+            let imageUrl = '';
+            try {
+              const imageResponse = await base44.asServiceRole.integrations.Core.GenerateImage({
+                prompt: `Professional news thumbnail. Text overlay (English only): "${englishTitle}". News article style, modern design, ${cat.category} themed.`
+              });
+              imageUrl = imageResponse.url || '';
+            } catch (imgErr) {
+              console.log('Image generation failed:', imgErr.message);
+            }
+
             await base44.asServiceRole.entities.NewsArticle.create({
               title: article.title,
               subtitle: article.subtitle || '',
               content: article.content,
-              image_url: '',
+              image_url: imageUrl,
               category: cat.category,
               source: article.source || 'News',
               is_breaking: cat.category === 'breaking',
