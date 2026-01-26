@@ -113,10 +113,8 @@ Deno.serve(async (req) => {
         },
         config: {
           fluent: true,
-          stitch: motionConfig.stitch,
           pad_audio: motionConfig.pad_audio,
           transition: motionConfig.transition,
-          driver_expressions: motionConfig.driver_expressions,
         },
         // Use expressive driver for more realistic body movements
         driver_url: 'bank://expressive/',
