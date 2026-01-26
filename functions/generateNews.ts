@@ -33,28 +33,44 @@ Deno.serve(async (req) => {
     for (const cat of categoriesToProcess) {
       try {
         const response = await base44.asServiceRole.integrations.Core.InvokeLLM({
-          prompt: `Find ${cat.count} REAL news articles from today about: ${cat.query}.
-          IMPORTANT: Return ALL text (title, subtitle, content, source) in HEBREW ONLY. 
-          Return JSON with articles array. Each article has: title (Hebrew), subtitle (Hebrew), content (Hebrew, 3 paragraphs), source (Hebrew).`,
-          add_context_from_internet: true,
-          response_json_schema: {
-            type: "object",
-            properties: {
-              articles: {
-                type: "array",
-                items: {
-                  type: "object",
-                  properties: {
-                    title: { type: "string" },
-                    subtitle: { type: "string" },
-                    content: { type: "string" },
-                    source: { type: "string" }
-                  }
-                }
-              }
-            }
-          }
-        });
+                        prompt: `חפש ${cat.count} כתבות חדשות אמיתיות מהיום בנושא: ${cat.query}.
+                        חשוב: החזר את כל הטקסט בעברית בלבד! לא אנגלית!
+                        החזר JSON עם מערך articles. כל כתבה צריכה להכיל:
+                        - title: כותרת בעברית (קצרה ומעניינת)
+                        - subtitle: כותרת משנה בעברית 
+                        - content: תוכן בעברית (3 פסקאות)
+                        - source: מקור בעברית
+
+                        דוגמה:
+                        {
+                          "articles": [
+                            {
+                              "title": "כותרת בעברית",
+                              "subtitle": "כותרת משנה",
+                              "content": "תוכן...",
+                              "source": "וואלה"
+                            }
+                          ]
+                        }`,
+                        add_context_from_internet: true,
+                        response_json_schema: {
+                          type: "object",
+                          properties: {
+                            articles: {
+                              type: "array",
+                              items: {
+                                type: "object",
+                                properties: {
+                                  title: { type: "string" },
+                                  subtitle: { type: "string" },
+                                  content: { type: "string" },
+                                  source: { type: "string" }
+                                }
+                              }
+                            }
+                          }
+                        }
+                      });
 
         const articles = response.articles || [];
         let created = 0;
