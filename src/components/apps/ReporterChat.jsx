@@ -78,15 +78,15 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
   const localStreamRef = useRef(null);
 
   const { data: reporters = [] } = useQuery({
-    queryKey: ['reporters-chat'],
-    queryFn: async () => {
-      try {
-        return await base44.entities.Reporter.filter({ is_active: true }, 'name', 20);
-      } catch {
-        return [];
-      }
-    },
-    initialData: []
+   queryKey: ['reporters-chat'],
+   queryFn: async () => {
+     try {
+       return await base44.asServiceRole.entities.Reporter.filter({ is_active: true }, 'name', 20);
+     } catch {
+       return [];
+     }
+   },
+   initialData: []
   });
 
   const scrollToBottom = () => {
