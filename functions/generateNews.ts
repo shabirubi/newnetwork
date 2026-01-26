@@ -64,37 +64,15 @@ Deno.serve(async (req) => {
         const articles = response.articles || [];
         
         for (const article of articles) {
-          let final_image = null;
+          // יצור כתבה עם תמונה ברקע (ללא המתנה)
+          const shortText = (article.image_topic || article.title).substring(0, 35);
           
-          // יצור תמונה עם טקסט אנגלית משולב
-          if (article.image_topic || article.title) {
-            try {
-              const topic = article.image_topic || article.title;
-              const shortText = topic.length > 30 ? topic.substring(0, 30) : topic;
-              
-              const imagePrompt = `Create professional news article image. 
-              Add bold centered English text: "${shortText}". 
-              Topic: ${topic}. 
-              Modern journalism style, vibrant design, high quality. 
-              16:9 format, professional typography, engaging colors.`;
-              
-              const imgResponse = await base44.asServiceRole.integrations.Core.GenerateImage({
-                prompt: imagePrompt
-              });
-              
-              if (imgResponse && imgResponse.url) {
-                final_image = imgResponse.url;
-              }
-            } catch (imgErr) {
-              console.log(`Image generation skipped for: ${article.title}`);
-            }
-          }
-          
+          // שמור כתבה מיד בלי להמתין לתמונה
           await base44.asServiceRole.entities.NewsArticle.create({
             title: article.title,
             subtitle: article.subtitle || '',
             content: article.content,
-            image_url: final_image || '',
+            image_url: '',
             category: cat.category,
             source: article.source || 'News Source',
             is_breaking: cat.category === 'breaking' ? Math.random() > 0.7 : false,
@@ -104,9 +82,18 @@ Deno.serve(async (req) => {
           results.push({
             category: cat.category,
             title: article.title,
-            image: final_image ? 'generated' : 'none',
             status: 'created'
           });
+          
+          // יצור תמונה ברקע (לא מחכים)
+          try {
+            const imagePrompt = `Professional news article banner. Bold English text: "${shortText}". Topic: ${article.image_topic || article.title}. Journalism style, modern design, vibrant colors.`;
+            base44.asServiceRole.integrations.Core.GenerateImage({
+              prompt: imagePrompt
+            }).catch(e => console.log(`BG Image: ${article.title.substring(0, 30)}`));
+          } catch (e) {
+            // ממשיך ללא תמונה
+          }
         }
 
         await new Promise(resolve => setTimeout(resolve, 2000));
