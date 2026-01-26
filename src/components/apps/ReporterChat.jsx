@@ -48,7 +48,13 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
   // טעינת חדשות אחרונות
   const { data: newsArticles = [] } = useQuery({
     queryKey: ['breaking-news-ticker'],
-    queryFn: () => base44.entities.NewsArticle.filter({ is_breaking: true }, '-created_date', 20),
+    queryFn: async () => {
+      try {
+        return await base44.entities.NewsArticle.filter({ is_breaking: true }, '-created_date', 20);
+      } catch {
+        return [];
+      }
+    },
     refetchInterval: 120000,
     initialData: []
   });
@@ -73,7 +79,13 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
 
   const { data: reporters = [] } = useQuery({
     queryKey: ['reporters-chat'],
-    queryFn: () => base44.entities.Reporter.filter({ is_active: true }, 'name', 20),
+    queryFn: async () => {
+      try {
+        return await base44.entities.Reporter.filter({ is_active: true }, 'name', 20);
+      } catch {
+        return [];
+      }
+    },
     initialData: []
   });
 
