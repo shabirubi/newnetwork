@@ -11,18 +11,18 @@ Deno.serve(async (req) => {
     }
 
     const categories = [
-      { category: 'breaking', count: 5, query: 'חדשות חמות בישראל עכשיו' },
-      { category: 'security', count: 5, query: 'חדשות ביטחון ומדיניות ישראל' },
-      { category: 'economy', count: 5, query: 'חדשות כלכלה ועסקים ישראל' },
-      { category: 'politics', count: 5, query: 'חדשות פוליטיקה ישראל' },
-      { category: 'technology', count: 5, query: 'חדשות טכנולוגיה והייטק ישראל' },
-      { category: 'sports', count: 5, query: 'חדשות ספורט ישראל' },
-      { category: 'entertainment', count: 5, query: 'חדשות בידור ותרבות ישראל' },
-      { category: 'world', count: 5, query: 'חדשות עולם בינלאומיות' },
-      { category: 'health', count: 5, query: 'חדשות בריאות וכללי בריאות' },
-      { category: 'music', count: 5, query: 'חדשות מוזיקה וזמרים ישראליים' },
-      { category: 'horoscope', count: 3, query: 'הורוסקופ ותחזוקות אסטרולוגיות' },
-      { category: 'finance', count: 5, query: 'חדשות בורסה ופיננסים' }
+      { category: 'breaking', count: 8, query: 'breaking news Israel today' },
+      { category: 'security', count: 8, query: 'security defense Israel news' },
+      { category: 'economy', count: 8, query: 'economy business Israel news' },
+      { category: 'politics', count: 8, query: 'politics government Israel' },
+      { category: 'technology', count: 8, query: 'technology startup Israel' },
+      { category: 'sports', count: 8, query: 'sports Israel football' },
+      { category: 'entertainment', count: 8, query: 'entertainment culture Israel' },
+      { category: 'world', count: 8, query: 'international world news' },
+      { category: 'health', count: 8, query: 'health medical news' },
+      { category: 'music', count: 6, query: 'music artists Israel' },
+      { category: 'horoscope', count: 4, query: 'horoscope astrology' },
+      { category: 'finance', count: 8, query: 'finance stock market trading' }
     ];
 
     const results = [];
@@ -30,15 +30,15 @@ Deno.serve(async (req) => {
     for (const cat of categories) {
       try {
         const response = await base44.asServiceRole.integrations.Core.InvokeLLM({
-          prompt: `חפש ${cat.count} כתבות חדשות אמיתיות ועדכניות על "${cat.query}".
+          prompt: `Find ${cat.count} REAL, recent news articles about: "${cat.query}". Get them from current news sources.
           
-          עבור כל כתבה תן:
-          - כותרת מושכת בעברית
-          - תוכן מפורט (2-3 פסקאות)
-          - תמונה רלוונטית (URL)
-          - מקור
+          For EACH article provide:
+          - Compelling Hebrew title
+          - 2-3 paragraph detailed content in Hebrew
+          - Professional image URL (real image from the article)
+          - News source name
           
-          החזר ${cat.count} כתבות בפורמט JSON.`,
+          Return ${cat.count} articles in JSON format with real, current information.`,
           add_context_from_internet: true,
           response_json_schema: {
             type: "object",
@@ -63,26 +63,42 @@ Deno.serve(async (req) => {
         const articles = response.articles || [];
         
         for (const article of articles) {
+          let final_image = article.image_url;
+          
+          // אם אין תמונה או שהיא לא תקינה, ייצור תמונה
+          if (!final_image || final_image.includes('placeholder') || final_image.includes('default')) {
+            try {
+              const imageResponse = await base44.asServiceRole.integrations.Core.GenerateImage({
+                prompt: `Professional news article image for: "${article.title}". High quality, modern design, relevant to the news topic. Hebrew context.`,
+                existing_image_urls: article.image_url ? [article.image_url] : []
+              });
+              final_image = imageResponse.url || article.image_url;
+            } catch (imgErr) {
+              console.error('Image generation failed:', imgErr);
+              final_image = article.image_url || 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=800&h=600&fit=crop';
+            }
+          }
+          
           await base44.asServiceRole.entities.NewsArticle.create({
             title: article.title,
             subtitle: article.subtitle || '',
             content: article.content,
-            image_url: article.image_url,
+            image_url: final_image,
             category: cat.category,
-            source: article.source || 'הרשת החדשה',
-            is_breaking: cat.category === 'breaking',
-            is_featured: false
+            source: article.source || 'News Source',
+            is_breaking: cat.category === 'breaking' ? Math.random() > 0.7 : false,
+            is_featured: cat.category === 'breaking' || cat.category === 'security' ? Math.random() > 0.6 : false
           });
           
           results.push({
             category: cat.category,
             title: article.title,
+            image: final_image ? 'generated' : 'original',
             status: 'created'
           });
         }
 
-        // המתנה קצרה בין קטגוריות
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 2000));
         
       } catch (error) {
         console.error(`Error in category ${cat.category}:`, error);
@@ -96,6 +112,7 @@ Deno.serve(async (req) => {
     return Response.json({
       success: true,
       generated: results.filter(r => r.status === 'created').length,
+      with_images: results.filter(r => r.image === 'generated').length,
       total_categories: categories.length,
       results: results
     });
