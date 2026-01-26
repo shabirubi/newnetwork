@@ -1524,6 +1524,7 @@ export default function BroadcastStudio() {
         </AnimatePresence>
         </>
         )}
+        </div>
       </div>
     </div>
   );
