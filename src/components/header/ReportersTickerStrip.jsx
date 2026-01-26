@@ -88,33 +88,35 @@ export default function ReportersTickerStrip() {
 
         <div ref={scrollContainerRef} className="overflow-x-auto overflow-y-hidden scrollbar-hide" onScroll={handleScroll} style={{ WebkitOverflowScrolling: 'touch' }}>
           <div className="flex gap-2 px-2 py-3 min-h-fit">
-        {reporters.map((reporter, idx) => (
-          <motion.div
-            key={`${reporter.id}-${idx}`}
-            onClick={() => {
-              setSelectedReporterForChat(reporter);
-              setOpenReporterChat(true);
-            }}
-            onMouseEnter={() => setHoveredReporter(reporter.id)}
-            onMouseLeave={() => setHoveredReporter(null)}
-            className="flex-shrink-0 flex flex-col items-center gap-1 p-2 bg-black/50 rounded-lg border border-[#E31E24]/40 hover:border-[#E31E24]/80 hover:bg-[#E31E24]/10 transition-all cursor-pointer group shadow-md"
-            whileHover={{ scale: 1.05 }}
-          >
-            <img
-              src={reporter.image}
-              alt={reporter.name}
-              className={`w-14 h-14 sm:w-16 sm:h-16 rounded-lg object-cover border border-[#E31E24]/30 transition-all shadow-lg ${
-                hoveredReporter === reporter.id ? 'reporter-ticker-image-color' : 'reporter-ticker-image-bw'
-              }`}
-              onError={(e) => {
-                e.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="80" height="80"%3E%3Crect fill="%23333" width="80" height="80"/%3E%3Ctext x="40" y="40" font-size="40" fill="white" text-anchor="middle" dy=".3em"%3E' + reporter.name.charAt(0) + '%3C/text%3E%3C/svg%3E';
+          {reporters.map((reporter, idx) => (
+            <motion.div
+              key={`${reporter.id}-${idx}`}
+              onClick={() => {
+                setSelectedReporterForChat(reporter);
+                setOpenReporterChat(true);
               }}
-            />
-            <div className="text-center w-12 sm:w-16">
-              <div className="text-white font-bold text-[7px] sm:text-[8px] line-clamp-2 leading-tight">{reporter.name}</div>
-            </div>
-          </motion.div>
-          ))}
+              onMouseEnter={() => setHoveredReporter(reporter.id)}
+              onMouseLeave={() => setHoveredReporter(null)}
+              onTouchStart={() => setHoveredReporter(reporter.id)}
+              onTouchEnd={() => setHoveredReporter(null)}
+              className="flex-shrink-0 flex flex-col items-center gap-1 p-2 bg-black/50 rounded-lg border border-[#E31E24]/40 hover:border-[#E31E24]/80 hover:bg-[#E31E24]/10 transition-all cursor-pointer group shadow-md"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <img
+                src={reporter.image}
+                alt={reporter.name}
+                className="w-16 h-16 sm:w-16 sm:h-16 rounded-lg object-cover border border-[#E31E24]/30 transition-all shadow-lg reporter-ticker-image-color"
+                style={{ display: 'block', minWidth: '64px', minHeight: '64px' }}
+                onError={(e) => {
+                  e.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="80" height="80"%3E%3Crect fill="%23333" width="80" height="80"/%3E%3Ctext x="40" y="40" font-size="40" fill="white" text-anchor="middle" dy=".3em"%3E' + reporter.name.charAt(0) + '%3C/text%3E%3C/svg%3E';
+                }}
+              />
+              <div className="text-center w-16 sm:w-16">
+                <div className="text-white font-bold text-[8px] sm:text-[8px] line-clamp-2 leading-tight">{reporter.name}</div>
+              </div>
+            </motion.div>
+            ))}
           </div>
           </div>
           </div>
