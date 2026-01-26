@@ -66,33 +66,33 @@ Deno.serve(async (req) => {
         for (const article of articles) {
           let final_image = null;
           
-          // יצור תמונה עם טקסט משולב - עברית בכותרת ואנגלית בתמונה
-          if (article.title) {
-            const topic = article.image_topic || article.title;
-            const shortText = topic.length > 35 ? topic.substring(0, 35) + "..." : topic;
-            
+          // משיכת תמונה מ-Unsplash בהתאם לנושא + שדרוג עם טקסט אנגלית
+          if (article.image_topic || article.title) {
             try {
-              const imagePrompt = `Professional news article thumbnail image. Bold English text: "${shortText}" centered. Topic: ${topic}. Modern design, high contrast, journalism style, vibrant colors. 16:9 aspect.`;
+              const searchTerm = article.image_topic || article.title;
+              const keywords = searchTerm.split(' ').slice(0, 2).join('+');
+              const unsplashUrl = `https://source.unsplash.com/1280x720/?${encodeURIComponent(keywords)},news,professional`;
+              
+              // יוצרים תמונה עם טקסט משולב
+              const textOverlay = searchTerm.substring(0, 35);
+              const overlayPrompt = `Take the image from: ${unsplashUrl}. Add bold white English text at center: "${textOverlay}". Add professional news style dark overlay. Return the modified image.`;
               
               const imgResponse = await base44.asServiceRole.integrations.Core.GenerateImage({
-                prompt: imagePrompt
+                prompt: overlayPrompt,
+                existing_image_urls: [unsplashUrl]
               });
               
               if (imgResponse && imgResponse.url) {
                 final_image = imgResponse.url;
+              } else {
+                final_image = unsplashUrl;
               }
             } catch (imgErr) {
-              console.log(`Generating backup image for: ${topic}`);
               try {
-                const backupPrompt = `News article image for: ${topic}. Professional, modern, high quality.`;
-                const backupImg = await base44.asServiceRole.integrations.Core.GenerateImage({
-                  prompt: backupPrompt
-                });
-                if (backupImg && backupImg.url) {
-                  final_image = backupImg.url;
-                }
+                const fallbackTerm = cat.category;
+                final_image = `https://source.unsplash.com/1280x720/?${encodeURIComponent(fallbackTerm)},news`;
               } catch (e) {
-                console.error(`Both image generations failed for ${article.title}`);
+                console.error('Image fetch error:', e.message);
               }
             }
           }
@@ -111,7 +111,7 @@ Deno.serve(async (req) => {
           results.push({
             category: cat.category,
             title: article.title,
-            image: final_image ? 'generated' : 'none',
+            image: final_image ? 'success' : 'none',
             status: 'created'
           });
         }
