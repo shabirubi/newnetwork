@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { Award, Users, TrendingUp, ExternalLink, MessageSquare, Eye, ChevronLeft, ChevronRight } from "lucide-react";
+import ReporterChat from "../apps/ReporterChat";
 
 export default function ReportersSpotlight() {
   const [selectedReporter, setSelectedReporter] = useState(null);
@@ -199,6 +200,14 @@ export default function ReportersSpotlight() {
           </div>
         </div>
       </div>
+
+      {/* Reporter Chat */}
+      {selectedReporter && (
+        <ReporterChat
+          reporter={selectedReporter}
+          onClose={() => setSelectedReporter(null)}
+        />
+      )}
     </section>
   );
 }
