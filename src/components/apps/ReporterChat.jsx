@@ -386,9 +386,6 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
         
         if (videoResponse.data?.video_url) {
           toast.success('🎥 הווידאו מוכן!');
-          setTimeout(() => {
-            setFullscreenVideo(videoResponse.data.video_url);
-          }, 300);
         }
       }).catch(err => {
         console.error('Video generation failed:', err);
@@ -1206,11 +1203,12 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
             {/* Video Area */}
             <div className="flex-1 relative flex items-center justify-center">
               <video
+                key={fullscreenVideo}
                 src={fullscreenVideo}
                 autoPlay
                 playsInline
+                controls
                 className="w-full h-full object-contain"
-                onEnded={() => setFullscreenVideo(null)}
               />
             </div>
 
