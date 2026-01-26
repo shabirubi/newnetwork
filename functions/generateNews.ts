@@ -74,47 +74,24 @@ Deno.serve(async (req) => {
 
         const articles = response.articles || [];
         let created = 0;
-        
+
         for (const article of articles) {
           try {
-            // תרגום מאנגלית לעברית אם צריך
-            let hebrewTitle = article.title;
-            let hebrewSubtitle = article.subtitle || '';
-            let hebrewContent = article.content;
-            
-            // בדיקה אם הטקסט באנגלית
-            const isEnglish = /^[A-Za-z\s.,!?-]*$/.test(article.title);
-            
-            if (isEnglish) {
-              try {
-                const titleTranslation = await base44.asServiceRole.integrations.Core.InvokeLLM({
-                  prompt: `Translate to Hebrew ONLY, no explanations:\n${article.title}`
-                });
-                hebrewTitle = titleTranslation || article.title;
-                
-                const subtitleTranslation = await base44.asServiceRole.integrations.Core.InvokeLLM({
-                  prompt: `Translate to Hebrew ONLY, no explanations:\n${article.subtitle || ''}`
-                });
-                hebrewSubtitle = subtitleTranslation || article.subtitle || '';
-                
-                const contentTranslation = await base44.asServiceRole.integrations.Core.InvokeLLM({
-                  prompt: `Translate to Hebrew ONLY, no explanations:\n${article.content}`
-                });
-                hebrewContent = contentTranslation || article.content;
-              } catch (transErr) {
-                console.log('Translation failed:', transErr.message);
-              }
-            }
+            const hebrewTitle = article.title || '';
+            const hebrewSubtitle = article.subtitle || '';
+            const hebrewContent = article.content || '';
 
-            // יצירת תמונה עם הטקסט באנגלית מהמקורי
+            // יצירת תמונה עם כותרת בעברית
             let imageUrl = '';
             try {
+              console.log(`Generating image for: ${hebrewTitle}`);
               const imageResponse = await base44.asServiceRole.integrations.Core.GenerateImage({
-                prompt: `Professional news thumbnail. Text overlay (English): "${article.title}". Modern news style, ${cat.category} themed.`
+                prompt: `Professional Hebrew news thumbnail for category ${cat.category}. Title text: "${hebrewTitle}". High quality, modern news studio style, vibrant colors. Must include Hebrew text overlay.`
               });
               imageUrl = imageResponse.url || '';
+              console.log(`Image created: ${imageUrl}`);
             } catch (imgErr) {
-              console.log('Image generation failed:', imgErr.message);
+              console.log('Image generation error:', imgErr.message);
             }
 
             await base44.asServiceRole.entities.NewsArticle.create({
@@ -123,11 +100,12 @@ Deno.serve(async (req) => {
               content: hebrewContent,
               image_url: imageUrl,
               category: cat.category,
-              source: article.source || 'News',
+              source: article.source || 'חדשות',
               is_breaking: cat.category === 'breaking',
               is_featured: Math.random() > 0.7
             });
             created++;
+            console.log(`Article created: ${hebrewTitle}`);
           } catch (e) {
             console.log(`Save error: ${e.message}`);
           }
