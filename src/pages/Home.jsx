@@ -22,7 +22,7 @@ import TikTokNewsFeed from "../components/news/TikTokNewsFeed";
 import VODModal from "../components/vod/VODModal";
 import AccessibilityPanel from "../components/accessibility/AccessibilityPanel";
 import UploadVideoModal from "../components/home/UploadVideoModal";
-import { Droplet, Mic, Users, Wand2 } from "lucide-react";
+import { Droplet, Mic, Users, Wand2, FileVideo } from "lucide-react";
 
       // Lazy loaded components
 const NewsReels = React.lazy(() => import("../components/news/NewsReels"));
@@ -337,6 +337,21 @@ export default function Home() {
           העלה סרטון
         </span>
       </motion.button>
+
+      {/* Animation Studio Button */}
+      <Link to={createPageUrl("AnimationStudio")}>
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          className="fixed bottom-56 right-4 z-[9998] w-16 h-16 rounded-full bg-gradient-to-br from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 shadow-2xl flex items-center justify-center border-2 border-cyan-300/50 transition-all group"
+          title="Animation Studio"
+        >
+          <FileVideo className="w-7 h-7 text-white" />
+          <span className="absolute right-full mr-3 top-1/2 -translate-y-1/2 px-3 py-1 bg-cyan-600 text-white text-sm font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+            Animation
+          </span>
+        </motion.button>
+      </Link>
 
       {/* AI Design Studio Button */}
       <Link to={createPageUrl("AIDesignStudio")}>
