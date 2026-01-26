@@ -257,6 +257,7 @@ export default function UploadVideoModal({ isOpen, onClose }) {
                       className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-white focus:border-red-500 focus:outline-none transition-colors"
                     >
                       <option value="all">כל הפידים</option>
+                      <option value="live-player">נגן החדשות הראשי - דף הבית</option>
                       <option value="tiktok">TikTok News Feed</option>
                       <option value="kan-archive">ארכיון כאן - עמוד האש</option>
                       <option value="reporters-spotlight">Reporters Spotlight</option>
