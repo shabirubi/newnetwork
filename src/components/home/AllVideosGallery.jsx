@@ -36,32 +36,17 @@ export default function AllVideosGallery() {
     refetchInterval: 60000
   });
 
-  // YouTube videos from the channel
-  const youtubeVideos = [
-    { id: 'yt-EGxPXB-Kwuo', title: 'עדכון חדשות יומי - הרשת החדשה', url: 'https://www.youtube.com/embed/EGxPXB-Kwuo', thumbnail: 'https://img.youtube.com/vi/EGxPXB-Kwuo/maxresdefault.jpg', type: 'youtube', created_date: new Date('2024-01-21') },
-    { id: 'yt-yqfErzEHR0g', title: 'כתבים מהשטח - דיווח בזמן אמת', url: 'https://www.youtube.com/embed/yqfErzEHR0g', thumbnail: 'https://img.youtube.com/vi/yqfErzEHR0g/maxresdefault.jpg', type: 'youtube', created_date: new Date('2024-01-20') },
-    { id: 'yt-k7WPygB6GlI', title: 'סרטון ממוחשב - הרשת החדשה', url: 'https://www.youtube.com/embed/k7WPygB6GlI', thumbnail: 'https://img.youtube.com/vi/k7WPygB6GlI/maxresdefault.jpg', type: 'youtube', created_date: new Date('2024-01-15') },
-    { id: 'yt-4miQnYCTdS8', title: 'הרשת החדשה - שידור חי', url: 'https://www.youtube.com/embed/4miQnYCTdS8', thumbnail: 'https://img.youtube.com/vi/4miQnYCTdS8/maxresdefault.jpg', type: 'youtube', created_date: new Date('2024-01-14') },
-    { id: 'yt-2q9lcnXBicQ', title: 'תוכן מיוחד הרשת', url: 'https://www.youtube.com/embed/2q9lcnXBicQ', thumbnail: 'https://img.youtube.com/vi/2q9lcnXBicQ/maxresdefault.jpg', type: 'youtube', created_date: new Date('2024-01-13') },
-    { id: 'yt-vecTR4YAf-w', title: 'חדשות בזמן אמת', url: 'https://www.youtube.com/embed/vecTR4YAf-w', thumbnail: 'https://img.youtube.com/vi/vecTR4YAf-w/maxresdefault.jpg', type: 'youtube', created_date: new Date('2024-01-12') },
-    { id: 'yt-OE6Oj8pW0BU', title: 'עדכוני חדשות', url: 'https://www.youtube.com/embed/OE6Oj8pW0BU', thumbnail: 'https://img.youtube.com/vi/OE6Oj8pW0BU/maxresdefault.jpg', type: 'youtube', created_date: new Date('2024-01-11') },
-    { id: 'yt-t60lrCbStcY', title: 'סיקור מיוחד', url: 'https://www.youtube.com/embed/t60lrCbStcY', thumbnail: 'https://img.youtube.com/vi/t60lrCbStcY/maxresdefault.jpg', type: 'youtube', created_date: new Date('2024-01-10') },
-  ];
-
-  // Combine all videos
-  const allVideos = [
-    ...youtubeVideos,
-    ...userVideos.map(v => ({
-      id: v.id,
-      title: v.title,
-      url: v.video_url,
-      thumbnail: v.thumbnail_url,
-      type: 'user',
-      created_date: new Date(v.created_date),
-      views: v.views || 0,
-      uploader_email: v.uploader_email
-    }))
-  ].sort((a, b) => b.created_date - a.created_date);
+  // Only show user videos
+  const allVideos = userVideos.map(v => ({
+    id: v.id,
+    title: v.title,
+    url: v.video_url,
+    thumbnail: v.thumbnail_url,
+    type: 'user',
+    created_date: new Date(v.created_date),
+    views: v.views || 0,
+    uploader_email: v.uploader_email
+  })).sort((a, b) => b.created_date - a.created_date);
 
   return (
     <section className="px-4 sm:px-4 mt-12 mb-12">
