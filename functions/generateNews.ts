@@ -66,34 +66,27 @@ Deno.serve(async (req) => {
         for (const article of articles) {
           let final_image = null;
           
-          // משיכת תמונה מ-Unsplash בהתאם לנושא + שדרוג עם טקסט אנגלית
+          // יצור תמונה עם טקסט אנגלית משולב
           if (article.image_topic || article.title) {
             try {
-              const searchTerm = article.image_topic || article.title;
-              const keywords = searchTerm.split(' ').slice(0, 2).join('+');
-              const unsplashUrl = `https://source.unsplash.com/1280x720/?${encodeURIComponent(keywords)},news,professional`;
+              const topic = article.image_topic || article.title;
+              const shortText = topic.length > 30 ? topic.substring(0, 30) : topic;
               
-              // יוצרים תמונה עם טקסט משולב
-              const textOverlay = searchTerm.substring(0, 35);
-              const overlayPrompt = `Take the image from: ${unsplashUrl}. Add bold white English text at center: "${textOverlay}". Add professional news style dark overlay. Return the modified image.`;
+              const imagePrompt = `Create professional news article image. 
+              Add bold centered English text: "${shortText}". 
+              Topic: ${topic}. 
+              Modern journalism style, vibrant design, high quality. 
+              16:9 format, professional typography, engaging colors.`;
               
               const imgResponse = await base44.asServiceRole.integrations.Core.GenerateImage({
-                prompt: overlayPrompt,
-                existing_image_urls: [unsplashUrl]
+                prompt: imagePrompt
               });
               
               if (imgResponse && imgResponse.url) {
                 final_image = imgResponse.url;
-              } else {
-                final_image = unsplashUrl;
               }
             } catch (imgErr) {
-              try {
-                const fallbackTerm = cat.category;
-                final_image = `https://source.unsplash.com/1280x720/?${encodeURIComponent(fallbackTerm)},news`;
-              } catch (e) {
-                console.error('Image fetch error:', e.message);
-              }
+              console.log(`Image generation skipped for: ${article.title}`);
             }
           }
           
@@ -111,7 +104,7 @@ Deno.serve(async (req) => {
           results.push({
             category: cat.category,
             title: article.title,
-            image: final_image ? 'success' : 'none',
+            image: final_image ? 'generated' : 'none',
             status: 'created'
           });
         }
