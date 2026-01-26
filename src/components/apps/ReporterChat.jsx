@@ -676,7 +676,7 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
              initial={{ scale: 0.9, opacity: 0 }}
              animate={{ scale: 1, opacity: 1 }}
              exit={{ scale: 0.9, opacity: 0 }}
-             className="bg-gradient-to-br from-black via-gray-900 to-black border border-[#E31E24]/30 rounded-2xl w-[95vw] h-[90vh] flex flex-col overflow-hidden"
+             className="bg-gradient-to-br from-black via-gray-900 to-black border border-[#E31E24]/30 rounded-2xl w-[95vw] max-w-6xl h-[90vh] max-h-[900px] flex flex-col overflow-hidden"
              onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}
@@ -768,12 +768,12 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                 ) : (
                   // Chat Window with Reporter Profile Side by Side
                   <div className="w-full flex h-full gap-0">
-                    {/* Reporter Profile Card - Left Side (Fixed) - Hidden on Mobile */}
-                     <motion.div
-                       initial={{ opacity: 0, x: -20 }}
-                       animate={{ opacity: 1, x: 0 }}
-                       className="hidden lg:flex flex-col items-center gap-4 p-6 w-72 bg-gradient-to-b from-black/60 via-red-900/20 to-black border-l border-[#E31E24]/30 flex-shrink-0 overflow-y-auto"
-                     >
+                    {/* Reporter Profile Card - Left Side (Fixed) */}
+                    <motion.div
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      className="hidden md:flex flex-col items-center gap-4 p-6 w-72 bg-gradient-to-b from-black/60 via-red-900/20 to-black border-l border-[#E31E24]/30 flex-shrink-0 overflow-y-auto"
+                    >
                       <div className="relative">
                          <div className="absolute inset-0 bg-gradient-to-br from-[#E31E24] to-red-900 rounded-full blur-2xl opacity-60" />
                          <img

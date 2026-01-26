@@ -46,7 +46,8 @@ export default function UploadVideoModal({ isOpen, onClose }) {
         thumbnail_url: videoUrl,
         description: formData.description || '',
         uploader_email: user.email,
-        status: 'ready'
+        status: 'ready',
+        category: formData.category
       });
       console.log('✅ UserVideo נשמר');
 
@@ -226,12 +227,18 @@ export default function UploadVideoModal({ isOpen, onClose }) {
                       }
                       className="w-full bg-gray-800 border border-gray-700 rounded-xl px-4 py-3 text-white focus:border-red-500 focus:outline-none transition-colors"
                     >
-                      <option value="breaking">חדשות דחופות</option>
-                      <option value="security">ביטחון</option>
+                      <option value="breaking">חדשות עכשיו</option>
+                      <option value="security">ביטחון ומדיניות</option>
+                      <option value="economy">כלכלה ועסקים</option>
                       <option value="politics">פוליטיקה</option>
-                      <option value="economy">כלכלה</option>
+                      <option value="technology">טכנולוגיה</option>
                       <option value="sports">ספורט</option>
-                      <option value="entertainment">בידור</option>
+                      <option value="entertainment">בידור ודרמה</option>
+                      <option value="world">חדשות עולם</option>
+                      <option value="health">בריאות</option>
+                      <option value="music">מוזיקה</option>
+                      <option value="horoscope">אסטרולוגיה</option>
+                      <option value="finance">פיננסים</option>
                     </select>
                   </div>
 
