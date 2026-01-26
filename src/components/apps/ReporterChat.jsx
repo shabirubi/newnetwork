@@ -934,24 +934,30 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                               </div>
                             )}
                             
-                            {(message.videoUrl || message.voice_url) && (
-                              <button
-                                onClick={() => setFullscreenVideo(message.videoUrl || message.voice_url)}
-                                className="mt-3 rounded-lg overflow-hidden border-2 border-[#E31E24]/30 relative group cursor-pointer block"
-                              >
-                                <video
-                                  src={message.videoUrl || message.voice_url}
-                                  className="w-full rounded-lg"
-                                  playsInline
-                                />
-                                <div className="absolute inset-0 bg-black/30 group-hover:bg-black/50 transition-colors flex items-center justify-center">
-                                  <div className="w-16 h-16 rounded-full bg-[#E31E24] flex items-center justify-center">
-                                    <svg className="w-8 h-8 text-white mr-1" fill="currentColor" viewBox="0 0 24 24">
-                                      <path d="M8 5v14l11-7z"/>
-                                    </svg>
+                            {message.role === "assistant" && (message.videoUrl || message.voice_url) && (
+                              <div className="mt-3">
+                                <button
+                                  onClick={() => setFullscreenVideo(message.videoUrl || message.voice_url)}
+                                  className="w-full rounded-lg overflow-hidden border-2 border-[#E31E24]/50 relative group cursor-pointer"
+                                >
+                                  <div className="aspect-video bg-gradient-to-br from-gray-900 to-gray-800 relative">
+                                    <video
+                                      src={message.videoUrl || message.voice_url}
+                                      className="w-full h-full object-cover"
+                                      playsInline
+                                      preload="metadata"
+                                    />
+                                    <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-colors flex items-center justify-center">
+                                      <div className="w-16 h-16 rounded-full bg-[#E31E24] flex items-center justify-center shadow-lg">
+                                        <svg className="w-8 h-8 text-white mr-1" fill="currentColor" viewBox="0 0 24 24">
+                                          <path d="M8 5v14l11-7z"/>
+                                        </svg>
+                                      </div>
+                                    </div>
                                   </div>
-                                </div>
-                              </button>
+                                </button>
+                                <p className="text-xs text-white/50 mt-2 text-center">👆 לחץ לצפייה במסך מלא</p>
+                              </div>
                             )}
                             
                             {message.media && (
