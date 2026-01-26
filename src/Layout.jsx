@@ -35,7 +35,8 @@ const categories = [
 
   const additionalPages = [
     { id: "archive", label: "ארכיון", icon: Clock, href: "Archive" },
-    { id: "design", label: "AI Design", icon: Sparkles, href: "AIDesignStudio" }
+    { id: "design", label: "AI Design", icon: Sparkles, href: "AIDesignStudio" },
+    { id: "avatar", label: "Avatar Studio", icon: Users, href: "AvatarStudio" }
     ];
 
 export default function Layout({ children, currentPageName }) {
