@@ -37,9 +37,7 @@ export default function ReportersTickerStrip() {
     queryKey: ['reporters-ticker'],
     queryFn: async () => {
       try {
-        const user = await base44.auth.me();
-        if (!user) return [];
-        return base44.entities.Reporter.filter({ is_active: true });
+        return await base44.entities.Reporter.filter({ is_active: true });
       } catch {
         return [];
       }
