@@ -354,7 +354,9 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
       setIsTyping(false);
       
       // הצג תשובה מיד
+      const messageId = `msg-${Date.now()}`;
       const aiMessage = {
+        id: messageId,
         role: "assistant",
         content: response.data.response,
         reporter: selectedReporter.name,
@@ -387,7 +389,7 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
       }).then(videoResponse => {
         setMessages(prev => {
           const updated = [...prev];
-          const msgIndex = updated.findIndex(m => m.content === response.data.response && m.isGeneratingVideo);
+          const msgIndex = updated.findIndex(m => m.id === messageId);
           if (msgIndex !== -1) {
             updated[msgIndex].videoUrl = videoResponse.data?.video_url;
             updated[msgIndex].voice_url = videoResponse.data?.video_url;
@@ -416,7 +418,7 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
         console.error('Video generation failed:', err);
         setMessages(prev => {
           const updated = [...prev];
-          const msgIndex = updated.findIndex(m => m.content === response.data.response && m.isGeneratingVideo);
+          const msgIndex = updated.findIndex(m => m.id === messageId);
           if (msgIndex !== -1) {
             updated[msgIndex].isGeneratingVideo = false;
           }
