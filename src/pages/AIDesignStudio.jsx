@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Wand2, Upload, Loader, Download, Copy, Share2, Trash2, X, Sparkles, Play, Bookmark, Send, Grid3X3, Mic } from "lucide-react";
+import { Wand2, Upload, Loader, Download, Copy, Share2, Trash2, X, Sparkles, Play, Bookmark, Send, Grid3X3, Mic, Newspaper } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
@@ -9,6 +9,7 @@ import AnimatedCharacter from "../components/avatar/AnimatedCharacter";
 import { SaveDesignModal, AddToVideoModal, AddToArticleModal, AddToBroadcastModal } from "../components/designstudio/DesignUsageModals";
 import { VoiceOverModal } from "../components/designstudio/VoiceOverModal";
 import { UploadDesignModal } from "../components/designstudio/UploadDesignModal";
+import { ArticlePresenterModal } from "../components/designstudio/ArticlePresenterModal";
 import { TextOverlayEditor, FiltersPanel, ExportOptions, ShareDesign } from "../components/designstudio/DesignEditor";
 
 export default function AIDesignStudio() {
@@ -29,6 +30,7 @@ export default function AIDesignStudio() {
   const [showBroadcastModal, setShowBroadcastModal] = useState(false);
   const [showVoiceOverModal, setShowVoiceOverModal] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
+  const [showArticleModal, setShowArticleModal] = useState(false);
 
   const generateDesign = async () => {
     if (!prompt.trim()) {
@@ -274,33 +276,33 @@ export default function AIDesignStudio() {
                     <div className="flex gap-2 flex-wrap">
                       <Button
                         onClick={() => setShowUploadModal(true)}
-                        className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500"
+                        className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-xs sm:text-sm"
                       >
-                        <Grid3X3 className="w-4 h-4 mr-2" />
+                        <Grid3X3 className="w-4 h-4 mr-1" />
                         הוסף
+                      </Button>
+                      <Button
+                        onClick={() => setShowArticleModal(true)}
+                        variant="outline"
+                        className="flex-1 border-blue-500/50 text-blue-400 hover:bg-blue-500/20 text-xs sm:text-sm"
+                      >
+                        <Newspaper className="w-4 h-4 mr-1" />
+                        כתבה
                       </Button>
                       <Button
                         onClick={() => setShowVoiceOverModal(true)}
                         variant="outline"
-                        className="flex-1 border-orange-500/50 text-orange-400 hover:bg-orange-500/20"
+                        className="flex-1 border-orange-500/50 text-orange-400 hover:bg-orange-500/20 text-xs sm:text-sm"
                       >
-                        <Mic className="w-4 h-4 mr-2" />
+                        <Mic className="w-4 h-4 mr-1" />
                         דיבוב
-                      </Button>
-                      <Button
-                        onClick={() => setShowAnimator(true)}
-                        variant="outline"
-                        className="flex-1 border-purple-500/50 text-purple-400 hover:bg-purple-500/20"
-                      >
-                        <Sparkles className="w-4 h-4 mr-2" />
-                        הנפיש
                       </Button>
                       <Button
                         onClick={() => downloadImage(editedImage || generatedImage)}
                         variant="outline"
-                        className="flex-1 border-purple-500/50 text-purple-400 hover:bg-purple-500/20"
+                        className="flex-1 border-purple-500/50 text-purple-400 hover:bg-purple-500/20 text-xs sm:text-sm"
                       >
-                        <Download className="w-4 h-4 mr-2" />
+                        <Download className="w-4 h-4 mr-1" />
                         הורד
                       </Button>
                     </div>
@@ -413,6 +415,11 @@ export default function AIDesignStudio() {
         onClose={() => setShowUploadModal(false)}
         imageUrl={editedImage || generatedImage}
         designTitle={prompt}
+      />
+      <ArticlePresenterModal
+        isOpen={showArticleModal}
+        onClose={() => setShowArticleModal(false)}
+        imageUrl={editedImage || generatedImage}
       />
 
       {/* Character Animation Modal */}
