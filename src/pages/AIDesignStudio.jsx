@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Wand2, Upload, Loader, Download, Copy, Share2, Trash2, X, Sparkles, Play, Bookmark, Send, Grid3X3, Mic, Newspaper, Zap } from "lucide-react";
+import { Wand2, Upload, Loader, Download, Copy, Share2, Trash2, X, Sparkles, Play, Bookmark, Send, Grid3X3, Mic, Newspaper, Zap, Lightbulb } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
@@ -11,6 +11,7 @@ import { VoiceOverModal } from "../components/designstudio/VoiceOverModal";
 import { UploadDesignModal } from "../components/designstudio/UploadDesignModal";
 import { ArticlePresenterModal } from "../components/designstudio/ArticlePresenterModal";
 import { MotionCharacterModal } from "../components/designstudio/MotionCharacterModal";
+import { ScriptGeneratorModal } from "../components/designstudio/ScriptGeneratorModal";
 import { TextOverlayEditor, FiltersPanel, ExportOptions, ShareDesign } from "../components/designstudio/DesignEditor";
 
 export default function AIDesignStudio() {
@@ -33,6 +34,7 @@ export default function AIDesignStudio() {
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [showArticlePresentationModal, setShowArticlePresentationModal] = useState(false);
   const [showMotionCharacterModal, setShowMotionCharacterModal] = useState(false);
+  const [showScriptGeneratorModal, setShowScriptGeneratorModal] = useState(false);
 
   const generateDesign = async () => {
     if (!prompt.trim()) {
@@ -284,6 +286,14 @@ export default function AIDesignStudio() {
                         הוסף
                       </Button>
                       <Button
+                        onClick={() => setShowScriptGeneratorModal(true)}
+                        variant="outline"
+                        className="flex-1 border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/20 text-xs sm:text-sm"
+                      >
+                        <Lightbulb className="w-4 h-4 mr-1" />
+                        AI סרטון
+                      </Button>
+                      <Button
                         onClick={() => setShowMotionCharacterModal(true)}
                         variant="outline"
                         className="flex-1 border-emerald-500/50 text-emerald-400 hover:bg-emerald-500/20 text-xs sm:text-sm"
@@ -434,6 +444,11 @@ export default function AIDesignStudio() {
       <MotionCharacterModal
         isOpen={showMotionCharacterModal}
         onClose={() => setShowMotionCharacterModal(false)}
+        imageUrl={editedImage || generatedImage}
+      />
+      <ScriptGeneratorModal
+        isOpen={showScriptGeneratorModal}
+        onClose={() => setShowScriptGeneratorModal(false)}
         imageUrl={editedImage || generatedImage}
       />
 
