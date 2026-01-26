@@ -25,7 +25,13 @@ export default function AllVideosGallery() {
 
   const { data: userVideos = [], isLoading } = useQuery({
     queryKey: ['all-user-videos'],
-    queryFn: () => base44.entities.UserVideo.filter({ status: 'ready' }, '-created_date', 200),
+    queryFn: async () => {
+      try {
+        return await base44.entities.UserVideo.filter({ status: 'ready' }, '-created_date', 200);
+      } catch {
+        return [];
+      }
+    },
     initialData: [],
     refetchInterval: 60000
   });

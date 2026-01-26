@@ -10,9 +10,13 @@ export default function UserUploadedVideos({ onUploadClick }) {
   const { data: videos = [] } = useQuery({
     queryKey: ['userVideos'],
     queryFn: async () => {
-      const allVideos = await base44.entities.UserVideo.filter({ status: 'ready' }, '-created_date', 200);
-      return allVideos;
-    }
+      try {
+        return await base44.entities.UserVideo.filter({ status: 'ready' }, '-created_date', 200);
+      } catch {
+        return [];
+      }
+    },
+    initialData: []
   });
 
   return (

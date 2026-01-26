@@ -10,22 +10,34 @@ import { useQuery } from "@tanstack/react-query";
 export default function EntertainmentUpdatesFeed() {
   const { data: entertainmentNews = [] } = useQuery({
     queryKey: ['entertainment-updates-feed'],
-    queryFn: () => base44.entities.NewsArticle.filter(
-      { category: 'entertainment' },
-      '-created_date',
-      8
-    ),
+    queryFn: async () => {
+      try {
+        return await base44.entities.NewsArticle.filter(
+          { category: 'entertainment' },
+          '-created_date',
+          8
+        );
+      } catch {
+        return [];
+      }
+    },
     refetchInterval: 120000,
     initialData: []
   });
 
   const { data: sportsNews = [] } = useQuery({
     queryKey: ['sports-updates-feed'],
-    queryFn: () => base44.entities.NewsArticle.filter(
-      { category: 'sports' },
-      '-created_date',
-      8
-    ),
+    queryFn: async () => {
+      try {
+        return await base44.entities.NewsArticle.filter(
+          { category: 'sports' },
+          '-created_date',
+          8
+        );
+      } catch {
+        return [];
+      }
+    },
     refetchInterval: 120000,
     initialData: []
   });
