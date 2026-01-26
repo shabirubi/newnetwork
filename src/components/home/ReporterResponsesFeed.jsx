@@ -2,11 +2,14 @@ import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageCircle, Play, X, User, Clock } from "lucide-react";
+import { MessageCircle, Play, X, User, Clock, MessageSquare } from "lucide-react";
 import moment from "moment";
+import ReporterChat from "../apps/ReporterChat";
 
 export default function ReporterResponsesFeed() {
   const [fullscreenVideo, setFullscreenVideo] = useState(null);
+  const [chatOpen, setChatOpen] = useState(false);
+  const [selectedReporter, setSelectedReporter] = useState(null);
 
   // טעינת תשובות כתבים - מכל המשתמשים
   const { data: responses = [], isLoading } = useQuery({
@@ -22,6 +25,21 @@ export default function ReporterResponsesFeed() {
     refetchInterval: 10000, // רענון כל 10 שניות
     initialData: []
   });
+
+  const { data: reporters = [] } = useQuery({
+    queryKey: ['reporters-for-feed'],
+    queryFn: () => base44.entities.Reporter.filter({ is_active: true }),
+    initialData: []
+  });
+
+  const handleOpenChat = (response) => {
+    const reporter = reporters.find(r => r.id === response.reporter_id);
+    if (reporter) {
+      setSelectedReporter(reporter);
+      setChatOpen(true);
+      setFullscreenVideo(null);
+    }
+  };
 
   if (isLoading) {
     return (
@@ -168,12 +186,21 @@ export default function ReporterResponsesFeed() {
                   <p className="text-white/70 text-xs">{moment(fullscreenVideo.created_date).format('DD/MM/YYYY HH:mm')}</p>
                 </div>
               </div>
-              <button
-                onClick={() => setFullscreenVideo(null)}
-                className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center hover:bg-white/20 transition-colors active:scale-95"
-              >
-                <X className="w-5 h-5 text-white" />
-              </button>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => handleOpenChat(fullscreenVideo)}
+                  className="flex items-center gap-2 px-3 py-2 rounded-full bg-[#E31E24] hover:bg-[#B91C1C] text-white transition-colors text-sm font-bold"
+                >
+                  <MessageSquare className="w-4 h-4" />
+                  <span className="hidden sm:inline">התכתב</span>
+                </button>
+                <button
+                  onClick={() => setFullscreenVideo(null)}
+                  className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center hover:bg-white/20 transition-colors active:scale-95"
+                >
+                  <X className="w-5 h-5 text-white" />
+                </button>
+              </div>
             </div>
 
             {/* Video/Text */}
@@ -218,6 +245,14 @@ export default function ReporterResponsesFeed() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      {selectedReporter && (
+        <ReporterChat 
+          externalIsOpen={chatOpen}
+          externalSetIsOpen={setChatOpen}
+          preSelectedReporter={selectedReporter}
+        />
+      )}
     </>
   );
 }
