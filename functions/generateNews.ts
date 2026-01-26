@@ -11,18 +11,18 @@ Deno.serve(async (req) => {
     }
 
     const categories = [
-      { category: 'breaking', count: 5, query: 'breaking news today' },
-      { category: 'security', count: 4, query: 'security defense news' },
-      { category: 'economy', count: 4, query: 'economy business news' },
-      { category: 'politics', count: 4, query: 'politics government' },
-      { category: 'technology', count: 4, query: 'technology startup news' },
-      { category: 'sports', count: 3, query: 'sports football news' },
-      { category: 'entertainment', count: 3, query: 'entertainment culture' },
-      { category: 'world', count: 4, query: 'world international news' },
-      { category: 'health', count: 3, query: 'health medical' },
-      { category: 'music', count: 2, query: 'music artists' },
-      { category: 'horoscope', count: 1, query: 'horoscope today' },
-      { category: 'finance', count: 3, query: 'finance market' }
+      { category: 'breaking', count: 8, query: 'breaking news today' },
+      { category: 'security', count: 7, query: 'security defense news' },
+      { category: 'economy', count: 7, query: 'economy business news' },
+      { category: 'politics', count: 7, query: 'politics government' },
+      { category: 'technology', count: 7, query: 'technology startup innovation' },
+      { category: 'sports', count: 6, query: 'sports football news' },
+      { category: 'entertainment', count: 6, query: 'entertainment culture movies' },
+      { category: 'world', count: 7, query: 'world international news' },
+      { category: 'health', count: 6, query: 'health medical science' },
+      { category: 'music', count: 5, query: 'music artists concerts' },
+      { category: 'horoscope', count: 3, query: 'horoscope astrology' },
+      { category: 'finance', count: 6, query: 'finance market stocks' }
     ];
 
     const results = [];
