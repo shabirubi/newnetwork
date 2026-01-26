@@ -11,18 +11,18 @@ Deno.serve(async (req) => {
     }
 
     const categories = [
-      { category: 'breaking', count: 8, query: 'breaking news Israel today' },
-      { category: 'security', count: 8, query: 'security defense Israel news' },
-      { category: 'economy', count: 8, query: 'economy business Israel news' },
-      { category: 'politics', count: 8, query: 'politics government Israel' },
-      { category: 'technology', count: 8, query: 'technology startup Israel' },
-      { category: 'sports', count: 8, query: 'sports Israel football' },
-      { category: 'entertainment', count: 8, query: 'entertainment culture Israel' },
-      { category: 'world', count: 8, query: 'international world news' },
-      { category: 'health', count: 8, query: 'health medical news' },
-      { category: 'music', count: 6, query: 'music artists Israel' },
-      { category: 'horoscope', count: 4, query: 'horoscope astrology' },
-      { category: 'finance', count: 8, query: 'finance stock market trading' }
+      { category: 'breaking', count: 5, query: 'breaking news today' },
+      { category: 'security', count: 4, query: 'security defense news' },
+      { category: 'economy', count: 4, query: 'economy business news' },
+      { category: 'politics', count: 4, query: 'politics government' },
+      { category: 'technology', count: 4, query: 'technology startup news' },
+      { category: 'sports', count: 3, query: 'sports football news' },
+      { category: 'entertainment', count: 3, query: 'entertainment culture' },
+      { category: 'world', count: 4, query: 'world international news' },
+      { category: 'health', count: 3, query: 'health medical' },
+      { category: 'music', count: 2, query: 'music artists' },
+      { category: 'horoscope', count: 1, query: 'horoscope today' },
+      { category: 'finance', count: 3, query: 'finance market' }
     ];
 
     const results = [];
