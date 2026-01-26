@@ -341,8 +341,8 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
 
       setIsTyping(false);
       
-      // הוסף הודעה זמנית
-      const tempAiMessage = {
+      // הצג תשובה מיד
+      const aiMessage = {
         role: "assistant",
         content: response.data.response,
         reporter: selectedReporter.name,
@@ -350,50 +350,61 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
         isGeneratingVideo: true
       };
       
-      setMessages(prev => [...prev, tempAiMessage]);
+      setMessages(prev => [...prev, aiMessage]);
+      setIsLoading(false);
+      setReporterStatus('online');
       
-      // Clean text from emojis and excessive punctuation
+      // Clean text
       const cleanText = response.data.response
-        .replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F700}-\u{1F77F}\u{1F780}-\u{1F7FF}\u{1F800}-\u{1F8FF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{1FA70}-\u{1FAFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '') // Remove emojis
-        .replace(/\.{2,}/g, '.') // Replace multiple dots with single dot
-        .replace(/\s+/g, ' ') // Normalize spaces
+        .replace(/[\u{1F600}-\u{1F64F}\u{1F300}-\u{1F5FF}\u{1F680}-\u{1F6FF}\u{1F700}-\u{1F77F}\u{1F780}-\u{1F7FF}\u{1F800}-\u{1F8FF}\u{1F900}-\u{1F9FF}\u{1FA00}-\u{1FA6F}\u{1FA70}-\u{1FAFF}\u{2600}-\u{26FF}\u{2700}-\u{27BF}]/gu, '')
+        .replace(/\.{2,}/g, '.')
+        .replace(/\s+/g, ' ')
         .trim();
 
-      // Generate talking video with the AI response
+      // יצירת וידאו ברקע (לא חוסם)
       const reporterGender = selectedReporter.gender || 'male';
       const studioBackground = 'https://images.unsplash.com/photo-1598550487956-4238a7359cd5?w=1920&h=1080&fit=crop';
-      const videoResponse = await base44.functions.invoke('generateTalkingVideo', {
+      
+      base44.functions.invoke('generateTalkingVideo', {
         text: cleanText,
         avatarUrl: selectedReporter.image,
         gender: reporterGender,
         voiceProvider: 'microsoft',
         voiceId: reporterGender === 'male' ? 'he-IL-AvriNeural' : 'he-IL-HilaNeural',
         backgroundUrl: studioBackground
-      });
-
-      // עדכן את ההודעה האחרונה עם הוידאו
-      setMessages(prev => {
-        const updated = [...prev];
-        const lastMsg = updated[updated.length - 1];
-        if (lastMsg && lastMsg.isGeneratingVideo) {
-          lastMsg.videoUrl = videoResponse.data?.video_url;
-          lastMsg.voice_url = videoResponse.data?.video_url;
-          lastMsg.isGeneratingVideo = false;
+      }).then(videoResponse => {
+        setMessages(prev => {
+          const updated = [...prev];
+          const msgIndex = updated.findIndex(m => m.content === response.data.response && m.isGeneratingVideo);
+          if (msgIndex !== -1) {
+            updated[msgIndex].videoUrl = videoResponse.data?.video_url;
+            updated[msgIndex].voice_url = videoResponse.data?.video_url;
+            updated[msgIndex].isGeneratingVideo = false;
+          }
+          return updated;
+        });
+        
+        if (videoResponse.data?.video_url) {
+          toast.success('🎥 הווידאו מוכן!');
+          setTimeout(() => {
+            setFullscreenVideo(videoResponse.data.video_url);
+          }, 300);
         }
-        return updated;
-      });
+      }).catch(err => {
+        console.error('Video generation failed:', err);
+        setMessages(prev => {
+          const updated = [...prev];
+          const msgIndex = updated.findIndex(m => m.content === response.data.response && m.isGeneratingVideo);
+          if (msgIndex !== -1) {
+            updated[msgIndex].isGeneratingVideo = false;
+          }
+          return updated;
+        });
+      })
       
-      // פתח אוטומטית במסך מלא
-      if (videoResponse.data?.video_url) {
-        setTimeout(() => {
-          setFullscreenVideo(videoResponse.data.video_url);
-        }, 500);
-      }
-      
-      // שמירת הודעות במסד נתונים
-      try {
-        const currentUser = await base44.auth.me();
-        await base44.entities.ReporterChat.create({
+      // שמירת הודעות במסד נתונים ברקע
+      base44.auth.me().then(currentUser => {
+        base44.entities.ReporterChat.create({
           reporter_id: selectedReporter.id,
           reporter_name: selectedReporter.name,
           user_email: currentUser.email,
@@ -402,22 +413,16 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
           sender_type: 'user'
         });
         
-        await base44.entities.ReporterChat.create({
+        base44.entities.ReporterChat.create({
           reporter_id: selectedReporter.id,
           reporter_name: selectedReporter.name,
           user_email: currentUser.email,
           user_name: currentUser.full_name,
           message: response.data.response,
           sender_type: 'reporter',
-          response_text: response.data.response,
-          voice_url: videoResponse.data?.video_url
+          response_text: response.data.response
         });
-      } catch (saveError) {
-        console.error('Failed to save chat:', saveError);
-      }
-
-      setIsLoading(false);
-      setReporterStatus('online');
+      }).catch(err => console.error('Failed to save chat:', err));
 
       if (Math.random() > 0.8) {
         setTimeout(() => {
@@ -462,6 +467,12 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
       setReporterStatus('online');
       toast.error('שגיאה בשליחת ההודעה');
     }
+  };
+  
+  // סיום הפונקציה sendMessage - הוספת סוגריים סגורים שחסרים
+  
+  // שאר הקוד ממשיך כרגיל למטה
+  const oldSendMessageEnd = () => {
   };
 
   const startRecording = async () => {
