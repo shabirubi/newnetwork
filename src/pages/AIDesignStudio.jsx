@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Wand2, Upload, Loader, Download, Copy, Share2, Trash2, X, Sparkles, Play, Bookmark, Send, Grid3X3, Mic, Newspaper } from "lucide-react";
+import { Wand2, Upload, Loader, Download, Copy, Share2, Trash2, X, Sparkles, Play, Bookmark, Send, Grid3X3, Mic, Newspaper, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
@@ -10,6 +10,7 @@ import { SaveDesignModal, AddToVideoModal, AddToArticleModal, AddToBroadcastModa
 import { VoiceOverModal } from "../components/designstudio/VoiceOverModal";
 import { UploadDesignModal } from "../components/designstudio/UploadDesignModal";
 import { ArticlePresenterModal } from "../components/designstudio/ArticlePresenterModal";
+import { MotionCharacterModal } from "../components/designstudio/MotionCharacterModal";
 import { TextOverlayEditor, FiltersPanel, ExportOptions, ShareDesign } from "../components/designstudio/DesignEditor";
 
 export default function AIDesignStudio() {
@@ -31,6 +32,7 @@ export default function AIDesignStudio() {
   const [showVoiceOverModal, setShowVoiceOverModal] = useState(false);
   const [showUploadModal, setShowUploadModal] = useState(false);
   const [showArticlePresentationModal, setShowArticlePresentationModal] = useState(false);
+  const [showMotionCharacterModal, setShowMotionCharacterModal] = useState(false);
 
   const generateDesign = async () => {
     if (!prompt.trim()) {
@@ -282,6 +284,14 @@ export default function AIDesignStudio() {
                         הוסף
                       </Button>
                       <Button
+                        onClick={() => setShowMotionCharacterModal(true)}
+                        variant="outline"
+                        className="flex-1 border-emerald-500/50 text-emerald-400 hover:bg-emerald-500/20 text-xs sm:text-sm"
+                      >
+                        <Zap className="w-4 h-4 mr-1" />
+                        תנועה
+                      </Button>
+                      <Button
                         onClick={() => setShowArticlePresentationModal(true)}
                         variant="outline"
                         className="flex-1 border-blue-500/50 text-blue-400 hover:bg-blue-500/20 text-xs sm:text-sm"
@@ -419,6 +429,11 @@ export default function AIDesignStudio() {
       <ArticlePresenterModal
         isOpen={showArticlePresentationModal}
         onClose={() => setShowArticlePresentationModal(false)}
+        imageUrl={editedImage || generatedImage}
+      />
+      <MotionCharacterModal
+        isOpen={showMotionCharacterModal}
+        onClose={() => setShowMotionCharacterModal(false)}
         imageUrl={editedImage || generatedImage}
       />
 
