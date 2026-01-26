@@ -18,9 +18,6 @@ import CategoriesMenu from "../components/shared/CategoriesMenu";
 import TalkingAvatar from "../components/avatar/TalkingAvatar";
 import ReportersModal from "../components/reporter/ReportersModal";
 
-import AutoNewsUpdater from "../components/news/AutoNewsUpdater";
-import AutoChannelsUpdater from "../components/news/AutoChannelsUpdater";
-
 import TikTokNewsFeed from "../components/news/TikTokNewsFeed";
 import VODModal from "../components/vod/VODModal";
 import AccessibilityPanel from "../components/accessibility/AccessibilityPanel";
