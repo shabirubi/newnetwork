@@ -191,6 +191,16 @@ export default function Layout({ children, currentPageName }) {
               <Sparkles className="w-4 h-4 text-white" />
               <span className="text-white font-bold hidden sm:inline">דמויות</span>
             </button>
+
+            <a 
+              href={base44.agents.getWhatsAppConnectURL('general_reporter')}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-black/60 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-[#25D366]/50 transition-all hover:scale-105 hover:bg-[#25D366]/30 text-xs sm:text-sm"
+            >
+              <MessageCircle className="w-4 h-4 text-[#25D366]" />
+              <span className="text-white font-bold hidden sm:inline">WhatsApp</span>
+            </a>
             </div>
 
             {/* Mobile: Logo Only */}
