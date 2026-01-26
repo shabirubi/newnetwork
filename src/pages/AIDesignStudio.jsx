@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Wand2, Upload, Loader, Download, Copy, Share2, Trash2, X, Sparkles, Play, Bookmark, Send, Grid3X3 } from "lucide-react";
+import { Wand2, Upload, Loader, Download, Copy, Share2, Trash2, X, Sparkles, Play, Bookmark, Send, Grid3X3, Mic } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { base44 } from "@/api/base44Client";
 import AnimatedCharacter from "../components/avatar/AnimatedCharacter";
 import { SaveDesignModal, AddToVideoModal, AddToArticleModal, AddToBroadcastModal } from "../components/designstudio/DesignUsageModals";
+import { VoiceOverModal } from "../components/designstudio/VoiceOverModal";
 
 export default function AIDesignStudio() {
   const [prompt, setPrompt] = useState("");
@@ -23,6 +24,7 @@ export default function AIDesignStudio() {
   const [showVideoModal, setShowVideoModal] = useState(false);
   const [showArticleModal, setShowArticleModal] = useState(false);
   const [showBroadcastModal, setShowBroadcastModal] = useState(false);
+  const [showVoiceOverModal, setShowVoiceOverModal] = useState(false);
 
   const generateDesign = async () => {
     if (!prompt.trim()) {
@@ -254,15 +256,15 @@ export default function AIDesignStudio() {
                         className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500"
                       >
                         <Grid3X3 className="w-4 h-4 mr-2" />
-                        שימוש בדיזיין
+                        שימוש
                       </Button>
                       <Button
-                        onClick={() => downloadImage(generatedImage)}
+                        onClick={() => setShowVoiceOverModal(true)}
                         variant="outline"
-                        className="flex-1 border-purple-500/50 text-purple-400 hover:bg-purple-500/20"
+                        className="flex-1 border-orange-500/50 text-orange-400 hover:bg-orange-500/20"
                       >
-                        <Download className="w-4 h-4 mr-2" />
-                        הורד
+                        <Mic className="w-4 h-4 mr-2" />
+                        דיבוב
                       </Button>
                       <Button
                         onClick={() => setShowAnimator(true)}
@@ -271,6 +273,14 @@ export default function AIDesignStudio() {
                       >
                         <Sparkles className="w-4 h-4 mr-2" />
                         הנפיש
+                      </Button>
+                      <Button
+                        onClick={() => downloadImage(generatedImage)}
+                        variant="outline"
+                        className="flex-1 border-purple-500/50 text-purple-400 hover:bg-purple-500/20"
+                      >
+                        <Download className="w-4 h-4 mr-2" />
+                        הורד
                       </Button>
                     </div>
                   </motion.div>
@@ -370,6 +380,12 @@ export default function AIDesignStudio() {
         isOpen={showBroadcastModal}
         onClose={() => setShowBroadcastModal(false)}
         imageUrl={generatedImage}
+      />
+      <VoiceOverModal
+        isOpen={showVoiceOverModal}
+        onClose={() => setShowVoiceOverModal(false)}
+        imageUrl={generatedImage}
+        designTitle={prompt}
       />
 
       {/* Character Animation Modal */}
