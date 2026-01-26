@@ -34,22 +34,8 @@ export default function AutoNewsUpdater() {
   const [newArticles, setNewArticles] = useState([]);
 
   useEffect(() => {
-    const checkAndUpdate = async () => {
-      const lastUpdateTime = localStorage.getItem('newsLastUpdate');
-      const now = Date.now();
-      
-      // Update once a day (24 hours)
-      if (!lastUpdateTime || now - parseInt(lastUpdateTime) > 86400000) {
-        await updateNews();
-      }
-    };
-
-    // Run immediately on mount
-    checkAndUpdate();
-
-    // Check every 24 hours
-    const interval = setInterval(checkAndUpdate, 86400000);
-    return () => clearInterval(interval);
+    // לא מריץ אוטומטית - מסתמך על automation
+    return () => {};
   }, []);
 
   // Show notification for new articles on mobile

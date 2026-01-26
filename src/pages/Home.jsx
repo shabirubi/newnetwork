@@ -177,10 +177,18 @@ export default function Home() {
       {/* Category News Section */}
       <section className="px-4 sm:px-4 mt-8 space-y-8">
         {[
-          { category: 'horoscope', label: 'אסטרולוגיה' },
-          { category: 'entertainment', label: 'בידור' },
+          { category: 'breaking', label: 'חדשות עכשיו' },
+          { category: 'security', label: 'ביטחון ומדיניות' },
+          { category: 'economy', label: 'כלכלה ועסקים' },
+          { category: 'politics', label: 'פוליטיקה' },
+          { category: 'technology', label: 'טכנולוגיה' },
           { category: 'sports', label: 'ספורט' },
-          { category: 'politics', label: 'פוליטיקה' }
+          { category: 'entertainment', label: 'בידור ודרמה' },
+          { category: 'world', label: 'חדשות עולם' },
+          { category: 'health', label: 'בריאות' },
+          { category: 'music', label: 'מוזיקה' },
+          { category: 'horoscope', label: 'אסטרולוגיה' },
+          { category: 'finance', label: 'פיננסים' }
         ].map(({ category, label }) => {
           const categoryArticles = articles.filter(a => a.category === category).slice(0, 4);
           if (categoryArticles.length === 0) return null;
