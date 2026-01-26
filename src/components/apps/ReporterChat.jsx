@@ -396,7 +396,20 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
           return updated;
         });
         
+        // Update the database with the video URL
         if (videoResponse.data?.video_url) {
+          base44.entities.ReporterChat.filter({
+            reporter_id: selectedReporter.id,
+            reporter_name: selectedReporter.name,
+            message: response.data.response,
+            sender_type: 'reporter'
+          }).then(records => {
+            if (records && records.length > 0) {
+              base44.entities.ReporterChat.update(records[0].id, {
+                voice_url: videoResponse.data?.video_url
+              });
+            }
+          });
           toast.success('🎥 הווידאו מוכן!');
         }
       }).catch(err => {
@@ -613,17 +626,13 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
 
   const loadChatHistory = async (reporter) => {
     try {
-      const currentUser = await base44.auth.me();
+      // Load all reporter responses - accessible to everyone
       const history = await base44.entities.ReporterChat.filter({
-        reporter_id: reporter.id,
-        user_email: currentUser.email
+        reporter_id: reporter.id
       }, '-created_date', 50);
-      
-      console.log('📚 היסטוריה:', history); // Debug
       
       if (history && history.length > 0) {
         const formattedMessages = history.reverse().map(msg => {
-          console.log('הודעה:', msg.message, 'יש וידאו?', !!msg.voice_url); // Debug
           return {
             role: msg.sender_type === 'user' ? 'user' : 'assistant',
             content: msg.message,
