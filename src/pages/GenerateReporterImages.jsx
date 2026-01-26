@@ -150,6 +150,24 @@ export default function GenerateReporterImages() {
   const [progress, setProgress] = useState(0);
   const [generatedImages, setGeneratedImages] = useState([]);
   const [error, setError] = useState(null);
+  const [updatingExisting, setUpdatingExisting] = useState(false);
+
+  const updateExistingReporters = async () => {
+    setUpdatingExisting(true);
+    setError(null);
+    
+    try {
+      console.log('🎨 מעדכן תמונות לכל הכתבים הקיימים במערכת...');
+      const result = await base44.functions.invoke('updateReportersImages', {});
+      console.log('✅ סיימתי לעדכן את כל התמונות!', result);
+      alert(`עודכנו ${result.data.updated} כתבים בהצלחה!`);
+    } catch (err) {
+      console.error('❌ שגיאה:', err);
+      setError(err.message || 'שגיאה בעדכון התמונות');
+    } finally {
+      setUpdatingExisting(false);
+    }
+  };
 
   const generateAllImages = async () => {
     setLoading(true);
@@ -316,13 +334,34 @@ ${generatedImages.filter(r => r.success).map((reporter, idx) => `  {
           לחץ על הכפתור למטה כדי ליצור תמונות AI ל-{REPORTER_PROMPTS.length} כתבים נוספים (כולל כוכבות ערוץ הילדים) עם רקעים צבעוניים ייחודיים
         </p>
 
-        {!loading && generatedImages.length === 0 && (
-          <Button
-            onClick={generateAllImages}
-            className="bg-gradient-to-r from-[#E31E24] to-[#B91C1C] hover:from-[#B91C1C] hover:to-[#991B1B] text-white px-8 py-6 text-lg"
-          >
-            התחל ליצור תמונות
-          </Button>
+        {!loading && !updatingExisting && generatedImages.length === 0 && (
+          <div className="space-y-4">
+            <Button
+              onClick={updateExistingReporters}
+              className="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white px-8 py-6 text-lg w-full"
+            >
+              🎥 עדכן תמונות כתבים קיימים (עם מיקרופון + לוגו)
+            </Button>
+            
+            <Button
+              onClick={generateAllImages}
+              className="bg-gradient-to-r from-[#E31E24] to-[#B91C1C] hover:from-[#B91C1C] hover:to-[#991B1B] text-white px-8 py-6 text-lg w-full"
+            >
+              התחל ליצור תמונות חדשות
+            </Button>
+          </div>
+        )}
+
+        {updatingExisting && (
+          <div className="mb-6 text-center">
+            <div className="flex items-center justify-center gap-3 mb-3">
+              <Loader2 className="w-6 h-6 text-green-600 animate-spin" />
+              <span className="text-lg font-bold dark:text-white">
+                מעדכן תמונות כתבים קיימים במערכת...
+              </span>
+            </div>
+            <p className="text-sm text-gray-600 dark:text-gray-400">זה עשוי לקחת מספר דקות, נא להמתין</p>
+          </div>
         )}
 
         {loading && (
