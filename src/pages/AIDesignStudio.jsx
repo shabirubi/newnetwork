@@ -8,6 +8,7 @@ import { base44 } from "@/api/base44Client";
 import AnimatedCharacter from "../components/avatar/AnimatedCharacter";
 import { SaveDesignModal, AddToVideoModal, AddToArticleModal, AddToBroadcastModal } from "../components/designstudio/DesignUsageModals";
 import { VoiceOverModal } from "../components/designstudio/VoiceOverModal";
+import { UploadDesignModal } from "../components/designstudio/UploadDesignModal";
 import { TextOverlayEditor, FiltersPanel, ExportOptions, ShareDesign } from "../components/designstudio/DesignEditor";
 
 export default function AIDesignStudio() {
@@ -27,6 +28,7 @@ export default function AIDesignStudio() {
   const [showArticleModal, setShowArticleModal] = useState(false);
   const [showBroadcastModal, setShowBroadcastModal] = useState(false);
   const [showVoiceOverModal, setShowVoiceOverModal] = useState(false);
+  const [showUploadModal, setShowUploadModal] = useState(false);
 
   const generateDesign = async () => {
     if (!prompt.trim()) {
@@ -271,11 +273,11 @@ export default function AIDesignStudio() {
 
                     <div className="flex gap-2 flex-wrap">
                       <Button
-                        onClick={() => setShowUsageOptions(true)}
+                        onClick={() => setShowUploadModal(true)}
                         className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500"
                       >
                         <Grid3X3 className="w-4 h-4 mr-2" />
-                        שימוש
+                        הוסף
                       </Button>
                       <Button
                         onClick={() => setShowVoiceOverModal(true)}
@@ -403,6 +405,12 @@ export default function AIDesignStudio() {
       <VoiceOverModal
         isOpen={showVoiceOverModal}
         onClose={() => setShowVoiceOverModal(false)}
+        imageUrl={generatedImage}
+        designTitle={prompt}
+      />
+      <UploadDesignModal
+        isOpen={showUploadModal}
+        onClose={() => setShowUploadModal(false)}
         imageUrl={generatedImage}
         designTitle={prompt}
       />

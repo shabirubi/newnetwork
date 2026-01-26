@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Loader, Mic, Play, Download } from "lucide-react";
+import { X, Loader, Mic, Play, Download, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
@@ -31,7 +31,7 @@ export function VoiceOverModal({ isOpen, onClose, imageUrl, designTitle = "Desig
 
     setIsGenerating(true);
     try {
-      const response = await base44.functions.invoke("createVoiceOverVideo", {
+      const response = await base44.functions.invoke("createTalkingAvatarVideo", {
         imageUrl,
         script,
         voice: selectedVoice,
@@ -41,13 +41,13 @@ export function VoiceOverModal({ isOpen, onClose, imageUrl, designTitle = "Desig
       if (response.data?.video_url) {
         setGeneratedVideo({
           url: response.data.video_url,
-          duration: response.data.duration,
+          duration: "זמן משתנה",
         });
-        toast.success("✅ וידאו עם דיבוב נוצר בהצלחה");
+        toast.success("✅ דמות דוברת נוצרה בהצלחה");
       }
     } catch (error) {
       console.error("Error:", error);
-      toast.error("שגיאה ביצירת הוידאו");
+      toast.error("שגיאה ביצירת הוידאו - ודא שתמונה גלויה ברורה");
     } finally {
       setIsGenerating(false);
     }
@@ -200,10 +200,18 @@ export function VoiceOverModal({ isOpen, onClose, imageUrl, designTitle = "Desig
             </div>
 
             {/* Tips */}
-            <div className="mt-6 p-4 bg-orange-600/20 border border-orange-500/30 rounded-lg">
-              <p className="text-xs text-orange-200">
-                💡 <span className="font-semibold">טיפ:</span> בחר קול בשפה שמתאימה לטקסט שלך לתוצאות הטובות ביותר
-              </p>
+            <div className="mt-6 space-y-3">
+              <div className="p-4 bg-orange-600/20 border border-orange-500/30 rounded-lg">
+                <p className="text-xs text-orange-200">
+                  💡 <span className="font-semibold">טיפ:</span> תמונה ברורה של פנים לתוצאות הטובות ביותר
+                </p>
+              </div>
+              <div className="p-4 bg-green-600/20 border border-green-500/30 rounded-lg flex items-start gap-2">
+                <Zap className="w-4 h-4 text-green-400 flex-shrink-0 mt-0.5" />
+                <p className="text-xs text-green-200">
+                  <span className="font-semibold">הפיצ'ר:</span> דמות אנימציה עם שפת גוף, תנועות עיניים ודיבור טבעי בכל שפה
+                </p>
+              </div>
             </div>
           </motion.div>
         </motion.div>
