@@ -663,27 +663,6 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
 
   return (
     <>
-      <motion.div
-        whileHover={{ scale: 1.02 }}
-        whileTap={{ scale: 0.98 }}
-        className="bg-gradient-to-br from-[#E31E24] to-red-900 rounded-2xl p-8 cursor-pointer shadow-2xl"
-        onClick={() => setOpenState(true)}
-      >
-        <div className="flex items-center gap-4 mb-4">
-          <div className="bg-white/20 backdrop-blur-sm rounded-full p-4 relative">
-            <MessageCircle className="w-8 h-8 text-white" />
-            <div className="absolute -top-1 -right-1 w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-          </div>
-          <div>
-            <h3 className="text-2xl font-bold text-white">צ'אט כתבים חכם</h3>
-            <p className="text-white/80">שוחח עם כתבים מומחים</p>
-          </div>
-        </div>
-        <p className="text-white/90 text-sm">
-          קבל תשובות ממחקרים אמיתיים של כתבים
-        </p>
-      </motion.div>
-
       <AnimatePresence>
         {openState && (
           <motion.div
