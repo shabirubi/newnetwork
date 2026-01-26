@@ -397,11 +397,12 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
       
       // שמירת הודעות במסד נתונים
       try {
+        const currentUser = await base44.auth.me();
         await base44.entities.ReporterChat.create({
           reporter_id: selectedReporter.id,
           reporter_name: selectedReporter.name,
-          user_email: user.email,
-          user_name: user.full_name,
+          user_email: currentUser.email,
+          user_name: currentUser.full_name,
           message: messageText,
           sender_type: 'user'
         });
@@ -409,8 +410,8 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
         await base44.entities.ReporterChat.create({
           reporter_id: selectedReporter.id,
           reporter_name: selectedReporter.name,
-          user_email: user.email,
-          user_name: user.full_name,
+          user_email: currentUser.email,
+          user_name: currentUser.full_name,
           message: response.data.response,
           sender_type: 'reporter',
           response_text: response.data.response,
