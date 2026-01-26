@@ -61,22 +61,40 @@ Deno.serve(async (req) => {
         
         for (const article of articles) {
           try {
-            // תרגום הכותרת לאנגלית להשתמש בתמונות
-            let englishTitle = article.title;
-            try {
-              const translationResponse = await base44.asServiceRole.integrations.Core.InvokeLLM({
-                prompt: `Translate this Hebrew text to English ONLY. Do not add anything else. Just the translation:\n\n${article.title}`
-              });
-              englishTitle = translationResponse || article.title;
-            } catch (transErr) {
-              console.log('Translation failed, using original:', transErr.message);
+            // תרגום מאנגלית לעברית אם צריך
+            let hebrewTitle = article.title;
+            let hebrewSubtitle = article.subtitle || '';
+            let hebrewContent = article.content;
+            
+            // בדיקה אם הטקסט באנגלית
+            const isEnglish = /^[A-Za-z\s.,!?-]*$/.test(article.title);
+            
+            if (isEnglish) {
+              try {
+                const titleTranslation = await base44.asServiceRole.integrations.Core.InvokeLLM({
+                  prompt: `Translate to Hebrew ONLY, no explanations:\n${article.title}`
+                });
+                hebrewTitle = titleTranslation || article.title;
+                
+                const subtitleTranslation = await base44.asServiceRole.integrations.Core.InvokeLLM({
+                  prompt: `Translate to Hebrew ONLY, no explanations:\n${article.subtitle || ''}`
+                });
+                hebrewSubtitle = subtitleTranslation || article.subtitle || '';
+                
+                const contentTranslation = await base44.asServiceRole.integrations.Core.InvokeLLM({
+                  prompt: `Translate to Hebrew ONLY, no explanations:\n${article.content}`
+                });
+                hebrewContent = contentTranslation || article.content;
+              } catch (transErr) {
+                console.log('Translation failed:', transErr.message);
+              }
             }
 
-            // יצירת תמונה עם הטקסט באנגלית
+            // יצירת תמונה עם הטקסט באנגלית מהמקורי
             let imageUrl = '';
             try {
               const imageResponse = await base44.asServiceRole.integrations.Core.GenerateImage({
-                prompt: `Professional news thumbnail. Text overlay (English only): "${englishTitle}". News article style, modern design, ${cat.category} themed.`
+                prompt: `Professional news thumbnail. Text overlay (English): "${article.title}". Modern news style, ${cat.category} themed.`
               });
               imageUrl = imageResponse.url || '';
             } catch (imgErr) {
@@ -84,9 +102,9 @@ Deno.serve(async (req) => {
             }
 
             await base44.asServiceRole.entities.NewsArticle.create({
-              title: article.title,
-              subtitle: article.subtitle || '',
-              content: article.content,
+              title: hebrewTitle,
+              subtitle: hebrewSubtitle,
+              content: hebrewContent,
               image_url: imageUrl,
               category: cat.category,
               source: article.source || 'News',
