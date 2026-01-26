@@ -62,9 +62,7 @@ export default function Home() {
     queryKey: ['channels'],
     queryFn: async () => {
       try {
-        const user = await base44.auth.me();
-        if (!user) return [];
-        return base44.entities.NewsChannel.filter({ is_active: true }, 'name');
+        return await base44.entities.NewsChannel.filter({ is_active: true }, 'name');
       } catch {
         return [];
       }
@@ -80,8 +78,6 @@ export default function Home() {
     queryKey: ['news-articles', selectedChannel, page],
     queryFn: async () => {
       try {
-        const user = await base44.auth.me();
-        if (!user) return [];
         const limit = 30;
         const skip = (page - 1) * limit;
         
@@ -134,9 +130,7 @@ export default function Home() {
     queryKey: ['live-stream'],
     queryFn: async () => {
       try {
-        const user = await base44.auth.me();
-        if (!user) return [];
-        return base44.entities.LiveStream.list('-created_date', 1);
+        return await base44.entities.LiveStream.list('-created_date', 1);
       } catch {
         return [];
       }
