@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Wand2, Upload, Loader, Download, Copy, Share2, Trash2, X, Sparkles } from "lucide-react";
+import { Wand2, Upload, Loader, Download, Copy, Share2, Trash2, X, Sparkles, Play, Bookmark, Send, Grid3X3 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
@@ -17,6 +17,7 @@ export default function AIDesignStudio() {
   const [designTitle, setDesignTitle] = useState("");
   const [animationScript, setAnimationScript] = useState("");
   const [showAnimator, setShowAnimator] = useState(false);
+  const [showUsageOptions, setShowUsageOptions] = useState(false);
 
   const generateDesign = async () => {
     if (!prompt.trim()) {
@@ -93,6 +94,13 @@ export default function AIDesignStudio() {
     if (selectedDesign?.id === id) setSelectedDesign(null);
     toast.success("🗑️ הדיזיין נמחק");
   };
+
+  const usageOptions = [
+    { id: "video", icon: Play, label: "הכנס לוידאו", desc: "overlay על וידאו", color: "bg-blue-600" },
+    { id: "article", icon: Send, label: "הכנס לכתבה", desc: "צמוד בתוך המאמר", color: "bg-cyan-600" },
+    { id: "broadcast", icon: Grid3X3, label: "שדר בשידור", desc: "הוסף לשידור חי", color: "bg-red-600" },
+    { id: "save", icon: Bookmark, label: "שמור דיזיין", desc: "לספריית התכנים שלי", color: "bg-purple-600" },
+  ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-black via-purple-900/20 to-black p-4 sm:p-6">
@@ -236,7 +244,14 @@ export default function AIDesignStudio() {
                     </div>
 
                     <div className="flex gap-2 flex-wrap">
-                       <Button
+                      <Button
+                        onClick={() => setShowUsageOptions(true)}
+                        className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500"
+                      >
+                        <Grid3X3 className="w-4 h-4 mr-2" />
+                        שימוש בדיזיין
+                      </Button>
+                      <Button
                         onClick={() => downloadImage(generatedImage)}
                         variant="outline"
                         className="flex-1 border-purple-500/50 text-purple-400 hover:bg-purple-500/20"
@@ -245,28 +260,12 @@ export default function AIDesignStudio() {
                         הורד
                       </Button>
                       <Button
-                        onClick={() => copyPrompt(prompt)}
-                        variant="outline"
-                        className="flex-1 border-purple-500/50 text-purple-400 hover:bg-purple-500/20"
-                      >
-                        <Copy className="w-4 h-4 mr-2" />
-                        העתק Prompt
-                      </Button>
-                      <Button
                         onClick={() => setShowAnimator(true)}
                         variant="outline"
                         className="flex-1 border-purple-500/50 text-purple-400 hover:bg-purple-500/20"
                       >
                         <Sparkles className="w-4 h-4 mr-2" />
                         הנפיש
-                      </Button>
-                      <Button
-                        onClick={() => setGeneratedImage(null)}
-                        variant="outline"
-                        className="flex-1 border-purple-500/50 text-purple-400 hover:bg-purple-500/20"
-                      >
-                        <Trash2 className="w-4 h-4 mr-2" />
-                        נקה
                       </Button>
                     </div>
                   </motion.div>
@@ -395,6 +394,68 @@ export default function AIDesignStudio() {
                     script={animationScript}
                   />
                 )}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Usage Options Modal */}
+      <AnimatePresence>
+        {showUsageOptions && generatedImage && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            onClick={() => setShowUsageOptions(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              className="bg-gradient-to-br from-purple-900/40 to-black border border-purple-500/30 rounded-2xl p-8 max-w-2xl w-full"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-2xl font-bold text-white flex items-center gap-2">
+                  <Grid3X3 className="w-6 h-6 text-purple-400" />
+                  איך להשתמש בדיזיין?
+                </h3>
+                <button
+                  onClick={() => setShowUsageOptions(false)}
+                  className="p-2 hover:bg-white/10 rounded-full transition-colors"
+                >
+                  <X className="w-6 h-6 text-white" />
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                {usageOptions.map((option) => {
+                  const Icon = option.icon;
+                  return (
+                    <motion.button
+                      key={option.id}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={() => {
+                        toast.success(`✅ ${option.label} - בקרוב יהיה זמין`);
+                        setShowUsageOptions(false);
+                      }}
+                      className={`${option.color} p-6 rounded-xl text-white hover:shadow-lg transition-all text-center group`}
+                    >
+                      <Icon className="w-8 h-8 mx-auto mb-3 group-hover:scale-110 transition-transform" />
+                      <h4 className="font-bold mb-1">{option.label}</h4>
+                      <p className="text-sm text-white/80">{option.desc}</p>
+                    </motion.button>
+                  );
+                })}
+              </div>
+
+              <div className="mt-8 p-4 bg-purple-600/20 border border-purple-500/30 rounded-xl">
+                <p className="text-sm text-purple-200 text-center">
+                  💡 בחר אפשרות כדי להשתמש בדיזיין שיצרת בדרכים שונות
+                </p>
               </div>
             </motion.div>
           </motion.div>
