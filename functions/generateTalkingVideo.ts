@@ -187,10 +187,13 @@ Deno.serve(async (req) => {
     if (!response.ok) {
       const errorText = await response.text();
       console.error('❌ D-ID Error:', response.status, errorText);
-      return Response.json({ 
+      return new Response(JSON.stringify({ 
         error: `D-ID API error: ${errorText}`,
         status: response.status
-      }, { status: 500 });
+      }), { 
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
 
     const result = await response.json();
@@ -228,19 +231,25 @@ Deno.serve(async (req) => {
 
         if (statusData.status === 'done' && statusData.result_url) {
           console.log('🎉 Video ready:', statusData.result_url);
-          return Response.json({
+          return new Response(JSON.stringify({
             success: true,
             video_url: statusData.result_url,
             duration: statusData.duration || 0,
             job_id: jobId
+          }), { 
+            status: 200,
+            headers: { 'Content-Type': 'application/json' }
           });
         }
 
         if (statusData.status === 'error' || statusData.status === 'rejected') {
           console.error('❌ Generation failed:', statusData);
-          return Response.json({ 
+          return new Response(JSON.stringify({ 
             error: `Generation failed: ${statusData.error?.message || 'Unknown error'}` 
-          }, { status: 500 });
+          }), { 
+            status: 500,
+            headers: { 'Content-Type': 'application/json' }
+          });
         }
 
         // Adaptive polling
@@ -254,10 +263,16 @@ Deno.serve(async (req) => {
       }
     }
 
-    return Response.json({ error: 'Video generation timeout' }, { status: 504 });
+    return new Response(JSON.stringify({ error: 'Video generation timeout' }), { 
+      status: 504,
+      headers: { 'Content-Type': 'application/json' }
+    });
 
   } catch (error) {
     console.error('🔴 Error:', error);
-    return Response.json({ error: error.message }, { status: 500 });
+    return new Response(JSON.stringify({ error: error.message }), { 
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    });
   }
 });
