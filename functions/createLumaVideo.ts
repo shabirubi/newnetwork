@@ -24,26 +24,36 @@ Deno.serve(async (req) => {
     console.log('Image URL:', imageUrl);
     console.log('Aspect ratio:', aspectRatio);
 
-    // Build payload according to piapi.ai docs
+    // Build payload according to GitHub example
     const generatePayload = {
       prompt: prompt,
-      aspect_ratio: aspectRatio,
-      loop: loop
+      expand_prompt: false
     };
 
-    // Add image for image-to-video
+    // Add image_url if provided
     if (imageUrl) {
       generatePayload.image_url = imageUrl;
     }
 
+    // Add aspect_ratio if not default
+    if (aspectRatio && aspectRatio !== "16:9") {
+      generatePayload.aspect_ratio = aspectRatio;
+    }
+
+    // Add loop if needed
+    if (loop) {
+      generatePayload.loop = loop;
+    }
+
     console.log('Request payload:', JSON.stringify(generatePayload, null, 2));
 
-    // Create task using piapi.ai Luma API
-    const generateResponse = await fetch('https://api.piapi.ai/api/luma/generations', {
+    // Create task using correct piapi.ai endpoint
+    const generateResponse = await fetch('https://api.piapi.ai/api/luma/v1/video', {
       method: 'POST',
       headers: {
-        'x-api-key': lumaApiKey,
-        'Content-Type': 'application/json'
+        'X-API-Key': lumaApiKey,
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
       },
       body: JSON.stringify(generatePayload)
     });
@@ -80,9 +90,9 @@ Deno.serve(async (req) => {
     while (attempts < maxAttempts) {
       await new Promise(resolve => setTimeout(resolve, pollInterval));
 
-      const statusResponse = await fetch(`https://api.piapi.ai/api/luma/task/${taskId}`, {
+      const statusResponse = await fetch(`https://api.piapi.ai/api/luma/v1/video/${taskId}`, {
         headers: {
-          'x-api-key': lumaApiKey
+          'Accept': 'application/json'
         }
       });
 
@@ -99,8 +109,8 @@ Deno.serve(async (req) => {
         console.log('Video generation completed!');
         return Response.json({
           success: true,
-          video_url: statusData.data?.output?.video_url || statusData.data?.video_url,
-          thumbnail_url: statusData.data?.output?.thumbnail_url,
+          video_url: statusData.data?.video_url,
+          thumbnail_url: statusData.data?.thumbnail_url,
           generation_id: taskId,
           prompt: prompt,
           aspect_ratio: aspectRatio,
@@ -112,7 +122,7 @@ Deno.serve(async (req) => {
         console.error('Video generation failed:', statusData.data?.error);
         return Response.json({
           error: 'Video generation failed',
-          details: statusData.data?.error
+          details: statusData.data?.error || statusData.data?.failure_reason
         }, { status: 500 });
       }
 
