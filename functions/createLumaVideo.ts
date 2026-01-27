@@ -24,36 +24,38 @@ Deno.serve(async (req) => {
     console.log('Image URL:', imageUrl);
     console.log('Aspect ratio:', aspectRatio);
 
-    // Build payload according to GitHub example
+    // Build payload according to piapi.ai docs
     const generatePayload = {
-      prompt: prompt,
-      expand_prompt: false
+      model: "luma",
+      task_type: "dreamachine",
+      input: {
+        prompt: prompt
+      }
     };
 
-    // Add image_url if provided
+    // Add image_url if provided for img2video
     if (imageUrl) {
-      generatePayload.image_url = imageUrl;
+      generatePayload.input.image_url = imageUrl;
     }
 
-    // Add aspect_ratio if not default
-    if (aspectRatio && aspectRatio !== "16:9") {
-      generatePayload.aspect_ratio = aspectRatio;
+    // Add aspect_ratio
+    if (aspectRatio) {
+      generatePayload.input.aspect_ratio = aspectRatio;
     }
 
-    // Add loop if needed
+    // Add loop
     if (loop) {
-      generatePayload.loop = loop;
+      generatePayload.input.loop = loop;
     }
 
     console.log('Request payload:', JSON.stringify(generatePayload, null, 2));
 
-    // Create task using correct piapi.ai endpoint
-    const generateResponse = await fetch('https://api.piapi.ai/api/luma/v1/video', {
+    // Create task using piapi.ai general endpoint
+    const generateResponse = await fetch('https://api.piapi.ai/api/v1/task', {
       method: 'POST',
       headers: {
-        'X-API-Key': lumaApiKey,
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
+        'x-api-key': lumaApiKey,
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify(generatePayload)
     });
@@ -90,9 +92,9 @@ Deno.serve(async (req) => {
     while (attempts < maxAttempts) {
       await new Promise(resolve => setTimeout(resolve, pollInterval));
 
-      const statusResponse = await fetch(`https://api.piapi.ai/api/luma/v1/video/${taskId}`, {
+      const statusResponse = await fetch(`https://api.piapi.ai/api/v1/task/${taskId}`, {
         headers: {
-          'Accept': 'application/json'
+          'x-api-key': lumaApiKey
         }
       });
 
@@ -109,8 +111,8 @@ Deno.serve(async (req) => {
         console.log('Video generation completed!');
         return Response.json({
           success: true,
-          video_url: statusData.data?.video_url,
-          thumbnail_url: statusData.data?.thumbnail_url,
+          video_url: statusData.data?.output?.video_url,
+          thumbnail_url: statusData.data?.output?.thumbnail_url,
           generation_id: taskId,
           prompt: prompt,
           aspect_ratio: aspectRatio,
