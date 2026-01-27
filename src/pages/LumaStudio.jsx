@@ -1,0 +1,187 @@
+import React, { useState, useRef, useEffect } from 'react';
+import { base44 } from '@/api/base44Client';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { Send, Loader2, Download, Copy, Play, Pause } from 'lucide-react';
+import { toast } from 'sonner';
+
+export default function LumaStudio() {
+  const [messages, setMessages] = useState([]);
+  const [prompt, setPrompt] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [videoUrl, setVideoUrl] = useState(null);
+  const videoRef = useRef(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const generateVideo = async (e) => {
+    e.preventDefault();
+    if (!prompt.trim()) return;
+
+    setLoading(true);
+    try {
+      const response = await base44.functions.invoke('createLumaVideo', {
+        prompt: prompt.trim()
+      });
+
+      const videoData = response.data;
+      
+      setMessages(prev => [...prev, {
+        id: Date.now(),
+        type: 'user',
+        text: prompt,
+        timestamp: new Date()
+      }, {
+        id: Date.now() + 1,
+        type: 'assistant',
+        videoUrl: videoData.video_url,
+        prompt: prompt,
+        timestamp: new Date()
+      }]);
+
+      setVideoUrl(videoData.video_url);
+      setPrompt('');
+      toast.success('סרטון יצור בהצלחה!');
+    } catch (error) {
+      toast.error('שגיאה ביצירת סרטון: ' + error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const downloadVideo = async (url) => {
+    try {
+      const response = await fetch(url);
+      const blob = await response.blob();
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `luma-video-${Date.now()}.mp4`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      toast.success('הסרטון הורד!');
+    } catch (error) {
+      toast.error('שגיאה בהורדה');
+    }
+  };
+
+  const copyPrompt = (text) => {
+    navigator.clipboard.writeText(text);
+    toast.success('הטקסט הועתק!');
+  };
+
+  const togglePlayPause = () => {
+    if (videoRef.current) {
+      if (isPlaying) {
+        videoRef.current.pause();
+      } else {
+        videoRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-black text-white flex flex-col">
+      {/* Header */}
+      <div className="bg-gradient-to-r from-[#E31E24]/20 to-black border-b border-[#E31E24]/30 p-6">
+        <h1 className="text-3xl font-bold">Luma AI סטודיו</h1>
+        <p className="text-gray-400 mt-2">צור סרטונים בעזרת בינה מלאכותית</p>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col lg:flex-row gap-6 p-6">
+        {/* Chat Messages */}
+        <div className="flex-1 flex flex-col">
+          <div className="flex-1 overflow-y-auto space-y-4 mb-6 bg-black/50 rounded-2xl p-4 border border-white/10">
+            {messages.length === 0 ? (
+              <div className="flex items-center justify-center h-full text-gray-500">
+                <div className="text-center">
+                  <p className="text-lg">כתוב בקשה לייצור סרטון</p>
+                  <p className="text-sm mt-2">לדוגמה: "כלב רץ בשדה ירוק בשמש"</p>
+                </div>
+              </div>
+            ) : (
+              messages.map(msg => (
+                <div key={msg.id} className={`flex ${msg.type === 'user' ? 'justify-end' : 'justify-start'}`}>
+                  <div className={`max-w-[80%] rounded-2xl p-4 ${
+                    msg.type === 'user' 
+                      ? 'bg-[#E31E24] text-white' 
+                      : 'bg-white/10 border border-white/20'
+                  }`}>
+                    {msg.type === 'user' ? (
+                      <p className="text-sm">{msg.text}</p>
+                    ) : (
+                      <div className="space-y-2">
+                        <video
+                          ref={videoRef}
+                          src={msg.videoUrl}
+                          className="w-full rounded-lg bg-black"
+                          controls
+                        />
+                        <div className="flex gap-2 text-xs">
+                          <button
+                            onClick={() => downloadVideo(msg.videoUrl)}
+                            className="flex items-center gap-1 px-3 py-1 bg-[#E31E24]/20 hover:bg-[#E31E24]/40 rounded-lg transition-all"
+                          >
+                            <Download size={14} /> הורדה
+                          </button>
+                          <button
+                            onClick={() => copyPrompt(msg.prompt)}
+                            className="flex items-center gap-1 px-3 py-1 bg-white/10 hover:bg-white/20 rounded-lg transition-all"
+                          >
+                            <Copy size={14} /> העתקה
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+
+          {/* Input */}
+          <form onSubmit={generateVideo} className="flex gap-3">
+            <Textarea
+              value={prompt}
+              onChange={(e) => setPrompt(e.target.value)}
+              placeholder="תאר את הסרטון שאתה רוצה ליצור..."
+              className="bg-white/5 border-white/20 text-white placeholder-gray-500 resize-none"
+              rows={3}
+              disabled={loading}
+            />
+            <Button
+              type="submit"
+              disabled={loading || !prompt.trim()}
+              className="bg-[#E31E24] hover:bg-[#B91C1C] text-white px-6 flex items-center gap-2 self-end"
+            >
+              {loading ? (
+                <>
+                  <Loader2 size={18} className="animate-spin" />
+                  ייצור...
+                </>
+              ) : (
+                <>
+                  <Send size={18} />
+                  שלח
+                </>
+              )}
+            </Button>
+          </form>
+        </div>
+
+        {/* Tips */}
+        <div className="lg:w-80 bg-white/5 border border-white/20 rounded-2xl p-6">
+          <h3 className="font-bold mb-4 text-[#E31E24]">טיפים לסרטון מוצלח</h3>
+          <ul className="space-y-3 text-sm text-gray-300">
+            <li>✨ תאר את הסרטון בפירוט - צבעים, תנועות, מקום</li>
+            <li>🎬 השתמש בערך בתיאור של "מה קורה" לא "איך"</li>
+            <li>⏱️ זכור שהסרטון הוא עד 10 שניות</li>
+            <li>🎯 היה ספציפי - "כלב שחור רץ בשדה ירוק" טוב מ-"כלב רץ"</li>
+            <li>📐 תמך את עצמך לזמן עיבוד - עד כמה דקות</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+}
