@@ -15,10 +15,11 @@ export function ScriptGeneratorModal({ isOpen, onClose, imageUrl }) {
   const [scriptApproved, setScriptApproved] = useState(false);
 
   const voices = [
-    { id: "he", name: "🇮🇱 עברית זכר" },
-    { id: "he-female", name: "👱 עברית נקבה" },
-    { id: "en", name: "🎤 English Male" },
-    { id: "en-female", name: "👩 English Female" },
+    { id: "he", name: "📰 עברית - כתב חדשות (זכר)" },
+    { id: "he-female", name: "📰 עברית - כתבת חדשות (נקבה)" },
+    { id: "en", name: "📰 English News - Male" },
+    { id: "en-female", name: "📰 English News - Female" },
+    { id: "ar", name: "🌍 العربية - مذيع أخبار" },
   ];
 
   const handleGenerateScript = async () => {

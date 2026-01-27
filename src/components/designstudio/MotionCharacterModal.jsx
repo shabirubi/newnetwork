@@ -15,11 +15,11 @@ export function MotionCharacterModal({ isOpen, onClose, imageUrl }) {
   const [motionIntensity, setMotionIntensity] = useState("medium"); // light, medium, heavy
 
   const voices = [
-    { id: "he", name: "🇮🇱 עברית זכר" },
-    { id: "he-female", name: "👱 עברית נקבה" },
-    { id: "en", name: "🎤 English Male" },
-    { id: "en-female", name: "👩 English Female" },
-    { id: "ar", name: "🌍 العربية" },
+    { id: "he", name: "📰 עברית - כתב חדשות (זכר)" },
+    { id: "he-female", name: "📰 עברית - כתבת חדשות (נקבה)" },
+    { id: "en", name: "📰 English News - Male" },
+    { id: "en-female", name: "📰 English News - Female" },
+    { id: "ar", name: "🌍 العربية - مذيع أخبار" },
   ];
 
   const motionSettings = {

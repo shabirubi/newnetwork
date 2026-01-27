@@ -13,14 +13,11 @@ export function VoiceOverModal({ isOpen, onClose, imageUrl, designTitle = "Desig
   const [generatedVideo, setGeneratedVideo] = useState(null);
 
   const voices = [
-    { id: "en", name: "🎤 English Male", lang: "en" },
-    { id: "en-female", name: "👩 English Female", lang: "en" },
-    { id: "he", name: "🇮🇱 עברית זכר", lang: "he" },
-    { id: "he-female", name: "👱 עברית נקבה", lang: "he" },
-    { id: "es", name: "🇪🇸 Spanish", lang: "es" },
-    { id: "fr", name: "🇫🇷 French", lang: "fr" },
-    { id: "de", name: "🇩🇪 German", lang: "de" },
-    { id: "it", name: "🇮🇹 Italian", lang: "it" },
+    { id: "he", name: "📰 עברית - כתב חדשות (זכר)", lang: "he" },
+    { id: "he-female", name: "📰 עברית - כתבת חדשות (נקבה)", lang: "he" },
+    { id: "en", name: "📰 English News - Male", lang: "en" },
+    { id: "en-female", name: "📰 English News - Female", lang: "en" },
+    { id: "ar", name: "🌍 العربية - مذيع أخبار", lang: "ar" },
   ];
 
   const handleGenerateVoiceOver = async () => {

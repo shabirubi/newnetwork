@@ -17,10 +17,11 @@ export function ArticlePresenterModal({ isOpen, onClose, imageUrl }) {
   const [selectedVoice, setSelectedVoice] = useState("he");
 
   const voices = [
-    { id: "en", name: "🎤 English Male" },
-    { id: "en-female", name: "👩 English Female" },
-    { id: "he", name: "🇮🇱 עברית זכר" },
-    { id: "he-female", name: "👱 עברית נקבה" },
+    { id: "he", name: "📰 עברית - כתב חדשות (זכר)" },
+    { id: "he-female", name: "📰 עברית - כתבת חדשות (נקבה)" },
+    { id: "en", name: "📰 English News - Male" },
+    { id: "en-female", name: "📰 English News - Female" },
+    { id: "ar", name: "🌍 العربية - مذيع أخبار" },
   ];
 
   // Fetch articles when modal opens
