@@ -25,7 +25,8 @@ Deno.serve(async (req) => {
 
     // Build payload for Luma API
     const generatePayload = {
-      prompt: prompt
+      prompt: prompt,
+      model: "dream-machine"
     };
 
     // Add image if provided
