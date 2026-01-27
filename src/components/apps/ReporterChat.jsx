@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import moment from "moment";
+import VideoShareButtons from "@/components/shared/VideoShareButtons";
 
 export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSelectedReporter }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -949,7 +950,7 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                             )}
                             
                             {message.role === "assistant" && (message.videoUrl || message.voice_url) && (
-                              <div className="mt-3">
+                              <div className="mt-3 space-y-2">
                                 <div className="w-full rounded-lg overflow-hidden border-2 border-[#E31E24]/50 relative group">
                                   <div className="aspect-video bg-gradient-to-br from-gray-900 to-gray-800 relative">
                                     <video
@@ -961,6 +962,7 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                                     />
                                   </div>
                                 </div>
+                                <VideoShareButtons videoUrl={message.videoUrl || message.voice_url} />
                               </div>
                             )}
                             
