@@ -46,8 +46,8 @@ Deno.serve(async (req) => {
 
     // Map gender to ElevenLabs voice IDs - Hebrew voices
     const elevenLabsVoices = {
-      male: 'GEyb0CAhZyT34ES5zdqh',     // Hebrew Male Voice
-      female: 'GEyb0CAhZyT34ES5zdqh'    // Hebrew Voice
+      male: '9BWtsMINqrJLrRacOk9x',     // Hebrew Male (Daniel)
+      female: 'zrHiPzrd1d3O8z5RsZXS'    // Hebrew Female (Rachel)
     };
 
     const finalVoiceId = voiceProvider === 'elevenlabs' 
