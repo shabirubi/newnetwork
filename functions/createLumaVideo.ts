@@ -107,8 +107,8 @@ Deno.serve(async (req) => {
       if (status === 'completed') {
         return Response.json({
           success: true,
-          video_url: statusData.assets?.video_url,
-          thumbnail_url: statusData.assets?.thumbnail_url,
+          video_url: statusData.assets?.video,
+          thumbnail_url: statusData.assets?.image,
           generation_id: generationId,
           prompt: prompt
         });
