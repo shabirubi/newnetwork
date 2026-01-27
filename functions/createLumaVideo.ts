@@ -23,14 +23,19 @@ Deno.serve(async (req) => {
     console.log('Creating Luma video with prompt:', prompt);
     console.log('Image URL:', imageUrl);
 
-    // Build payload - simple format
+    // Build payload for Luma API
     const generatePayload = {
       prompt: prompt
     };
 
     // Add image if provided
     if (imageUrl) {
-      generatePayload.image_url = imageUrl;
+      generatePayload.keyframes = {
+        frame0: {
+          type: "image",
+          url: imageUrl
+        }
+      };
     }
 
     // Add aspect ratio
@@ -38,20 +43,14 @@ Deno.serve(async (req) => {
       generatePayload.aspect_ratio = aspectRatio;
     }
 
-    // Add loop
-    if (loop) {
-      generatePayload.loop = loop;
-    }
-
     console.log('Payload:', JSON.stringify(generatePayload, null, 2));
 
-    // Try the simple endpoint from GitHub
-    const generateResponse = await fetch('https://api.piapi.ai/api/luma/v1/video', {
+    // Use Luma API directly
+    const generateResponse = await fetch('https://api.lumalabs.ai/dream-machine/v1/generations', {
       method: 'POST',
       headers: {
-        'X-API-Key': lumaApiKey,
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
+        'Authorization': `Bearer ${lumaApiKey}`,
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify(generatePayload)
     });
