@@ -25,6 +25,7 @@ Deno.serve(async (req) => {
     // Build payload for Luma API - using dream-machine model
     const generatePayload = {
       prompt: prompt,
+      model: "dream-machine",
       aspect_ratio: aspectRatio
     };
 
