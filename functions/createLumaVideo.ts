@@ -20,28 +20,25 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'LUMA_API_KEY not configured' }, { status: 500 });
     }
 
-    // Create generation request
+    // Create generation request for piapi.ai
     const generatePayload = {
-      prompt: prompt,
-      aspect_ratio: aspectRatio,
-      loop: loop
+      model: "luma-video",
+      task_type: imageUrl ? "img2video" : "txt2video",
+      input: {
+        prompt: prompt
+      }
     };
 
     // Add image if provided (image-to-video)
     if (imageUrl) {
-      generatePayload.keyframes = {
-        frame0: {
-          type: "image",
-          url: imageUrl
-        }
-      };
+      generatePayload.input.image_url = imageUrl;
     }
 
-    // Call Luma API to create generation
-    const generateResponse = await fetch('https://api.lumalabs.ai/dream-machine/v1/generations', {
+    // Call piapi.ai Luma API to create generation
+    const generateResponse = await fetch('https://api.piapi.ai/api/luma/generate', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${lumaApiKey}`,
+        'x-api-key': lumaApiKey,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(generatePayload)
@@ -57,7 +54,14 @@ Deno.serve(async (req) => {
     }
 
     const generateData = await generateResponse.json();
-    const generationId = generateData.id;
+    const taskId = generateData.data?.task_id;
+
+    if (!taskId) {
+      return Response.json({
+        error: 'Failed to get task ID',
+        details: generateData
+      }, { status: 500 });
+    }
 
     // Poll for completion
     let attempts = 0;
@@ -67,9 +71,9 @@ Deno.serve(async (req) => {
     while (attempts < maxAttempts) {
       await new Promise(resolve => setTimeout(resolve, pollInterval));
 
-      const statusResponse = await fetch(`https://api.lumalabs.ai/dream-machine/v1/generations/${generationId}`, {
+      const statusResponse = await fetch(`https://api.piapi.ai/api/luma/fetch/${taskId}`, {
         headers: {
-          'Authorization': `Bearer ${lumaApiKey}`
+          'x-api-key': lumaApiKey
         }
       });
 
@@ -81,22 +85,22 @@ Deno.serve(async (req) => {
 
       const statusData = await statusResponse.json();
 
-      if (statusData.state === 'completed') {
+      if (statusData.data?.status === 'completed') {
         return Response.json({
           success: true,
-          video_url: statusData.assets?.video || statusData.video?.url,
-          thumbnail_url: statusData.assets?.thumbnail,
-          generation_id: generationId,
+          video_url: statusData.data?.output?.video_url,
+          thumbnail_url: statusData.data?.output?.thumbnail_url,
+          generation_id: taskId,
           prompt: prompt,
           aspect_ratio: aspectRatio,
-          created_at: statusData.created_at
+          created_at: new Date().toISOString()
         });
       }
 
-      if (statusData.state === 'failed') {
+      if (statusData.data?.status === 'failed') {
         return Response.json({
           error: 'Video generation failed',
-          details: statusData.failure_reason
+          details: statusData.data?.error
         }, { status: 500 });
       }
 
@@ -105,7 +109,7 @@ Deno.serve(async (req) => {
 
     return Response.json({
       error: 'Video generation timed out',
-      generation_id: generationId
+      generation_id: taskId
     }, { status: 408 });
 
   } catch (error) {
