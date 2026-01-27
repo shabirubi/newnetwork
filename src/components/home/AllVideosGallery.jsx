@@ -4,6 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { Play, Eye, Clock, X, Film, Youtube, Loader } from "lucide-react";
 import moment from "moment";
+import VideoShareButtons from "../shared/VideoShareButtons";
 
 const VideoSkeleton = () => (
   <div className="group cursor-pointer bg-gradient-to-br from-black/80 via-[#E31E24]/20 to-black/80 backdrop-blur-sm rounded-xl overflow-hidden border-2 border-[#E31E24]/40" style={{ boxShadow: '0 0 20px rgba(227, 30, 36, 0.3)' }}>
@@ -225,27 +226,30 @@ export default function AllVideosGallery() {
               {/* Video Info */}
               <div className="p-6 bg-gradient-to-br from-black/80 via-[#E31E24]/20 to-black/80">
                 <h2 className="text-white text-2xl font-bold mb-2">{selectedVideo.title}</h2>
-                <div className="flex items-center gap-4 text-gray-400 text-sm">
-                  <div className="flex items-center gap-1">
-                    <Clock className="w-4 h-4" />
-                    {moment(selectedVideo.created_date).format('DD/MM/YYYY')}
-                  </div>
-                  {selectedVideo.views > 0 && (
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center gap-4 text-gray-400 text-sm">
                     <div className="flex items-center gap-1">
-                      <Eye className="w-4 h-4" />
-                      {selectedVideo.views.toLocaleString()} צפיות
+                      <Clock className="w-4 h-4" />
+                      {moment(selectedVideo.created_date).format('DD/MM/YYYY')}
                     </div>
-                  )}
-                  {selectedVideo.type === 'youtube' ? (
-                    <div className="bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
-                      <Youtube className="w-3 h-3" />
-                      YouTube
-                    </div>
-                  ) : (
-                    <div className="bg-[#E31E24] text-white px-3 py-1 rounded-full text-xs font-bold">
-                      הועלה ע"י משתמש
-                    </div>
-                  )}
+                    {selectedVideo.views > 0 && (
+                      <div className="flex items-center gap-1">
+                        <Eye className="w-4 h-4" />
+                        {selectedVideo.views.toLocaleString()} צפיות
+                      </div>
+                    )}
+                    {selectedVideo.type === 'youtube' ? (
+                      <div className="bg-red-600 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+                        <Youtube className="w-3 h-3" />
+                        YouTube
+                      </div>
+                    ) : (
+                      <div className="bg-[#E31E24] text-white px-3 py-1 rounded-full text-xs font-bold">
+                        הועלה ע"י משתמש
+                      </div>
+                    )}
+                  </div>
+                  <VideoShareButtons videoUrl={selectedVideo.url} title={selectedVideo.title} />
                 </div>
               </div>
             </motion.div>

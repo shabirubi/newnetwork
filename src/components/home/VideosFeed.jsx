@@ -2,7 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
-import { Share2, Bookmark, Eye, ChevronUp, ChevronDown, Play } from "lucide-react";
+import { Bookmark, Eye, ChevronUp, ChevronDown, Play } from "lucide-react";
+import VideoShareButtons from "../shared/VideoShareButtons";
 
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png";
 const BACKGROUND_IMAGE = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/43de178a9_image.png";
@@ -160,13 +161,18 @@ export default function VideosFeed() {
                   {/* Video Title Overlay */}
                   {currentVideo?.title && (
                     <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/60 to-transparent p-4">
-                      <h3 className="text-white font-bold text-base line-clamp-2">{currentVideo.title}</h3>
-                      {currentVideo?.views && (
-                        <div className="flex items-center gap-2 text-white/80 text-xs mt-2">
-                          <Eye className="w-3 h-3" />
-                          <span>{currentVideo.views.toLocaleString()} צפיות</span>
+                      <h3 className="text-white font-bold text-base line-clamp-2 mb-2">{currentVideo.title}</h3>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2 text-white/80 text-xs">
+                          {currentVideo?.views && (
+                            <>
+                              <Eye className="w-3 h-3" />
+                              <span>{currentVideo.views.toLocaleString()} צפיות</span>
+                            </>
+                          )}
                         </div>
-                      )}
+                        <VideoShareButtons videoUrl={currentVideo.url} title={currentVideo.title} className="scale-90" />
+                      </div>
                     </div>
                   )}
 

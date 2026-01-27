@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { MessageCircle, Play, X, User, Clock, MessageSquare } from "lucide-react";
 import moment from "moment";
 import ReporterChat from "../apps/ReporterChat";
+import VideoShareButtons from "../shared/VideoShareButtons";
 
 export default function ReporterResponsesFeed() {
   const [fullscreenVideo, setFullscreenVideo] = useState(null);
@@ -261,9 +262,14 @@ export default function ReporterResponsesFeed() {
                     </p>
                   </div>
                 )}
-                <p className="text-white/70 text-xs sm:text-sm leading-relaxed">
-                  {fullscreenVideo.message}
-                </p>
+                <div className="flex items-start justify-between gap-4">
+                  <p className="text-white/70 text-xs sm:text-sm leading-relaxed flex-1">
+                    {fullscreenVideo.message}
+                  </p>
+                  {fullscreenVideo.voice_url && (
+                    <VideoShareButtons videoUrl={fullscreenVideo.voice_url} title={fullscreenVideo.response_text || fullscreenVideo.message} />
+                  )}
+                </div>
               </div>
             </div>
           </motion.div>

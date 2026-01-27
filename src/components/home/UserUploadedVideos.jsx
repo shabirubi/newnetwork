@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Play, Heart, MessageCircle, Share2, Upload, Film } from "lucide-react";
+import { Play, Heart, MessageCircle, Upload, Film } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
+import VideoShareButtons from "../shared/VideoShareButtons";
 
 export default function UserUploadedVideos({ onUploadClick }) {
   const [selectedVideo, setSelectedVideo] = useState(null);
@@ -119,10 +120,8 @@ export default function UserUploadedVideos({ onUploadClick }) {
                         <MessageCircle className="w-4 h-4" />
                         0
                       </button>
-                      <button className="flex items-center gap-1 hover:text-green-500 transition-colors">
-                        <Share2 className="w-4 h-4" />
-                      </button>
                     </div>
+                    <VideoShareButtons videoUrl={video.video_url} title={video.title} className="scale-90" />
                   </div>
                 </div>
               </div>
