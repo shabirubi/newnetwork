@@ -68,16 +68,16 @@ Deno.serve(async (req) => {
     }
 
     const generateData = JSON.parse(responseText);
-    const taskId = generateData.data?.task_id;
+    const generationId = generateData.id;
 
-    if (!taskId) {
+    if (!generationId) {
       return Response.json({
-        error: 'No task_id received',
+        error: 'No generation ID received',
         details: generateData
       }, { status: 500 });
     }
 
-    console.log('Task ID:', taskId);
+    console.log('Generation ID:', generationId);
 
     // Poll for completion
     let attempts = 0;
@@ -88,9 +88,9 @@ Deno.serve(async (req) => {
       await new Promise(resolve => setTimeout(resolve, pollInterval));
       attempts++;
 
-      const statusResponse = await fetch(`https://api.piapi.ai/api/luma/v1/video/${taskId}`, {
+      const statusResponse = await fetch(`https://api.lumalabs.ai/dream-machine/v1/generations/${generationId}`, {
         headers: {
-          'X-API-Key': lumaApiKey,
+          'Authorization': `Bearer ${lumaApiKey}`,
           'Accept': 'application/json'
         }
       });
@@ -103,31 +103,31 @@ Deno.serve(async (req) => {
       }
 
       const statusData = JSON.parse(statusText);
-      const status = statusData.data?.status;
+      const status = statusData.status;
 
       console.log(`Status: ${status}`);
 
       if (status === 'completed') {
         return Response.json({
           success: true,
-          video_url: statusData.data?.video_url,
-          thumbnail_url: statusData.data?.thumbnail_url,
-          generation_id: taskId,
+          video_url: statusData.assets?.video_url,
+          thumbnail_url: statusData.assets?.thumbnail_url,
+          generation_id: generationId,
           prompt: prompt
         });
       }
 
-      if (status === 'failed' || status === 'error') {
+      if (status === 'failed') {
         return Response.json({
           error: 'Generation failed',
-          details: statusData.data
+          details: statusData
         }, { status: 500 });
       }
     }
 
     return Response.json({
       error: 'Timeout',
-      generation_id: taskId
+      generation_id: generationId
     }, { status: 408 });
 
   } catch (error) {
