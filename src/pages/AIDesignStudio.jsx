@@ -12,6 +12,7 @@ import { UploadDesignModal } from "../components/designstudio/UploadDesignModal"
 import { ArticlePresenterModal } from "../components/designstudio/ArticlePresenterModal";
 import { MotionCharacterModal } from "../components/designstudio/MotionCharacterModal";
 import { ScriptGeneratorModal } from "../components/designstudio/ScriptGeneratorModal";
+import { LumaVideoModal } from "../components/designstudio/LumaVideoModal";
 import { TextOverlayEditor, FiltersPanel, ExportOptions, ShareDesign } from "../components/designstudio/DesignEditor";
 
 export default function AIDesignStudio() {
@@ -35,6 +36,7 @@ export default function AIDesignStudio() {
   const [showArticlePresentationModal, setShowArticlePresentationModal] = useState(false);
   const [showMotionCharacterModal, setShowMotionCharacterModal] = useState(false);
   const [showScriptGeneratorModal, setShowScriptGeneratorModal] = useState(false);
+  const [showLumaVideoModal, setShowLumaVideoModal] = useState(false);
 
   const generateDesign = async () => {
     if (!prompt.trim()) {
@@ -279,8 +281,16 @@ export default function AIDesignStudio() {
 
                     <div className="flex gap-2 flex-wrap">
                       <Button
-                        onClick={() => setShowUploadModal(true)}
+                        onClick={() => setShowLumaVideoModal(true)}
                         className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-xs sm:text-sm"
+                      >
+                        <Sparkles className="w-4 h-4 mr-1" />
+                        Luma AI
+                      </Button>
+                      <Button
+                        onClick={() => setShowUploadModal(true)}
+                        variant="outline"
+                        className="flex-1 border-purple-500/50 text-purple-400 hover:bg-purple-500/20 text-xs sm:text-sm"
                       >
                         <Grid3X3 className="w-4 h-4 mr-1" />
                         הוסף
@@ -449,6 +459,11 @@ export default function AIDesignStudio() {
       <ScriptGeneratorModal
         isOpen={showScriptGeneratorModal}
         onClose={() => setShowScriptGeneratorModal(false)}
+        imageUrl={editedImage || generatedImage}
+      />
+      <LumaVideoModal
+        isOpen={showLumaVideoModal}
+        onClose={() => setShowLumaVideoModal(false)}
         imageUrl={editedImage || generatedImage}
       />
 

@@ -1,5 +1,6 @@
 import AIDesignStudio from './pages/AIDesignStudio';
 import Accessibility from './pages/Accessibility';
+import AnimationStudio from './pages/AnimationStudio';
 import Archive from './pages/Archive';
 import Article from './pages/Article';
 import AvatarStudio from './pages/AvatarStudio';
@@ -28,13 +29,13 @@ import UserVideos from './pages/UserVideos';
 import VOD from './pages/VOD';
 import VODContent from './pages/VODContent';
 import WarRoom from './pages/WarRoom';
-import AnimationStudio from './pages/AnimationStudio';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
     "AIDesignStudio": AIDesignStudio,
     "Accessibility": Accessibility,
+    "AnimationStudio": AnimationStudio,
     "Archive": Archive,
     "Article": Article,
     "AvatarStudio": AvatarStudio,
@@ -63,7 +64,6 @@ export const PAGES = {
     "VOD": VOD,
     "VODContent": VODContent,
     "WarRoom": WarRoom,
-    "AnimationStudio": AnimationStudio,
 }
 
 export const pagesConfig = {
