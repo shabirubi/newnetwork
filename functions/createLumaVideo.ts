@@ -91,6 +91,7 @@ Deno.serve(async (req) => {
 
       const statusResponse = await fetch(`https://api.piapi.ai/api/luma/v1/video/${taskId}`, {
         headers: {
+          'X-API-Key': lumaApiKey,
           'Accept': 'application/json'
         }
       });
