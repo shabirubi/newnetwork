@@ -24,34 +24,27 @@ Deno.serve(async (req) => {
     console.log('Image URL:', imageUrl);
     console.log('Aspect ratio:', aspectRatio);
 
-    // Build payload according to piapi.ai docs
+    // Build payload for Luma Dream Machine
     const generatePayload = {
-      model: "luma",
-      task_type: "dreamachine",
-      input: {
-        prompt: prompt
-      }
+      user_prompt: prompt,
+      aspect_ratio: aspectRatio,
+      expand_prompt: false
     };
 
-    // Add image_url if provided for img2video
+    // Add image_url if provided
     if (imageUrl) {
-      generatePayload.input.image_url = imageUrl;
+      generatePayload.image_url = imageUrl;
     }
 
-    // Add aspect_ratio
-    if (aspectRatio) {
-      generatePayload.input.aspect_ratio = aspectRatio;
-    }
-
-    // Add loop
+    // Add loop if needed
     if (loop) {
-      generatePayload.input.loop = loop;
+      generatePayload.loop = loop;
     }
 
     console.log('Request payload:', JSON.stringify(generatePayload, null, 2));
 
-    // Create task using piapi.ai general endpoint
-    const generateResponse = await fetch('https://api.piapi.ai/api/v1/task', {
+    // Create task using Luma endpoint
+    const generateResponse = await fetch('https://api.piapi.ai/api/luma/v1/generations', {
       method: 'POST',
       headers: {
         'x-api-key': lumaApiKey,
@@ -73,11 +66,11 @@ Deno.serve(async (req) => {
     const generateData = await generateResponse.json();
     console.log('Generation response:', JSON.stringify(generateData, null, 2));
 
-    const taskId = generateData.data?.task_id;
+    const generationId = generateData.data?.id;
 
-    if (!taskId) {
+    if (!generationId) {
       return Response.json({
-        error: 'Failed to get task ID',
+        error: 'Failed to get generation ID',
         details: generateData
       }, { status: 500 });
     }
@@ -87,12 +80,12 @@ Deno.serve(async (req) => {
     const maxAttempts = 180; // 15 minutes max
     const pollInterval = 5000; // 5 seconds
 
-    console.log('Starting polling for task:', taskId);
+    console.log('Starting polling for generation:', generationId);
 
     while (attempts < maxAttempts) {
       await new Promise(resolve => setTimeout(resolve, pollInterval));
 
-      const statusResponse = await fetch(`https://api.piapi.ai/api/v1/task/${taskId}`, {
+      const statusResponse = await fetch(`https://api.piapi.ai/api/luma/v1/generations/${generationId}`, {
         headers: {
           'x-api-key': lumaApiKey
         }
@@ -105,26 +98,26 @@ Deno.serve(async (req) => {
       }
 
       const statusData = await statusResponse.json();
-      console.log(`Poll attempt ${attempts + 1}: Status =`, statusData.data?.status);
+      console.log(`Poll attempt ${attempts + 1}: Status =`, statusData.data?.state);
 
-      if (statusData.data?.status === 'completed') {
+      if (statusData.data?.state === 'completed') {
         console.log('Video generation completed!');
         return Response.json({
           success: true,
-          video_url: statusData.data?.output?.video_url,
-          thumbnail_url: statusData.data?.output?.thumbnail_url,
-          generation_id: taskId,
+          video_url: statusData.data?.video?.url,
+          thumbnail_url: statusData.data?.video?.thumbnail_url,
+          generation_id: generationId,
           prompt: prompt,
           aspect_ratio: aspectRatio,
           created_at: new Date().toISOString()
         });
       }
 
-      if (statusData.data?.status === 'failed' || statusData.data?.status === 'error') {
-        console.error('Video generation failed:', statusData.data?.error);
+      if (statusData.data?.state === 'failed') {
+        console.error('Video generation failed:', statusData.data?.failure_reason);
         return Response.json({
           error: 'Video generation failed',
-          details: statusData.data?.error || statusData.data?.failure_reason
+          details: statusData.data?.failure_reason
         }, { status: 500 });
       }
 
@@ -133,7 +126,7 @@ Deno.serve(async (req) => {
 
     return Response.json({
       error: 'Video generation timed out',
-      generation_id: taskId,
+      generation_id: generationId,
       message: 'The video is still being generated. Please try fetching it later.'
     }, { status: 408 });
 
