@@ -50,8 +50,9 @@ Deno.serve(async (req) => {
       female: 'GEyb0CAhZyT34ES5zdqh'    // Hebrew Voice
     };
 
+    // Use provided voiceId if it's ElevenLabs, otherwise use gender mapping
     const finalVoiceId = voiceProvider === 'elevenlabs' 
-      ? elevenLabsVoices[gender] 
+      ? (voiceId && voiceId.length > 10 ? voiceId : elevenLabsVoices[gender])
       : voiceId;
 
     let apiUrl, payload, jobId;
