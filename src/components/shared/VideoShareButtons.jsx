@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Share2, Instagram, Facebook, Twitter } from "lucide-react";
+import { Share2, Instagram, Facebook, Twitter, MessageCircle } from "lucide-react";
 import { toast } from "sonner";
 
 export default function VideoShareButtons({ videoUrl, title = "", className = "" }) {
@@ -25,6 +25,12 @@ export default function VideoShareButtons({ videoUrl, title = "", className = ""
     const text = title ? `${title}\n${videoUrl}` : videoUrl;
     const twitterUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(text)}`;
     window.open(twitterUrl, '_blank', 'width=600,height=400');
+  };
+
+  const shareToWhatsApp = () => {
+    const text = title ? `${title}\n${videoUrl}` : videoUrl;
+    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text)}`;
+    window.open(whatsappUrl, '_blank');
   };
 
   const shareGeneral = async () => {
@@ -92,6 +98,17 @@ export default function VideoShareButtons({ videoUrl, title = "", className = ""
         title="שתף ב-X"
       >
         <Twitter className="w-4 h-4 text-white" fill="currentColor" />
+      </motion.button>
+
+      {/* WhatsApp */}
+      <motion.button
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={shareToWhatsApp}
+        className="w-8 h-8 rounded-full bg-[#25D366] hover:bg-[#20BA5A] flex items-center justify-center transition-colors shadow-lg"
+        title="שתף בוואטסאפ"
+      >
+        <MessageCircle className="w-4 h-4 text-white" fill="currentColor" />
       </motion.button>
 
       {/* General Share */}
