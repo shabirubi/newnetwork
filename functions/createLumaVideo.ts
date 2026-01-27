@@ -24,7 +24,8 @@ Deno.serve(async (req) => {
 
     // Build payload for Luma API - using dream-machine model
     const generatePayload = {
-      prompt: prompt
+      prompt: prompt,
+      aspect_ratio: aspectRatio
     };
 
     // Add image if provided
@@ -40,7 +41,7 @@ Deno.serve(async (req) => {
     console.log('Payload:', JSON.stringify(generatePayload, null, 2));
 
     // Use Luma API
-    const generateResponse = await fetch('https://api.lumalabs.ai/dream-machine/v1/generations', {
+    const generateResponse = await fetch('https://api.lumalabs.ai/v1/generations', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${lumaApiKey}`,
