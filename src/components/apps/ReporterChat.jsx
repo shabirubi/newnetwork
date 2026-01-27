@@ -380,29 +380,26 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
       const studioBackground = 'https://images.unsplash.com/photo-1598550487956-4238a7359cd5?w=1920&h=1080&fit=crop';
       
       base44.functions.invoke('generateTalkingVideo', {
-        mode: 'talks',
         text: cleanText,
         avatarUrl: selectedReporter.image,
+        gender: reporterGender,
         voiceProvider: 'elevenlabs',
         voiceId: 'GEyb0CAhZyT34ES5zdqh',
         backgroundUrl: studioBackground
       }).then(videoResponse => {
-        console.log('Video Response:', videoResponse);
-        const videoUrl = videoResponse?.data?.video_url || videoResponse?.video_url;
+        setMessages(prev => {
+          const updated = [...prev];
+          const msgIndex = updated.findIndex(m => m.id === messageId);
+          if (msgIndex !== -1) {
+            updated[msgIndex].videoUrl = videoResponse.data?.video_url;
+            updated[msgIndex].voice_url = videoResponse.data?.video_url;
+            updated[msgIndex].isGeneratingVideo = false;
+          }
+          return updated;
+        });
         
-        if (videoUrl) {
-          setMessages(prev => {
-            const updated = [...prev];
-            const msgIndex = updated.findIndex(m => m.id === messageId);
-            if (msgIndex !== -1) {
-              updated[msgIndex].videoUrl = videoUrl;
-              updated[msgIndex].voice_url = videoUrl;
-              updated[msgIndex].isGeneratingVideo = false;
-            }
-            return updated;
-          });
-          
-          // Update the database with the video URL
+        // Update the database with the video URL
+        if (videoResponse.data?.video_url) {
           base44.entities.ReporterChat.filter({
             reporter_id: selectedReporter.id,
             reporter_name: selectedReporter.name,
@@ -411,22 +408,11 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
           }).then(records => {
             if (records && records.length > 0) {
               base44.entities.ReporterChat.update(records[0].id, {
-                voice_url: videoUrl
+                voice_url: videoResponse.data?.video_url
               });
             }
-          }).catch(err => console.error('Failed to update chat:', err));
-          
-          toast.success('🎥 הווידאו מוכן!');
-        } else {
-          console.error('No video URL in response:', videoResponse);
-          setMessages(prev => {
-            const updated = [...prev];
-            const msgIndex = updated.findIndex(m => m.id === messageId);
-            if (msgIndex !== -1) {
-              updated[msgIndex].isGeneratingVideo = false;
-            }
-            return updated;
           });
+          toast.success('🎥 הווידאו מוכן!');
         }
       }).catch(err => {
         console.error('Video generation failed:', err);
@@ -962,22 +948,16 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                               </div>
                             )}
                             
-                            {message.role === "assistant" && (message.videoUrl || message.voice_url) && !message.isGeneratingVideo && (
+                            {message.role === "assistant" && (message.videoUrl || message.voice_url) && (
                               <div className="mt-3">
                                 <div className="w-full rounded-lg overflow-hidden border-2 border-[#E31E24]/50 relative group">
                                   <div className="aspect-video bg-gradient-to-br from-gray-900 to-gray-800 relative">
                                     <video
-                                      key={message.videoUrl || message.voice_url}
                                       src={message.videoUrl || message.voice_url}
                                       className="w-full h-full object-cover"
                                       controls
                                       playsInline
-                                      autoPlay
-                                      muted={false}
-                                      preload="auto"
-                                      onError={(e) => console.error('Video error:', e)}
-                                      onLoadStart={() => console.log('Video loading...')}
-                                      onCanPlay={() => console.log('Video ready')}
+                                      preload="metadata"
                                     />
                                   </div>
                                 </div>

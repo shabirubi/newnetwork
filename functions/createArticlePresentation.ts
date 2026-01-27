@@ -26,8 +26,8 @@ Deno.serve(async (req) => {
     const voiceMap = {
       'en': '21m00Tcm4TlvDq8ikWAM',
       'en-female': 'EZwHvHT1z3XmcmzWIWFF',
-      'he': 'GEyb0CAhZyT34ES5zdqh',
-      'he-female': 'GEyb0CAhZyT34ES5zdqh',
+      'he': '9BWtsMINqrJLrRacOk9x',
+      'he-female': 'zrHiPzrd1d3O8z5RsZXS',
     };
 
     const voiceId = voiceMap[voice] || voiceMap['he'];

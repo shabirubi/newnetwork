@@ -6,10 +6,7 @@ Deno.serve(async (req) => {
     const user = await base44.auth.me();
 
     if (!user) {
-      return new Response(JSON.stringify({ error: 'Unauthorized' }), { 
-        status: 401,
-        headers: { 'Content-Type': 'application/json' }
-      });
+      return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const { 
@@ -27,28 +24,19 @@ Deno.serve(async (req) => {
       } = await req.json();
 
       if (!text && !audioUrl) {
-        return new Response(JSON.stringify({ error: 'Missing text or audioUrl' }), { 
-          status: 400,
-          headers: { 'Content-Type': 'application/json' }
-        });
+        return Response.json({ error: 'Missing text or audioUrl' }, { status: 400 });
       }
 
     const DID_API_KEY = Deno.env.get('DID_API_KEY');
     const ELEVENLABS_API_KEY = Deno.env.get('ELEVENLABS_API_KEY');
     
     if (!DID_API_KEY) {
-      return new Response(JSON.stringify({ error: 'D-ID API Key not configured' }), { 
-        status: 500,
-        headers: { 'Content-Type': 'application/json' }
-      });
+      return Response.json({ error: 'D-ID API Key not configured' }, { status: 500 });
     }
     
     // ElevenLabs is optional - only needed if voiceProvider is 'elevenlabs'
     if (voiceProvider === 'elevenlabs' && !ELEVENLABS_API_KEY) {
-      return new Response(JSON.stringify({ error: 'ElevenLabs API Key not configured' }), { 
-        status: 500,
-        headers: { 'Content-Type': 'application/json' }
-      });
+      return Response.json({ error: 'ElevenLabs API Key not configured' }, { status: 500 });
     }
 
     console.log('🎬 Mode:', mode);
@@ -58,13 +46,12 @@ Deno.serve(async (req) => {
 
     // Map gender to ElevenLabs voice IDs - Hebrew voices
     const elevenLabsVoices = {
-      male: 'GEyb0CAhZyT34ES5zdqh',     // Hebrew Voice
-      female: 'GEyb0CAhZyT34ES5zdqh'    // Hebrew Voice
+      male: '9BWtsMINqrJLrRacOk9x',     // Hebrew Male (Daniel)
+      female: 'zrHiPzrd1d3O8z5RsZXS'    // Hebrew Female (Rachel)
     };
 
-    // Use provided voiceId if it's ElevenLabs, otherwise use gender mapping
     const finalVoiceId = voiceProvider === 'elevenlabs' 
-      ? (voiceId && voiceId.length > 10 ? voiceId : elevenLabsVoices[gender])
+      ? elevenLabsVoices[gender] 
       : voiceId;
 
     let apiUrl, payload, jobId;
@@ -72,10 +59,7 @@ Deno.serve(async (req) => {
     // Mode 1: V2 Talks API - Head Only
     if (mode === 'talks') {
       if (!avatarUrl) {
-        return new Response(JSON.stringify({ error: 'Missing avatarUrl for talks mode' }), { 
-          status: 400,
-          headers: { 'Content-Type': 'application/json' }
-        });
+        return Response.json({ error: 'Missing avatarUrl for talks mode' }, { status: 400 });
       }
 
       console.log('🖼️ Avatar URL:', avatarUrl);
@@ -124,10 +108,7 @@ Deno.serve(async (req) => {
     // Mode 2: V3 Clips API - Pre-made Full Body Presenters
     else if (mode === 'clips') {
       if (!presenterId) {
-        return new Response(JSON.stringify({ error: 'Missing presenterId for clips mode' }), { 
-          status: 400,
-          headers: { 'Content-Type': 'application/json' }
-        });
+        return Response.json({ error: 'Missing presenterId for clips mode' }, { status: 400 });
       }
 
       console.log('👤 Presenter ID:', presenterId);
@@ -155,10 +136,7 @@ Deno.serve(async (req) => {
     // Mode 3: V3 Express/Instant API - Custom Avatar
     else if (mode === 'express') {
       if (!avatarId) {
-        return new Response(JSON.stringify({ error: 'Missing avatarId for express mode' }), { 
-          status: 400,
-          headers: { 'Content-Type': 'application/json' }
-        });
+        return Response.json({ error: 'Missing avatarId for express mode' }, { status: 400 });
       }
 
       console.log('✨ Avatar ID:', avatarId);
@@ -183,10 +161,7 @@ Deno.serve(async (req) => {
         }
       };
     } else {
-      return new Response(JSON.stringify({ error: 'Invalid mode' }), { 
-        status: 400,
-        headers: { 'Content-Type': 'application/json' }
-      });
+      return Response.json({ error: 'Invalid mode' }, { status: 400 });
     }
 
     // Create video
@@ -211,13 +186,10 @@ Deno.serve(async (req) => {
     if (!response.ok) {
       const errorText = await response.text();
       console.error('❌ D-ID Error:', response.status, errorText);
-      return new Response(JSON.stringify({ 
+      return Response.json({ 
         error: `D-ID API error: ${errorText}`,
         status: response.status
-      }), { 
-        status: 500,
-        headers: { 'Content-Type': 'application/json' }
-      });
+      }, { status: 500 });
     }
 
     const result = await response.json();
@@ -255,25 +227,19 @@ Deno.serve(async (req) => {
 
         if (statusData.status === 'done' && statusData.result_url) {
           console.log('🎉 Video ready:', statusData.result_url);
-          return new Response(JSON.stringify({
+          return Response.json({
             success: true,
             video_url: statusData.result_url,
             duration: statusData.duration || 0,
             job_id: jobId
-          }), { 
-            status: 200,
-            headers: { 'Content-Type': 'application/json' }
           });
         }
 
         if (statusData.status === 'error' || statusData.status === 'rejected') {
           console.error('❌ Generation failed:', statusData);
-          return new Response(JSON.stringify({ 
+          return Response.json({ 
             error: `Generation failed: ${statusData.error?.message || 'Unknown error'}` 
-          }), { 
-            status: 500,
-            headers: { 'Content-Type': 'application/json' }
-          });
+          }, { status: 500 });
         }
 
         // Adaptive polling
@@ -287,16 +253,10 @@ Deno.serve(async (req) => {
       }
     }
 
-    return new Response(JSON.stringify({ error: 'Video generation timeout' }), { 
-      status: 504,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    return Response.json({ error: 'Video generation timeout' }, { status: 504 });
 
   } catch (error) {
     console.error('🔴 Error:', error);
-    return new Response(JSON.stringify({ error: error.message }), { 
-      status: 500,
-      headers: { 'Content-Type': 'application/json' }
-    });
+    return Response.json({ error: error.message }, { status: 500 });
   }
 });
