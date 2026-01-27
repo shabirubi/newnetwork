@@ -9,7 +9,7 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { prompt, imageUrl, aspectRatio = "16:9", loop = false } = await req.json();
+    const { prompt, imageUrl, aspectRatio = "16:9" } = await req.json();
 
     if (!prompt) {
       return Response.json({ error: 'Prompt is required' }, { status: 400 });
@@ -21,12 +21,10 @@ Deno.serve(async (req) => {
     }
 
     console.log('Creating Luma video with prompt:', prompt);
-    console.log('Image URL:', imageUrl);
 
-    // Build payload for Luma API
+    // Build payload for Luma API - using dream-machine model
     const generatePayload = {
-      prompt: prompt,
-      model: "ray-3"
+      prompt: prompt
     };
 
     // Add image if provided
@@ -39,14 +37,9 @@ Deno.serve(async (req) => {
       };
     }
 
-    // Add aspect ratio
-    if (aspectRatio) {
-      generatePayload.aspect_ratio = aspectRatio;
-    }
-
     console.log('Payload:', JSON.stringify(generatePayload, null, 2));
 
-    // Use Luma API directly
+    // Use Luma API
     const generateResponse = await fetch('https://api.lumalabs.ai/dream-machine/v1/generations', {
       method: 'POST',
       headers: {
@@ -97,7 +90,7 @@ Deno.serve(async (req) => {
       });
 
       const statusText = await statusResponse.text();
-      console.log(`Poll ${attempts}: Status ${statusResponse.status}, Body: ${statusText.substring(0, 200)}`);
+      console.log(`Poll ${attempts}: Status ${statusResponse.status}`);
 
       if (!statusResponse.ok) {
         continue;
