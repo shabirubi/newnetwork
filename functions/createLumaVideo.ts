@@ -83,7 +83,7 @@ Deno.serve(async (req) => {
       await new Promise(resolve => setTimeout(resolve, pollInterval));
       attempts++;
 
-      const statusResponse = await fetch(`https://api.lumalabs.ai/dream-machine/v1/generations/${generationId}`, {
+      const statusResponse = await fetch(`https://api.lumalabs.ai/v1/generations/${generationId}`, {
         headers: {
           'Authorization': `Bearer ${lumaApiKey}`,
           'Accept': 'application/json'
