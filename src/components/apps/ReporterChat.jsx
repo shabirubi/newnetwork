@@ -387,19 +387,22 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
         voiceId: 'GEyb0CAhZyT34ES5zdqh',
         backgroundUrl: studioBackground
       }).then(videoResponse => {
-        setMessages(prev => {
-          const updated = [...prev];
-          const msgIndex = updated.findIndex(m => m.id === messageId);
-          if (msgIndex !== -1) {
-            updated[msgIndex].videoUrl = videoResponse.data?.video_url;
-            updated[msgIndex].voice_url = videoResponse.data?.video_url;
-            updated[msgIndex].isGeneratingVideo = false;
-          }
-          return updated;
-        });
+        console.log('Video Response:', videoResponse);
+        const videoUrl = videoResponse?.data?.video_url || videoResponse?.video_url;
         
-        // Update the database with the video URL
-        if (videoResponse.data?.video_url) {
+        if (videoUrl) {
+          setMessages(prev => {
+            const updated = [...prev];
+            const msgIndex = updated.findIndex(m => m.id === messageId);
+            if (msgIndex !== -1) {
+              updated[msgIndex].videoUrl = videoUrl;
+              updated[msgIndex].voice_url = videoUrl;
+              updated[msgIndex].isGeneratingVideo = false;
+            }
+            return updated;
+          });
+          
+          // Update the database with the video URL
           base44.entities.ReporterChat.filter({
             reporter_id: selectedReporter.id,
             reporter_name: selectedReporter.name,
@@ -408,11 +411,22 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
           }).then(records => {
             if (records && records.length > 0) {
               base44.entities.ReporterChat.update(records[0].id, {
-                voice_url: videoResponse.data?.video_url
+                voice_url: videoUrl
               });
             }
-          });
+          }).catch(err => console.error('Failed to update chat:', err));
+          
           toast.success('🎥 הווידאו מוכן!');
+        } else {
+          console.error('No video URL in response:', videoResponse);
+          setMessages(prev => {
+            const updated = [...prev];
+            const msgIndex = updated.findIndex(m => m.id === messageId);
+            if (msgIndex !== -1) {
+              updated[msgIndex].isGeneratingVideo = false;
+            }
+            return updated;
+          });
         }
       }).catch(err => {
         console.error('Video generation failed:', err);
