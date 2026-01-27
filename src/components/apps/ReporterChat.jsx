@@ -383,7 +383,8 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
         text: cleanText,
         avatarUrl: selectedReporter.image,
         gender: reporterGender,
-        voiceProvider: 'elevenlabs',
+        voiceProvider: 'microsoft',
+        voiceId: reporterGender === 'male' ? 'he-IL-AvriNeural' : 'he-IL-HilaNeural',
         backgroundUrl: studioBackground
       }).then(videoResponse => {
         setMessages(prev => {
