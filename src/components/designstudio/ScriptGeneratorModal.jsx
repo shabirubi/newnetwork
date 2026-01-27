@@ -262,6 +262,8 @@ Return ONLY the script text in Hebrew, nothing else.`,
                     src={generatedVideo.url}
                     controls
                     autoPlay
+                    muted
+                    playsInline
                     className="w-full aspect-video bg-black"
                   />
                 </div>
