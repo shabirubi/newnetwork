@@ -44,10 +44,10 @@ Deno.serve(async (req) => {
     console.log('🔊 Voice Provider:', voiceProvider);
     console.log('👤 Gender:', gender);
 
-    // Map gender to ElevenLabs voice IDs - Professional news anchors
+    // Map gender to ElevenLabs voice IDs - Hebrew voices
     const elevenLabsVoices = {
-      male: 'pNInz6obpgDQGcFmaJgB',     // Hebrew Male News Anchor (Adam)
-      female: 'XrExE9yKIg1WjnnlVkGX'    // Hebrew Female News Anchor (Matilda)
+      male: '9BWtsMINqrJLrRacOk9x',     // Hebrew Male (Daniel)
+      female: 'zrHiPzrd1d3O8z5RsZXS'    // Hebrew Female (Rachel)
     };
 
     const finalVoiceId = voiceProvider === 'elevenlabs' 

@@ -22,10 +22,10 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'API keys not configured' }, { status: 500 });
     }
 
-    // Voice ID mapping - Professional news anchor voices
+    // Voice ID mapping - Hebrew professional voices
     const voiceMap = {
-      'he': 'pNInz6obpgDQGcFmaJgB', // Hebrew Male News Anchor
-      'he-female': 'XrExE9yKIg1WjnnlVkGX', // Hebrew Female News Anchor
+      'he': '9BWtsMINqrJLrRacOk9x', // Hebrew Male (Daniel)
+      'he-female': 'zrHiPzrd1d3O8z5RsZXS', // Hebrew Female (Rachel)
       'en': 'pqHfZKP75CvOlQylNhV4', // English Male News Anchor (Bill)
       'en-female': 'EXAVITQu4vr4xnSDxMaL', // English Female News Anchor (Bella)
       'ar': 'VR6AewLHbXDG24trsUsT', // Arabic News Anchor
