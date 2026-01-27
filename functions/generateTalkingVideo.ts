@@ -6,7 +6,10 @@ Deno.serve(async (req) => {
     const user = await base44.auth.me();
 
     if (!user) {
-      return Response.json({ error: 'Unauthorized' }, { status: 401 });
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), { 
+        status: 401,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
 
     const { 
@@ -24,19 +27,28 @@ Deno.serve(async (req) => {
       } = await req.json();
 
       if (!text && !audioUrl) {
-        return Response.json({ error: 'Missing text or audioUrl' }, { status: 400 });
+        return new Response(JSON.stringify({ error: 'Missing text or audioUrl' }), { 
+          status: 400,
+          headers: { 'Content-Type': 'application/json' }
+        });
       }
 
     const DID_API_KEY = Deno.env.get('DID_API_KEY');
     const ELEVENLABS_API_KEY = Deno.env.get('ELEVENLABS_API_KEY');
     
     if (!DID_API_KEY) {
-      return Response.json({ error: 'D-ID API Key not configured' }, { status: 500 });
+      return new Response(JSON.stringify({ error: 'D-ID API Key not configured' }), { 
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
     
     // ElevenLabs is optional - only needed if voiceProvider is 'elevenlabs'
     if (voiceProvider === 'elevenlabs' && !ELEVENLABS_API_KEY) {
-      return Response.json({ error: 'ElevenLabs API Key not configured' }, { status: 500 });
+      return new Response(JSON.stringify({ error: 'ElevenLabs API Key not configured' }), { 
+        status: 500,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
 
     console.log('🎬 Mode:', mode);
@@ -60,7 +72,10 @@ Deno.serve(async (req) => {
     // Mode 1: V2 Talks API - Head Only
     if (mode === 'talks') {
       if (!avatarUrl) {
-        return Response.json({ error: 'Missing avatarUrl for talks mode' }, { status: 400 });
+        return new Response(JSON.stringify({ error: 'Missing avatarUrl for talks mode' }), { 
+          status: 400,
+          headers: { 'Content-Type': 'application/json' }
+        });
       }
 
       console.log('🖼️ Avatar URL:', avatarUrl);
@@ -109,7 +124,10 @@ Deno.serve(async (req) => {
     // Mode 2: V3 Clips API - Pre-made Full Body Presenters
     else if (mode === 'clips') {
       if (!presenterId) {
-        return Response.json({ error: 'Missing presenterId for clips mode' }, { status: 400 });
+        return new Response(JSON.stringify({ error: 'Missing presenterId for clips mode' }), { 
+          status: 400,
+          headers: { 'Content-Type': 'application/json' }
+        });
       }
 
       console.log('👤 Presenter ID:', presenterId);
@@ -137,7 +155,10 @@ Deno.serve(async (req) => {
     // Mode 3: V3 Express/Instant API - Custom Avatar
     else if (mode === 'express') {
       if (!avatarId) {
-        return Response.json({ error: 'Missing avatarId for express mode' }, { status: 400 });
+        return new Response(JSON.stringify({ error: 'Missing avatarId for express mode' }), { 
+          status: 400,
+          headers: { 'Content-Type': 'application/json' }
+        });
       }
 
       console.log('✨ Avatar ID:', avatarId);
@@ -162,7 +183,10 @@ Deno.serve(async (req) => {
         }
       };
     } else {
-      return Response.json({ error: 'Invalid mode' }, { status: 400 });
+      return new Response(JSON.stringify({ error: 'Invalid mode' }), { 
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      });
     }
 
     // Create video
