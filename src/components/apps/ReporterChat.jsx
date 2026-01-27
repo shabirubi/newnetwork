@@ -962,16 +962,22 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                               </div>
                             )}
                             
-                            {message.role === "assistant" && (message.videoUrl || message.voice_url) && (
+                            {message.role === "assistant" && (message.videoUrl || message.voice_url) && !message.isGeneratingVideo && (
                               <div className="mt-3">
                                 <div className="w-full rounded-lg overflow-hidden border-2 border-[#E31E24]/50 relative group">
                                   <div className="aspect-video bg-gradient-to-br from-gray-900 to-gray-800 relative">
                                     <video
+                                      key={message.videoUrl || message.voice_url}
                                       src={message.videoUrl || message.voice_url}
                                       className="w-full h-full object-cover"
                                       controls
                                       playsInline
-                                      preload="metadata"
+                                      autoPlay
+                                      muted={false}
+                                      preload="auto"
+                                      onError={(e) => console.error('Video error:', e)}
+                                      onLoadStart={() => console.log('Video loading...')}
+                                      onCanPlay={() => console.log('Video ready')}
                                     />
                                   </div>
                                 </div>
