@@ -91,15 +91,16 @@ Deno.serve(async (req) => {
         }
       });
 
-      const statusText = await statusResponse.text();
-      console.log(`Poll ${attempts}: Status ${statusResponse.status}`);
-
       if (!statusResponse.ok) {
+        console.log(`Poll ${attempts}: Status ${statusResponse.status}`);
         continue;
       }
 
+      const statusText = await statusResponse.text();
+      console.log(`Poll ${attempts}: Status ${statusResponse.status}, Body: ${statusText.substring(0, 200)}`);
+
       const statusData = JSON.parse(statusText);
-      const status = statusData.status;
+      const status = statusData.state;
 
       console.log(`Status: ${status}`);
 
