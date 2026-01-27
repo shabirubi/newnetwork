@@ -380,9 +380,9 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
       const studioBackground = 'https://images.unsplash.com/photo-1598550487956-4238a7359cd5?w=1920&h=1080&fit=crop';
       
       base44.functions.invoke('generateTalkingVideo', {
+        mode: 'talks',
         text: cleanText,
         avatarUrl: selectedReporter.image,
-        gender: reporterGender,
         voiceProvider: 'elevenlabs',
         voiceId: 'GEyb0CAhZyT34ES5zdqh',
         backgroundUrl: studioBackground
