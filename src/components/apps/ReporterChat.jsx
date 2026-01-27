@@ -1191,49 +1191,105 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black z-[100000] flex flex-col"
+            className="fixed inset-0 z-[100000] flex flex-col"
+            style={{
+              background: 'radial-gradient(ellipse at center, rgba(15,23,42,0.95) 0%, rgba(0,0,0,0.98) 100%)',
+            }}
           >
-            {/* Header Info Bar - Mobile Optimized */}
-            <div className="bg-gradient-to-b from-black/80 to-transparent px-4 py-3 flex items-center justify-between">
-              <div className="flex items-center gap-2">
+            {/* Animated Background Grid */}
+            <div className="absolute inset-0 opacity-20 pointer-events-none">
+              <div className="absolute inset-0" style={{
+                backgroundImage: `
+                  linear-gradient(rgba(226,30,36,0.1) 1px, transparent 1px),
+                  linear-gradient(90deg, rgba(226,30,36,0.1) 1px, transparent 1px)
+                `,
+                backgroundSize: '40px 40px',
+                animation: 'gridPulse 3s ease-in-out infinite'
+              }} />
+            </div>
+
+            <style>{`
+              @keyframes gridPulse {
+                0%, 100% { opacity: 0.2; }
+                50% { opacity: 0.4; }
+              }
+              @keyframes scanline {
+                0% { transform: translateY(-100%); }
+                100% { transform: translateY(100vh); }
+              }
+            `}</style>
+
+            {/* Header Info Bar - Futuristic */}
+            <div className="relative bg-gradient-to-b from-black/60 via-black/40 to-transparent backdrop-blur-xl px-4 py-3 flex items-center justify-between border-b border-[#E31E24]/20">
+              <div className="flex items-center gap-3">
                 {selectedReporter && (
                   <>
-                    <img
-                      src={selectedReporter.image}
-                      alt={selectedReporter.name}
-                      className="w-8 h-8 rounded-full border border-[#E31E24]"
-                    />
+                    <div className="relative">
+                      <div className="absolute inset-0 bg-[#E31E24] rounded-full blur-lg opacity-50 animate-pulse" />
+                      <img
+                        src={selectedReporter.image}
+                        alt={selectedReporter.name}
+                        className="relative w-10 h-10 rounded-full border-2 border-[#E31E24] shadow-lg"
+                      />
+                    </div>
                     <div>
-                      <p className="text-white text-sm font-bold">{selectedReporter.name}</p>
-                      <p className="text-white/70 text-xs">{selectedReporter.role}</p>
+                      <p className="text-white text-sm font-bold tracking-wide">{selectedReporter.name}</p>
+                      <p className="text-[#E31E24] text-xs font-semibold">{selectedReporter.role}</p>
                     </div>
                   </>
                 )}
               </div>
               <button
                 onClick={() => setFullscreenVideo(null)}
-                className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center hover:bg-white/20 transition-colors active:scale-95"
+                className="w-10 h-10 rounded-full bg-[#E31E24]/20 backdrop-blur-md border border-[#E31E24]/40 flex items-center justify-center hover:bg-[#E31E24]/40 transition-all active:scale-95 shadow-lg"
               >
                 <X className="w-5 h-5 text-white" />
               </button>
             </div>
 
-            {/* Video Area */}
-            <div className="flex-1 relative flex items-center justify-center">
-              <video
-                key={fullscreenVideo}
-                src={fullscreenVideo}
-                autoPlay
-                playsInline
-                controls
-                onEnded={() => setFullscreenVideo(null)}
-                className="w-full h-full object-contain"
-              />
+            {/* Video Area with Futuristic Frame */}
+            <div className="flex-1 relative flex items-center justify-center p-4">
+              {/* Scanline Effect */}
+              <div className="absolute inset-0 pointer-events-none overflow-hidden">
+                <div className="absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-[#E31E24]/50 to-transparent" 
+                     style={{ animation: 'scanline 4s linear infinite' }} />
+              </div>
+
+              {/* Corner Decorations */}
+              <div className="absolute top-6 left-6 w-12 h-12 border-t-2 border-l-2 border-[#E31E24]/60" />
+              <div className="absolute top-6 right-6 w-12 h-12 border-t-2 border-r-2 border-[#E31E24]/60" />
+              <div className="absolute bottom-24 left-6 w-12 h-12 border-b-2 border-l-2 border-[#E31E24]/60" />
+              <div className="absolute bottom-24 right-6 w-12 h-12 border-b-2 border-r-2 border-[#E31E24]/60" />
+
+              {/* Video Container */}
+              <div className="relative w-full max-w-5xl">
+                <div className="relative rounded-lg overflow-hidden shadow-2xl" style={{
+                  boxShadow: '0 0 60px rgba(226,30,36,0.3), inset 0 0 40px rgba(0,0,0,0.3)'
+                }}>
+                  <video
+                    key={fullscreenVideo}
+                    src={fullscreenVideo}
+                    autoPlay
+                    playsInline
+                    controls
+                    onEnded={() => setFullscreenVideo(null)}
+                    className="w-full aspect-video bg-black"
+                    style={{
+                      filter: 'contrast(1.05) brightness(1.02)'
+                    }}
+                  />
+                </div>
+              </div>
             </div>
 
-            {/* Chat Input Overlay - Mobile Optimized */}
-            <div className="bg-gradient-to-t from-black via-black/95 to-transparent px-3 sm:px-4 py-3 sm:py-4 border-t border-white/10 safe-area-inset-bottom">
-              <div className="max-w-3xl mx-auto">
+            {/* Chat Input & Share - Futuristic */}
+            <div className="bg-gradient-to-t from-black/80 via-black/60 to-transparent backdrop-blur-xl px-3 sm:px-4 py-3 sm:py-4 border-t border-[#E31E24]/20 safe-area-inset-bottom">
+              <div className="max-w-3xl mx-auto space-y-3">
+                {/* Share Buttons */}
+                <div className="flex justify-center">
+                  <VideoShareButtons videoUrl={fullscreenVideo} />
+                </div>
+
                 <div className="flex gap-2">
                   <Input
                     type="text"
@@ -1242,12 +1298,12 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                     onChange={(e) => setInputValue(e.target.value)}
                     onKeyPress={(e) => e.key === "Enter" && sendMessage()}
                     disabled={isLoading}
-                    className="flex-1 bg-white/10 border-white/20 text-white placeholder-white/50 backdrop-blur-sm h-12 px-4 text-base"
+                    className="flex-1 bg-black/40 border-[#E31E24]/30 text-white placeholder-white/50 backdrop-blur-sm h-12 px-4 text-base rounded-lg"
                   />
                   <Button
                     onClick={() => sendMessage()}
                     disabled={isLoading || !inputValue.trim()}
-                    className="bg-[#E31E24] hover:bg-red-700 h-12 w-12 sm:w-auto sm:px-6 flex-shrink-0"
+                    className="bg-gradient-to-r from-[#E31E24] to-red-700 hover:from-red-700 hover:to-[#E31E24] h-12 w-12 sm:w-auto sm:px-6 flex-shrink-0 rounded-lg shadow-lg"
                   >
                     {isLoading ? (
                       <Loader className="w-5 h-5 animate-spin" />
@@ -1256,33 +1312,33 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                     )}
                   </Button>
                 </div>
-                
-                {/* Quick Actions - Mobile */}
-                <div className="flex gap-2 mt-2 overflow-x-auto pb-1">
+
+                {/* Quick Actions - Futuristic */}
+                <div className="flex gap-2 overflow-x-auto pb-1">
                   <button
                     onClick={() => setInputValue('ספר לי עוד')}
-                    className="px-3 py-1.5 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-xs text-white whitespace-nowrap backdrop-blur-sm transition-colors"
+                    className="px-3 py-1.5 bg-[#E31E24]/20 hover:bg-[#E31E24]/40 border border-[#E31E24]/40 rounded-full text-xs text-white whitespace-nowrap backdrop-blur-sm transition-all"
                   >
                     📖 ספר עוד
                   </button>
                   <button
                     onClick={() => setInputValue('מה עוד חדש?')}
-                    className="px-3 py-1.5 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-xs text-white whitespace-nowrap backdrop-blur-sm transition-colors"
+                    className="px-3 py-1.5 bg-[#E31E24]/20 hover:bg-[#E31E24]/40 border border-[#E31E24]/40 rounded-full text-xs text-white whitespace-nowrap backdrop-blur-sm transition-all"
                   >
                     🔥 מה חדש?
                   </button>
                   <button
                     onClick={() => setInputValue('תודה!')}
-                    className="px-3 py-1.5 bg-white/10 hover:bg-white/20 border border-white/20 rounded-full text-xs text-white whitespace-nowrap backdrop-blur-sm transition-colors"
+                    className="px-3 py-1.5 bg-[#E31E24]/20 hover:bg-[#E31E24]/40 border border-[#E31E24]/40 rounded-full text-xs text-white whitespace-nowrap backdrop-blur-sm transition-all"
                   >
                     👍 תודה
                   </button>
                 </div>
               </div>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+            </motion.div>
+            )}
+            </AnimatePresence>
     </>
   );
 }
