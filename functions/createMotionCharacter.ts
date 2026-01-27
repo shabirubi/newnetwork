@@ -24,8 +24,8 @@ Deno.serve(async (req) => {
 
     // Voice ID mapping - Hebrew professional voices
     const voiceMap = {
-      'he': '9BWtsMINqrJLrRacOk9x', // Hebrew Male (Daniel)
-      'he-female': 'zrHiPzrd1d3O8z5RsZXS', // Hebrew Female (Rachel)
+      'he': 'GEyb0CAhZyT34ES5zdqh', // Hebrew Male Voice
+      'he-female': 'GEyb0CAhZyT34ES5zdqh', // Hebrew Voice
       'en': 'pqHfZKP75CvOlQylNhV4', // English Male News Anchor (Bill)
       'en-female': 'EXAVITQu4vr4xnSDxMaL', // English Female News Anchor (Bella)
       'ar': 'VR6AewLHbXDG24trsUsT', // Arabic News Anchor
