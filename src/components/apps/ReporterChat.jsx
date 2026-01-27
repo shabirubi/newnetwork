@@ -43,6 +43,11 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
   });
   const [latestNews, setLatestNews] = useState([]);
   const [fullscreenVideo, setFullscreenVideo] = useState(null);
+  const [isPlaying, setIsPlaying] = useState(true);
+  const [videoProgress, setVideoProgress] = useState(0);
+  const [videoDuration, setVideoDuration] = useState(0);
+  const [isMuted, setIsMuted] = useState(false);
+  const videoRef = useRef(null);
   const messagesEndRef = useRef(null);
   const recordingIntervalRef = useRef(null);
 
@@ -1263,24 +1268,114 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
 
               {/* Video Container */}
               <div className="relative w-full max-w-5xl">
-                <div className="relative rounded-lg overflow-hidden shadow-2xl" style={{
-                  boxShadow: '0 0 60px rgba(226,30,36,0.3), inset 0 0 40px rgba(0,0,0,0.3)'
+                <div className="relative overflow-hidden" style={{
+                  boxShadow: '0 0 60px rgba(226,30,36,0.4)'
                 }}>
                   <video
+                    ref={videoRef}
                     key={fullscreenVideo}
                     src={fullscreenVideo}
                     autoPlay
                     playsInline
-                    controls
+                    muted={isMuted}
                     onEnded={() => setFullscreenVideo(null)}
+                    onTimeUpdate={(e) => {
+                      setVideoProgress((e.target.currentTime / e.target.duration) * 100);
+                    }}
+                    onLoadedMetadata={(e) => {
+                      setVideoDuration(e.target.duration);
+                    }}
                     className="w-full aspect-video bg-black"
                     style={{
                       filter: 'contrast(1.05) brightness(1.02)'
                     }}
                   />
+
+                  {/* Custom Futuristic Controls Overlay */}
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent backdrop-blur-sm p-4">
+                    {/* Progress Bar */}
+                    <div className="mb-3 group cursor-pointer" onClick={(e) => {
+                      const rect = e.currentTarget.getBoundingClientRect();
+                      const x = e.clientX - rect.left;
+                      const percentage = (x / rect.width) * 100;
+                      if (videoRef.current) {
+                        videoRef.current.currentTime = (percentage / 100) * videoDuration;
+                      }
+                    }}>
+                      <div className="relative h-1 bg-white/20 rounded-full overflow-hidden">
+                        <div 
+                          className="absolute top-0 left-0 h-full bg-gradient-to-r from-[#E31E24] to-red-600 transition-all"
+                          style={{ width: `${videoProgress}%` }}
+                        >
+                          <div className="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 bg-white rounded-full shadow-lg opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Controls */}
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-3">
+                        {/* Play/Pause */}
+                        <button
+                          onClick={() => {
+                            if (videoRef.current) {
+                              if (isPlaying) {
+                                videoRef.current.pause();
+                              } else {
+                                videoRef.current.play();
+                              }
+                              setIsPlaying(!isPlaying);
+                            }
+                          }}
+                          className="w-10 h-10 rounded-full bg-[#E31E24]/20 hover:bg-[#E31E24]/40 backdrop-blur-md border border-[#E31E24]/40 flex items-center justify-center transition-all"
+                        >
+                          {isPlaying ? (
+                            <div className="flex gap-0.5">
+                              <div className="w-1 h-4 bg-white rounded-full" />
+                              <div className="w-1 h-4 bg-white rounded-full" />
+                            </div>
+                          ) : (
+                            <div className="w-0 h-0 border-t-4 border-t-transparent border-l-6 border-l-white border-b-4 border-b-transparent ml-0.5" />
+                          )}
+                        </button>
+
+                        {/* Mute */}
+                        <button
+                          onClick={() => {
+                            setIsMuted(!isMuted);
+                          }}
+                          className="w-10 h-10 rounded-full bg-[#E31E24]/20 hover:bg-[#E31E24]/40 backdrop-blur-md border border-[#E31E24]/40 flex items-center justify-center transition-all"
+                        >
+                          {isMuted ? (
+                            <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM12.293 7.293a1 1 0 011.414 0L15 8.586l1.293-1.293a1 1 0 111.414 1.414L16.414 10l1.293 1.293a1 1 0 01-1.414 1.414L15 11.414l-1.293 1.293a1 1 0 01-1.414-1.414L13.586 10l-1.293-1.293a1 1 0 010-1.414z" />
+                            </svg>
+                          ) : (
+                            <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                              <path d="M9.383 3.076A1 1 0 0110 4v12a1 1 0 01-1.707.707L4.586 13H2a1 1 0 01-1-1V8a1 1 0 011-1h2.586l3.707-3.707a1 1 0 011.09-.217zM14.657 2.929a1 1 0 011.414 0A9.972 9.972 0 0119 10a9.972 9.972 0 01-2.929 7.071 1 1 0 01-1.414-1.414A7.971 7.971 0 0017 10c0-2.21-.894-4.208-2.343-5.657a1 1 0 010-1.414zm-2.829 2.828a1 1 0 011.415 0A5.983 5.983 0 0115 10a5.984 5.984 0 01-1.757 4.243 1 1 0 01-1.415-1.415A3.984 3.984 0 0013 10a3.983 3.983 0 00-1.172-2.828 1 1 0 010-1.415z" />
+                            </svg>
+                          )}
+                        </button>
+
+                        {/* Time */}
+                        <div className="text-white text-sm font-mono">
+                          {Math.floor((videoProgress / 100) * videoDuration / 60)}:{String(Math.floor((videoProgress / 100) * videoDuration % 60)).padStart(2, '0')} / {Math.floor(videoDuration / 60)}:{String(Math.floor(videoDuration % 60)).padStart(2, '0')}
+                        </div>
+                      </div>
+
+                      {/* Fullscreen Exit */}
+                      <button
+                        onClick={() => setFullscreenVideo(null)}
+                        className="px-4 py-2 rounded-full bg-[#E31E24]/20 hover:bg-[#E31E24]/40 backdrop-blur-md border border-[#E31E24]/40 text-white text-sm font-semibold transition-all flex items-center gap-2"
+                      >
+                        סגור
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
+              </div>
 
             {/* Chat Input & Share - Futuristic */}
             <div className="bg-gradient-to-t from-black/80 via-black/60 to-transparent backdrop-blur-xl px-3 sm:px-4 py-3 sm:py-4 border-t border-[#E31E24]/20 safe-area-inset-bottom">
