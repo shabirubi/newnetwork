@@ -22,10 +22,10 @@ Deno.serve(async (req) => {
 
     console.log('Creating Luma video with prompt:', prompt);
 
-    // Build payload for Luma API - using dream-machine model
+    // Build payload for Luma API - using ray-2 model
     const generatePayload = {
       prompt: prompt,
-      model: "dream-machine",
+      model: "ray-2",
       aspect_ratio: aspectRatio
     };
 
