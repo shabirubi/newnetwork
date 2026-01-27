@@ -1267,10 +1267,8 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
               <div className="absolute bottom-24 right-6 w-12 h-12 border-b-2 border-r-2 border-[#E31E24]/60" />
 
               {/* Video Container */}
-              <div className="relative w-full max-w-5xl">
-                <div className="relative overflow-hidden" style={{
-                  boxShadow: '0 0 60px rgba(226,30,36,0.4)'
-                }}>
+              <div className="relative w-full max-w-5xl group">
+                <div className="relative overflow-hidden">
                   <video
                     ref={videoRef}
                     key={fullscreenVideo}
@@ -1286,13 +1284,10 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                       setVideoDuration(e.target.duration);
                     }}
                     className="w-full aspect-video bg-black"
-                    style={{
-                      filter: 'contrast(1.05) brightness(1.02)'
-                    }}
                   />
 
-                  {/* Custom Futuristic Controls Overlay */}
-                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent backdrop-blur-sm p-4">
+                  {/* Custom Futuristic Controls Overlay - Hidden by default, shown on hover */}
+                  <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent backdrop-blur-sm p-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                     {/* Progress Bar */}
                     <div className="mb-3 group cursor-pointer" onClick={(e) => {
                       const rect = e.currentTarget.getBoundingClientRect();
