@@ -168,29 +168,35 @@ export default function LumaStudio() {
                   }`}>
                     {msg.type === 'user' ? (
                       <p className="text-sm">{msg.text}</p>
+                    ) : msg.videoUrl ? (
+                     <div className="space-y-2">
+                       <video
+                         ref={videoRef}
+                         src={msg.videoUrl}
+                         className="w-full rounded-lg bg-black"
+                         controls
+                         poster={msg.thumbnailUrl}
+                       />
+                       <div className="flex gap-2 text-xs">
+                         <button
+                           onClick={() => downloadVideo(msg.videoUrl)}
+                           className="flex items-center gap-1 px-3 py-1 bg-[#E31E24]/20 hover:bg-[#E31E24]/40 rounded-lg transition-all"
+                         >
+                           <Download size={14} /> הורדה
+                         </button>
+                         <button
+                           onClick={() => copyPrompt(msg.prompt)}
+                           className="flex items-center gap-1 px-3 py-1 bg-white/10 hover:bg-white/20 rounded-lg transition-all"
+                         >
+                           <Copy size={14} /> העתקה
+                         </button>
+                       </div>
+                     </div>
                     ) : (
-                      <div className="space-y-2">
-                        <video
-                          ref={videoRef}
-                          src={msg.videoUrl}
-                          className="w-full rounded-lg bg-black"
-                          controls
-                        />
-                        <div className="flex gap-2 text-xs">
-                          <button
-                            onClick={() => downloadVideo(msg.videoUrl)}
-                            className="flex items-center gap-1 px-3 py-1 bg-[#E31E24]/20 hover:bg-[#E31E24]/40 rounded-lg transition-all"
-                          >
-                            <Download size={14} /> הורדה
-                          </button>
-                          <button
-                            onClick={() => copyPrompt(msg.prompt)}
-                            className="flex items-center gap-1 px-3 py-1 bg-white/10 hover:bg-white/20 rounded-lg transition-all"
-                          >
-                            <Copy size={14} /> העתקה
-                          </button>
-                        </div>
-                      </div>
+                     <div className="flex items-center gap-2">
+                       <Loader2 size={16} className="animate-spin" />
+                       <span className="text-sm">מעבד סרטון...</span>
+                     </div>
                     )}
                   </div>
                 </div>
