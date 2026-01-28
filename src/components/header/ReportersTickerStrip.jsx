@@ -33,18 +33,26 @@ export default function ReportersTickerStrip() {
     return () => document.head.removeChild(style);
   }, []);
 
-  const { data: reporters = [] } = useQuery({
+  const { data: reporters = [], isError } = useQuery({
     queryKey: ['reporters-ticker'],
     queryFn: async () => {
       try {
-        return await base44.entities.Reporter.filter({ is_active: true });
-      } catch {
+        const result = await base44.entities.Reporter.filter({ is_active: true });
+        return result || [];
+      } catch (error) {
+        console.error('Failed to fetch reporters:', error);
         return [];
       }
     },
     initialData: [],
-    refetchInterval: 30000
+    refetchInterval: 30000,
+    retry: false,
+    enabled: true
   });
+
+  if (isError || !reporters || reporters.length === 0) {
+    return null;
+  }
 
   const scroll = (direction) => {
     const container = scrollContainerRef.current;
