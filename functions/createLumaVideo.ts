@@ -20,8 +20,6 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'LUMA_API_KEY not configured' }, { status: 500 });
     }
 
-    console.log('Creating Luma video with prompt:', prompt);
-
     // Build payload for Luma API - using ray-2 model
     const generatePayload = {
       prompt: prompt,
@@ -39,9 +37,7 @@ Deno.serve(async (req) => {
       };
     }
 
-    console.log('Payload:', JSON.stringify(generatePayload, null, 2));
-
-    // Use Luma API - dream-machine endpoint
+    // Create generation
     const generateResponse = await fetch('https://api.lumalabs.ai/dream-machine/v1/generations', {
       method: 'POST',
       headers: {
@@ -51,19 +47,15 @@ Deno.serve(async (req) => {
       body: JSON.stringify(generatePayload)
     });
 
-    const responseText = await generateResponse.text();
-    console.log('Response status:', generateResponse.status);
-    console.log('Response body:', responseText);
-
     if (!generateResponse.ok) {
+      const errorText = await generateResponse.text();
       return Response.json({ 
         error: 'Failed to create video',
-        details: responseText,
-        status: generateResponse.status
+        details: errorText
       }, { status: generateResponse.status });
     }
 
-    const generateData = JSON.parse(responseText);
+    const generateData = await generateResponse.json();
     const generationId = generateData.id;
 
     if (!generationId) {
@@ -73,11 +65,9 @@ Deno.serve(async (req) => {
       }, { status: 500 });
     }
 
-    console.log('Generation ID:', generationId);
-
-    // Poll for completion
+    // Poll for completion (max 2.5 minutes to avoid timeout)
     let attempts = 0;
-    const maxAttempts = 180;
+    const maxAttempts = 30; // 30 * 5s = 150s = 2.5 min
     const pollInterval = 5000;
 
     while (attempts < maxAttempts) {
@@ -86,23 +76,16 @@ Deno.serve(async (req) => {
 
       const statusResponse = await fetch(`https://api.lumalabs.ai/dream-machine/v1/generations/${generationId}`, {
         headers: {
-          'Authorization': `Bearer ${lumaApiKey}`,
-          'Accept': 'application/json'
+          'Authorization': `Bearer ${lumaApiKey}`
         }
       });
 
       if (!statusResponse.ok) {
-        console.log(`Poll ${attempts}: Status ${statusResponse.status}`);
         continue;
       }
 
-      const statusText = await statusResponse.text();
-      console.log(`Poll ${attempts}: Status ${statusResponse.status}, Body: ${statusText.substring(0, 200)}`);
-
-      const statusData = JSON.parse(statusText);
+      const statusData = await statusResponse.json();
       const status = statusData.state;
-
-      console.log(`Status: ${status}`);
 
       if (status === 'completed') {
         return Response.json({
@@ -117,21 +100,23 @@ Deno.serve(async (req) => {
       if (status === 'failed') {
         return Response.json({
           error: 'Generation failed',
-          details: statusData
+          details: statusData.failure_reason || 'Unknown error'
         }, { status: 500 });
       }
     }
 
+    // Still processing - return ID for manual checking
     return Response.json({
-      error: 'Timeout',
-      generation_id: generationId
-    }, { status: 408 });
+      still_processing: true,
+      generation_id: generationId,
+      message: 'Video is still being generated. Please check back in a few minutes.',
+      check_url: `https://api.lumalabs.ai/dream-machine/v1/generations/${generationId}`
+    });
 
   } catch (error) {
     console.error('Error:', error);
     return Response.json({ 
-      error: error.message,
-      stack: error.stack
+      error: error.message
     }, { status: 500 });
   }
 });
