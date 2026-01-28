@@ -12,38 +12,96 @@ export default function LumaStudio() {
   const [videoUrl, setVideoUrl] = useState(null);
   const videoRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [processingGenId, setProcessingGenId] = useState(null);
 
   const generateVideo = async (e) => {
     e.preventDefault();
     if (!prompt.trim()) return;
 
     setLoading(true);
+    const userPrompt = prompt.trim();
+    setPrompt('');
+    
+    // Add user message immediately
+    const userMsgId = Date.now();
+    setMessages(prev => [...prev, {
+      id: userMsgId,
+      type: 'user',
+      text: userPrompt,
+      timestamp: new Date()
+    }]);
+
     try {
       const response = await base44.functions.invoke('createLumaVideo', {
-        prompt: prompt.trim()
+        prompt: userPrompt
       });
 
       const videoData = response.data;
       
-      setMessages(prev => [...prev, {
-        id: Date.now(),
-        type: 'user',
-        text: prompt,
-        timestamp: new Date()
-      }, {
-        id: Date.now() + 1,
-        type: 'assistant',
-        videoUrl: videoData.video_url,
-        prompt: prompt,
-        timestamp: new Date()
-      }]);
+      if (videoData.still_processing) {
+        // Video still processing - poll for completion
+        toast.info('הסרטון מתעבד... ייקח עוד כמה דקות');
+        setProcessingGenId(videoData.generation_id);
+        
+        // Poll every 10 seconds
+        const pollInterval = setInterval(async () => {
+          try {
+            const checkResponse = await base44.functions.invoke('checkLumaVideo', {
+              generation_id: videoData.generation_id
+            });
+            
+            const checkData = checkResponse.data;
+            
+            if (checkData.status === 'completed') {
+              clearInterval(pollInterval);
+              setProcessingGenId(null);
+              
+              setMessages(prev => [...prev, {
+                id: Date.now(),
+                type: 'assistant',
+                videoUrl: checkData.video_url,
+                thumbnailUrl: checkData.thumbnail_url,
+                prompt: userPrompt,
+                timestamp: new Date()
+              }]);
+              
+              setVideoUrl(checkData.video_url);
+              toast.success('הסרטון מוכן!');
+              setLoading(false);
+            } else if (checkData.status === 'failed') {
+              clearInterval(pollInterval);
+              setProcessingGenId(null);
+              toast.error('הסרטון נכשל: ' + checkData.error);
+              setLoading(false);
+            }
+          } catch (err) {
+            clearInterval(pollInterval);
+            setProcessingGenId(null);
+            toast.error('שגיאה בבדיקת סטטוס');
+            setLoading(false);
+          }
+        }, 10000);
+        
+      } else if (videoData.video_url) {
+        // Video ready immediately
+        setMessages(prev => [...prev, {
+          id: Date.now(),
+          type: 'assistant',
+          videoUrl: videoData.video_url,
+          thumbnailUrl: videoData.thumbnail_url,
+          prompt: userPrompt,
+          timestamp: new Date()
+        }]);
 
-      setVideoUrl(videoData.video_url);
-      setPrompt('');
-      toast.success('סרטון יצור בהצלחה!');
+        setVideoUrl(videoData.video_url);
+        toast.success('סרטון יצור בהצלחה!');
+        setLoading(false);
+      } else {
+        toast.error('לא התקבל קישור לסרטון');
+        setLoading(false);
+      }
     } catch (error) {
       toast.error('שגיאה ביצירת סרטון: ' + error.message);
-    } finally {
       setLoading(false);
     }
   };

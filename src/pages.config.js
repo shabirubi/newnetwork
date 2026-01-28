@@ -11,6 +11,7 @@ import DownloadReporterImages from './pages/DownloadReporterImages';
 import GenerateReporterImages from './pages/GenerateReporterImages';
 import Home from './pages/Home';
 import Live from './pages/Live';
+import LumaStudio from './pages/LumaStudio';
 import NewsAdmin from './pages/NewsAdmin';
 import NewsLoader from './pages/NewsLoader';
 import PublicReports from './pages/PublicReports';
@@ -29,7 +30,6 @@ import UserVideos from './pages/UserVideos';
 import VOD from './pages/VOD';
 import VODContent from './pages/VODContent';
 import WarRoom from './pages/WarRoom';
-import LumaStudio from './pages/LumaStudio';
 import __Layout from './Layout.jsx';
 
 
@@ -47,6 +47,7 @@ export const PAGES = {
     "GenerateReporterImages": GenerateReporterImages,
     "Home": Home,
     "Live": Live,
+    "LumaStudio": LumaStudio,
     "NewsAdmin": NewsAdmin,
     "NewsLoader": NewsLoader,
     "PublicReports": PublicReports,
@@ -65,7 +66,6 @@ export const PAGES = {
     "VOD": VOD,
     "VODContent": VODContent,
     "WarRoom": WarRoom,
-    "LumaStudio": LumaStudio,
 }
 
 export const pagesConfig = {
