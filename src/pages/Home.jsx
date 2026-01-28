@@ -78,14 +78,14 @@ export default function Home() {
     queryKey: ['news-articles', selectedChannel, page],
     queryFn: async () => {
       try {
-        const limit = 30;
+        const limit = 20; // הקטנת כמות הכתבות בכל טעינה
         const skip = (page - 1) * limit;
         
         let allArticles = [];
         if (selectedChannel === 'all') {
-          allArticles = await base44.entities.NewsArticle.list('-created_date', 1000);
+          allArticles = await base44.entities.NewsArticle.list('-created_date', 200); // הפחתת המקסימום ל-200
         } else {
-          allArticles = await base44.entities.NewsArticle.filter({ channel_id: selectedChannel }, '-created_date', 1000);
+          allArticles = await base44.entities.NewsArticle.filter({ channel_id: selectedChannel }, '-created_date', 200);
         }
         
         const paginated = allArticles.slice(skip, skip + limit);
@@ -93,7 +93,8 @@ export default function Home() {
           setHasMore(false);
         }
         return paginated;
-      } catch {
+      } catch (err) {
+        console.error('Error loading articles:', err);
         return [];
       }
     },
@@ -102,24 +103,32 @@ export default function Home() {
     refetchInterval: false,
     refetchOnWindowFocus: false,
     initialData: [],
-    keepPreviousData: true
+    keepPreviousData: true,
+    retry: 1 // ניסיון אחד בלבד במקרה של שגיאה
   });
 
-  // Infinite scroll handler
+  // Infinite scroll handler with debounce
   React.useEffect(() => {
+    let timeout;
     const handleScroll = () => {
-      if (
-        window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 500 &&
-        !isLoading &&
-        !isFetchingNextPage &&
-        hasMore
-      ) {
-        setPage(prev => prev + 1);
-      }
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        if (
+          window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 500 &&
+          !isLoading &&
+          !isFetchingNextPage &&
+          hasMore
+        ) {
+          setPage(prev => prev + 1);
+        }
+      }, 200);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      clearTimeout(timeout);
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, [isLoading, isFetchingNextPage, hasMore]);
 
   React.useEffect(() => {
@@ -136,7 +145,8 @@ export default function Home() {
       }
     },
     initialData: [],
-    refetchInterval: 5000 // רענן כל 5 שניות
+    refetchInterval: 30000, // רענן כל 30 שניות במקום 5
+    refetchOnWindowFocus: false
   });
 
   const { data: livePlayerVideos = [] } = useQuery({
@@ -149,7 +159,8 @@ export default function Home() {
       }
     },
     initialData: [],
-    refetchInterval: 5000
+    refetchInterval: 30000, // רענן כל 30 שניות במקום 5
+    refetchOnWindowFocus: false
   });
 
   // האזן לעדכונים בסרטונים להעלאה
