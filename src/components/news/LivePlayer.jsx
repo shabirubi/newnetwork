@@ -255,7 +255,7 @@ export default function LivePlayer({
             playerRef.current.detachMediaElement();
             playerRef.current.destroy();
           } catch (e) {
-            console.log('Cleanup error:', e);
+            // Silently handle cleanup errors
           }
           playerRef.current = null;
         }
@@ -300,7 +300,7 @@ export default function LivePlayer({
           try {
             playerRef.current.dispose();
           } catch (e) {
-            console.log('Dispose error:', e);
+            // Silently handle cleanup errors
           }
           playerRef.current = null;
         }
