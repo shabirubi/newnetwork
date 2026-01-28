@@ -2,7 +2,9 @@ import React, { useState, useRef, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
-import { Send, Loader2, Download, Copy, Play, Pause } from 'lucide-react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Input } from '@/components/ui/input';
+import { Send, Loader2, Download, Copy, Play, Pause, Upload, Check } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function LumaStudio() {
@@ -13,6 +15,14 @@ export default function LumaStudio() {
   const videoRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [processingGenId, setProcessingGenId] = useState(null);
+  const [uploadModalOpen, setUploadModalOpen] = useState(false);
+  const [selectedVideo, setSelectedVideo] = useState(null);
+  const [uploadData, setUploadData] = useState({
+    title: '',
+    description: '',
+    category: 'breaking',
+    feed: 'all'
+  });
 
   const generateVideo = async (e) => {
     e.preventDefault();
@@ -143,6 +153,39 @@ export default function LumaStudio() {
     }
   };
 
+  const openUploadModal = (videoUrl, prompt) => {
+    setSelectedVideo({ url: videoUrl, prompt: prompt });
+    setUploadData({
+      title: prompt.substring(0, 100),
+      description: prompt,
+      category: 'breaking',
+      feed: 'all'
+    });
+    setUploadModalOpen(true);
+  };
+
+  const uploadToFeeds = async () => {
+    try {
+      const user = await base44.auth.me();
+      
+      await base44.entities.UserVideo.create({
+        title: uploadData.title,
+        description: uploadData.description,
+        video_url: selectedVideo.url,
+        category: uploadData.category,
+        feed: uploadData.feed,
+        status: 'ready',
+        uploader_email: user.email
+      });
+
+      toast.success('הסרטון הועלה בהצלחה לפידים!');
+      setUploadModalOpen(false);
+      setSelectedVideo(null);
+    } catch (error) {
+      toast.error('שגיאה בהעלאה: ' + error.message);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
       {/* Header */}
@@ -182,7 +225,13 @@ export default function LumaStudio() {
                          controls
                          poster={msg.thumbnailUrl}
                        />
-                       <div className="flex gap-2 text-xs">
+                       <div className="flex gap-2 text-xs flex-wrap">
+                         <button
+                           onClick={() => openUploadModal(msg.videoUrl, msg.prompt)}
+                           className="flex items-center gap-1 px-3 py-1 bg-green-600/20 hover:bg-green-600/40 rounded-lg transition-all border border-green-500/30"
+                         >
+                           <Upload size={14} /> העלה לפידים
+                         </button>
                          <button
                            onClick={() => downloadVideo(msg.videoUrl)}
                            className="flex items-center gap-1 px-3 py-1 bg-[#E31E24]/20 hover:bg-[#E31E24]/40 rounded-lg transition-all"
@@ -251,6 +300,98 @@ export default function LumaStudio() {
           </ul>
         </div>
       </div>
+
+      {/* Upload Modal */}
+      {uploadModalOpen && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50" onClick={() => setUploadModalOpen(false)}>
+          <div className="bg-gradient-to-br from-gray-900 to-black border border-[#E31E24]/30 rounded-2xl p-6 max-w-2xl w-full" onClick={(e) => e.stopPropagation()}>
+            <h3 className="text-2xl font-bold text-white mb-4">העלאה לפידים</h3>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="text-sm text-gray-400 mb-2 block">כותרת</label>
+                <Input
+                  value={uploadData.title}
+                  onChange={(e) => setUploadData({...uploadData, title: e.target.value})}
+                  className="bg-white/5 border-white/20 text-white"
+                  placeholder="כותרת הסרטון"
+                />
+              </div>
+
+              <div>
+                <label className="text-sm text-gray-400 mb-2 block">תיאור</label>
+                <Textarea
+                  value={uploadData.description}
+                  onChange={(e) => setUploadData({...uploadData, description: e.target.value})}
+                  className="bg-white/5 border-white/20 text-white"
+                  placeholder="תיאור הסרטון"
+                  rows={3}
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm text-gray-400 mb-2 block">קטגוריה</label>
+                  <Select value={uploadData.category} onValueChange={(val) => setUploadData({...uploadData, category: val})}>
+                    <SelectTrigger className="bg-white/5 border-white/20 text-white">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="breaking">חדשות חמות</SelectItem>
+                      <SelectItem value="security">ביטחון</SelectItem>
+                      <SelectItem value="economy">כלכלה</SelectItem>
+                      <SelectItem value="politics">פוליטיקה</SelectItem>
+                      <SelectItem value="technology">טכנולוגיה</SelectItem>
+                      <SelectItem value="sports">ספורט</SelectItem>
+                      <SelectItem value="entertainment">בידור</SelectItem>
+                      <SelectItem value="world">עולם</SelectItem>
+                      <SelectItem value="health">בריאות</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+
+                <div>
+                  <label className="text-sm text-gray-400 mb-2 block">פיד</label>
+                  <Select value={uploadData.feed} onValueChange={(val) => setUploadData({...uploadData, feed: val})}>
+                    <SelectTrigger className="bg-white/5 border-white/20 text-white">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">כל הפידים</SelectItem>
+                      <SelectItem value="live-player">נגן חדשות ראשי</SelectItem>
+                      <SelectItem value="tiktok">TikTok פיד</SelectItem>
+                      <SelectItem value="user-videos">סרטוני משתמשים</SelectItem>
+                      <SelectItem value="all-videos">גלריית וידאו</SelectItem>
+                      <SelectItem value="reporter-responses">תגובות כתבים</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div className="bg-white/5 rounded-lg p-3 border border-white/10">
+                <video src={selectedVideo?.url} className="w-full rounded-lg" controls />
+              </div>
+
+              <div className="flex gap-3 justify-end">
+                <Button
+                  variant="outline"
+                  onClick={() => setUploadModalOpen(false)}
+                  className="border-white/20 text-white hover:bg-white/10"
+                >
+                  ביטול
+                </Button>
+                <Button
+                  onClick={uploadToFeeds}
+                  className="bg-green-600 hover:bg-green-700 text-white flex items-center gap-2"
+                >
+                  <Check size={18} />
+                  העלה לפידים
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
