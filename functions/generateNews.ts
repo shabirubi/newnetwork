@@ -25,10 +25,16 @@ Deno.serve(async (req) => {
       { category: 'finance', count: 6, query: 'finance market stocks' }
     ];
 
+    const { batch = 0 } = await req.json().catch(() => ({}));
+    
     const results = [];
     
-    // מעבד את כל הקטגוריות
-    for (const cat of categories) {
+    // מעבד 3 קטגוריות בכל קריאה
+    const batchSize = 3;
+    const startIdx = batch * batchSize;
+    const categoriesToProcess = categories.slice(startIdx, startIdx + batchSize);
+    
+    for (const cat of categoriesToProcess) {
       try {
         const response = await base44.asServiceRole.integrations.Core.InvokeLLM({
                         prompt: `חפש ${cat.count} כתבות חדשות אמיתיות מהיום בנושא: ${cat.query}.
