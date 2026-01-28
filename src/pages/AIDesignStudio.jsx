@@ -140,7 +140,7 @@ export default function AIDesignStudio() {
           <div className="flex items-center justify-center gap-3 mb-4">
             <Wand2 className="w-8 h-8 text-purple-400" />
             <h1 className="text-3xl sm:text-4xl font-bold text-white">
-              AI Design Studio
+              סטודיו עיצוב
             </h1>
           </div>
           <p className="text-gray-400 text-lg">
@@ -291,7 +291,7 @@ export default function AIDesignStudio() {
                         className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-xs sm:text-sm"
                       >
                         <Sparkles className="w-4 h-4 mr-1" />
-                        Luma AI
+                        הנפש
                       </Button>
                       <Button
                         onClick={() => setShowUploadModal(true)}
