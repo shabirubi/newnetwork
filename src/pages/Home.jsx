@@ -78,14 +78,14 @@ export default function Home() {
     queryKey: ['news-articles', selectedChannel, page],
     queryFn: async () => {
       try {
-        const limit = 20; // הקטנת כמות הכתבות בכל טעינה
+        const limit = 15; // הפחתת כמות הכתבות עוד יותר
         const skip = (page - 1) * limit;
         
         let allArticles = [];
         if (selectedChannel === 'all') {
-          allArticles = await base44.entities.NewsArticle.list('-created_date', 200); // הפחתת המקסימום ל-200
+          allArticles = await base44.entities.NewsArticle.list('-created_date', 100); // הפחתה ל-100 בלבד
         } else {
-          allArticles = await base44.entities.NewsArticle.filter({ channel_id: selectedChannel }, '-created_date', 200);
+          allArticles = await base44.entities.NewsArticle.filter({ channel_id: selectedChannel }, '-created_date', 100);
         }
         
         const paginated = allArticles.slice(skip, skip + limit);
@@ -94,17 +94,17 @@ export default function Home() {
         }
         return paginated;
       } catch (err) {
-        console.error('Error loading articles:', err);
         return [];
       }
     },
-    staleTime: 5 * 60 * 1000,
-    gcTime: 10 * 60 * 1000,
+    staleTime: 10 * 60 * 1000,
+    gcTime: 15 * 60 * 1000,
     refetchInterval: false,
     refetchOnWindowFocus: false,
     initialData: [],
     keepPreviousData: true,
-    retry: 1 // ניסיון אחד בלבד במקרה של שגיאה
+    retry: 1,
+    enabled: true
   });
 
   // Infinite scroll handler with debounce
@@ -114,14 +114,14 @@ export default function Home() {
       clearTimeout(timeout);
       timeout = setTimeout(() => {
         if (
-          window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 500 &&
+          window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 1000 &&
           !isLoading &&
           !isFetchingNextPage &&
           hasMore
         ) {
           setPage(prev => prev + 1);
         }
-      }, 200);
+      }, 300);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -145,8 +145,9 @@ export default function Home() {
       }
     },
     initialData: [],
-    refetchInterval: 30000, // רענן כל 30 שניות במקום 5
-    refetchOnWindowFocus: false
+    refetchInterval: 60000, // רענן כל דקה
+    refetchOnWindowFocus: false,
+    retry: 1
   });
 
   const { data: livePlayerVideos = [] } = useQuery({
@@ -159,8 +160,9 @@ export default function Home() {
       }
     },
     initialData: [],
-    refetchInterval: 30000, // רענן כל 30 שניות במקום 5
-    refetchOnWindowFocus: false
+    refetchInterval: 60000, // רענן כל דקה
+    refetchOnWindowFocus: false,
+    retry: 1
   });
 
   // האזן לעדכונים בסרטונים להעלאה
@@ -172,10 +174,25 @@ export default function Home() {
     return () => window.removeEventListener('videoUploaded', handleVideoUploaded);
   }, [refetchLiveStream]);
 
-  const featuredArticle = articles.find(a => a.is_featured || a.is_breaking) || articles[0];
-  const breakingNews = articles.filter(a => a.is_breaking);
-  const regularNews = articles.filter(a => a.id !== featuredArticle?.id).slice(0, 8);
-  const trendingNews = [...articles].sort((a, b) => new Date(b.created_date) - new Date(a.created_date)).slice(0, 5);
+  const featuredArticle = React.useMemo(() => 
+    articles.find(a => a.is_featured || a.is_breaking) || articles[0], 
+    [articles]
+  );
+  
+  const breakingNews = React.useMemo(() => 
+    articles.filter(a => a.is_breaking), 
+    [articles]
+  );
+  
+  const regularNews = React.useMemo(() => 
+    articles.filter(a => a.id !== featuredArticle?.id).slice(0, 8), 
+    [articles, featuredArticle]
+  );
+  
+  const trendingNews = React.useMemo(() => 
+    [...articles].sort((a, b) => new Date(b.created_date) - new Date(a.created_date)).slice(0, 5),
+    [articles]
+  );
 
   const activeLive = liveStream[0];
   const currentChannel = selectedChannel === 'all' ? null : channels.find(c => c.id === selectedChannel);
