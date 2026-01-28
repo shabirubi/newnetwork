@@ -27,10 +27,8 @@ Deno.serve(async (req) => {
 
     const results = [];
     
-    // רק שתי קטגוריות בכל פעם להימנע מ-timeout
-    const categoriesToProcess = categories.slice(0, 4);
-    
-    for (const cat of categoriesToProcess) {
+    // מעבד את כל הקטגוריות
+    for (const cat of categories) {
       try {
         const response = await base44.asServiceRole.integrations.Core.InvokeLLM({
                         prompt: `חפש ${cat.count} כתבות חדשות אמיתיות מהיום בנושא: ${cat.query}.
