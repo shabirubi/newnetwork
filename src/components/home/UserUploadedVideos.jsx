@@ -129,6 +129,64 @@ export default function UserUploadedVideos({ onUploadClick }) {
           ))}
         </div>
       </div>
+
+      {/* Video Modal */}
+      {selectedVideo && (
+        <div 
+          className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+          onClick={() => setSelectedVideo(null)}
+        >
+          <div 
+            className="relative max-w-4xl w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setSelectedVideo(null)}
+              className="absolute -top-12 right-0 text-white hover:text-red-500 transition-colors"
+            >
+              ✕ סגור
+            </button>
+            
+            <div className="bg-gray-900 rounded-2xl overflow-hidden border border-gray-700">
+              <video
+                src={selectedVideo.video_url}
+                controls
+                autoPlay
+                className="w-full aspect-video bg-black"
+              />
+              
+              <div className="p-6 space-y-4">
+                <h2 className="text-2xl font-bold text-white">{selectedVideo.title}</h2>
+                {selectedVideo.description && (
+                  <p className="text-gray-400">{selectedVideo.description}</p>
+                )}
+                
+                <div className="flex items-center justify-between pt-4 border-t border-gray-700">
+                  <div className="flex items-center gap-3">
+                    <div className="w-10 h-10 rounded-full bg-gradient-to-r from-red-500 to-orange-500 flex items-center justify-center text-white font-bold">
+                      {selectedVideo.uploader_email?.charAt(0).toUpperCase()}
+                    </div>
+                    <div>
+                      <p className="text-white font-bold">{selectedVideo.uploader_email}</p>
+                      <p className="text-sm text-gray-400">
+                        {new Date(selectedVideo.created_date).toLocaleDateString('he-IL')}
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-4">
+                    <button className="flex items-center gap-2 text-gray-400 hover:text-red-500 transition-colors">
+                      <Heart className="w-5 h-5" />
+                      {selectedVideo.likes || 0}
+                    </button>
+                    <VideoShareButtons videoUrl={selectedVideo.video_url} title={selectedVideo.title} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </section>
   );
 }
