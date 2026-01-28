@@ -96,8 +96,14 @@ export default function AIDesignStudio() {
       const a = document.createElement("a");
       a.href = url;
       a.download = `design-${Date.now()}.png`;
+      document.body.appendChild(a);
       a.click();
-      window.URL.revokeObjectURL(url);
+      setTimeout(() => {
+        if (a.parentNode) {
+          document.body.removeChild(a);
+        }
+        window.URL.revokeObjectURL(url);
+      }, 100);
       toast.success("✅ הדיזיין הורד בהצלחה");
     } catch (error) {
       toast.error("שגיאה בהורדה");
