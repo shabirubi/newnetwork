@@ -115,7 +115,12 @@ export default function LumaStudio() {
       a.download = `luma-video-${Date.now()}.mp4`;
       document.body.appendChild(a);
       a.click();
-      document.body.removeChild(a);
+      setTimeout(() => {
+        if (a.parentNode) {
+          document.body.removeChild(a);
+        }
+        URL.revokeObjectURL(a.href);
+      }, 100);
       toast.success('הסרטון הורד!');
     } catch (error) {
       toast.error('שגיאה בהורדה');
