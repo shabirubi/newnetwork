@@ -139,6 +139,19 @@ export default function Home() {
     refetchInterval: 5000 // רענן כל 5 שניות
   });
 
+  const { data: livePlayerVideos = [] } = useQuery({
+    queryKey: ['livePlayerVideos'],
+    queryFn: async () => {
+      try {
+        return await base44.entities.UserVideo.filter({ feed: 'live-player', status: 'ready' }, '-created_date', 1);
+      } catch {
+        return [];
+      }
+    },
+    initialData: [],
+    refetchInterval: 5000
+  });
+
   // האזן לעדכונים בסרטונים להעלאה
   React.useEffect(() => {
     const handleVideoUploaded = () => {
@@ -156,6 +169,12 @@ export default function Home() {
   const activeLive = liveStream[0];
   const currentChannel = selectedChannel === 'all' ? null : channels.find(c => c.id === selectedChannel);
   const channelStreamUrl = currentChannel?.stream_url || defaultStreamUrl;
+  
+  // שימוש בסרטונים שהועלו ל-live-player
+  const livePlayerVideo = livePlayerVideos[0];
+  const finalStreamUrl = livePlayerVideo?.video_url || activeLive?.stream_url || channelStreamUrl;
+  const finalTitle = livePlayerVideo?.title || currentChannel?.name || activeLive?.title || "הרשת החדשה - שידור חי";
+  const finalThumbnail = livePlayerVideo?.thumbnail_url || activeLive?.thumbnail_url;
 
   // Don't block render on loading - show content as it loads
 
@@ -167,11 +186,11 @@ export default function Home() {
       <section className="px-0 mb-0 -mx-4 sm:mx-0 sm:px-0 sm:mb-6">
         <div className="bg-black sm:bg-black/40 sm:backdrop-blur-sm sm:rounded-lg sm:p-4">
           <LivePlayer 
-            title={currentChannel?.name || activeLive?.title || "הרשת החדשה - שידור חי"}
+            title={finalTitle}
             isLive={!!activeLive?.is_active}
             viewerCount={activeLive?.viewer_count || 3456}
-            streamUrl={activeLive?.stream_url || channelStreamUrl}
-            thumbnailUrl={activeLive?.thumbnail_url}
+            streamUrl={finalStreamUrl}
+            thumbnailUrl={finalThumbnail}
           />
         </div>
       </section>
