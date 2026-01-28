@@ -191,7 +191,7 @@ export default function LumaStudio() {
     <div className="min-h-screen bg-black text-white flex flex-col">
       {/* Header */}
       <div className="bg-gradient-to-r from-[#E31E24]/20 to-black border-b border-[#E31E24]/30 p-6">
-        <h1 className="text-3xl font-bold">Luma AI סטודיו</h1>
+        <h1 className="text-3xl font-bold">סטודיו ייצור סרטונים</h1>
         <p className="text-gray-400 mt-2">צור סרטונים בעזרת בינה מלאכותית</p>
       </div>
 
