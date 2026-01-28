@@ -202,8 +202,8 @@ export default function LivePlayer({
   useEffect(() => {
     if (!videoRef.current || !currentStreamUrl || !isPlaying) return;
 
-    // Skip for embedded players
-    if (currentStreamUrl?.includes('ok.ru')) {
+    // Skip for embedded players and invalid URLs
+    if (currentStreamUrl?.includes('ok.ru') || currentStreamUrl?.includes('youtube.com') || currentStreamUrl?.includes('embed')) {
       return;
     }
 
@@ -213,98 +213,109 @@ export default function LivePlayer({
     const isDASH = currentStreamUrl?.includes('.mpd');
     const isMP4 = currentStreamUrl?.includes('.mp4');
 
+    // Don't try to initialize players for unsupported formats
+    if (!isTS && !isFLV && !isHLS && !isDASH && !isMP4) {
+      return;
+    }
+
     // Use mpegts.js for MPEG-TS and FLV (better for live TV)
     if ((isTS || isFLV) && mpegts.isSupported()) {
-      const player = mpegts.createPlayer({
-        type: isFLV ? 'flv' : 'mpegts',
-        url: currentStreamUrl,
-        isLive: true,
-        cors: true
-      }, {
-        enableWorker: true,
-        enableStashBuffer: false,
-        stashInitialSize: 128,
-        liveBufferLatencyChasing: true,
-        liveBufferLatencyMaxLatency: 3,
-        liveBufferLatencyMinRemain: 0.3
-      });
+      try {
+        const player = mpegts.createPlayer({
+          type: isFLV ? 'flv' : 'mpegts',
+          url: currentStreamUrl,
+          isLive: true,
+          cors: true
+        }, {
+          enableWorker: true,
+          enableStashBuffer: false,
+          stashInitialSize: 128,
+          liveBufferLatencyChasing: true,
+          liveBufferLatencyMaxLatency: 3,
+          liveBufferLatencyMinRemain: 0.3
+        });
 
-      player.attachMediaElement(videoRef.current);
-      player.load();
-      player.play().catch(err => console.log('Play error:', err));
+        player.attachMediaElement(videoRef.current);
+        player.load();
+        player.play().catch(() => {}); // Silent fail
 
-      playerRef.current = player;
+        playerRef.current = player;
 
-      player.on(mpegts.Events.ERROR, (errType, errDetail) => {
-        console.log('mpegts.js error:', errType, errDetail);
-        // Auto-retry on network errors
-        if (errType === mpegts.ErrorTypes.NETWORK_ERROR) {
-          setTimeout(() => {
-            player.unload();
-            player.load();
-            player.play();
-          }, 2000);
-        }
-      });
-
-      return () => {
-        if (playerRef.current) {
-          try {
-            playerRef.current.pause();
-            playerRef.current.unload();
-            playerRef.current.detachMediaElement();
-            playerRef.current.destroy();
-          } catch (e) {
-            // Silently handle cleanup errors
+        player.on(mpegts.Events.ERROR, (errType) => {
+          // Only retry once on network errors
+          if (errType === mpegts.ErrorTypes.NETWORK_ERROR && !player._retried) {
+            player._retried = true;
+            setTimeout(() => {
+              try {
+                player.unload();
+                player.load();
+                player.play().catch(() => {});
+              } catch (e) {}
+            }, 2000);
           }
-          playerRef.current = null;
-        }
-      };
+        });
+
+        return () => {
+          if (playerRef.current) {
+            try {
+              playerRef.current.pause();
+              playerRef.current.unload();
+              playerRef.current.detachMediaElement();
+              playerRef.current.destroy();
+            } catch (e) {}
+            playerRef.current = null;
+          }
+        };
+      } catch (e) {
+        return; // Silent fail on player creation error
+      }
     }
 
     // Use video.js for HLS/DASH/MP4
     if (isHLS || isDASH || isMP4) {
-      const player = videojs(videoRef.current, {
-        controls: false,
-        autoplay: false,
-        muted: true,
-        preload: 'auto',
-        liveui: true,
-        html5: {
-          vhs: {
-            withCredentials: false,
-            overrideNative: true,
-            enableLowInitialPlaylist: true,
-            smoothQualityChange: true
+      try {
+        const player = videojs(videoRef.current, {
+          controls: false,
+          autoplay: false,
+          muted: true,
+          preload: 'metadata',
+          liveui: true,
+          html5: {
+            vhs: {
+              withCredentials: false,
+              overrideNative: true,
+              enableLowInitialPlaylist: true,
+              smoothQualityChange: true
+            }
           }
-        }
-      });
+        });
 
-      playerRef.current = player;
+        playerRef.current = player;
 
-      player.src({
-        src: currentStreamUrl,
-        type: isDASH ? 'application/dash+xml' : isHLS ? 'application/x-mpegURL' : 'video/mp4'
-      });
+        player.src({
+          src: currentStreamUrl,
+          type: isDASH ? 'application/dash+xml' : isHLS ? 'application/x-mpegURL' : 'video/mp4'
+        });
 
-      player.on('error', () => {
-        console.log('Video.js error:', player.error());
-      });
+        player.on('error', () => {
+          // Silent error handling - don't spam console
+        });
 
-      player.ready(function() {
-        this.play().catch(err => console.log('Play error:', err));
-      });
+        player.ready(function() {
+          this.play().catch(() => {});
+        });
 
-      return () => {
-        if (playerRef.current) {
-          try {
-            playerRef.current.dispose();
-          } catch (e) {
-            // Silently handle cleanup errors
+        return () => {
+          if (playerRef.current) {
+            try {
+              playerRef.current.dispose();
+            } catch (e) {}
+            playerRef.current = null;
           }
-          playerRef.current = null;
-        }
-      };
+        };
+      } catch (e) {
+        return; // Silent fail on player creation error
+      }
     }
   }, [currentStreamUrl, isPlaying]);
 
