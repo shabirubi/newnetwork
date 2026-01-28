@@ -120,16 +120,17 @@ export default function LumaStudio() {
     try {
       const response = await fetch(url);
       const blob = await response.blob();
+      const blobUrl = URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
+      a.href = blobUrl;
       a.download = `luma-video-${Date.now()}.mp4`;
       document.body.appendChild(a);
       a.click();
       setTimeout(() => {
-        if (a.parentNode) {
+        if (a.parentNode === document.body) {
           document.body.removeChild(a);
         }
-        URL.revokeObjectURL(a.href);
+        URL.revokeObjectURL(blobUrl);
       }, 100);
       toast.success('הסרטון הורד!');
     } catch (error) {
