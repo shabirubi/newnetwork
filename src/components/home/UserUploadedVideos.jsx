@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { Play, Heart, MessageCircle, Upload, Film } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
+import { motion, AnimatePresence } from "framer-motion";
+import { Play, Heart, MessageCircle, Upload, Film, Send, X } from "lucide-react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import VideoShareButtons from "../shared/VideoShareButtons";
+import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 export default function UserUploadedVideos({ onUploadClick }) {
   const [selectedVideo, setSelectedVideo] = useState(null);
+  const [commentText, setCommentText] = useState('');
+  const queryClient = useQueryClient();
   
   const { data: videos = [] } = useQuery({
     queryKey: ['userVideos'],
@@ -19,6 +24,46 @@ export default function UserUploadedVideos({ onUploadClick }) {
     },
     initialData: []
   });
+
+  const { data: comments = [] } = useQuery({
+    queryKey: ['videoComments', selectedVideo?.id],
+    queryFn: async () => {
+      if (!selectedVideo?.id) return [];
+      try {
+        return await base44.entities.VideoComment.filter({ video_id: selectedVideo.id, is_approved: true }, '-created_date', 100);
+      } catch {
+        return [];
+      }
+    },
+    enabled: !!selectedVideo?.id
+  });
+
+  const addCommentMutation = useMutation({
+    mutationFn: async (comment) => {
+      const user = await base44.auth.me();
+      return await base44.entities.VideoComment.create({
+        video_id: selectedVideo.id,
+        user_email: user.email,
+        user_name: user.full_name || user.email,
+        content: comment,
+        is_approved: true
+      });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['videoComments', selectedVideo?.id]);
+      setCommentText('');
+      toast.success('התגובה נוספה בהצלחה!');
+    }
+  });
+
+  const handleAddComment = async () => {
+    if (!commentText.trim()) return;
+    try {
+      await addCommentMutation.mutateAsync(commentText);
+    } catch (error) {
+      toast.error('שגיאה בהוספת תגובה');
+    }
+  };
 
   return (
     <section className="py-12 px-4">
@@ -131,62 +176,131 @@ export default function UserUploadedVideos({ onUploadClick }) {
       </div>
 
       {/* Video Modal */}
-      {selectedVideo && (
-        <div 
-          className="fixed inset-0 bg-black/90 backdrop-blur-sm z-50 flex items-center justify-center p-4"
-          onClick={() => setSelectedVideo(null)}
-        >
-          <div 
-            className="relative max-w-4xl w-full"
-            onClick={(e) => e.stopPropagation()}
+      <AnimatePresence>
+        {selectedVideo && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/95 backdrop-blur-md z-50 flex items-center justify-center p-4 overflow-y-auto"
+            onClick={() => setSelectedVideo(null)}
           >
-            <button
-              onClick={() => setSelectedVideo(null)}
-              className="absolute -top-12 right-0 text-white hover:text-red-500 transition-colors"
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              transition={{ type: "spring", damping: 25 }}
+              className="relative max-w-5xl w-full my-8"
+              onClick={(e) => e.stopPropagation()}
             >
-              ✕ סגור
-            </button>
-            
-            <div className="bg-gray-900 rounded-2xl overflow-hidden border border-gray-700">
-              <video
-                src={selectedVideo.video_url}
-                controls
-                autoPlay
-                className="w-full aspect-video bg-black"
-              />
+              <button
+                onClick={() => setSelectedVideo(null)}
+                className="absolute -top-12 left-0 text-white hover:text-red-500 transition-colors flex items-center gap-2 text-lg font-bold"
+              >
+                <X className="w-6 h-6" />
+                סגור
+              </button>
               
-              <div className="p-6 space-y-4">
-                <h2 className="text-2xl font-bold text-white">{selectedVideo.title}</h2>
-                {selectedVideo.description && (
-                  <p className="text-gray-400">{selectedVideo.description}</p>
-                )}
+              <div className="bg-gradient-to-br from-gray-900 to-black rounded-2xl overflow-hidden border-2 border-red-600/30 shadow-2xl">
+                <video
+                  src={selectedVideo.video_url}
+                  controls
+                  autoPlay
+                  className="w-full aspect-video bg-black"
+                />
                 
-                <div className="flex items-center justify-between pt-4 border-t border-gray-700">
-                  <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-r from-red-500 to-orange-500 flex items-center justify-center text-white font-bold">
-                      {selectedVideo.uploader_email?.charAt(0).toUpperCase()}
-                    </div>
-                    <div>
-                      <p className="text-white font-bold">{selectedVideo.uploader_email}</p>
-                      <p className="text-sm text-gray-400">
-                        {new Date(selectedVideo.created_date).toLocaleDateString('he-IL')}
-                      </p>
-                    </div>
+                <div className="p-6 space-y-6">
+                  <div>
+                    <h2 className="text-2xl font-bold text-white mb-2">{selectedVideo.title}</h2>
+                    {selectedVideo.description && (
+                      <p className="text-gray-400">{selectedVideo.description}</p>
+                    )}
                   </div>
                   
-                  <div className="flex items-center gap-4">
-                    <button className="flex items-center gap-2 text-gray-400 hover:text-red-500 transition-colors">
-                      <Heart className="w-5 h-5" />
-                      {selectedVideo.likes || 0}
-                    </button>
-                    <VideoShareButtons videoUrl={selectedVideo.video_url} title={selectedVideo.title} />
+                  <div className="flex items-center justify-between py-4 border-y border-gray-700">
+                    <div className="flex items-center gap-3">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-r from-red-500 to-orange-500 flex items-center justify-center text-white font-bold text-lg">
+                        {selectedVideo.uploader_email?.charAt(0).toUpperCase()}
+                      </div>
+                      <div>
+                        <p className="text-white font-bold">{selectedVideo.uploader_email}</p>
+                        <p className="text-sm text-gray-400">
+                          {new Date(selectedVideo.created_date).toLocaleDateString('he-IL')}
+                        </p>
+                      </div>
+                    </div>
+                    
+                    <div className="flex items-center gap-4">
+                      <button className="flex items-center gap-2 text-gray-400 hover:text-red-500 transition-colors">
+                        <Heart className="w-5 h-5" />
+                        {selectedVideo.likes || 0}
+                      </button>
+                      <VideoShareButtons videoUrl={selectedVideo.video_url} title={selectedVideo.title} />
+                    </div>
+                  </div>
+
+                  {/* Comments Section */}
+                  <div className="space-y-4">
+                    <h3 className="text-xl font-bold text-white flex items-center gap-2">
+                      <MessageCircle className="w-5 h-5" />
+                      תגובות ({comments.length})
+                    </h3>
+
+                    {/* Add Comment */}
+                    <div className="flex gap-3">
+                      <Textarea
+                        value={commentText}
+                        onChange={(e) => setCommentText(e.target.value)}
+                        placeholder="כתוב תגובה..."
+                        className="bg-gray-800 border-gray-700 text-white resize-none"
+                        rows={2}
+                      />
+                      <Button
+                        onClick={handleAddComment}
+                        disabled={!commentText.trim() || addCommentMutation.isPending}
+                        className="bg-red-600 hover:bg-red-700 text-white self-end"
+                      >
+                        <Send className="w-4 h-4" />
+                      </Button>
+                    </div>
+
+                    {/* Comments List */}
+                    <div className="space-y-3 max-h-96 overflow-y-auto">
+                      {comments.length === 0 ? (
+                        <p className="text-center text-gray-500 py-8">אין תגובות עדיין. היו הראשונים להגיב!</p>
+                      ) : (
+                        comments.map((comment) => (
+                          <motion.div
+                            key={comment.id}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="bg-gray-800/50 rounded-xl p-4 border border-gray-700"
+                          >
+                            <div className="flex items-start gap-3">
+                              <div className="w-10 h-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-500 flex items-center justify-center text-white font-bold flex-shrink-0">
+                                {comment.user_name?.charAt(0).toUpperCase() || comment.user_email?.charAt(0).toUpperCase()}
+                              </div>
+                              <div className="flex-1">
+                                <div className="flex items-center gap-2 mb-1">
+                                  <p className="text-white font-bold text-sm">{comment.user_name || comment.user_email}</p>
+                                  <span className="text-xs text-gray-500">
+                                    {new Date(comment.created_date).toLocaleDateString('he-IL')}
+                                  </span>
+                                </div>
+                                <p className="text-gray-300 text-sm">{comment.content}</p>
+                              </div>
+                            </div>
+                          </motion.div>
+                        ))
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </div>
-      )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
