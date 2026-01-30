@@ -70,7 +70,7 @@ export default function Layout({ children, currentPageName }) {
   }, []);
 
   // דפים ללא Layout
-  if (currentPageName === 'VODContent' || currentPageName === 'ReporterStudio' || currentPageName === 'BroadcastStudio') {
+  if (currentPageName === 'VODContent' || currentPageName === 'ReporterStudio' || currentPageName === 'BroadcastStudio' || currentPageName === 'VideoEditor') {
     return children;
   }
 
