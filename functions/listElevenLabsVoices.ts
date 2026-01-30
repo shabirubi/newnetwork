@@ -4,79 +4,51 @@ Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
     const user = await base44.auth.me();
-    
+
     if (!user) {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     const apiKey = Deno.env.get('ELEVENLABS_API_KEY');
-    
     if (!apiKey) {
-      return Response.json({ 
-        error: 'ELEVENLABS_API_KEY not configured' 
-      }, { status: 500 });
+      return Response.json({ error: 'ElevenLabs API key not configured' }, { status: 500 });
     }
 
-    // Get all available voices from ElevenLabs
-    const response = await fetch('https://api.elevenlabs.io/v1/voices', {
-      method: 'GET',
-      headers: {
-        'xi-api-key': apiKey,
-      },
-    });
+    // Get available voices from ElevenLabs
+    const response = await fetch(
+      'https://api.elevenlabs.io/v1/voices',
+      {
+        headers: {
+          'xi-api-key': apiKey,
+        },
+      }
+    );
 
     if (!response.ok) {
-      const errorText = await response.text();
-      return Response.json({ 
-        error: 'ElevenLabs API error',
-        details: errorText,
-        status: response.status
-      }, { status: response.status });
+      const error = await response.text();
+      console.error('ElevenLabs error:', error);
+      return Response.json(
+        { error: 'Failed to fetch voices' },
+        { status: response.status }
+      );
     }
 
     const data = await response.json();
     
-    // Filter for Hebrew voices or voices that support Hebrew
-    const hebrewVoices = data.voices.filter(voice => {
-      const labels = voice.labels || {};
-      const description = voice.description || '';
-      const name = voice.name || '';
-      
-      // Check if voice supports Hebrew
-      return (
-        labels.language === 'he' || 
-        labels.language === 'hebrew' ||
-        description.toLowerCase().includes('hebrew') ||
-        description.toLowerCase().includes('עברית') ||
-        name.toLowerCase().includes('hebrew') ||
-        name.includes('עברית')
-      );
-    });
+    // Format voices with gender and language info
+    const voices = data.voices.map(voice => ({
+      id: voice.voice_id,
+      name: voice.name,
+      preview_url: voice.preview_url,
+      labels: voice.labels || {},
+      gender: voice.labels?.gender || 'unknown',
+      language: voice.labels?.language || 'multilingual',
+      accent: voice.labels?.accent || 'neutral',
+    }));
 
-    return Response.json({
-      success: true,
-      totalVoices: data.voices.length,
-      hebrewVoices: hebrewVoices.length,
-      allVoices: data.voices.map(v => ({
-        voice_id: v.voice_id,
-        name: v.name,
-        labels: v.labels,
-        description: v.description,
-        preview_url: v.preview_url
-      })),
-      hebrewVoicesOnly: hebrewVoices.map(v => ({
-        voice_id: v.voice_id,
-        name: v.name,
-        labels: v.labels,
-        description: v.description,
-        preview_url: v.preview_url
-      }))
-    });
-
+    return Response.json({ voices, success: true });
   } catch (error) {
     console.error('Error:', error);
-    return Response.json({ 
-      error: error.message 
-    }, { status: 500 });
+    return Response.json({ error: error.message }, { status: 500 });
   }
 });
