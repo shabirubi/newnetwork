@@ -1,22 +1,34 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Music, Play, Pause, X, Download } from 'lucide-react';
+import { Music, Play, Pause, X, Download, Zap, Smile, Wind, Sword, Briefcase, Film, Heart, Volume2 } from 'lucide-react';
 
 export default function MusicLibraryModal({ onClose, onApply }) {
   const [activeCategory, setActiveCategory] = useState('all');
   const [playingId, setPlayingId] = useState(null);
-  const audioRef = React.useRef(new Audio());
+  const audioRef = useRef(null);
+
+  useEffect(() => {
+    audioRef.current = new Audio();
+    audioRef.current.volume = 0.5;
+    
+    return () => {
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current = null;
+      }
+    };
+  }, []);
 
   const categories = [
-    { id: 'all', name: 'הכל', icon: '🎵' },
-    { id: 'dramatic', name: 'דרמטי', icon: '🎭' },
-    { id: 'energetic', name: 'אנרגטי', icon: '⚡' },
-    { id: 'dance', name: 'דאנס', icon: '💃' },
-    { id: 'chill', name: 'רגוע', icon: '😌' },
-    { id: 'epic', name: 'אפי', icon: '🦸' },
-    { id: 'funny', name: 'מצחיק', icon: '😂' },
-    { id: 'corporate', name: 'קורפורטיבי', icon: '💼' },
-    { id: 'cinematic', name: 'קולנועי', icon: '🎬' }
+    { id: 'all', name: 'הכל', icon: Music },
+    { id: 'dramatic', name: 'דרמטי', icon: Volume2 },
+    { id: 'energetic', name: 'אנרגטי', icon: Zap },
+    { id: 'dance', name: 'דאנס', icon: Music },
+    { id: 'chill', name: 'רגוע', icon: Wind },
+    { id: 'epic', name: 'אפי', icon: Sword },
+    { id: 'funny', name: 'מצחיק', icon: Smile },
+    { id: 'corporate', name: 'קורפורטיבי', icon: Briefcase },
+    { id: 'cinematic', name: 'קולנועי', icon: Film }
   ];
 
   // ספריית מוזיקה חינמית מ-Pixabay, Bensound, Free Music Archive
@@ -73,33 +85,31 @@ export default function MusicLibraryModal({ onClose, onApply }) {
     : musicLibrary.filter(m => m.category === activeCategory);
 
   const handlePlay = (music) => {
+    if (!audioRef.current) return;
+    
     const audio = audioRef.current;
     
     if (playingId === music.id) {
-      // Stop current playing
       audio.pause();
       audio.currentTime = 0;
       setPlayingId(null);
     } else {
-      // Play new audio
       audio.pause();
       audio.src = music.url;
-      audio.volume = 0.5; // 50% volume for preview
-      audio.play().catch(err => console.error('Audio play error:', err));
-      setPlayingId(music.id);
+      audio.currentTime = 0;
       
-      // Auto-stop when finished
+      audio.play()
+        .then(() => {
+          setPlayingId(music.id);
+        })
+        .catch(err => {
+          console.error('Audio play error:', err);
+          setPlayingId(null);
+        });
+      
       audio.onended = () => setPlayingId(null);
     }
   };
-
-  // Cleanup on unmount
-  React.useEffect(() => {
-    return () => {
-      audioRef.current.pause();
-      audioRef.current.src = '';
-    };
-  }, []);
 
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50" onClick={onClose}>
@@ -116,16 +126,19 @@ export default function MusicLibraryModal({ onClose, onApply }) {
 
         {/* Categories */}
         <div className="flex gap-2 mb-6 overflow-x-auto pb-2">
-          {categories.map(cat => (
-            <Button
-              key={cat.id}
-              onClick={() => setActiveCategory(cat.id)}
-              className={`flex-shrink-0 ${activeCategory === cat.id ? 'bg-purple-600' : 'bg-white/10'}`}
-            >
-              <span className="mr-1">{cat.icon}</span>
-              {cat.name}
-            </Button>
-          ))}
+          {categories.map(cat => {
+            const IconComponent = cat.icon;
+            return (
+              <Button
+                key={cat.id}
+                onClick={() => setActiveCategory(cat.id)}
+                className={`flex-shrink-0 ${activeCategory === cat.id ? 'bg-purple-600' : 'bg-white/10'}`}
+              >
+                <IconComponent size={16} className="ml-1" />
+                {cat.name}
+              </Button>
+            );
+          })}
         </div>
 
         {/* Music List */}
@@ -152,14 +165,20 @@ export default function MusicLibraryModal({ onClose, onApply }) {
                 </button>
 
                 <div className="flex-1">
-                  <div className="font-bold text-white mb-1">{music.name}</div>
-                  <div className="flex items-center gap-4 text-xs text-gray-400">
-                    <span>⏱️ {music.duration}</span>
-                    <span>🎵 {music.bpm} BPM</span>
-                    <span className="px-2 py-1 bg-purple-600/30 text-purple-300 rounded-full">
-                      {categories.find(c => c.id === music.category)?.name}
-                    </span>
-                  </div>
+                <div className="font-bold text-white mb-1">{music.name}</div>
+                <div className="flex items-center gap-4 text-xs text-gray-400">
+                  <span className="flex items-center gap-1">
+                    <Music size={12} />
+                    {music.duration}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <Volume2 size={12} />
+                    {music.bpm} BPM
+                  </span>
+                  <span className="px-2 py-1 bg-purple-600/30 text-purple-300 rounded-full">
+                    {categories.find(c => c.id === music.category)?.name}
+                  </span>
+                </div>
                 </div>
 
                 <Button

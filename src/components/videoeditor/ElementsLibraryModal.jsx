@@ -34,39 +34,39 @@ export default function ElementsLibraryModal({ onClose, onApply }) {
   ];
 
   const animations = [
-    { id: 1, name: 'Fade In', icon: '📥', type: 'fadeIn' },
-    { id: 2, name: 'Slide In', icon: '➡️', type: 'slideIn' },
-    { id: 3, name: 'Bounce', icon: '🏀', type: 'bounce' },
-    { id: 4, name: 'Zoom In', icon: '🔍', type: 'zoomIn' },
-    { id: 5, name: 'Rotate', icon: '🔄', type: 'rotate' },
-    { id: 6, name: 'Shake', icon: '📳', type: 'shake' }
+    { id: 1, name: 'Fade In', icon: Eye, type: 'fadeIn' },
+    { id: 2, name: 'Slide In', icon: Zap, type: 'slideIn' },
+    { id: 3, name: 'Bounce', icon: Sparkles, type: 'bounce' },
+    { id: 4, name: 'Zoom In', icon: Eye, type: 'zoomIn' },
+    { id: 5, name: 'Rotate', icon: Sparkles, type: 'rotate' },
+    { id: 6, name: 'Shake', icon: AlertTriangle, type: 'shake' }
   ];
 
   const professionalElements = [
-    { id: 1, name: 'Lower Third', icon: '📝', category: 'Lower Third', desc: 'כיתובית תחתונה מקצועית' },
-    { id: 2, name: 'News Ticker', icon: '📰', category: 'Ticker', desc: 'רצועת חדשות זורמת' },
-    { id: 3, name: 'Subscribe CTA', icon: '🔔', category: 'CTA', desc: 'כפתור הרשמה מונפש' },
-    { id: 4, name: 'Like & Share', icon: '👍', category: 'Social', desc: 'לייק ושיתוף מונפש' },
-    { id: 5, name: 'Progress Bar', icon: '📊', category: 'Progress', desc: 'פס התקדמות' },
-    { id: 6, name: 'Countdown Timer', icon: '⏰', category: 'Timer', desc: 'טיימר ספירה לאחור' },
-    { id: 7, name: 'Light Leak', icon: '💡', category: 'Effect', desc: 'דליפת אור קולנועית' },
-    { id: 8, name: 'Lens Flare', icon: '✨', category: 'Effect', desc: 'אפקט עדשה' },
-    { id: 9, name: 'Confetti', icon: '🎉', category: 'Particle', desc: 'קונפטי מונפש' },
-    { id: 10, name: 'Snow Fall', icon: '❄️', category: 'Particle', desc: 'שלג יורד' },
-    { id: 11, name: 'Fire Effect', icon: '🔥', category: 'Particle', desc: 'אש מונפשת' },
-    { id: 12, name: 'Audio Wave', icon: '🎵', category: 'Visualizer', desc: 'ויזואליזציית אודיו' },
-    { id: 13, name: 'Split Screen', icon: '⬛', category: 'Layout', desc: 'מסך מפוצל' },
-    { id: 14, name: 'PIP Frame', icon: '🖼️', category: 'Frame', desc: 'מסגרת תמונה-בתוך-תמונה' },
-    { id: 15, name: '3D Text', icon: '🔤', category: 'Text', desc: 'טקסט תלת-ממדי' },
-    { id: 16, name: 'Glitch Text', icon: '⚡', category: 'Text', desc: 'טקסט גליץ' },
-    { id: 17, name: 'Neon Sign', icon: '💫', category: 'Text', desc: 'שלט ניאון' },
-    { id: 18, name: 'Film Grain', icon: '📽️', category: 'Effect', desc: 'גרעיניות סרט' },
-    { id: 19, name: 'Vignette', icon: '⭕', category: 'Effect', desc: 'אפקט וינייט' },
-    { id: 20, name: 'Color Grading', icon: '🎨', category: 'Effect', desc: 'דירוג צבע מקצועי' },
-    { id: 21, name: 'Green Screen', icon: '🟢', category: 'Background', desc: 'מסך ירוק/כרומה' },
-    { id: 22, name: 'Blur Background', icon: '🌫️', category: 'Background', desc: 'רקע מטושטש' },
-    { id: 23, name: 'Zoom Burst', icon: '💥', category: 'Transition', desc: 'מעבר זום פיצוץ' },
-    { id: 24, name: 'Follow Button', icon: '➕', category: 'Social', desc: 'כפתור עקוב מונפש' }
+    { id: 1, name: 'Lower Third', icon: FileText, category: 'Lower Third', desc: 'כיתובית תחתונה מקצועית' },
+    { id: 2, name: 'News Ticker', icon: Newspaper, category: 'Ticker', desc: 'רצועת חדשות זורמת' },
+    { id: 3, name: 'Subscribe CTA', icon: Bell, category: 'CTA', desc: 'כפתור הרשמה מונפש' },
+    { id: 4, name: 'Like & Share', icon: ThumbsUp, category: 'Social', desc: 'לייק ושיתוף מונפש' },
+    { id: 5, name: 'Progress Bar', icon: BarChart, category: 'Progress', desc: 'פס התקדמות' },
+    { id: 6, name: 'Countdown Timer', icon: Clock, category: 'Timer', desc: 'טיימר ספירה לאחור' },
+    { id: 7, name: 'Light Leak', icon: Lightbulb, category: 'Effect', desc: 'דליפת אור קולנועית' },
+    { id: 8, name: 'Lens Flare', icon: Sparkles, category: 'Effect', desc: 'אפקט עדשה' },
+    { id: 9, name: 'Confetti', icon: Sparkles, category: 'Particle', desc: 'קונפטי מונפש' },
+    { id: 10, name: 'Snow Fall', icon: Snowflake, category: 'Particle', desc: 'שלג יורד' },
+    { id: 11, name: 'Fire Effect', icon: Flame, category: 'Particle', desc: 'אש מונפשת' },
+    { id: 12, name: 'Audio Wave', icon: MusicIcon, category: 'Visualizer', desc: 'ויזואליזציית אודיו' },
+    { id: 13, name: 'Split Screen', icon: Layout, category: 'Layout', desc: 'מסך מפוצל' },
+    { id: 14, name: 'PIP Frame', icon: Frame, category: 'Frame', desc: 'מסגרת תמונה-בתוך-תמונה' },
+    { id: 15, name: '3D Text', icon: Type, category: 'Text', desc: 'טקסט תלת-ממדי' },
+    { id: 16, name: 'Glitch Text', icon: Zap, category: 'Text', desc: 'טקסט גליץ' },
+    { id: 17, name: 'Neon Sign', icon: Sparkles, category: 'Text', desc: 'שלט ניאון' },
+    { id: 18, name: 'Film Grain', icon: FilmIcon, category: 'Effect', desc: 'גרעיניות סרט' },
+    { id: 19, name: 'Vignette', icon: Circle, category: 'Effect', desc: 'אפקט וינייט' },
+    { id: 20, name: 'Color Grading', icon: Eye, category: 'Effect', desc: 'דירוג צבע מקצועי' },
+    { id: 21, name: 'Green Screen', icon: Camera, category: 'Background', desc: 'מסך ירוק/כרומה' },
+    { id: 22, name: 'Blur Background', icon: Eye, category: 'Background', desc: 'רקע מטושטש' },
+    { id: 23, name: 'Zoom Burst', icon: Zap, category: 'Transition', desc: 'מעבר זום פיצוץ' },
+    { id: 24, name: 'Follow Button', icon: Share2, category: 'Social', desc: 'כפתור עקוב מונפש' }
   ];
 
   const handleAddSticker = (sticker) => {
@@ -163,25 +163,29 @@ export default function ElementsLibraryModal({ onClose, onApply }) {
             onClick={() => setActiveTab('professional')}
             className={`${activeTab === 'professional' ? 'bg-yellow-600' : 'bg-white/10'}`}
           >
-            🎬 מקצועי
+            <FilmIcon size={16} className="ml-1" />
+            מקצועי
           </Button>
           <Button
             onClick={() => setActiveTab('stickers')}
             className={`${activeTab === 'stickers' ? 'bg-yellow-600' : 'bg-white/10'}`}
           >
-            🎭 סטיקרים
+            <Sparkles size={16} className="ml-1" />
+            סטיקרים
           </Button>
           <Button
             onClick={() => setActiveTab('shapes')}
             className={`${activeTab === 'shapes' ? 'bg-yellow-600' : 'bg-white/10'}`}
           >
-            🔷 צורות
+            <Square size={16} className="ml-1" />
+            צורות
           </Button>
           <Button
             onClick={() => setActiveTab('animations')}
             className={`${activeTab === 'animations' ? 'bg-yellow-600' : 'bg-white/10'}`}
           >
-            ✨ אנימציות
+            <Zap size={16} className="ml-1" />
+            אנימציות
           </Button>
         </div>
 
@@ -189,38 +193,41 @@ export default function ElementsLibraryModal({ onClose, onApply }) {
         {activeTab === 'professional' && (
           <div className="space-y-4">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              {professionalElements.map(element => (
-                <button
-                  key={element.id}
-                  onClick={() => handleAddProfessional(element)}
-                  className="bg-gradient-to-br from-white/10 to-white/5 hover:from-yellow-600/40 hover:to-yellow-600/20 border border-white/20 hover:border-yellow-500/50 rounded-xl p-4 transition-all group text-right"
-                >
-                  <div className="flex items-start gap-2 mb-2">
-                    <div className="text-3xl group-hover:scale-110 transition-transform">{element.icon}</div>
-                    <div className="flex-1">
-                      <div className="text-sm font-bold text-white mb-1">{element.name}</div>
-                      <div className="text-[10px] text-gray-400 mb-1">{element.desc}</div>
-                      <div className="text-[9px] px-2 py-0.5 bg-yellow-600/30 text-yellow-300 rounded-full inline-block">
-                        {element.category}
+              {professionalElements.map(element => {
+                const IconComponent = element.icon;
+                return (
+                  <button
+                    key={element.id}
+                    onClick={() => handleAddProfessional(element)}
+                    className="bg-gradient-to-br from-white/10 to-white/5 hover:from-yellow-600/40 hover:to-yellow-600/20 border border-white/20 hover:border-yellow-500/50 rounded-xl p-4 transition-all group text-right"
+                  >
+                    <div className="flex items-start gap-2 mb-2">
+                      <IconComponent size={28} className="text-yellow-400 group-hover:scale-110 transition-transform flex-shrink-0" />
+                      <div className="flex-1">
+                        <div className="text-sm font-bold text-white mb-1">{element.name}</div>
+                        <div className="text-[10px] text-gray-400 mb-1">{element.desc}</div>
+                        <div className="text-[9px] px-2 py-0.5 bg-yellow-600/30 text-yellow-300 rounded-full inline-block">
+                          {element.category}
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </button>
-              ))}
+                  </button>
+                );
+              })}
             </div>
             
             <div className="bg-gradient-to-r from-yellow-600/20 to-orange-600/20 border border-yellow-500/30 rounded-xl p-4">
               <div className="text-yellow-300 font-bold mb-2 flex items-center gap-2">
-                <span className="text-2xl">🎯</span>
+                <Target size={20} />
                 <span>אלמנטים מקצועיים מ-Premiere Pro & After Effects</span>
               </div>
               <div className="text-xs text-gray-300 space-y-1">
-                <p>✅ Lower Thirds - כיתוביות מקצועיות לשמות ותפקידים</p>
-                <p>✅ CTA & Social Media - כפתורים מונפשים להרשמה ולייק</p>
-                <p>✅ Progress Bars & Timers - פסי התקדמות וטיימרים</p>
-                <p>✅ Particles & Effects - קונפטי, שלג, אש, light leaks</p>
-                <p>✅ Text Presets - טקסטים תלת-ממדיים, גליץ' וניאון</p>
-                <p>✅ Backgrounds & Layouts - מסכים ירוקים ומסכים מפוצלים</p>
+                <p className="flex items-center gap-2"><FileText size={14} /> Lower Thirds - כיתוביות מקצועיות לשמות ותפקידים</p>
+                <p className="flex items-center gap-2"><Bell size={14} /> CTA & Social Media - כפתורים מונפשים להרשמה ולייק</p>
+                <p className="flex items-center gap-2"><BarChart size={14} /> Progress Bars & Timers - פסי התקדמות וטיימרים</p>
+                <p className="flex items-center gap-2"><Sparkles size={14} /> Particles & Effects - קונפטי, שלג, אש, light leaks</p>
+                <p className="flex items-center gap-2"><Type size={14} /> Text Presets - טקסטים תלת-ממדיים, גליץ' וניאון</p>
+                <p className="flex items-center gap-2"><Layout size={14} /> Backgrounds & Layouts - מסכים ירוקים ומסכים מפוצלים</p>
               </div>
             </div>
           </div>
@@ -285,8 +292,9 @@ export default function ElementsLibraryModal({ onClose, onApply }) {
         )}
 
         {activeTab !== 'professional' && (
-          <div className="mt-6 bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3 text-xs text-yellow-300">
-            💡 טיפ: לחץ על אלמנט כדי להוסיף אותו לסרטון. תוכל לגרור ולשנות גודל בתצוגה המקדימה
+          <div className="mt-6 bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3 text-xs text-yellow-300 flex items-center gap-2">
+            <Lightbulb size={16} />
+            <span>טיפ: לחץ על אלמנט כדי להוסיף אותו לסרטון. תוכל לגרור ולשנות גודל בתצוגה המקדימה</span>
           </div>
         )}
       </div>
