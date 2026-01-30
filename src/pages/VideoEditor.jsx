@@ -301,12 +301,16 @@ export default function VideoEditor() {
     setPlayingAll(true);
     setSelectedClipIndex(0);
     
-    // Auto-play first clip
+    // Auto-play first clip with proper timing
     setTimeout(() => {
       if (videoRef.current) {
-        videoRef.current.play();
+        videoRef.current.currentTime = 0;
+        videoRef.current.play().catch(err => {
+          console.error('Play error:', err);
+          toast.error('לא ניתן להפעיל את הסרטון');
+        });
       }
-    }, 100);
+    }, 200);
   };
 
   // Handle clip ended - move to next with transition
