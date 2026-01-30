@@ -372,30 +372,44 @@ export default function VideoEditor() {
   // Save project
   const handleSaveProject = async () => {
     if (clips.length === 0) {
-      toast.error('אין מה לשמור');
+      toast.error('אין קליפים לשמירה');
       return;
     }
 
+    setLoading(true);
     try {
       const user = await base44.auth.me();
-      const title = projectTitle || window.prompt('שם הפרויקט:', 'פרויקט חדש');
-      if (!title) return;
+      if (!user) {
+        toast.error('יש להתחבר תחילה');
+        setLoading(false);
+        return;
+      }
 
-      await base44.entities.VideoProject.create({
+      const title = projectTitle || `פרויקט חדש - ${new Date().toLocaleDateString('he-IL')}`;
+
+      const projectData = {
         title,
-        clips,
+        clips: clips.map(clip => ({
+          ...clip,
+          localUrl: undefined // Remove local URLs, keep only uploaded URLs
+        })),
         audioTrack,
         transitions,
         overlays,
         thumbnail: clips[0]?.thumbnail || clips[0]?.url,
         duration: totalDuration,
         creator_email: user.email
-      });
+      };
 
+      const result = await base44.entities.VideoProject.create(projectData);
+      
       setProjectTitle(title);
-      toast.success('הפרויקט נשמר! 💾');
+      toast.success(`הפרויקט "${title}" נשמר בהצלחה! 💾`);
     } catch (error) {
-      toast.error('שגיאה בשמירה: ' + error.message);
+      console.error('Save error:', error);
+      toast.error('שגיאה בשמירה: ' + (error.message || 'Unknown error'));
+    } finally {
+      setLoading(false);
     }
   };
 
