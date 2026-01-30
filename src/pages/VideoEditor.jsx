@@ -17,6 +17,7 @@ import TTSModal from '../components/videoeditor/TTSModal';
 import EffectsLibraryModal from '../components/videoeditor/EffectsLibraryModal';
 import SpeedControlModal from '../components/videoeditor/SpeedControlModal';
 import ResizeModal from '../components/videoeditor/ResizeModal';
+import ElementsLibraryModal from '../components/videoeditor/ElementsLibraryModal';
 
 // Projects Modal Component
 function ProjectsModal({ onClose, onLoad }) {
@@ -105,6 +106,7 @@ export default function VideoEditor() {
   const [showEffectsModal, setShowEffectsModal] = useState(false);
   const [showSpeedModal, setShowSpeedModal] = useState(false);
   const [showResizeModal, setShowResizeModal] = useState(false);
+  const [showElementsModal, setShowElementsModal] = useState(false);
   const videoRef = useRef(null);
   const audioRef = useRef(null);
 
@@ -114,22 +116,37 @@ export default function VideoEditor() {
     setTotalDuration(duration);
   }, [clips]);
 
-  // Add clip from file upload
+  // Add clip from file upload (video or image)
   const handleAddClip = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
 
     setLoading(true);
     try {
-      const video = document.createElement('video');
-      const localUrl = URL.createObjectURL(file);
-      video.src = localUrl;
-      
-      video.onloadedmetadata = async () => {
-        try {
-          // Upload file to server
-          const uploadResult = await base44.integrations.Core.UploadFile({ file });
-          
+      const isImage = file.type.startsWith('image/');
+      const uploadResult = await base44.integrations.Core.UploadFile({ file });
+
+      if (isImage) {
+        // Handle image
+        setClips(prev => [...prev, {
+          id: Date.now(),
+          url: uploadResult.file_url,
+          duration: 5, // Default 5 seconds for images
+          name: file.name,
+          thumbnail: uploadResult.file_url,
+          filters: { brightness: 100, contrast: 100, saturation: 100 },
+          volume: 0,
+          type: 'image'
+        }]);
+        toast.success('תמונה נוספה בהצלחה');
+        setLoading(false);
+      } else {
+        // Handle video
+        const video = document.createElement('video');
+        const localUrl = URL.createObjectURL(file);
+        video.src = localUrl;
+        
+        video.onloadedmetadata = async () => {
           setClips(prev => [...prev, {
             id: Date.now(),
             url: uploadResult.file_url,
@@ -138,20 +155,18 @@ export default function VideoEditor() {
             name: file.name,
             thumbnail: uploadResult.file_url,
             filters: { brightness: 100, contrast: 100, saturation: 100 },
-            volume: 100
+            volume: 100,
+            type: 'video'
           }]);
           toast.success('קליפ נוסף בהצלחה');
-        } catch (error) {
-          toast.error('שגיאה בהעלאה: ' + error.message);
-        } finally {
           setLoading(false);
-        }
-      };
-      
-      video.onerror = () => {
-        toast.error('שגיאה בטעינת הסרטון');
-        setLoading(false);
-      };
+        };
+        
+        video.onerror = () => {
+          toast.error('שגיאה בטעינת הסרטון');
+          setLoading(false);
+        };
+      }
     } catch (error) {
       toast.error('שגיאה: ' + error.message);
       setLoading(false);
@@ -250,22 +265,34 @@ export default function VideoEditor() {
     }, 100);
   };
 
-  // Handle clip ended - move to next
+  // Handle clip ended - move to next with transition
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
     const handleEnded = () => {
       if (playingAll && selectedClipIndex !== null && selectedClipIndex < clips.length - 1) {
-        // Move to next clip
-        setSelectedClipIndex(prev => prev + 1);
+        const transition = transitions[selectedClipIndex] || 'cut';
+        const transitionDuration = transition === 'cut' ? 0 : 500; // 500ms for transitions
+        
+        // Apply transition effect
+        if (transition !== 'cut') {
+          video.style.transition = `opacity ${transitionDuration}ms`;
+          video.style.opacity = '0';
+        }
+        
         setTimeout(() => {
-          if (videoRef.current) {
-            videoRef.current.play();
-          }
-        }, 100);
+          setSelectedClipIndex(prev => prev + 1);
+          setTimeout(() => {
+            if (videoRef.current) {
+              if (transition !== 'cut') {
+                videoRef.current.style.opacity = '1';
+              }
+              videoRef.current.play();
+            }
+          }, 50);
+        }, transitionDuration);
       } else if (playingAll && selectedClipIndex === clips.length - 1) {
-        // Finished all clips
         setPlayingAll(false);
         toast.success('הסרטון הושלם! 🎬');
       }
@@ -273,7 +300,7 @@ export default function VideoEditor() {
 
     video.addEventListener('ended', handleEnded);
     return () => video.removeEventListener('ended', handleEnded);
-  }, [playingAll, selectedClipIndex, clips.length]);
+  }, [playingAll, selectedClipIndex, clips.length, transitions]);
 
   // Preview video
   const handlePreview = () => {
@@ -485,7 +512,7 @@ export default function VideoEditor() {
           <div className="space-y-3">
             <input
               type="file"
-              accept="video/mp4,video/webm,video/ogg,video/quicktime,video/x-msvideo,video/x-matroska"
+              accept="video/mp4,video/webm,video/ogg,video/quicktime,video/x-msvideo,video/x-matroska,image/png,image/jpeg,image/jpg,image/gif"
               onChange={handleAddClip}
               className="hidden"
               id="video-upload"
@@ -496,9 +523,9 @@ export default function VideoEditor() {
               disabled={loading}
             >
               {loading ? <Loader2 size={18} className="mr-2 animate-spin" /> : <Upload size={18} className="mr-2" />}
-              העלה סרטון
+              העלה סרטון/תמונה
             </Button>
-            <p className="text-[10px] text-gray-500 text-center">MP4, WebM, MOV, AVI, MKV</p>
+            <p className="text-[10px] text-gray-500 text-center">MP4, WebM, MOV, AVI, MKV, PNG, JPG, GIF</p>
 
             <Button
               onClick={handleAddLumaClip}
@@ -530,6 +557,14 @@ export default function VideoEditor() {
             >
               <Type size={18} className="mr-2" />
               הוסף טקסט/לוגו
+            </Button>
+
+            <Button
+              onClick={() => setShowElementsModal(true)}
+              className="w-full bg-yellow-600/20 hover:bg-yellow-600/40 border border-yellow-500/30 text-white"
+            >
+              <Sparkles size={18} className="mr-2" />
+              ספריית אלמנטים
             </Button>
 
             <div className="border-t border-white/10 pt-3 mt-3">
@@ -673,15 +708,26 @@ export default function VideoEditor() {
             {selectedClip ? (
               <div className="relative max-w-4xl w-full">
                 <div className="relative">
-                  <video
-                    ref={videoRef}
-                    src={selectedClip.localUrl || selectedClip.url}
-                    className="w-full rounded-2xl shadow-2xl"
-                    style={{
-                      filter: `brightness(${selectedClip.filters.brightness}%) contrast(${selectedClip.filters.contrast}%) saturate(${selectedClip.filters.saturation}%)`
-                    }}
-                    controls
-                  />
+                  {selectedClip.type === 'image' ? (
+                    <img
+                      src={selectedClip.url}
+                      className="w-full rounded-2xl shadow-2xl"
+                      style={{
+                        filter: `brightness(${selectedClip.filters.brightness}%) contrast(${selectedClip.filters.contrast}%) saturate(${selectedClip.filters.saturation}%)`
+                      }}
+                      alt={selectedClip.name}
+                    />
+                  ) : (
+                    <video
+                      ref={videoRef}
+                      src={selectedClip.localUrl || selectedClip.url}
+                      className="w-full rounded-2xl shadow-2xl"
+                      style={{
+                        filter: `brightness(${selectedClip.filters.brightness}%) contrast(${selectedClip.filters.contrast}%) saturate(${selectedClip.filters.saturation}%)`
+                      }}
+                      controls
+                    />
+                  )}
                   {playingAll && (
                     <div className="absolute top-4 left-4 bg-green-600/90 backdrop-blur-sm px-4 py-2 rounded-full flex items-center gap-2 animate-pulse">
                       <Play size={16} className="text-white" />
@@ -859,6 +905,17 @@ export default function VideoEditor() {
           onApply={(aspectRatio) => {
             setClips(prev => prev.map(clip => ({ ...clip, aspectRatio })));
             toast.success(`שונה ל-${aspectRatio}! 📐`);
+          }}
+        />
+      )}
+
+      {/* Elements Library Modal */}
+      {showElementsModal && (
+        <ElementsLibraryModal 
+          onClose={() => setShowElementsModal(false)}
+          onApply={(element) => {
+            setOverlays(prev => [...prev, element]);
+            toast.success('אלמנט נוסף! ✨');
           }}
         />
       )}
