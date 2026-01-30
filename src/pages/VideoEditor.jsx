@@ -1180,6 +1180,17 @@ export default function VideoEditor() {
         />
       )}
 
+      {/* Stock Video Library Modal */}
+      {showStockVideoModal && (
+        <StockVideoLibraryModal 
+          onClose={() => setShowStockVideoModal(false)}
+          onApply={(videoData) => {
+            setClips(prev => [...prev, videoData]);
+            setShowStockVideoModal(false);
+          }}
+        />
+      )}
+
       {/* Luma Video Generator Modal */}
       {showLumaGeneratorModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50" onClick={() => setShowLumaGeneratorModal(false)}>
