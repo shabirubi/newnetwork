@@ -178,9 +178,10 @@ export default function StockVideoLibraryModal({ onClose, onApply }) {
           ) : filteredVideos.length === 0 ? (
             <div className="flex items-center justify-center h-48 text-gray-400">
               <div className="text-center">
-                <Play size={48} className="mx-auto mb-4 opacity-30" />
-                <p>לא נמצאו סרטונים</p>
-              </div>
+                    <Play size={48} className="mx-auto mb-4 opacity-30" />
+                    <p>לא נמצאו סרטונים</p>
+                    <p className="text-xs text-gray-500 mt-2">נסה לשנות את הקטגוריה או את טקסט החיפוש</p>
+                  </div>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pr-2">
