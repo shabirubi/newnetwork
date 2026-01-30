@@ -209,8 +209,8 @@ export default function TimelineEditor({
       {/* Clips List with Timing */}
       <div className="bg-white/5 border border-white/10 rounded-lg p-4">
         <h4 className="text-sm font-semibold text-white mb-3 flex items-center gap-2">
-          <Clock size={16} className="text-[#E31E24]" />
-          פירוט הקליפים ({clips.length})
+          <Layers size={16} className="text-[#E31E24]" />
+          רכיבים בציר זמן ({clips.length})
         </h4>
 
         <div className="space-y-2 max-h-48 overflow-y-auto">
