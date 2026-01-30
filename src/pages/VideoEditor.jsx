@@ -10,6 +10,7 @@ import {
   Volume2, VolumeX, Scissors, Sparkles, Music, 
   MoveHorizontal, Film, Loader2, Save, Eye, Type, Image as ImageIcon, FolderOpen
 } from 'lucide-react';
+import { createPageUrl } from './utils';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
@@ -535,14 +536,23 @@ export default function VideoEditor() {
             </Button>
             <p className="text-[10px] text-gray-500 text-center">MP4, WebM, MOV, AVI, MKV, PNG, JPG, GIF</p>
 
-            <Button
-              onClick={() => setShowLumaGeneratorModal(true)}
-              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
-              disabled={loading}
-            >
-              <Sparkles size={18} className="mr-2" />
-              צור עם AI
-            </Button>
+            <div className="flex gap-2">
+              <Button
+                onClick={() => setShowLumaGeneratorModal(true)}
+                className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
+                disabled={loading}
+              >
+                <Sparkles size={18} className="mr-2" />
+                סרטון AI
+              </Button>
+              <Button
+                onClick={() => window.open(createPageUrl('AIDesignStudio'), '_blank')}
+                className="flex-1 bg-gradient-to-r from-pink-600 to-orange-600 hover:from-pink-700 hover:to-orange-700 text-white"
+              >
+                <ImageIcon size={18} className="mr-2" />
+                תמונה AI
+              </Button>
+            </div>
 
             <div className="flex gap-2">
               <input
@@ -1035,7 +1045,7 @@ export default function VideoEditor() {
           <div className="bg-gradient-to-br from-purple-900/90 to-black border border-purple-500/30 rounded-2xl p-6 max-w-2xl w-full" onClick={(e) => e.stopPropagation()}>
             <h3 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
               <Sparkles size={24} className="text-purple-400" />
-              צור סרטון AI עם Luma
+              צור סרטון AI של הרשת החדשה
             </h3>
             
             <div className="space-y-4">
