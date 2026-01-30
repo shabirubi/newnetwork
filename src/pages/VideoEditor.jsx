@@ -393,6 +393,41 @@ export default function VideoEditor() {
               <Type size={18} className="mr-2" />
               הוסף טקסט/לוגו
             </Button>
+
+            <div className="border-t border-white/10 pt-3 mt-3">
+              <p className="text-xs text-gray-400 mb-2 font-bold">כלים מתקדמים</p>
+              <Button
+                onClick={() => toast.info('פיצ'ר בקרוב: חיתוך וקיצוץ מדויק')}
+                className="w-full bg-yellow-600/20 hover:bg-yellow-600/40 border border-yellow-500/30 text-white mb-2"
+              >
+                <Scissors size={18} className="mr-2" />
+                חתוך וקצץ
+              </Button>
+              
+              <Button
+                onClick={() => toast.info('פיצ'ר בקרוב: הוספת אנימציות')}
+                className="w-full bg-pink-600/20 hover:bg-pink-600/40 border border-pink-500/30 text-white mb-2"
+              >
+                <Sparkles size={18} className="mr-2" />
+                אנימציות
+              </Button>
+
+              <Button
+                onClick={() => toast.info('פיצ'ר בקרוב: שינוי מהירות סרטון')}
+                className="w-full bg-indigo-600/20 hover:bg-indigo-600/40 border border-indigo-500/30 text-white mb-2"
+              >
+                <MoveHorizontal size={18} className="mr-2" />
+                מהירות סרטון
+              </Button>
+
+              <Button
+                onClick={() => toast.info('פיצ'ר בקרוב: הסרת רקע')}
+                className="w-full bg-teal-600/20 hover:bg-teal-600/40 border border-teal-500/30 text-white"
+              >
+                <Film size={18} className="mr-2" />
+                הסרת רקע
+              </Button>
+            </div>
           </div>
 
           {audioTrack && (
