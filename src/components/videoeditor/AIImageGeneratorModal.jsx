@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Slider } from '@/components/ui/slider';
-import { X, Sparkles, Loader2, Zap, Image as ImageIcon, Plus } from 'lucide-react';
+import { X, Sparkles, Loader2, Zap, Image as ImageIcon, Plus, FileText, Cpu, Maximize, Palette } from 'lucide-react';
 import { toast } from 'sonner';
 import { base44 } from '@/api/base44Client';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -25,10 +25,10 @@ export default function AIImageGeneratorModal({ onClose, onApply }) {
   ];
 
   const aspectRatios = [
-    { id: '16:9', name: 'רחב (16:9)', icon: '🖼️' },
-    { id: '9:16', name: 'אנכי (9:16)', icon: '📱' },
-    { id: '1:1', name: 'מרובע (1:1)', icon: '⬜' },
-    { id: '4:3', name: 'קלאסי (4:3)', icon: '📺' }
+    { id: '16:9', name: 'רחב (16:9)' },
+    { id: '9:16', name: 'אנכי (9:16)' },
+    { id: '1:1', name: 'מרובע (1:1)' },
+    { id: '4:3', name: 'קלאסי (4:3)' }
   ];
 
   const handleEnhancePrompt = async () => {
@@ -101,8 +101,9 @@ export default function AIImageGeneratorModal({ onClose, onApply }) {
         <div className="space-y-6">
           {/* Prompt */}
           <div>
-            <label className="block text-sm font-semibold text-white mb-2">
-              📝 תיאור התמונה
+            <label className="block text-sm font-semibold text-white mb-2 flex items-center gap-2">
+              <FileText size={16} className="text-pink-400" />
+              תיאור התמונה
             </label>
             <Textarea
               value={prompt}
@@ -132,8 +133,9 @@ export default function AIImageGeneratorModal({ onClose, onApply }) {
 
           {/* Model Selection */}
           <div>
-            <label className="block text-sm font-semibold text-white mb-2">
-              🤖 מנוע AI
+            <label className="block text-sm font-semibold text-white mb-2 flex items-center gap-2">
+              <Cpu size={16} className="text-pink-400" />
+              מנוע AI
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               {models.map((m) => (
@@ -155,8 +157,9 @@ export default function AIImageGeneratorModal({ onClose, onApply }) {
 
           {/* Aspect Ratio */}
           <div>
-            <label className="block text-sm font-semibold text-white mb-2">
-              📐 יחס תצוגה
+            <label className="block text-sm font-semibold text-white mb-2 flex items-center gap-2">
+              <Maximize size={16} className="text-pink-400" />
+              יחס תצוגה
             </label>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
               {aspectRatios.map((ar) => (
@@ -169,7 +172,6 @@ export default function AIImageGeneratorModal({ onClose, onApply }) {
                       : 'bg-black/40 text-gray-400 hover:bg-black/60'
                   }`}
                 >
-                  <div className="text-xl mb-1">{ar.icon}</div>
                   <div className="text-xs font-semibold">{ar.name}</div>
                 </button>
               ))}
@@ -178,8 +180,9 @@ export default function AIImageGeneratorModal({ onClose, onApply }) {
 
           {/* Number of Images */}
           <div>
-            <label className="block text-sm font-semibold text-white mb-2">
-              🎨 מספר תמונות ({numImages})
+            <label className="block text-sm font-semibold text-white mb-2 flex items-center gap-2">
+              <Palette size={16} className="text-pink-400" />
+              מספר תמונות ({numImages})
             </label>
             <Slider
               value={[numImages]}
