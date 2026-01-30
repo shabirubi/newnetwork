@@ -193,15 +193,22 @@ export default function LumaStudio() {
                     {msg.type === 'user' ? (
                       <p className="text-sm">{msg.text}</p>
                     ) : msg.videoUrl ? (
-                     <div className="space-y-2">
-                       <video
-                         ref={videoRef}
-                         src={msg.videoUrl}
-                         className="w-full rounded-lg bg-black"
-                         controls
-                         poster={msg.thumbnailUrl}
-                       />
-                       <div className="flex gap-2 text-xs flex-wrap">
+                    <div className="space-y-2">
+                      <video
+                        ref={videoRef}
+                        src={msg.videoUrl}
+                        className="w-full rounded-lg bg-black"
+                        controls
+                        poster={msg.thumbnailUrl}
+                      />
+                      {msg.has_voice && msg.audio_url && (
+                        <div className="flex items-center gap-2 text-xs text-green-400 bg-green-500/10 px-3 py-1 rounded-lg">
+                          <span>🎤</span>
+                          <span>הסרטון כולל דיבוב קולי</span>
+                          <audio src={msg.audio_url} controls className="flex-1 h-6" />
+                        </div>
+                      )}
+                      <div className="flex gap-2 text-xs flex-wrap">
                          <button
                            onClick={() => openUploadModal(msg.videoUrl, msg.prompt)}
                            className="flex items-center gap-1 px-3 py-1 bg-green-600/20 hover:bg-green-600/40 rounded-lg transition-all border border-green-500/30"
