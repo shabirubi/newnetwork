@@ -155,19 +155,30 @@ export default function VideoEditor() {
         video.src = localUrl;
         
         video.onloadedmetadata = async () => {
-          setClips(prev => [...prev, {
-            id: Date.now(),
-            url: uploadResult.file_url,
-            localUrl: localUrl,
-            duration: video.duration,
-            name: file.name,
-            thumbnail: uploadResult.file_url,
-            filters: { brightness: 100, contrast: 100, saturation: 100 },
-            volume: 100,
-            type: 'video'
-          }]);
-          toast.success('קליפ נוסף בהצלחה');
-          setLoading(false);
+          // Create thumbnail from video
+          video.currentTime = 1; // Get frame at 1 second
+          video.onseeked = () => {
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const thumbnail = canvas.toDataURL('image/jpeg', 0.7);
+
+            setClips(prev => [...prev, {
+              id: Date.now(),
+              url: uploadResult.file_url,
+              localUrl: localUrl,
+              duration: video.duration,
+              name: file.name,
+              thumbnail: thumbnail,
+              filters: { brightness: 100, contrast: 100, saturation: 100 },
+              volume: 100,
+              type: 'video'
+            }]);
+            toast.success('קליפ נוסף בהצלחה');
+            setLoading(false);
+          };
         };
         
         video.onerror = () => {
