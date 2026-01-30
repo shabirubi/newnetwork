@@ -15,6 +15,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
 import AutoCaptionsModal from '../components/videoeditor/AutoCaptionsModal';
 import TTSModal from '../components/videoeditor/TTSModal';
+import AdvancedTTSModal from '../components/videoeditor/AdvancedTTSModal';
 import EffectsLibraryModal from '../components/videoeditor/EffectsLibraryModal';
 import SpeedControlModal from '../components/videoeditor/SpeedControlModal';
 import ResizeModal from '../components/videoeditor/ResizeModal';
@@ -22,6 +23,7 @@ import ElementsLibraryModal from '../components/videoeditor/ElementsLibraryModal
 import MusicLibraryModal from '../components/videoeditor/MusicLibraryModal';
 import PIPOverlay from '../components/videoeditor/PIPOverlay';
 import AIImageGeneratorModal from '../components/videoeditor/AIImageGeneratorModal';
+import AdCreatorModal from '../components/videoeditor/AdCreatorModal';
 
 // Projects Modal Component
 function ProjectsModal({ onClose, onLoad }) {
