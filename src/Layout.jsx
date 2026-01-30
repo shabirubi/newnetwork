@@ -199,7 +199,15 @@ export default function Layout({ children, currentPageName }) {
               className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-black/60 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-[#E31E24]/50 transition-all hover:scale-105 hover:bg-[#E31E24]/30 text-xs sm:text-sm"
             >
               <Clapperboard className="w-4 h-4 text-white" />
-              <span className="text-white font-bold hidden sm:inline">ייצור סרטון</span>
+              <span className="text-white font-bold hidden sm:inline">ייצור</span>
+            </Link>
+
+            <Link 
+              to={createPageUrl("VideoEditor")}
+              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-black/60 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-purple-500/50 transition-all hover:scale-105 hover:bg-purple-600/30 text-xs sm:text-sm"
+            >
+              <Film className="w-4 h-4 text-white" />
+              <span className="text-white font-bold hidden sm:inline">עורך</span>
             </Link>
 
             <a 

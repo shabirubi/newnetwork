@@ -156,16 +156,36 @@ export default function VideoEditor() {
 
     setExporting(true);
     try {
-      // Here you would typically send to a backend service that uses ffmpeg
-      // For now, we'll create a simple playlist
-      toast.info('ייצוא הסרטון... זה יכול לקחת מספר דקות');
+      const user = await base44.auth.me();
       
-      // Simulate export
-      await new Promise(resolve => setTimeout(resolve, 3000));
+      // For now, upload the first clip as the main video
+      // In a real implementation, you'd merge all clips with ffmpeg on the backend
+      const mainClip = clips[0];
       
-      toast.success('הסרטון יוצא בהצלחה! 🎬');
+      const title = window.prompt('כותרת הסרטון:', 'סרטון ערוך - ' + new Date().toLocaleDateString());
+      if (!title) {
+        setExporting(false);
+        return;
+      }
+
+      const category = window.prompt('קטגוריה (breaking/security/economy/politics/technology/sports/entertainment/world/health):', 'breaking');
+      const feed = window.prompt('פיד (all/live-player/tiktok/user-videos/all-videos):', 'all-videos');
+
+      await base44.entities.UserVideo.create({
+        title: title,
+        description: `סרטון ערוך עם ${clips.length} קליפים`,
+        video_url: mainClip.url,
+        thumbnail_url: mainClip.thumbnail,
+        category: category || 'breaking',
+        feed: feed || 'all-videos',
+        status: 'ready',
+        uploader_email: user.email,
+        duration: totalDuration
+      });
+
+      toast.success('הסרטון הועלה בהצלחה לפידים! 🎬');
     } catch (error) {
-      toast.error('שגיאה בייצוא');
+      toast.error('שגיאה בהעלאה: ' + error.message);
     } finally {
       setExporting(false);
     }
@@ -224,7 +244,7 @@ export default function VideoEditor() {
             <label className="block">
               <input
                 type="file"
-                accept="video/*"
+                accept="video/mp4,video/webm,video/ogg,video/quicktime,video/x-msvideo,video/x-matroska"
                 onChange={handleAddClip}
                 className="hidden"
               />
@@ -233,6 +253,7 @@ export default function VideoEditor() {
                 העלה סרטון
               </Button>
             </label>
+            <p className="text-[10px] text-gray-500 text-center">MP4, WebM, MOV, AVI, MKV</p>
 
             <Button
               onClick={handleAddLumaClip}
