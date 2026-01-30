@@ -12,6 +12,11 @@ import {
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
+import AutoCaptionsModal from '../components/videoeditor/AutoCaptionsModal';
+import TTSModal from '../components/videoeditor/TTSModal';
+import EffectsLibraryModal from '../components/videoeditor/EffectsLibraryModal';
+import SpeedControlModal from '../components/videoeditor/SpeedControlModal';
+import ResizeModal from '../components/videoeditor/ResizeModal';
 
 // Projects Modal Component
 function ProjectsModal({ onClose, onLoad }) {
@@ -95,6 +100,11 @@ export default function VideoEditor() {
   const [playingAll, setPlayingAll] = useState(false);
   const [showProjectsModal, setShowProjectsModal] = useState(false);
   const [projectTitle, setProjectTitle] = useState('');
+  const [showCaptionsModal, setShowCaptionsModal] = useState(false);
+  const [showTTSModal, setShowTTSModal] = useState(false);
+  const [showEffectsModal, setShowEffectsModal] = useState(false);
+  const [showSpeedModal, setShowSpeedModal] = useState(false);
+  const [showResizeModal, setShowResizeModal] = useState(false);
   const videoRef = useRef(null);
   const audioRef = useRef(null);
 
@@ -523,37 +533,55 @@ export default function VideoEditor() {
             </Button>
 
             <div className="border-t border-white/10 pt-3 mt-3">
-              <p className="text-xs text-gray-400 mb-2 font-bold">כלים מתקדמים</p>
+              <p className="text-xs text-gray-400 mb-2 font-bold">🎬 כלים מתקדמים</p>
+              
               <Button
-                onClick={() => toast.info("פיצ'ר בקרוב: חיתוך וקיצוץ מדויק")}
-                className="w-full bg-yellow-600/20 hover:bg-yellow-600/40 border border-yellow-500/30 text-white mb-2"
+                onClick={() => setShowCaptionsModal(true)}
+                className="w-full bg-blue-600/20 hover:bg-blue-600/40 border border-blue-500/30 text-white mb-2"
               >
-                <Scissors size={18} className="mr-2" />
-                חתוך וקצץ
+                <Type size={18} className="mr-2" />
+                כיתובים אוטומטיים
+              </Button>
+
+              <Button
+                onClick={() => setShowTTSModal(true)}
+                className="w-full bg-purple-600/20 hover:bg-purple-600/40 border border-purple-500/30 text-white mb-2"
+              >
+                <Volume2 size={18} className="mr-2" />
+                דיבוב קולי (TTS)
               </Button>
               
               <Button
-                onClick={() => toast.info("פיצ'ר בקרוב: הוספת אנימציות")}
+                onClick={() => setShowEffectsModal(true)}
                 className="w-full bg-pink-600/20 hover:bg-pink-600/40 border border-pink-500/30 text-white mb-2"
               >
                 <Sparkles size={18} className="mr-2" />
-                אנימציות
+                אפקטים ומעברים
               </Button>
 
               <Button
-                onClick={() => toast.info("פיצ'ר בקרוב: שינוי מהירות סרטון")}
+                onClick={() => setShowSpeedModal(true)}
+                disabled={!selectedClip}
                 className="w-full bg-indigo-600/20 hover:bg-indigo-600/40 border border-indigo-500/30 text-white mb-2"
               >
                 <MoveHorizontal size={18} className="mr-2" />
-                מהירות סרטון
+                שינוי מהירות
               </Button>
 
               <Button
-                onClick={() => toast.info("פיצ'ר בקרוב: הסרת רקע")}
-                className="w-full bg-teal-600/20 hover:bg-teal-600/40 border border-teal-500/30 text-white"
+                onClick={() => setShowResizeModal(true)}
+                className="w-full bg-green-600/20 hover:bg-green-600/40 border border-green-500/30 text-white mb-2"
               >
                 <Film size={18} className="mr-2" />
-                הסרת רקע
+                שינוי גודל
+              </Button>
+
+              <Button
+                onClick={() => toast.info("פיצ'ר בקרוב: הסרת רעש מאודיו")}
+                className="w-full bg-teal-600/20 hover:bg-teal-600/40 border border-teal-500/30 text-white"
+              >
+                <Volume2 size={18} className="mr-2" />
+                הסרת רעש
               </Button>
             </div>
           </div>
@@ -760,6 +788,78 @@ export default function VideoEditor() {
         <ProjectsModal 
           onClose={() => setShowProjectsModal(false)}
           onLoad={handleLoadProject}
+        />
+      )}
+
+      {/* Auto Captions Modal */}
+      {showCaptionsModal && (
+        <AutoCaptionsModal 
+          onClose={() => setShowCaptionsModal(false)}
+          selectedClip={selectedClip}
+          onApply={(captions) => {
+            setOverlays(prev => [...prev, ...captions]);
+            toast.success('כיתובים נוספו! 🎤');
+          }}
+        />
+      )}
+
+      {/* Text-to-Speech Modal */}
+      {showTTSModal && (
+        <TTSModal 
+          onClose={() => setShowTTSModal(false)}
+          onApply={async (text, voice) => {
+            try {
+              const { data } = await base44.functions.invoke('generateSpeech', { text, voice_id: voice });
+              setAudioTrack({ url: data.audio_url, name: 'TTS Audio', volume: 100 });
+              toast.success('דיבוב נוסף! 🎙️');
+            } catch (error) {
+              toast.error('שגיאה ביצירת דיבוב');
+            }
+          }}
+        />
+      )}
+
+      {/* Effects Library Modal */}
+      {showEffectsModal && (
+        <EffectsLibraryModal 
+          onClose={() => setShowEffectsModal(false)}
+          onApplyEffect={(effect) => {
+            if (selectedClipIndex !== null) {
+              updateClipFilter(selectedClipIndex, 'effect', effect);
+              toast.success(`אפקט ${effect} הוחל! ✨`);
+            }
+          }}
+          onApplyTransition={(transition) => {
+            if (selectedClipIndex !== null && selectedClipIndex < clips.length - 1) {
+              updateTransition(selectedClipIndex, transition);
+              toast.success(`מעבר ${transition} הוחל! 🎬`);
+            }
+          }}
+        />
+      )}
+
+      {/* Speed Control Modal */}
+      {showSpeedModal && selectedClip && (
+        <SpeedControlModal 
+          onClose={() => setShowSpeedModal(false)}
+          currentSpeed={selectedClip.speed || 1}
+          onApply={(speed) => {
+            setClips(prev => prev.map((clip, i) => 
+              i === selectedClipIndex ? { ...clip, speed } : clip
+            ));
+            toast.success(`מהירות שונתה ל-${speed}x! ⚡`);
+          }}
+        />
+      )}
+
+      {/* Resize Modal */}
+      {showResizeModal && (
+        <ResizeModal 
+          onClose={() => setShowResizeModal(false)}
+          onApply={(aspectRatio) => {
+            setClips(prev => prev.map(clip => ({ ...clip, aspectRatio })));
+            toast.success(`שונה ל-${aspectRatio}! 📐`);
+          }}
         />
       )}
 
