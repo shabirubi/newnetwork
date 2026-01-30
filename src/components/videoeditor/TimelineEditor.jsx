@@ -238,9 +238,16 @@ export default function TimelineEditor({
                       <span className="text-xs font-semibold text-white truncate">
                         {index + 1}. {clip.name}
                       </span>
-                      <span className="text-[10px] text-gray-400 flex-shrink-0 ml-2">
-                        {clip.type === 'image' ? '🖼️' : '🎬'}
-                      </span>
+                      <div className="flex gap-1 flex-shrink-0 ml-2">
+                        <span className="text-[10px] text-gray-400">
+                          {clip.type === 'image' ? '🖼️ תמונה' : '🎬 סרטון'}
+                        </span>
+                        {clip.overlays?.length > 0 && (
+                          <span className="text-[10px] bg-purple-600/30 text-purple-300 px-1 rounded">
+                            {clip.overlays.length} שכבות
+                          </span>
+                        )}
+                      </div>
                     </div>
                     <div className="text-[10px] text-gray-400 mt-1">
                       {formatTime(cumulativeTime)} → {formatTime(nextTime)}
