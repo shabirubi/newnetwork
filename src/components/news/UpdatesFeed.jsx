@@ -64,6 +64,11 @@ export default function UpdatesFeed() {
                     src={article.image_url}
                     alt={article.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.parentElement.style.display = 'none';
+                    }}
+                    loading="lazy"
                   />
                   {article.is_breaking && (
                     <div className="absolute -top-1 -right-1 w-3 h-3">
@@ -120,6 +125,11 @@ export default function UpdatesFeed() {
                       src={article.image_url}
                       alt={article.title}
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        e.target.parentElement.style.display = 'none';
+                      }}
+                      loading="lazy"
                     />
                     {article.is_breaking && (
                       <div className="absolute -top-1 -right-1 w-3 h-3">

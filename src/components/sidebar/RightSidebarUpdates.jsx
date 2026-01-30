@@ -54,10 +54,14 @@ export default function RightSidebarUpdates() {
                       src={update.image_url}
                       alt={update.title}
                       className="w-full h-full object-cover rounded-lg"
+                      onError={(e) => {
+                        e.target.style.display = 'none';
+                        e.target.nextElementSibling?.classList?.remove('hidden');
+                      }}
+                      loading="lazy"
                     />
-                  ) : (
-                    <Flame className="w-8 h-8 text-[#E31E24] animate-pulse" />
-                  )}
+                  ) : null}
+                  <Flame className={`w-8 h-8 text-[#E31E24] animate-pulse ${update.image_url ? 'hidden' : ''}`} />
                 </div>
                 <span className="text-[11px] text-[#E31E24] text-center line-clamp-2 leading-tight font-bold">
                   {update.title.substring(0, 30)}
