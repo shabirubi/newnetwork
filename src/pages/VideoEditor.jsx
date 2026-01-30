@@ -242,9 +242,10 @@ export default function VideoEditor() {
       setAudioTrack({
         url: data.file_url,
         name: file.name,
-        volume: 100
+        volume: 100,
+        loop: true // Loop audio to match video duration
       });
-      toast.success('מוזיקת רקע נוספה');
+      toast.success('מוזיקת רקע נוספה - תחזור בלולאה');
     } catch (error) {
       toast.error('שגיאה בהעלאת אודיו');
     }
@@ -635,7 +636,15 @@ export default function VideoEditor() {
           {audioTrack && (
             <div className="mt-4 p-3 bg-green-500/10 border border-green-500/30 rounded-lg">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-xs text-green-400">🎵 {audioTrack.name}</span>
+                <div className="flex-1">
+                  <div className="text-xs text-green-400 mb-1 flex items-center gap-2">
+                    <Music size={12} />
+                    {audioTrack.name}
+                  </div>
+                  <div className="text-[10px] text-gray-500">
+                    {audioTrack.loop ? 'חוזר בלולאה למשך הסרטון' : 'מתנגן פעם אחת'}
+                  </div>
+                </div>
                 <button
                   onClick={() => setAudioTrack(null)}
                   className="text-red-400 hover:text-red-300"
@@ -643,13 +652,24 @@ export default function VideoEditor() {
                   <Trash2 size={14} />
                 </button>
               </div>
-              <Slider
-                value={[audioTrack.volume]}
-                onValueChange={(val) => setAudioTrack(prev => ({ ...prev, volume: val[0] }))}
-                max={100}
-                step={1}
-                className="w-full"
-              />
+              <div className="space-y-2">
+                <div>
+                  <label className="text-xs text-gray-400 mb-1 block">עוצמת שמע</label>
+                  <Slider
+                    value={[audioTrack.volume]}
+                    onValueChange={(val) => setAudioTrack(prev => ({ ...prev, volume: val[0] }))}
+                    max={100}
+                    step={1}
+                    className="w-full"
+                  />
+                </div>
+                <button
+                  onClick={() => setAudioTrack(prev => ({ ...prev, loop: !prev.loop }))}
+                  className={`w-full text-xs py-1 px-2 rounded ${audioTrack.loop ? 'bg-green-600/30 text-green-300' : 'bg-white/10 text-gray-400'}`}
+                >
+                  {audioTrack.loop ? 'לולאה פעילה' : 'לחץ להפעיל לולאה'}
+                </button>
+              </div>
             </div>
           )}
 
