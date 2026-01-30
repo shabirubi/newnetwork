@@ -415,13 +415,32 @@ export default function VideoEditor() {
 
   // Load project
   const handleLoadProject = async (project) => {
-    setClips(project.clips || []);
-    setAudioTrack(project.audioTrack || null);
-    setTransitions(project.transitions || {});
-    setOverlays(project.overlays || []);
-    setProjectTitle(project.title);
-    setShowProjectsModal(false);
-    toast.success('הפרויקט נטען! 📂');
+    try {
+      setLoading(true);
+      
+      // Ensure clips have proper structure
+      const loadedClips = (project.clips || []).map(clip => ({
+        ...clip,
+        id: clip.id || Date.now(),
+        type: clip.type || 'video',
+        filters: clip.filters || { brightness: 100, contrast: 100, saturation: 100 },
+        volume: clip.volume ?? 100,
+        duration: clip.duration || 10
+      }));
+
+      setClips(loadedClips);
+      setAudioTrack(project.audioTrack || null);
+      setTransitions(project.transitions || {});
+      setOverlays(project.overlays || []);
+      setProjectTitle(project.title);
+      setShowProjectsModal(false);
+      toast.success(`הפרויקט "${project.title}" נטען בהצלחה! 📂`);
+    } catch (error) {
+      console.error('Load error:', error);
+      toast.error('שגיאה בטעינה: ' + (error.message || 'Unknown error'));
+    } finally {
+      setLoading(false);
+    }
   };
 
   // Export final video
