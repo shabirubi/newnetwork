@@ -692,10 +692,18 @@ export default function VideoEditor() {
 
               <Button
                 onClick={() => setShowPIPModal(true)}
-                className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white"
+                className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white mb-2"
               >
                 <Film size={18} className="mr-2" />
                 וידאו בתוך וידאו (PIP)
+              </Button>
+
+              <Button
+                onClick={() => setShowAdCreatorModal(true)}
+                className="w-full bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-500 hover:to-orange-500 text-white"
+              >
+                <Sparkles size={18} className="mr-2" />
+                יוצר פרסומות AI
               </Button>
             </div>
           </div>
