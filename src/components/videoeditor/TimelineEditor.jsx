@@ -46,6 +46,31 @@ export default function TimelineEditor({
     toast.success('הקליפ חותך בהצלחה! ✂️');
   };
 
+  const handleDuplicate = () => {
+    if (selectedClip && selectedClipIndex !== null) {
+      const duplicatedClip = {
+        ...selectedClip,
+        id: Date.now(),
+        name: `${selectedClip.name} (העתק)`
+      };
+      onUpdateClip(selectedClipIndex, selectedClip);
+      toast.success('הקליפ שוכפל! 📋');
+    }
+  };
+
+  const handleReset = () => {
+    if (selectedClip && selectedClipIndex !== null) {
+      onUpdateClip(selectedClipIndex, {
+        ...selectedClip,
+        startTime: 0,
+        duration: selectedClip.originalDuration || selectedClip.duration || 10,
+        filters: { brightness: 100, contrast: 100, saturation: 100 }
+      });
+      setCuttingMode(false);
+      toast.success('הקליפ אופס לחלוטין! 🔄');
+    }
+  };
+
   return (
     <div className="flex flex-col gap-4">
       {/* Clip Duration Control */}
