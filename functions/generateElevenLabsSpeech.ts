@@ -57,28 +57,18 @@ Deno.serve(async (req) => {
     // Get audio buffer
     const audioBuffer = await response.arrayBuffer();
     
-    // Create a temporary file path
-    const fileName = `speech_${Date.now()}.mp3`;
-    const tempPath = `/tmp/${fileName}`;
-    
-    // Write the audio file to temp storage
-    await Deno.writeFile(tempPath, new Uint8Array(audioBuffer));
-    
-    // Read it back and convert to base64
-    const fileData = await Deno.readFile(tempPath);
-    const base64Audio = btoa(String.fromCharCode.apply(null, fileData));
+    // Convert to base64
+    const uint8Array = new Uint8Array(audioBuffer);
+    let base64Audio = '';
+    for (let i = 0; i < uint8Array.length; i++) {
+      base64Audio += String.fromCharCode(uint8Array[i]);
+    }
+    base64Audio = btoa(base64Audio);
     
     // Upload to Base44 storage
     const uploadResponse = await base44.integrations.Core.UploadFile({
       file: base64Audio,
     });
-    
-    // Clean up temp file
-    try {
-      await Deno.remove(tempPath);
-    } catch (e) {
-      console.warn('Could not delete temp file:', e);
-    }
 
     return Response.json({
       audio_url: uploadResponse.file_url,
