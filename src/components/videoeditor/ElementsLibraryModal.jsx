@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Sparkles, X } from 'lucide-react';
 
 export default function ElementsLibraryModal({ onClose, onApply }) {
-  const [activeTab, setActiveTab] = useState('stickers');
+  const [activeTab, setActiveTab] = useState('professional');
 
   const stickers = [
     { id: 1, emoji: '🔥', name: 'אש' },
@@ -42,6 +42,33 @@ export default function ElementsLibraryModal({ onClose, onApply }) {
     { id: 6, name: 'Shake', icon: '📳', type: 'shake' }
   ];
 
+  const professionalElements = [
+    { id: 1, name: 'Lower Third', icon: '📝', category: 'Lower Third', desc: 'כיתובית תחתונה מקצועית' },
+    { id: 2, name: 'News Ticker', icon: '📰', category: 'Ticker', desc: 'רצועת חדשות זורמת' },
+    { id: 3, name: 'Subscribe CTA', icon: '🔔', category: 'CTA', desc: 'כפתור הרשמה מונפש' },
+    { id: 4, name: 'Like & Share', icon: '👍', category: 'Social', desc: 'לייק ושיתוף מונפש' },
+    { id: 5, name: 'Progress Bar', icon: '📊', category: 'Progress', desc: 'פס התקדמות' },
+    { id: 6, name: 'Countdown Timer', icon: '⏰', category: 'Timer', desc: 'טיימר ספירה לאחור' },
+    { id: 7, name: 'Light Leak', icon: '💡', category: 'Effect', desc: 'דליפת אור קולנועית' },
+    { id: 8, name: 'Lens Flare', icon: '✨', category: 'Effect', desc: 'אפקט עדשה' },
+    { id: 9, name: 'Confetti', icon: '🎉', category: 'Particle', desc: 'קונפטי מונפש' },
+    { id: 10, name: 'Snow Fall', icon: '❄️', category: 'Particle', desc: 'שלג יורד' },
+    { id: 11, name: 'Fire Effect', icon: '🔥', category: 'Particle', desc: 'אש מונפשת' },
+    { id: 12, name: 'Audio Wave', icon: '🎵', category: 'Visualizer', desc: 'ויזואליזציית אודיו' },
+    { id: 13, name: 'Split Screen', icon: '⬛', category: 'Layout', desc: 'מסך מפוצל' },
+    { id: 14, name: 'PIP Frame', icon: '🖼️', category: 'Frame', desc: 'מסגרת תמונה-בתוך-תמונה' },
+    { id: 15, name: '3D Text', icon: '🔤', category: 'Text', desc: 'טקסט תלת-ממדי' },
+    { id: 16, name: 'Glitch Text', icon: '⚡', category: 'Text', desc: 'טקסט גליץ' },
+    { id: 17, name: 'Neon Sign', icon: '💫', category: 'Text', desc: 'שלט ניאון' },
+    { id: 18, name: 'Film Grain', icon: '📽️', category: 'Effect', desc: 'גרעיניות סרט' },
+    { id: 19, name: 'Vignette', icon: '⭕', category: 'Effect', desc: 'אפקט וינייט' },
+    { id: 20, name: 'Color Grading', icon: '🎨', category: 'Effect', desc: 'דירוג צבע מקצועי' },
+    { id: 21, name: 'Green Screen', icon: '🟢', category: 'Background', desc: 'מסך ירוק/כרומה' },
+    { id: 22, name: 'Blur Background', icon: '🌫️', category: 'Background', desc: 'רקע מטושטש' },
+    { id: 23, name: 'Zoom Burst', icon: '💥', category: 'Transition', desc: 'מעבר זום פיצוץ' },
+    { id: 24, name: 'Follow Button', icon: '➕', category: 'Social', desc: 'כפתור עקוב מונפש' }
+  ];
+
   const handleAddSticker = (sticker) => {
     onApply({
       id: Date.now(),
@@ -75,6 +102,48 @@ export default function ElementsLibraryModal({ onClose, onApply }) {
     onClose();
   };
 
+  const handleAddProfessional = (element) => {
+    const elementConfig = {
+      id: Date.now(),
+      type: 'professional',
+      category: element.category,
+      name: element.name,
+      position: { x: 50, y: element.category === 'Lower Third' || element.category === 'Ticker' ? 90 : 50 },
+      // Default configs per category
+      ...(element.category === 'Lower Third' && {
+        text: 'שם המשתמש',
+        subtitle: 'תפקיד',
+        style: 'modern',
+        color: '#E31E24'
+      }),
+      ...(element.category === 'Ticker' && {
+        text: 'חדשות אחרונות: ',
+        speed: 2
+      }),
+      ...(element.category === 'CTA' && {
+        text: 'לחץ להרשמה',
+        buttonColor: '#FF0000',
+        animated: true
+      }),
+      ...(element.category === 'Progress' && {
+        value: 0,
+        max: 100,
+        color: '#00FF00'
+      }),
+      ...(element.category === 'Timer' && {
+        startTime: 60,
+        format: 'mm:ss'
+      }),
+      ...(element.category === 'Particle' && {
+        density: 50,
+        speed: 1
+      })
+    };
+    
+    onApply(elementConfig);
+    onClose();
+  };
+
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50" onClick={onClose}>
       <div className="bg-gradient-to-br from-gray-900 to-black border border-white/20 rounded-2xl p-6 max-w-3xl w-full max-h-[85vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
@@ -89,26 +158,73 @@ export default function ElementsLibraryModal({ onClose, onApply }) {
         </div>
 
         {/* Tabs */}
-        <div className="flex gap-2 mb-6">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6">
+          <Button
+            onClick={() => setActiveTab('professional')}
+            className={`${activeTab === 'professional' ? 'bg-yellow-600' : 'bg-white/10'}`}
+          >
+            🎬 מקצועי
+          </Button>
           <Button
             onClick={() => setActiveTab('stickers')}
-            className={`flex-1 ${activeTab === 'stickers' ? 'bg-yellow-600' : 'bg-white/10'}`}
+            className={`${activeTab === 'stickers' ? 'bg-yellow-600' : 'bg-white/10'}`}
           >
             🎭 סטיקרים
           </Button>
           <Button
             onClick={() => setActiveTab('shapes')}
-            className={`flex-1 ${activeTab === 'shapes' ? 'bg-yellow-600' : 'bg-white/10'}`}
+            className={`${activeTab === 'shapes' ? 'bg-yellow-600' : 'bg-white/10'}`}
           >
             🔷 צורות
           </Button>
           <Button
             onClick={() => setActiveTab('animations')}
-            className={`flex-1 ${activeTab === 'animations' ? 'bg-yellow-600' : 'bg-white/10'}`}
+            className={`${activeTab === 'animations' ? 'bg-yellow-600' : 'bg-white/10'}`}
           >
             ✨ אנימציות
           </Button>
         </div>
+
+        {/* Professional Elements Grid */}
+        {activeTab === 'professional' && (
+          <div className="space-y-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {professionalElements.map(element => (
+                <button
+                  key={element.id}
+                  onClick={() => handleAddProfessional(element)}
+                  className="bg-gradient-to-br from-white/10 to-white/5 hover:from-yellow-600/40 hover:to-yellow-600/20 border border-white/20 hover:border-yellow-500/50 rounded-xl p-4 transition-all group text-right"
+                >
+                  <div className="flex items-start gap-2 mb-2">
+                    <div className="text-3xl group-hover:scale-110 transition-transform">{element.icon}</div>
+                    <div className="flex-1">
+                      <div className="text-sm font-bold text-white mb-1">{element.name}</div>
+                      <div className="text-[10px] text-gray-400 mb-1">{element.desc}</div>
+                      <div className="text-[9px] px-2 py-0.5 bg-yellow-600/30 text-yellow-300 rounded-full inline-block">
+                        {element.category}
+                      </div>
+                    </div>
+                  </div>
+                </button>
+              ))}
+            </div>
+            
+            <div className="bg-gradient-to-r from-yellow-600/20 to-orange-600/20 border border-yellow-500/30 rounded-xl p-4">
+              <div className="text-yellow-300 font-bold mb-2 flex items-center gap-2">
+                <span className="text-2xl">🎯</span>
+                <span>אלמנטים מקצועיים מ-Premiere Pro & After Effects</span>
+              </div>
+              <div className="text-xs text-gray-300 space-y-1">
+                <p>✅ Lower Thirds - כיתוביות מקצועיות לשמות ותפקידים</p>
+                <p>✅ CTA & Social Media - כפתורים מונפשים להרשמה ולייק</p>
+                <p>✅ Progress Bars & Timers - פסי התקדמות וטיימרים</p>
+                <p>✅ Particles & Effects - קונפטי, שלג, אש, light leaks</p>
+                <p>✅ Text Presets - טקסטים תלת-ממדיים, גליץ' וניאון</p>
+                <p>✅ Backgrounds & Layouts - מסכים ירוקים ומסכים מפוצלים</p>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Stickers Grid */}
         {activeTab === 'stickers' && (
@@ -168,9 +284,11 @@ export default function ElementsLibraryModal({ onClose, onApply }) {
           </div>
         )}
 
-        <div className="mt-6 bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3 text-xs text-yellow-300">
-          💡 טיפ: לחץ על אלמנט כדי להוסיף אותו לסרטון. תוכל לגרור ולשנות גודל בתצוגה המקדימה
-        </div>
+        {activeTab !== 'professional' && (
+          <div className="mt-6 bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3 text-xs text-yellow-300">
+            💡 טיפ: לחץ על אלמנט כדי להוסיף אותו לסרטון. תוכל לגרור ולשנות גודל בתצוגה המקדימה
+          </div>
+        )}
       </div>
     </div>
   );
