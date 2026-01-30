@@ -6,10 +6,10 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Slider } from '@/components/ui/slider';
 import { 
-  Play, Pause, Plus, Trash2, Upload, Download, 
-  Volume2, VolumeX, Scissors, Sparkles, Music, 
-  MoveHorizontal, Film, Loader2, Save, Eye, Type, Image as ImageIcon, FolderOpen
-} from 'lucide-react';
+        Play, Pause, Plus, Trash2, Upload, Download, 
+        Volume2, VolumeX, Scissors, Sparkles, Music, 
+        MoveHorizontal, Film, Loader2, Save, Eye, Type, Image as ImageIcon, FolderOpen, X, Clock
+      } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
