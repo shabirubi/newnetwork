@@ -7,7 +7,7 @@ import { Slider } from '@/components/ui/slider';
 import { 
   Play, Pause, Plus, Trash2, Upload, Download, 
   Volume2, VolumeX, Scissors, Sparkles, Music, 
-  MoveHorizontal, Film, Loader2, Save, Eye
+  MoveHorizontal, Film, Loader2, Save, Eye, Type, Image as ImageIcon
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -22,6 +22,8 @@ export default function VideoEditor() {
   const [totalDuration, setTotalDuration] = useState(0);
   const [loading, setLoading] = useState(false);
   const [exporting, setExporting] = useState(false);
+  const [overlays, setOverlays] = useState([]);
+  const [showOverlayModal, setShowOverlayModal] = useState(false);
   const videoRef = useRef(null);
   const audioRef = useRef(null);
 
@@ -206,6 +208,34 @@ export default function VideoEditor() {
 
   const selectedClip = selectedClipIndex !== null ? clips[selectedClipIndex] : null;
 
+  // Add overlay (text or logo)
+  const handleAddOverlay = async (type, content, file = null) => {
+    if (type === 'text') {
+      setOverlays(prev => [...prev, {
+        id: Date.now(),
+        type: 'text',
+        content: content.text,
+        position: { x: 50, y: 50 },
+        style: { fontSize: content.fontSize || 24, color: content.color || '#ffffff' }
+      }]);
+    } else if (type === 'logo' && file) {
+      try {
+        const uploadResult = await base44.integrations.Core.UploadFile({ file });
+        setOverlays(prev => [...prev, {
+          id: Date.now(),
+          type: 'logo',
+          url: uploadResult.file_url,
+          position: { x: 10, y: 10 },
+          size: { width: 100, height: 100 }
+        }]);
+      } catch (error) {
+        toast.error('שגיאה בהעלאת לוגו');
+      }
+    }
+    setShowOverlayModal(false);
+    toast.success('אלמנט נוסף!');
+  };
+
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
       {/* Header */}
@@ -254,18 +284,21 @@ export default function VideoEditor() {
           </h3>
 
           <div className="space-y-3">
-            <label className="block">
-              <input
-                type="file"
-                accept="video/mp4,video/webm,video/ogg,video/quicktime,video/x-msvideo,video/x-matroska"
-                onChange={handleAddClip}
-                className="hidden"
-              />
-              <Button className="w-full bg-white/10 hover:bg-white/20" disabled={loading}>
-                <Upload size={18} className="mr-2" />
-                העלה סרטון
-              </Button>
-            </label>
+            <input
+              type="file"
+              accept="video/mp4,video/webm,video/ogg,video/quicktime,video/x-msvideo,video/x-matroska"
+              onChange={handleAddClip}
+              className="hidden"
+              id="video-upload"
+            />
+            <Button 
+              onClick={() => document.getElementById('video-upload').click()}
+              className="w-full bg-white/10 hover:bg-white/20" 
+              disabled={loading}
+            >
+              {loading ? <Loader2 size={18} className="mr-2 animate-spin" /> : <Upload size={18} className="mr-2" />}
+              העלה סרטון
+            </Button>
             <p className="text-[10px] text-gray-500 text-center">MP4, WebM, MOV, AVI, MKV</p>
 
             <Button
@@ -277,18 +310,28 @@ export default function VideoEditor() {
               צור עם AI
             </Button>
 
-            <label className="block">
-              <input
-                type="file"
-                accept="audio/*"
-                onChange={handleAddAudio}
-                className="hidden"
-              />
-              <Button className="w-full bg-white/10 hover:bg-white/20">
-                <Music size={18} className="mr-2" />
-                הוסף מוזיקה
-              </Button>
-            </label>
+            <input
+              type="file"
+              accept="audio/*"
+              onChange={handleAddAudio}
+              className="hidden"
+              id="audio-upload"
+            />
+            <Button 
+              onClick={() => document.getElementById('audio-upload').click()}
+              className="w-full bg-white/10 hover:bg-white/20"
+            >
+              <Music size={18} className="mr-2" />
+              הוסף מוזיקה
+            </Button>
+
+            <Button
+              onClick={() => setShowOverlayModal(true)}
+              className="w-full bg-blue-600/20 hover:bg-blue-600/40 border border-blue-500/30"
+            >
+              <Type size={18} className="mr-2" />
+              הוסף טקסט/לוגו
+            </Button>
           </div>
 
           {audioTrack && (
@@ -473,6 +516,103 @@ export default function VideoEditor() {
           </div>
         </div>
       </div>
+
+      {/* Overlay Modal */}
+      {showOverlayModal && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-gradient-to-br from-gray-900 to-black border border-white/20 rounded-2xl p-6 max-w-md w-full">
+            <h3 className="text-xl font-bold mb-4">הוסף טקסט או לוגו</h3>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="text-sm text-gray-400 mb-2 block">טקסט</label>
+                <Input
+                  id="overlay-text"
+                  placeholder="הכנס טקסט..."
+                  className="bg-white/5 border-white/20 text-white"
+                />
+                <div className="flex gap-2 mt-2">
+                  <Input
+                    id="text-color"
+                    type="color"
+                    defaultValue="#ffffff"
+                    className="w-20 h-10"
+                  />
+                  <Input
+                    id="text-size"
+                    type="number"
+                    placeholder="גודל"
+                    defaultValue="24"
+                    className="flex-1 bg-white/5 border-white/20 text-white"
+                  />
+                </div>
+                <Button
+                  onClick={() => {
+                    const text = document.getElementById('overlay-text').value;
+                    const color = document.getElementById('text-color').value;
+                    const fontSize = parseInt(document.getElementById('text-size').value);
+                    if (text) handleAddOverlay('text', { text, color, fontSize });
+                  }}
+                  className="w-full mt-2 bg-blue-600 hover:bg-blue-700"
+                >
+                  <Type size={18} className="mr-2" />
+                  הוסף טקסט
+                </Button>
+              </div>
+
+              <div className="border-t border-white/20 pt-4">
+                <label className="text-sm text-gray-400 mb-2 block">לוגו / תמונה</label>
+                <input
+                  type="file"
+                  accept="image/*"
+                  id="logo-upload"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files[0];
+                    if (file) handleAddOverlay('logo', null, file);
+                  }}
+                />
+                <Button
+                  onClick={() => document.getElementById('logo-upload').click()}
+                  className="w-full bg-purple-600 hover:bg-purple-700"
+                >
+                  <ImageIcon size={18} className="mr-2" />
+                  העלה לוגו
+                </Button>
+              </div>
+            </div>
+
+            <div className="flex gap-2 mt-6">
+              <Button
+                onClick={() => setShowOverlayModal(false)}
+                variant="outline"
+                className="flex-1 border-white/20 text-white hover:bg-white/10"
+              >
+                סגור
+              </Button>
+            </div>
+
+            {overlays.length > 0 && (
+              <div className="mt-4 border-t border-white/20 pt-4">
+                <p className="text-xs text-gray-400 mb-2">אלמנטים קיימים:</p>
+                <div className="space-y-1">
+                  {overlays.map(overlay => (
+                    <div key={overlay.id} className="flex items-center justify-between text-xs bg-white/5 p-2 rounded">
+                      <span>{overlay.type === 'text' ? overlay.content : 'לוגו'}</span>
+                      <button
+                        onClick={() => setOverlays(prev => prev.filter(o => o.id !== overlay.id))}
+                        className="text-red-400 hover:text-red-300"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
