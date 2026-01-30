@@ -293,7 +293,7 @@ export default function VideoEditor() {
             />
             <Button 
               onClick={() => document.getElementById('video-upload').click()}
-              className="w-full bg-white/10 hover:bg-white/20" 
+              className="w-full bg-white/10 hover:bg-white/20 text-white" 
               disabled={loading}
             >
               {loading ? <Loader2 size={18} className="mr-2 animate-spin" /> : <Upload size={18} className="mr-2" />}
@@ -303,7 +303,7 @@ export default function VideoEditor() {
 
             <Button
               onClick={handleAddLumaClip}
-              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
               disabled={loading}
             >
               <Sparkles size={18} className="mr-2" />
@@ -319,7 +319,7 @@ export default function VideoEditor() {
             />
             <Button 
               onClick={() => document.getElementById('audio-upload').click()}
-              className="w-full bg-white/10 hover:bg-white/20"
+              className="w-full bg-white/10 hover:bg-white/20 text-white"
             >
               <Music size={18} className="mr-2" />
               הוסף מוזיקה
@@ -327,7 +327,7 @@ export default function VideoEditor() {
 
             <Button
               onClick={() => setShowOverlayModal(true)}
-              className="w-full bg-blue-600/20 hover:bg-blue-600/40 border border-blue-500/30"
+              className="w-full bg-blue-600/20 hover:bg-blue-600/40 border border-blue-500/30 text-white"
             >
               <Type size={18} className="mr-2" />
               הוסף טקסט/לוגו
@@ -432,6 +432,12 @@ export default function VideoEditor() {
                 <div className="mt-4 text-center text-sm text-gray-400">
                   קליפ {selectedClipIndex + 1} מתוך {clips.length} | {selectedClip.name}
                 </div>
+              </div>
+            ) : clips.length > 0 ? (
+              <div className="text-center text-gray-400">
+                <Film size={64} className="mx-auto mb-4 opacity-30" />
+                <p className="text-lg mb-2">בחר קליפ מהטיימליין כדי לראות אותו</p>
+                <p className="text-sm">{clips.length} קליפים בטיימליין</p>
               </div>
             ) : (
               <div className="text-center text-gray-500">
@@ -553,7 +559,7 @@ export default function VideoEditor() {
                     const fontSize = parseInt(document.getElementById('text-size').value);
                     if (text) handleAddOverlay('text', { text, color, fontSize });
                   }}
-                  className="w-full mt-2 bg-blue-600 hover:bg-blue-700"
+                  className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white"
                 >
                   <Type size={18} className="mr-2" />
                   הוסף טקסט
@@ -574,7 +580,7 @@ export default function VideoEditor() {
                 />
                 <Button
                   onClick={() => document.getElementById('logo-upload').click()}
-                  className="w-full bg-purple-600 hover:bg-purple-700"
+                  className="w-full bg-purple-600 hover:bg-purple-700 text-white"
                 >
                   <ImageIcon size={18} className="mr-2" />
                   העלה לוגו
