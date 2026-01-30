@@ -47,7 +47,11 @@ export default function LumaStudio() {
 
     try {
       const response = await base44.functions.invoke('createLumaVideo', {
-        prompt: userPrompt
+        prompt: userPrompt,
+        aspect_ratio: aspectRatio,
+        add_voice: addVoiceOver,
+        voice_script: addVoiceOver ? (voiceScript.trim() || userPrompt) : null,
+        voice_id: selectedVoice
       });
 
       const videoData = response.data;
