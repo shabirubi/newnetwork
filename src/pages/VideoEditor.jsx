@@ -18,6 +18,7 @@ import EffectsLibraryModal from '../components/videoeditor/EffectsLibraryModal';
 import SpeedControlModal from '../components/videoeditor/SpeedControlModal';
 import ResizeModal from '../components/videoeditor/ResizeModal';
 import ElementsLibraryModal from '../components/videoeditor/ElementsLibraryModal';
+import MusicLibraryModal from '../components/videoeditor/MusicLibraryModal';
 
 // Projects Modal Component
 function ProjectsModal({ onClose, onLoad }) {
@@ -107,6 +108,7 @@ export default function VideoEditor() {
   const [showSpeedModal, setShowSpeedModal] = useState(false);
   const [showResizeModal, setShowResizeModal] = useState(false);
   const [showElementsModal, setShowElementsModal] = useState(false);
+  const [showMusicLibraryModal, setShowMusicLibraryModal] = useState(false);
   const videoRef = useRef(null);
   const audioRef = useRef(null);
 
@@ -536,20 +538,29 @@ export default function VideoEditor() {
               צור עם AI
             </Button>
 
-            <input
-              type="file"
-              accept="audio/*"
-              onChange={handleAddAudio}
-              className="hidden"
-              id="audio-upload"
-            />
-            <Button 
-              onClick={() => document.getElementById('audio-upload').click()}
-              className="w-full bg-white/10 hover:bg-white/20 text-white"
-            >
-              <Music size={18} className="mr-2" />
-              הוסף מוזיקה
-            </Button>
+            <div className="flex gap-2">
+              <input
+                type="file"
+                accept="audio/*"
+                onChange={handleAddAudio}
+                className="hidden"
+                id="audio-upload"
+              />
+              <Button 
+                onClick={() => document.getElementById('audio-upload').click()}
+                className="flex-1 bg-white/10 hover:bg-white/20 text-white"
+              >
+                <Upload size={18} className="mr-2" />
+                העלה
+              </Button>
+              <Button 
+                onClick={() => setShowMusicLibraryModal(true)}
+                className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
+              >
+                <Music size={18} className="mr-2" />
+                ספרייה
+              </Button>
+            </div>
 
             <Button
               onClick={() => setShowOverlayModal(true)}
@@ -916,6 +927,17 @@ export default function VideoEditor() {
           onApply={(element) => {
             setOverlays(prev => [...prev, element]);
             toast.success('אלמנט נוסף! ✨');
+          }}
+        />
+      )}
+
+      {/* Music Library Modal */}
+      {showMusicLibraryModal && (
+        <MusicLibraryModal 
+          onClose={() => setShowMusicLibraryModal(false)}
+          onApply={(music) => {
+            setAudioTrack({ url: music.url, name: music.name, volume: 100 });
+            toast.success(`${music.name} נוסף! 🎵`);
           }}
         />
       )}
