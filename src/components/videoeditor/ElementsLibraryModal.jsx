@@ -1,36 +1,36 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Sparkles, X } from 'lucide-react';
+import { X, Smile, Star, Heart, ThumbsUp, Zap, Circle, Square, Triangle, Sparkles, FileText, Newspaper, Bell, Share2, BarChart, Clock, Lightbulb, Eye, Snowflake, Flame, Music as MusicIcon, Layout, Frame, Type, AlertTriangle, Film as FilmIcon, Target, Camera, Rocket, TrendingUp } from 'lucide-react';
 
 export default function ElementsLibraryModal({ onClose, onApply }) {
   const [activeTab, setActiveTab] = useState('professional');
 
   const stickers = [
-    { id: 1, emoji: '🔥', name: 'אש' },
-    { id: 2, emoji: '⭐', name: 'כוכב' },
-    { id: 3, emoji: '💡', name: 'נורה' },
-    { id: 4, emoji: '🎯', name: 'מטרה' },
-    { id: 5, emoji: '✨', name: 'נוצץ' },
-    { id: 6, emoji: '🚀', name: 'רקטה' },
-    { id: 7, emoji: '💥', name: 'פיצוץ' },
-    { id: 8, emoji: '🎬', name: 'קולנוע' },
-    { id: 9, emoji: '📱', name: 'טלפון' },
-    { id: 10, emoji: '💰', name: 'כסף' },
-    { id: 11, emoji: '👍', name: 'לייק' },
-    { id: 12, emoji: '❤️', name: 'לב' },
-    { id: 13, emoji: '🎉', name: 'חגיגה' },
-    { id: 14, emoji: '🔔', name: 'פעמון' },
-    { id: 15, emoji: '⚡', name: 'ברק' },
-    { id: 16, emoji: '🌟', name: 'כוכב נוצץ' }
+    { id: 1, icon: Flame, name: 'אש', color: 'text-orange-400' },
+    { id: 2, icon: Star, name: 'כוכב', color: 'text-yellow-400' },
+    { id: 3, icon: Lightbulb, name: 'נורה', color: 'text-yellow-400' },
+    { id: 4, icon: Target, name: 'מטרה', color: 'text-red-400' },
+    { id: 5, icon: Sparkles, name: 'נוצץ', color: 'text-pink-400' },
+    { id: 6, icon: Rocket, name: 'רקטה', color: 'text-blue-400' },
+    { id: 7, icon: Zap, name: 'פיצוץ', color: 'text-yellow-400' },
+    { id: 8, icon: FilmIcon, name: 'קולנוע', color: 'text-red-400' },
+    { id: 9, icon: Camera, name: 'מצלמה', color: 'text-gray-400' },
+    { id: 10, icon: TrendingUp, name: 'עלייה', color: 'text-green-400' },
+    { id: 11, icon: ThumbsUp, name: 'לייק', color: 'text-blue-400' },
+    { id: 12, icon: Heart, name: 'לב', color: 'text-red-400' },
+    { id: 13, icon: Sparkles, name: 'חגיגה', color: 'text-purple-400' },
+    { id: 14, icon: Bell, name: 'פעמון', color: 'text-yellow-400' },
+    { id: 15, icon: Zap, name: 'ברק', color: 'text-yellow-400' },
+    { id: 16, icon: Star, name: 'כוכב נוצץ', color: 'text-yellow-400' }
   ];
 
   const shapes = [
-    { id: 1, type: 'circle', name: 'עיגול', color: '#FF0000' },
-    { id: 2, type: 'square', name: 'ריבוע', color: '#00FF00' },
-    { id: 3, type: 'triangle', name: 'משולש', color: '#0000FF' },
-    { id: 4, type: 'arrow', name: 'חץ', color: '#FFFF00' },
-    { id: 5, type: 'star', name: 'כוכב', color: '#FF00FF' },
-    { id: 6, type: 'heart', name: 'לב', color: '#FF0066' }
+    { id: 1, type: 'circle', name: 'עיגול', color: '#FF0000', icon: Circle },
+    { id: 2, type: 'square', name: 'ריבוע', color: '#00FF00', icon: Square },
+    { id: 3, type: 'triangle', name: 'משולש', color: '#0000FF', icon: Triangle },
+    { id: 4, type: 'arrow', name: 'חץ', color: '#FFFF00', icon: TrendingUp },
+    { id: 5, type: 'star', name: 'כוכב', color: '#FF00FF', icon: Star },
+    { id: 6, type: 'heart', name: 'לב', color: '#FF0066', icon: Heart }
   ];
 
   const animations = [
@@ -73,7 +73,9 @@ export default function ElementsLibraryModal({ onClose, onApply }) {
     onApply({
       id: Date.now(),
       type: 'sticker',
-      content: sticker.emoji,
+      icon: sticker.icon,
+      iconName: sticker.name,
+      color: sticker.color,
       position: { x: 50, y: 50 },
       size: 60
     });
@@ -236,15 +238,19 @@ export default function ElementsLibraryModal({ onClose, onApply }) {
         {/* Stickers Grid */}
         {activeTab === 'stickers' && (
           <div className="grid grid-cols-4 md:grid-cols-8 gap-3">
-            {stickers.map(sticker => (
-              <button
-                key={sticker.id}
-                onClick={() => handleAddSticker(sticker)}
-                className="aspect-square bg-white/5 hover:bg-yellow-600/30 border border-white/10 hover:border-yellow-500/50 rounded-xl flex items-center justify-center transition-all group"
-              >
-                <div className="text-4xl group-hover:scale-125 transition-transform">{sticker.emoji}</div>
-              </button>
-            ))}
+            {stickers.map(sticker => {
+              const IconComponent = sticker.icon;
+              return (
+                <button
+                  key={sticker.id}
+                  onClick={() => handleAddSticker(sticker)}
+                  className="aspect-square bg-white/5 hover:bg-yellow-600/30 border border-white/10 hover:border-yellow-500/50 rounded-xl flex flex-col items-center justify-center gap-1 transition-all group"
+                >
+                  <IconComponent size={32} className={`${sticker.color} group-hover:scale-125 transition-transform`} />
+                  <div className="text-[10px] text-gray-400">{sticker.name}</div>
+                </button>
+              );
+            })}
           </div>
         )}
 
@@ -278,16 +284,19 @@ export default function ElementsLibraryModal({ onClose, onApply }) {
         {/* Animations Grid */}
         {activeTab === 'animations' && (
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            {animations.map(animation => (
-              <button
-                key={animation.id}
-                onClick={() => handleAddAnimation(animation)}
-                className="bg-white/5 hover:bg-yellow-600/30 border border-white/10 hover:border-yellow-500/50 rounded-xl p-6 transition-all group"
-              >
-                <div className="text-4xl mb-3 group-hover:scale-110 transition-transform">{animation.icon}</div>
-                <div className="text-sm font-medium text-white">{animation.name}</div>
-              </button>
-            ))}
+            {animations.map(animation => {
+              const IconComponent = animation.icon;
+              return (
+                <button
+                  key={animation.id}
+                  onClick={() => handleAddAnimation(animation)}
+                  className="bg-white/5 hover:bg-yellow-600/30 border border-white/10 hover:border-yellow-500/50 rounded-xl p-6 transition-all group flex flex-col items-center"
+                >
+                  <IconComponent size={32} className="text-purple-400 mb-3 group-hover:scale-110 transition-transform" />
+                  <div className="text-sm font-medium text-white">{animation.name}</div>
+                </button>
+              );
+            })}
           </div>
         )}
 
