@@ -7,10 +7,78 @@ import { Slider } from '@/components/ui/slider';
 import { 
   Play, Pause, Plus, Trash2, Upload, Download, 
   Volume2, VolumeX, Scissors, Sparkles, Music, 
-  MoveHorizontal, Film, Loader2, Save, Eye, Type, Image as ImageIcon
+  MoveHorizontal, Film, Loader2, Save, Eye, Type, Image as ImageIcon, FolderOpen
 } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useQuery } from '@tanstack/react-query';
+
+// Projects Modal Component
+function ProjectsModal({ onClose, onLoad }) {
+  const { data: projects, isLoading } = useQuery({
+    queryKey: ['video-projects'],
+    queryFn: async () => {
+      const user = await base44.auth.me();
+      return await base44.entities.VideoProject.filter({ creator_email: user.email }, '-created_date', 50);
+    }
+  });
+
+  return (
+    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50" onClick={onClose}>
+      <div className="bg-gradient-to-br from-gray-900 to-black border border-white/20 rounded-2xl p-6 max-w-3xl w-full max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+        <h3 className="text-2xl font-bold mb-4 flex items-center gap-2">
+          <FolderOpen size={24} className="text-[#E31E24]" />
+          הפרויקטים שלי
+        </h3>
+
+        {isLoading ? (
+          <div className="flex items-center justify-center py-12">
+            <Loader2 size={32} className="animate-spin text-[#E31E24]" />
+          </div>
+        ) : projects?.length === 0 ? (
+          <div className="text-center py-12 text-gray-400">
+            <Film size={48} className="mx-auto mb-4 opacity-30" />
+            <p>אין פרויקטים שמורים עדיין</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {projects?.map(project => (
+              <div 
+                key={project.id}
+                className="bg-white/5 border border-white/10 rounded-xl p-4 hover:bg-white/10 transition-all cursor-pointer group"
+                onClick={() => onLoad(project)}
+              >
+                <div className="aspect-video bg-black/50 rounded-lg mb-3 overflow-hidden">
+                  {project.thumbnail && (
+                    <img src={project.thumbnail} alt={project.title} className="w-full h-full object-cover" />
+                  )}
+                </div>
+                <h4 className="font-bold text-white mb-1 group-hover:text-[#E31E24] transition-colors">{project.title}</h4>
+                <div className="flex items-center justify-between text-xs text-gray-400">
+                  <span>{project.clips?.length || 0} קליפים</span>
+                  <span>{project.duration?.toFixed(1)}s</span>
+                </div>
+                <div className="text-xs text-gray-500 mt-2">
+                  {new Date(project.created_date).toLocaleDateString('he-IL')}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        <div className="flex justify-end mt-6">
+          <Button
+            onClick={onClose}
+            variant="outline"
+            className="border-white/20 text-white hover:bg-white/10"
+          >
+            סגור
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export default function VideoEditor() {
   const [clips, setClips] = useState([]);
@@ -25,6 +93,8 @@ export default function VideoEditor() {
   const [overlays, setOverlays] = useState([]);
   const [showOverlayModal, setShowOverlayModal] = useState(false);
   const [playingAll, setPlayingAll] = useState(false);
+  const [showProjectsModal, setShowProjectsModal] = useState(false);
+  const [projectTitle, setProjectTitle] = useState('');
   const videoRef = useRef(null);
   const audioRef = useRef(null);
 
@@ -206,6 +276,47 @@ export default function VideoEditor() {
     toast.success('בחר קליפ מהטיימליין להצגה');
   };
 
+  // Save project
+  const handleSaveProject = async () => {
+    if (clips.length === 0) {
+      toast.error('אין מה לשמור');
+      return;
+    }
+
+    try {
+      const user = await base44.auth.me();
+      const title = projectTitle || window.prompt('שם הפרויקט:', 'פרויקט חדש');
+      if (!title) return;
+
+      await base44.entities.VideoProject.create({
+        title,
+        clips,
+        audioTrack,
+        transitions,
+        overlays,
+        thumbnail: clips[0]?.thumbnail || clips[0]?.url,
+        duration: totalDuration,
+        creator_email: user.email
+      });
+
+      setProjectTitle(title);
+      toast.success('הפרויקט נשמר! 💾');
+    } catch (error) {
+      toast.error('שגיאה בשמירה: ' + error.message);
+    }
+  };
+
+  // Load project
+  const handleLoadProject = async (project) => {
+    setClips(project.clips || []);
+    setAudioTrack(project.audioTrack || null);
+    setTransitions(project.transitions || {});
+    setOverlays(project.overlays || []);
+    setProjectTitle(project.title);
+    setShowProjectsModal(false);
+    toast.success('הפרויקט נטען! 📂');
+  };
+
   // Export final video
   const handleExport = async () => {
     if (clips.length === 0) {
@@ -290,6 +401,23 @@ export default function VideoEditor() {
             <p className="text-sm text-gray-400">ערוך, חבר והוסף אפקטים לסרטונים שלך</p>
           </div>
           <div className="flex gap-2">
+            <Button
+              onClick={() => setShowProjectsModal(true)}
+              variant="outline"
+              className="border-white/20 text-white hover:bg-white/10"
+            >
+              <FolderOpen size={18} className="mr-2" />
+              הפרויקטים שלי
+            </Button>
+            <Button
+              onClick={handleSaveProject}
+              disabled={clips.length === 0}
+              variant="outline"
+              className="border-green-500/30 text-green-400 hover:bg-green-600/20"
+            >
+              <Save size={18} className="mr-2" />
+              שמור פרויקט
+            </Button>
             <Button
               onClick={handlePlayAll}
               disabled={clips.length === 0}
@@ -626,6 +754,14 @@ export default function VideoEditor() {
           </div>
         </div>
       </div>
+
+      {/* Projects Modal */}
+      {showProjectsModal && (
+        <ProjectsModal 
+          onClose={() => setShowProjectsModal(false)}
+          onLoad={handleLoadProject}
+        />
+      )}
 
       {/* Overlay Modal */}
       {showOverlayModal && (
