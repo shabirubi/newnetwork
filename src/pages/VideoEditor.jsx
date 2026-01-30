@@ -650,11 +650,11 @@ export default function VideoEditor() {
               </Button>
 
               <Button
-                onClick={() => setShowTTSModal(true)}
+                onClick={() => setShowAdvancedTTSModal(true)}
                 className="w-full bg-purple-600/20 hover:bg-purple-600/40 border border-purple-500/30 text-white mb-2"
               >
                 <Volume2 size={18} className="mr-2" />
-                דיבוב קולי (TTS)
+                דיבוב מתקדם (11labs)
               </Button>
               
               <Button
