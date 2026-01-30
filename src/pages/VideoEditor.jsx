@@ -1118,6 +1118,45 @@ export default function VideoEditor() {
         />
       )}
 
+      {/* Advanced TTS Modal */}
+      {showAdvancedTTSModal && (
+        <AdvancedTTSModal 
+          onClose={() => setShowAdvancedTTSModal(false)}
+          onApply={async (text, voice) => {
+            setLoading(true);
+            try {
+              const { data } = await base44.functions.invoke('generateElevenLabsSpeech', { 
+                text, 
+                voice_id: voice 
+              });
+              if (data.audio_url) {
+                setAudioTrack({ url: data.audio_url, name: 'דיבוב - ' + voice, volume: 100 });
+                toast.success('דיבוב ElevenLabs נוסף! 🎙️');
+                setShowAdvancedTTSModal(false);
+              } else {
+                toast.error('לא הצליח ליצור דיבוב');
+              }
+            } catch (error) {
+              toast.error('שגיאה: ' + error.message);
+            } finally {
+              setLoading(false);
+            }
+          }}
+        />
+      )}
+
+      {/* Ad Creator Modal */}
+      {showAdCreatorModal && (
+        <AdCreatorModal 
+          onClose={() => setShowAdCreatorModal(false)}
+          onApply={(adClip) => {
+            setClips(prev => [...prev, adClip]);
+            setShowAdCreatorModal(false);
+            toast.success('פרסומה נוספה לעורך! 📢');
+          }}
+        />
+      )}
+
       {/* Luma Video Generator Modal */}
       {showLumaGeneratorModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50" onClick={() => setShowLumaGeneratorModal(false)}>
