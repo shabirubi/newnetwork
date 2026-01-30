@@ -17,7 +17,10 @@ export default function UpdatesFeed() {
         return [];
       }
     },
-    initialData: []
+    initialData: [],
+    refetchInterval: false,
+    refetchOnWindowFocus: false,
+    staleTime: 5 * 60 * 1000
   });
 
   return (

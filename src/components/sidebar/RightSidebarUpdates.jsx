@@ -24,7 +24,9 @@ export default function RightSidebarUpdates() {
       }
     },
     initialData: [],
-    refetchInterval: 60000
+    refetchInterval: false,
+    refetchOnWindowFocus: false,
+    staleTime: 5 * 60 * 1000
   });
 
   if (updates.length === 0) return null;

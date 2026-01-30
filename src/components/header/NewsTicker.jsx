@@ -19,19 +19,14 @@ export default function NewsTicker({ darkMode, setDarkMode, onMenuClick }) {
     loadBreakingNews();
     fetchCurrencyRates();
     
-    // Refresh news every 5 minutes
-    const newsInterval = setInterval(loadBreakingNews, 300000);
-    
-    // Listen for news updates from AutoNewsUpdater
+    // Listen for news updates from AutoNewsUpdater only
     const handleNewsUpdate = () => {
-      console.log('🔄 NewsTicker מתעדכן עם חדשות חדשות');
       loadBreakingNews();
     };
     
     window.addEventListener('newsUpdated', handleNewsUpdate);
     
     return () => {
-      clearInterval(newsInterval);
       window.removeEventListener('newsUpdated', handleNewsUpdate);
     };
   }, []);
@@ -245,7 +240,9 @@ function TickerContent({ news, currencies }) {
         return [];
       }
     },
-    refetchInterval: 120000,
+    refetchInterval: false,
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
     initialData: []
   });
 
