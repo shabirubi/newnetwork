@@ -117,6 +117,9 @@ export default function VideoEditor() {
   const [showPIPModal, setShowPIPModal] = useState(false);
   const [pipLayers, setPipLayers] = useState([]);
   const [showAIImageModal, setShowAIImageModal] = useState(false);
+  const [showAdvancedTTSModal, setShowAdvancedTTSModal] = useState(false);
+  const [showAdCreatorModal, setShowAdCreatorModal] = useState(false);
+  const [videoLoop, setVideoLoop] = useState(false);
   const videoRef = useRef(null);
   const audioRef = useRef(null);
 
