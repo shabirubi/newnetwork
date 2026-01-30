@@ -235,33 +235,95 @@ export default function LumaStudio() {
           </div>
 
           {/* Input */}
-          <form onSubmit={generateVideo} className="flex gap-3">
-            <Textarea
-              value={prompt}
-              onChange={(e) => setPrompt(e.target.value)}
-              placeholder="תאר את הסרטון שאתה רוצה ליצור..."
-              className="bg-white/5 border-white/20 text-white placeholder-gray-500 resize-none"
-              rows={3}
-              disabled={loading}
-            />
-            <Button
-              type="submit"
-              disabled={loading || !prompt.trim()}
-              className="bg-[#E31E24] hover:bg-[#B91C1C] text-white px-6 flex items-center gap-2 self-end"
-            >
-              {loading ? (
-                <>
-                  <Loader2 size={18} className="animate-spin" />
-                  ייצור...
-                </>
-              ) : (
-                <>
-                  <Send size={18} />
-                  שלח
-                </>
+          <div className="space-y-3">
+            {/* Voice Over Options */}
+            <div className="bg-white/5 border border-white/10 rounded-xl p-4 space-y-3">
+              <div className="flex items-center gap-3">
+                <input
+                  type="checkbox"
+                  id="addVoice"
+                  checked={addVoiceOver}
+                  onChange={(e) => setAddVoiceOver(e.target.checked)}
+                  className="w-4 h-4"
+                />
+                <label htmlFor="addVoice" className="text-sm text-white cursor-pointer">
+                  הוסף דיבוב קולי לסרטון
+                </label>
+              </div>
+
+              {addVoiceOver && (
+                <div className="space-y-3 pt-2 border-t border-white/10">
+                  <div>
+                    <label className="text-xs text-gray-400 mb-1 block">קול</label>
+                    <Select value={selectedVoice} onValueChange={setSelectedVoice}>
+                      <SelectTrigger className="bg-black/40 border-white/20 text-white text-sm">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Rachel">רחל (אנגלית)</SelectItem>
+                        <SelectItem value="Adam">אדם (אנגלית)</SelectItem>
+                        <SelectItem value="Antoni">אנטוני (אנגלית)</SelectItem>
+                        <SelectItem value="Bella">בלה (אנגלית)</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div>
+                    <label className="text-xs text-gray-400 mb-1 block">טקסט לדיבוב (אופציונלי - אם ריק ישתמש בתיאור הסרטון)</label>
+                    <Textarea
+                      value={voiceScript}
+                      onChange={(e) => setVoiceScript(e.target.value)}
+                      placeholder="כתוב את הטקסט שיידובב על הסרטון..."
+                      className="bg-black/40 border-white/20 text-white placeholder-gray-500 resize-none text-sm"
+                      rows={2}
+                    />
+                  </div>
+                </div>
               )}
-            </Button>
-          </form>
+
+              <div>
+                <label className="text-xs text-gray-400 mb-1 block">יחס גובה-רוחב</label>
+                <Select value={aspectRatio} onValueChange={setAspectRatio}>
+                  <SelectTrigger className="bg-black/40 border-white/20 text-white text-sm">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="16:9">16:9 (רחב)</SelectItem>
+                    <SelectItem value="9:16">9:16 (אנכי - סטורי)</SelectItem>
+                    <SelectItem value="1:1">1:1 (מרבע)</SelectItem>
+                    <SelectItem value="4:3">4:3 (טלוויזיה)</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <form onSubmit={generateVideo} className="flex gap-3">
+              <Textarea
+                value={prompt}
+                onChange={(e) => setPrompt(e.target.value)}
+                placeholder="תאר את הסרטון שאתה רוצה ליצור..."
+                className="bg-white/5 border-white/20 text-white placeholder-gray-500 resize-none"
+                rows={3}
+                disabled={loading}
+              />
+              <Button
+                type="submit"
+                disabled={loading || !prompt.trim()}
+                className="bg-[#E31E24] hover:bg-[#B91C1C] text-white px-6 flex items-center gap-2 self-end"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 size={18} className="animate-spin" />
+                    ייצור...
+                  </>
+                ) : (
+                  <>
+                    <Send size={18} />
+                    שלח
+                  </>
+                )}
+              </Button>
+            </form>
+          </div>
         </div>
 
         {/* Tips */}
