@@ -10,7 +10,6 @@ import {
   Volume2, VolumeX, Scissors, Sparkles, Music, 
   MoveHorizontal, Film, Loader2, Save, Eye, Type, Image as ImageIcon, FolderOpen
 } from 'lucide-react';
-import { createPageUrl } from '../utils';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
@@ -22,6 +21,7 @@ import ResizeModal from '../components/videoeditor/ResizeModal';
 import ElementsLibraryModal from '../components/videoeditor/ElementsLibraryModal';
 import MusicLibraryModal from '../components/videoeditor/MusicLibraryModal';
 import PIPOverlay from '../components/videoeditor/PIPOverlay';
+import AIImageGeneratorModal from '../components/videoeditor/AIImageGeneratorModal';
 
 // Projects Modal Component
 function ProjectsModal({ onClose, onLoad }) {
@@ -114,6 +114,7 @@ export default function VideoEditor() {
   const [showMusicLibraryModal, setShowMusicLibraryModal] = useState(false);
   const [showPIPModal, setShowPIPModal] = useState(false);
   const [pipLayers, setPipLayers] = useState([]);
+  const [showAIImageModal, setShowAIImageModal] = useState(false);
   const videoRef = useRef(null);
   const audioRef = useRef(null);
 
@@ -546,7 +547,7 @@ export default function VideoEditor() {
                 סרטון AI
               </Button>
               <Button
-                onClick={() => window.open(createPageUrl('AIDesignStudio'), '_blank')}
+                onClick={() => setShowAIImageModal(true)}
                 className="flex-1 bg-gradient-to-r from-pink-600 to-orange-600 hover:from-pink-700 hover:to-orange-700 text-white"
               >
                 <ImageIcon size={18} className="mr-2" />
@@ -1035,6 +1036,22 @@ export default function VideoEditor() {
           onApply={(pipData) => {
             setPipLayers(prev => [...prev, pipData]);
             toast.success('PIP נוסף בהצלחה! 📹');
+          }}
+        />
+      )}
+
+      {/* AI Image Generator Modal */}
+      {showAIImageModal && (
+        <AIImageGeneratorModal 
+          onClose={() => setShowAIImageModal(false)}
+          onApply={(imageData) => {
+            setClips(prev => [...prev, {
+              id: Date.now(),
+              ...imageData,
+              filters: { brightness: 100, contrast: 100, saturation: 100 },
+              volume: 0
+            }]);
+            setShowAIImageModal(false);
           }}
         />
       )}
