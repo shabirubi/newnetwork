@@ -74,12 +74,14 @@ export default function LumaStudio() {
           type: 'assistant',
           videoUrl: videoData.video_url,
           thumbnailUrl: videoData.thumbnail_url,
+          audioUrl: videoData.audio_url,
+          has_voice: videoData.has_voice,
           prompt: userPrompt,
           timestamp: new Date()
         }]);
 
         setVideoUrl(videoData.video_url);
-        toast.success('סרטון יצור בהצלחה!');
+        toast.success(videoData.has_voice ? 'סרטון עם דיבוב יצור בהצלחה! 🎤' : 'סרטון יצור בהצלחה!');
         setLoading(false);
       } else {
         toast.error('לא התקבל קישור לסרטון');
