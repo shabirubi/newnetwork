@@ -9,11 +9,9 @@ import { createPageUrl } from "../../utils";
 
 export default function RightSidebarUpdates() {
   const { data: updates = [] } = useQuery({
-    queryKey: ['sidebar-updates'],
+    queryKey: ['breaking-news-shared'],
     queryFn: async () => {
       try {
-        const user = await base44.auth.me();
-        if (!user) return [];
         return base44.entities.NewsArticle.filter(
           { is_breaking: true },
           '-created_date',
@@ -26,7 +24,8 @@ export default function RightSidebarUpdates() {
     initialData: [],
     refetchInterval: false,
     refetchOnWindowFocus: false,
-    staleTime: 5 * 60 * 1000
+    staleTime: 10 * 60 * 1000,
+    gcTime: 15 * 60 * 1000
   });
 
   if (updates.length === 0) return null;

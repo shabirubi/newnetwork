@@ -9,10 +9,14 @@ import { useQuery } from "@tanstack/react-query";
 
 export default function UpdatesFeed() {
   const { data: breakingNews = [] } = useQuery({
-    queryKey: ['breaking-news-feed'],
+    queryKey: ['breaking-news-shared'],
     queryFn: async () => {
       try {
-        return await base44.entities.NewsArticle.list('-created_date', 8);
+        return await base44.entities.NewsArticle.filter(
+          { is_breaking: true },
+          '-created_date',
+          12
+        );
       } catch {
         return [];
       }
@@ -20,7 +24,8 @@ export default function UpdatesFeed() {
     initialData: [],
     refetchInterval: false,
     refetchOnWindowFocus: false,
-    staleTime: 5 * 60 * 1000
+    staleTime: 10 * 60 * 1000,
+    gcTime: 15 * 60 * 1000
   });
 
   return (

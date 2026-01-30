@@ -232,17 +232,22 @@ export default function NewsTicker({ darkMode, setDarkMode, onMenuClick }) {
 
 function TickerContent({ news, currencies }) {
   const { data: articles = [] } = useQuery({
-    queryKey: ['breaking-news-ticker'],
+    queryKey: ['breaking-news-shared'],
     queryFn: async () => {
       try {
-        return await base44.entities.NewsArticle.list('-created_date', 10);
+        return await base44.entities.NewsArticle.filter(
+          { is_breaking: true },
+          '-created_date',
+          12
+        );
       } catch {
         return [];
       }
     },
     refetchInterval: false,
     refetchOnWindowFocus: false,
-    staleTime: Infinity,
+    staleTime: 10 * 60 * 1000,
+    gcTime: 15 * 60 * 1000,
     initialData: []
   });
 

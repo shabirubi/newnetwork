@@ -131,9 +131,7 @@ export default function Home() {
     };
   }, [isLoading, isFetchingNextPage, hasMore]);
 
-  React.useEffect(() => {
-    queryClient.invalidateQueries({ queryKey: ['news-articles'] });
-  }, [queryClient]);
+
 
   const { data: liveStream, refetch: refetchLiveStream } = useQuery({
     queryKey: ['live-stream'],
