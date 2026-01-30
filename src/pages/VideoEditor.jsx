@@ -176,15 +176,14 @@ export default function VideoEditor() {
   };
 
   // Add clip from Luma generation
-  const handleAddLumaClip = async () => {
-    const prompt = window.prompt('תאר את הסרטון שברצונך ליצור:');
-    if (!prompt) return;
-
+  const [showLumaGeneratorModal, setShowLumaGeneratorModal] = useState(false);
+  
+  const handleAddLumaClip = async (lumaPrompt, aspectRatio) => {
     setLoading(true);
     try {
       const { data } = await base44.functions.invoke('createLumaVideo', { 
-        prompt,
-        aspect_ratio: '16:9'
+        prompt: lumaPrompt,
+        aspect_ratio: aspectRatio || '16:9'
       });
 
       if (data.video_url) {
@@ -192,12 +191,14 @@ export default function VideoEditor() {
           id: Date.now(),
           url: data.video_url,
           duration: 10,
-          name: prompt.substring(0, 30),
+          name: lumaPrompt.substring(0, 30),
           thumbnail: data.thumbnail_url,
           filters: { brightness: 100, contrast: 100, saturation: 100 },
-          volume: 100
+          volume: 100,
+          type: 'video'
         }]);
         toast.success('קליפ AI נוסף בהצלחה');
+        setShowLumaGeneratorModal(false);
       } else {
         toast.info('הסרטון בתהליך יצירה...');
       }
@@ -531,7 +532,7 @@ export default function VideoEditor() {
             <p className="text-[10px] text-gray-500 text-center">MP4, WebM, MOV, AVI, MKV, PNG, JPG, GIF</p>
 
             <Button
-              onClick={handleAddLumaClip}
+              onClick={() => setShowLumaGeneratorModal(true)}
               className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
               disabled={loading}
             >
@@ -956,10 +957,119 @@ export default function VideoEditor() {
         <MusicLibraryModal 
           onClose={() => setShowMusicLibraryModal(false)}
           onApply={(music) => {
-            setAudioTrack({ url: music.url, name: music.name, volume: 100 });
+            setAudioTrack({ url: music.url, name: music.name, volume: 100, loop: true });
             toast.success(`${music.name} נוסף! 🎵`);
           }}
         />
+      )}
+
+      {/* Luma Video Generator Modal */}
+      {showLumaGeneratorModal && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50" onClick={() => setShowLumaGeneratorModal(false)}>
+          <div className="bg-gradient-to-br from-purple-900/90 to-black border border-purple-500/30 rounded-2xl p-6 max-w-2xl w-full" onClick={(e) => e.stopPropagation()}>
+            <h3 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+              <Sparkles size={24} className="text-purple-400" />
+              צור סרטון AI עם Luma
+            </h3>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-white mb-2">
+                  תיאור הסרטון
+                </label>
+                <Textarea
+                  id="luma-prompt"
+                  placeholder="לדוגמה: דרקון זהוב עף מעל הרים מושלגים בשקיעה..."
+                  className="bg-black/60 border-purple-500/30 text-white placeholder-white/40 resize-none"
+                  rows={4}
+                />
+                <p className="text-xs text-gray-400 mt-1">
+                  💡 תאר תנועות, אפקטים, ושינויים שתרצה לראות
+                </p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-white mb-2">
+                  יחס תצוגה
+                </label>
+                <div className="grid grid-cols-3 gap-3">
+                  {[
+                    { value: "16:9", label: "רחב (16:9)", icon: Film },
+                    { value: "9:16", label: "אנכי (9:16)", icon: Film },
+                    { value: "1:1", label: "מרובע (1:1)", icon: Film }
+                  ].map((option) => (
+                    <button
+                      key={option.value}
+                      onClick={(e) => {
+                        document.querySelectorAll('[data-aspect-ratio]').forEach(el => el.classList.remove('border-purple-500', 'bg-purple-500/20'));
+                        e.currentTarget.classList.add('border-purple-500', 'bg-purple-500/20');
+                        e.currentTarget.setAttribute('data-selected', 'true');
+                      }}
+                      data-aspect-ratio={option.value}
+                      className={`p-3 rounded-xl border-2 transition-all flex flex-col items-center gap-1 ${
+                        option.value === '16:9' 
+                          ? 'border-purple-500 bg-purple-500/20 text-white' 
+                          : 'border-purple-500/30 bg-black/40 text-gray-400 hover:border-purple-500/50'
+                      }`}
+                    >
+                      <option.icon size={20} />
+                      <span className="text-xs font-semibold">{option.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="bg-purple-600/10 border border-purple-500/30 rounded-xl p-4">
+                <p className="text-sm text-purple-200 font-semibold mb-2 flex items-center gap-2">
+                  <Sparkles size={16} />
+                  טיפים ליצירת סרטון מושלם:
+                </p>
+                <ul className="text-xs text-purple-300 space-y-1">
+                  <li>• תאר תנועות ספציפיות: "הדמות מסתובבת ימינה"</li>
+                  <li>• הוסף פרטי תאורה: "באור זהוב", "בשקיעה"</li>
+                  <li>• ציין מהירות: "בתנועה איטית", "במהירות"</li>
+                  <li>• תאר אפקטים: "עם עשן ברקע", "ניצוצות"</li>
+                </ul>
+              </div>
+
+              <div className="flex gap-2">
+                <Button
+                  onClick={() => setShowLumaGeneratorModal(false)}
+                  variant="outline"
+                  className="flex-1 border-white/20 text-white hover:bg-white/10"
+                >
+                  ביטול
+                </Button>
+                <Button
+                  onClick={() => {
+                    const prompt = document.getElementById('luma-prompt').value;
+                    if (!prompt.trim()) {
+                      toast.error('אנא הזן תיאור לסרטון');
+                      return;
+                    }
+                    const aspectButton = document.querySelector('[data-aspect-ratio][data-selected="true"]');
+                    const aspectRatio = aspectButton?.getAttribute('data-aspect-ratio') || '16:9';
+                    handleAddLumaClip(prompt, aspectRatio);
+                  }}
+                  disabled={loading}
+                  className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white"
+                >
+                  {loading ? (
+                    <>
+                      <Loader2 size={18} className="mr-2 animate-spin" />
+                      יוצר...
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles size={18} className="mr-2" />
+                      צור סרטון
+                    </>
+                  )}
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Overlay Modal */}
