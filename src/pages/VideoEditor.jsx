@@ -25,6 +25,7 @@ import PIPOverlay from '../components/videoeditor/PIPOverlay';
 import AIImageGeneratorModal from '../components/videoeditor/AIImageGeneratorModal';
 import AdCreatorModal from '../components/videoeditor/AdCreatorModal';
       import StockVideoLibraryModal from '../components/videoeditor/StockVideoLibraryModal';
+      import TimelineEditor from '../components/videoeditor/TimelineEditor';
 
 // Projects Modal Component
 function ProjectsModal({ onClose, onLoad }) {
