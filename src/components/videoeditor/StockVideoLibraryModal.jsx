@@ -11,65 +11,65 @@ const STOCK_VIDEO_API = {
 
 const SAMPLE_STOCK_VIDEOS = [
   {
-    id: 'pixabay-1',
+    id: 'sample-1',
     title: 'עולא שמש בטבע',
-    url: 'https://pixabay.com/videos/download/sunrise-nature-4k-2619/',
+    url: 'https://www.w3schools.com/html/mov_bbb.mp4',
     thumbnail: 'https://images.unsplash.com/photo-1495567720989-cebdbdd97913?w=400',
     duration: '30s',
     category: 'nature'
   },
   {
-    id: 'pixabay-2',
+    id: 'sample-2',
     title: 'בניין עיר מודרני',
-    url: 'https://pixabay.com/videos/download/city-building-modern-1784/',
+    url: 'https://www.w3schools.com/html/mov_bbb.mp4',
     thumbnail: 'https://images.unsplash.com/photo-1449844908441-8829872d2607?w=400',
     duration: '20s',
     category: 'urban'
   },
   {
-    id: 'coverr-1',
+    id: 'sample-3',
     title: 'טכנולוגיה וקידוד',
-    url: 'https://videos.coverr.co/videos/download/Coding-ZdAYKRfCnXu.mp4',
+    url: 'https://www.w3schools.com/html/mov_bbb.mp4',
     thumbnail: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400',
     duration: '15s',
     category: 'technology'
   },
   {
-    id: 'coverr-2',
+    id: 'sample-4',
     title: 'משרד עם מחשבים',
-    url: 'https://videos.coverr.co/videos/download/Office-Workspace-rN5DPNL7Vjl.mp4',
+    url: 'https://www.w3schools.com/html/mov_bbb.mp4',
     thumbnail: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400',
     duration: '25s',
     category: 'business'
   },
   {
-    id: 'pixabay-3',
+    id: 'sample-5',
     title: 'אנשים בפגישה',
-    url: 'https://pixabay.com/videos/download/people-meeting-conference-1547/',
+    url: 'https://www.w3schools.com/html/mov_bbb.mp4',
     thumbnail: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400',
     duration: '30s',
     category: 'people'
   },
   {
-    id: 'coverr-3',
+    id: 'sample-6',
     title: 'תנועה דינאמית',
-    url: 'https://videos.coverr.co/videos/download/Dynamic-Motion-wK8nPqV2Jxk.mp4',
+    url: 'https://www.w3schools.com/html/mov_bbb.mp4',
     thumbnail: 'https://images.unsplash.com/photo-1460925895917-adf4e565e6c1?w=400',
     duration: '20s',
     category: 'motion'
   },
   {
-    id: 'pixabay-4',
+    id: 'sample-7',
     title: 'מים וטבע',
-    url: 'https://pixabay.com/videos/download/water-nature-relaxation-1625/',
+    url: 'https://www.w3schools.com/html/mov_bbb.mp4',
     thumbnail: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400',
     duration: '15s',
     category: 'nature'
   },
   {
-    id: 'coverr-4',
+    id: 'sample-8',
     title: 'נוף פנטסטי',
-    url: 'https://videos.coverr.co/videos/download/Scenic-Landscape-vJ9PkL3Mxt2.mp4',
+    url: 'https://www.w3schools.com/html/mov_bbb.mp4',
     thumbnail: 'https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=400',
     duration: '25s',
     category: 'space'
