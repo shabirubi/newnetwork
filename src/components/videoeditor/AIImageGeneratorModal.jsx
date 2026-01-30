@@ -57,18 +57,20 @@ export default function AIImageGeneratorModal({ onClose, onApply }) {
     }
 
     setLoading(true);
+    const images = [];
+    
     try {
-      const { data } = await base44.functions.invoke('generateAIImage', {
-        prompt: finalPrompt,
-        model,
-        aspect_ratio: aspectRatio,
-        num_images: numImages
-      });
+      for (let i = 0; i < numImages; i++) {
+        const result = await base44.integrations.Core.GenerateImage({ 
+          prompt: finalPrompt
+        });
+        images.push(result.url);
+      }
 
-      setGeneratedImages(data.images);
-      toast.success(`${data.images.length} תמונות נוצרו! 🎨`);
+      setGeneratedImages(images);
+      toast.success(`${images.length} תמונות נוצרו!`);
     } catch (error) {
-      toast.error('שגיאה ביצירת תמונה');
+      toast.error('שגיאה ביצירת תמונה: ' + error.message);
     } finally {
       setLoading(false);
     }
