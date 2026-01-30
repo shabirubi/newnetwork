@@ -417,11 +417,11 @@ export default function VideoEditor() {
     setExporting(true);
     try {
       const user = await base44.auth.me();
-      
+
       // For now, upload the first clip as the main video
       // In a real implementation, you'd merge all clips with ffmpeg on the backend
       const mainClip = clips[0];
-      
+
       const title = window.prompt('כותרת הסרטון:', 'סרטון ערוך - ' + new Date().toLocaleDateString());
       if (!title) {
         setExporting(false);
@@ -433,14 +433,15 @@ export default function VideoEditor() {
 
       await base44.entities.UserVideo.create({
         title: title,
-        description: `סרטון ערוך עם ${clips.length} קליפים`,
+        description: `סרטון ערוך עם ${clips.length} קליפים${videoLoop ? ' - חוזר בלופ' : ''}`,
         video_url: mainClip.url,
         thumbnail_url: mainClip.thumbnail,
         category: category || 'breaking',
         feed: feed || 'all-videos',
         status: 'ready',
         uploader_email: user.email,
-        duration: totalDuration
+        duration: totalDuration,
+        loop: videoLoop
       });
 
       toast.success('הסרטון הועלה בהצלחה לפידים! 🎬');
