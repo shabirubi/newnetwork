@@ -93,12 +93,65 @@ Deno.serve(async (req) => {
       const status = statusData.state;
 
       if (status === 'completed') {
+        let finalVideoUrl = statusData.assets?.video;
+
+        // Add voice over if requested
+        if (add_voice && elevenLabsApiKey) {
+          try {
+            const textToSpeak = voice_script || prompt;
+            
+            // Generate speech
+            const voiceResponse = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voice_id}`, {
+              method: 'POST',
+              headers: {
+                'Accept': 'audio/mpeg',
+                'Content-Type': 'application/json',
+                'xi-api-key': elevenLabsApiKey
+              },
+              body: JSON.stringify({
+                text: textToSpeak,
+                model_id: 'eleven_multilingual_v2',
+                voice_settings: {
+                  stability: 0.5,
+                  similarity_boost: 0.75
+                }
+              })
+            });
+
+            if (voiceResponse.ok) {
+              const audioBlob = await voiceResponse.arrayBuffer();
+              
+              // Upload audio to storage
+              const audioFile = new File([audioBlob], `voice_${Date.now()}.mp3`, { type: 'audio/mpeg' });
+              const uploadResult = await base44.asServiceRole.integrations.Core.UploadFile({ file: audioFile });
+              
+              if (uploadResult?.file_url) {
+                // Note: Video + audio merge would require ffmpeg
+                // For now, return both URLs - frontend can handle playback
+                return Response.json({
+                  success: true,
+                  video_url: finalVideoUrl,
+                  audio_url: uploadResult.file_url,
+                  thumbnail_url: statusData.assets?.image,
+                  generation_id: generationId,
+                  prompt: prompt,
+                  has_voice: true
+                });
+              }
+            }
+          } catch (voiceError) {
+            console.error('Voice generation error:', voiceError);
+            // Continue without voice if it fails
+          }
+        }
+
         return Response.json({
           success: true,
-          video_url: statusData.assets?.video,
+          video_url: finalVideoUrl,
           thumbnail_url: statusData.assets?.image,
           generation_id: generationId,
-          prompt: prompt
+          prompt: prompt,
+          has_voice: false
         });
       }
 
