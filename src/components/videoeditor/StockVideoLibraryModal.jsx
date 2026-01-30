@@ -13,64 +13,64 @@ const SAMPLE_STOCK_VIDEOS = [
   {
     id: 'pexels-1',
     title: 'עולה שמש בטבע',
-    url: 'https://videos.pexels.com/video-files/6823156/6823156-sd_640_360_30fps.mp4',
-    thumbnail: 'https://images.pexels.com/videos/6823156/pexels-photo-6823156.png',
+    url: 'https://commondatastorage.googleapis.com/gtv-videos-library/sample/BigBuckBunny.mp4',
+    thumbnail: 'https://images.unsplash.com/photo-1495567720989-cebdbdd97913?w=400',
     duration: '30s',
     category: 'nature'
   },
   {
     id: 'pexels-2',
     title: 'בניין עיר מודרני',
-    url: 'https://videos.pexels.com/video-files/6964496/6964496-sd_640_360_30fps.mp4',
-    thumbnail: 'https://images.pexels.com/videos/6964496/pexels-photo-6964496.png',
+    url: 'https://commondatastorage.googleapis.com/gtv-videos-library/sample/ElephantsDream.mp4',
+    thumbnail: 'https://images.unsplash.com/photo-1449844908441-8829872d2607?w=400',
     duration: '20s',
     category: 'urban'
   },
   {
     id: 'pexels-3',
     title: 'טכנולוגיה וקידוד',
-    url: 'https://videos.pexels.com/video-files/5632664/5632664-sd_640_360_30fps.mp4',
-    thumbnail: 'https://images.pexels.com/videos/5632664/pexels-photo-5632664.png',
+    url: 'https://commondatastorage.googleapis.com/gtv-videos-library/sample/ForBiggerBlazes.mp4',
+    thumbnail: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400',
     duration: '15s',
     category: 'technology'
   },
   {
     id: 'pexels-4',
     title: 'משרד עם מחשבים',
-    url: 'https://videos.pexels.com/video-files/7974559/7974559-sd_640_360_30fps.mp4',
-    thumbnail: 'https://images.pexels.com/videos/7974559/pexels-photo-7974559.png',
+    url: 'https://commondatastorage.googleapis.com/gtv-videos-library/sample/ForBiggerEscapes.mp4',
+    thumbnail: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400',
     duration: '25s',
     category: 'business'
   },
   {
     id: 'pexels-5',
     title: 'אנשים בפגישה',
-    url: 'https://videos.pexels.com/video-files/3192202/3192202-sd_640_360_30fps.mp4',
-    thumbnail: 'https://images.pexels.com/videos/3192202/pexels-photo-3192202.png',
+    url: 'https://commondatastorage.googleapis.com/gtv-videos-library/sample/ForBiggerFun.mp4',
+    thumbnail: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400',
     duration: '30s',
     category: 'people'
   },
   {
     id: 'pexels-6',
     title: 'תנועת סחורות',
-    url: 'https://videos.pexels.com/video-files/4792399/4792399-sd_640_360_30fps.mp4',
-    thumbnail: 'https://images.pexels.com/videos/4792399/pexels-photo-4792399.png',
+    url: 'https://commondatastorage.googleapis.com/gtv-videos-library/sample/ForBiggerJoyrides.mp4',
+    thumbnail: 'https://images.unsplash.com/photo-1460925895917-adf4e565e6c1?w=400',
     duration: '20s',
     category: 'motion'
   },
   {
     id: 'pexels-7',
     title: 'מים וטבע',
-    url: 'https://videos.pexels.com/video-files/855370/855370-sd_640_360_24fps.mp4',
-    thumbnail: 'https://images.pexels.com/videos/855370/pexels-photo-855370.png',
+    url: 'https://commondatastorage.googleapis.com/gtv-videos-library/sample/Sintel.mp4',
+    thumbnail: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400',
     duration: '15s',
     category: 'nature'
   },
   {
     id: 'pexels-8',
     title: 'חלל וכוכבים',
-    url: 'https://videos.pexels.com/video-files/1261768/1261768-sd_640_360_24fps.mp4',
-    thumbnail: 'https://images.pexels.com/videos/1261768/pexels-photo-1261768.png',
+    url: 'https://commondatastorage.googleapis.com/gtv-videos-library/sample/SubaruOutbackOnStreetAndDirt.mp4',
+    thumbnail: 'https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=400',
     duration: '25s',
     category: 'space'
   }
