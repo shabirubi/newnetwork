@@ -773,7 +773,21 @@ export default function VideoEditor() {
             </div>
           )}
 
-          {/* Clip Editor */}
+          {/* Timeline Editor Component */}
+          <div className="mt-6 border-t border-white/10 pt-4">
+            <TimelineEditor 
+              clips={clips}
+              selectedClipIndex={selectedClipIndex}
+              onSelectClip={setSelectedClipIndex}
+              onUpdateClip={(index, updatedClip) => {
+                setClips(prev => prev.map((clip, i) => i === index ? updatedClip : clip));
+              }}
+              onRemoveClip={removeClip}
+              totalDuration={totalDuration}
+            />
+          </div>
+
+          {/* Clip Filter Editor */}
           {selectedClip && (
             <div className="mt-6">
               <h3 className="font-bold mb-4 flex items-center gap-2">
