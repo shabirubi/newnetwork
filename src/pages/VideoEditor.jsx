@@ -24,6 +24,7 @@ export default function VideoEditor() {
   const [exporting, setExporting] = useState(false);
   const [overlays, setOverlays] = useState([]);
   const [showOverlayModal, setShowOverlayModal] = useState(false);
+  const [playingAll, setPlayingAll] = useState(false);
   const videoRef = useRef(null);
   const audioRef = useRef(null);
 
@@ -152,6 +153,48 @@ export default function VideoEditor() {
     }
   };
 
+  // Play all clips in sequence
+  const handlePlayAll = () => {
+    if (clips.length === 0) {
+      toast.error('אין קליפים להפעלה');
+      return;
+    }
+    setPlayingAll(true);
+    setSelectedClipIndex(0);
+    
+    // Auto-play first clip
+    setTimeout(() => {
+      if (videoRef.current) {
+        videoRef.current.play();
+      }
+    }, 100);
+  };
+
+  // Handle clip ended - move to next
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    const handleEnded = () => {
+      if (playingAll && selectedClipIndex !== null && selectedClipIndex < clips.length - 1) {
+        // Move to next clip
+        setSelectedClipIndex(prev => prev + 1);
+        setTimeout(() => {
+          if (videoRef.current) {
+            videoRef.current.play();
+          }
+        }, 100);
+      } else if (playingAll && selectedClipIndex === clips.length - 1) {
+        // Finished all clips
+        setPlayingAll(false);
+        toast.success('הסרטון הושלם! 🎬');
+      }
+    };
+
+    video.addEventListener('ended', handleEnded);
+    return () => video.removeEventListener('ended', handleEnded);
+  }, [playingAll, selectedClipIndex, clips.length]);
+
   // Preview video
   const handlePreview = () => {
     if (clips.length === 0) {
@@ -159,7 +202,6 @@ export default function VideoEditor() {
       return;
     }
     setSelectedClipIndex(0);
-    setIsPlaying(true);
   };
 
   // Export final video
@@ -247,6 +289,23 @@ export default function VideoEditor() {
           </div>
           <div className="flex gap-2">
             <Button
+              onClick={handlePlayAll}
+              disabled={clips.length === 0}
+              className="bg-green-600 hover:bg-green-700 text-white font-bold"
+            >
+              {playingAll ? (
+                <>
+                  <Pause size={20} className="mr-2" />
+                  מפעיל...
+                </>
+              ) : (
+                <>
+                  <Play size={20} className="mr-2" />
+                  הפעל הכל
+                </>
+              )}
+            </Button>
+            <Button
               onClick={handlePreview}
               variant="outline"
               className="border-white/20 text-white hover:bg-white/10"
@@ -257,7 +316,7 @@ export default function VideoEditor() {
             <Button
               onClick={handleExport}
               disabled={exporting || clips.length === 0}
-              className="bg-[#E31E24] hover:bg-[#B91C1C]"
+              className="bg-[#E31E24] hover:bg-[#B91C1C] text-white"
             >
               {exporting ? (
                 <>
@@ -420,15 +479,23 @@ export default function VideoEditor() {
           <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-gray-900 to-black p-8">
             {selectedClip ? (
               <div className="relative max-w-4xl w-full">
-                <video
-                  ref={videoRef}
-                  src={selectedClip.localUrl || selectedClip.url}
-                  className="w-full rounded-2xl shadow-2xl"
-                  style={{
-                    filter: `brightness(${selectedClip.filters.brightness}%) contrast(${selectedClip.filters.contrast}%) saturate(${selectedClip.filters.saturation}%)`
-                  }}
-                  controls
-                />
+                <div className="relative">
+                  <video
+                    ref={videoRef}
+                    src={selectedClip.localUrl || selectedClip.url}
+                    className="w-full rounded-2xl shadow-2xl"
+                    style={{
+                      filter: `brightness(${selectedClip.filters.brightness}%) contrast(${selectedClip.filters.contrast}%) saturate(${selectedClip.filters.saturation}%)`
+                    }}
+                    controls
+                  />
+                  {playingAll && (
+                    <div className="absolute top-4 left-4 bg-green-600/90 backdrop-blur-sm px-4 py-2 rounded-full flex items-center gap-2 animate-pulse">
+                      <Play size={16} className="text-white" />
+                      <span className="text-white font-bold text-sm">מפעיל {selectedClipIndex + 1}/{clips.length}</span>
+                    </div>
+                  )}
+                </div>
                 <div className="mt-4 text-center text-sm text-gray-400">
                   קליפ {selectedClipIndex + 1} מתוך {clips.length} | {selectedClip.name}
                 </div>
