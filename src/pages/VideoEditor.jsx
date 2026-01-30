@@ -38,26 +38,39 @@ export default function VideoEditor() {
 
     setLoading(true);
     try {
-      const { data } = await base44.functions.invoke('uploadUserVideo', { file });
-      
       const video = document.createElement('video');
-      video.src = URL.createObjectURL(file);
-      video.onloadedmetadata = () => {
-        setClips(prev => [...prev, {
-          id: Date.now(),
-          url: data.file_url,
-          localUrl: URL.createObjectURL(file),
-          duration: video.duration,
-          name: file.name,
-          thumbnail: data.file_url,
-          filters: { brightness: 100, contrast: 100, saturation: 100 },
-          volume: 100
-        }]);
-        toast.success('קליפ נוסף בהצלחה');
+      const localUrl = URL.createObjectURL(file);
+      video.src = localUrl;
+      
+      video.onloadedmetadata = async () => {
+        try {
+          // Upload file to server
+          const uploadResult = await base44.integrations.Core.UploadFile({ file });
+          
+          setClips(prev => [...prev, {
+            id: Date.now(),
+            url: uploadResult.file_url,
+            localUrl: localUrl,
+            duration: video.duration,
+            name: file.name,
+            thumbnail: uploadResult.file_url,
+            filters: { brightness: 100, contrast: 100, saturation: 100 },
+            volume: 100
+          }]);
+          toast.success('קליפ נוסף בהצלחה');
+        } catch (error) {
+          toast.error('שגיאה בהעלאה: ' + error.message);
+        } finally {
+          setLoading(false);
+        }
+      };
+      
+      video.onerror = () => {
+        toast.error('שגיאה בטעינת הסרטון');
+        setLoading(false);
       };
     } catch (error) {
-      toast.error('שגיאה בהעלאה: ' + error.message);
-    } finally {
+      toast.error('שגיאה: ' + error.message);
       setLoading(false);
     }
   };
