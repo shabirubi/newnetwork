@@ -23,6 +23,10 @@ export default function LumaStudio() {
     category: 'breaking',
     feed: 'all'
   });
+  const [addVoiceOver, setAddVoiceOver] = useState(false);
+  const [voiceScript, setVoiceScript] = useState('');
+  const [selectedVoice, setSelectedVoice] = useState('Rachel');
+  const [aspectRatio, setAspectRatio] = useState('16:9');
 
   const generateVideo = async (e) => {
     e.preventDefault();
