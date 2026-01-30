@@ -11,65 +11,65 @@ const STOCK_VIDEO_API = {
 
 const SAMPLE_STOCK_VIDEOS = [
   {
-    id: 'pexels-1',
-    title: 'עולה שמש בטבע',
-    url: 'https://commondatastorage.googleapis.com/gtv-videos-library/sample/BigBuckBunny.mp4',
+    id: 'pixabay-1',
+    title: 'עולא שמש בטבע',
+    url: 'https://pixabay.com/videos/download/sunrise-nature-4k-2619/',
     thumbnail: 'https://images.unsplash.com/photo-1495567720989-cebdbdd97913?w=400',
     duration: '30s',
     category: 'nature'
   },
   {
-    id: 'pexels-2',
+    id: 'pixabay-2',
     title: 'בניין עיר מודרני',
-    url: 'https://commondatastorage.googleapis.com/gtv-videos-library/sample/ElephantsDream.mp4',
+    url: 'https://pixabay.com/videos/download/city-building-modern-1784/',
     thumbnail: 'https://images.unsplash.com/photo-1449844908441-8829872d2607?w=400',
     duration: '20s',
     category: 'urban'
   },
   {
-    id: 'pexels-3',
+    id: 'coverr-1',
     title: 'טכנולוגיה וקידוד',
-    url: 'https://commondatastorage.googleapis.com/gtv-videos-library/sample/ForBiggerBlazes.mp4',
+    url: 'https://videos.coverr.co/videos/download/Coding-ZdAYKRfCnXu.mp4',
     thumbnail: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400',
     duration: '15s',
     category: 'technology'
   },
   {
-    id: 'pexels-4',
+    id: 'coverr-2',
     title: 'משרד עם מחשבים',
-    url: 'https://commondatastorage.googleapis.com/gtv-videos-library/sample/ForBiggerEscapes.mp4',
+    url: 'https://videos.coverr.co/videos/download/Office-Workspace-rN5DPNL7Vjl.mp4',
     thumbnail: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400',
     duration: '25s',
     category: 'business'
   },
   {
-    id: 'pexels-5',
+    id: 'pixabay-3',
     title: 'אנשים בפגישה',
-    url: 'https://commondatastorage.googleapis.com/gtv-videos-library/sample/ForBiggerFun.mp4',
+    url: 'https://pixabay.com/videos/download/people-meeting-conference-1547/',
     thumbnail: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400',
     duration: '30s',
     category: 'people'
   },
   {
-    id: 'pexels-6',
-    title: 'תנועת סחורות',
-    url: 'https://commondatastorage.googleapis.com/gtv-videos-library/sample/ForBiggerJoyrides.mp4',
+    id: 'coverr-3',
+    title: 'תנועה דינאמית',
+    url: 'https://videos.coverr.co/videos/download/Dynamic-Motion-wK8nPqV2Jxk.mp4',
     thumbnail: 'https://images.unsplash.com/photo-1460925895917-adf4e565e6c1?w=400',
     duration: '20s',
     category: 'motion'
   },
   {
-    id: 'pexels-7',
+    id: 'pixabay-4',
     title: 'מים וטבע',
-    url: 'https://commondatastorage.googleapis.com/gtv-videos-library/sample/Sintel.mp4',
+    url: 'https://pixabay.com/videos/download/water-nature-relaxation-1625/',
     thumbnail: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400',
     duration: '15s',
     category: 'nature'
   },
   {
-    id: 'pexels-8',
-    title: 'חלל וכוכבים',
-    url: 'https://commondatastorage.googleapis.com/gtv-videos-library/sample/SubaruOutbackOnStreetAndDirt.mp4',
+    id: 'coverr-4',
+    title: 'נוף פנטסטי',
+    url: 'https://videos.coverr.co/videos/download/Scenic-Landscape-vJ9PkL3Mxt2.mp4',
     thumbnail: 'https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=400',
     duration: '25s',
     category: 'space'
