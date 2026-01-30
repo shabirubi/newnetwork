@@ -149,43 +149,66 @@ export default function VideoEditor() {
         toast.success('תמונה נוספה בהצלחה');
         setLoading(false);
       } else {
-        // Handle video
-        const video = document.createElement('video');
-        const localUrl = URL.createObjectURL(file);
-        video.src = localUrl;
-        
-        video.onloadedmetadata = async () => {
-          // Create thumbnail from video
-          video.currentTime = 1; // Get frame at 1 second
-          video.onseeked = () => {
-            const canvas = document.createElement('canvas');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-            const thumbnail = canvas.toDataURL('image/jpeg', 0.7);
+         // Handle video
+         const video = document.createElement('video');
+         video.src = URL.createObjectURL(file);
+         video.crossOrigin = 'anonymous';
 
-            setClips(prev => [...prev, {
-              id: Date.now(),
-              url: uploadResult.file_url,
-              localUrl: localUrl,
-              duration: video.duration,
-              name: file.name,
-              thumbnail: thumbnail,
-              filters: { brightness: 100, contrast: 100, saturation: 100 },
-              volume: 100,
-              type: 'video'
-            }]);
-            toast.success('קליפ נוסף בהצלחה');
-            setLoading(false);
-          };
-        };
-        
-        video.onerror = () => {
-          toast.error('שגיאה בטעינת הסרטון');
-          setLoading(false);
-        };
-      }
+         const handleMetadata = () => {
+           const duration = video.duration;
+           // Create thumbnail from video
+           video.currentTime = Math.min(1, duration * 0.1); // Get frame at 1 second or 10% of video
+
+           const handleSeeked = () => {
+             try {
+               const canvas = document.createElement('canvas');
+               canvas.width = video.videoWidth;
+               canvas.height = video.videoHeight;
+               const ctx = canvas.getContext('2d');
+               ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+               const thumbnail = canvas.toDataURL('image/jpeg', 0.7);
+
+               setClips(prev => [...prev, {
+                 id: Date.now(),
+                 url: uploadResult.file_url,
+                 localUrl: video.src,
+                 duration: duration,
+                 name: file.name,
+                 thumbnail: thumbnail,
+                 filters: { brightness: 100, contrast: 100, saturation: 100 },
+                 volume: 100,
+                 type: 'video'
+               }]);
+               toast.success('קליפ נוסף בהצלחה');
+             } catch (e) {
+               console.error('Error creating thumbnail:', e);
+               // Fallback - add without thumbnail
+               setClips(prev => [...prev, {
+                 id: Date.now(),
+                 url: uploadResult.file_url,
+                 localUrl: video.src,
+                 duration: duration,
+                 name: file.name,
+                 thumbnail: uploadResult.file_url,
+                 filters: { brightness: 100, contrast: 100, saturation: 100 },
+                 volume: 100,
+                 type: 'video'
+               }]);
+               toast.success('קליפ נוסף בהצלחה');
+             }
+             video.removeEventListener('seeked', handleSeeked);
+             setLoading(false);
+           };
+
+           video.addEventListener('seeked', handleSeeked);
+         };
+
+         video.addEventListener('loadedmetadata', handleMetadata);
+         video.addEventListener('error', () => {
+           toast.error('שגיאה בטעינת הסרטון');
+           setLoading(false);
+         });
+       }
     } catch (error) {
       toast.error('שגיאה: ' + error.message);
       setLoading(false);
