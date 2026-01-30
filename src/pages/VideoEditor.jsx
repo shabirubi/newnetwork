@@ -10,7 +10,7 @@ import {
   Volume2, VolumeX, Scissors, Sparkles, Music, 
   MoveHorizontal, Film, Loader2, Save, Eye, Type, Image as ImageIcon, FolderOpen
 } from 'lucide-react';
-import { createPageUrl } from './utils';
+import { createPageUrl } from '../utils';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
