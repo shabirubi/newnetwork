@@ -49,48 +49,15 @@ export default function LumaStudio() {
       const videoData = response.data;
       
       if (videoData.still_processing) {
-        // Video still processing - poll for completion
-        toast.info('הסרטון מתעבד... ייקח עוד כמה דקות');
-        setProcessingGenId(videoData.generation_id);
-        
-        // Poll every 10 seconds
-        const pollInterval = setInterval(async () => {
-          try {
-            const checkResponse = await base44.functions.invoke('checkLumaVideo', {
-              generation_id: videoData.generation_id
-            });
-            
-            const checkData = checkResponse.data;
-            
-            if (checkData.status === 'completed') {
-              clearInterval(pollInterval);
-              setProcessingGenId(null);
-              
-              setMessages(prev => [...prev, {
-                id: Date.now(),
-                type: 'assistant',
-                videoUrl: checkData.video_url,
-                thumbnailUrl: checkData.thumbnail_url,
-                prompt: userPrompt,
-                timestamp: new Date()
-              }]);
-              
-              setVideoUrl(checkData.video_url);
-              toast.success('הסרטון מוכן!');
-              setLoading(false);
-            } else if (checkData.status === 'failed') {
-              clearInterval(pollInterval);
-              setProcessingGenId(null);
-              toast.error('הסרטון נכשל: ' + checkData.error);
-              setLoading(false);
-            }
-          } catch (err) {
-            clearInterval(pollInterval);
-            setProcessingGenId(null);
-            toast.error('שגיאה בבדיקת סטטוס');
-            setLoading(false);
-          }
-        }, 10000);
+        // Video still processing - show message and stop
+        toast.info('הסרטון בתהליך יצירה. הוא יהיה זמין בקרוב.');
+        setMessages(prev => [...prev, {
+          id: Date.now(),
+          type: 'assistant',
+          text: 'הסרטון בתהליך יצירה... זה יכול לקחת עד 5 דקות.',
+          timestamp: new Date()
+        }]);
+        setLoading(false);
         
       } else if (videoData.video_url) {
         // Video ready immediately

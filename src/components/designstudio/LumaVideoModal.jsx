@@ -61,19 +61,15 @@ export function LumaVideoModal({ isOpen, onClose, imageUrl }) {
     if (!generatedVideo?.video_url) return;
 
     try {
-      const response = await fetch(generatedVideo.video_url);
-      const blob = await response.blob();
-      const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
-      a.href = url;
+      a.href = generatedVideo.video_url;
       a.download = `luma-video-${Date.now()}.mp4`;
+      a.target = '_blank';
       document.body.appendChild(a);
       a.click();
-      window.URL.revokeObjectURL(url);
       a.remove();
       toast.success("הווידאו הורד בהצלחה");
     } catch (error) {
-      console.error('Download error:', error);
       toast.error("שגיאה בהורדת הווידאו");
     }
   };
