@@ -990,12 +990,22 @@ export default function VideoEditor() {
         <TTSModal 
           onClose={() => setShowTTSModal(false)}
           onApply={async (text, voice) => {
+            setLoading(true);
             try {
-              const { data } = await base44.functions.invoke('generateSpeech', { text, voice_id: voice });
-              setAudioTrack({ url: data.audio_url, name: 'TTS Audio', volume: 100 });
-              toast.success('דיבוב נוסף! 🎙️');
+              const { data } = await base44.functions.invoke('generateElevenLabsSpeech', { 
+                text, 
+                voice_id: voice 
+              });
+              if (data.audio_url) {
+                setAudioTrack({ url: data.audio_url, name: 'דיבוב - ' + voice, volume: 100 });
+                toast.success('דיבוב ElevenLabs נוסף! 🎙️');
+              } else {
+                toast.error('לא הצליח ליצור דיבוב');
+              }
             } catch (error) {
-              toast.error('שגיאה ביצירת דיבוב');
+              toast.error('שגיאה: ' + error.message);
+            } finally {
+              setLoading(false);
             }
           }}
         />
