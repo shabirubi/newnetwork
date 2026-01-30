@@ -7,12 +7,12 @@ export default function EffectsLibraryModal({ onClose, onApplyEffect, onApplyTra
 
   const effects = [
     { id: 'blur', name: 'טשטוש', icon: '🌫️' },
-    { id: 'glitch', name: 'גליץ'', icon: '⚡' },
+    { id: 'glitch', name: 'גליץ', icon: '⚡' },
     { id: 'vhs', name: 'VHS רטרו', icon: '📼' },
     { id: 'cinematic', name: 'קולנועי', icon: '🎬' },
     { id: 'sketch', name: 'סקיצה', icon: '✏️' },
     { id: 'neon', name: 'ניאון', icon: '💡' },
-    { id: 'vintage', name: 'וינטג'', icon: '📷' },
+    { id: 'vintage', name: 'וינטג', icon: '📷' },
     { id: 'comic', name: 'קומיקס', icon: '💥' }
   ];
 
@@ -23,7 +23,7 @@ export default function EffectsLibraryModal({ onClose, onApplyEffect, onApplyTra
     { id: 'zoom', name: 'זום', icon: '🔍' },
     { id: 'wipe', name: 'ניגוב', icon: '🧹' },
     { id: 'spin', name: 'סיבוב', icon: '🌀' },
-    { id: 'glitch', name: 'גליץ'', icon: '⚡' },
+    { id: 'glitch', name: 'גליץ', icon: '⚡' },
     { id: 'morph', name: 'מורפינג', icon: '🔄' }
   ];
 
