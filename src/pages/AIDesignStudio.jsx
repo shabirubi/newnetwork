@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Wand2, Upload, Loader, Download, Copy, Share2, Trash2, X, Sparkles, Play, Bookmark, Send, Grid3X3, Mic, Newspaper, Zap, Lightbulb } from "lucide-react";
+import { Wand2, Upload, Loader, Download, Copy, Share2, Trash2, X, Sparkles, Play, Bookmark, Send, Grid3X3, Mic, Newspaper, Zap, Lightbulb, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { base44 } from "@/api/base44Client";
 import AnimatedCharacter from "../components/avatar/AnimatedCharacter";
@@ -14,6 +15,9 @@ import { MotionCharacterModal } from "../components/designstudio/MotionCharacter
 import { ScriptGeneratorModal } from "../components/designstudio/ScriptGeneratorModal";
 import { LumaVideoModal } from "../components/designstudio/LumaVideoModal";
 import { TextOverlayEditor, FiltersPanel, ExportOptions, ShareDesign } from "../components/designstudio/DesignEditor";
+import ModelSelector from "../components/designstudio/ModelSelector";
+import StylePresetsLibrary from "../components/designstudio/StylePresetsLibrary";
+import AdvancedTools from "../components/designstudio/AdvancedTools";
 
 export default function AIDesignStudio() {
   const [prompt, setPrompt] = useState("");
@@ -37,6 +41,36 @@ export default function AIDesignStudio() {
   const [showMotionCharacterModal, setShowMotionCharacterModal] = useState(false);
   const [showScriptGeneratorModal, setShowScriptGeneratorModal] = useState(false);
   const [showLumaVideoModal, setShowLumaVideoModal] = useState(false);
+  const [selectedModel, setSelectedModel] = useState('flux-pro');
+  const [selectedStyle, setSelectedStyle] = useState('');
+  const [negativePrompt, setNegativePrompt] = useState('');
+  const [numVariations, setNumVariations] = useState(1);
+  const [aspectRatio, setAspectRatio] = useState('16:9');
+  const [isEnhancing, setIsEnhancing] = useState(false);
+
+  const enhancePrompt = async () => {
+    if (!prompt.trim()) {
+      toast.error("אנא הזן תיאור");
+      return;
+    }
+
+    setIsEnhancing(true);
+    try {
+      const response = await base44.functions.invoke("enhancePrompt", {
+        prompt: prompt,
+        style: selectedStyle
+      });
+
+      if (response.data?.enhanced_prompt) {
+        setPrompt(response.data.enhanced_prompt);
+        toast.success("הפרומפט שופר! ✨");
+      }
+    } catch (error) {
+      toast.error("שגיאה בשיפור הפרומפט");
+    } finally {
+      setIsEnhancing(false);
+    }
+  };
 
   const generateDesign = async () => {
     if (!prompt.trim()) {
@@ -46,22 +80,35 @@ export default function AIDesignStudio() {
 
     setIsGenerating(true);
     try {
-      const response = await base44.functions.invoke("generateAIDesign", {
-        prompt: prompt
+      const response = await base44.functions.invoke("generateAIImage", {
+        prompt: prompt,
+        model: selectedModel,
+        style: selectedStyle,
+        negative_prompt: negativePrompt,
+        num_images: numVariations,
+        aspect_ratio: aspectRatio
       });
 
-      const imageUrl = response.data?.image_url;
-      if (imageUrl) {
-        const newDesign = {
-          id: Date.now(),
+      const images = response.data?.images || [];
+      if (images.length > 0) {
+        // Add all images to history
+        const newDesigns = images.map((imageUrl, index) => ({
+          id: Date.now() + index,
           imageUrl,
           prompt,
+          model: selectedModel,
           createdAt: new Date().toISOString()
-        };
-        setGeneratedImage(imageUrl);
-        setEditedImage(imageUrl);
-        setHistory([newDesign, ...history]);
-        toast.success("🎨 דיזיין נוצר בהצלחה!");
+        }));
+        
+        setGeneratedImage(images[0]);
+        setEditedImage(images[0]);
+        setHistory([...newDesigns, ...history]);
+        
+        if (images.length > 1) {
+          toast.success(`${images.length} תמונות נוצרו בהצלחה! 🎨`);
+        } else {
+          toast.success("תמונה נוצרה בהצלחה! 🎨");
+        }
       }
     } catch (error) {
       console.error("Error:", error);
@@ -158,18 +205,107 @@ export default function AIDesignStudio() {
             <div className="bg-gradient-to-br from-purple-900/40 to-black border border-purple-500/30 rounded-2xl p-6">
               {/* Input Area */}
               <div className="space-y-4">
-                <label className="block text-sm font-semibold text-white">
-                  📝 תיאור הדיזיין
-                </label>
-                <Textarea
-                  id="design-prompt"
-                  name="prompt"
-                  value={prompt}
-                  onChange={(e) => setPrompt(e.target.value)}
-                  placeholder="לדוגמה: כרזה עם אריה זהוב, טקסט לבן, רקע סיום..."
-                  className="bg-black/60 border-purple-500/30 text-white placeholder-white/40 resize-none"
-                  rows={5}
+                <div>
+                  <label className="block text-sm font-semibold text-white mb-2">
+                    📝 תיאור הדיזיין
+                  </label>
+                  <Textarea
+                    id="design-prompt"
+                    name="prompt"
+                    value={prompt}
+                    onChange={(e) => setPrompt(e.target.value)}
+                    placeholder="לדוגמה: כרזה עם אריה זהוב, טקסט לבן, רקע סיום..."
+                    className="bg-black/60 border-purple-500/30 text-white placeholder-white/40 resize-none"
+                    rows={4}
+                  />
+                  <Button
+                    onClick={enhancePrompt}
+                    disabled={isEnhancing || !prompt.trim()}
+                    variant="outline"
+                    className="w-full mt-2 border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/20"
+                  >
+                    {isEnhancing ? (
+                      <>
+                        <Loader className="w-4 h-4 animate-spin mr-2" />
+                        משפר...
+                      </>
+                    ) : (
+                      <>
+                        <Sparkles className="w-4 h-4 mr-2" />
+                        שפר פרומפט באמצעות AI
+                      </>
+                    )}
+                  </Button>
+                </div>
+
+                {/* Model Selector */}
+                <ModelSelector 
+                  selectedModel={selectedModel}
+                  onModelChange={setSelectedModel}
                 />
+
+                {/* Style Presets */}
+                <StylePresetsLibrary 
+                  onStyleSelect={(style) => setSelectedStyle(style)}
+                />
+
+                {/* Advanced Options */}
+                <div className="space-y-3 p-4 bg-black/40 rounded-xl border border-purple-500/20">
+                  <label className="block text-sm font-semibold text-white">
+                    ⚙️ הגדרות מתקדמות
+                  </label>
+                  
+                  {/* Negative Prompt */}
+                  <div>
+                    <label className="block text-xs text-gray-400 mb-1">מה לא לכלול (אופציונלי)</label>
+                    <Input
+                      value={negativePrompt}
+                      onChange={(e) => setNegativePrompt(e.target.value)}
+                      placeholder="לדוגמה: blurry, low quality, distorted"
+                      className="bg-black/60 border-purple-500/30 text-white placeholder-white/40 text-sm"
+                    />
+                  </div>
+
+                  {/* Aspect Ratio */}
+                  <div>
+                    <label className="block text-xs text-gray-400 mb-1">יחס תצוגה</label>
+                    <div className="grid grid-cols-5 gap-2">
+                      {['16:9', '9:16', '1:1', '4:3', '3:4'].map((ratio) => (
+                        <button
+                          key={ratio}
+                          onClick={() => setAspectRatio(ratio)}
+                          className={`py-2 rounded-lg text-xs font-semibold transition-all ${
+                            aspectRatio === ratio
+                              ? 'bg-purple-600 text-white'
+                              : 'bg-black/60 text-gray-400 hover:bg-black/80'
+                          }`}
+                        >
+                          {ratio}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Number of Variations */}
+                  <div>
+                    <label className="block text-xs text-gray-400 mb-1">מספר וריאציות</label>
+                    <div className="grid grid-cols-4 gap-2">
+                      {[1, 2, 3, 4].map((num) => (
+                        <button
+                          key={num}
+                          onClick={() => setNumVariations(num)}
+                          className={`py-2 rounded-lg text-xs font-semibold transition-all ${
+                            numVariations === num
+                              ? 'bg-purple-600 text-white'
+                              : 'bg-black/60 text-gray-400 hover:bg-black/80'
+                          }`}
+                        >
+                          {num}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
 
                 <div className="space-y-2">
                   <label className="block text-sm font-semibold text-white">
@@ -228,6 +364,10 @@ export default function AIDesignStudio() {
             {/* Design Tools */}
             {generatedImage && (
               <div className="bg-black/40 border border-purple-500/20 rounded-2xl p-4 space-y-4">
+                <AdvancedTools
+                  imageUrl={editedImage || generatedImage}
+                  onImageUpdate={setEditedImage}
+                />
                 <TextOverlayEditor
                   imageUrl={editedImage || generatedImage}
                   onImageUpdate={setEditedImage}
