@@ -201,7 +201,9 @@ export default function VideoEditor() {
       toast.error('אין קליפים לתצוגה מקדימה');
       return;
     }
+    setPlayingAll(false);
     setSelectedClipIndex(0);
+    toast.success('בחר קליפ מהטיימליין להצגה');
   };
 
   // Export final video
