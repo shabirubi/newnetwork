@@ -20,6 +20,7 @@ import SpeedControlModal from '../components/videoeditor/SpeedControlModal';
 import ResizeModal from '../components/videoeditor/ResizeModal';
 import ElementsLibraryModal from '../components/videoeditor/ElementsLibraryModal';
 import MusicLibraryModal from '../components/videoeditor/MusicLibraryModal';
+import PIPOverlay from '../components/videoeditor/PIPOverlay';
 
 // Projects Modal Component
 function ProjectsModal({ onClose, onLoad }) {
@@ -110,6 +111,8 @@ export default function VideoEditor() {
   const [showResizeModal, setShowResizeModal] = useState(false);
   const [showElementsModal, setShowElementsModal] = useState(false);
   const [showMusicLibraryModal, setShowMusicLibraryModal] = useState(false);
+  const [showPIPModal, setShowPIPModal] = useState(false);
+  const [pipLayers, setPipLayers] = useState([]);
   const videoRef = useRef(null);
   const audioRef = useRef(null);
 
@@ -627,10 +630,18 @@ export default function VideoEditor() {
 
               <Button
                 onClick={() => toast.info("פיצ'ר בקרוב: הסרת רעש מאודיו")}
-                className="w-full bg-teal-600/20 hover:bg-teal-600/40 border border-teal-500/30 text-white"
+                className="w-full bg-teal-600/20 hover:bg-teal-600/40 border border-teal-500/30 text-white mb-2"
               >
                 <Volume2 size={18} className="mr-2" />
                 הסרת רעש
+              </Button>
+
+              <Button
+                onClick={() => setShowPIPModal(true)}
+                className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white"
+              >
+                <Film size={18} className="mr-2" />
+                וידאו בתוך וידאו (PIP)
               </Button>
             </div>
           </div>
@@ -761,6 +772,48 @@ export default function VideoEditor() {
                       controls
                     />
                   )}
+
+                  {/* PIP Layers */}
+                  {pipLayers.map((pip, index) => {
+                    const positionStyles = {
+                      'top-left': { top: `${pip.config.offsetY}px`, left: `${pip.config.offsetX}px` },
+                      'top-right': { top: `${pip.config.offsetY}px`, right: `${pip.config.offsetX}px` },
+                      'bottom-left': { bottom: `${pip.config.offsetY}px`, left: `${pip.config.offsetX}px` },
+                      'bottom-right': { bottom: `${pip.config.offsetY}px`, right: `${pip.config.offsetX}px` }
+                    };
+
+                    return (
+                      <div
+                        key={index}
+                        className="absolute"
+                        style={{
+                          ...positionStyles[pip.config.position],
+                          width: `${pip.config.size}%`,
+                          opacity: pip.config.opacity / 100,
+                          zIndex: 10 + index
+                        }}
+                      >
+                        <video
+                          src={pip.video.localUrl || pip.video.url}
+                          className={`w-full ${pip.config.shape === 'circle' ? 'rounded-full' : 'rounded-xl'}`}
+                          style={{
+                            border: `${pip.config.borderWidth}px solid ${pip.config.borderColor}`,
+                            boxShadow: pip.config.shadow ? '0 10px 40px rgba(0,0,0,0.5)' : 'none'
+                          }}
+                          autoPlay
+                          loop
+                          muted
+                        />
+                        <button
+                          onClick={() => setPipLayers(prev => prev.filter((_, i) => i !== index))}
+                          className="absolute -top-2 -right-2 bg-red-600 p-1 rounded-full hover:bg-red-700 transition-colors"
+                        >
+                          <X size={14} className="text-white" />
+                        </button>
+                      </div>
+                    );
+                  })}
+
                   {playingAll && (
                     <div className="absolute top-4 left-4 bg-green-600/90 backdrop-blur-sm px-4 py-2 rounded-full flex items-center gap-2 animate-pulse">
                       <Play size={16} className="text-white" />
@@ -770,6 +823,7 @@ export default function VideoEditor() {
                 </div>
                 <div className="mt-4 text-center text-sm text-gray-400">
                   קליפ {selectedClipIndex + 1} מתוך {clips.length} | {selectedClip.name}
+                  {pipLayers.length > 0 && <span className="text-cyan-400"> • {pipLayers.length} PIP</span>}
                 </div>
               </div>
             ) : clips.length > 0 ? (
@@ -960,6 +1014,17 @@ export default function VideoEditor() {
           onApply={(music) => {
             setAudioTrack({ url: music.url, name: music.name, volume: 100, loop: true });
             toast.success(`${music.name} נוסף! 🎵`);
+          }}
+        />
+      )}
+
+      {/* PIP Modal */}
+      {showPIPModal && (
+        <PIPOverlay 
+          onClose={() => setShowPIPModal(false)}
+          onApply={(pipData) => {
+            setPipLayers(prev => [...prev, pipData]);
+            toast.success('PIP נוסף בהצלחה! 📹');
           }}
         />
       )}
