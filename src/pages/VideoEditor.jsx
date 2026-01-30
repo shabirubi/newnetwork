@@ -585,14 +585,23 @@ export default function VideoEditor() {
               className="hidden"
               id="video-upload"
             />
-            <Button 
-              onClick={() => document.getElementById('video-upload').click()}
-              className="w-full bg-white/10 hover:bg-white/20 text-white" 
-              disabled={loading}
-            >
-              {loading ? <Loader2 size={18} className="mr-2 animate-spin" /> : <Upload size={18} className="mr-2" />}
-              העלה סרטון/תמונה
-            </Button>
+            <div className="flex gap-2">
+              <Button 
+                onClick={() => document.getElementById('video-upload').click()}
+                className="flex-1 bg-white/10 hover:bg-white/20 text-white" 
+                disabled={loading}
+              >
+                {loading ? <Loader2 size={18} className="mr-2 animate-spin" /> : <Upload size={18} className="mr-2" />}
+                העלה
+              </Button>
+              <Button
+                onClick={() => setShowStockVideoModal(true)}
+                className="flex-1 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white"
+              >
+                <Play size={18} className="mr-2" />
+                ספריה
+              </Button>
+            </div>
             <p className="text-[10px] text-gray-500 text-center">MP4, WebM, MOV, AVI, MKV, PNG, JPG, GIF</p>
 
             <div className="flex gap-2">
