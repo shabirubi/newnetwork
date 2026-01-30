@@ -54,12 +54,13 @@ Deno.serve(async (req) => {
       );
     }
 
-    // Get audio buffer
+    // Get audio buffer and convert to base64 for UploadFile
     const audioBuffer = await response.arrayBuffer();
+    const base64Audio = btoa(String.fromCharCode(...new Uint8Array(audioBuffer)));
 
     // Upload to Base44 storage
     const uploadResponse = await base44.integrations.Core.UploadFile({
-      file: new Blob([audioBuffer], { type: 'audio/mpeg' }),
+      file: base64Audio,
     });
 
     return Response.json({
