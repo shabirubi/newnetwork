@@ -120,6 +120,7 @@ export default function VideoEditor() {
   const [showAIImageModal, setShowAIImageModal] = useState(false);
   const [showAdvancedTTSModal, setShowAdvancedTTSModal] = useState(false);
   const [showAdCreatorModal, setShowAdCreatorModal] = useState(false);
+  const [showStockVideoModal, setShowStockVideoModal] = useState(false);
   const [videoLoop, setVideoLoop] = useState(false);
   const videoRef = useRef(null);
   const audioRef = useRef(null);
