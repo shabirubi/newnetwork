@@ -162,6 +162,8 @@ export default function AIDesignStudio() {
                   📝 תיאור הדיזיין
                 </label>
                 <Textarea
+                  id="design-prompt"
+                  name="prompt"
                   value={prompt}
                   onChange={(e) => setPrompt(e.target.value)}
                   placeholder="לדוגמה: כרזה עם אריה זהוב, טקסט לבן, רקע סיום..."
@@ -177,6 +179,8 @@ export default function AIDesignStudio() {
                     <Upload className="w-5 h-5 text-purple-400" />
                     <span className="text-sm text-gray-400">בחר תמונה</span>
                     <input
+                      id="image-upload"
+                      name="image-upload"
                       type="file"
                       accept="image/*"
                       onChange={handleImageUpload}
@@ -509,6 +513,8 @@ export default function AIDesignStudio() {
                     🎤 טקסט לדיבור
                   </label>
                   <Textarea
+                    id="animation-script"
+                    name="animation-script"
                     value={animationScript}
                     onChange={(e) => setAnimationScript(e.target.value)}
                     placeholder="כתוב את הטקסט שהדמות תדבר..."
