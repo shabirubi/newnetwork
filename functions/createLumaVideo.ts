@@ -9,7 +9,7 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { prompt, imageUrl, aspectRatio = "16:9" } = await req.json();
+    const { prompt, imageUrl, aspectRatio = "16:9", add_voice = false, voice_script = null, voice_id = "Rachel" } = await req.json();
 
     if (!prompt) {
       return Response.json({ error: 'Prompt is required' }, { status: 400 });
@@ -18,6 +18,11 @@ Deno.serve(async (req) => {
     const lumaApiKey = Deno.env.get('LUMA_API_KEY');
     if (!lumaApiKey) {
       return Response.json({ error: 'LUMA_API_KEY not configured' }, { status: 500 });
+    }
+
+    const elevenLabsApiKey = add_voice ? Deno.env.get('ELEVENLABS_API_KEY') : null;
+    if (add_voice && !elevenLabsApiKey) {
+      return Response.json({ error: 'ELEVENLABS_API_KEY not configured' }, { status: 500 });
     }
 
     // Build payload for Luma API - using ray-2 model
