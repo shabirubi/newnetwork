@@ -103,6 +103,40 @@ export default function TimelineEditor({
         </div>
       )}
 
+      {/* Quick Actions */}
+      {selectedClip && (
+        <div className="flex gap-2 flex-wrap">
+          <Button
+            onClick={handleDuplicate}
+            variant="outline"
+            size="sm"
+            className="flex-1 border-purple-500/30 text-purple-300 hover:bg-purple-600/20"
+          >
+            <Copy size={14} className="mr-1" />
+            שכפל
+          </Button>
+          <Button
+            onClick={handleReset}
+            variant="outline"
+            size="sm"
+            className="flex-1 border-yellow-500/30 text-yellow-300 hover:bg-yellow-600/20"
+          >
+            <RotateCcw size={14} className="mr-1" />
+            אפס
+          </Button>
+          {selectedClip.type === 'image' && (
+            <Button
+              variant="outline"
+              size="sm"
+              className="flex-1 border-orange-500/30 text-orange-300 hover:bg-orange-600/20"
+            >
+              <Layers size={14} className="mr-1" />
+              שכבה
+            </Button>
+          )}
+        </div>
+      )}
+
       {/* Trim/Cut Controls */}
       {selectedClip && selectedClip.type === 'video' && (
         <div className="bg-blue-600/10 border border-blue-500/30 rounded-lg p-4">
