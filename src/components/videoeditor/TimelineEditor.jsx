@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Slider } from '@/components/ui/slider';
 import { Button } from '@/components/ui/button';
-import { Scissors, Clock, GripVertical, Trash2, Copy } from 'lucide-react';
+import { Scissors, Clock, GripVertical, Trash2, Copy, ImageIcon, Volume2, Eye, RotateCcw, Lock, Unlock, Layers } from 'lucide-react';
 import { toast } from 'sonner';
 
 export default function TimelineEditor({ 
