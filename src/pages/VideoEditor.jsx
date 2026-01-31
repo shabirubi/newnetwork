@@ -541,139 +541,139 @@ export default function VideoEditor() {
                           return (
                             <Draggable key={clip.id} draggableId={clip.id.toString()} index={index}>
                               {(provided, snapshot) => (
-                                <React.Fragment>
-                        <motion.div
-                          ref={provided.innerRef}
-                          {...provided.draggableProps}
-                          {...provided.dragHandleProps}
-                          initial={{ scale: 0.8, opacity: 0 }}
-                          animate={{ scale: 1, opacity: 1 }}
-                          className={`relative rounded-lg overflow-hidden cursor-move transition-all group ${selectedClipIndex === index ? 'ring-2 ring-[#E31E24] shadow-lg shadow-[#E31E24]/30' : 'hover:ring-2 hover:ring-white/30'} ${snapshot.isDragging ? 'shadow-2xl ring-2 ring-cyan-500 scale-105 z-50' : ''}`}
-                          style={{ 
-                            width: `${clipWidth}px`,
-                            minWidth: '60px',
-                            height: '70px',
-                            ...provided.draggableProps.style
-                          }}
-                          onClick={() => setSelectedClipIndex(index)}
-                        >
-                          {/* Thumbnail */}
-                          <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${clip.thumbnail || clip.url})` }}>
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-                          </div>
+                                <div className="flex items-center gap-1">
+                                  <motion.div
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                    initial={{ scale: 0.8, opacity: 0 }}
+                                    animate={{ scale: 1, opacity: 1 }}
+                                    className={`relative rounded-lg overflow-hidden cursor-move transition-all group ${selectedClipIndex === index ? 'ring-2 ring-[#E31E24] shadow-lg shadow-[#E31E24]/30' : 'hover:ring-2 hover:ring-white/30'} ${snapshot.isDragging ? 'shadow-2xl ring-2 ring-cyan-500 scale-105 z-50' : ''}`}
+                                    style={{ 
+                                      width: `${clipWidth}px`,
+                                      minWidth: '60px',
+                                      height: '70px',
+                                      ...provided.draggableProps.style
+                                    }}
+                                    onClick={() => setSelectedClipIndex(index)}
+                                  >
+                                    {/* Thumbnail */}
+                                    <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${clip.thumbnail || clip.url})` }}>
+                                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                                    </div>
 
-                          {/* Clip Info */}
-                          <div className="absolute bottom-0 left-0 right-0 p-1.5 text-[10px]">
-                            <div className="font-bold truncate text-white">{clip.name}</div>
-                            <div className="text-[#E31E24] font-semibold">{clip.duration?.toFixed(2)}s</div>
-                          </div>
+                                    {/* Clip Info */}
+                                    <div className="absolute bottom-0 left-0 right-0 p-1.5 text-[10px]">
+                                      <div className="font-bold truncate text-white">{clip.name}</div>
+                                      <div className="text-[#E31E24] font-semibold">{clip.duration?.toFixed(2)}s</div>
+                                    </div>
 
-                          {/* Delete Button */}
-                          <button 
-                            onClick={(e) => { e.stopPropagation(); removeClip(index); }} 
-                            className="absolute top-1 left-1 p-1 bg-red-600/90 rounded hover:bg-red-600 transition-colors opacity-0 group-hover:opacity-100"
-                          >
-                            <Trash2 size={12} />
-                          </button>
+                                    {/* Delete Button */}
+                                    <button 
+                                      onClick={(e) => { e.stopPropagation(); removeClip(index); }} 
+                                      className="absolute top-1 left-1 p-1 bg-red-600/90 rounded hover:bg-red-600 transition-colors opacity-0 group-hover:opacity-100"
+                                    >
+                                      <Trash2 size={12} />
+                                    </button>
 
-                          {/* Left Resize Handle */}
-                          <div
-                            className="absolute left-0 top-0 bottom-0 w-2 bg-[#E31E24] cursor-col-resize hover:w-3 transition-all z-50"
-                            title="גרור למתיחה"
-                            onMouseDown={(e) => {
-                              e.stopPropagation();
-                              e.preventDefault();
-                              const startX = e.clientX;
-                              const startDuration = clip.duration || 1;
+                                    {/* Left Resize Handle */}
+                                    <div
+                                      className="absolute left-0 top-0 bottom-0 w-2 bg-[#E31E24] cursor-col-resize hover:w-3 transition-all z-50"
+                                      title="גרור למתיחה"
+                                      onMouseDown={(e) => {
+                                        e.stopPropagation();
+                                        e.preventDefault();
+                                        const startX = e.clientX;
+                                        const startDuration = clip.duration || 1;
 
-                              const handleMouseMove = (moveE) => {
-                                const deltaX = startX - moveE.clientX;
-                                const deltaDuration = deltaX / widthPerSecond;
-                                const newDuration = Math.max(0.5, Math.min(30, startDuration + deltaDuration));
+                                        const handleMouseMove = (moveE) => {
+                                          const deltaX = startX - moveE.clientX;
+                                          const deltaDuration = deltaX / widthPerSecond;
+                                          const newDuration = Math.max(0.5, Math.min(30, startDuration + deltaDuration));
 
-                                setClips(prev => prev.map((c, i) => 
-                                  i === index ? { ...c, duration: parseFloat(newDuration.toFixed(2)) } : c
-                                ));
-                              };
+                                          setClips(prev => prev.map((c, i) => 
+                                            i === index ? { ...c, duration: parseFloat(newDuration.toFixed(2)) } : c
+                                          ));
+                                        };
 
-                              const handleMouseUp = () => {
-                                document.removeEventListener('mousemove', handleMouseMove);
-                                document.removeEventListener('mouseup', handleMouseUp);
-                                toast.success(`משך עודכן ל-${clips[index].duration.toFixed(2)}s`);
-                              };
+                                        const handleMouseUp = () => {
+                                          document.removeEventListener('mousemove', handleMouseMove);
+                                          document.removeEventListener('mouseup', handleMouseUp);
+                                          toast.success(`משך עודכן ל-${clips[index].duration.toFixed(2)}s`);
+                                        };
 
-                              document.addEventListener('mousemove', handleMouseMove);
-                              document.addEventListener('mouseup', handleMouseUp);
-                            }}
-                          >
-                            <div className="absolute inset-0 flex items-center justify-center">
-                              <div className="w-0.5 h-4 bg-white/80"></div>
-                            </div>
-                          </div>
+                                        document.addEventListener('mousemove', handleMouseMove);
+                                        document.addEventListener('mouseup', handleMouseUp);
+                                      }}
+                                    >
+                                      <div className="absolute inset-0 flex items-center justify-center">
+                                        <div className="w-0.5 h-4 bg-white/80"></div>
+                                      </div>
+                                    </div>
 
-                          {/* Right Resize Handle */}
-                          <div
-                            className="absolute right-0 top-0 bottom-0 w-2 bg-[#E31E24] cursor-col-resize hover:w-3 transition-all z-50"
-                            title="גרור למתיחה"
-                            onMouseDown={(e) => {
-                              e.stopPropagation();
-                              e.preventDefault();
-                              const startX = e.clientX;
-                              const startDuration = clip.duration || 1;
+                                    {/* Right Resize Handle */}
+                                    <div
+                                      className="absolute right-0 top-0 bottom-0 w-2 bg-[#E31E24] cursor-col-resize hover:w-3 transition-all z-50"
+                                      title="גרור למתיחה"
+                                      onMouseDown={(e) => {
+                                        e.stopPropagation();
+                                        e.preventDefault();
+                                        const startX = e.clientX;
+                                        const startDuration = clip.duration || 1;
 
-                              const handleMouseMove = (moveE) => {
-                                const deltaX = moveE.clientX - startX;
-                                const deltaDuration = deltaX / widthPerSecond;
-                                const newDuration = Math.max(0.5, Math.min(30, startDuration + deltaDuration));
+                                        const handleMouseMove = (moveE) => {
+                                          const deltaX = moveE.clientX - startX;
+                                          const deltaDuration = deltaX / widthPerSecond;
+                                          const newDuration = Math.max(0.5, Math.min(30, startDuration + deltaDuration));
 
-                                setClips(prev => prev.map((c, i) => 
-                                  i === index ? { ...c, duration: parseFloat(newDuration.toFixed(2)) } : c
-                                ));
-                              };
+                                          setClips(prev => prev.map((c, i) => 
+                                            i === index ? { ...c, duration: parseFloat(newDuration.toFixed(2)) } : c
+                                          ));
+                                        };
 
-                              const handleMouseUp = () => {
-                                document.removeEventListener('mousemove', handleMouseMove);
-                                document.removeEventListener('mouseup', handleMouseUp);
-                                toast.success(`משך עודכן ל-${clips[index].duration.toFixed(2)}s`);
-                              };
+                                        const handleMouseUp = () => {
+                                          document.removeEventListener('mousemove', handleMouseMove);
+                                          document.removeEventListener('mouseup', handleMouseUp);
+                                          toast.success(`משך עודכן ל-${clips[index].duration.toFixed(2)}s`);
+                                        };
 
-                              document.addEventListener('mousemove', handleMouseMove);
-                              document.addEventListener('mouseup', handleMouseUp);
-                            }}
-                          >
-                            <div className="absolute inset-0 flex items-center justify-center">
-                              <div className="w-0.5 h-4 bg-white/80"></div>
-                            </div>
-                            </div>
+                                        document.addEventListener('mousemove', handleMouseMove);
+                                        document.addEventListener('mouseup', handleMouseUp);
+                                      }}
+                                    >
+                                      <div className="absolute inset-0 flex items-center justify-center">
+                                        <div className="w-0.5 h-4 bg-white/80"></div>
+                                      </div>
+                                    </div>
                                   </motion.div>
 
                                   {index < clips.length - 1 && (
-                          <div className="flex flex-col items-center justify-center px-1">
-                            <MoveHorizontal size={14} className="text-[#E31E24] mb-1" />
-                            <Select value={transitions[index] || 'cut'} onValueChange={(val) => updateTransition(index, val)}>
-                              <SelectTrigger className="w-20 h-6 text-[10px] bg-black/60 border-white/20">
-                                <SelectValue />
-                              </SelectTrigger>
-                              <SelectContent>
-                                <SelectItem value="cut">חיתוך</SelectItem>
-                                <SelectItem value="fade">דהייה</SelectItem>
-                                <SelectItem value="dissolve">המסה</SelectItem>
-                                <SelectItem value="slide">החלקה</SelectItem>
-                                <SelectItem value="zoom">זום</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            </div>
+                                    <div className="flex flex-col items-center justify-center px-1">
+                                      <MoveHorizontal size={14} className="text-[#E31E24] mb-1" />
+                                      <Select value={transitions[index] || 'cut'} onValueChange={(val) => updateTransition(index, val)}>
+                                        <SelectTrigger className="w-20 h-6 text-[10px] bg-black/60 border-white/20">
+                                          <SelectValue />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                          <SelectItem value="cut">חיתוך</SelectItem>
+                                          <SelectItem value="fade">דהייה</SelectItem>
+                                          <SelectItem value="dissolve">המסה</SelectItem>
+                                          <SelectItem value="slide">החלקה</SelectItem>
+                                          <SelectItem value="zoom">זום</SelectItem>
+                                        </SelectContent>
+                                      </Select>
+                                    </div>
                                   )}
-                                </React.Fragment>
+                                </div>
                               )}
                             </Draggable>
-                            );
-                            })}
-                            {provided.placeholder}
-                            </div>
-                            )}
-                            </Droppable>
-                            </DragDropContext>
+                          );
+                        })}
+                        {provided.placeholder}
+                      </div>
+                    )}
+                  </Droppable>
+                </DragDropContext>
               </div>
             )}
           </div>
