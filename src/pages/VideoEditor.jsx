@@ -539,9 +539,9 @@ export default function VideoEditor() {
                           const clipWidth = (clip.duration || 1) * widthPerSecond;
 
                           return (
-                            <Draggable key={clip.id} draggableId={clip.id.toString()} index={index}>
-                              {(provided, snapshot) => (
-                                <div className="flex items-center gap-1">
+                            <React.Fragment key={clip.id}>
+                              <Draggable draggableId={clip.id.toString()} index={index}>
+                                {(provided, snapshot) => (
                                   <motion.div
                                     ref={provided.innerRef}
                                     {...provided.draggableProps}
