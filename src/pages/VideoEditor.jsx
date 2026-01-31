@@ -548,11 +548,68 @@ export default function VideoEditor() {
                 </button>
 
                 <div className="relative bg-black rounded-2xl shadow-2xl p-2">
-                  {selectedClip.type === 'image' ? (
-                    <img src={selectedClip.url} className="w-full rounded-xl" style={{ filter: `brightness(${selectedClip.filters.brightness}%) contrast(${selectedClip.filters.contrast}%) saturate(${selectedClip.filters.saturation}%)` }} alt={selectedClip.name} />
-                  ) : (
-                    <video ref={videoRef} src={selectedClip.localUrl || selectedClip.url} className="w-full rounded-xl" style={{ filter: `brightness(${selectedClip.filters.brightness}%) contrast(${selectedClip.filters.contrast}%) saturate(${selectedClip.filters.saturation}%)` }} controls />
-                  )}
+                  <div className="relative">
+                    {selectedClip.type === 'image' ? (
+                      <img src={selectedClip.url} className="w-full rounded-xl" style={{ filter: `brightness(${selectedClip.filters.brightness}%) contrast(${selectedClip.filters.contrast}%) saturate(${selectedClip.filters.saturation}%)` }} alt={selectedClip.name} />
+                    ) : (
+                      <video ref={videoRef} src={selectedClip.localUrl || selectedClip.url} className="w-full rounded-xl" style={{ filter: `brightness(${selectedClip.filters.brightness}%) contrast(${selectedClip.filters.contrast}%) saturate(${selectedClip.filters.saturation}%)` }} controls />
+                    )}
+
+                    {/* Overlays Display */}
+                    {overlays.map((overlay, index) => (
+                      <div
+                        key={overlay.id}
+                        className="absolute cursor-move"
+                        style={{
+                          left: `${overlay.position.x}%`,
+                          top: `${overlay.position.y}%`,
+                          zIndex: 20 + index
+                        }}
+                        draggable
+                        onDragEnd={(e) => {
+                          const rect = e.currentTarget.parentElement.getBoundingClientRect();
+                          const x = ((e.clientX - rect.left) / rect.width) * 100;
+                          const y = ((e.clientY - rect.top) / rect.height) * 100;
+                          setOverlays(prev => prev.map(o => 
+                            o.id === overlay.id ? { ...o, position: { x: Math.max(0, Math.min(100, x)), y: Math.max(0, Math.min(100, y)) } } : o
+                          ));
+                        }}
+                      >
+                        {overlay.type === 'text' ? (
+                          <div
+                            style={{
+                              color: overlay.style.color,
+                              fontSize: `${overlay.style.fontSize}px`,
+                              textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
+                              fontWeight: 'bold',
+                              whiteSpace: 'nowrap'
+                            }}
+                          >
+                            {overlay.content}
+                          </div>
+                        ) : overlay.type === 'logo' ? (
+                          <img 
+                            src={overlay.url} 
+                            style={{ 
+                              width: `${overlay.size.width}px`, 
+                              height: `${overlay.size.height}px` 
+                            }} 
+                            alt="logo" 
+                          />
+                        ) : null}
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setOverlays(prev => prev.filter(o => o.id !== overlay.id));
+                            toast.success('אלמנט הוסר');
+                          }}
+                          className="absolute -top-2 -right-2 bg-red-600 p-1 rounded-full hover:bg-red-700 transition-colors"
+                        >
+                          <X size={12} className="text-white" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
 
                   {pipLayers.map((pip, index) => {
                     const positionStyles = {
