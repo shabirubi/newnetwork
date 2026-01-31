@@ -1104,7 +1104,16 @@ export default function VideoEditor() {
 
       {showResizeModal && <ResizeModal onClose={() => setShowResizeModal(false)} onApply={(aspectRatio) => { setClips(prev => prev.map(clip => ({ ...clip, aspectRatio }))); toast.success(`שונה ל-${aspectRatio}! 📐`); }} />}
 
-      {showElementsModal && <ElementsLibraryModal onClose={() => setShowElementsModal(false)} onApply={(element) => { setOverlays(prev => [...prev, element]); toast.success('אלמנט נוסף! ✨'); }} />}
+      {showElementsModal && <ElementsLibraryModal onClose={() => setShowElementsModal(false)} onApply={(element) => { 
+        const processedElement = {
+          ...element,
+          // Ensure all required properties exist for timeline display
+          style: element.style || { color: element.color || '#FFFFFF', fontSize: 24 },
+          content: element.content || element.text || element.name || 'אלמנט',
+        };
+        setOverlays(prev => [...prev, processedElement]); 
+        toast.success('אלמנט נוסף לציר הזמן! ✨'); 
+      }} />}
 
       {showMusicLibraryModal && <MusicLibraryModal onClose={() => setShowMusicLibraryModal(false)} onApply={(music) => { setAudioTrack({ url: music.url, name: music.name, volume: 100, loop: true }); toast.success(`${music.name} נוסף! 🎵`); }} />}
 
