@@ -246,7 +246,7 @@ export default function SubscriptionPage() {
               <label className="block text-sm font-semibold text-white mb-2">קוד קופון</label>
               <Input
                 type="text"
-                placeholder="הזן קוד (לדוגמה: 0248)"
+                placeholder="הזן קוד קופון"
                 value={couponCode}
                 onChange={(e) => setCouponCode(e.target.value)}
                 className="bg-black/60 border-green-500/30 text-white"
