@@ -225,10 +225,11 @@ export default function SubscriptionPage() {
             <label className="block text-sm font-semibold text-white mb-2">כתובת אימייל</label>
             <Input
               type="email"
-              placeholder="your@email.com"
+              placeholder="הזן את האימייל שלך"
               value={userEmail}
               onChange={(e) => setUserEmail(e.target.value)}
-              className="bg-black/60 border-purple-500/30 text-white text-lg"
+              readOnly={userEmail && userEmail.includes('@')}
+              className={`bg-black/60 border-purple-500/30 text-white text-lg ${userEmail && userEmail.includes('@') ? 'opacity-80' : ''}`}
             />
           </div>
 
