@@ -187,7 +187,6 @@ export default function VideoEditor() {
         }
       } catch (err) {
         console.error('Subscription check error:', err);
-        localStorage.removeItem('user_email');
       } finally {
         setCheckingAccess(false);
       }
