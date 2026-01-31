@@ -762,9 +762,36 @@ export default function VideoEditor() {
           <div className="flex-1 flex items-center justify-center p-4 relative overflow-auto">
             {selectedClip ? (
               <div className="relative w-full max-w-5xl">
-                <button onClick={() => setSelectedClipIndex(null)} className="absolute -top-2 -left-2 z-20 bg-red-600 hover:bg-red-700 p-3 rounded-full transition-all shadow-2xl">
-                  <X size={24} className="text-white" />
-                </button>
+                <div className="absolute -top-2 -left-2 z-20 flex gap-2">
+                  {selectedClip.type === 'video' && (
+                    <button 
+                      onClick={async () => {
+                        try {
+                          const response = await fetch(selectedClip.url);
+                          const blob = await response.blob();
+                          const url = window.URL.createObjectURL(blob);
+                          const a = document.createElement('a');
+                          a.href = url;
+                          a.download = selectedClip.name || 'video.mp4';
+                          document.body.appendChild(a);
+                          a.click();
+                          window.URL.revokeObjectURL(url);
+                          document.body.removeChild(a);
+                          toast.success('הסרטון הורד בהצלחה! ⬇️');
+                        } catch (err) {
+                          toast.error('שגיאה בהורדה');
+                        }
+                      }}
+                      className="bg-green-600 hover:bg-green-700 p-3 rounded-full transition-all shadow-2xl"
+                      title="הורד סרטון"
+                    >
+                      <Download size={24} className="text-white" />
+                    </button>
+                  )}
+                  <button onClick={() => setSelectedClipIndex(null)} className="bg-red-600 hover:bg-red-700 p-3 rounded-full transition-all shadow-2xl">
+                    <X size={24} className="text-white" />
+                  </button>
+                </div>
 
                 <div className="relative bg-black rounded-2xl shadow-2xl p-2">
                   <div className="relative">
