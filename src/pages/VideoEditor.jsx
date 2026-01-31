@@ -901,7 +901,7 @@ export default function VideoEditor() {
                         });
 
                         if (data.video_url) {
-                          setClips(prev => [...prev, {
+                          const newClip = {
                             id: Date.now(),
                             url: data.video_url,
                             duration: 5,
@@ -910,7 +910,12 @@ export default function VideoEditor() {
                             filters: { brightness: 100, contrast: 100, saturation: 100 },
                             volume: 100,
                             type: 'video'
-                          }]);
+                          };
+                          setClips(prev => {
+                            const updated = [...prev, newClip];
+                            setSelectedClipIndex(updated.length - 1);
+                            return updated;
+                          });
                           
                           if (data.audio_url && addVoice) {
                             setAudioTrack({ url: data.audio_url, name: 'דיבוב - ' + prompt.substring(0, 20), volume: 100, loop: false });
@@ -937,7 +942,7 @@ export default function VideoEditor() {
                         });
 
                         if (data.video_url) {
-                          setClips(prev => [...prev, {
+                          const newClip = {
                             id: Date.now(),
                             url: data.video_url,
                             duration: 5,
@@ -946,7 +951,12 @@ export default function VideoEditor() {
                             filters: { brightness: 100, contrast: 100, saturation: 100 },
                             volume: 100,
                             type: 'video'
-                          }]);
+                          };
+                          setClips(prev => {
+                            const updated = [...prev, newClip];
+                            setSelectedClipIndex(updated.length - 1);
+                            return updated;
+                          });
                           
                           if (data.audio_url && addVoice) {
                             setAudioTrack({ url: data.audio_url, name: 'דיבוב - ' + prompt.substring(0, 20), volume: 100, loop: false });
