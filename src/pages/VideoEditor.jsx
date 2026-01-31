@@ -579,6 +579,153 @@ export default function VideoEditor() {
             )}
           </div>
         </div>
+
+        {/* Right Sidebar - Tools */}
+        <div className="w-80 bg-black/50 border-r border-white/10 p-4 overflow-y-auto relative z-10">
+          <h3 className="font-bold mb-4 flex items-center gap-2">
+            <Plus size={18} className="text-[#E31E24]" />
+            הוסף תוכן
+          </h3>
+
+          <div className="space-y-2">
+            <input type="file" accept="video/mp4,video/webm,video/ogg,video/quicktime,video/x-msvideo,video/x-matroska,image/png,image/jpeg,image/jpg,image/gif" onChange={handleAddClip} className="hidden" id="video-upload" />
+            <div className="flex gap-2">
+              <Button onClick={() => document.getElementById('video-upload').click()} className="flex-1 bg-white/10 hover:bg-white/20 text-white text-sm" disabled={loading}>
+                {loading ? <Loader2 size={16} className="ml-1 animate-spin" /> : <Upload size={16} className="ml-1" />}
+                העלה
+              </Button>
+              <Button onClick={() => setShowStockVideoModal(true)} className="flex-1 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white text-sm">
+                <Play size={16} className="ml-1" />
+                ספריה
+              </Button>
+            </div>
+
+            <Button onClick={() => setShowLumaGeneratorModal(true)} className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white text-sm" disabled={loading}>
+              <Sparkles size={16} className="ml-1" />
+              סרטון AI
+            </Button>
+
+            <Button onClick={() => { if (!selectedClip || selectedClip.type === 'image') { toast.error('בחר סרטון כדי להאריך אותו'); return; } setShowLumaGeneratorModal(true); }} className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white text-sm" disabled={loading || !selectedClip || selectedClip?.type === 'image'}>
+              <Clock size={16} className="ml-1" />
+              המשך סרטון
+            </Button>
+
+            <Button onClick={() => setShowAIVideoFromImagesModal(true)} className="w-full bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700 text-white text-sm" disabled={loading}>
+              <Film size={16} className="ml-1" />
+              מתמונות
+            </Button>
+
+            <Button onClick={() => setShowAIImageModal(true)} className="w-full bg-gradient-to-r from-pink-600 to-orange-600 hover:from-pink-700 hover:to-orange-700 text-white text-sm">
+              <ImageIcon size={16} className="ml-1" />
+              תמונה AI
+            </Button>
+
+            <input type="file" accept="audio/*" onChange={handleAddAudio} className="hidden" id="audio-upload" />
+            <div className="flex gap-2">
+              <Button onClick={() => document.getElementById('audio-upload').click()} className="flex-1 bg-white/10 hover:bg-white/20 text-white text-sm">
+                <Music size={16} className="ml-1" />
+                מוזיקה
+              </Button>
+              <Button onClick={() => setShowMusicLibraryModal(true)} className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white text-sm">
+                <Music size={16} className="ml-1" />
+                ספרייה
+              </Button>
+            </div>
+
+            <Button onClick={() => setShowOverlayModal(true)} className="w-full bg-blue-600/20 hover:bg-blue-600/40 border border-blue-500/30 text-white text-sm">
+              <Type size={16} className="ml-1" />
+              טקסט/לוגו
+            </Button>
+
+            <Button onClick={() => setShowElementsModal(true)} className="w-full bg-yellow-600/20 hover:bg-yellow-600/40 border border-yellow-500/30 text-white text-sm">
+              <Sparkles size={16} className="ml-1" />
+              אלמנטים
+            </Button>
+
+            <div className="border-t border-white/10 pt-2 mt-2">
+              <p className="text-xs text-gray-400 mb-2 font-bold">כלים מתקדמים</p>
+              
+              <div className="space-y-1">
+                <Button onClick={() => setShowCaptionsModal(true)} className="w-full bg-blue-600/20 hover:bg-blue-600/40 border border-blue-500/30 text-white text-xs justify-start">
+                  <Type size={14} className="ml-1" />
+                  כיתובים
+                </Button>
+
+                <Button onClick={() => setShowAdvancedTTSModal(true)} className="w-full bg-purple-600/20 hover:bg-purple-600/40 border border-purple-500/30 text-white text-xs justify-start">
+                  <Volume2 size={14} className="ml-1" />
+                  דיבוב
+                </Button>
+                
+                <Button onClick={() => setShowEffectsModal(true)} className="w-full bg-pink-600/20 hover:bg-pink-600/40 border border-pink-500/30 text-white text-xs justify-start">
+                  <Sparkles size={14} className="ml-1" />
+                  אפקטים
+                </Button>
+
+                <Button onClick={() => setShowSpeedModal(true)} disabled={!selectedClip} className="w-full bg-indigo-600/20 hover:bg-indigo-600/40 border border-indigo-500/30 text-white text-xs justify-start">
+                  <MoveHorizontal size={14} className="ml-1" />
+                  מהירות
+                </Button>
+
+                <Button onClick={() => setShowResizeModal(true)} className="w-full bg-green-600/20 hover:bg-green-600/40 border border-green-500/30 text-white text-xs justify-start">
+                  <Film size={14} className="ml-1" />
+                  גודל
+                </Button>
+
+                <Button onClick={() => setShowPIPModal(true)} className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white text-xs justify-start">
+                  <Film size={14} className="ml-1" />
+                  PIP
+                </Button>
+
+                <Button onClick={() => setShowAdCreatorModal(true)} className="w-full bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-500 hover:to-orange-500 text-white text-xs justify-start">
+                  <Sparkles size={14} className="ml-1" />
+                  פרסומת
+                </Button>
+              </div>
+            </div>
+
+            {audioTrack && (
+              <div className="mt-3 p-2 bg-green-500/10 border border-green-500/30 rounded-lg">
+                <div className="flex items-center justify-between mb-1">
+                  <div className="text-xs text-green-400 flex items-center gap-1">
+                    <Music size={10} />
+                    {audioTrack.name}
+                  </div>
+                  <button onClick={() => setAudioTrack(null)} className="text-red-400 hover:text-red-300">
+                    <Trash2 size={12} />
+                  </button>
+                </div>
+                <Slider value={[audioTrack.volume]} onValueChange={(val) => setAudioTrack(prev => ({ ...prev, volume: val[0] }))} max={100} step={1} className="w-full" />
+              </div>
+            )}
+
+            {selectedClip && (
+              <div className="mt-3 border-t border-white/10 pt-3">
+                <h4 className="text-xs font-bold mb-2 flex items-center gap-1">
+                  <Scissors size={14} className="text-[#E31E24]" />
+                  עריכת קליפ
+                </h4>
+                <div className="space-y-2">
+                  <div>
+                    <label className="text-[10px] text-gray-400 block mb-1">בהירות</label>
+                    <Slider value={[selectedClip.filters.brightness]} onValueChange={(val) => updateClipFilter(selectedClipIndex, 'brightness', val[0])} max={200} step={1} />
+                  </div>
+                  <div>
+                    <label className="text-[10px] text-gray-400 block mb-1">ניגודיות</label>
+                    <Slider value={[selectedClip.filters.contrast]} onValueChange={(val) => updateClipFilter(selectedClipIndex, 'contrast', val[0])} max={200} step={1} />
+                  </div>
+                  <div>
+                    <label className="text-[10px] text-gray-400 block mb-1">רוויה</label>
+                    <Slider value={[selectedClip.filters.saturation]} onValueChange={(val) => updateClipFilter(selectedClipIndex, 'saturation', val[0])} max={200} step={1} />
+                  </div>
+                  <div>
+                    <label className="text-[10px] text-gray-400 block mb-1">שמע</label>
+                    <Slider value={[selectedClip.volume]} onValueChange={(val) => setClips(prev => prev.map((clip, i) => i === selectedClipIndex ? { ...clip, volume: val[0] } : clip))} max={100} step={1} />
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
 
       {showProjectsModal && <ProjectsModal onClose={() => setShowProjectsModal(false)} onLoad={handleLoadProject} />}
