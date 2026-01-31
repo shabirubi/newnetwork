@@ -607,81 +607,7 @@ export default function VideoEditor() {
         </div>
       </div>
 
-      <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Timeline - Top Section */}
-        <div className="h-40 bg-black/90 border-b border-white/10 p-3 overflow-x-auto">
-          <div className="flex items-center gap-2 mb-3">
-            <Film size={18} className="text-[#E31E24]" />
-            <h3 className="font-bold">ציר זמן</h3>
-            <span className="text-xs text-gray-400">({clips.length} קליפים, {totalDuration.toFixed(1)}s)</span>
-          </div>
-
-          {clips.length === 0 ? (
-            <div className="flex items-center justify-center h-24 border-2 border-dashed border-white/20 rounded-xl">
-              <p className="text-gray-500">אין קליפים עדיין</p>
-            </div>
-          ) : (
-            <div className="flex gap-2 items-stretch">
-              {clips.map((clip, index) => (
-                <React.Fragment key={clip.id}>
-                  <motion.div
-                    initial={{ scale: 0.8, opacity: 0 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    className={`relative flex-shrink-0 w-40 rounded-lg overflow-hidden cursor-pointer transition-all ${
-                      selectedClipIndex === index 
-                        ? 'ring-2 ring-[#E31E24] shadow-lg shadow-[#E31E24]/30' 
-                        : 'hover:ring-2 hover:ring-white/30'
-                    }`}
-                    onClick={() => setSelectedClipIndex(index)}
-                  >
-                    <div 
-                      className="h-20 bg-cover bg-center"
-                      style={{ backgroundImage: `url(${clip.thumbnail || clip.url})` }}
-                    >
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-                    </div>
-                    <div className="absolute bottom-0 left-0 right-0 p-2 text-xs">
-                      <div className="font-bold truncate">{clip.name}</div>
-                      <div className="text-gray-400">{clip.duration?.toFixed(1)}s</div>
-                    </div>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        removeClip(index);
-                      }}
-                      className="absolute top-1 left-1 p-1 bg-red-600/80 rounded hover:bg-red-600 transition-colors"
-                    >
-                      <Trash2 size={14} />
-                    </button>
-                  </motion.div>
-
-                  {index < clips.length - 1 && (
-                    <div className="flex flex-col items-center justify-center gap-2 px-2">
-                      <MoveHorizontal size={20} className="text-[#E31E24]" />
-                      <Select
-                        value={transitions[index] || 'cut'}
-                        onValueChange={(val) => updateTransition(index, val)}
-                      >
-                        <SelectTrigger className="w-24 h-8 text-xs bg-black/40 border-white/20">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="cut">חיתוך</SelectItem>
-                          <SelectItem value="fade">דהייה</SelectItem>
-                          <SelectItem value="dissolve">המסה</SelectItem>
-                          <SelectItem value="slide">החלקה</SelectItem>
-                          <SelectItem value="zoom">זום</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  )}
-                </React.Fragment>
-              ))}
-            </div>
-          )}
-        </div>
-
-        <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex overflow-hidden">
         {/* Sidebar - Tools - Always Visible */}
         <div className="w-80 bg-black/50 border-l border-white/10 p-4 overflow-y-auto relative z-10">
           <h3 className="font-bold mb-4 flex items-center gap-2">
@@ -980,8 +906,83 @@ export default function VideoEditor() {
           )}
         </div>
 
-        {/* Main Canvas - Preview Only */}
-        <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-gray-900 to-black p-4 relative">
+        {/* Main Canvas - Timeline + Preview */}
+        <div className="flex-1 flex flex-col bg-gradient-to-br from-gray-900 to-black overflow-hidden">
+          {/* Timeline - Top Section */}
+          <div className="h-40 bg-black/90 border-b border-white/10 p-3 overflow-x-auto">
+            <div className="flex items-center gap-2 mb-3">
+              <Film size={18} className="text-[#E31E24]" />
+              <h3 className="font-bold">ציר זמן</h3>
+              <span className="text-xs text-gray-400">({clips.length} קליפים, {totalDuration.toFixed(1)}s)</span>
+            </div>
+
+            {clips.length === 0 ? (
+              <div className="flex items-center justify-center h-24 border-2 border-dashed border-white/20 rounded-xl">
+                <p className="text-gray-500">אין קליפים עדיין</p>
+              </div>
+            ) : (
+              <div className="flex gap-2 items-stretch">
+                {clips.map((clip, index) => (
+                  <React.Fragment key={clip.id}>
+                    <motion.div
+                      initial={{ scale: 0.8, opacity: 0 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      className={`relative flex-shrink-0 w-40 rounded-lg overflow-hidden cursor-pointer transition-all ${
+                        selectedClipIndex === index 
+                          ? 'ring-2 ring-[#E31E24] shadow-lg shadow-[#E31E24]/30' 
+                          : 'hover:ring-2 hover:ring-white/30'
+                      }`}
+                      onClick={() => setSelectedClipIndex(index)}
+                    >
+                      <div 
+                        className="h-20 bg-cover bg-center"
+                        style={{ backgroundImage: `url(${clip.thumbnail || clip.url})` }}
+                      >
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+                      </div>
+                      <div className="absolute bottom-0 left-0 right-0 p-2 text-xs">
+                        <div className="font-bold truncate">{clip.name}</div>
+                        <div className="text-gray-400">{clip.duration?.toFixed(1)}s</div>
+                      </div>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          removeClip(index);
+                        }}
+                        className="absolute top-1 left-1 p-1 bg-red-600/80 rounded hover:bg-red-600 transition-colors"
+                      >
+                        <Trash2 size={14} />
+                      </button>
+                    </motion.div>
+
+                    {index < clips.length - 1 && (
+                      <div className="flex flex-col items-center justify-center gap-2 px-2">
+                        <MoveHorizontal size={20} className="text-[#E31E24]" />
+                        <Select
+                          value={transitions[index] || 'cut'}
+                          onValueChange={(val) => updateTransition(index, val)}
+                        >
+                          <SelectTrigger className="w-24 h-8 text-xs bg-black/40 border-white/20">
+                            <SelectValue />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="cut">חיתוך</SelectItem>
+                            <SelectItem value="fade">דהייה</SelectItem>
+                            <SelectItem value="dissolve">המסה</SelectItem>
+                            <SelectItem value="slide">החלקה</SelectItem>
+                            <SelectItem value="zoom">זום</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    )}
+                  </React.Fragment>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Preview Area */}
+          <div className="flex-1 flex items-center justify-center p-4 relative">
             {selectedClip ? (
                 <div className="relative w-full max-w-5xl">
                   {/* Close Preview Button */}
