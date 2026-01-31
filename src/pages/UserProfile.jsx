@@ -36,11 +36,30 @@ export default function UserProfile() {
     try {
       const userData = await base44.auth.me();
       setUser(userData);
-      setFormData({ full_name: userData.full_name || "" });
+      setFormData({ 
+        full_name: userData.full_name || "",
+        profile_image: userData.profile_image || ""
+      });
+      if (userData.profile_image) {
+        setProfileImage(userData.profile_image);
+      }
     } catch (error) {
       console.error("Error loading user:", error);
     }
     setLoading(false);
+  };
+
+  const handleImageUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      try {
+        const { file_url } = await base44.integrations.Core.UploadFile({ file });
+        setProfileImage(file_url);
+        setFormData(prev => ({ ...prev, profile_image: file_url }));
+      } catch (error) {
+        console.error("Error uploading image:", error);
+      }
+    }
   };
 
   const handleSave = async () => {
