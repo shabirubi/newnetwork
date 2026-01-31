@@ -132,6 +132,7 @@ export default function VideoEditor() {
   const [videoLoop, setVideoLoop] = useState(false);
   const [showAIVideoFromImagesModal, setShowAIVideoFromImagesModal] = useState(false);
   const [showLumaGeneratorModal, setShowLumaGeneratorModal] = useState(false);
+  const [showExportModal, setShowExportModal] = useState(false);
   const [contextMenu, setContextMenu] = useState(null);
   const [contextClipIndex, setContextClipIndex] = useState(null);
   const videoRef = useRef(null);
