@@ -225,16 +225,16 @@ export default function VideoEditor() {
     }
   };
 
-  // Add clip from Luma generation
+  // Add clip from AI generation
   const [showLumaGeneratorModal, setShowLumaGeneratorModal] = useState(false);
-  
+
   const handleAddLumaClip = async (lumaPrompt, aspectRatio) => {
     setLoading(true);
     try {
       toast.info('יוצר סרטון AI... יכול לקחת עד דקה');
-      const { data } = await base44.functions.invoke('createFalVideo', { 
+      const { data } = await base44.functions.invoke('createLumaVideo', { 
         prompt: lumaPrompt,
-        aspect_ratio: aspectRatio || '16:9'
+        aspectRatio: aspectRatio || '16:9'
       });
 
       if (data.video_url) {
@@ -643,12 +643,21 @@ export default function VideoEditor() {
             <p className="text-[10px] text-gray-500 text-center">MP4, WebM, MOV, AVI, MKV, PNG, JPG, GIF</p>
 
             <Button
-              onClick={() => setShowAIVideoFromImagesModal(true)}
-              className="w-full bg-gradient-to-r from-yellow-600 via-purple-600 to-pink-600 hover:from-yellow-500 hover:via-purple-500 hover:to-pink-500 text-white font-bold shadow-lg"
+              onClick={() => setShowLumaGeneratorModal(true)}
+              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
               disabled={loading}
             >
               <Sparkles size={18} className="mr-2" />
-              🎬 סרטון AI (חינם!)
+              סרטון AI
+            </Button>
+
+            <Button
+              onClick={() => setShowAIVideoFromImagesModal(true)}
+              className="w-full bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700 text-white"
+              disabled={loading}
+            >
+              <Film size={18} className="mr-2" />
+              סרטון מתמונות
             </Button>
 
             <Button
@@ -1253,13 +1262,13 @@ export default function VideoEditor() {
         />
       )}
 
-      {/* Luma Video Generator Modal */}
+      {/* AI Video Generator Modal */}
       {showLumaGeneratorModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50" onClick={() => setShowLumaGeneratorModal(false)}>
           <div className="bg-gradient-to-br from-purple-900/90 to-black border border-purple-500/30 rounded-2xl p-6 max-w-2xl w-full" onClick={(e) => e.stopPropagation()}>
             <h3 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
               <Sparkles size={24} className="text-purple-400" />
-              צור סרטון AI של הרשת החדשה
+              מחולל סרטונים AI מתקדם
             </h3>
             
             <div className="space-y-4">
