@@ -87,6 +87,7 @@ export default function WarRoom() {
 
   const refreshAlerts = () => {
     setLastUpdate(new Date());
+    loadAlerts();
     refetchNews();
   };
 
