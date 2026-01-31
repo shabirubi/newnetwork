@@ -560,16 +560,16 @@ export default function VideoEditor() {
             </div>
 
             {clips.length === 0 ? (
-              <div className="flex items-center justify-center h-32 border-2 border-dashed border-white/20 rounded-xl">
-                <div className="text-center">
-                  <Film size={48} className="mx-auto mb-2 opacity-30 text-gray-500" />
-                  <p className="text-gray-500">גרור סרטונים לכאן או לחץ "העלה"</p>
+                <div className="flex items-center justify-center h-32 border-2 border-dashed border-white/20 rounded-xl">
+                  <div className="text-center">
+                    <Film size={48} className="mx-auto mb-2 opacity-30 text-gray-500" />
+                    <p className="text-gray-500">גרור סרטונים לכאן או לחץ "העלה"</p>
+                  </div>
                 </div>
-              </div>
-            ) : (
-              <div className="relative h-32 bg-black/40 rounded-xl border border-white/10 p-2 overflow-x-auto">
-                {/* Time ruler */}
-                <div className="flex items-center gap-1 mb-2 text-[10px] text-gray-500 px-2 flex-shrink-0">
+              ) : (
+                <div className="relative h-32 bg-black/40 rounded-xl border border-white/10 p-2 overflow-x-scroll scrollbar-thumb-red-500 scrollbar-track-gray-900 scrollbar-thin">
+                  {/* Time ruler */}
+                  <div className="flex items-center gap-1 mb-2 text-[10px] text-gray-500 px-2 flex-shrink-0">
                   {Array.from({ length: Math.ceil(totalDuration) + 1 }).map((_, i) => (
                     <div key={i} className="flex-shrink-0" style={{ width: '60px' }}>
                       <div className="border-l border-white/20 h-2"></div>
