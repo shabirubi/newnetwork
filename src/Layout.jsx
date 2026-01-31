@@ -178,6 +178,35 @@ export default function Layout({ children, currentPageName }) {
           </div>
           
           <div className="hidden sm:flex items-center gap-2">
+            {/* Auth Buttons */}
+            {authLoading ? (
+              <div className="flex items-center gap-2 px-3 py-2 bg-black/60 rounded-2xl">
+                <Loader2 className="w-4 h-4 text-white animate-spin" />
+              </div>
+            ) : user ? (
+              <>
+                <div className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-green-500/20 to-green-600/20 border border-green-500/30 rounded-2xl">
+                  <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                  <span className="text-green-300 font-bold text-sm hidden sm:inline">{user.full_name || user.email}</span>
+                </div>
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-red-600/20 hover:bg-red-600/40 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-red-500/30 transition-all hover:scale-105 text-xs sm:text-sm"
+                >
+                  <LogOut className="w-4 h-4 text-red-400" />
+                  <span className="text-red-300 font-bold hidden sm:inline">התנתק</span>
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={handleLogin}
+                className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-blue-500/30 transition-all hover:scale-105 text-xs sm:text-sm"
+              >
+                <LogIn className="w-4 h-4 text-white" />
+                <span className="text-white font-bold hidden sm:inline">התחבר</span>
+              </button>
+            )}
+
             <button
               onClick={() => setReportersModalOpen(true)}
               className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-black/60 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-white/20 transition-all hover:scale-105 hover:bg-black/70 text-xs sm:text-sm"
