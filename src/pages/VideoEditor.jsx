@@ -960,6 +960,7 @@ export default function VideoEditor() {
                     
                     if (selectedClip && selectedClip.type === 'video') {
                       setLoading(true);
+                      setShowLumaGeneratorModal(false);
                       try {
                         toast.info('מאריך סרטון עם דיבוב... עד דקה');
                         const { data } = await base44.functions.invoke('createLumaVideo', { 
@@ -981,17 +982,14 @@ export default function VideoEditor() {
                             volume: 100,
                             type: 'video'
                           };
-                          setClips(prev => {
-                            const updated = [...prev, newClip];
-                            setTimeout(() => setSelectedClipIndex(updated.length - 1), 100);
-                            return updated;
-                          });
-                          
+                          setClips(prev => [...prev, newClip]);
+                          setTimeout(() => setSelectedClipIndex(clips.length), 200);
+
                           if (data.audio_url && addVoice) {
                             setAudioTrack({ url: data.audio_url, name: 'דיבוב - ' + prompt.substring(0, 20), volume: 100, loop: false });
-                            toast.success('סרטון + דיבוב נוספו! 🎬🎤');
+                            toast.success('סרטון + דיבוב נוספו לציר הזמן! 🎬🎤');
                           } else {
-                            toast.success('סרטון המשך נוסף! 🎬');
+                            toast.success('סרטון המשך נוסף לציר הזמן! 🎬');
                           }
                         } else if (data?.still_processing) {
                           toast.info('הסרטון בתהליך... נסה שוב בעוד רגע');
@@ -1002,10 +1000,10 @@ export default function VideoEditor() {
                         toast.error('שגיאה: ' + error.message);
                       } finally {
                         setLoading(false);
-                        setShowLumaGeneratorModal(false);
                       }
                     } else {
                       setLoading(true);
+                      setShowLumaGeneratorModal(false);
                       try {
                         toast.info('יוצר סרטון עם דיבוב... עד דקה');
                         const { data } = await base44.functions.invoke('createLumaVideo', { 
@@ -1026,17 +1024,14 @@ export default function VideoEditor() {
                             volume: 100,
                             type: 'video'
                           };
-                          setClips(prev => {
-                            const updated = [...prev, newClip];
-                            setTimeout(() => setSelectedClipIndex(updated.length - 1), 100);
-                            return updated;
-                          });
-                          
+                          setClips(prev => [...prev, newClip]);
+                          setTimeout(() => setSelectedClipIndex(clips.length), 200);
+
                           if (data.audio_url && addVoice) {
                             setAudioTrack({ url: data.audio_url, name: 'דיבוב - ' + prompt.substring(0, 20), volume: 100, loop: false });
-                            toast.success('סרטון + דיבוב נוספו! 🎬🎤');
+                            toast.success('סרטון + דיבוב נוספו לציר הזמן! 🎬🎤');
                           } else {
-                            toast.success('קליפ AI נוסף! 🎬');
+                            toast.success('קליפ AI נוסף לציר הזמן! 🎬');
                           }
                         } else if (data?.still_processing) {
                           toast.info('הסרטון בתהליך... נסה שוב בעוד רגע');
@@ -1047,7 +1042,6 @@ export default function VideoEditor() {
                         toast.error('שגיאה: ' + error.message);
                       } finally {
                         setLoading(false);
-                        setShowLumaGeneratorModal(false);
                       }
                     }
                   }}
