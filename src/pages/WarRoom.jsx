@@ -470,17 +470,17 @@ export default function WarRoom() {
                   )}
 
                   {/* Article Details */}
-                  <div className="bg-gray-800/50 rounded-xl p-4 mb-4">
+                  <div className="bg-gradient-to-br from-red-900/30 to-gray-800/50 rounded-xl p-4 mb-4 border border-red-600/30">
+                    <div className="flex items-center gap-2 mb-3 pb-3 border-b border-red-600/30">
+                      <span className="text-xs font-bold bg-red-600 text-white px-2 py-1 rounded">הרשת החדשה</span>
+                      <span className="text-xs text-gray-400">{selectedArticleForVideo.source}</span>
+                      <span className="text-xs text-gray-500">{new Date(selectedArticleForVideo.created_date).toLocaleString('he-IL')}</span>
+                    </div>
                     <h3 className="text-lg font-bold text-white mb-2">{selectedArticleForVideo.title}</h3>
-                    <p className="text-gray-400 text-sm mb-3">{selectedArticleForVideo.subtitle}</p>
-                    <p className="text-gray-300 text-sm leading-relaxed whitespace-pre-wrap">
+                    <p className="text-gray-300 text-sm mb-3">{selectedArticleForVideo.subtitle}</p>
+                    <p className="text-gray-400 text-sm leading-relaxed whitespace-pre-wrap">
                       {selectedArticleForVideo.content}
                     </p>
-                    <div className="flex items-center gap-2 text-xs text-gray-500 mt-3 pt-3 border-t border-gray-700">
-                      <span>{selectedArticleForVideo.source}</span>
-                      <span>•</span>
-                      <span>{new Date(selectedArticleForVideo.created_date).toLocaleString('he-IL')}</span>
-                    </div>
                   </div>
 
                   {/* Share Buttons */}
