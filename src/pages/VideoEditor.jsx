@@ -608,8 +608,8 @@ export default function VideoEditor() {
       </div>
 
       <div className="flex-1 flex overflow-hidden">
-        {/* Sidebar - Tools - Always Visible */}
-        <div className="w-80 bg-black/50 border-l border-white/10 p-4 overflow-y-auto relative z-10">
+        {/* Main Canvas - Timeline + Preview */}
+        <div className="flex-1 flex flex-col bg-gradient-to-br from-gray-900 to-black overflow-hidden">
           <h3 className="font-bold mb-4 flex items-center gap-2">
             <Plus size={18} className="text-[#E31E24]" />
             הוסף תוכן
@@ -793,7 +793,7 @@ export default function VideoEditor() {
             </div>
           </div>
 
-          {audioTrack && (
+          {/* Clip Filter Editor */}
             <div className="mt-4 p-3 bg-green-500/10 border border-green-500/30 rounded-lg">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex-1">
@@ -906,10 +906,8 @@ export default function VideoEditor() {
           )}
         </div>
 
-        {/* Main Canvas - Timeline + Preview */}
-        <div className="flex-1 flex flex-col bg-gradient-to-br from-gray-900 to-black overflow-hidden">
-          {/* Timeline - Top Section */}
-          <div className="h-40 bg-black/90 border-b border-white/10 p-3 overflow-x-auto">
+        {/* Timeline - Top Section */}
+        <div className="h-40 bg-black/90 border-b border-white/10 p-3 overflow-x-auto shrink-0">
             <div className="flex items-center gap-2 mb-3">
               <Film size={18} className="text-[#E31E24]" />
               <h3 className="font-bold">ציר זמן</h3>
