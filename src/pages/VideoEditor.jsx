@@ -980,13 +980,7 @@ export default function VideoEditor() {
                   {pipLayers.length > 0 && <span className="text-cyan-400"> • {pipLayers.length} PIP</span>}
                   </div>
                   </div>
-                  ) : clips.length > 0 ? (
-              <div className="text-center text-gray-400">
-                <Film size={64} className="mx-auto mb-4 opacity-30" />
-                <p className="text-lg mb-2">בחר קליפ מהטיימליין כדי לראות אותו</p>
-                <p className="text-sm">{clips.length} קליפים בטיימליין</p>
-              </div>
-            ) : (
+                  ) : (
               <div className="text-center text-gray-500">
                 <Film size={64} className="mx-auto mb-4 opacity-30" />
                 <p className="text-lg">הוסף קליפים כדי להתחיל לערוך</p>
