@@ -644,10 +644,10 @@ export default function VideoEditor() {
                             <div className="absolute inset-0 flex items-center justify-center">
                               <div className="w-0.5 h-4 bg-white/80"></div>
                             </div>
-                          </div>
-                        </motion.div>
+                            </div>
+                                  </motion.div>
 
-                        {index < clips.length - 1 && (
+                                  {index < clips.length - 1 && (
                           <div className="flex flex-col items-center justify-center px-1">
                             <MoveHorizontal size={14} className="text-[#E31E24] mb-1" />
                             <Select value={transitions[index] || 'cut'} onValueChange={(val) => updateTransition(index, val)}>
