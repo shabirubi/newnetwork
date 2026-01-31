@@ -16,7 +16,8 @@ export default function UserProfile() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
-  const [formData, setFormData] = useState({ full_name: "" });
+  const [formData, setFormData] = useState({ full_name: "", profile_image: "" });
+  const [profileImage, setProfileImage] = useState(null);
 
   useEffect(() => {
     loadUser();
