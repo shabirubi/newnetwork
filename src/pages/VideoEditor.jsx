@@ -578,145 +578,198 @@ export default function VideoEditor() {
                   ))}
                 </div>
 
-                {/* Clips Track - Custom Drag Implementation */}
-                <div className="relative h-20 bg-black/20 rounded-lg border border-white/5 p-1 flex items-center gap-1">
-                  {clips.length === 0 ? (
-                    <div className="absolute inset-0 flex items-center justify-center text-gray-500 text-sm">
-                      אין קליפים
-                    </div>
-                  ) : (
-                    clips.map((clip, index) => {
-                      const widthPerSecond = 60;
-                      const clipWidth = Math.max(60, (clip.duration || 1) * widthPerSecond);
+                {/* Multiple Tracks */}
+                <div className="space-y-1">
+                  {/* Video Clips Track */}
+                  <div className="relative bg-black/20 rounded-lg border border-white/5 p-1">
+                    <div className="text-[10px] font-bold text-gray-400 mb-1 px-2">📹 וידאו</div>
+                    <div className="flex items-center gap-1 h-16">
+                      {clips.length === 0 ? (
+                        <div className="text-gray-500 text-xs ml-2">אין קליפים</div>
+                      ) : (
+                        clips.map((clip, index) => {
+                          const widthPerSecond = 60;
+                          const clipWidth = Math.max(60, (clip.duration || 1) * widthPerSecond);
 
-                      return (
-                        <motion.div
-                          key={clip.id}
-                          layout
-                          initial={{ scale: 0.8, opacity: 0 }}
-                          animate={{ scale: 1, opacity: 1 }}
-                          exit={{ scale: 0.8, opacity: 0 }}
-                          className={`relative rounded-lg overflow-hidden flex-shrink-0 transition-all group ${selectedClipIndex === index ? 'ring-2 ring-[#E31E24] shadow-lg shadow-[#E31E24]/30' : 'hover:ring-2 hover:ring-white/30'}`}
+                          return (
+                            <motion.div
+                              key={clip.id}
+                              layout
+                              initial={{ scale: 0.8, opacity: 0 }}
+                              animate={{ scale: 1, opacity: 1 }}
+                              exit={{ scale: 0.8, opacity: 0 }}
+                              className={`relative rounded-lg overflow-hidden flex-shrink-0 transition-all group ${selectedClipIndex === index ? 'ring-2 ring-[#E31E24] shadow-lg shadow-[#E31E24]/30' : 'hover:ring-2 hover:ring-white/30'}`}
+                              style={{ 
+                                width: `${clipWidth}px`,
+                                height: '60px',
+                                cursor: 'grab'
+                              }}
+                              onClick={() => setSelectedClipIndex(index)}
+                              onContextMenu={(e) => {
+                                e.preventDefault();
+                                setContextMenu({ x: e.clientX, y: e.clientY });
+                                setContextClipIndex(index);
+                              }}
+                              draggable
+                              onDragStart={(e) => {
+                                e.dataTransfer.effectAllowed = 'move';
+                                e.dataTransfer.setData('clipIndex', index.toString());
+                                setSelectedClipIndex(index);
+                              }}
+                              onDragOver={(e) => {
+                                e.preventDefault();
+                                e.dataTransfer.dropEffect = 'move';
+                              }}
+                              onDrop={(e) => {
+                                e.preventDefault();
+                                const sourceIndex = parseInt(e.dataTransfer.getData('clipIndex'));
+                                if (sourceIndex !== index) {
+                                  const newClips = [...clips];
+                                  const [movedClip] = newClips.splice(sourceIndex, 1);
+                                  newClips.splice(index, 0, movedClip);
+                                  setClips(newClips);
+                                  toast.success('קליפים סודרו מחדש!');
+                                }
+                              }}
+                            >
+                              {/* Thumbnail */}
+                              <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${clip.thumbnail || clip.url})` }}>
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                              </div>
+
+                              {/* Clip Info */}
+                              <div className="absolute bottom-0 left-0 right-0 p-1 text-[9px]">
+                                <div className="font-bold truncate text-white">{clip.name}</div>
+                                <div className="text-[#E31E24] font-semibold">{clip.duration?.toFixed(2)}s</div>
+                              </div>
+
+                              {/* Delete Button */}
+                              <button 
+                                onClick={(e) => { e.stopPropagation(); removeClip(index); }} 
+                                className="absolute top-0.5 left-0.5 p-0.5 bg-red-600/90 rounded hover:bg-red-600 transition-colors opacity-0 group-hover:opacity-100 z-10"
+                              >
+                                <Trash2 size={10} />
+                              </button>
+
+                              {/* Resize Handles */}
+                              <div
+                                className="absolute left-0 top-0 bottom-0 w-2 bg-[#E31E24]/80 cursor-ew-resize hover:bg-[#E31E24] hover:w-3 transition-all z-40"
+                                onMouseDown={(e) => {
+                                  e.stopPropagation();
+                                  e.preventDefault();
+                                  const startX = e.clientX;
+                                  const startDuration = clip.duration || 1;
+                                  const widthPerSecond = 60;
+
+                                  const handleMouseMove = (moveE) => {
+                                    const deltaX = startX - moveE.clientX;
+                                    const deltaDuration = deltaX / widthPerSecond;
+                                    const newDuration = Math.max(0.5, startDuration + deltaDuration);
+                                    setClips(prev => prev.map((c, i) => 
+                                      i === index ? { ...c, duration: parseFloat(newDuration.toFixed(2)) } : c
+                                    ));
+                                  };
+
+                                  const handleMouseUp = () => {
+                                    document.removeEventListener('mousemove', handleMouseMove);
+                                    document.removeEventListener('mouseup', handleMouseUp);
+                                  };
+
+                                  document.addEventListener('mousemove', handleMouseMove);
+                                  document.addEventListener('mouseup', handleMouseUp);
+                                }}
+                              />
+                              <div
+                                className="absolute right-0 top-0 bottom-0 w-2 bg-[#E31E24]/80 cursor-ew-resize hover:bg-[#E31E24] hover:w-3 transition-all z-40"
+                                onMouseDown={(e) => {
+                                  e.stopPropagation();
+                                  e.preventDefault();
+                                  const startX = e.clientX;
+                                  const startDuration = clip.duration || 1;
+                                  const widthPerSecond = 60;
+
+                                  const handleMouseMove = (moveE) => {
+                                    const deltaX = moveE.clientX - startX;
+                                    const deltaDuration = deltaX / widthPerSecond;
+                                    const newDuration = Math.max(0.5, startDuration + deltaDuration);
+                                    setClips(prev => prev.map((c, i) => 
+                                      i === index ? { ...c, duration: parseFloat(newDuration.toFixed(2)) } : c
+                                    ));
+                                  };
+
+                                  const handleMouseUp = () => {
+                                    document.removeEventListener('mousemove', handleMouseMove);
+                                    document.removeEventListener('mouseup', handleMouseUp);
+                                  };
+
+                                  document.addEventListener('mousemove', handleMouseMove);
+                                  document.addEventListener('mouseup', handleMouseUp);
+                                }}
+                              />
+                            </motion.div>
+                          );
+                        })
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Audio Track */}
+                  {audioTrack && (
+                    <div className="relative bg-purple-900/20 border border-purple-500/30 rounded-lg p-1">
+                      <div className="text-[10px] font-bold text-purple-400 mb-1 px-2">🎵 אודיו</div>
+                      <div className="flex items-center gap-1 h-12">
+                        <div 
+                          className="relative rounded-lg overflow-hidden flex-shrink-0 bg-purple-600/30 border border-purple-500/50 p-2"
                           style={{ 
-                            width: `${clipWidth}px`,
-                            height: '70px',
-                            cursor: 'grab'
-                          }}
-                          onClick={() => setSelectedClipIndex(index)}
-                          onContextMenu={(e) => {
-                            e.preventDefault();
-                            setContextMenu({ x: e.clientX, y: e.clientY });
-                            setContextClipIndex(index);
-                          }}
-                          draggable
-                          onDragStart={(e) => {
-                            e.dataTransfer.effectAllowed = 'move';
-                            e.dataTransfer.setData('clipIndex', index.toString());
-                            setSelectedClipIndex(index);
-                          }}
-                          onDragOver={(e) => {
-                            e.preventDefault();
-                            e.dataTransfer.dropEffect = 'move';
-                          }}
-                          onDrop={(e) => {
-                            e.preventDefault();
-                            const sourceIndex = parseInt(e.dataTransfer.getData('clipIndex'));
-                            if (sourceIndex !== index) {
-                              const newClips = [...clips];
-                              const [movedClip] = newClips.splice(sourceIndex, 1);
-                              newClips.splice(index, 0, movedClip);
-                              setClips(newClips);
-                              toast.success('קליפים סודרו מחדש!');
-                            }
+                            width: `${Math.max(100, totalDuration * 60)}px`,
+                            height: '40px'
                           }}
                         >
-                                    {/* Thumbnail */}
-                                    <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${clip.thumbnail || clip.url})` }}>
-                                      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-                                    </div>
+                          <div className="text-[9px] text-purple-300 truncate font-bold">
+                            {audioTrack.name}
+                          </div>
+                          <div className="text-[9px] text-purple-400">
+                            {audioTrack.loop ? '🔄 לופ' : 'חד פעמי'}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  )}
 
-                                    {/* Clip Info */}
-                                    <div className="absolute bottom-0 left-0 right-0 p-1.5 text-[10px]">
-                                      <div className="font-bold truncate text-white">{clip.name}</div>
-                                      <div className="text-[#E31E24] font-semibold">{clip.duration?.toFixed(2)}s</div>
-                                    </div>
+                  {/* Overlays Track */}
+                  {overlays.length > 0 && (
+                    <div className="relative bg-blue-900/20 border border-blue-500/30 rounded-lg p-1">
+                      <div className="text-[10px] font-bold text-blue-400 mb-1 px-2">✨ אלמנטים ({overlays.length})</div>
+                      <div className="flex items-center gap-1 h-12 flex-wrap">
+                        {overlays.map((overlay) => (
+                          <div 
+                            key={overlay.id}
+                            className="rounded-lg overflow-hidden flex-shrink-0 bg-blue-600/30 border border-blue-500/50 p-2 text-[9px] text-blue-300 font-bold truncate max-w-[150px]"
+                          >
+                            {overlay.type === 'text' ? '📝' : '🖼️'} {overlay.type === 'text' ? overlay.content.substring(0, 15) : 'תמונה'}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
 
-                                    {/* Delete Button */}
-                                    <button 
-                                      onClick={(e) => { e.stopPropagation(); removeClip(index); }} 
-                                      className="absolute top-1 left-1 p-1 bg-red-600/90 rounded hover:bg-red-600 transition-colors opacity-0 group-hover:opacity-100 z-10"
-                                    >
-                                      <Trash2 size={12} />
-                                    </button>
-
-                                    {/* Left Resize Handle */}
-                                    <div
-                                      className="absolute left-0 top-0 bottom-0 w-2.5 bg-[#E31E24]/80 cursor-ew-resize hover:bg-[#E31E24] hover:w-3 transition-all z-40 hover:shadow-lg"
-                                      title="גרור לשינוי תחילה"
-                                      onMouseDown={(e) => {
-                                        e.stopPropagation();
-                                        e.preventDefault();
-                                        const startX = e.clientX;
-                                        const startDuration = clip.duration || 1;
-                                        const widthPerSecond = 60;
-
-                                        const handleMouseMove = (moveE) => {
-                                          const deltaX = startX - moveE.clientX;
-                                          const deltaDuration = deltaX / widthPerSecond;
-                                          const newDuration = Math.max(0.5, startDuration + deltaDuration);
-
-                                          setClips(prev => prev.map((c, i) => 
-                                            i === index ? { ...c, duration: parseFloat(newDuration.toFixed(2)) } : c
-                                          ));
-                                        };
-
-                                        const handleMouseUp = () => {
-                                          document.removeEventListener('mousemove', handleMouseMove);
-                                          document.removeEventListener('mouseup', handleMouseUp);
-                                          toast.success(`משך עודכן ל-${clip.duration?.toFixed(2)}s`);
-                                        };
-
-                                        document.addEventListener('mousemove', handleMouseMove);
-                                        document.addEventListener('mouseup', handleMouseUp);
-                                      }}
-                                    />
-
-                                    {/* Right Resize Handle */}
-                                    <div
-                                      className="absolute right-0 top-0 bottom-0 w-2.5 bg-[#E31E24]/80 cursor-ew-resize hover:bg-[#E31E24] hover:w-3 transition-all z-40 hover:shadow-lg"
-                                      title="גרור לשינוי סוף"
-                                      onMouseDown={(e) => {
-                                        e.stopPropagation();
-                                        e.preventDefault();
-                                        const startX = e.clientX;
-                                        const startDuration = clip.duration || 1;
-                                        const widthPerSecond = 60;
-
-                                        const handleMouseMove = (moveE) => {
-                                          const deltaX = moveE.clientX - startX;
-                                          const deltaDuration = deltaX / widthPerSecond;
-                                          const newDuration = Math.max(0.5, startDuration + deltaDuration);
-
-                                          setClips(prev => prev.map((c, i) => 
-                                            i === index ? { ...c, duration: parseFloat(newDuration.toFixed(2)) } : c
-                                          ));
-                                        };
-
-                                        const handleMouseUp = () => {
-                                          document.removeEventListener('mousemove', handleMouseMove);
-                                          document.removeEventListener('mouseup', handleMouseUp);
-                                          toast.success(`משך עודכן ל-${clip.duration?.toFixed(2)}s`);
-                                        };
-
-                                        document.addEventListener('mousemove', handleMouseMove);
-                                        document.addEventListener('mouseup', handleMouseUp);
-                                      }}
-                                    />
-                                    </motion.div>
-                                    );
-                                    })
-                                    )}
-                                    </div>
+                  {/* PIP Layers Track */}
+                  {pipLayers.length > 0 && (
+                    <div className="relative bg-cyan-900/20 border border-cyan-500/30 rounded-lg p-1">
+                      <div className="text-[10px] font-bold text-cyan-400 mb-1 px-2">📹 PIP ({pipLayers.length})</div>
+                      <div className="flex items-center gap-1 h-12">
+                        {pipLayers.map((pip, idx) => (
+                          <div 
+                            key={idx}
+                            className="rounded-lg overflow-hidden flex-shrink-0 bg-cyan-600/30 border border-cyan-500/50 p-2 text-[9px] text-cyan-300 font-bold"
+                          >
+                            PIP {idx + 1}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
                                     </div>
             )}
           </div>
