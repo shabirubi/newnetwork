@@ -41,12 +41,13 @@ const severityColors = {
 };
 
 export default function WarRoom() {
-  const [alerts, setAlerts] = useState(mockAlerts);
+  const [alerts, setAlerts] = useState([]);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [activeCount, setActiveCount] = useState(0);
   const [lastUpdate, setLastUpdate] = useState(new Date());
   const [playingArticleId, setPlayingArticleId] = useState(null);
   const [loadingArticleId, setLoadingArticleId] = useState(null);
+  const [loadingAlerts, setLoadingAlerts] = useState(true);
   const audioRef = useRef(null);
 
   // Fetch news articles
@@ -58,17 +59,31 @@ export default function WarRoom() {
     }
   });
 
+  // Fetch real alerts
+  const loadAlerts = async () => {
+    setLoadingAlerts(true);
+    try {
+      const realAlerts = await fetchRealAlerts();
+      setAlerts(realAlerts);
+    } catch (error) {
+      console.error('Failed to fetch alerts:', error);
+    } finally {
+      setLoadingAlerts(false);
+    }
+  };
+
   useEffect(() => {
-    setActiveCount(alerts.filter(a => a.status === "active").length);
+    loadAlerts();
     
-    // Simulate real-time updates
+    // Real-time updates every 30 seconds
     const interval = setInterval(() => {
       setLastUpdate(new Date());
+      loadAlerts();
       refetchNews();
     }, 30000);
     
     return () => clearInterval(interval);
-  }, [alerts, refetchNews]);
+  }, [refetchNews]);
 
   const refreshAlerts = () => {
     setLastUpdate(new Date());
