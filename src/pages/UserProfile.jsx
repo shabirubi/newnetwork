@@ -20,7 +20,16 @@ export default function UserProfile() {
 
   useEffect(() => {
     loadUser();
+    logLogin();
   }, []);
+
+  const logLogin = async () => {
+    try {
+      await base44.functions.invoke('logUserLogin', {});
+    } catch (error) {
+      console.error('Failed to log login:', error);
+    }
+  };
 
   const loadUser = async () => {
     try {
