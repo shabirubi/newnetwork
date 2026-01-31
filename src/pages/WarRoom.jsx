@@ -28,17 +28,32 @@ export default function WarRoom() {
   const [videoUrl, setVideoUrl] = useState(null);
   const audioRef = useRef(null);
 
-  // Fetch ONLY real security and politics news
+  // Fetch ONLY security news - Israel, Iran, US and IDF Gaza operations
   const { data: articles = [], refetch: refetchNews, isLoading: newsLoading } = useQuery({
     queryKey: ['news-articles-real'],
     queryFn: async () => {
       try {
-        const articles = await base44.entities.NewsArticle.filter(
-          { category: { $in: ['security', 'politics'] } },
+        const allArticles = await base44.entities.NewsArticle.filter(
+          { category: 'security' },
           '-created_date',
-          30
+          50
         );
-        return articles || [];
+        
+        // Filter for relevant security topics
+        const keywordPatterns = [
+          /ישראל|israel/i,
+          /איראן|iran/i,
+          /אמריקה|ארצות הברית|usa|united states|american/i,
+          /צהל|idf|israel defense/i,
+          /עזה|gaza/i
+        ];
+        
+        const filteredArticles = (allArticles || []).filter(article => {
+          const text = `${article.title} ${article.subtitle} ${article.content}`.toLowerCase();
+          return keywordPatterns.some(pattern => pattern.test(text));
+        });
+        
+        return filteredArticles.slice(0, 30);
       } catch (error) {
         console.error('Error fetching articles:', error);
         return [];
