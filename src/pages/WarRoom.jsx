@@ -154,7 +154,25 @@ export default function WarRoom() {
 
       if (data?.video_url) {
         setVideoUrl(data.video_url);
-        toast.success('וידאו נוצר בהצלחה!');
+        
+        // שמור הוידאו למערכת כדי שיופיע בכל הפידים
+        try {
+          const user = await base44.auth.me().catch(() => null);
+          await base44.entities.UserVideo.create({
+            title: article.title,
+            video_url: data.video_url,
+            thumbnail_url: data.thumbnail_url || article.image_url,
+            description: article.subtitle,
+            uploader_email: user?.email || 'anonymous',
+            category: 'breaking',
+            feed: 'all-videos',
+            status: 'ready'
+          });
+        } catch (err) {
+          console.error('Error saving video to feed:', err);
+        }
+        
+        toast.success('וידאו נוצר וחולק בפידים!');
         
         const newCount = watchedCount + 1;
         setWatchedCount(newCount);
