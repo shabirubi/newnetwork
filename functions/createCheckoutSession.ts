@@ -49,6 +49,11 @@ Deno.serve(async (req) => {
       customer = await stripe.customers.create({ email: userEmail });
     }
 
+    // בדוק ש-priceId קיים
+    if (!priceId) {
+      return Response.json({ error: 'נדרש ID של מחיר' }, { status: 400 });
+    }
+
     // יצירת Checkout Session
     const session = await stripe.checkout.sessions.create({
       customer: customer.id,
@@ -58,11 +63,18 @@ Deno.serve(async (req) => {
       cancel_url: `${req.headers.get('origin')}/Subscription?cancelled=true`,
       metadata: {
         base44_app_id: Deno.env.get("BASE44_APP_ID"),
-        user_email: userEmail
+        user_email: userEmail,
+        app_name: 'WarRoom'
       }
     });
 
-    return Response.json({ sessionId: session.id, url: session.url });
+    console.log('✅ Checkout session created:', { sessionId: session.id, email: userEmail, priceId });
+
+    return Response.json({ 
+      success: true,
+      sessionId: session.id, 
+      url: session.url 
+    });
   } catch (error) {
     console.error('Checkout error:', error);
     return Response.json({ error: error.message }, { status: 500 });
