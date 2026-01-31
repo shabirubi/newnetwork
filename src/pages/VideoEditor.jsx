@@ -482,59 +482,151 @@ export default function VideoEditor() {
       <div className="flex-1 flex overflow-hidden" dir="rtl">
         {/* Left Side - Timeline + Preview */}
         <div className="flex-1 flex flex-col bg-gradient-to-br from-gray-900 to-black overflow-hidden">
-          {/* Timeline - Top */}
-          <div className="h-40 bg-black/90 border-b border-white/10 p-3 overflow-x-auto shrink-0">
-            <div className="flex items-center gap-2 mb-3">
-              <Film size={18} className="text-[#E31E24]" />
-              <h3 className="font-bold">ציר זמן</h3>
-              <span className="text-xs text-gray-400">({clips.length} קליפים, {totalDuration.toFixed(1)}s)</span>
+          {/* Professional Timeline - Top */}
+          <div className="h-48 bg-gradient-to-b from-black via-gray-900 to-black border-b border-white/10 p-4 overflow-x-auto overflow-y-hidden shrink-0">
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <Film size={18} className="text-[#E31E24]" />
+                <h3 className="font-bold">ציר זמן מקצועי</h3>
+                <span className="text-xs text-gray-400">({clips.length} קליפים, {totalDuration.toFixed(2)}s)</span>
+              </div>
+              <div className="text-xs text-gray-500">גרור קליפ • מתח קצוות • שנה סדר</div>
             </div>
 
             {clips.length === 0 ? (
-              <div className="flex items-center justify-center h-24 border-2 border-dashed border-white/20 rounded-xl">
-                <p className="text-gray-500">אין קליפים עדיין</p>
+              <div className="flex items-center justify-center h-32 border-2 border-dashed border-white/20 rounded-xl">
+                <div className="text-center">
+                  <Film size={48} className="mx-auto mb-2 opacity-30 text-gray-500" />
+                  <p className="text-gray-500">גרור סרטונים לכאן או לחץ "העלה"</p>
+                </div>
               </div>
             ) : (
-              <div className="flex gap-2 items-stretch">
-                {clips.map((clip, index) => (
-                  <React.Fragment key={clip.id}>
-                    <motion.div
-                      initial={{ scale: 0.8, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      className={`relative flex-shrink-0 w-40 rounded-lg overflow-hidden cursor-pointer transition-all ${selectedClipIndex === index ? 'ring-2 ring-[#E31E24] shadow-lg shadow-[#E31E24]/30' : 'hover:ring-2 hover:ring-white/30'}`}
-                      onClick={() => setSelectedClipIndex(index)}
-                    >
-                      <div className="h-20 bg-cover bg-center" style={{ backgroundImage: `url(${clip.thumbnail || clip.url})` }}>
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-                      </div>
-                      <div className="absolute bottom-0 left-0 right-0 p-2 text-xs">
-                        <div className="font-bold truncate">{clip.name}</div>
-                        <div className="text-gray-400">{clip.duration?.toFixed(1)}s</div>
-                      </div>
-                      <button onClick={(e) => { e.stopPropagation(); removeClip(index); }} className="absolute top-1 left-1 p-1 bg-red-600/80 rounded hover:bg-red-600 transition-colors">
-                        <Trash2 size={14} />
-                      </button>
-                    </motion.div>
+              <div className="relative h-32 bg-black/40 rounded-xl border border-white/10 p-2">
+                {/* Time ruler */}
+                <div className="flex items-center gap-1 mb-2 text-[10px] text-gray-500 px-2">
+                  {Array.from({ length: Math.ceil(totalDuration) + 1 }).map((_, i) => (
+                    <div key={i} className="flex-shrink-0" style={{ width: '60px' }}>
+                      <div className="border-l border-white/20 h-2"></div>
+                      <span>{i}s</span>
+                    </div>
+                  ))}
+                </div>
 
-                    {index < clips.length - 1 && (
-                      <div className="flex flex-col items-center justify-center gap-2 px-2">
-                        <MoveHorizontal size={20} className="text-[#E31E24]" />
-                        <Select value={transitions[index] || 'cut'} onValueChange={(val) => updateTransition(index, val)}>
-                          <SelectTrigger className="w-24 h-8 text-xs bg-black/40 border-white/20">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="cut">חיתוך</SelectItem>
-                            <SelectItem value="fade">דהייה</SelectItem>
-                            <SelectItem value="dissolve">המסה</SelectItem>
-                            <SelectItem value="slide">החלקה</SelectItem>
-                            <SelectItem value="zoom">זום</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    )}
-                  </React.Fragment>
-                ))}
+                {/* Clips Track */}
+                <div className="flex gap-1 items-center h-20">
+                  {clips.map((clip, index) => {
+                    const widthPerSecond = 60;
+                    const clipWidth = (clip.duration || 1) * widthPerSecond;
+
+                    return (
+                      <React.Fragment key={clip.id}>
+                        <motion.div
+                          initial={{ scale: 0.8, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          className={`relative rounded-lg overflow-hidden cursor-pointer transition-all group ${selectedClipIndex === index ? 'ring-2 ring-[#E31E24] shadow-lg shadow-[#E31E24]/30' : 'hover:ring-2 hover:ring-white/30'}`}
+                          style={{ 
+                            width: `${clipWidth}px`,
+                            minWidth: '60px',
+                            height: '70px'
+                          }}
+                          onClick={() => setSelectedClipIndex(index)}
+                        >
+                          {/* Thumbnail */}
+                          <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${clip.thumbnail || clip.url})` }}>
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
+                          </div>
+
+                          {/* Clip Info */}
+                          <div className="absolute bottom-0 left-0 right-0 p-1.5 text-[10px]">
+                            <div className="font-bold truncate text-white">{clip.name}</div>
+                            <div className="text-[#E31E24] font-semibold">{clip.duration?.toFixed(2)}s</div>
+                          </div>
+
+                          {/* Delete Button */}
+                          <button 
+                            onClick={(e) => { e.stopPropagation(); removeClip(index); }} 
+                            className="absolute top-1 left-1 p-1 bg-red-600/90 rounded hover:bg-red-600 transition-colors opacity-0 group-hover:opacity-100"
+                          >
+                            <Trash2 size={12} />
+                          </button>
+
+                          {/* Resize Handles */}
+                          <div
+                            className="absolute left-0 top-0 bottom-0 w-2 bg-white/20 cursor-ew-resize hover:bg-[#E31E24] opacity-0 group-hover:opacity-100 transition-opacity"
+                            onMouseDown={(e) => {
+                              e.stopPropagation();
+                              const startX = e.clientX;
+                              const startDuration = clip.duration || 1;
+
+                              const handleMouseMove = (moveE) => {
+                                const deltaX = startX - moveE.clientX;
+                                const deltaDuration = deltaX / widthPerSecond;
+                                const newDuration = Math.max(0.5, startDuration + deltaDuration);
+
+                                setClips(prev => prev.map((c, i) => 
+                                  i === index ? { ...c, duration: parseFloat(newDuration.toFixed(2)) } : c
+                                ));
+                              };
+
+                              const handleMouseUp = () => {
+                                document.removeEventListener('mousemove', handleMouseMove);
+                                document.removeEventListener('mouseup', handleMouseUp);
+                              };
+
+                              document.addEventListener('mousemove', handleMouseMove);
+                              document.addEventListener('mouseup', handleMouseUp);
+                            }}
+                          />
+
+                          <div
+                            className="absolute right-0 top-0 bottom-0 w-2 bg-white/20 cursor-ew-resize hover:bg-[#E31E24] opacity-0 group-hover:opacity-100 transition-opacity"
+                            onMouseDown={(e) => {
+                              e.stopPropagation();
+                              const startX = e.clientX;
+                              const startDuration = clip.duration || 1;
+
+                              const handleMouseMove = (moveE) => {
+                                const deltaX = moveE.clientX - startX;
+                                const deltaDuration = deltaX / widthPerSecond;
+                                const newDuration = Math.max(0.5, startDuration + deltaDuration);
+
+                                setClips(prev => prev.map((c, i) => 
+                                  i === index ? { ...c, duration: parseFloat(newDuration.toFixed(2)) } : c
+                                ));
+                              };
+
+                              const handleMouseUp = () => {
+                                document.removeEventListener('mousemove', handleMouseMove);
+                                document.removeEventListener('mouseup', handleMouseUp);
+                              };
+
+                              document.addEventListener('mousemove', handleMouseMove);
+                              document.addEventListener('mouseup', handleMouseUp);
+                            }}
+                          />
+                        </motion.div>
+
+                        {index < clips.length - 1 && (
+                          <div className="flex flex-col items-center justify-center px-1">
+                            <MoveHorizontal size={14} className="text-[#E31E24] mb-1" />
+                            <Select value={transitions[index] || 'cut'} onValueChange={(val) => updateTransition(index, val)}>
+                              <SelectTrigger className="w-20 h-6 text-[10px] bg-black/60 border-white/20">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="cut">חיתוך</SelectItem>
+                                <SelectItem value="fade">דהייה</SelectItem>
+                                <SelectItem value="dissolve">המסה</SelectItem>
+                                <SelectItem value="slide">החלקה</SelectItem>
+                                <SelectItem value="zoom">זום</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
+                        )}
+                      </React.Fragment>
+                    );
+                  })}
+                </div>
               </div>
             )}
           </div>
