@@ -3,22 +3,6 @@ css
 @tailwind components;
 @tailwind utilities;
 
-/* Timeline scrollbar styling */
-.scrollbar-thin::-webkit-scrollbar {
-  height: 8px;
-}
-.scrollbar-thin::-webkit-scrollbar-track {
-  background: #111827;
-  border-radius: 4px;
-}
-.scrollbar-thin::-webkit-scrollbar-thumb {
-  background: #E31E24;
-  border-radius: 4px;
-}
-.scrollbar-thin::-webkit-scrollbar-thumb:hover {
-  background: #B91C1C;
-}
-
 /* High Contrast Mode */
 html.high-contrast {
   background-color: #000000 !important;
