@@ -114,11 +114,32 @@ export default function UserProfile() {
           <div className="flex flex-col md:flex-row items-center gap-6">
             {/* Avatar */}
             <div className="relative">
-              <Avatar className="w-32 h-32 border-4 border-[#E31E24]">
-                <AvatarFallback className="text-2xl font-bold bg-[#E31E24] text-white">
-                  {getInitials(user.full_name)}
-                </AvatarFallback>
-              </Avatar>
+              <div className="relative w-32 h-32">
+                {profileImage ? (
+                  <img 
+                    src={profileImage} 
+                    alt={user.full_name}
+                    className="w-full h-full rounded-full object-cover border-4 border-[#E31E24]"
+                  />
+                ) : (
+                  <Avatar className="w-32 h-32 border-4 border-[#E31E24]">
+                    <AvatarFallback className="text-2xl font-bold bg-[#E31E24] text-white">
+                      {getInitials(user.full_name)}
+                    </AvatarFallback>
+                  </Avatar>
+                )}
+                {editing && (
+                  <label className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full cursor-pointer opacity-0 hover:opacity-100 transition-opacity">
+                    <Camera className="w-6 h-6 text-white" />
+                    <input 
+                      type="file" 
+                      accept="image/*" 
+                      onChange={handleImageUpload}
+                      className="hidden"
+                    />
+                  </label>
+                )}
+              </div>
               <Badge 
                 className={`absolute bottom-2 right-2 ${
                   user.role === 'admin' 
