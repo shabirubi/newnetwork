@@ -42,6 +42,18 @@ export default function WarRoom() {
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [activeCount, setActiveCount] = useState(0);
   const [lastUpdate, setLastUpdate] = useState(new Date());
+  const [playingArticleId, setPlayingArticleId] = useState(null);
+  const [loadingArticleId, setLoadingArticleId] = useState(null);
+  const audioRef = useRef(null);
+
+  // Fetch news articles
+  const { data: articles = [], refetch: refetchNews } = useQuery({
+    queryKey: ['news-articles'],
+    queryFn: async () => {
+      const articles = await base44.entities.NewsArticle.filter({}, '-created_date', 10);
+      return articles.filter(a => a.category === 'security' || a.category === 'politics');
+    }
+  });
 
   useEffect(() => {
     setActiveCount(alerts.filter(a => a.status === "active").length);
@@ -49,13 +61,45 @@ export default function WarRoom() {
     // Simulate real-time updates
     const interval = setInterval(() => {
       setLastUpdate(new Date());
+      refetchNews();
     }, 30000);
     
     return () => clearInterval(interval);
-  }, [alerts]);
+  }, [alerts, refetchNews]);
 
   const refreshAlerts = () => {
     setLastUpdate(new Date());
+    refetchNews();
+  };
+
+  const handlePlayArticle = async (article) => {
+    if (playingArticleId === article.id) {
+      setPlayingArticleId(null);
+      if (audioRef.current) audioRef.current.pause();
+      return;
+    }
+
+    setLoadingArticleId(article.id);
+    try {
+      const { data } = await base44.functions.invoke('generateElevenLabsSpeech', {
+        text: article.content || article.subtitle,
+        voice_id: 'onwK4ZeVeZw25vXSwVNc'
+      });
+
+      if (data?.audio_url) {
+        if (audioRef.current) {
+          audioRef.current.src = data.audio_url;
+          audioRef.current.play();
+          setPlayingArticleId(article.id);
+        }
+      } else {
+        toast.error('שגיאה בהפעלת הקול');
+      }
+    } catch (error) {
+      toast.error('שגיאה בהפעלת הקול: ' + error.message);
+    } finally {
+      setLoadingArticleId(null);
+    }
   };
 
   return (
