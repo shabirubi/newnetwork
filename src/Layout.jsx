@@ -5,8 +5,10 @@ import {
   Menu, X, Radio, Newspaper, Shield, TrendingUp, 
   Vote, Cpu, Trophy, Clapperboard, Globe, Heart,
   Clock, ChevronLeft, Users, Moon, Sun, Home, Flame,
-  Siren, AlertTriangle, MessageSquareWarning, Film, Tv, User, MessageCircle, Sparkles
+  Siren, AlertTriangle, MessageSquareWarning, Film, Tv, User, MessageCircle, Sparkles,
+  LogOut, LogIn, Loader2
 } from "lucide-react";
+import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import NewsTicker from "./components/header/NewsTicker";
 import ReportersTickerStrip from "./components/header/ReportersTickerStrip";
