@@ -97,6 +97,9 @@ function ProjectsModal({ onClose, onLoad }) {
 }
 
 export default function VideoEditor() {
+  const [hasAccess, setHasAccess] = useState(false);
+  const [checkingAccess, setCheckingAccess] = useState(true);
+  const [userEmail, setUserEmail] = useState('');
   const [clips, setClips] = useState([]);
   const [selectedClipIndex, setSelectedClipIndex] = useState(null);
   const [audioTrack, setAudioTrack] = useState(null);
@@ -129,6 +132,34 @@ export default function VideoEditor() {
   const [showLumaGeneratorModal, setShowLumaGeneratorModal] = useState(false);
   const videoRef = useRef(null);
   const audioRef = useRef(null);
+
+  // בדיקת גישה למנוי
+  useEffect(() => {
+    const checkSubscription = async () => {
+      try {
+        const user = await base44.auth.me();
+        if (!user?.email) {
+          setCheckingAccess(false);
+          return;
+        }
+        
+        setUserEmail(user.email);
+        
+        const subs = await base44.entities.Subscription.filter({ user_email: user.email }, '-created_date', 1);
+        const activeSub = subs.find(s => s.status === 'active');
+        
+        if (activeSub) {
+          setHasAccess(true);
+        }
+      } catch (err) {
+        console.error('Subscription check error:', err);
+      } finally {
+        setCheckingAccess(false);
+      }
+    };
+    
+    checkSubscription();
+  }, []);
 
   // Calculate total duration
   useEffect(() => {
@@ -460,6 +491,68 @@ export default function VideoEditor() {
   };
 
   const selectedClip = selectedClipIndex !== null ? clips[selectedClipIndex] : null;
+
+  // אם עדיין בודק
+  if (checkingAccess) {
+    return (
+      <div className="min-h-screen bg-black text-white flex items-center justify-center">
+        <Loader2 size={48} className="animate-spin text-purple-400" />
+      </div>
+    );
+  }
+
+  // אם אין גישה - הצג מסך מנוי
+  if (!hasAccess) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-black via-purple-900/20 to-black flex items-center justify-center p-4" dir="rtl">
+        <motion.div
+          initial={{ scale: 0.9, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          className="max-w-2xl w-full bg-gradient-to-br from-purple-900/40 to-black border-2 border-purple-500/50 rounded-3xl p-8 text-center"
+        >
+          <div className="w-24 h-24 bg-gradient-to-br from-purple-600 to-pink-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg shadow-purple-500/50">
+            <Film size={48} className="text-white" />
+          </div>
+          
+          <h1 className="text-4xl font-bold text-white mb-4">
+            עורך סרטונים מתקדם
+          </h1>
+          <p className="text-xl text-gray-300 mb-8">
+            כלי מקצועי ליצירת סרטונים מדהימים עם AI
+          </p>
+
+          <div className="bg-black/40 rounded-2xl p-6 mb-8 text-right">
+            <h3 className="text-lg font-bold text-purple-300 mb-4 flex items-center gap-2">
+              <Sparkles size={20} />
+              מה כלול במנוי:
+            </h3>
+            <div className="grid gap-2">
+              {['עריכת וידאו מתקדמת', 'AI Video Generator', 'ספריית אפקטים מלאה', 'דיבוב מקצועי', 'כיתובים אוטומטיים', 'ייצוא ללא הגבלה'].map((feature, i) => (
+                <div key={i} className="flex items-center gap-3 text-gray-200">
+                  <Check size={18} className="text-green-400 shrink-0" />
+                  <span>{feature}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-3">
+            <Button
+              onClick={() => window.location.href = '/Subscription'}
+              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white text-xl py-6 rounded-2xl shadow-lg shadow-purple-500/30"
+            >
+              <Crown size={24} className="ml-2" />
+              הצטרף עכשיו - ₪49/חודש
+            </Button>
+            
+            <p className="text-sm text-gray-400">
+              או חזור ל<a href="/" className="text-purple-400 hover:text-purple-300 underline mx-1">דף הבית</a>
+            </p>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">

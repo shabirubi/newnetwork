@@ -91,7 +91,7 @@ export default function SubscriptionPage() {
 
     setLoading(true);
     try {
-      const priceId = 'price_1Qu2hGP6BvSNRhNlpMu2P2a4'; // החלף במזהה המחיר שנוצר
+      const priceId = 'price_1SvTZcPkbtN03exRYfRfNzJK';
 
       const { data } = await base44.functions.invoke('createCheckoutSession', {
         priceId,
