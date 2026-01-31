@@ -142,16 +142,16 @@ export default function VideoEditor() {
     setLoading(true);
     try {
       const isImage = file.type.startsWith('image/');
-      const uploadResult = await base44.integrations.Core.UploadFile({ file });
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
 
       if (isImage) {
         // Handle image
         setClips(prev => [...prev, {
           id: Date.now(),
-          url: uploadResult.file_url,
+          url: file_url,
           duration: 5, // Default 5 seconds for images
           name: file.name,
-          thumbnail: uploadResult.file_url,
+          thumbnail: file_url,
           filters: { brightness: 100, contrast: 100, saturation: 100 },
           volume: 0,
           type: 'image'
@@ -180,7 +180,7 @@ export default function VideoEditor() {
 
                setClips(prev => [...prev, {
                  id: Date.now(),
-                 url: uploadResult.file_url,
+                 url: file_url,
                  localUrl: video.src,
                  duration: duration,
                  name: file.name,
@@ -190,16 +190,16 @@ export default function VideoEditor() {
                  type: 'video'
                }]);
                toast.success('קליפ נוסף בהצלחה');
-             } catch (e) {
+               } catch (e) {
                console.error('Error creating thumbnail:', e);
                // Fallback - add without thumbnail
                setClips(prev => [...prev, {
                  id: Date.now(),
-                 url: uploadResult.file_url,
+                 url: file_url,
                  localUrl: video.src,
                  duration: duration,
                  name: file.name,
-                 thumbnail: uploadResult.file_url,
+                 thumbnail: file_url,
                  filters: { brightness: 100, contrast: 100, saturation: 100 },
                  volume: 100,
                  type: 'video'
@@ -894,9 +894,17 @@ export default function VideoEditor() {
         {/* Main Canvas */}
         <div className="flex-1 flex flex-col">
           {/* Preview Area */}
-          <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-gray-900 to-black p-8">
+          <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-gray-900 to-black p-8 relative">
             {selectedClip ? (
               <div className="relative max-w-4xl w-full">
+                {/* Close Preview Button */}
+                <button
+                  onClick={() => setSelectedClipIndex(null)}
+                  className="absolute top-4 right-4 z-20 bg-black/80 hover:bg-black p-3 rounded-full transition-all"
+                >
+                  <X size={24} className="text-white" />
+                </button>
+
                 <div className="relative">
                   {selectedClip.type === 'image' ? (
                     <img
