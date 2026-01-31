@@ -538,8 +538,8 @@ export default function VideoEditor() {
             <button onClick={() => setVideoLoop(!videoLoop)} className={`px-3 py-2 rounded-lg text-sm font-semibold transition-all ${videoLoop ? 'bg-cyan-600/40 text-cyan-300 border border-cyan-500' : 'bg-white/10 text-gray-300 border border-white/20 hover:bg-white/20'}`}>
               {videoLoop ? '🔄 לופ פעיל' : '🔄 לופ'}
             </button>
-            <Button onClick={handleExport} disabled={exporting || clips.length === 0} className="bg-[#E31E24] hover:bg-[#B91C1C] text-white">
-              {exporting ? <><Loader2 size={18} className="mr-2 animate-spin" />מייצא...</> : <><Download size={18} className="mr-2" />ייצוא סרטון</>}
+            <Button onClick={handleExport} disabled={clips.length === 0} className="bg-[#E31E24] hover:bg-[#B91C1C] text-white">
+              <><Download size={18} className="mr-2" />ייצוא סרטון</>
             </Button>
           </div>
         </div>
