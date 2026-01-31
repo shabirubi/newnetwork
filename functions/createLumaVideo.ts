@@ -96,55 +96,68 @@ Deno.serve(async (req) => {
       if (status === 'completed') {
         let finalVideoUrl = statusData.assets?.video;
 
-        // Add voice over if requested
-        if (add_voice && elevenLabsApiKey) {
-          try {
-            const textToSpeak = voice_script || prompt;
-            
-            // Generate speech
-            const voiceResponse = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voice_id}`, {
-              method: 'POST',
-              headers: {
-                'Accept': 'audio/mpeg',
-                'Content-Type': 'application/json',
-                'xi-api-key': elevenLabsApiKey
-              },
-              body: JSON.stringify({
-                text: textToSpeak,
-                model_id: 'eleven_multilingual_v2',
-                voice_settings: {
-                  stability: 0.5,
-                  similarity_boost: 0.75
-                }
-              })
-            });
+        // Add voice over - ALWAYS create voice
+         if (elevenLabsApiKey) {
+           try {
+             const textToSpeak = voice_script || prompt;
+             console.log('🎤 Creating voice with text:', textToSpeak);
+             console.log('Voice ID:', voice_id);
 
-            if (voiceResponse.ok) {
-              const audioBlob = await voiceResponse.arrayBuffer();
-              
-              // Upload audio to storage
-              const audioFile = new File([audioBlob], `voice_${Date.now()}.mp3`, { type: 'audio/mpeg' });
-              const uploadResult = await base44.asServiceRole.integrations.Core.UploadFile({ file: audioFile });
-              
-              if (uploadResult?.file_url) {
-                // Note: Video + audio merge would require ffmpeg
-                // For now, return both URLs - frontend can handle playback
-                return Response.json({
-                  success: true,
-                  video_url: finalVideoUrl,
-                  audio_url: uploadResult.file_url,
-                  thumbnail_url: statusData.assets?.image,
-                  generation_id: generationId,
-                  prompt: prompt,
-                  has_voice: true
-                });
-              }
-            }
-          } catch (voiceError) {
-            console.error('Voice generation error:', voiceError);
-            // Continue without voice if it fails
-          }
-        }
+             // Generate speech
+             const voiceResponse = await fetch(`https://api.elevenlabs.io/v1/text-to-speech/${voice_id}`, {
+               method: 'POST',
+               headers: {
+                 'Accept': 'audio/mpeg',
+                 'Content-Type': 'application/json',
+                 'xi-api-key': elevenLabsApiKey
+               },
+               body: JSON.stringify({
+                 text: textToSpeak,
+                 model_id: 'eleven_multilingual_v2',
+                 voice_settings: {
+                   stability: 0.5,
+                   similarity_boost: 0.75
+                 }
+               })
+             });
+
+             console.log('Voice response status:', voiceResponse.status);
+
+             if (voiceResponse.ok) {
+               const audioBlob = await voiceResponse.arrayBuffer();
+               console.log('✅ Audio blob created, size:', audioBlob.byteLength);
+
+               // Upload audio to storage
+               const audioFile = new File([audioBlob], `voice_${Date.now()}.mp3`, { type: 'audio/mpeg' });
+               const uploadResult = await base44.asServiceRole.integrations.Core.UploadFile({ file: audioFile });
+               console.log('Upload result:', uploadResult);
+
+               if (uploadResult?.file_url) {
+                 console.log('✅ Voice uploaded successfully:', uploadResult.file_url);
+                 // Note: Video + audio merge would require ffmpeg
+                 // For now, return both URLs - frontend can handle playback
+                 return Response.json({
+                   success: true,
+                   video_url: finalVideoUrl,
+                   audio_url: uploadResult.file_url,
+                   thumbnail_url: statusData.assets?.image,
+                   generation_id: generationId,
+                   prompt: prompt,
+                   has_voice: true
+                 });
+               } else {
+                 console.error('❌ Upload failed - no file_url returned');
+               }
+             } else {
+               const errorText = await voiceResponse.text();
+               console.error('❌ Voice API error:', voiceResponse.status, errorText);
+             }
+           } catch (voiceError) {
+             console.error('❌ Voice generation error:', voiceError);
+           }
+         } else {
+           console.error('❌ No ELEVENLABS_API_KEY configured');
+         }
 
         return Response.json({
           success: true,
