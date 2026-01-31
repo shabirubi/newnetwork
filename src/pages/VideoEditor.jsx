@@ -341,8 +341,14 @@ export default function VideoEditor() {
       const projectData = {
         title,
         clips: clips.map(clip => ({
-          ...clip,
-          localUrl: undefined
+          id: clip.id,
+          url: clip.url,
+          duration: clip.duration,
+          name: clip.name,
+          thumbnail: clip.thumbnail,
+          filters: clip.filters,
+          volume: clip.volume,
+          type: clip.type
         })),
         audioTrack,
         transitions,
@@ -355,8 +361,9 @@ export default function VideoEditor() {
       await base44.entities.VideoProject.create(projectData);
       
       setProjectTitle(title);
-      toast.success(`הפרויקט "${title}" נשמר בהצלחה! 💾`);
+      toast.success(`הפרויקט "${title}" נשמר בהצלחה!`);
     } catch (error) {
+      console.error('Save error:', error);
       toast.error('שגיאה בשמירה: ' + (error.message || 'Unknown error'));
     } finally {
       setLoading(false);
@@ -401,33 +408,39 @@ export default function VideoEditor() {
     setExporting(true);
     try {
       const user = await base44.auth.me();
+      if (!user) {
+        toast.error('יש להתחבר תחילה');
+        setExporting(false);
+        return;
+      }
+      
       const mainClip = clips[0];
 
-      const title = window.prompt('כותרת הסרטון:', 'סרטון ערוך - ' + new Date().toLocaleDateString());
+      const title = window.prompt('כותרת הסרטון:', 'סרטון ערוך - ' + new Date().toLocaleDateString('he-IL'));
       if (!title) {
         setExporting(false);
         return;
       }
 
-      const category = window.prompt('קטגוריה (breaking/security/economy/politics/technology/sports/entertainment/world/health):', 'breaking');
-      const feed = window.prompt('פיד (all/live-player/tiktok/user-videos/all-videos):', 'all-videos');
+      const category = window.prompt('קטגוריה (breaking/security/economy/politics/technology/sports/entertainment/world/health):', 'breaking') || 'breaking';
+      const feed = window.prompt('פיד (all/live-player/tiktok/user-videos/all-videos):', 'all-videos') || 'all-videos';
 
       await base44.entities.UserVideo.create({
         title: title,
         description: `סרטון ערוך עם ${clips.length} קליפים${videoLoop ? ' - חוזר בלופ' : ''}`,
         video_url: mainClip.url,
-        thumbnail_url: mainClip.thumbnail,
-        category: category || 'breaking',
-        feed: feed || 'all-videos',
+        thumbnail_url: mainClip.thumbnail || mainClip.url,
+        category: category,
+        feed: feed,
         status: 'ready',
         uploader_email: user.email,
-        duration: totalDuration,
-        loop: videoLoop
+        duration: totalDuration
       });
 
-      toast.success('הסרטון הועלה בהצלחה לפידים! 🎬');
+      toast.success('הסרטון הועלה בהצלחה לפידים!');
     } catch (error) {
-      toast.error('שגיאה בהעלאה: ' + error.message);
+      console.error('Export error:', error);
+      toast.error('שגיאה בהעלאה: ' + (error.message || 'Unknown error'));
     } finally {
       setExporting(false);
     }
@@ -1006,19 +1019,25 @@ export default function VideoEditor() {
                   <Input id="text-size" type="number" placeholder="גודל" defaultValue="24" className="flex-1 bg-white/5 border-white/20 text-white" />
                 </div>
                 <Button onClick={() => {
-                  const text = document.getElementById('overlay-text').value;
-                  const color = document.getElementById('text-color').value;
-                  const fontSize = parseInt(document.getElementById('text-size').value);
-                  if (text) {
-                    setOverlays(prev => [...prev, {
+                  const text = document.getElementById('overlay-text')?.value;
+                  const color = document.getElementById('text-color')?.value || '#ffffff';
+                  const fontSize = parseInt(document.getElementById('text-size')?.value || '24');
+                  if (text && text.trim()) {
+                    const newOverlay = {
                       id: Date.now(),
                       type: 'text',
                       content: text,
                       position: { x: 50, y: 50 },
                       style: { fontSize, color }
-                    }]);
+                    };
+                    setOverlays(prev => [...prev, newOverlay]);
                     setShowOverlayModal(false);
-                    toast.success('טקסט נוסף!');
+                    toast.success('טקסט נוסף בהצלחה!');
+                    
+                    // Clear inputs
+                    if (document.getElementById('overlay-text')) document.getElementById('overlay-text').value = '';
+                  } else {
+                    toast.error('אנא הזן טקסט');
                   }
                 }} className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white">
                   <Type size={18} className="mr-2" />
@@ -1032,18 +1051,23 @@ export default function VideoEditor() {
                   const file = e.target.files[0];
                   if (file) {
                     try {
+                      setLoading(true);
                       const uploadResult = await base44.integrations.Core.UploadFile({ file });
-                      setOverlays(prev => [...prev, {
+                      const newOverlay = {
                         id: Date.now(),
                         type: 'logo',
                         url: uploadResult.file_url,
                         position: { x: 10, y: 10 },
                         size: { width: 100, height: 100 }
-                      }]);
+                      };
+                      setOverlays(prev => [...prev, newOverlay]);
                       setShowOverlayModal(false);
-                      toast.success('לוגו נוסף!');
+                      toast.success('לוגו נוסף בהצלחה!');
                     } catch (error) {
-                      toast.error('שגיאה בהעלאת לוגו');
+                      console.error('Logo upload error:', error);
+                      toast.error('שגיאה בהעלאת לוגו: ' + (error.message || 'Unknown error'));
+                    } finally {
+                      setLoading(false);
                     }
                   }
                 }} />
