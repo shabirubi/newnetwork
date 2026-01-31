@@ -1,16 +1,17 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
   AlertTriangle, Shield, Siren, MapPin, Clock, 
   Radio, Bell, AlertCircle, Target, Users, 
   TrendingUp, Activity, Volume2, VolumeX,
-  ChevronRight, RefreshCw, Flame, Zap
+  ChevronRight, RefreshCw, Flame, Zap, Play, Pause, Loader2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 // Mock real-time alerts
 const mockAlerts = [
