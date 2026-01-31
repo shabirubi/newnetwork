@@ -607,7 +607,81 @@ export default function VideoEditor() {
         </div>
       </div>
 
-      <div className="flex-1 flex overflow-hidden">
+      <div className="flex-1 flex flex-col overflow-hidden">
+        {/* Timeline - Top Section */}
+        <div className="h-48 bg-black/90 border-b border-white/10 p-4 overflow-x-auto">
+          <div className="flex items-center gap-2 mb-3">
+            <Film size={18} className="text-[#E31E24]" />
+            <h3 className="font-bold">ציר זמן</h3>
+            <span className="text-xs text-gray-400">({clips.length} קליפים, {totalDuration.toFixed(1)}s)</span>
+          </div>
+
+          {clips.length === 0 ? (
+            <div className="flex items-center justify-center h-24 border-2 border-dashed border-white/20 rounded-xl">
+              <p className="text-gray-500">אין קליפים עדיין</p>
+            </div>
+          ) : (
+            <div className="flex gap-2 items-stretch">
+              {clips.map((clip, index) => (
+                <React.Fragment key={clip.id}>
+                  <motion.div
+                    initial={{ scale: 0.8, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    className={`relative flex-shrink-0 w-40 rounded-lg overflow-hidden cursor-pointer transition-all ${
+                      selectedClipIndex === index 
+                        ? 'ring-2 ring-[#E31E24] shadow-lg shadow-[#E31E24]/30' 
+                        : 'hover:ring-2 hover:ring-white/30'
+                    }`}
+                    onClick={() => setSelectedClipIndex(index)}
+                  >
+                    <div 
+                      className="h-20 bg-cover bg-center"
+                      style={{ backgroundImage: `url(${clip.thumbnail || clip.url})` }}
+                    >
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+                    </div>
+                    <div className="absolute bottom-0 left-0 right-0 p-2 text-xs">
+                      <div className="font-bold truncate">{clip.name}</div>
+                      <div className="text-gray-400">{clip.duration?.toFixed(1)}s</div>
+                    </div>
+                    <button
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        removeClip(index);
+                      }}
+                      className="absolute top-1 left-1 p-1 bg-red-600/80 rounded hover:bg-red-600 transition-colors"
+                    >
+                      <Trash2 size={14} />
+                    </button>
+                  </motion.div>
+
+                  {index < clips.length - 1 && (
+                    <div className="flex flex-col items-center justify-center gap-2 px-2">
+                      <MoveHorizontal size={20} className="text-[#E31E24]" />
+                      <Select
+                        value={transitions[index] || 'cut'}
+                        onValueChange={(val) => updateTransition(index, val)}
+                      >
+                        <SelectTrigger className="w-24 h-8 text-xs bg-black/40 border-white/20">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="cut">חיתוך</SelectItem>
+                          <SelectItem value="fade">דהייה</SelectItem>
+                          <SelectItem value="dissolve">המסה</SelectItem>
+                          <SelectItem value="slide">החלקה</SelectItem>
+                          <SelectItem value="zoom">זום</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  )}
+                </React.Fragment>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <div className="flex-1 flex overflow-hidden">
         {/* Sidebar - Tools - Always Visible */}
         <div className="w-80 bg-black/50 border-l border-white/10 p-4 overflow-y-auto relative z-10">
           <h3 className="font-bold mb-4 flex items-center gap-2">
@@ -648,7 +722,22 @@ export default function VideoEditor() {
               disabled={loading}
             >
               <Sparkles size={18} className="mr-2" />
-              סרטון AI
+              סרטון AI חדש
+            </Button>
+
+            <Button
+              onClick={() => {
+                if (!selectedClip || selectedClip.type === 'image') {
+                  toast.error('בחר סרטון כדי להאריך אותו');
+                  return;
+                }
+                setShowLumaGeneratorModal(true);
+              }}
+              className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white"
+              disabled={loading || !selectedClip || selectedClip?.type === 'image'}
+            >
+              <Clock size={18} className="mr-2" />
+              המשך סרטון
             </Button>
 
             <Button
@@ -891,25 +980,23 @@ export default function VideoEditor() {
           )}
         </div>
 
-        {/* Main Canvas */}
-        <div className="flex-1 flex flex-col">
-          {/* Preview Area */}
-          <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-gray-900 to-black p-4 relative">
+        {/* Main Canvas - Preview Only */}
+        <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-gray-900 to-black p-4 relative">
             {selectedClip ? (
-              <div className="relative w-full max-w-3xl">
-                {/* Close Preview Button */}
-                <button
-                  onClick={() => setSelectedClipIndex(null)}
-                  className="absolute -top-2 -left-2 z-20 bg-red-600 hover:bg-red-700 p-3 rounded-full transition-all shadow-2xl"
-                >
-                  <X size={24} className="text-white" />
-                </button>
+                <div className="relative w-full max-w-5xl">
+                  {/* Close Preview Button */}
+                  <button
+                    onClick={() => setSelectedClipIndex(null)}
+                    className="absolute -top-2 -left-2 z-20 bg-red-600 hover:bg-red-700 p-3 rounded-full transition-all shadow-2xl"
+                  >
+                    <X size={24} className="text-white" />
+                  </button>
 
-                <div className="relative">
+                  <div className="relative bg-black rounded-2xl shadow-2xl p-2">
                   {selectedClip.type === 'image' ? (
                     <img
                       src={selectedClip.url}
-                      className="w-full rounded-2xl shadow-2xl"
+                      className="w-full rounded-xl"
                       style={{
                         filter: `brightness(${selectedClip.filters.brightness}%) contrast(${selectedClip.filters.contrast}%) saturate(${selectedClip.filters.saturation}%)`
                       }}
@@ -919,7 +1006,7 @@ export default function VideoEditor() {
                     <video
                       ref={videoRef}
                       src={selectedClip.localUrl || selectedClip.url}
-                      className="w-full rounded-2xl shadow-2xl"
+                      className="w-full rounded-xl"
                       style={{
                         filter: `brightness(${selectedClip.filters.brightness}%) contrast(${selectedClip.filters.contrast}%) saturate(${selectedClip.filters.saturation}%)`
                       }}
@@ -975,92 +1062,24 @@ export default function VideoEditor() {
                     </div>
                   )}
                 </div>
-                <div className="mt-4 text-center text-sm text-gray-400">
-                  קליפ {selectedClipIndex + 1} מתוך {clips.length} | {selectedClip.name}
-                  {pipLayers.length > 0 && <span className="text-cyan-400"> • {pipLayers.length} PIP</span>}
+                <div className="mt-3 flex items-center justify-between text-sm">
+                  <div className="text-gray-400">
+                    קליפ {selectedClipIndex + 1}/{clips.length} • {selectedClip.name}
                   </div>
-                  </div>
+                  {pipLayers.length > 0 && (
+                    <div className="text-cyan-400 text-xs">
+                      {pipLayers.length} PIP Layers
+                    </div>
+                  )}
+                </div>
+                </div>
                   ) : (
-              <div className="text-center text-gray-500">
+                <div className="text-center text-gray-500">
                 <Film size={64} className="mx-auto mb-4 opacity-30" />
                 <p className="text-lg">הוסף קליפים כדי להתחיל לערוך</p>
-              </div>
-            )}
-          </div>
-
-          {/* Timeline */}
-          <div className="h-64 bg-black/80 border-t border-white/10 p-4 overflow-x-auto">
-            <div className="flex items-center gap-2 mb-4">
-              <Film size={18} className="text-[#E31E24]" />
-              <h3 className="font-bold">ציר זמן</h3>
-              <span className="text-xs text-gray-400">({clips.length} קליפים, {totalDuration.toFixed(1)}s)</span>
-            </div>
-
-            {clips.length === 0 ? (
-              <div className="flex items-center justify-center h-32 border-2 border-dashed border-white/20 rounded-xl">
-                <p className="text-gray-500">אין קליפים עדיין</p>
-              </div>
-            ) : (
-              <div className="flex gap-2 items-stretch">
-                {clips.map((clip, index) => (
-                  <React.Fragment key={clip.id}>
-                    <motion.div
-                      initial={{ scale: 0.8, opacity: 0 }}
-                      animate={{ scale: 1, opacity: 1 }}
-                      className={`relative flex-shrink-0 w-40 rounded-lg overflow-hidden cursor-pointer transition-all ${
-                        selectedClipIndex === index 
-                          ? 'ring-2 ring-[#E31E24] shadow-lg shadow-[#E31E24]/30' 
-                          : 'hover:ring-2 hover:ring-white/30'
-                      }`}
-                      onClick={() => setSelectedClipIndex(index)}
-                    >
-                      <div 
-                        className="h-24 bg-cover bg-center"
-                        style={{ backgroundImage: `url(${clip.thumbnail || clip.url})` }}
-                      >
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
-                      </div>
-                      <div className="absolute bottom-0 left-0 right-0 p-2 text-xs">
-                        <div className="font-bold truncate">{clip.name}</div>
-                        <div className="text-gray-400">{clip.duration?.toFixed(1)}s</div>
-                      </div>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          removeClip(index);
-                        }}
-                        className="absolute top-1 left-1 p-1 bg-red-600/80 rounded hover:bg-red-600 transition-colors"
-                      >
-                        <Trash2 size={14} />
-                      </button>
-                    </motion.div>
-
-                    {/* Transition selector */}
-                    {index < clips.length - 1 && (
-                      <div className="flex flex-col items-center justify-center gap-2 px-2">
-                        <MoveHorizontal size={20} className="text-[#E31E24]" />
-                        <Select
-                          value={transitions[index] || 'cut'}
-                          onValueChange={(val) => updateTransition(index, val)}
-                        >
-                          <SelectTrigger className="w-24 h-8 text-xs bg-black/40 border-white/20">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="cut">חיתוך</SelectItem>
-                            <SelectItem value="fade">דהייה</SelectItem>
-                            <SelectItem value="dissolve">המסה</SelectItem>
-                            <SelectItem value="slide">החלקה</SelectItem>
-                            <SelectItem value="zoom">זום</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    )}
-                  </React.Fragment>
-                ))}
-              </div>
-            )}
-          </div>
+                </div>
+                )}
+                </div>
         </div>
       </div>
 
@@ -1270,7 +1289,7 @@ export default function VideoEditor() {
           <div className="bg-gradient-to-br from-purple-900/90 to-black border border-purple-500/30 rounded-2xl p-6 max-w-2xl w-full" onClick={(e) => e.stopPropagation()}>
             <h3 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
               <Sparkles size={24} className="text-purple-400" />
-              מחולל סרטונים AI מתקדם
+              {selectedClip && selectedClip.type === 'video' ? 'המשך סרטון קיים' : 'מחולל סרטונים AI'}
             </h3>
             
             <div className="space-y-4">
@@ -1342,7 +1361,7 @@ export default function VideoEditor() {
                   ביטול
                 </Button>
                 <Button
-                  onClick={() => {
+                  onClick={async () => {
                     const prompt = document.getElementById('luma-prompt').value;
                     if (!prompt.trim()) {
                       toast.error('אנא הזן תיאור לסרטון');
@@ -1350,7 +1369,40 @@ export default function VideoEditor() {
                     }
                     const aspectButton = document.querySelector('[data-aspect-ratio][data-selected="true"]');
                     const aspectRatio = aspectButton?.getAttribute('data-aspect-ratio') || '16:9';
-                    handleAddLumaClip(prompt, aspectRatio);
+
+                    // Check if extending existing video
+                    if (selectedClip && selectedClip.type === 'video') {
+                      setLoading(true);
+                      try {
+                        toast.info('מאריך סרטון... יכול לקחת עד דקה');
+                        const { data } = await base44.functions.invoke('createLumaVideo', { 
+                          prompt: prompt,
+                          aspectRatio: aspectRatio,
+                          imageUrl: selectedClip.url // Use last frame as keyframe
+                        });
+
+                        if (data.video_url) {
+                          setClips(prev => [...prev, {
+                            id: Date.now(),
+                            url: data.video_url,
+                            duration: 5,
+                            name: 'המשך - ' + prompt.substring(0, 30),
+                            thumbnail: data.thumbnail_url || data.video_url,
+                            filters: { brightness: 100, contrast: 100, saturation: 100 },
+                            volume: 100,
+                            type: 'video'
+                          }]);
+                          toast.success('סרטון המשך נוסף! 🎬');
+                          setShowLumaGeneratorModal(false);
+                        }
+                      } catch (error) {
+                        toast.error('שגיאה: ' + error.message);
+                      } finally {
+                        setLoading(false);
+                      }
+                    } else {
+                      handleAddLumaClip(prompt, aspectRatio);
+                    }
                   }}
                   disabled={loading}
                   className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white"
@@ -1363,7 +1415,7 @@ export default function VideoEditor() {
                   ) : (
                     <>
                       <Sparkles size={18} className="mr-2" />
-                      צור סרטון
+                      {selectedClip && selectedClip.type === 'video' ? 'המשך סרטון' : 'צור סרטון'}
                     </>
                   )}
                 </Button>
