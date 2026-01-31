@@ -8,7 +8,7 @@ import { Slider } from '@/components/ui/slider';
 import { 
         Play, Pause, Plus, Trash2, Upload, Download, 
         Volume2, VolumeX, Scissors, Sparkles, Music, 
-        MoveHorizontal, Film, Loader2, Save, Eye, Type, Image as ImageIcon, FolderOpen, X, Clock
+        MoveHorizontal, Film, Loader2, Save, Eye, Type, Image as ImageIcon, FolderOpen, X, Clock, Check, Crown
       } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
