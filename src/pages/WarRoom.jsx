@@ -117,6 +117,43 @@ export default function WarRoom() {
     }
   };
 
+  const handleGenerateVideo = async (article) => {
+    // בדיקה: אם ללא מנוי והגיע ל-3 כתבות
+    if (!userHasSubscription && watchedCount >= 3) {
+      toast.error('צפית ב-3 כתבות בחינם. עבור למנוי כדי לצפות בעוד כתבות');
+      setTimeout(() => {
+        window.location.href = '/Subscription';
+      }, 1500);
+      return;
+    }
+
+    setGeneratingVideo(true);
+    setVideoUrl(null);
+    try {
+      const { data } = await base44.functions.invoke('generateReporterNewsVideo', {
+        title: article.title,
+        content: article.content || article.subtitle,
+        imageUrl: article.image_url,
+        voiceId: 'onwK4ZeVeZw25vXSwVNc'
+      });
+
+      if (data?.video_url) {
+        setVideoUrl(data.video_url);
+        
+        // הוסף לספירת צפיות
+        const newCount = watchedCount + 1;
+        setWatchedCount(newCount);
+        localStorage.setItem('warroom_watched_count', newCount.toString());
+      } else {
+        toast.error('שגיאה ביצירת הוידאו');
+      }
+    } catch (error) {
+      toast.error('שגיאה ביצירת הוידאו: ' + error.message);
+    } finally {
+      setGeneratingVideo(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
