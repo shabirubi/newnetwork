@@ -3,7 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { motion } from "framer-motion";
 import { 
   User, Mail, Shield, Calendar, Edit2, Save, X,
-  Settings, Bell, Eye, Heart, BookMarked, Clock, Upload, Camera
+  Settings, Bell, Eye, Heart, BookMarked, Clock, Upload, Camera, CreditCard, RefreshCw, Zap
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
