@@ -229,7 +229,8 @@ export default function VideoEditor() {
   const handleAddLumaClip = async (lumaPrompt, aspectRatio) => {
     setLoading(true);
     try {
-      const { data } = await base44.functions.invoke('createLumaVideo', { 
+      toast.info('יוצר סרטון AI... יכול לקחת עד דקה');
+      const { data } = await base44.functions.invoke('createFalVideo', { 
         prompt: lumaPrompt,
         aspect_ratio: aspectRatio || '16:9'
       });
@@ -238,17 +239,18 @@ export default function VideoEditor() {
         setClips(prev => [...prev, {
           id: Date.now(),
           url: data.video_url,
-          duration: 10,
+          duration: 2,
           name: lumaPrompt.substring(0, 30),
-          thumbnail: data.thumbnail_url,
+          thumbnail: data.thumbnail_url || data.video_url,
           filters: { brightness: 100, contrast: 100, saturation: 100 },
           volume: 100,
           type: 'video'
         }]);
-        toast.success('קליפ AI נוסף בהצלחה');
+        toast.success('קליפ AI נוסף בהצלחה! 🎬');
         setShowLumaGeneratorModal(false);
-      } else {
-        toast.info('הסרטון בתהליך יצירה...');
+      } else if (data.still_processing) {
+        toast.info('הסרטון בתהליך יצירה... נסה שוב בעוד רגע');
+        setShowLumaGeneratorModal(false);
       }
     } catch (error) {
       toast.error('שגיאה ביצירת קליפ: ' + error.message);
