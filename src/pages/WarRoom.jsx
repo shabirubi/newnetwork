@@ -419,13 +419,13 @@ export default function WarRoom() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                className="fixed inset-0 z-[1000] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
+                className="fixed inset-0 z-[1000] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto"
               >
                 <motion.div
                   initial={{ scale: 0.9, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
                   exit={{ scale: 0.9, opacity: 0 }}
-                  className="bg-gray-900 dark:bg-gray-800 rounded-2xl p-6 max-w-3xl w-full"
+                  className="bg-gray-900 dark:bg-gray-800 rounded-2xl p-6 max-w-3xl w-full my-8"
                 >
                   <div className="flex items-center justify-between mb-4">
                     <h2 className="text-xl font-bold text-white">וידאו מדובב</h2>
@@ -469,7 +469,57 @@ export default function WarRoom() {
                     </div>
                   )}
 
-                  <p className="text-gray-300 text-sm mb-4">{selectedArticleForVideo.title}</p>
+                  {/* Article Details */}
+                  <div className="bg-gray-800/50 rounded-xl p-4 mb-4">
+                    <h3 className="text-lg font-bold text-white mb-2">{selectedArticleForVideo.title}</h3>
+                    <p className="text-gray-400 text-sm mb-3">{selectedArticleForVideo.subtitle}</p>
+                    <p className="text-gray-300 text-sm leading-relaxed whitespace-pre-wrap">
+                      {selectedArticleForVideo.content}
+                    </p>
+                    <div className="flex items-center gap-2 text-xs text-gray-500 mt-3 pt-3 border-t border-gray-700">
+                      <span>{selectedArticleForVideo.source}</span>
+                      <span>•</span>
+                      <span>{new Date(selectedArticleForVideo.created_date).toLocaleString('he-IL')}</span>
+                    </div>
+                  </div>
+
+                  {/* Share Buttons */}
+                  <div className="flex gap-2 flex-wrap mb-4">
+                    <a
+                      href={`https://wa.me/?text=${encodeURIComponent(`${selectedArticleForVideo.title}\n\n${selectedArticleForVideo.subtitle}\n\nצפה בוידאו מדובב בחדר המלחמה`)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 px-4 py-2 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors text-sm"
+                    >
+                      <span>💬 וואצאפ</span>
+                    </a>
+                    <a
+                      href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(selectedArticleForVideo.title)}&url=`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors text-sm"
+                    >
+                      <span>𝕏 טוויטר</span>
+                    </a>
+                    <a
+                      href={`https://www.facebook.com/sharer/sharer.php?quote=${encodeURIComponent(selectedArticleForVideo.title)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 px-4 py-2 bg-blue-800 hover:bg-blue-900 text-white rounded-lg transition-colors text-sm"
+                    >
+                      <span>f פייסבוק</span>
+                    </a>
+                    <button
+                      onClick={() => {
+                        const text = `${selectedArticleForVideo.title}\n\n${selectedArticleForVideo.subtitle}\n\n${selectedArticleForVideo.content}`;
+                        navigator.clipboard.writeText(text);
+                        toast.success('הכתבה הועתקה');
+                      }}
+                      className="flex items-center gap-2 px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white rounded-lg transition-colors text-sm"
+                    >
+                      <span>📋 העתק</span>
+                    </button>
+                  </div>
 
                   <Button
                     onClick={() => {
