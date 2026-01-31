@@ -272,7 +272,7 @@ export default function WarRoom() {
                         <span>{new Date(article.created_date).toLocaleTimeString('he-IL')}</span>
                       </div>
 
-                      {/* Play Button */}
+                      {/* Action Buttons */}
                       <div className="flex items-center gap-2">
                         <button
                           onClick={() => handlePlayArticle(article)}
@@ -287,6 +287,19 @@ export default function WarRoom() {
                             <><Play size={16} />הפעל קול</>
                           )}
                         </button>
+
+                        <button
+                          onClick={() => {
+                            setSelectedArticleForVideo(article);
+                            setVideoModalOpen(true);
+                          }}
+                          disabled={!userHasSubscription && watchedCount >= 3}
+                          className="flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 disabled:bg-gray-400 text-white rounded-lg transition-colors text-sm font-semibold"
+                        >
+                          <Film size={16} />
+                          וידאו מדובב
+                        </button>
+
                         {!userHasSubscription && (
                           <span className="text-xs text-gray-500">{watchedCount}/3</span>
                         )}
