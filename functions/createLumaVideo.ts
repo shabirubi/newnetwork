@@ -66,9 +66,9 @@ Deno.serve(async (req) => {
       }, { status: 500 });
     }
 
-    // Poll for completion (max 2.5 minutes to avoid timeout)
+    // Poll for completion (max 3 minutes to avoid timeout)
     let attempts = 0;
-    const maxAttempts = 30; // 30 * 5s = 150s = 2.5 min
+    const maxAttempts = 35; // 35 * 5s = 175s = ~3 min
     const pollInterval = 5000;
 
     while (attempts < maxAttempts) {
