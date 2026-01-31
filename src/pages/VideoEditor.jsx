@@ -26,6 +26,7 @@ import AIImageGeneratorModal from '../components/videoeditor/AIImageGeneratorMod
 import AdCreatorModal from '../components/videoeditor/AdCreatorModal';
       import StockVideoLibraryModal from '../components/videoeditor/StockVideoLibraryModal';
       import TimelineEditor from '../components/videoeditor/TimelineEditor';
+import AIVideoFromImagesModal from '../components/videoeditor/AIVideoFromImagesModal';
 
 // Projects Modal Component
 function ProjectsModal({ onClose, onLoad }) {
@@ -123,6 +124,7 @@ export default function VideoEditor() {
   const [showAdCreatorModal, setShowAdCreatorModal] = useState(false);
   const [showStockVideoModal, setShowStockVideoModal] = useState(false);
   const [videoLoop, setVideoLoop] = useState(false);
+  const [showAIVideoFromImagesModal, setShowAIVideoFromImagesModal] = useState(false);
   const videoRef = useRef(null);
   const audioRef = useRef(null);
 
@@ -640,23 +642,22 @@ export default function VideoEditor() {
             </div>
             <p className="text-[10px] text-gray-500 text-center">MP4, WebM, MOV, AVI, MKV, PNG, JPG, GIF</p>
 
-            <div className="flex gap-2">
-              <Button
-                onClick={() => setShowLumaGeneratorModal(true)}
-                className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white"
-                disabled={loading}
-              >
-                <Sparkles size={18} className="mr-2" />
-                סרטון AI
-              </Button>
-              <Button
-                onClick={() => setShowAIImageModal(true)}
-                className="flex-1 bg-gradient-to-r from-pink-600 to-orange-600 hover:from-pink-700 hover:to-orange-700 text-white"
-              >
-                <ImageIcon size={18} className="mr-2" />
-                תמונה AI
-              </Button>
-            </div>
+            <Button
+              onClick={() => setShowAIVideoFromImagesModal(true)}
+              className="w-full bg-gradient-to-r from-yellow-600 via-purple-600 to-pink-600 hover:from-yellow-500 hover:via-purple-500 hover:to-pink-500 text-white font-bold shadow-lg"
+              disabled={loading}
+            >
+              <Sparkles size={18} className="mr-2" />
+              🎬 סרטון AI (חינם!)
+            </Button>
+
+            <Button
+              onClick={() => setShowAIImageModal(true)}
+              className="w-full bg-gradient-to-r from-pink-600 to-orange-600 hover:from-pink-700 hover:to-orange-700 text-white"
+            >
+              <ImageIcon size={18} className="mr-2" />
+              תמונה AI
+            </Button>
 
             <div className="flex gap-2">
               <input
@@ -1237,6 +1238,17 @@ export default function VideoEditor() {
           onApply={(videoData) => {
             setClips(prev => [...prev, videoData]);
             setShowStockVideoModal(false);
+          }}
+        />
+      )}
+
+      {/* AI Video From Images Modal */}
+      {showAIVideoFromImagesModal && (
+        <AIVideoFromImagesModal 
+          onClose={() => setShowAIVideoFromImagesModal(false)}
+          onApply={(clips) => {
+            setClips(prev => [...prev, ...clips]);
+            setShowAIVideoFromImagesModal(false);
           }}
         />
       )}
