@@ -185,9 +185,24 @@ export default function Layout({ children, currentPageName }) {
               </div>
             ) : user ? (
               <>
-                <div className="flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-green-500/20 to-green-600/20 border border-green-500/30 rounded-2xl">
-                  <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                  <span className="text-green-300 font-bold text-sm hidden sm:inline">{user.full_name || user.email}</span>
+                <div className="flex items-center gap-2 px-2 py-1 bg-gradient-to-r from-green-500/20 to-green-600/20 border border-green-500/30 rounded-2xl">
+                  <div className="flex items-center gap-2 flex-1">
+                    {user.profile_image ? (
+                      <img 
+                        src={user.profile_image} 
+                        alt={user.full_name}
+                        className="w-8 h-8 rounded-full object-cover border border-green-400"
+                      />
+                    ) : (
+                      <div className="w-8 h-8 rounded-full bg-[#E31E24] flex items-center justify-center text-white text-xs font-bold">
+                        {user.full_name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'U'}
+                      </div>
+                    )}
+                    <div className="flex items-center gap-1">
+                      <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                      <span className="text-green-300 font-bold text-sm hidden sm:inline">{user.full_name || user.email}</span>
+                    </div>
+                  </div>
                 </div>
                 <button
                   onClick={handleLogout}
