@@ -22,6 +22,10 @@ export default function WarRoom() {
     return saved ? parseInt(saved) : 0;
   });
   const [userHasSubscription, setUserHasSubscription] = useState(false);
+  const [videoModalOpen, setVideoModalOpen] = useState(false);
+  const [selectedArticleForVideo, setSelectedArticleForVideo] = useState(null);
+  const [generatingVideo, setGeneratingVideo] = useState(false);
+  const [videoUrl, setVideoUrl] = useState(null);
   const audioRef = useRef(null);
 
   // Fetch ONLY real security and politics news
