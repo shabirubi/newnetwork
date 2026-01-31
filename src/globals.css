@@ -3,6 +3,11 @@ css
 @tailwind components;
 @tailwind utilities;
 
+/* Hide scrollbars globally but keep scrolling */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 /* High Contrast Mode */
 html.high-contrast {
   background-color: #000000 !important;
