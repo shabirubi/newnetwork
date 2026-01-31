@@ -34,8 +34,9 @@ function ProjectsModal({ onClose, onLoad }) {
   const { data: projects, isLoading } = useQuery({
     queryKey: ['video-projects'],
     queryFn: async () => {
-      const user = await base44.auth.me();
-      return await base44.entities.VideoProject.filter({ creator_email: user.email }, '-created_date', 50);
+      const email = localStorage.getItem('user_email');
+      if (!email) return [];
+      return await base44.entities.VideoProject.filter({ creator_email: email }, '-created_date', 50);
     }
   });
 
@@ -414,9 +415,9 @@ export default function VideoEditor() {
 
     setLoading(true);
     try {
-      const user = await base44.auth.me();
-      if (!user) {
-        toast.error('יש להתחבר תחילה');
+      const email = localStorage.getItem('user_email');
+      if (!email) {
+        toast.error('אין מייל - עבור ל/Subscription תחילה');
         setLoading(false);
         return;
       }
@@ -440,11 +441,11 @@ export default function VideoEditor() {
         overlays,
         thumbnail: clips[0]?.thumbnail || clips[0]?.url,
         duration: totalDuration,
-        creator_email: user.email
+        creator_email: email
       };
 
       await base44.entities.VideoProject.create(projectData);
-      
+
       setProjectTitle(title);
       toast.success(`הפרויקט "${title}" נשמר בהצלחה!`);
     } catch (error) {
@@ -492,13 +493,13 @@ export default function VideoEditor() {
 
     setExporting(true);
     try {
-      const user = await base44.auth.me();
-      if (!user) {
-        toast.error('יש להתחבר תחילה');
+      const email = localStorage.getItem('user_email');
+      if (!email) {
+        toast.error('אין מייל - עבור ל/Subscription תחילה');
         setExporting(false);
         return;
       }
-      
+
       const mainClip = clips[0];
 
       const title = window.prompt('כותרת הסרטון:', 'סרטון ערוך - ' + new Date().toLocaleDateString('he-IL'));
@@ -518,7 +519,7 @@ export default function VideoEditor() {
         category: category,
         feed: feed,
         status: 'ready',
-        uploader_email: user.email,
+        uploader_email: email,
         duration: totalDuration
       });
 
