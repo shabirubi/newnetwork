@@ -14,13 +14,9 @@ import { toast } from "sonner";
 
 
 export default function WarRoom() {
-  const [alerts, setAlerts] = useState([]);
   const [soundEnabled, setSoundEnabled] = useState(true);
-  const [activeCount, setActiveCount] = useState(0);
-  const [lastUpdate, setLastUpdate] = useState(new Date());
   const [playingArticleId, setPlayingArticleId] = useState(null);
   const [loadingArticleId, setLoadingArticleId] = useState(null);
-  const [loadingAlerts, setLoadingAlerts] = useState(true);
   const audioRef = useRef(null);
 
   // Fetch ONLY real security and politics news
