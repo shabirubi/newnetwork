@@ -136,40 +136,36 @@ export default function VideoEditor() {
   // בדיקת גישה למנוי
   useEffect(() => {
     const checkSubscription = async () => {
+      setHasAccess(false); // ברירת מחדל - אין גישה
+      
       try {
-        const isAuth = await base44.auth.isAuthenticated();
-        if (!isAuth) {
-          console.log('User not authenticated');
-          setCheckingAccess(false);
-          setHasAccess(false);
-          return;
-        }
-
         const user = await base44.auth.me();
         if (!user?.email) {
-          console.log('No user email');
+          console.log('No user or email found');
           setCheckingAccess(false);
-          setHasAccess(false);
           return;
         }
         
         setUserEmail(user.email);
+        console.log('Checking subscription for:', user.email);
         
         const subs = await base44.entities.Subscription.filter({ user_email: user.email }, '-created_date', 10);
-        console.log('Found subscriptions:', subs);
+        console.log('Subscriptions found:', subs?.length || 0, subs);
+        
+        if (!subs || subs.length === 0) {
+          console.log('No subscriptions at all');
+          setCheckingAccess(false);
+          return;
+        }
         
         const activeSub = subs.find(s => s.status === 'active');
+        console.log('Active subscription?', !!activeSub, activeSub);
         
         if (activeSub) {
-          console.log('Active subscription found');
           setHasAccess(true);
-        } else {
-          console.log('No active subscription');
-          setHasAccess(false);
         }
       } catch (err) {
         console.error('Subscription check error:', err);
-        setHasAccess(false);
       } finally {
         setCheckingAccess(false);
       }
