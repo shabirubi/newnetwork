@@ -24,13 +24,26 @@ export default function SubscriptionPage() {
     queryFn: async () => {
       if (!userEmail) return null;
       const subs = await base44.entities.Subscription.filter({ user_email: userEmail }, '-created_date', 1);
-      return subs.find(s => s.status === 'active');
+      const activeSub = subs.find(s => s.status === 'active');
+      if (activeSub) {
+        // שמירת המייל ב-localStorage
+        localStorage.setItem('user_email', userEmail);
+      }
+      return activeSub;
     },
     enabled: !!userEmail
   });
 
   useEffect(() => {
     const getEmail = async () => {
+      // קודם כל נבדוק אם יש מייל שמור
+      const storedEmail = localStorage.getItem('user_email');
+      if (storedEmail) {
+        setUserEmail(storedEmail);
+        return;
+      }
+      
+      // אם לא, ננסה לקבל מהאימות
       try {
         const user = await base44.auth.me();
         if (user?.email) setUserEmail(user.email);
@@ -72,7 +85,7 @@ export default function SubscriptionPage() {
 
         if (data.coupon_used) {
           // שמירת המייל ב-localStorage
-          localStorage.setItem('user_email', email);
+          localStorage.setItem('user_email', userEmail.trim());
           toast.success('המנוי הופעל בהצלחה! 🎉');
           setTimeout(() => {
             window.location.href = '/VideoEditor';
