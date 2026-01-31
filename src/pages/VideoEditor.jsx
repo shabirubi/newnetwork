@@ -608,8 +608,8 @@ export default function VideoEditor() {
       </div>
 
       <div className="flex-1 flex overflow-hidden">
-        {/* Sidebar - Tools */}
-        <div className="w-80 bg-black/50 border-l border-white/10 p-4 overflow-y-auto">
+        {/* Sidebar - Tools - Always Visible */}
+        <div className="w-80 bg-black/50 border-l border-white/10 p-4 overflow-y-auto relative z-10">
           <h3 className="font-bold mb-4 flex items-center gap-2">
             <Plus size={18} className="text-[#E31E24]" />
             הוסף תוכן
@@ -894,19 +894,18 @@ export default function VideoEditor() {
         {/* Main Canvas */}
         <div className="flex-1 flex flex-col">
           {/* Preview Area */}
-          <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-gray-900 to-black p-8 relative">
+          <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-gray-900 to-black p-4 relative">
             {selectedClip ? (
-              <>
-                {/* Close Preview Button - Fixed Position */}
+              <div className="relative w-full max-w-3xl">
+                {/* Close Preview Button */}
                 <button
                   onClick={() => setSelectedClipIndex(null)}
-                  className="fixed top-24 left-8 z-50 bg-red-600 hover:bg-red-700 p-4 rounded-full transition-all shadow-2xl"
+                  className="absolute -top-2 -left-2 z-20 bg-red-600 hover:bg-red-700 p-3 rounded-full transition-all shadow-2xl"
                 >
-                  <X size={28} className="text-white" />
+                  <X size={24} className="text-white" />
                 </button>
 
-                <div className="relative max-w-4xl w-full">
-                  <div className="relative">
+                <div className="relative">
                   {selectedClip.type === 'image' ? (
                     <img
                       src={selectedClip.url}
@@ -981,7 +980,6 @@ export default function VideoEditor() {
                   {pipLayers.length > 0 && <span className="text-cyan-400"> • {pipLayers.length} PIP</span>}
                   </div>
                   </div>
-                  </>
                   ) : clips.length > 0 ? (
               <div className="text-center text-gray-400">
                 <Film size={64} className="mx-auto mb-4 opacity-30" />
