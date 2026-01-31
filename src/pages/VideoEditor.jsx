@@ -646,27 +646,27 @@ export default function VideoEditor() {
                                       </div>
                                     </div>
                                   </motion.div>
+                                )}
+                              </Draggable>
 
-                                  {index < clips.length - 1 && (
-                                    <div className="flex flex-col items-center justify-center px-1">
-                                      <MoveHorizontal size={14} className="text-[#E31E24] mb-1" />
-                                      <Select value={transitions[index] || 'cut'} onValueChange={(val) => updateTransition(index, val)}>
-                                        <SelectTrigger className="w-20 h-6 text-[10px] bg-black/60 border-white/20">
-                                          <SelectValue />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                          <SelectItem value="cut">חיתוך</SelectItem>
-                                          <SelectItem value="fade">דהייה</SelectItem>
-                                          <SelectItem value="dissolve">המסה</SelectItem>
-                                          <SelectItem value="slide">החלקה</SelectItem>
-                                          <SelectItem value="zoom">זום</SelectItem>
-                                        </SelectContent>
-                                      </Select>
-                                    </div>
-                                  )}
+                              {index < clips.length - 1 && (
+                                <div className="flex flex-col items-center justify-center px-1">
+                                  <MoveHorizontal size={14} className="text-[#E31E24] mb-1" />
+                                  <Select value={transitions[index] || 'cut'} onValueChange={(val) => updateTransition(index, val)}>
+                                    <SelectTrigger className="w-20 h-6 text-[10px] bg-black/60 border-white/20">
+                                      <SelectValue />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      <SelectItem value="cut">חיתוך</SelectItem>
+                                      <SelectItem value="fade">דהייה</SelectItem>
+                                      <SelectItem value="dissolve">המסה</SelectItem>
+                                      <SelectItem value="slide">החלקה</SelectItem>
+                                      <SelectItem value="zoom">זום</SelectItem>
+                                    </SelectContent>
+                                  </Select>
                                 </div>
                               )}
-                            </Draggable>
+                            </React.Fragment>
                           );
                         })}
                         {provided.placeholder}
