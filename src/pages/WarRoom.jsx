@@ -50,13 +50,20 @@ export default function WarRoom() {
   const [loadingAlerts, setLoadingAlerts] = useState(true);
   const audioRef = useRef(null);
 
-  // Fetch news articles
-  const { data: articles = [], refetch: refetchNews } = useQuery({
+  // Fetch news articles - only real data
+  const { data: articles = [], refetch: refetchNews, isLoading: newsLoading } = useQuery({
     queryKey: ['news-articles'],
     queryFn: async () => {
-      const articles = await base44.entities.NewsArticle.filter({}, '-created_date', 10);
-      return articles.filter(a => a.category === 'security' || a.category === 'politics');
-    }
+      try {
+        const articles = await base44.entities.NewsArticle.filter({}, '-created_date', 20);
+        return articles || [];
+      } catch (error) {
+        console.error('Error fetching articles:', error);
+        return [];
+      }
+    },
+    staleTime: 30000,
+    refetchInterval: 30000
   });
 
   // Fetch real alerts
