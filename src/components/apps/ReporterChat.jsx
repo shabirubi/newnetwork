@@ -333,6 +333,22 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
     const messageText = text || inputValue;
     if (!messageText.trim() || !selectedReporter || isLoading) return;
 
+    // בדיקה: אם המשתמש רק שאל ללא מנוי פעיל
+    if (!userHasActiveSubscription && questionCount >= 3) {
+      toast.error('הגעת ל-3 שאלות בחינם. יש לך אפשרות לשאול עוד קבוצות של 3 שאלות במנוי.');
+      setOpenState(false);
+      // הפנה למנוי
+      setTimeout(() => {
+        window.location.href = '/Subscription';
+      }, 1500);
+      return;
+    }
+
+    // עדכון ספירת השאלות
+    const newQuestionCount = questionCount + 1;
+    setQuestionCount(newQuestionCount);
+    localStorage.setItem(`reporterChat_${selectedReporter?.id}_questionCount`, newQuestionCount.toString());
+
     // עדכון פרופיל משתמש
     updateUserProfile(messageText);
 
