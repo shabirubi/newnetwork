@@ -549,7 +549,7 @@ export default function VideoEditor() {
         {/* Left Side - Timeline + Preview */}
         <div className="flex-1 flex flex-col bg-gradient-to-br from-gray-900 to-black overflow-hidden">
           {/* Professional Timeline - Top */}
-          <div className="h-48 bg-gradient-to-b from-black via-gray-900 to-black border-b border-white/10 p-4 overflow-x-auto overflow-y-hidden shrink-0">
+          <div className="h-48 bg-gradient-to-b from-black via-gray-900 to-black border-b border-white/10 p-4 overflow-hidden shrink-0">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <Film size={18} className="text-[#E31E24]" />
