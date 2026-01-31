@@ -71,6 +71,7 @@ import ReporterQA from './pages/ReporterQA';
 import ReporterStudio from './pages/ReporterStudio';
 import Reporters from './pages/Reporters';
 import Schedule from './pages/Schedule';
+import Subscription from './pages/Subscription';
 import Terms from './pages/Terms';
 import TestApps from './pages/TestApps';
 import TestDID from './pages/TestDID';
@@ -80,7 +81,6 @@ import VOD from './pages/VOD';
 import VODContent from './pages/VODContent';
 import VideoEditor from './pages/VideoEditor';
 import WarRoom from './pages/WarRoom';
-import Subscription from './pages/Subscription';
 import __Layout from './Layout.jsx';
 
 
@@ -109,6 +109,7 @@ export const PAGES = {
     "ReporterStudio": ReporterStudio,
     "Reporters": Reporters,
     "Schedule": Schedule,
+    "Subscription": Subscription,
     "Terms": Terms,
     "TestApps": TestApps,
     "TestDID": TestDID,
@@ -118,7 +119,6 @@ export const PAGES = {
     "VODContent": VODContent,
     "VideoEditor": VideoEditor,
     "WarRoom": WarRoom,
-    "Subscription": Subscription,
 }
 
 export const pagesConfig = {

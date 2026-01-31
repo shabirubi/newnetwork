@@ -130,6 +130,8 @@ export default function VideoEditor() {
   const [videoLoop, setVideoLoop] = useState(false);
   const [showAIVideoFromImagesModal, setShowAIVideoFromImagesModal] = useState(false);
   const [showLumaGeneratorModal, setShowLumaGeneratorModal] = useState(false);
+  const [contextMenu, setContextMenu] = useState(null);
+  const [contextClipIndex, setContextClipIndex] = useState(null);
   const videoRef = useRef(null);
   const audioRef = useRef(null);
 
@@ -284,7 +286,20 @@ export default function VideoEditor() {
     setClips(prev => prev.filter((_, i) => i !== index));
     if (selectedClipIndex === index) setSelectedClipIndex(null);
     toast.success('קליפ הוסר');
+  };
+
+  // Duplicate clip
+  const duplicateClip = (index) => {
+    const clipToDuplicate = clips[index];
+    const newClip = {
+      ...clipToDuplicate,
+      id: Date.now()
     };
+    setClips(prev => [...prev.slice(0, index + 1), newClip, ...prev.slice(index + 1)]);
+    toast.success('קליפ שוכפל! 📋');
+    setContextMenu(null);
+    setContextClipIndex(null);
+  };
 
     // Handle drag end
     const handleDragEnd = (result) => {
@@ -640,6 +655,11 @@ export default function VideoEditor() {
                                       ...provided.draggableProps.style
                                     }}
                                     onClick={() => setSelectedClipIndex(index)}
+                                    onContextMenu={(e) => {
+                                      e.preventDefault();
+                                      setContextMenu({ x: e.clientX, y: e.clientY });
+                                      setContextClipIndex(index);
+                                    }}
                                   >
                                     {/* Thumbnail */}
                                     <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${clip.thumbnail || clip.url})` }}>
@@ -1098,6 +1118,52 @@ export default function VideoEditor() {
       {showStockVideoModal && <StockVideoLibraryModal onClose={() => setShowStockVideoModal(false)} onApply={(videoData) => { setClips(prev => [...prev, videoData]); setShowStockVideoModal(false); }} />}
 
       {showAIVideoFromImagesModal && <AIVideoFromImagesModal onClose={() => setShowAIVideoFromImagesModal(false)} onApply={(clips) => { setClips(prev => [...prev, ...clips]); setShowAIVideoFromImagesModal(false); }} />}
+
+      {/* Context Menu */}
+      {contextMenu && (
+        <>
+          <div 
+            className="fixed inset-0 z-40"
+            onClick={() => {
+              setContextMenu(null);
+              setContextClipIndex(null);
+            }}
+          />
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.95 }}
+            className="fixed z-50 bg-gray-900 border border-white/20 rounded-xl shadow-lg overflow-hidden"
+            style={{
+              left: `${contextMenu.x}px`,
+              top: `${contextMenu.y}px`
+            }}
+          >
+            <button
+              onClick={() => {
+                if (contextClipIndex !== null) {
+                  duplicateClip(contextClipIndex);
+                }
+              }}
+              className="w-full px-4 py-2 text-sm text-white hover:bg-white/10 transition-colors flex items-center gap-2 whitespace-nowrap"
+            >
+              <Film size={16} />
+              שכפל קליפ
+            </button>
+            <button
+              onClick={() => {
+                if (contextClipIndex !== null) {
+                  removeClip(contextClipIndex);
+                }
+              }}
+              className="w-full px-4 py-2 text-sm text-red-400 hover:bg-red-500/20 transition-colors flex items-center gap-2 whitespace-nowrap"
+            >
+              <Trash2 size={16} />
+              מחק קליפ
+            </button>
+          </motion.div>
+        </>
+      )}
 
       {showLumaGeneratorModal && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50" onClick={() => setShowLumaGeneratorModal(false)}>
