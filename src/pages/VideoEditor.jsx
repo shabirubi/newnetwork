@@ -1085,6 +1085,17 @@ export default function VideoEditor() {
 
       {showAIVideoFromImagesModal && <AIVideoFromImagesModal onClose={() => setShowAIVideoFromImagesModal(false)} onApply={(clips) => { setClips(prev => [...prev, ...clips]); setShowAIVideoFromImagesModal(false); }} />}
 
+      {showExportModal && (
+        <ExportVideoModal 
+          onClose={() => setShowExportModal(false)}
+          clips={clips}
+          totalDuration={totalDuration}
+          userEmail={userEmail}
+          loading={exporting}
+          setLoading={setExporting}
+        />
+      )}
+
       {/* Context Menu */}
       {contextMenu && (
         <>
