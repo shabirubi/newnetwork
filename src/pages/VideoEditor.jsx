@@ -526,13 +526,22 @@ export default function VideoEditor() {
                 </div>
 
                 {/* Clips Track */}
-                <div className="flex gap-1 items-center h-20">
-                  {clips.map((clip, index) => {
-                    const widthPerSecond = 60;
-                    const clipWidth = (clip.duration || 1) * widthPerSecond;
+                <DragDropContext onDragEnd={handleDragEnd}>
+                  <Droppable droppableId="timeline" direction="horizontal">
+                    {(provided) => (
+                      <div 
+                        className="flex gap-1 items-center h-20"
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}
+                      >
+                        {clips.map((clip, index) => {
+                          const widthPerSecond = 60;
+                          const clipWidth = (clip.duration || 1) * widthPerSecond;
 
-                    return (
-                      <React.Fragment key={clip.id}>
+                          return (
+                            <Draggable key={clip.id} draggableId={clip.id.toString()} index={index}>
+                              {(provided, snapshot) => (
+                                <React.Fragment>
                         <motion.div
                           initial={{ scale: 0.8, opacity: 0 }}
                           animate={{ scale: 1, opacity: 1 }}
