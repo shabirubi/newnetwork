@@ -145,15 +145,17 @@ export default function WarRoom() {
     setGeneratingVideo(true);
     setVideoUrl(null);
     try {
-      const { data } = await base44.functions.invoke('generateReporterNewsVideo', {
+      // יצירת וידאו עם דיבוב מהכתבה
+      const { data } = await base44.functions.invoke('generateTalkingVideo', {
         title: article.title,
         content: article.content || article.subtitle,
         imageUrl: article.image_url,
         voiceId: 'onwK4ZeVeZw25vXSwVNc'
       });
 
-      if (data?.video_url) {
-        setVideoUrl(data.video_url);
+      if (data?.url || data?.video_url) {
+        setVideoUrl(data.url || data.video_url);
+        toast.success('וידאו נוצר בהצלחה!');
         
         // הוסף לספירת צפיות
         const newCount = watchedCount + 1;
@@ -161,8 +163,10 @@ export default function WarRoom() {
         localStorage.setItem('warroom_watched_count', newCount.toString());
       } else {
         toast.error('שגיאה ביצירת הוידאו');
+        console.error('Video response:', data);
       }
     } catch (error) {
+      console.error('Video generation error:', error);
       toast.error('שגיאה ביצירת הוידאו: ' + error.message);
     } finally {
       setGeneratingVideo(false);
