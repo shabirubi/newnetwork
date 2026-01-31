@@ -17,6 +17,11 @@ export default function WarRoom() {
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [playingArticleId, setPlayingArticleId] = useState(null);
   const [loadingArticleId, setLoadingArticleId] = useState(null);
+  const [watchedCount, setWatchedCount] = useState(() => {
+    const saved = localStorage.getItem('warroom_watched_count');
+    return saved ? parseInt(saved) : 0;
+  });
+  const [userHasSubscription, setUserHasSubscription] = useState(false);
   const audioRef = useRef(null);
 
   // Fetch ONLY real security and politics news
