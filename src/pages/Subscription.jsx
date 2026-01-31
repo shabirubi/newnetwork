@@ -72,7 +72,10 @@ export default function SubscriptionPage() {
 
         if (data.coupon_used) {
           toast.success('המנוי הופעל בהצלחה! 🎉');
-          setTimeout(() => window.location.href = '/VideoEditor', 1500);
+          setTimeout(() => {
+            window.location.href = '/VideoEditor';
+            window.location.reload();
+          }, 1500);
           return;
         }
       } catch (error) {
