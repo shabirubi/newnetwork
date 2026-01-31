@@ -92,25 +92,14 @@ export default function WarRoom() {
             </div>
           </div>
           
-          <div className="flex items-center gap-3">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setSoundEnabled(!soundEnabled)}
-              className="border-white/30 text-white hover:bg-white/10"
-            >
-              {soundEnabled ? <Volume2 size={18} /> : <VolumeX size={18} />}
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={refreshAlerts}
-              className="border-white/30 text-white hover:bg-white/10"
-            >
-              <RefreshCw size={18} className="ml-2" />
-              רענון
-            </Button>
-          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => setSoundEnabled(!soundEnabled)}
+            className="border-white/30 text-white hover:bg-white/10"
+          >
+            {soundEnabled ? <Volume2 size={18} /> : <VolumeX size={18} />}
+          </Button>
         </div>
       </motion.div>
 
