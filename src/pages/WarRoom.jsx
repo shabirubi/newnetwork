@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  AlertTriangle, Shield, Radio, Bell, 
-  Volume2, VolumeX, RefreshCw, Zap, Play, Pause, Loader2
-} from "lucide-react";
+        AlertTriangle, Shield, Radio, Bell, 
+        Volume2, VolumeX, RefreshCw, Zap, Play, Pause, Loader2, Film, X
+      } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
