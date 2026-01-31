@@ -282,7 +282,22 @@ export default function UserProfile() {
 
                   {/* Logout */}
                   <Button 
-                    onClick={() => base44.auth.logout()}
+                    onClick={async () => {
+                      try {
+                        // שלח הודעת התנתקות
+                        await base44.integrations.Core.SendEmail({
+                          to: 'seyorlayla@gmail.com',
+                          subject: `👋 התנתקות - ${user.full_name || user.email}`,
+                          body: `משתמש התנתק בהצלחה!\n\n📧 אימייל: ${user.email}\n🕐 זמן: ${new Date().toLocaleString('he-IL')}`
+                        });
+                      } catch (error) {
+                        console.error('Failed to send logout email:', error);
+                      }
+                      // נקה את כל הנתונים המקומיים
+                      localStorage.clear();
+                      sessionStorage.clear();
+                      base44.auth.logout();
+                    }}
                     variant="destructive" 
                     className="w-full bg-red-600 hover:bg-red-700"
                   >
