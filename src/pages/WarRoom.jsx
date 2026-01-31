@@ -44,6 +44,27 @@ export default function WarRoom() {
     refetchInterval: 30000
   });
 
+  // בדיקת מנוי
+  useEffect(() => {
+    const checkSubscription = async () => {
+      try {
+        const user = await base44.auth.me().catch(() => null);
+        if (user) {
+          const subs = await base44.entities.Subscription.filter(
+            { user_email: user.email },
+            '-created_date',
+            5
+          ).catch(() => []);
+          const activeSub = subs?.find(s => s.status === 'active' && (!s.end_date || new Date(s.end_date) > new Date()));
+          setUserHasSubscription(!!activeSub);
+        }
+      } catch (err) {
+        console.error('Subscription check:', err);
+      }
+    };
+    checkSubscription();
+  }, []);
+
   useEffect(() => {
     refetchNews();
   }, [refetchNews]);
