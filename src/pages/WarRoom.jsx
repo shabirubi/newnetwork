@@ -244,7 +244,18 @@ export default function WarRoom() {
           </div>
         </CardHeader>
         <CardContent className="p-0">
-          <AnimatePresence>
+          {loadingAlerts ? (
+            <div className="p-6 text-center text-gray-500">
+              <Loader2 size={32} className="mx-auto mb-2 animate-spin" />
+              <p>טוען התראות בזמן אמת...</p>
+            </div>
+          ) : alerts.length === 0 ? (
+            <div className="p-6 text-center text-gray-500">
+              <Shield size={32} className="mx-auto mb-2 opacity-30" />
+              <p>אין התראות פעילות כעת</p>
+            </div>
+          ) : (
+            <AnimatePresence>
             {alerts.map((alert, index) => {
               const alertType = alertTypes[alert.type] || alertTypes.rocket;
               const AlertIcon = alertType.icon;
