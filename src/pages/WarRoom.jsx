@@ -271,6 +271,98 @@ export default function WarRoom() {
         </CardContent>
       </Card>
 
+      {/* News Updates from Sources */}
+      <Card className="border-blue-300 dark:border-blue-800 overflow-hidden">
+        <CardHeader className="bg-gradient-to-r from-blue-600 to-blue-700 dark:from-blue-800 dark:to-blue-900 text-white">
+          <div className="flex items-center justify-between">
+            <CardTitle className="flex items-center gap-2">
+              <Radio className="w-5 h-5 animate-pulse" />
+              עדכוני חדשות עם קול
+            </CardTitle>
+            <Button
+              size="sm"
+              onClick={refetchNews}
+              variant="outline"
+              className="border-white/30 text-white hover:bg-white/10"
+            >
+              <RefreshCw size={16} className="ml-1" />
+              רענן
+            </Button>
+          </div>
+        </CardHeader>
+        <CardContent className="p-0">
+          <AnimatePresence>
+            {articles.length === 0 ? (
+              <div className="p-6 text-center text-gray-500">
+                <Loader2 size={32} className="mx-auto mb-2 animate-spin" />
+                <p>טוען עדכוני חדשות...</p>
+              </div>
+            ) : (
+              articles.map((article, index) => (
+                <motion.div
+                  key={article.id}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  transition={{ delay: index * 0.1 }}
+                  className="border-b dark:border-gray-700 last:border-0 p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
+                >
+                  <div className="flex gap-4">
+                    {/* Thumbnail */}
+                    <div className="w-24 h-24 rounded-lg overflow-hidden flex-shrink-0 bg-gray-200 dark:bg-gray-700">
+                      {article.image_url && (
+                        <img 
+                          src={article.image_url} 
+                          alt={article.title}
+                          className="w-full h-full object-cover"
+                        />
+                      )}
+                    </div>
+
+                    {/* Content */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-start gap-2 mb-2">
+                        <h3 className="font-bold text-gray-900 dark:text-white leading-tight flex-1">
+                          {article.title}
+                        </h3>
+                        {article.is_breaking && (
+                          <Badge className="bg-red-600 text-white animate-pulse flex-shrink-0">חדשות חם</Badge>
+                        )}
+                      </div>
+
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-2 line-clamp-2">
+                        {article.subtitle || article.content}
+                      </p>
+
+                      <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mb-3">
+                        <span>{article.source}</span>
+                        <span>•</span>
+                        <span>{new Date(article.created_date).toLocaleTimeString('he-IL')}</span>
+                      </div>
+
+                      {/* Play Button */}
+                      <button
+                        onClick={() => handlePlayArticle(article)}
+                        disabled={loadingArticleId === article.id}
+                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white rounded-lg transition-colors text-sm font-semibold"
+                      >
+                        {loadingArticleId === article.id ? (
+                          <><Loader2 size={16} className="animate-spin" />טוען...</>
+                        ) : playingArticleId === article.id ? (
+                          <><Pause size={16} />הפסק קול</>
+                        ) : (
+                          <><Play size={16} />הפעל קול</>
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
+              ))
+            )}
+          </AnimatePresence>
+        </CardContent>
+      </Card>
+
       {/* Safety Instructions */}
       <div className="grid md:grid-cols-2 gap-6">
         <Card className="dark:bg-gray-800 dark:border-gray-700">
