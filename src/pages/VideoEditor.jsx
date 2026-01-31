@@ -900,7 +900,7 @@ export default function VideoEditor() {
                           voice_script: voiceScript
                         });
 
-                        if (data.video_url) {
+                        if (data?.video_url) {
                           const newClip = {
                             id: Date.now(),
                             url: data.video_url,
@@ -913,7 +913,7 @@ export default function VideoEditor() {
                           };
                           setClips(prev => {
                             const updated = [...prev, newClip];
-                            setSelectedClipIndex(updated.length - 1);
+                            setTimeout(() => setSelectedClipIndex(updated.length - 1), 100);
                             return updated;
                           });
                           
@@ -923,12 +923,16 @@ export default function VideoEditor() {
                           } else {
                             toast.success('סרטון המשך נוסף! 🎬');
                           }
-                          setShowLumaGeneratorModal(false);
+                        } else if (data?.still_processing) {
+                          toast.info('הסרטון בתהליך... נסה שוב בעוד רגע');
+                        } else {
+                          toast.error('לא התקבל סרטון מהשרת');
                         }
                       } catch (error) {
                         toast.error('שגיאה: ' + error.message);
                       } finally {
                         setLoading(false);
+                        setShowLumaGeneratorModal(false);
                       }
                     } else {
                       setLoading(true);
@@ -941,7 +945,7 @@ export default function VideoEditor() {
                           voice_script: voiceScript
                         });
 
-                        if (data.video_url) {
+                        if (data?.video_url) {
                           const newClip = {
                             id: Date.now(),
                             url: data.video_url,
@@ -954,7 +958,7 @@ export default function VideoEditor() {
                           };
                           setClips(prev => {
                             const updated = [...prev, newClip];
-                            setSelectedClipIndex(updated.length - 1);
+                            setTimeout(() => setSelectedClipIndex(updated.length - 1), 100);
                             return updated;
                           });
                           
@@ -964,15 +968,16 @@ export default function VideoEditor() {
                           } else {
                             toast.success('קליפ AI נוסף! 🎬');
                           }
-                          setShowLumaGeneratorModal(false);
-                        } else if (data.still_processing) {
+                        } else if (data?.still_processing) {
                           toast.info('הסרטון בתהליך... נסה שוב בעוד רגע');
-                          setShowLumaGeneratorModal(false);
+                        } else {
+                          toast.error('לא התקבל סרטון מהשרת');
                         }
                       } catch (error) {
                         toast.error('שגיאה: ' + error.message);
                       } finally {
                         setLoading(false);
+                        setShowLumaGeneratorModal(false);
                       }
                     }
                   }}
