@@ -232,19 +232,24 @@ export default function WarRoom() {
                       </div>
 
                       {/* Play Button */}
-                      <button
-                        onClick={() => handlePlayArticle(article)}
-                        disabled={loadingArticleId === article.id}
-                        className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white rounded-lg transition-colors text-sm font-semibold"
-                      >
-                        {loadingArticleId === article.id ? (
-                          <><Loader2 size={16} className="animate-spin" />טוען...</>
-                        ) : playingArticleId === article.id ? (
-                          <><Pause size={16} />הפסק קול</>
-                        ) : (
-                          <><Play size={16} />הפעל קול</>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => handlePlayArticle(article)}
+                          disabled={loadingArticleId === article.id || (!userHasSubscription && watchedCount >= 3)}
+                          className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 disabled:bg-gray-400 text-white rounded-lg transition-colors text-sm font-semibold"
+                        >
+                          {loadingArticleId === article.id ? (
+                            <><Loader2 size={16} className="animate-spin" />טוען...</>
+                          ) : playingArticleId === article.id ? (
+                            <><Pause size={16} />הפסק קול</>
+                          ) : (
+                            <><Play size={16} />הפעל קול</>
+                          )}
+                        </button>
+                        {!userHasSubscription && (
+                          <span className="text-xs text-gray-500">{watchedCount}/3</span>
                         )}
-                      </button>
+                      </div>
                     </div>
                   </div>
                 </motion.div>
