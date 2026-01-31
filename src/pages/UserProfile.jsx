@@ -59,6 +59,7 @@ export default function UserProfile() {
       if (userData.profile_image) {
         setProfileImage(userData.profile_image);
       }
+      await loadSubscription(userData.email);
     } catch (error) {
       console.error("Error loading user:", error);
     }
