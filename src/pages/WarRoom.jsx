@@ -305,7 +305,8 @@ export default function WarRoom() {
                 </motion.div>
               );
             })}
-          </AnimatePresence>
+            </AnimatePresence>
+          )}
         </CardContent>
       </Card>
 
