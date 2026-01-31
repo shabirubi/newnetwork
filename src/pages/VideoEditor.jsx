@@ -8,7 +8,7 @@ import { Slider } from '@/components/ui/slider';
 import { 
         Play, Pause, Plus, Trash2, Upload, Download, 
         Volume2, VolumeX, Scissors, Sparkles, Music, 
-        MoveHorizontal, Film, Loader2, Save, Eye, Type, Image as ImageIcon, FolderOpen, X, Clock, Check, Crown, ArrowRight
+        MoveHorizontal, Film, Loader2, Save, Eye, Type, Image as ImageIcon, FolderOpen, X, Clock, Check, Crown
       } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -577,13 +577,12 @@ export default function VideoEditor() {
       <div className="bg-gradient-to-r from-[#E31E24]/20 to-black border-b border-[#E31E24]/30 p-4 shrink-0">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <Button 
-              onClick={() => window.location.href = '/'} 
-              variant="outline" 
-              className="border-white/20 text-white hover:bg-white/10"
+            <a 
+              href="/"
+              className="px-4 py-2 border border-white/20 text-white hover:bg-white/10 rounded-md transition-colors text-sm"
             >
               ← חזרה לאתר
-            </Button>
+            </a>
             <div>
               <h1 className="text-2xl font-bold">עורך סרטונים מתקדם</h1>
               <p className="text-sm text-gray-400">ערוך, חבר והוסף אפקטים לסרטונים שלך</p>
