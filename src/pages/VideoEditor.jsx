@@ -141,45 +141,52 @@ export default function VideoEditor() {
   // בדיקת גישה למנוי
   useEffect(() => {
     const checkSubscription = async () => {
-      setHasAccess(false); // ברירת מחדל - אין גישה
+      setHasAccess(false);
       
       try {
-        // קודם כל ננסה לקבל מייל מ-localStorage
         const storedEmail = localStorage.getItem('user_email');
         
         if (!storedEmail) {
-          console.log('No email in localStorage - redirecting to subscription');
           setCheckingAccess(false);
           return;
         }
         
         setUserEmail(storedEmail);
-        console.log('Checking subscription for:', storedEmail);
         
-        const subs = await base44.entities.Subscription.filter({ user_email: storedEmail }, '-created_date', 10);
-        console.log('Subscriptions found:', subs?.length || 0);
+        // בדוק מנוי פעיל
+        const subs = await base44.entities.Subscription.filter(
+          { user_email: storedEmail, status: 'active' }, 
+          '-created_date', 
+          1
+        );
         
         if (!subs || subs.length === 0) {
-          console.log('No subscriptions - removing email and redirecting');
           localStorage.removeItem('user_email');
           setCheckingAccess(false);
           return;
         }
         
-        const activeSub = subs.find(s => s.status === 'active');
-        console.log('Active subscription?', !!activeSub);
+        const activeSub = subs[0];
         
-        if (activeSub) {
-          // בדיקה שהמנוי לא פג תוקף
-          if (activeSub.end_date && new Date(activeSub.end_date) < new Date()) {
-            console.log('Subscription expired');
-            localStorage.removeItem('user_email');
-            setCheckingAccess(false);
-            return;
-          }
-          setHasAccess(true);
-        } else {
+        // בדיקה שהמנוי לא פג תוקף
+        if (activeSub.end_date && new Date(activeSub.end_date) < new Date()) {
+          console.log('Subscription expired');
           localStorage.removeItem('user_email');
+          setCheckingAccess(false);
+          return;
+        }
+        
+        setHasAccess(true);
+        
+        // שלח הודעה שהמשתמש נכנס לעורך
+        try {
+          await base44.functions.invoke('logPaymentSuccess', {
+            userEmail: storedEmail,
+            sessionId: activeSub.stripe_subscription_id,
+            priceId: activeSub.stripe_subscription_id
+          });
+        } catch (e) {
+          console.log('Could not log access:', e);
         }
       } catch (err) {
         console.error('Subscription check error:', err);
