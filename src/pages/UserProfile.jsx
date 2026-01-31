@@ -25,6 +25,21 @@ export default function UserProfile() {
     logLogin();
   }, []);
 
+  const loadSubscription = async (email) => {
+    try {
+      const subs = await base44.entities.Subscription.filter(
+        { user_email: email, status: "active" },
+        "-created_date",
+        1
+      );
+      if (subs && subs.length > 0) {
+        setSubscription(subs[0]);
+      }
+    } catch (error) {
+      console.error("Error loading subscription:", error);
+    }
+  };
+
   const logLogin = async () => {
     try {
       await base44.functions.invoke('logUserLogin', {});
