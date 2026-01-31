@@ -8,7 +8,7 @@ import { Slider } from '@/components/ui/slider';
 import { 
         Play, Pause, Plus, Trash2, Upload, Download, 
         Volume2, VolumeX, Scissors, Sparkles, Music, 
-        MoveHorizontal, Film, Loader2, Save, Eye, Type, Image as ImageIcon, FolderOpen, X, Clock, Check, Crown
+        MoveHorizontal, Film, Loader2, Save, Eye, Type, Image as ImageIcon, FolderOpen, X, Clock, Check, Crown, ArrowRight
       } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -137,22 +137,39 @@ export default function VideoEditor() {
   useEffect(() => {
     const checkSubscription = async () => {
       try {
+        const isAuth = await base44.auth.isAuthenticated();
+        if (!isAuth) {
+          console.log('User not authenticated');
+          setCheckingAccess(false);
+          setHasAccess(false);
+          return;
+        }
+
         const user = await base44.auth.me();
         if (!user?.email) {
+          console.log('No user email');
           setCheckingAccess(false);
+          setHasAccess(false);
           return;
         }
         
         setUserEmail(user.email);
         
-        const subs = await base44.entities.Subscription.filter({ user_email: user.email }, '-created_date', 1);
+        const subs = await base44.entities.Subscription.filter({ user_email: user.email }, '-created_date', 10);
+        console.log('Found subscriptions:', subs);
+        
         const activeSub = subs.find(s => s.status === 'active');
         
         if (activeSub) {
+          console.log('Active subscription found');
           setHasAccess(true);
+        } else {
+          console.log('No active subscription');
+          setHasAccess(false);
         }
       } catch (err) {
         console.error('Subscription check error:', err);
+        setHasAccess(false);
       } finally {
         setCheckingAccess(false);
       }
@@ -559,9 +576,18 @@ export default function VideoEditor() {
       {/* Header */}
       <div className="bg-gradient-to-r from-[#E31E24]/20 to-black border-b border-[#E31E24]/30 p-4 shrink-0">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div>
-            <h1 className="text-2xl font-bold">עורך סרטונים מתקדם</h1>
-            <p className="text-sm text-gray-400">ערוך, חבר והוסף אפקטים לסרטונים שלך</p>
+          <div className="flex items-center gap-4">
+            <Button 
+              onClick={() => window.location.href = '/'} 
+              variant="outline" 
+              className="border-white/20 text-white hover:bg-white/10"
+            >
+              ← חזרה לאתר
+            </Button>
+            <div>
+              <h1 className="text-2xl font-bold">עורך סרטונים מתקדם</h1>
+              <p className="text-sm text-gray-400">ערוך, חבר והוסף אפקטים לסרטונים שלך</p>
+            </div>
           </div>
           <div className="flex gap-2">
             <Button onClick={() => setShowProjectsModal(true)} variant="outline" className="border-white/20 text-white hover:bg-white/10">
