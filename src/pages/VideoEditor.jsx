@@ -567,7 +567,7 @@ export default function VideoEditor() {
                   </div>
                 </div>
               ) : (
-                <div className="relative h-32 bg-black/40 rounded-xl border border-white/10 p-2 overflow-x-scroll scrollbar-thumb-red-500 scrollbar-track-gray-900 scrollbar-thin">
+                <div className="relative h-32 bg-black/40 rounded-xl border border-white/10 p-2 overflow-hidden">
                   {/* Time ruler */}
                   <div className="flex items-center gap-1 mb-2 text-[10px] text-gray-500 px-2 flex-shrink-0">
                   {Array.from({ length: Math.ceil(totalDuration) + 1 }).map((_, i) => (
