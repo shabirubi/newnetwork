@@ -1245,16 +1245,17 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                           className="flex-1 bg-black/40 border-[#E31E24]/30 text-white placeholder-white/50"
                         />
                         <Button
-                          onClick={() => sendMessage()}
-                          disabled={isLoading || !inputValue.trim() || isRecording}
-                          className="bg-[#E31E24] hover:bg-red-700 px-4"
-                        >
-                          {isLoading ? (
-                            <Loader className="w-5 h-5 animate-spin" />
-                          ) : (
-                            <Send className="w-5 h-5" />
-                          )}
-                        </Button>
+                           onClick={() => sendMessage()}
+                           disabled={isLoading || !inputValue.trim() || isRecording || (!userHasActiveSubscription && questionCount >= 3)}
+                           className="bg-[#E31E24] hover:bg-red-700 px-4"
+                           title={!userHasActiveSubscription && questionCount >= 3 ? "הגעת ל-3 שאלות בחינם" : "שלח"}
+                         >
+                           {isLoading ? (
+                             <Loader className="w-5 h-5 animate-spin" />
+                           ) : (
+                             <Send className="w-5 h-5" />
+                           )}
+                         </Button>
                       </div>
                     </div>
                     </div>
