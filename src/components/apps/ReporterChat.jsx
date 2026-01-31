@@ -651,6 +651,37 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
     };
   }, [setOpenState]);
 
+  // בדיקת מנוי פעיל
+  useEffect(() => {
+    const checkSubscription = async () => {
+      try {
+        const user = await base44.auth.me().catch(() => null);
+        
+        if (user) {
+          setUserEmail(user.email);
+          const subs = await base44.entities.Subscription.filter(
+            { user_email: user.email },
+            '-created_date',
+            5
+          ).catch(() => []);
+
+          const activeSub = subs?.find(s => s.status === 'active' && (!s.end_date || new Date(s.end_date) > new Date()));
+          setUserHasActiveSubscription(!!activeSub);
+        } else {
+          // משתמש לא מחובר - ללא מנוי
+          setUserHasActiveSubscription(false);
+        }
+      } catch (err) {
+        console.error('Subscription check error:', err);
+        setUserHasActiveSubscription(false);
+      }
+    };
+
+    if (openState) {
+      checkSubscription();
+    }
+  }, [openState]);
+
   useEffect(() => {
     if (preSelectedReporter && openState) {
       startNewChat(preSelectedReporter);
