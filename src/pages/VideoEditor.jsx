@@ -166,15 +166,13 @@ export default function VideoEditor() {
         }
         
         const activeSub = subs[0];
-        
+
         // בדיקה שהמנוי לא פג תוקף
         if (activeSub.end_date && new Date(activeSub.end_date) < new Date()) {
-          console.log('Subscription expired');
-          localStorage.removeItem('user_email');
           setCheckingAccess(false);
           return;
         }
-        
+
         setHasAccess(true);
         
         // שלח הודעה שהמשתמש נכנס לעורך
