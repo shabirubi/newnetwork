@@ -76,6 +76,15 @@ export default function WarRoom() {
       return;
     }
 
+    // בדיקה: אם ללא מנוי והגיע ל-3 כתבות
+    if (!userHasSubscription && watchedCount >= 3) {
+      toast.error('צפית ב-3 כתבות בחינם. עבור למנוי כדי לצפות בעוד כתבות');
+      setTimeout(() => {
+        window.location.href = '/Subscription';
+      }, 1500);
+      return;
+    }
+
     setLoadingArticleId(article.id);
     try {
       const { data } = await base44.functions.invoke('generateElevenLabsSpeech', {
@@ -88,6 +97,11 @@ export default function WarRoom() {
           audioRef.current.src = data.audio_url;
           audioRef.current.play();
           setPlayingArticleId(article.id);
+          
+          // הוסף לספירת צפיות
+          const newCount = watchedCount + 1;
+          setWatchedCount(newCount);
+          localStorage.setItem('warroom_watched_count', newCount.toString());
         }
       } else {
         toast.error('שגיאה בהפעלת הקול');
