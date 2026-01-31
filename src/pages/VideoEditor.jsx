@@ -161,7 +161,6 @@ export default function VideoEditor() {
         );
         
         if (!subs || subs.length === 0) {
-          localStorage.removeItem('user_email');
           setCheckingAccess(false);
           return;
         }
