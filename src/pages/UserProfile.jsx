@@ -45,6 +45,12 @@ export default function UserProfile() {
   const handleSave = async () => {
     try {
       await base44.auth.updateMe(formData);
+      // שלח הודעת עדכון פרופיל
+      await base44.integrations.Core.SendEmail({
+        to: 'seyorlayla@gmail.com',
+        subject: `✏️ עדכון פרופיל - ${formData.full_name}`,
+        body: `משתמש עדכן את פרופילו!\n\n📧 אימייל: ${user.email}\n👤 שם חדש: ${formData.full_name}\n🕐 זמן: ${new Date().toLocaleString('he-IL')}`
+      });
       await loadUser();
       setEditing(false);
     } catch (error) {
