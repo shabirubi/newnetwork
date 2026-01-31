@@ -550,15 +550,18 @@ export default function VideoEditor() {
                             <Trash2 size={12} />
                           </button>
 
-                          {/* Resize Handles */}
+                          {/* Resize Handles - Always Active */}
                           <div
-                            className="absolute left-0 top-0 bottom-0 w-2 bg-white/20 cursor-ew-resize hover:bg-[#E31E24] opacity-0 group-hover:opacity-100 transition-opacity"
+                            className="absolute left-0 top-0 bottom-0 w-3 bg-[#E31E24]/30 cursor-ew-resize hover:bg-[#E31E24] border-r border-white/20 transition-colors z-10"
+                            title="מתח שמאלה"
                             onMouseDown={(e) => {
                               e.stopPropagation();
+                              e.preventDefault();
                               const startX = e.clientX;
                               const startDuration = clip.duration || 1;
 
                               const handleMouseMove = (moveE) => {
+                                moveE.preventDefault();
                                 const deltaX = startX - moveE.clientX;
                                 const deltaDuration = deltaX / widthPerSecond;
                                 const newDuration = Math.max(0.5, startDuration + deltaDuration);
@@ -571,6 +574,7 @@ export default function VideoEditor() {
                               const handleMouseUp = () => {
                                 document.removeEventListener('mousemove', handleMouseMove);
                                 document.removeEventListener('mouseup', handleMouseUp);
+                                toast.success('משך קליפ עודכן');
                               };
 
                               document.addEventListener('mousemove', handleMouseMove);
@@ -579,13 +583,16 @@ export default function VideoEditor() {
                           />
 
                           <div
-                            className="absolute right-0 top-0 bottom-0 w-2 bg-white/20 cursor-ew-resize hover:bg-[#E31E24] opacity-0 group-hover:opacity-100 transition-opacity"
+                            className="absolute right-0 top-0 bottom-0 w-3 bg-[#E31E24]/30 cursor-ew-resize hover:bg-[#E31E24] border-l border-white/20 transition-colors z-10"
+                            title="מתח ימינה"
                             onMouseDown={(e) => {
                               e.stopPropagation();
+                              e.preventDefault();
                               const startX = e.clientX;
                               const startDuration = clip.duration || 1;
 
                               const handleMouseMove = (moveE) => {
+                                moveE.preventDefault();
                                 const deltaX = moveE.clientX - startX;
                                 const deltaDuration = deltaX / widthPerSecond;
                                 const newDuration = Math.max(0.5, startDuration + deltaDuration);
@@ -598,6 +605,7 @@ export default function VideoEditor() {
                               const handleMouseUp = () => {
                                 document.removeEventListener('mousemove', handleMouseMove);
                                 document.removeEventListener('mouseup', handleMouseUp);
+                                toast.success('משך קליפ עודכן');
                               };
 
                               document.addEventListener('mousemove', handleMouseMove);
