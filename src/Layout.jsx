@@ -440,6 +440,44 @@ export default function Layout({ children, currentPageName }) {
                   </Link>
                 </div>
 
+                {/* Auth Section */}
+                {user && (
+                  <div className="p-4 border-b border-[#E31E24]/30">
+                    <div className="flex items-center gap-3 p-4 bg-gradient-to-r from-green-500/20 to-green-600/20 rounded-2xl border border-green-500/30 mb-2">
+                      <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse"></div>
+                      <div className="flex-1">
+                        <p className="text-green-300 font-bold text-sm">{user.full_name || user.email}</p>
+                        <p className="text-green-200/70 text-xs">מחובר</p>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => {
+                        handleLogout();
+                        setMobileMenuOpen(false);
+                      }}
+                      className="w-full flex items-center justify-center gap-2 py-3 bg-red-600/20 hover:bg-red-600/40 text-red-300 rounded-2xl font-bold transition-all border border-red-500/30"
+                    >
+                      <LogOut size={18} />
+                      התנתק
+                    </button>
+                  </div>
+                )}
+
+                {!user && (
+                  <div className="p-4 border-b border-[#E31E24]/30">
+                    <button
+                      onClick={() => {
+                        handleLogin();
+                        setMobileMenuOpen(false);
+                      }}
+                      className="w-full flex items-center justify-center gap-2 py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-bold transition-all border border-blue-500/30"
+                    >
+                      <LogIn size={18} />
+                      התחבר
+                    </button>
+                  </div>
+                )}
+
                 {/* Menu Items */}
                 <div className="p-4 space-y-1">
 
