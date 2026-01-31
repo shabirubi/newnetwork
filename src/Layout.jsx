@@ -73,6 +73,36 @@ export default function Layout({ children, currentPageName }) {
     }
   }, []);
 
+  // בדיקת משתמש מחובר
+  useEffect(() => {
+    const checkAuth = async () => {
+      try {
+        const userData = await base44.auth.me();
+        setUser(userData);
+      } catch (err) {
+        setUser(null);
+      } finally {
+        setAuthLoading(false);
+      }
+    };
+    checkAuth();
+  }, []);
+
+  const handleLogout = async () => {
+    try {
+      await base44.auth.logout();
+      setUser(null);
+      localStorage.removeItem('user_email');
+      toast.success('התנתקת בהצלחה');
+    } catch (err) {
+      toast.error('שגיאה בהתנתקות');
+    }
+  };
+
+  const handleLogin = async () => {
+    await base44.auth.redirectToLogin(createPageUrl('Home'));
+  };
+
   // דפים ללא Layout
   if (currentPageName === 'VODContent' || currentPageName === 'ReporterStudio' || currentPageName === 'BroadcastStudio' || currentPageName === 'VideoEditor') {
     return children;
