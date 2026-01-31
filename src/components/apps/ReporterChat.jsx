@@ -329,9 +329,63 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
     return allQuestions[Math.floor(Math.random() * allQuestions.length)];
   };
 
+  // בדיקת שבת בלוח העברי
+  const isShabbat = () => {
+    const today = new Date();
+    const year = today.getFullYear();
+    
+    // תאריכי שבתות בלוח העברי 2026 (ככל שאני יודע)
+    const sabbaths = [
+      // פברואר 2026
+      { month: 1, day: 1 }, { month: 1, day: 2 },    // שבת ויקרא
+      { month: 1, day: 8 }, { month: 1, day: 9 },    // שבת צו
+      { month: 1, day: 15 }, { month: 1, day: 16 },  // שבת שמיני
+      { month: 1, day: 22 }, { month: 1, day: 23 },  // שבת תזריע
+      { month: 1, day: 29 }, { month: 2, day: 1 },   // שבת מצורע
+      
+      // מרץ 2026
+      { month: 2, day: 1 }, { month: 2, day: 8 },    // שבתות במרץ
+      { month: 2, day: 15 }, { month: 2, day: 22 },
+      { month: 2, day: 29 },
+      
+      // אפריל 2026
+      { month: 3, day: 4 }, { month: 3, day: 5 },    // פסח
+      { month: 3, day: 11 }, { month: 3, day: 12 },
+      { month: 3, day: 18 }, { month: 3, day: 19 },
+      { month: 3, day: 25 }, { month: 3, day: 26 },
+      
+      // מאי - יוני 2026 (שבתות רגולריות)
+      { month: 4, day: 2 }, { month: 4, day: 3 },
+      { month: 4, day: 9 }, { month: 4, day: 10 },
+      { month: 4, day: 16 }, { month: 4, day: 17 },
+      { month: 4, day: 23 }, { month: 4, day: 24 },
+      { month: 4, day: 30 },
+      
+      { month: 5, day: 1 }, { month: 5, day: 6 },
+      { month: 5, day: 7 }, { month: 5, day: 13 },
+      { month: 5, day: 14 }, { month: 5, day: 20 },
+      { month: 5, day: 21 }, { month: 5, day: 27 },
+      { month: 5, day: 28 }
+    ];
+    
+    const month = today.getMonth();
+    const date = today.getDate();
+    
+    return sabbaths.some(s => s.month === month && s.day === date);
+  };
+
   const sendMessage = async (text = null) => {
     const messageText = text || inputValue;
     if (!messageText.trim() || !selectedReporter || isLoading) return;
+
+    // בדיקת שבת
+    if (isShabbat()) {
+      toast.error('⛔ בשבת הקודש לא ניתן להשתמש בצ\'אט. הצ\'אט יחזור לפעילות אחרי יציאת השבת. 🕯️', {
+        duration: 4000,
+        icon: '🕯️'
+      });
+      return;
+    }
 
     // בדיקה: אם המשתמש רק שאל ללא מנוי פעיל
     if (!userHasActiveSubscription && questionCount >= 3) {
