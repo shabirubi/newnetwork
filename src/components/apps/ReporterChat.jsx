@@ -750,6 +750,10 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
     setQuickReplies(replies);
     setShowQuickReplies(true);
     
+    // איפוס ספירת שאלות לכתב חדש
+    const savedCount = localStorage.getItem(`reporterChat_${reporter?.id}_questionCount`);
+    setQuestionCount(savedCount ? parseInt(savedCount) : 0);
+    
     // טעינת היסטוריית צ'אט
     await loadChatHistory(reporter);
   };
