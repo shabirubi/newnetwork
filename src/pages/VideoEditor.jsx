@@ -609,7 +609,7 @@ export default function VideoEditor() {
 
       <div className="flex-1 flex flex-col overflow-hidden">
         {/* Timeline - Top Section */}
-        <div className="h-48 bg-black/90 border-b border-white/10 p-4 overflow-x-auto">
+        <div className="h-40 bg-black/90 border-b border-white/10 p-3 overflow-x-auto">
           <div className="flex items-center gap-2 mb-3">
             <Film size={18} className="text-[#E31E24]" />
             <h3 className="font-bold">ציר זמן</h3>
@@ -1301,11 +1301,35 @@ export default function VideoEditor() {
                   id="luma-prompt"
                   placeholder="לדוגמה: דרקון זהוב עף מעל הרים מושלגים בשקיעה..."
                   className="bg-black/60 border-purple-500/30 text-white placeholder-white/40 resize-none"
-                  rows={4}
+                  rows={3}
                 />
                 <p className="text-xs text-gray-400 mt-1">
                   💡 תאר תנועות, אפקטים, ושינויים שתרצה לראות
                 </p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-white mb-2 flex items-center gap-2">
+                  <Volume2 size={16} className="text-purple-400" />
+                  טקסט לדיבוב (אופציונלי)
+                </label>
+                <Textarea
+                  id="luma-voice-script"
+                  placeholder="הטקסט שיוקרא בסרטון... אם ריק - ישתמש בתיאור הסרטון"
+                  className="bg-black/60 border-purple-500/30 text-white placeholder-white/40 resize-none"
+                  rows={2}
+                />
+                <div className="flex items-center gap-2 mt-2">
+                  <input
+                    type="checkbox"
+                    id="add-voice-checkbox"
+                    defaultChecked
+                    className="w-4 h-4 rounded bg-black/60 border-purple-500/30"
+                  />
+                  <label htmlFor="add-voice-checkbox" className="text-xs text-gray-300">
+                    הוסף דיבוב אוטומטי (ElevenLabs)
+                  </label>
+                </div>
               </div>
 
               <div>
@@ -1370,19 +1394,24 @@ export default function VideoEditor() {
                     const aspectButton = document.querySelector('[data-aspect-ratio][data-selected="true"]');
                     const aspectRatio = aspectButton?.getAttribute('data-aspect-ratio') || '16:9';
 
+                    const addVoice = document.getElementById('add-voice-checkbox')?.checked || false;
+                    const voiceScript = document.getElementById('luma-voice-script')?.value?.trim() || prompt;
+
                     // Check if extending existing video
                     if (selectedClip && selectedClip.type === 'video') {
                       setLoading(true);
                       try {
-                        toast.info('מאריך סרטון... יכול לקחת עד דקה');
+                        toast.info('מאריך סרטון עם דיבוב... עד דקה');
                         const { data } = await base44.functions.invoke('createLumaVideo', { 
                           prompt: prompt,
                           aspectRatio: aspectRatio,
-                          imageUrl: selectedClip.url // Use last frame as keyframe
+                          imageUrl: selectedClip.url,
+                          add_voice: addVoice,
+                          voice_script: voiceScript
                         });
 
                         if (data.video_url) {
-                          setClips(prev => [...prev, {
+                          const newClip = {
                             id: Date.now(),
                             url: data.video_url,
                             duration: 5,
@@ -1391,8 +1420,15 @@ export default function VideoEditor() {
                             filters: { brightness: 100, contrast: 100, saturation: 100 },
                             volume: 100,
                             type: 'video'
-                          }]);
-                          toast.success('סרטון המשך נוסף! 🎬');
+                          };
+                          setClips(prev => [...prev, newClip]);
+
+                          if (data.audio_url && addVoice) {
+                            setAudioTrack({ url: data.audio_url, name: 'דיבוב - ' + prompt.substring(0, 20), volume: 100, loop: false });
+                            toast.success('סרטון + דיבוב נוספו! 🎬🎤');
+                          } else {
+                            toast.success('סרטון המשך נוסף! 🎬');
+                          }
                           setShowLumaGeneratorModal(false);
                         }
                       } catch (error) {
@@ -1401,7 +1437,44 @@ export default function VideoEditor() {
                         setLoading(false);
                       }
                     } else {
-                      handleAddLumaClip(prompt, aspectRatio);
+                      setLoading(true);
+                      try {
+                        toast.info('יוצר סרטון עם דיבוב... עד דקה');
+                        const { data } = await base44.functions.invoke('createLumaVideo', { 
+                          prompt: prompt,
+                          aspectRatio: aspectRatio,
+                          add_voice: addVoice,
+                          voice_script: voiceScript
+                        });
+
+                        if (data.video_url) {
+                          setClips(prev => [...prev, {
+                            id: Date.now(),
+                            url: data.video_url,
+                            duration: 5,
+                            name: prompt.substring(0, 30),
+                            thumbnail: data.thumbnail_url || data.video_url,
+                            filters: { brightness: 100, contrast: 100, saturation: 100 },
+                            volume: 100,
+                            type: 'video'
+                          }]);
+
+                          if (data.audio_url && addVoice) {
+                            setAudioTrack({ url: data.audio_url, name: 'דיבוב - ' + prompt.substring(0, 20), volume: 100, loop: false });
+                            toast.success('סרטון + דיבוב נוספו! 🎬🎤');
+                          } else {
+                            toast.success('קליפ AI נוסף! 🎬');
+                          }
+                          setShowLumaGeneratorModal(false);
+                        } else if (data.still_processing) {
+                          toast.info('הסרטון בתהליך... נסה שוב בעוד רגע');
+                          setShowLumaGeneratorModal(false);
+                        }
+                      } catch (error) {
+                        toast.error('שגיאה: ' + error.message);
+                      } finally {
+                        setLoading(false);
+                      }
                     }
                   }}
                   disabled={loading}
