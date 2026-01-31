@@ -145,21 +145,24 @@ export default function WarRoom() {
     setGeneratingVideo(true);
     setVideoUrl(null);
     try {
-      const { data } = await base44.functions.invoke('generateSimpleVideo', {
-        title: article.title,
-        content: article.content || article.subtitle,
-        imageUrl: article.image_url
+      const { data } = await base44.functions.invoke('createLumaVideo', {
+        prompt: `${article.title}. ${article.content || article.subtitle}`,
+        imageUrl: article.image_url,
+        voice_script: article.content || article.subtitle,
+        voice_id: 'Rachel'
       });
 
-      if (data?.url || data?.video_url) {
-        setVideoUrl(data.url || data.video_url);
+      if (data?.video_url) {
+        setVideoUrl(data.video_url);
         toast.success('וידאו נוצר בהצלחה!');
         
         const newCount = watchedCount + 1;
         setWatchedCount(newCount);
         localStorage.setItem('warroom_watched_count', newCount.toString());
+      } else if (data?.still_processing) {
+        toast.info('הוידאו עדיין בעיבוד, אנא חכה...');
       } else {
-        toast.error('שגיאה ביצירת הוידאו');
+        toast.error('שגיאה ביצירת הוידאו: ' + (data?.error || 'שגיאה לא ידועה'));
         console.error('Video response:', data);
       }
     } catch (error) {
