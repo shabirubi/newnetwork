@@ -255,57 +255,57 @@ export default function WarRoom() {
               <p>אין התראות פעילות כעת</p>
             </div>
           ) : (
-            <AnimatePresence>
-            {alerts.map((alert, index) => {
-              const alertType = alertTypes[alert.type] || alertTypes.rocket;
-              const AlertIcon = alertType.icon;
-              
-              return (
-                <motion.div
-                  key={alert.id}
-                  initial={{ opacity: 0, x: -50 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 50 }}
-                  transition={{ delay: index * 0.1 }}
-                  className={`flex items-center gap-4 p-4 border-b dark:border-gray-700 last:border-0 ${
-                    alert.status === "active" ? "bg-red-50 dark:bg-red-900/20" : "bg-gray-50 dark:bg-gray-800"
-                  }`}
-                >
-                  <div className={`w-12 h-12 rounded-full ${alertType.color} flex items-center justify-center ${
-                    alert.status === "active" ? "animate-pulse" : "opacity-60"
-                  }`}>
-                    <AlertIcon className="w-6 h-6 text-white" />
-                  </div>
-                  
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="font-bold text-gray-900 dark:text-white">{alertType.label}</span>
-                      <Badge className={severityColors[alert.severity]}>
-                        {alert.severity === "critical" ? "קריטי" : 
-                         alert.severity === "high" ? "גבוה" :
-                         alert.severity === "medium" ? "בינוני" : "נמוך"}
-                      </Badge>
-                      {alert.status === "active" && (
-                        <Badge className="bg-red-600 text-white animate-pulse">פעיל</Badge>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400">
-                      <span className="flex items-center gap-1">
-                        <MapPin size={14} />
-                        {alert.location}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Clock size={14} />
-                        {alert.time}
-                      </span>
-                    </div>
-                  </div>
-                  
-                  <ChevronRight className="w-5 h-5 text-gray-400" />
-                </motion.div>
-              );
-            })}
-            </AnimatePresence>
+           <AnimatePresence>
+             {alerts.map((alert, index) => {
+               const alertType = alertTypes[alert.type] || alertTypes.rocket;
+               const AlertIcon = alertType.icon;
+
+               return (
+                 <motion.div
+                   key={alert.id}
+                   initial={{ opacity: 0, x: -50 }}
+                   animate={{ opacity: 1, x: 0 }}
+                   exit={{ opacity: 0, x: 50 }}
+                   transition={{ delay: index * 0.1 }}
+                   className={`flex items-center gap-4 p-4 border-b dark:border-gray-700 last:border-0 ${
+                     alert.status === "active" ? "bg-red-50 dark:bg-red-900/20" : "bg-gray-50 dark:bg-gray-800"
+                   }`}
+                 >
+                   <div className={`w-12 h-12 rounded-full ${alertType.color} flex items-center justify-center ${
+                     alert.status === "active" ? "animate-pulse" : "opacity-60"
+                   }`}>
+                     <AlertIcon className="w-6 h-6 text-white" />
+                   </div>
+
+                   <div className="flex-1">
+                     <div className="flex items-center gap-2 mb-1">
+                       <span className="font-bold text-gray-900 dark:text-white">{alertType.label}</span>
+                       <Badge className={severityColors[alert.severity]}>
+                         {alert.severity === "critical" ? "קריטי" : 
+                          alert.severity === "high" ? "גבוה" :
+                          alert.severity === "medium" ? "בינוני" : "נמוך"}
+                       </Badge>
+                       {alert.status === "active" && (
+                         <Badge className="bg-red-600 text-white animate-pulse">פעיל</Badge>
+                       )}
+                     </div>
+                     <div className="flex items-center gap-3 text-sm text-gray-600 dark:text-gray-400">
+                       <span className="flex items-center gap-1">
+                         <MapPin size={14} />
+                         {alert.location}
+                       </span>
+                       <span className="flex items-center gap-1">
+                         <Clock size={14} />
+                         {alert.time}
+                       </span>
+                     </div>
+                   </div>
+
+                   <ChevronRight className="w-5 h-5 text-gray-400" />
+                 </motion.div>
+               );
+             })}
+           </AnimatePresence>
           )}
         </CardContent>
       </Card>
