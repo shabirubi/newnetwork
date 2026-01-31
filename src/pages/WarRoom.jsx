@@ -1,10 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  AlertTriangle, Shield, Siren, MapPin, Clock, 
-  Radio, Bell, AlertCircle, Target, Users, 
-  TrendingUp, Activity, Volume2, VolumeX,
-  ChevronRight, RefreshCw, Flame, Zap, Play, Pause, Loader2
+  AlertTriangle, Shield, Radio, Bell, 
+  Volume2, VolumeX, RefreshCw, Zap, Play, Pause, Loader2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
