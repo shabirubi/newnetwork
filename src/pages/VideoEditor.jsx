@@ -1293,11 +1293,11 @@ export default function VideoEditor() {
                       setLoading(true);
                       setShowLumaGeneratorModal(false);
                       try {
-                        toast.info('מאריך סרטון עם דיבוב... עד דקה');
+                        toast.info('מאריך סרטון עם דיבוב... עד דקה וחצי');
                         const { data } = await base44.functions.invoke('createLumaVideo', { 
                           prompt: prompt,
                           aspectRatio: aspectRatio,
-                          imageUrl: selectedClip.url,
+                          imageUrl: selectedClip.url, // שלח את הסרטון הקודם כ-reference
                           voice_script: voiceScript
                         });
 
