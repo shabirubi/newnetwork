@@ -1192,6 +1192,26 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
                       </div>
                     )}
 
+                    {/* Question Counter Badge */}
+                    {!userHasActiveSubscription && (
+                      <div className="px-4 py-2 bg-[#E31E24]/20 border-b border-[#E31E24]/30 flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs text-white/70">שאלות בחינם:</span>
+                          <span className="text-sm font-bold text-[#E31E24]">{questionCount}/3</span>
+                        </div>
+                        {questionCount >= 3 && (
+                          <button
+                            onClick={() => {
+                              window.location.href = '/Subscription';
+                            }}
+                            className="text-xs bg-[#E31E24] text-white px-3 py-1 rounded-full hover:bg-red-700 transition-colors"
+                          >
+                            שדרג לעדכונים
+                          </button>
+                        )}
+                      </div>
+                    )}
+
                     {/* Input Area */}
                     <div className="p-4 border-t border-[#E31E24]/30 bg-gradient-to-r from-black/60 to-red-900/20">
                       <div className="flex gap-2 mb-3">
