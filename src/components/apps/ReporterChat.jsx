@@ -29,6 +29,12 @@ export default function ReporterChat({ externalIsOpen, externalSetIsOpen, preSel
   const [reporterStatus, setReporterStatus] = useState('online');
   const [messageReactions, setMessageReactions] = useState({});
   const [recordingTime, setRecordingTime] = useState(0);
+  const [userEmail, setUserEmail] = useState(null);
+  const [userHasActiveSubscription, setUserHasActiveSubscription] = useState(false);
+  const [questionCount, setQuestionCount] = useState(() => {
+    const saved = localStorage.getItem(`reporterChat_${preSelectedReporter?.id}_questionCount`);
+    return saved ? parseInt(saved) : 0;
+  });
   const [userProfile, setUserProfile] = useState(() => {
     const saved = localStorage.getItem('userChatProfile');
     return saved ? JSON.parse(saved) : {
