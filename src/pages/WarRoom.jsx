@@ -145,19 +145,16 @@ export default function WarRoom() {
     setGeneratingVideo(true);
     setVideoUrl(null);
     try {
-      // יצירת וידאו עם דיבוב מהכתבה
-      const { data } = await base44.functions.invoke('generateTalkingVideo', {
+      const { data } = await base44.functions.invoke('generateSimpleVideo', {
         title: article.title,
         content: article.content || article.subtitle,
-        imageUrl: article.image_url,
-        voiceId: 'onwK4ZeVeZw25vXSwVNc'
+        imageUrl: article.image_url
       });
 
       if (data?.url || data?.video_url) {
         setVideoUrl(data.url || data.video_url);
         toast.success('וידאו נוצר בהצלחה!');
         
-        // הוסף לספירת צפיות
         const newCount = watchedCount + 1;
         setWatchedCount(newCount);
         localStorage.setItem('warroom_watched_count', newCount.toString());
