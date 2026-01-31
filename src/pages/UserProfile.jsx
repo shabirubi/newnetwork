@@ -103,98 +103,114 @@ export default function UserProfile() {
   };
 
   return (
-    <div className="min-h-screen bg-black py-8 px-4" dir="rtl">
-      <div className="max-w-6xl mx-auto">
-        {/* Profile Header */}
+    <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black py-8 px-4" dir="rtl">
+      <div className="max-w-5xl mx-auto">
+        {/* Large Profile Header Card */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-gradient-to-br from-black via-[#E31E24]/20 to-black border border-[#E31E24]/30 rounded-2xl p-8 mb-6 shadow-2xl"
+          className="bg-gradient-to-br from-gray-900 via-gray-800 to-black border border-[#E31E24]/40 rounded-3xl overflow-hidden mb-8 shadow-2xl shadow-[#E31E24]/20"
         >
-          <div className="flex flex-col md:flex-row items-center gap-6">
-            {/* Avatar */}
-            <div className="relative">
-              <div className="relative w-32 h-32">
-                {profileImage ? (
-                  <img 
-                    src={profileImage} 
-                    alt={user.full_name}
-                    className="w-full h-full rounded-full object-cover border-4 border-[#E31E24]"
-                  />
-                ) : (
-                  <Avatar className="w-32 h-32 border-4 border-[#E31E24]">
-                    <AvatarFallback className="text-2xl font-bold bg-[#E31E24] text-white">
-                      {getInitials(user.full_name)}
-                    </AvatarFallback>
-                  </Avatar>
-                )}
-                {editing && (
-                  <label className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full cursor-pointer opacity-0 hover:opacity-100 transition-opacity">
-                    <Camera className="w-6 h-6 text-white" />
-                    <input 
-                      type="file" 
-                      accept="image/*" 
-                      onChange={handleImageUpload}
-                      className="hidden"
+          {/* Background Banner */}
+          <div className="h-40 bg-gradient-to-r from-[#E31E24]/30 via-[#E31E24]/10 to-black relative overflow-hidden">
+            <div className="absolute inset-0 opacity-30" style={{
+              backgroundImage: 'radial-gradient(circle at 20% 50%, #E31E24 0%, transparent 50%)'
+            }}></div>
+          </div>
+
+          {/* Profile Content */}
+          <div className="px-8 pb-8 -mt-20 relative z-10">
+            <div className="flex flex-col md:flex-row items-start md:items-center gap-6 mb-6">
+              {/* Avatar - Large */}
+              <div className="relative flex-shrink-0">
+                <div className="relative w-40 h-40 rounded-2xl overflow-hidden border-4 border-[#E31E24] shadow-2xl shadow-[#E31E24]/50">
+                  {profileImage ? (
+                    <img 
+                      src={profileImage} 
+                      alt={user.full_name}
+                      className="w-full h-full object-cover"
                     />
-                  </label>
+                  ) : (
+                    <div className="w-full h-full bg-gradient-to-br from-[#E31E24] to-[#B91C1C] flex items-center justify-center">
+                      <span className="text-6xl font-bold text-white">
+                        {getInitials(user.full_name)}
+                      </span>
+                    </div>
+                  )}
+                  {editing && (
+                    <label className="absolute inset-0 flex items-center justify-center bg-black/60 cursor-pointer hover:bg-black/70 transition-all">
+                      <div className="flex flex-col items-center gap-2 text-white">
+                        <Camera className="w-8 h-8" />
+                        <span className="text-xs font-semibold">שינוי תמונה</span>
+                      </div>
+                      <input 
+                        type="file" 
+                        accept="image/*" 
+                        onChange={handleImageUpload}
+                        className="hidden"
+                      />
+                    </label>
+                  )}
+                </div>
+                <Badge 
+                  className={`absolute -bottom-2 left-0 ${
+                    user.role === 'admin' 
+                      ? 'bg-yellow-500 text-black' 
+                      : 'bg-green-500 text-white'
+                  } px-3 py-1 shadow-lg`}
+                >
+                  <Shield className="w-3 h-3 ml-1" />
+                  {user.role === 'admin' ? 'מנהל' : 'משתמש'}
+                </Badge>
+              </div>
+
+              {/* User Info - Right Side */}
+              <div className="flex-1">
+                {editing ? (
+                  <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
+                    <div>
+                      <label className="text-xs font-bold text-gray-400 mb-2 block">שם מלא</label>
+                      <Input
+                        value={formData.full_name}
+                        onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
+                        placeholder="שם מלא"
+                        className="bg-black/60 border-[#E31E24]/50 text-white text-lg"
+                      />
+                    </div>
+                    <div className="flex gap-3">
+                      <Button onClick={handleSave} className="bg-[#E31E24] hover:bg-[#B91C1C] text-white font-bold">
+                        <Save className="w-4 h-4 ml-2" />
+                        שמור שינויים
+                      </Button>
+                      <Button onClick={() => setEditing(false)} variant="outline" className="border-white/30 text-white hover:bg-white/10">
+                        <X className="w-4 h-4 ml-2" />
+                        ביטול
+                      </Button>
+                    </div>
+                  </motion.div>
+                ) : (
+                  <>
+                    <h1 className="text-4xl font-bold text-white mb-3">{user.full_name}</h1>
+                    <div className="space-y-2 mb-6">
+                      <div className="flex items-center gap-3 text-gray-300">
+                        <Mail className="w-5 h-5 text-[#E31E24]" />
+                        <span>{user.email}</span>
+                      </div>
+                      <div className="flex items-center gap-3 text-gray-300">
+                        <Calendar className="w-5 h-5 text-[#E31E24]" />
+                        <span>הצטרף ב-{new Date(user.created_date).toLocaleDateString('he-IL')}</span>
+                      </div>
+                    </div>
+                    <Button 
+                      onClick={() => setEditing(true)} 
+                      className="bg-[#E31E24] hover:bg-[#B91C1C] text-white font-bold"
+                    >
+                      <Edit2 className="w-4 h-4 ml-2" />
+                      ערוך פרופיל
+                    </Button>
+                  </>
                 )}
               </div>
-              <Badge 
-                className={`absolute bottom-2 right-2 ${
-                  user.role === 'admin' 
-                    ? 'bg-yellow-500 text-black' 
-                    : 'bg-blue-500 text-white'
-                }`}
-              >
-                <Shield className="w-3 h-3 mr-1" />
-                {user.role === 'admin' ? 'מנהל' : 'משתמש'}
-              </Badge>
-            </div>
-
-            {/* User Info */}
-            <div className="flex-1 text-center md:text-right">
-              {editing ? (
-                <div className="space-y-4">
-                  <Input
-                    value={formData.full_name}
-                    onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
-                    placeholder="שם מלא"
-                    className="bg-black/60 border-[#E31E24]/30 text-white"
-                  />
-                  <div className="flex gap-2">
-                    <Button onClick={handleSave} className="bg-[#E31E24] hover:bg-[#B91C1C]">
-                      <Save className="w-4 h-4 mr-2" />
-                      שמור
-                    </Button>
-                    <Button onClick={() => setEditing(false)} variant="outline" className="border-white/20 text-white">
-                      <X className="w-4 h-4 mr-2" />
-                      ביטול
-                    </Button>
-                  </div>
-                </div>
-              ) : (
-                <>
-                  <h1 className="text-3xl font-bold text-white mb-2">{user.full_name}</h1>
-                  <div className="flex flex-col md:flex-row items-center gap-4 text-gray-400 mb-4">
-                    <span className="flex items-center gap-2">
-                      <Mail className="w-4 h-4" />
-                      {user.email}
-                    </span>
-                    <span className="flex items-center gap-2">
-                      <Calendar className="w-4 h-4" />
-                      הצטרף: {new Date(user.created_date).toLocaleDateString('he-IL')}
-                    </span>
-                  </div>
-                  <Button 
-                    onClick={() => setEditing(true)} 
-                    className="bg-black/60 border border-white/20 text-white hover:bg-black/80"
-                  >
-                    <Edit2 className="w-4 h-4 mr-2" />
-                    ערוך פרופיל
-                  </Button>
-                </>
-              )}
             </div>
           </div>
         </motion.div>
