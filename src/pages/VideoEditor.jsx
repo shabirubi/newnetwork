@@ -662,12 +662,18 @@ export default function VideoEditor() {
                                 <SelectItem value="zoom">זום</SelectItem>
                               </SelectContent>
                             </Select>
-                          </div>
-                        )}
-                      </React.Fragment>
-                    );
-                  })}
-                </div>
+                            </div>
+                                  )}
+                                </React.Fragment>
+                              )}
+                            </Draggable>
+                            );
+                            })}
+                            {provided.placeholder}
+                            </div>
+                            )}
+                            </Droppable>
+                            </DragDropContext>
               </div>
             )}
           </div>
