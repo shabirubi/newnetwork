@@ -53,6 +53,8 @@ export default function Layout({ children, currentPageName }) {
     }
     return true;
   });
+  const [user, setUser] = useState(null);
+  const [authLoading, setAuthLoading] = useState(true);
 
   useEffect(() => {
     if (darkMode) {
