@@ -320,18 +320,65 @@ export default function UserProfile() {
           </TabsContent>
 
           <TabsContent value="settings">
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-            >
-              <Card className="bg-black/60 border-white/20">
-                <CardHeader>
-                  <CardTitle className="text-white">הגדרות</CardTitle>
-                  <CardDescription className="text-gray-400">
-                    נהל את הגדרות החשבון שלך
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-6">
+           <motion.div
+             initial={{ opacity: 0 }}
+             animate={{ opacity: 1 }}
+           >
+             {/* Subscription Card */}
+             {subscription && (
+               <Card className="bg-gradient-to-br from-blue-900/40 to-blue-900/20 border-blue-500/40 mb-6">
+                 <CardHeader>
+                   <CardTitle className="text-blue-300 flex items-center gap-2">
+                     <Zap className="w-5 h-5" />
+                     מידע המנוי שלך
+                   </CardTitle>
+                 </CardHeader>
+                 <CardContent className="space-y-4">
+                   <div className="grid md:grid-cols-2 gap-4">
+                     <div className="bg-black/40 p-4 rounded-lg border border-blue-500/30">
+                       <p className="text-xs text-gray-400 mb-1">סוג המנוי</p>
+                       <p className="text-white font-bold">{subscription.plan_type === 'monthly' ? '💳 חודשי' : '📅 שנתי'}</p>
+                     </div>
+                     <div className="bg-black/40 p-4 rounded-lg border border-blue-500/30">
+                       <p className="text-xs text-gray-400 mb-1">סטטוס</p>
+                       <div className="flex items-center gap-2">
+                         <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                         <p className="text-white font-bold text-green-400">פעיל</p>
+                       </div>
+                     </div>
+                     {subscription.end_date && (
+                       <div className="bg-black/40 p-4 rounded-lg border border-blue-500/30">
+                         <p className="text-xs text-gray-400 mb-1">תוקף עד</p>
+                         <p className="text-white font-bold">{new Date(subscription.end_date).toLocaleDateString('he-IL')}</p>
+                       </div>
+                     )}
+                     <div className="bg-black/40 p-4 rounded-lg border border-blue-500/30">
+                       <p className="text-xs text-gray-400 mb-1">חידוש אוטומטי</p>
+                       <p className="text-white font-bold">{subscription.auto_renew ? '✅ מופעל' : '❌ מבוטל'}</p>
+                     </div>
+                   </div>
+                   <div className="flex gap-3">
+                     <button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors">
+                       <CreditCard className="w-4 h-4" />
+                       עדכן כרטיס אשראי
+                     </button>
+                     <button className="flex-1 bg-blue-600/50 hover:bg-blue-600/70 text-white font-bold py-2 px-4 rounded-lg flex items-center justify-center gap-2 transition-colors">
+                       <RefreshCw className="w-4 h-4" />
+                       חדש עכשיו
+                     </button>
+                   </div>
+                 </CardContent>
+               </Card>
+             )}
+
+             <Card className="bg-black/60 border-white/20">
+               <CardHeader>
+                 <CardTitle className="text-white">הגדרות</CardTitle>
+                 <CardDescription className="text-gray-400">
+                   נהל את הגדרות החשבון שלך
+                 </CardDescription>
+               </CardHeader>
+               <CardContent className="space-y-6">
                   {/* Notifications */}
                   <div className="flex items-center justify-between p-4 bg-black/40 rounded-lg border border-white/10">
                     <div className="flex items-center gap-3">
