@@ -15,26 +15,31 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Prompt is required' }, { status: 400 });
     }
 
+    // Enhance prompt with character details if not explicitly mentioned
+    let enhancedPrompt = prompt;
+    const hasCharacter = /person|man|woman|character|דמות|אדם|איש|אישה/i.test(prompt);
+    
+    if (!hasCharacter) {
+      // Add a character to make the video more dynamic
+      enhancedPrompt = `${prompt}, with a person in the scene, cinematic framing`;
+    }
+
     // Generate multiple AI images with slight variations
     const frames = [];
-    const basePrompt = prompt;
+    const motionKeywords = [
+      'beginning of motion',
+      'slight movement forward',
+      'continuing motion',
+      'end of motion sequence'
+    ];
     
     for (let i = 0; i < num_frames; i++) {
-      // Add motion keywords to create progression
-      const framePrompt = `${basePrompt}, frame ${i + 1} of ${num_frames}, slight motion, cinematic`;
+      // Create progression through motion keywords
+      const motionPhase = motionKeywords[Math.min(i, motionKeywords.length - 1)];
+      const framePrompt = `${enhancedPrompt}, ${motionPhase}, frame ${i + 1} of ${num_frames}, cinematic, smooth motion, professional photography`;
       
       try {
-        const imageResult = await base44.asServiceRole.integrations.Core.InvokeLLM({
-          prompt: `Generate an image: ${framePrompt}`,
-          response_json_schema: {
-            type: "object",
-            properties: {
-              image_url: { type: "string" }
-            }
-          }
-        });
-
-        // Actually generate the image
+        // Generate the image
         const { url } = await base44.asServiceRole.integrations.Core.GenerateImage({
           prompt: framePrompt
         });
