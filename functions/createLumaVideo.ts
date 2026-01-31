@@ -122,36 +122,36 @@ Deno.serve(async (req) => {
                const audioBlob = await voiceResponse.blob();
                console.log('✅ Audio blob created, size:', audioBlob.size);
 
-               // Upload audio to storage
-               const uploadResult = await base44.asServiceRole.integrations.Core.UploadFile({ file: audioBlob });
-               console.log('Upload result:', uploadResult);
+               // Upload audio to storage - ignore auth errors
+               try {
+                 const uploadResult = await base44.asServiceRole.integrations.Core.UploadFile({ file: audioBlob });
+                 console.log('Upload result:', uploadResult);
 
-               if (uploadResult?.file_url) {
-                 console.log('✅ Voice uploaded successfully:', uploadResult.file_url);
-                 // Note: Video + audio merge would require ffmpeg
-                 // For now, return both URLs - frontend can handle playback
-                 return Response.json({
-                   success: true,
-                   video_url: finalVideoUrl,
-                   audio_url: uploadResult.file_url,
-                   thumbnail_url: statusData.assets?.image,
-                   generation_id: generationId,
-                   prompt: prompt,
-                   has_voice: true
-                 });
-               } else {
-                 console.error('❌ Upload failed - no file_url returned');
+                 if (uploadResult?.file_url) {
+                   console.log('✅ Voice uploaded successfully:', uploadResult.file_url);
+                   return Response.json({
+                     success: true,
+                     video_url: finalVideoUrl,
+                     audio_url: uploadResult.file_url,
+                     thumbnail_url: statusData.assets?.image,
+                     generation_id: generationId,
+                     prompt: prompt,
+                     has_voice: true
+                   });
+                 }
+               } catch (uploadErr) {
+                 console.error('❌ Upload error:', uploadErr.message);
                }
-             } else {
+               } else {
                const errorText = await voiceResponse.text();
                console.error('❌ Voice API error:', voiceResponse.status, errorText);
-             }
-           } catch (voiceError) {
-             console.error('❌ Voice generation error:', voiceError);
-           }
-         } else {
-           console.error('❌ No ELEVENLABS_API_KEY configured');
-         }
+               }
+               } catch (voiceError) {
+               console.error('❌ Voice generation error:', voiceError);
+               }
+               } else {
+               console.error('❌ No ELEVENLABS_API_KEY configured');
+               }
 
         return Response.json({
           success: true,
