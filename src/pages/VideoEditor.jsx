@@ -227,7 +227,19 @@ export default function VideoEditor() {
     setClips(prev => prev.filter((_, i) => i !== index));
     if (selectedClipIndex === index) setSelectedClipIndex(null);
     toast.success('קליפ הוסר');
-  };
+    };
+
+    // Handle drag end
+    const handleDragEnd = (result) => {
+    if (!result.destination) return;
+
+    const items = Array.from(clips);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+
+    setClips(items);
+    toast.success('סדר הקליפים שונה!');
+    };
 
   // Update transition
   const updateTransition = (afterClipIndex, transitionType) => {
