@@ -1305,6 +1305,7 @@ export default function VideoEditor() {
                           const newClip = {
                             id: Date.now(),
                             url: data.video_url,
+                            localUrl: data.video_url,
                             duration: 5,
                             name: 'המשך - ' + prompt.substring(0, 30),
                             thumbnail: data.thumbnail_url || data.video_url,
@@ -1312,8 +1313,11 @@ export default function VideoEditor() {
                             volume: 100,
                             type: 'video'
                           };
-                          setClips(prev => [...prev, newClip]);
-                          setTimeout(() => setSelectedClipIndex(clips.length), 200);
+                          setClips(prev => {
+                            const updated = [...prev, newClip];
+                            setTimeout(() => setSelectedClipIndex(updated.length - 1), 200);
+                            return updated;
+                          });
 
                           if (data.audio_url) {
                             setAudioTrack({ url: data.audio_url, name: 'דיבוב - ' + prompt.substring(0, 20), volume: 100, loop: false });
