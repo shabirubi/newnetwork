@@ -172,7 +172,9 @@ export default function WarRoom() {
           <Card className="border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20">
             <CardContent className="p-4 text-center">
               <Siren className="w-8 h-8 text-red-500 mx-auto mb-2" />
-              <p className="text-3xl font-bold text-red-600 dark:text-red-400">{activeCount}</p>
+              <p className="text-3xl font-bold text-red-600 dark:text-red-400">
+                {loadingAlerts ? <Loader2 className="w-8 h-8 animate-spin mx-auto" /> : activeCount}
+              </p>
               <p className="text-sm text-red-700 dark:text-red-300">התראות פעילות</p>
             </CardContent>
           </Card>
@@ -186,8 +188,10 @@ export default function WarRoom() {
           <Card className="border-orange-200 dark:border-orange-800 bg-orange-50 dark:bg-orange-900/20">
             <CardContent className="p-4 text-center">
               <Target className="w-8 h-8 text-orange-500 mx-auto mb-2" />
-              <p className="text-3xl font-bold text-orange-600 dark:text-orange-400">3</p>
-              <p className="text-sm text-orange-700 dark:text-orange-300">אזורים מאוימים</p>
+              <p className="text-3xl font-bold text-orange-600 dark:text-orange-400">
+                {loadingAlerts ? <Loader2 className="w-8 h-8 animate-spin mx-auto" /> : alerts.length}
+              </p>
+              <p className="text-sm text-orange-700 dark:text-orange-300">אזורים מדווחים</p>
             </CardContent>
           </Card>
         </motion.div>
@@ -200,8 +204,10 @@ export default function WarRoom() {
           <Card className="border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-900/20">
             <CardContent className="p-4 text-center">
               <Shield className="w-8 h-8 text-green-500 mx-auto mb-2" />
-              <p className="text-3xl font-bold text-green-600 dark:text-green-400">12</p>
-              <p className="text-sm text-green-700 dark:text-green-300">אירועים שנוטרלו</p>
+              <p className="text-3xl font-bold text-green-600 dark:text-green-400">
+                {loadingAlerts ? <Loader2 className="w-8 h-8 animate-spin mx-auto" /> : alerts.filter(a => a.status === 'resolved').length}
+              </p>
+              <p className="text-sm text-green-700 dark:text-green-300">אירועים שסיימו</p>
             </CardContent>
           </Card>
         </motion.div>
@@ -214,8 +220,10 @@ export default function WarRoom() {
           <Card className="border-blue-200 dark:border-blue-800 bg-blue-50 dark:bg-blue-900/20">
             <CardContent className="p-4 text-center">
               <Users className="w-8 h-8 text-blue-500 mx-auto mb-2" />
-              <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">1.2M</p>
-              <p className="text-sm text-blue-700 dark:text-blue-300">אזרחים מעודכנים</p>
+              <p className="text-3xl font-bold text-blue-600 dark:text-blue-400">
+                {loadingAlerts ? <Loader2 className="w-8 h-8 animate-spin mx-auto" /> : articles.length}
+              </p>
+              <p className="text-sm text-blue-700 dark:text-blue-300">כתבות משודכנות</p>
             </CardContent>
           </Card>
         </motion.div>
