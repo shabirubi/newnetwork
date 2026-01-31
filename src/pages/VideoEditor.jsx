@@ -728,10 +728,341 @@ export default function VideoEditor() {
         </div>
       </div>
 
-      {/* All Modals - keeping existing modals */}
       {showProjectsModal && <ProjectsModal onClose={() => setShowProjectsModal(false)} onLoad={handleLoadProject} />}
-      
-      {/* Continue with all other modals exactly as they were... */}
+
+      {showCaptionsModal && (
+        <AutoCaptionsModal 
+          onClose={() => setShowCaptionsModal(false)}
+          selectedClip={selectedClip}
+          onApply={(captions) => {
+            setOverlays(prev => [...prev, ...captions]);
+            toast.success('כיתובים נוספו! 🎤');
+          }}
+        />
+      )}
+
+      {showTTSModal && (
+        <TTSModal 
+          onClose={() => setShowTTSModal(false)}
+          onApply={async (text, voice) => {
+            setLoading(true);
+            try {
+              const { data } = await base44.functions.invoke('generateElevenLabsSpeech', { text, voice_id: voice });
+              if (data.audio_url) {
+                setAudioTrack({ url: data.audio_url, name: 'דיבוב - ' + voice, volume: 100 });
+                toast.success('דיבוב ElevenLabs נוסף! 🎙️');
+              } else {
+                toast.error('לא הצליח ליצור דיבוב');
+              }
+            } catch (error) {
+              toast.error('שגיאה: ' + error.message);
+            } finally {
+              setLoading(false);
+            }
+          }}
+        />
+      )}
+
+      {showEffectsModal && <EffectsLibraryModal onClose={() => setShowEffectsModal(false)} onApplyEffect={(effect) => { if (selectedClipIndex !== null) { updateClipFilter(selectedClipIndex, 'effect', effect); toast.success(`אפקט ${effect} הוחל! ✨`); } }} onApplyTransition={(transition) => { if (selectedClipIndex !== null && selectedClipIndex < clips.length - 1) { updateTransition(selectedClipIndex, transition); toast.success(`מעבר ${transition} הוחל! 🎬`); } }} />}
+
+      {showSpeedModal && selectedClip && <SpeedControlModal onClose={() => setShowSpeedModal(false)} currentSpeed={selectedClip.speed || 1} onApply={(speed) => { setClips(prev => prev.map((clip, i) => i === selectedClipIndex ? { ...clip, speed } : clip)); toast.success(`מהירות שונתה ל-${speed}x! ⚡`); }} />}
+
+      {showResizeModal && <ResizeModal onClose={() => setShowResizeModal(false)} onApply={(aspectRatio) => { setClips(prev => prev.map(clip => ({ ...clip, aspectRatio }))); toast.success(`שונה ל-${aspectRatio}! 📐`); }} />}
+
+      {showElementsModal && <ElementsLibraryModal onClose={() => setShowElementsModal(false)} onApply={(element) => { setOverlays(prev => [...prev, element]); toast.success('אלמנט נוסף! ✨'); }} />}
+
+      {showMusicLibraryModal && <MusicLibraryModal onClose={() => setShowMusicLibraryModal(false)} onApply={(music) => { setAudioTrack({ url: music.url, name: music.name, volume: 100, loop: true }); toast.success(`${music.name} נוסף! 🎵`); }} />}
+
+      {showPIPModal && <PIPOverlay onClose={() => setShowPIPModal(false)} onApply={(pipData) => { setPipLayers(prev => [...prev, pipData]); toast.success('PIP נוסף בהצלחה! 📹'); }} />}
+
+      {showAIImageModal && <AIImageGeneratorModal onClose={() => setShowAIImageModal(false)} onApply={(imageData) => { setClips(prev => [...prev, { id: Date.now(), ...imageData, filters: { brightness: 100, contrast: 100, saturation: 100 }, volume: 0 }]); setShowAIImageModal(false); }} />}
+
+      {showAdvancedTTSModal && (
+        <AdvancedTTSModal 
+          onClose={() => setShowAdvancedTTSModal(false)}
+          onApply={async (text, voice) => {
+            setLoading(true);
+            try {
+              const { data } = await base44.functions.invoke('generateElevenLabsSpeech', { text, voice_id: voice });
+              if (data.audio_url) {
+                setAudioTrack({ url: data.audio_url, name: 'דיבוב - ' + voice, volume: 100 });
+                toast.success('דיבוב ElevenLabs נוסף! 🎙️');
+                setShowAdvancedTTSModal(false);
+              } else {
+                toast.error('לא הצליח ליצור דיבוב');
+              }
+            } catch (error) {
+              toast.error('שגיאה: ' + error.message);
+            } finally {
+              setLoading(false);
+            }
+          }}
+        />
+      )}
+
+      {showAdCreatorModal && <AdCreatorModal onClose={() => setShowAdCreatorModal(false)} onApply={(adClip) => { setClips(prev => [...prev, adClip]); setShowAdCreatorModal(false); toast.success('פרסומה נוספה לעורך! 📢'); }} />}
+
+      {showStockVideoModal && <StockVideoLibraryModal onClose={() => setShowStockVideoModal(false)} onApply={(videoData) => { setClips(prev => [...prev, videoData]); setShowStockVideoModal(false); }} />}
+
+      {showAIVideoFromImagesModal && <AIVideoFromImagesModal onClose={() => setShowAIVideoFromImagesModal(false)} onApply={(clips) => { setClips(prev => [...prev, ...clips]); setShowAIVideoFromImagesModal(false); }} />}
+
+      {showLumaGeneratorModal && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50" onClick={() => setShowLumaGeneratorModal(false)}>
+          <div className="bg-gradient-to-br from-purple-900/90 to-black border border-purple-500/30 rounded-2xl p-6 max-w-2xl w-full" onClick={(e) => e.stopPropagation()}>
+            <h3 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+              <Sparkles size={24} className="text-purple-400" />
+              {selectedClip && selectedClip.type === 'video' ? 'המשך סרטון קיים' : 'מחולל סרטונים AI'}
+            </h3>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-white mb-2">תיאור הסרטון</label>
+                <Textarea id="luma-prompt" placeholder="לדוגמה: דרקון זהוב עף מעל הרים מושלגים בשקיעה..." className="bg-black/60 border-purple-500/30 text-white placeholder-white/40 resize-none" rows={3} />
+                <p className="text-xs text-gray-400 mt-1">💡 תאר תנועות, אפקטים, ושינויים שתרצה לראות</p>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-white mb-2 flex items-center gap-2">
+                  <Volume2 size={16} className="text-purple-400" />
+                  טקסט לדיבוב (אופציונלי)
+                </label>
+                <Textarea id="luma-voice-script" placeholder="הטקסט שיוקרא בסרטון... אם ריק - ישתמש בתיאור הסרטון" className="bg-black/60 border-purple-500/30 text-white placeholder-white/40 resize-none" rows={2} />
+                <div className="flex items-center gap-2 mt-2">
+                  <input type="checkbox" id="add-voice-checkbox" defaultChecked className="w-4 h-4 rounded bg-black/60 border-purple-500/30" />
+                  <label htmlFor="add-voice-checkbox" className="text-xs text-gray-300">הוסף דיבוב אוטומטי (ElevenLabs)</label>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-white mb-2">יחס תצוגה</label>
+                <div className="grid grid-cols-3 gap-3">
+                  {[
+                    { value: "16:9", label: "רחב (16:9)", icon: Film },
+                    { value: "9:16", label: "אנכי (9:16)", icon: Film },
+                    { value: "1:1", label: "מרובע (1:1)", icon: Film }
+                  ].map((option) => (
+                    <button
+                      key={option.value}
+                      onClick={(e) => {
+                        document.querySelectorAll('[data-aspect-ratio]').forEach(el => el.classList.remove('border-purple-500', 'bg-purple-500/20'));
+                        e.currentTarget.classList.add('border-purple-500', 'bg-purple-500/20');
+                        e.currentTarget.setAttribute('data-selected', 'true');
+                      }}
+                      data-aspect-ratio={option.value}
+                      className={`p-3 rounded-xl border-2 transition-all flex flex-col items-center gap-1 ${option.value === '16:9' ? 'border-purple-500 bg-purple-500/20 text-white' : 'border-purple-500/30 bg-black/40 text-gray-400 hover:border-purple-500/50'}`}
+                    >
+                      <option.icon size={20} />
+                      <span className="text-xs font-semibold">{option.label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="bg-purple-600/10 border border-purple-500/30 rounded-xl p-4">
+                <p className="text-sm text-purple-200 font-semibold mb-2 flex items-center gap-2">
+                  <Sparkles size={16} />
+                  טיפים ליצירת סרטון מושלם:
+                </p>
+                <ul className="text-xs text-purple-300 space-y-1">
+                  <li>• תאר תנועות ספציפיות: "הדמות מסתובבת ימינה"</li>
+                  <li>• הוסף פרטי תאורה: "באור זהוב", "בשקיעה"</li>
+                  <li>• ציין מהירות: "בתנועה איטית", "במהירות"</li>
+                  <li>• תאר אפקטים: "עם עשן ברקע", "ניצוצות"</li>
+                </ul>
+              </div>
+
+              <div className="flex gap-2">
+                <Button onClick={() => setShowLumaGeneratorModal(false)} variant="outline" className="flex-1 border-white/20 text-white hover:bg-white/10">
+                  ביטול
+                </Button>
+                <Button
+                  onClick={async () => {
+                    const prompt = document.getElementById('luma-prompt').value;
+                    if (!prompt.trim()) {
+                      toast.error('אנא הזן תיאור לסרטון');
+                      return;
+                    }
+                    const aspectButton = document.querySelector('[data-aspect-ratio][data-selected="true"]');
+                    const aspectRatio = aspectButton?.getAttribute('data-aspect-ratio') || '16:9';
+                    
+                    const addVoice = document.getElementById('add-voice-checkbox')?.checked || false;
+                    const voiceScript = document.getElementById('luma-voice-script')?.value?.trim() || prompt;
+                    
+                    if (selectedClip && selectedClip.type === 'video') {
+                      setLoading(true);
+                      try {
+                        toast.info('מאריך סרטון עם דיבוב... עד דקה');
+                        const { data } = await base44.functions.invoke('createLumaVideo', { 
+                          prompt: prompt,
+                          aspectRatio: aspectRatio,
+                          imageUrl: selectedClip.url,
+                          add_voice: addVoice,
+                          voice_script: voiceScript
+                        });
+
+                        if (data.video_url) {
+                          setClips(prev => [...prev, {
+                            id: Date.now(),
+                            url: data.video_url,
+                            duration: 5,
+                            name: 'המשך - ' + prompt.substring(0, 30),
+                            thumbnail: data.thumbnail_url || data.video_url,
+                            filters: { brightness: 100, contrast: 100, saturation: 100 },
+                            volume: 100,
+                            type: 'video'
+                          }]);
+                          
+                          if (data.audio_url && addVoice) {
+                            setAudioTrack({ url: data.audio_url, name: 'דיבוב - ' + prompt.substring(0, 20), volume: 100, loop: false });
+                            toast.success('סרטון + דיבוב נוספו! 🎬🎤');
+                          } else {
+                            toast.success('סרטון המשך נוסף! 🎬');
+                          }
+                          setShowLumaGeneratorModal(false);
+                        }
+                      } catch (error) {
+                        toast.error('שגיאה: ' + error.message);
+                      } finally {
+                        setLoading(false);
+                      }
+                    } else {
+                      setLoading(true);
+                      try {
+                        toast.info('יוצר סרטון עם דיבוב... עד דקה');
+                        const { data } = await base44.functions.invoke('createLumaVideo', { 
+                          prompt: prompt,
+                          aspectRatio: aspectRatio,
+                          add_voice: addVoice,
+                          voice_script: voiceScript
+                        });
+
+                        if (data.video_url) {
+                          setClips(prev => [...prev, {
+                            id: Date.now(),
+                            url: data.video_url,
+                            duration: 5,
+                            name: prompt.substring(0, 30),
+                            thumbnail: data.thumbnail_url || data.video_url,
+                            filters: { brightness: 100, contrast: 100, saturation: 100 },
+                            volume: 100,
+                            type: 'video'
+                          }]);
+                          
+                          if (data.audio_url && addVoice) {
+                            setAudioTrack({ url: data.audio_url, name: 'דיבוב - ' + prompt.substring(0, 20), volume: 100, loop: false });
+                            toast.success('סרטון + דיבוב נוספו! 🎬🎤');
+                          } else {
+                            toast.success('קליפ AI נוסף! 🎬');
+                          }
+                          setShowLumaGeneratorModal(false);
+                        } else if (data.still_processing) {
+                          toast.info('הסרטון בתהליך... נסה שוב בעוד רגע');
+                          setShowLumaGeneratorModal(false);
+                        }
+                      } catch (error) {
+                        toast.error('שגיאה: ' + error.message);
+                      } finally {
+                        setLoading(false);
+                      }
+                    }
+                  }}
+                  disabled={loading}
+                  className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white"
+                >
+                  {loading ? <><Loader2 size={18} className="mr-2 animate-spin" />יוצר...</> : <><Sparkles size={18} className="mr-2" />{selectedClip && selectedClip.type === 'video' ? 'המשך סרטון' : 'צור סרטון'}</>}
+                </Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showOverlayModal && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
+          <div className="bg-gradient-to-br from-gray-900 to-black border border-white/20 rounded-2xl p-6 max-w-md w-full">
+            <h3 className="text-xl font-bold mb-4">הוסף טקסט או לוגו</h3>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="text-sm text-gray-400 mb-2 block">טקסט</label>
+                <Input id="overlay-text" placeholder="הכנס טקסט..." className="bg-white/5 border-white/20 text-white" />
+                <div className="flex gap-2 mt-2">
+                  <Input id="text-color" type="color" defaultValue="#ffffff" className="w-20 h-10" />
+                  <Input id="text-size" type="number" placeholder="גודל" defaultValue="24" className="flex-1 bg-white/5 border-white/20 text-white" />
+                </div>
+                <Button onClick={() => {
+                  const text = document.getElementById('overlay-text').value;
+                  const color = document.getElementById('text-color').value;
+                  const fontSize = parseInt(document.getElementById('text-size').value);
+                  if (text) {
+                    setOverlays(prev => [...prev, {
+                      id: Date.now(),
+                      type: 'text',
+                      content: text,
+                      position: { x: 50, y: 50 },
+                      style: { fontSize, color }
+                    }]);
+                    setShowOverlayModal(false);
+                    toast.success('טקסט נוסף!');
+                  }
+                }} className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white">
+                  <Type size={18} className="mr-2" />
+                  הוסף טקסט
+                </Button>
+              </div>
+
+              <div className="border-t border-white/20 pt-4">
+                <label className="text-sm text-gray-400 mb-2 block">לוגו / תמונה</label>
+                <input type="file" accept="image/*" id="logo-upload" className="hidden" onChange={async (e) => {
+                  const file = e.target.files[0];
+                  if (file) {
+                    try {
+                      const uploadResult = await base44.integrations.Core.UploadFile({ file });
+                      setOverlays(prev => [...prev, {
+                        id: Date.now(),
+                        type: 'logo',
+                        url: uploadResult.file_url,
+                        position: { x: 10, y: 10 },
+                        size: { width: 100, height: 100 }
+                      }]);
+                      setShowOverlayModal(false);
+                      toast.success('לוגו נוסף!');
+                    } catch (error) {
+                      toast.error('שגיאה בהעלאת לוגו');
+                    }
+                  }
+                }} />
+                <Button onClick={() => document.getElementById('logo-upload').click()} className="w-full bg-purple-600 hover:bg-purple-700 text-white">
+                  <ImageIcon size={18} className="mr-2" />
+                  העלה לוגו
+                </Button>
+              </div>
+            </div>
+
+            <div className="flex gap-2 mt-6">
+              <Button onClick={() => setShowOverlayModal(false)} variant="outline" className="flex-1 border-white/20 text-white hover:bg-white/10">
+                סגור
+              </Button>
+            </div>
+
+            {overlays.length > 0 && (
+              <div className="mt-4 border-t border-white/20 pt-4">
+                <p className="text-xs text-gray-400 mb-2">אלמנטים קיימים:</p>
+                <div className="space-y-1">
+                  {overlays.map(overlay => (
+                    <div key={overlay.id} className="flex items-center justify-between text-xs bg-white/5 p-2 rounded">
+                      <span>{overlay.type === 'text' ? overlay.content : 'לוגו'}</span>
+                      <button onClick={() => setOverlays(prev => prev.filter(o => o.id !== overlay.id))} className="text-red-400 hover:text-red-300">
+                        <Trash2 size={14} />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 }
