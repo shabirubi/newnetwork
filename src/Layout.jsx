@@ -260,7 +260,7 @@ export default function Layout({ children, currentPageName }) {
 
             <button
               onClick={() => window.dispatchEvent(new CustomEvent('openAvatarCreator'))}
-              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-black/60 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-[#E31E24]/50 transition-all hover:scale-105 hover:bg-[#E31E24]/30 text-xs sm:text-sm"
+              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-gradient-to-r from-[#E31E24]/30 to-[#E31E24]/20 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-[#E31E24]/50 transition-all hover:scale-105 hover:from-[#E31E24]/50 hover:to-[#E31E24]/40 active:scale-95 cursor-pointer text-xs sm:text-sm"
             >
               <Sparkles className="w-4 h-4 text-white" />
               <span className="text-white font-bold hidden sm:inline">דמויות</span>
@@ -268,7 +268,7 @@ export default function Layout({ children, currentPageName }) {
 
             <Link 
               to={createPageUrl("AIDesignStudio")}
-              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-gradient-to-r from-pink-600 to-purple-600 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-pink-500/50 transition-all hover:scale-105 text-xs sm:text-sm"
+              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-gradient-to-r from-[#E31E24]/30 to-[#E31E24]/20 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-[#E31E24]/50 transition-all hover:scale-105 hover:from-[#E31E24]/50 hover:to-[#E31E24]/40 active:scale-95 cursor-pointer text-xs sm:text-sm"
             >
               <Sparkles className="w-4 h-4 text-white" />
               <span className="text-white font-bold hidden sm:inline">AI Design</span>
@@ -276,7 +276,7 @@ export default function Layout({ children, currentPageName }) {
 
             <Link 
               to={createPageUrl("LumaStudio")}
-              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-black/60 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-[#E31E24]/50 transition-all hover:scale-105 hover:bg-[#E31E24]/30 text-xs sm:text-sm"
+              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-gradient-to-r from-[#E31E24]/30 to-[#E31E24]/20 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-[#E31E24]/50 transition-all hover:scale-105 hover:from-[#E31E24]/50 hover:to-[#E31E24]/40 active:scale-95 cursor-pointer text-xs sm:text-sm"
             >
               <Clapperboard className="w-4 h-4 text-white" />
               <span className="text-white font-bold hidden sm:inline">ייצור</span>
@@ -284,7 +284,7 @@ export default function Layout({ children, currentPageName }) {
 
             <Link 
               to={createPageUrl("VideoEditor")}
-              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-black/60 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-purple-500/50 transition-all hover:scale-105 hover:bg-purple-600/30 text-xs sm:text-sm"
+              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-gradient-to-r from-[#E31E24]/30 to-[#E31E24]/20 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-[#E31E24]/50 transition-all hover:scale-105 hover:from-[#E31E24]/50 hover:to-[#E31E24]/40 active:scale-95 cursor-pointer text-xs sm:text-sm"
             >
               <Film className="w-4 h-4 text-white" />
               <span className="text-white font-bold hidden sm:inline">עורך</span>
@@ -294,9 +294,9 @@ export default function Layout({ children, currentPageName }) {
               href={base44.agents.getWhatsAppConnectURL('general_reporter')}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-black/60 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-[#25D366]/50 transition-all hover:scale-105 hover:bg-[#25D366]/30 text-xs sm:text-sm"
+              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-gradient-to-r from-[#E31E24]/30 to-[#E31E24]/20 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-[#E31E24]/50 transition-all hover:scale-105 hover:from-[#E31E24]/50 hover:to-[#E31E24]/40 active:scale-95 cursor-pointer text-xs sm:text-sm"
             >
-              <MessageCircle className="w-4 h-4 text-[#25D366]" />
+              <MessageCircle className="w-4 h-4 text-white" />
               <span className="text-white font-bold hidden sm:inline">WhatsApp</span>
             </a>
             </div>
