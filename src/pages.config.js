@@ -80,6 +80,7 @@ import VOD from './pages/VOD';
 import VODContent from './pages/VODContent';
 import VideoEditor from './pages/VideoEditor';
 import WarRoom from './pages/WarRoom';
+import Subscription from './pages/Subscription';
 import __Layout from './Layout.jsx';
 
 
@@ -117,6 +118,7 @@ export const PAGES = {
     "VODContent": VODContent,
     "VideoEditor": VideoEditor,
     "WarRoom": WarRoom,
+    "Subscription": Subscription,
 }
 
 export const pagesConfig = {
