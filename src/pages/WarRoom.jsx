@@ -422,8 +422,15 @@ export default function WarRoom() {
               <span className="text-2xl font-bold text-green-600 dark:text-green-400">101</span>
             </div>
           </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
-}
+          </Card>
+          </div>
+
+          {/* Audio element */}
+          <audio 
+          ref={audioRef} 
+          onEnded={() => setPlayingArticleId(null)}
+          className="hidden"
+          />
+          </div>
+          );
+          }
