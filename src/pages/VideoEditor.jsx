@@ -612,6 +612,7 @@ export default function VideoEditor() {
               </div>
             )}
           </div>
+        </div>
 
         {/* Left Side - Timeline + Preview */}
         <div className="flex-1 flex flex-col bg-gradient-to-br from-gray-900 to-black overflow-hidden">
