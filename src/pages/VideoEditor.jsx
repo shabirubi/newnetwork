@@ -550,10 +550,10 @@ export default function VideoEditor() {
                             <Trash2 size={12} />
                           </button>
 
-                          {/* Resize Handles - Always Active */}
+                          {/* Left Resize Handle */}
                           <div
-                            className="absolute left-0 top-0 bottom-0 w-3 bg-[#E31E24]/30 cursor-ew-resize hover:bg-[#E31E24] border-r border-white/20 transition-colors z-10"
-                            title="מתח שמאלה"
+                            className="absolute left-0 top-0 bottom-0 w-2 bg-[#E31E24] cursor-col-resize hover:w-3 transition-all z-50"
+                            title="גרור למתיחה"
                             onMouseDown={(e) => {
                               e.stopPropagation();
                               e.preventDefault();
@@ -561,10 +561,9 @@ export default function VideoEditor() {
                               const startDuration = clip.duration || 1;
 
                               const handleMouseMove = (moveE) => {
-                                moveE.preventDefault();
                                 const deltaX = startX - moveE.clientX;
                                 const deltaDuration = deltaX / widthPerSecond;
-                                const newDuration = Math.max(0.5, startDuration + deltaDuration);
+                                const newDuration = Math.max(0.5, Math.min(30, startDuration + deltaDuration));
 
                                 setClips(prev => prev.map((c, i) => 
                                   i === index ? { ...c, duration: parseFloat(newDuration.toFixed(2)) } : c
@@ -574,17 +573,22 @@ export default function VideoEditor() {
                               const handleMouseUp = () => {
                                 document.removeEventListener('mousemove', handleMouseMove);
                                 document.removeEventListener('mouseup', handleMouseUp);
-                                toast.success('משך קליפ עודכן');
+                                toast.success(`משך עודכן ל-${clips[index].duration.toFixed(2)}s`);
                               };
 
                               document.addEventListener('mousemove', handleMouseMove);
                               document.addEventListener('mouseup', handleMouseUp);
                             }}
-                          />
+                          >
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <div className="w-0.5 h-4 bg-white/80"></div>
+                            </div>
+                          </div>
 
+                          {/* Right Resize Handle */}
                           <div
-                            className="absolute right-0 top-0 bottom-0 w-3 bg-[#E31E24]/30 cursor-ew-resize hover:bg-[#E31E24] border-l border-white/20 transition-colors z-10"
-                            title="מתח ימינה"
+                            className="absolute right-0 top-0 bottom-0 w-2 bg-[#E31E24] cursor-col-resize hover:w-3 transition-all z-50"
+                            title="גרור למתיחה"
                             onMouseDown={(e) => {
                               e.stopPropagation();
                               e.preventDefault();
@@ -592,10 +596,9 @@ export default function VideoEditor() {
                               const startDuration = clip.duration || 1;
 
                               const handleMouseMove = (moveE) => {
-                                moveE.preventDefault();
                                 const deltaX = moveE.clientX - startX;
                                 const deltaDuration = deltaX / widthPerSecond;
-                                const newDuration = Math.max(0.5, startDuration + deltaDuration);
+                                const newDuration = Math.max(0.5, Math.min(30, startDuration + deltaDuration));
 
                                 setClips(prev => prev.map((c, i) => 
                                   i === index ? { ...c, duration: parseFloat(newDuration.toFixed(2)) } : c
@@ -605,13 +608,17 @@ export default function VideoEditor() {
                               const handleMouseUp = () => {
                                 document.removeEventListener('mousemove', handleMouseMove);
                                 document.removeEventListener('mouseup', handleMouseUp);
-                                toast.success('משך קליפ עודכן');
+                                toast.success(`משך עודכן ל-${clips[index].duration.toFixed(2)}s`);
                               };
 
                               document.addEventListener('mousemove', handleMouseMove);
                               document.addEventListener('mouseup', handleMouseUp);
                             }}
-                          />
+                          >
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <div className="w-0.5 h-4 bg-white/80"></div>
+                            </div>
+                          </div>
                         </motion.div>
 
                         {index < clips.length - 1 && (
