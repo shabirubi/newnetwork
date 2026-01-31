@@ -463,6 +463,7 @@ export default function WarRoom() {
           </CardContent>
           </Card>
           </div>
+          </div>
 
           {/* Audio element */}
           <audio 
