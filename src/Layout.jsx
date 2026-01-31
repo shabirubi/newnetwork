@@ -185,7 +185,10 @@ export default function Layout({ children, currentPageName }) {
               </div>
             ) : user ? (
               <>
-                <div className="flex items-center gap-2 px-2 py-1 bg-gradient-to-r from-green-500/20 to-green-600/20 border border-green-500/30 rounded-2xl">
+                <Link 
+                  to={createPageUrl("UserProfile")}
+                  className="flex items-center gap-2 px-2 py-1 bg-gradient-to-r from-green-500/20 to-green-600/20 border border-green-500/30 rounded-2xl hover:from-green-500/30 hover:to-green-600/30 transition-all cursor-pointer active:scale-95"
+                >
                   <div className="flex items-center gap-2 flex-1">
                     {user.profile_image ? (
                       <img 
@@ -203,7 +206,7 @@ export default function Layout({ children, currentPageName }) {
                       <span className="text-green-300 font-bold text-sm hidden sm:inline">{user.full_name || user.email}</span>
                     </div>
                   </div>
-                </div>
+                </Link>
                 <button
                   onClick={handleLogout}
                   className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-red-600/20 hover:bg-red-600/40 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-red-500/30 transition-all hover:scale-105 text-xs sm:text-sm"
