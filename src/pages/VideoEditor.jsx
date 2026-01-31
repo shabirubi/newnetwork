@@ -315,6 +315,7 @@ export default function VideoEditor() {
       ...prev,
       [afterClipIndex]: transitionType
     }));
+    toast.success(`מעבר "${transitionType}" הוחל בין קליפים! 🎬`);
   };
 
   // Update clip filters
