@@ -117,6 +117,8 @@ export default function SubscriptionPage() {
       });
 
       if (data.url) {
+        // שמור המייל לאחר התשלום
+        localStorage.setItem('user_email', userEmail.trim());
         window.location.href = data.url;
       }
     } catch (error) {
