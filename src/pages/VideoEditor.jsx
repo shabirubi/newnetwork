@@ -13,6 +13,7 @@ import {
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useQuery } from '@tanstack/react-query';
+import { DragDropContext, Droppable, Draggable } from '@hello-pangea/dnd';
 import AutoCaptionsModal from '../components/videoeditor/AutoCaptionsModal';
 import TTSModal from '../components/videoeditor/TTSModal';
 import AdvancedTTSModal from '../components/videoeditor/AdvancedTTSModal';
