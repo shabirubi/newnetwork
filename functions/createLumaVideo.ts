@@ -28,11 +28,11 @@ Deno.serve(async (req) => {
       aspect_ratio: aspectRatio
     };
 
-    // Add image if provided
+    // Add image/video if provided - for continuation consistency
     if (imageUrl) {
       generatePayload.keyframes = {
         frame0: {
-          type: "image",
+          type: imageUrl.includes('.mp4') ? 'video' : 'image',
           url: imageUrl
         }
       };
