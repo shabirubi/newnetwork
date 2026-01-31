@@ -896,16 +896,17 @@ export default function VideoEditor() {
           {/* Preview Area */}
           <div className="flex-1 flex items-center justify-center bg-gradient-to-br from-gray-900 to-black p-8 relative">
             {selectedClip ? (
-              <div className="relative max-w-4xl w-full">
-                {/* Close Preview Button */}
+              <>
+                {/* Close Preview Button - Fixed Position */}
                 <button
                   onClick={() => setSelectedClipIndex(null)}
-                  className="absolute top-4 right-4 z-20 bg-black/80 hover:bg-black p-3 rounded-full transition-all"
+                  className="fixed top-24 left-8 z-50 bg-red-600 hover:bg-red-700 p-4 rounded-full transition-all shadow-2xl"
                 >
-                  <X size={24} className="text-white" />
+                  <X size={28} className="text-white" />
                 </button>
 
-                <div className="relative">
+                <div className="relative max-w-4xl w-full">
+                  <div className="relative">
                   {selectedClip.type === 'image' ? (
                     <img
                       src={selectedClip.url}
@@ -978,9 +979,10 @@ export default function VideoEditor() {
                 <div className="mt-4 text-center text-sm text-gray-400">
                   קליפ {selectedClipIndex + 1} מתוך {clips.length} | {selectedClip.name}
                   {pipLayers.length > 0 && <span className="text-cyan-400"> • {pipLayers.length} PIP</span>}
-                </div>
-              </div>
-            ) : clips.length > 0 ? (
+                  </div>
+                  </div>
+                  </>
+                  ) : clips.length > 0 ? (
               <div className="text-center text-gray-400">
                 <Film size={64} className="mx-auto mb-4 opacity-30" />
                 <p className="text-lg mb-2">בחר קליפ מהטיימליין כדי לראות אותו</p>
