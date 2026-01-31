@@ -543,13 +543,17 @@ export default function VideoEditor() {
                               {(provided, snapshot) => (
                                 <React.Fragment>
                         <motion.div
+                          ref={provided.innerRef}
+                          {...provided.draggableProps}
+                          {...provided.dragHandleProps}
                           initial={{ scale: 0.8, opacity: 0 }}
                           animate={{ scale: 1, opacity: 1 }}
-                          className={`relative rounded-lg overflow-hidden cursor-pointer transition-all group ${selectedClipIndex === index ? 'ring-2 ring-[#E31E24] shadow-lg shadow-[#E31E24]/30' : 'hover:ring-2 hover:ring-white/30'}`}
+                          className={`relative rounded-lg overflow-hidden cursor-move transition-all group ${selectedClipIndex === index ? 'ring-2 ring-[#E31E24] shadow-lg shadow-[#E31E24]/30' : 'hover:ring-2 hover:ring-white/30'} ${snapshot.isDragging ? 'shadow-2xl ring-2 ring-cyan-500 scale-105 z-50' : ''}`}
                           style={{ 
                             width: `${clipWidth}px`,
                             minWidth: '60px',
-                            height: '70px'
+                            height: '70px',
+                            ...provided.draggableProps.style
                           }}
                           onClick={() => setSelectedClipIndex(index)}
                         >
