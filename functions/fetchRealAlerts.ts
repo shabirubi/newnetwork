@@ -4,61 +4,12 @@ Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
 
-    // Get real security news from database
-    let articles = await base44.asServiceRole.entities.NewsArticle.filter(
-      { 
-        category: 'security',
-        is_breaking: true
-      },
+    // Get real security and politics news from database only
+    const articles = await base44.asServiceRole.entities.NewsArticle.filter(
+      { },
       '-created_date',
-      20
-    );
-
-    // If no articles, use sample data
-    if (!articles || articles.length === 0) {
-      articles = [
-        {
-          id: 'sample1',
-          title: 'אזעקת רקטות בעוטף',
-          subtitle: 'צפון, קיבוץ בעוטף עזה',
-          content: 'דיווח על שני פיצוצים בעוטף עזה לאחר אזעקה שהושמעה בשטחי ישראל',
-          category: 'security',
-          is_breaking: true,
-          created_date: new Date().toISOString(),
-          image_url: 'https://images.unsplash.com/photo-1579033100900-cb5520f64fcc?w=400&h=300&fit=crop'
-        },
-        {
-          id: 'sample2',
-          title: 'התנועה לביטחון בדרום',
-          subtitle: 'אשקלון, מרכז העיר',
-          content: 'תהליך סגירה חירום של מוקדים ציבוריים בתחנות האוטובוסים',
-          category: 'security',
-          is_breaking: true,
-          created_date: new Date(Date.now() - 5*60000).toISOString(),
-          image_url: 'https://images.unsplash.com/photo-1578778712661-7a82dccc0e6b?w=400&h=300&fit=crop'
-        },
-        {
-          id: 'sample3',
-          title: 'דיווחים על התנגשויות בירושלים',
-          subtitle: 'ירושלים, רובע עתיק',
-          content: 'גדודי כיבוי אש מגיעים לאזור המוקד לאחר דיווחים על חדירה',
-          category: 'security',
-          is_breaking: false,
-          created_date: new Date(Date.now() - 15*60000).toISOString(),
-          image_url: 'https://images.unsplash.com/photo-1580532154208-d2dccff24fcc?w=400&h=300&fit=crop'
-        },
-        {
-          id: 'sample4',
-          title: 'נחיל של כטבי"ם מעל ישראל',
-          subtitle: 'חרמון, גולן',
-          content: 'צבא ההגנה ישראל מדווח על כטבי"ם שחדרו לשטח ישראל ממערב',
-          category: 'security',
-          is_breaking: true,
-          created_date: new Date(Date.now() - 2*60000).toISOString(),
-          image_url: 'https://images.unsplash.com/photo-1578482446554-0626e7fa5d78?w=400&h=300&fit=crop'
-        }
-      ];
-    }
+      50
+    ).catch(() => []);
 
     // Transform articles into alerts
     const alerts = articles.map((article, index) => {
