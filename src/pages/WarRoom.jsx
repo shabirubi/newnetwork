@@ -375,11 +375,85 @@ export default function WarRoom() {
           </Card>
           </div>
 
+          {/* Video Modal */}
+          <AnimatePresence>
+            {videoModalOpen && selectedArticleForVideo && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="fixed inset-0 z-[1000] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
+              >
+                <motion.div
+                  initial={{ scale: 0.9, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.9, opacity: 0 }}
+                  className="bg-gray-900 dark:bg-gray-800 rounded-2xl p-6 max-w-3xl w-full"
+                >
+                  <div className="flex items-center justify-between mb-4">
+                    <h2 className="text-xl font-bold text-white">וידאו מדובב</h2>
+                    <button
+                      onClick={() => {
+                        setVideoModalOpen(false);
+                        setVideoUrl(null);
+                        setSelectedArticleForVideo(null);
+                      }}
+                      className="p-2 hover:bg-gray-700 rounded-lg transition-colors"
+                    >
+                      <X size={24} className="text-white" />
+                    </button>
+                  </div>
+
+                  {!videoUrl ? (
+                    <div className="aspect-video bg-black rounded-xl flex items-center justify-center mb-4">
+                      {generatingVideo ? (
+                        <div className="text-center">
+                          <Loader2 size={48} className="animate-spin text-purple-400 mx-auto mb-3" />
+                          <p className="text-white">יוצר וידאו מדובב...</p>
+                        </div>
+                      ) : (
+                        <Button
+                          onClick={() => handleGenerateVideo(selectedArticleForVideo)}
+                          className="bg-purple-600 hover:bg-purple-700 text-white px-8 py-3 text-lg"
+                        >
+                          <Film size={24} className="ml-2" />
+                          צור וידאו
+                        </Button>
+                      )}
+                    </div>
+                  ) : (
+                    <div className="aspect-video bg-black rounded-xl mb-4 overflow-hidden">
+                      <video 
+                        src={videoUrl}
+                        controls
+                        autoPlay
+                        className="w-full h-full"
+                      />
+                    </div>
+                  )}
+
+                  <p className="text-gray-300 text-sm mb-4">{selectedArticleForVideo.title}</p>
+
+                  <Button
+                    onClick={() => {
+                      setVideoModalOpen(false);
+                      setVideoUrl(null);
+                      setSelectedArticleForVideo(null);
+                    }}
+                    className="w-full bg-gray-700 hover:bg-gray-600 text-white"
+                  >
+                    סגור
+                  </Button>
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
           {/* Audio element */}
           <audio 
-          ref={audioRef} 
-          onEnded={() => setPlayingArticleId(null)}
-          className="hidden"
+            ref={audioRef} 
+            onEnded={() => setPlayingArticleId(null)}
+            className="hidden"
           />
           </div>
           );
