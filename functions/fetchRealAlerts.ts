@@ -4,9 +4,9 @@ Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
 
-    // Get real security and politics news from database only
+    // Get ONLY real security and politics news from database
     const articles = await base44.asServiceRole.entities.NewsArticle.filter(
-      { },
+      { category: { $in: ['security', 'politics'] } },
       '-created_date',
       50
     ).catch(() => []);
