@@ -727,7 +727,7 @@ export default function VideoEditor() {
         </div>
 
         {/* Right Sidebar - Tools */}
-        <div className="w-80 bg-black/50 border-r border-white/10 p-4 overflow-y-auto relative z-10">
+        <div className="w-80 bg-black/50 border-l border-white/10 p-4 overflow-y-auto relative z-10">
           <h3 className="font-bold mb-4 flex items-center gap-2">
             <Plus size={18} className="text-[#E31E24]" />
             הוסף תוכן
