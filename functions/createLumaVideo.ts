@@ -124,12 +124,11 @@ Deno.serve(async (req) => {
              console.log('Voice response status:', voiceResponse.status);
 
              if (voiceResponse.ok) {
-               const audioBlob = await voiceResponse.arrayBuffer();
-               console.log('✅ Audio blob created, size:', audioBlob.byteLength);
+               const audioBlob = await voiceResponse.blob();
+               console.log('✅ Audio blob created, size:', audioBlob.size);
 
                // Upload audio to storage
-               const audioFile = new File([audioBlob], `voice_${Date.now()}.mp3`, { type: 'audio/mpeg' });
-               const uploadResult = await base44.asServiceRole.integrations.Core.UploadFile({ file: audioFile });
+               const uploadResult = await base44.asServiceRole.integrations.Core.UploadFile({ file: audioBlob });
                console.log('Upload result:', uploadResult);
 
                if (uploadResult?.file_url) {
