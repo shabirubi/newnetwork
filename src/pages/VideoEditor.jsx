@@ -476,52 +476,13 @@ export default function VideoEditor() {
     }
   };
 
-  // Export
-  const handleExport = async () => {
+  // Export - פתח Modal
+  const handleExport = () => {
     if (clips.length === 0) {
       toast.error('אין קליפים לייצוא');
       return;
     }
-
-    setExporting(true);
-    try {
-      const email = localStorage.getItem('user_email');
-      if (!email) {
-        toast.error('אין מייל - עבור ל/Subscription תחילה');
-        setExporting(false);
-        return;
-      }
-
-      const mainClip = clips[0];
-
-      const title = window.prompt('כותרת הסרטון:', 'סרטון ערוך - ' + new Date().toLocaleDateString('he-IL'));
-      if (!title) {
-        setExporting(false);
-        return;
-      }
-
-      const category = window.prompt('קטגוריה (breaking/security/economy/politics/technology/sports/entertainment/world/health):', 'breaking') || 'breaking';
-      const feed = window.prompt('פיד (all/live-player/tiktok/user-videos/all-videos):', 'all-videos') || 'all-videos';
-
-      await base44.entities.UserVideo.create({
-        title: title,
-        description: `סרטון ערוך עם ${clips.length} קליפים${videoLoop ? ' - חוזר בלופ' : ''}`,
-        video_url: mainClip.url,
-        thumbnail_url: mainClip.thumbnail || mainClip.url,
-        category: category,
-        feed: feed,
-        status: 'ready',
-        uploader_email: email,
-        duration: totalDuration
-      });
-
-      toast.success('הסרטון הועלה בהצלחה לפידים!');
-    } catch (error) {
-      console.error('Export error:', error);
-      toast.error('שגיאה בהעלאה: ' + (error.message || 'Unknown error'));
-    } finally {
-      setExporting(false);
-    }
+    setShowExportModal(true);
   };
 
   const selectedClip = selectedClipIndex !== null ? clips[selectedClipIndex] : null;
