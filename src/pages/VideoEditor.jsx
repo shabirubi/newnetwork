@@ -1232,7 +1232,6 @@ export default function VideoEditor() {
                           prompt: prompt,
                           aspectRatio: aspectRatio,
                           imageUrl: selectedClip.url,
-                          add_voice: addVoice,
                           voice_script: voiceScript
                         });
 
@@ -1250,11 +1249,11 @@ export default function VideoEditor() {
                           setClips(prev => [...prev, newClip]);
                           setTimeout(() => setSelectedClipIndex(clips.length), 200);
 
-                          if (data.audio_url && addVoice) {
+                          if (data.audio_url) {
                             setAudioTrack({ url: data.audio_url, name: 'דיבוב - ' + prompt.substring(0, 20), volume: 100, loop: false });
                             toast.success('סרטון + דיבוב נוספו לציר הזמן! 🎬🎤');
                           } else {
-                            toast.success('סרטון המשך נוסף לציר הזמן! 🎬');
+                            toast.warning('סרטון בלי קול - בעיה בדיבוב');
                           }
                         } else if (data?.still_processing) {
                           toast.info('הסרטון בתהליך... נסה שוב בעוד רגע');
@@ -1274,7 +1273,6 @@ export default function VideoEditor() {
                         const { data } = await base44.functions.invoke('createLumaVideo', { 
                           prompt: prompt,
                           aspectRatio: aspectRatio,
-                          add_voice: addVoice,
                           voice_script: voiceScript
                         });
 
@@ -1292,11 +1290,11 @@ export default function VideoEditor() {
                           setClips(prev => [...prev, newClip]);
                           setTimeout(() => setSelectedClipIndex(clips.length), 200);
 
-                          if (data.audio_url && addVoice) {
+                          if (data.audio_url) {
                             setAudioTrack({ url: data.audio_url, name: 'דיבוב - ' + prompt.substring(0, 20), volume: 100, loop: false });
                             toast.success('סרטון + דיבוב נוספו לציר הזמן! 🎬🎤');
                           } else {
-                            toast.success('קליפ AI נוסף לציר הזמן! 🎬');
+                            toast.warning('סרטון בלי קול - בעיה בדיבוב');
                           }
                         } else if (data?.still_processing) {
                           toast.info('הסרטון בתהליך... נסה שוב בעוד רגע');

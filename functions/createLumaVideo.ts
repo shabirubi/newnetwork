@@ -9,7 +9,8 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { prompt, imageUrl, aspectRatio = "16:9", add_voice = false, voice_script = null, voice_id = "Rachel" } = await req.json();
+    const { prompt, imageUrl, aspectRatio = "16:9", voice_script = null, voice_id = "Rachel" } = await req.json();
+    const add_voice = true; // ALWAYS add voice - no option to disable
 
     if (!prompt) {
       return Response.json({ error: 'Prompt is required' }, { status: 400 });
