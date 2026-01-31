@@ -72,8 +72,10 @@ export default function WarRoom() {
     try {
       const realAlerts = await fetchRealAlerts();
       setAlerts(realAlerts);
+      setActiveCount(realAlerts.filter(a => a.status === 'active').length);
     } catch (error) {
       console.error('Failed to fetch alerts:', error);
+      toast.error('שגיאה בטעינת התראות');
     } finally {
       setLoadingAlerts(false);
     }
