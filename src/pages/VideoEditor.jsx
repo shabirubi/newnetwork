@@ -28,6 +28,7 @@ import AdCreatorModal from '../components/videoeditor/AdCreatorModal';
       import StockVideoLibraryModal from '../components/videoeditor/StockVideoLibraryModal';
       import TimelineEditor from '../components/videoeditor/TimelineEditor';
 import AIVideoFromImagesModal from '../components/videoeditor/AIVideoFromImagesModal';
+import LumaGeneratorModal from '../components/videoeditor/LumaGeneratorModal';
 
 // Projects Modal Component
 function ProjectsModal({ onClose, onLoad }) {
