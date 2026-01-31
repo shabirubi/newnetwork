@@ -39,39 +39,9 @@ export default function WarRoom() {
     refetchInterval: 30000
   });
 
-  // Fetch real alerts
-  const loadAlerts = async () => {
-    setLoadingAlerts(true);
-    try {
-      const realAlerts = await fetchRealAlerts();
-      setAlerts(realAlerts);
-      setActiveCount(realAlerts.filter(a => a.status === 'active').length);
-    } catch (error) {
-      console.error('Failed to fetch alerts:', error);
-      toast.error('שגיאה בטעינת התראות');
-    } finally {
-      setLoadingAlerts(false);
-    }
-  };
-
   useEffect(() => {
-    loadAlerts();
-    
-    // Real-time updates every 30 seconds
-    const interval = setInterval(() => {
-      setLastUpdate(new Date());
-      loadAlerts();
-      refetchNews();
-    }, 30000);
-    
-    return () => clearInterval(interval);
-  }, [refetchNews]);
-
-  const refreshAlerts = () => {
-    setLastUpdate(new Date());
-    loadAlerts();
     refetchNews();
-  };
+  }, [refetchNews]);
 
   const handlePlayArticle = async (article) => {
     if (playingArticleId === article.id) {
