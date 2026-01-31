@@ -139,33 +139,46 @@ export default function VideoEditor() {
       setHasAccess(false); // ברירת מחדל - אין גישה
       
       try {
-        const user = await base44.auth.me();
-        if (!user?.email) {
-          console.log('No user or email found');
+        // קודם כל ננסה לקבל מייל מ-localStorage
+        const storedEmail = localStorage.getItem('user_email');
+        
+        if (!storedEmail) {
+          console.log('No email in localStorage - redirecting to subscription');
           setCheckingAccess(false);
           return;
         }
         
-        setUserEmail(user.email);
-        console.log('Checking subscription for:', user.email);
+        setUserEmail(storedEmail);
+        console.log('Checking subscription for:', storedEmail);
         
-        const subs = await base44.entities.Subscription.filter({ user_email: user.email }, '-created_date', 10);
-        console.log('Subscriptions found:', subs?.length || 0, subs);
+        const subs = await base44.entities.Subscription.filter({ user_email: storedEmail }, '-created_date', 10);
+        console.log('Subscriptions found:', subs?.length || 0);
         
         if (!subs || subs.length === 0) {
-          console.log('No subscriptions at all');
+          console.log('No subscriptions - removing email and redirecting');
+          localStorage.removeItem('user_email');
           setCheckingAccess(false);
           return;
         }
         
         const activeSub = subs.find(s => s.status === 'active');
-        console.log('Active subscription?', !!activeSub, activeSub);
+        console.log('Active subscription?', !!activeSub);
         
         if (activeSub) {
+          // בדיקה שהמנוי לא פג תוקף
+          if (activeSub.end_date && new Date(activeSub.end_date) < new Date()) {
+            console.log('Subscription expired');
+            localStorage.removeItem('user_email');
+            setCheckingAccess(false);
+            return;
+          }
           setHasAccess(true);
+        } else {
+          localStorage.removeItem('user_email');
         }
       } catch (err) {
         console.error('Subscription check error:', err);
+        localStorage.removeItem('user_email');
       } finally {
         setCheckingAccess(false);
       }

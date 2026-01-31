@@ -71,10 +71,11 @@ export default function SubscriptionPage() {
         });
 
         if (data.coupon_used) {
+          // שמירת המייל ב-localStorage
+          localStorage.setItem('user_email', email);
           toast.success('המנוי הופעל בהצלחה! 🎉');
           setTimeout(() => {
             window.location.href = '/VideoEditor';
-            window.location.reload();
           }, 1500);
           return;
         }
