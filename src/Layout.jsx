@@ -423,8 +423,8 @@ export default function Layout({ children, currentPageName }) {
           {children}
         </main>
 
-        {/* Right Sidebar */}
-        <RightSidebarUpdates />
+        {/* Right Sidebar - Hidden */}
+        {/* <RightSidebarUpdates /> */}
       </div>
 
       {/* Mobile Bottom Navigation */}
