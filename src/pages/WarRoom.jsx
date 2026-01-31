@@ -13,13 +13,16 @@ import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-// Mock real-time alerts
-const mockAlerts = [
-  { id: 1, type: "rocket", location: "אשקלון, שדרות", time: "12:34", severity: "critical", status: "active" },
-  { id: 2, type: "infiltration", location: "גבול עזה", time: "12:20", severity: "high", status: "active" },
-  { id: 3, type: "drone", location: "גליל עליון", time: "12:15", severity: "medium", status: "resolved" },
-  { id: 4, type: "earthquake", location: "צפון הארץ", time: "11:45", severity: "low", status: "resolved" },
-];
+// Fetch real alerts from backend
+async function fetchRealAlerts() {
+  try {
+    const { data } = await base44.functions.invoke('fetchRealAlerts');
+    return data.alerts || [];
+  } catch (error) {
+    console.error('Error fetching alerts:', error);
+    return [];
+  }
+}
 
 const alertTypes = {
   rocket: { icon: Siren, label: "אזעקת רקטות", color: "bg-red-500" },
