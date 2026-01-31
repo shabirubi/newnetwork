@@ -11,32 +11,7 @@ import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-// Fetch real alerts from backend
-async function fetchRealAlerts() {
-  try {
-    const { data } = await base44.functions.invoke('fetchRealAlerts');
-    return data.alerts || [];
-  } catch (error) {
-    console.error('Error fetching alerts:', error);
-    return [];
-  }
-}
 
-const alertTypes = {
-  rocket: { icon: Siren, label: "אזעקת רקטות", color: "bg-red-500" },
-  infiltration: { icon: AlertTriangle, label: "חדירה", color: "bg-orange-500" },
-  drone: { icon: Target, label: "כטב\"מ", color: "bg-yellow-500" },
-  earthquake: { icon: Activity, label: "רעידת אדמה", color: "bg-purple-500" },
-  fire: { icon: Flame, label: "שריפה", color: "bg-orange-600" },
-  flood: { icon: AlertCircle, label: "הצפה", color: "bg-blue-500" },
-};
-
-const severityColors = {
-  critical: "bg-red-600 text-white animate-pulse",
-  high: "bg-orange-500 text-white",
-  medium: "bg-yellow-500 text-black",
-  low: "bg-blue-500 text-white",
-};
 
 export default function WarRoom() {
   const [alerts, setAlerts] = useState([]);
