@@ -21,66 +21,31 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'HeyGen API key not configured' }, { status: 500 });
     }
 
-    console.log('Uploading image to HeyGen...');
+    console.log('Creating HeyGen avatar video from image URL...');
 
-    // Step 1: Upload the image
-    const uploadFormData = new FormData();
-    const imageBlob = await fetch(image_url).then(r => r.blob());
-    uploadFormData.append('file', imageBlob, 'avatar.jpg');
-
-    const uploadResponse = await fetch('https://api.heygen.com/v1/asset/upload', {
-      method: 'POST',
-      headers: {
-        'X-API-KEY': apiKey
-      },
-      body: uploadFormData
-    });
-
-    if (!uploadResponse.ok) {
-      const errorText = await uploadResponse.text();
-      console.error('Upload error:', errorText);
-      return Response.json({ error: 'Failed to upload image', details: errorText }, { status: 500 });
-    }
-
-    const uploadData = await uploadResponse.json();
-    const imageKey = uploadData.data?.image_key;
-
-    if (!imageKey) {
-      console.error('No image key returned:', uploadData);
-      return Response.json({ error: 'No image key returned from upload' }, { status: 500 });
-    }
-
-    console.log('Image uploaded, getting voices...');
-
-    // Step 2: Get voice list
-    const voiceResponse = await fetch('https://api.heygen.com/v2/voices', {
-      headers: {
-        'X-API-KEY': apiKey
-      }
-    });
-
-    let voiceId = 'en-US-Neural2-C'; // Default voice
-    if (voiceResponse.ok) {
-      const voiceData = await voiceResponse.json();
-      if (voiceData.data?.voices?.length > 0) {
-        voiceId = voiceData.data.voices[0].voice_id || voiceId;
-      }
-    }
-
-    console.log('Creating HeyGen avatar IV video...');
-
-    // Step 3: Create video with Avatar IV
-    const createResponse = await fetch('https://api.heygen.com/v1/avatar_iv/generate_video', {
+    // Create video using v2 API with image URL
+    const createResponse = await fetch('https://api.heygen.com/v2/video/generate', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'X-API-KEY': apiKey
       },
       body: JSON.stringify({
-        image_key: imageKey,
-        script: script,
-        voice_id: voiceId,
-        video_title: 'Avatar Video - ' + script.substring(0, 30)
+        dimension: {
+          width: 1280,
+          height: 720
+        },
+        duration: 5,
+        test: false,
+        source: {
+          type: 'image',
+          image_url: image_url
+        },
+        voice: {
+          type: 'text',
+          input_text: script,
+          voice_id: 'en-US-Neural2-C'
+        }
       })
     });
 
@@ -115,7 +80,7 @@ Deno.serve(async (req) => {
     for (let i = 0; i < maxAttempts; i++) {
       await new Promise(resolve => setTimeout(resolve, pollInterval));
       
-      const statusResponse = await fetch(`https://api.heygen.com/v1/video_status/${videoId}`, {
+      const statusResponse = await fetch(`https://api.heygen.com/v2/video_status/${videoId}`, {
         headers: {
           'X-API-KEY': apiKey
         }
@@ -134,10 +99,10 @@ Deno.serve(async (req) => {
       console.log(`Poll attempt ${i + 1}:`, statusData);
       
       if (statusResponse.ok) {
-        const status = statusData.status || statusData.video_status;
+        const status = statusData.data?.status || statusData.status || statusData.video_status;
         
         if (status === 'completed') {
-          const videoUrl = statusData.video_url || statusData.output_url;
+          const videoUrl = statusData.data?.video_url || statusData.video_url || statusData.output_url;
           if (videoUrl) {
             return Response.json({
               video_url: videoUrl,
