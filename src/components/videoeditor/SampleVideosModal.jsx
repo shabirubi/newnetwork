@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Play, Download, X, Search, Loader2 } from 'lucide-react';
+import { Play, Download, X, Search, Loader2, Image as ImageIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
@@ -109,7 +109,9 @@ export default function SampleVideosModal({ onClose, onApply }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
-  const [activeTab, setActiveTab] = useState('samples'); // 'samples' or 'search'
+  const [activeTab, setActiveTab] = useState('samples'); // 'samples', 'search', 'images', 'broll'
+  const [imageResults, setImageResults] = useState([]);
+  const [brollCategory, setBrollCategory] = useState('nature');
 
   const handleAddVideo = async (video) => {
     const newClip = {
@@ -156,6 +158,72 @@ export default function SampleVideosModal({ onClose, onApply }) {
     }
   };
 
+  const handleSearchImages = async () => {
+    if (!searchQuery.trim()) {
+      toast.error('הזן מילת חיפוש');
+      return;
+    }
+
+    setIsSearching(true);
+    try {
+      const { data } = await base44.functions.invoke('searchPexelsImages', {
+        query: searchQuery,
+        per_page: 20
+      });
+
+      if (data.images && data.images.length > 0) {
+        setImageResults(data.images);
+        setActiveTab('images');
+        toast.success(`נמצאו ${data.images.length} תמונות! 🖼️`);
+      } else {
+        toast.error('לא נמצאו תמונות');
+        setImageResults([]);
+      }
+    } catch (error) {
+      console.error('Image search error:', error);
+      toast.error('שגיאה בחיפוש תמונות');
+      setImageResults([]);
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  const handleBrollSearch = async (category) => {
+    setBrollCategory(category);
+    setIsSearching(true);
+    try {
+      const { data } = await base44.functions.invoke('searchPexelsVideos', {
+        query: category,
+        per_page: 20
+      });
+
+      if (data.videos && data.videos.length > 0) {
+        setSearchResults(data.videos);
+        setActiveTab('broll');
+        toast.success(`${data.videos.length} סרטוני ${category}! 🎬`);
+      }
+    } catch (error) {
+      toast.error('שגיאה בטעינת B-roll');
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
+  const handleAddImage = (image) => {
+    const newClip = {
+      id: Date.now(),
+      url: image.url,
+      duration: 5,
+      name: image.photographer || 'תמונה',
+      thumbnail: image.thumbnail,
+      filters: { brightness: 100, contrast: 100, saturation: 100 },
+      volume: 0,
+      type: 'image'
+    };
+    onApply(newClip);
+    toast.success('תמונה נוספה! 🖼️');
+  };
+
   return (
     <div 
       className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50"
@@ -173,7 +241,7 @@ export default function SampleVideosModal({ onClose, onApply }) {
                 <Play size={24} className="text-green-500" />
                 ספריית סרטונים
               </h3>
-              <p className="text-sm text-gray-400 mt-1">12 דוגמאות + מיליוני סרטונים מ-Pexels</p>
+              <p className="text-sm text-gray-400 mt-1">דוגמאות • סרטונים • תמונות • B-Roll</p>
             </div>
             <button
               onClick={onClose}
@@ -188,8 +256,8 @@ export default function SampleVideosModal({ onClose, onApply }) {
             <Input
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
-              placeholder="חפש סרטונים: טבע, ים, חתול, מכונית..."
+              onKeyPress={(e) => e.key === 'Enter' && (activeTab === 'images' ? handleSearchImages() : handleSearch())}
+              placeholder="חפש סרטונים או תמונות..."
               className="flex-1 bg-black/40 border-white/20 text-white placeholder-gray-500"
             />
             <Button
@@ -202,14 +270,28 @@ export default function SampleVideosModal({ onClose, onApply }) {
               ) : (
                 <>
                   <Search size={18} className="mr-2" />
-                  חפש
+                  וידאו
+                </>
+              )}
+            </Button>
+            <Button
+              onClick={handleSearchImages}
+              disabled={isSearching || !searchQuery.trim()}
+              className="bg-gradient-to-r from-pink-600 to-orange-600 hover:from-pink-700 hover:to-orange-700 text-white"
+            >
+              {isSearching ? (
+                <Loader2 size={18} className="animate-spin" />
+              ) : (
+                <>
+                  <Search size={18} className="mr-2" />
+                  תמונה
                 </>
               )}
             </Button>
           </div>
 
           {/* Tabs */}
-          <div className="flex gap-2 mt-4">
+          <div className="flex gap-2 mt-4 flex-wrap">
             <button
               onClick={() => setActiveTab('samples')}
               className={`px-4 py-2 rounded-lg font-semibold transition-all ${
@@ -228,14 +310,131 @@ export default function SampleVideosModal({ onClose, onApply }) {
                   : 'bg-white/5 text-gray-400 hover:bg-white/10'
               }`}
             >
-              חיפוש ({searchResults.length})
+              וידאו ({searchResults.length})
+            </button>
+            <button
+              onClick={() => setActiveTab('images')}
+              className={`px-4 py-2 rounded-lg font-semibold transition-all ${
+                activeTab === 'images'
+                  ? 'bg-pink-600 text-white'
+                  : 'bg-white/5 text-gray-400 hover:bg-white/10'
+              }`}
+            >
+              תמונות ({imageResults.length})
+            </button>
+            <button
+              onClick={() => setActiveTab('broll')}
+              className={`px-4 py-2 rounded-lg font-semibold transition-all ${
+                activeTab === 'broll'
+                  ? 'bg-purple-600 text-white'
+                  : 'bg-white/5 text-gray-400 hover:bg-white/10'
+              }`}
+            >
+              B-Roll
             </button>
           </div>
         </div>
 
-        {/* Videos Grid */}
+        {/* Content */}
         <div className="flex-1 overflow-y-auto">
-          {activeTab === 'samples' ? (
+          {activeTab === 'broll' ? (
+            <div>
+              <div className="mb-4 flex gap-2 flex-wrap">
+                {['nature', 'business', 'technology', 'city', 'people', 'food', 'sports', 'travel'].map(cat => (
+                  <button
+                    key={cat}
+                    onClick={() => handleBrollSearch(cat)}
+                    className={`px-4 py-2 rounded-lg font-semibold transition-all ${
+                      brollCategory === cat
+                        ? 'bg-purple-600 text-white'
+                        : 'bg-white/5 text-gray-400 hover:bg-white/10'
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pr-2">
+                {searchResults.map(video => (
+                  <div
+                    key={video.id}
+                    className="group relative bg-black/40 border border-white/10 rounded-xl overflow-hidden hover:border-purple-500/50 transition-all"
+                  >
+                    <div className="relative aspect-video overflow-hidden bg-black">
+                      <img
+                        src={video.thumbnail}
+                        alt={video.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <button
+                          onClick={() => setPreviewingVideo(video)}
+                          className="bg-purple-600/80 hover:bg-purple-600 p-3 rounded-full transition-all transform scale-75 group-hover:scale-100"
+                        >
+                          <Play size={20} className="text-white fill-white" />
+                        </button>
+                      </div>
+                      <div className="absolute bottom-2 left-2 bg-black/80 px-2 py-1 rounded text-xs text-white font-bold">
+                        {Math.round(video.duration)}s
+                      </div>
+                    </div>
+                    <div className="p-3">
+                      <h4 className="font-semibold text-white text-sm truncate group-hover:text-purple-400 transition-colors mb-1">
+                        {video.title}
+                      </h4>
+                      <p className="text-xs text-gray-400 truncate mb-3">{video.description}</p>
+                      <Button
+                        onClick={() => handleAddVideo(video)}
+                        size="sm"
+                        className="w-full bg-purple-600 hover:bg-purple-700 text-white text-xs h-8"
+                      >
+                        <Download size={14} className="mr-1" />
+                        הוסף
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ) : activeTab === 'images' ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pr-2">
+              {imageResults.length === 0 ? (
+                <div className="col-span-full text-center py-12 text-gray-400">
+                  <Search size={48} className="mx-auto mb-4 opacity-30" />
+                  <p>חפש תמונות...</p>
+                </div>
+              ) : (
+                imageResults.map(image => (
+                  <div
+                    key={image.id}
+                    className="group relative bg-black/40 border border-white/10 rounded-xl overflow-hidden hover:border-pink-500/50 transition-all"
+                  >
+                    <div className="relative aspect-video overflow-hidden bg-black">
+                      <img
+                        src={image.thumbnail}
+                        alt={image.description}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      />
+                    </div>
+                    <div className="p-3">
+                      <h4 className="font-semibold text-white text-sm truncate group-hover:text-pink-400 transition-colors mb-1">
+                        {image.photographer}
+                      </h4>
+                      <p className="text-xs text-gray-400 truncate mb-3">{image.description}</p>
+                      <Button
+                        onClick={() => handleAddImage(image)}
+                        size="sm"
+                        className="w-full bg-pink-600 hover:bg-pink-700 text-white text-xs h-8"
+                      >
+                        <Download size={14} className="mr-1" />
+                        הוסף
+                      </Button>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          ) : activeTab === 'samples' ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pr-2">
               {SAMPLE_VIDEOS.map(video => (
                 <div

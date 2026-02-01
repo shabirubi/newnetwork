@@ -8,7 +8,7 @@ import { Slider } from '@/components/ui/slider';
 import { 
         Play, Pause, Plus, Trash2, Upload, Download, 
         Volume2, VolumeX, Scissors, Sparkles, Music, 
-        MoveHorizontal, Film, Loader2, Save, Eye, Type, Image as ImageIcon, FolderOpen, X, Clock, Check, Crown
+        MoveHorizontal, Film, Loader2, Save, Eye, Type, Image as ImageIcon, FolderOpen, X, Clock, Check, Crown, User
       } from 'lucide-react';
 import { toast } from 'sonner';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -30,6 +30,7 @@ import AdCreatorModal from '../components/videoeditor/AdCreatorModal';
 import AIVideoFromImagesModal from '../components/videoeditor/AIVideoFromImagesModal';
 import ExportVideoModal from '../components/videoeditor/ExportVideoModal';
 import SampleVideosModal from '../components/videoeditor/SampleVideosModal';
+import KlingCharacterModal from '../components/videoeditor/KlingCharacterModal';
 
 // Projects Modal Component
 function ProjectsModal({ onClose, onLoad }) {
@@ -137,6 +138,7 @@ export default function VideoEditor() {
   const [contextMenu, setContextMenu] = useState(null);
   const [contextClipIndex, setContextClipIndex] = useState(null);
   const [showSampleVideosModal, setShowSampleVideosModal] = useState(false);
+  const [showKlingCharacterModal, setShowKlingCharacterModal] = useState(false);
   const videoRef = useRef(null);
   const audioRef = useRef(null);
 
@@ -1023,6 +1025,11 @@ export default function VideoEditor() {
               תמונה AI
             </Button>
 
+            <Button onClick={() => setShowKlingCharacterModal(true)} className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white text-sm">
+              <User size={16} className="ml-1" />
+              דמות
+            </Button>
+
             <input type="file" accept="audio/*" onChange={handleAddAudio} className="hidden" id="audio-upload" />
             <div className="flex gap-2">
               <Button onClick={() => document.getElementById('audio-upload').click()} className="flex-1 bg-white/10 hover:bg-white/20 text-white text-sm">
@@ -1219,6 +1226,8 @@ export default function VideoEditor() {
       {showAIVideoFromImagesModal && <AIVideoFromImagesModal onClose={() => setShowAIVideoFromImagesModal(false)} onApply={(clips) => { setClips(prev => [...prev, ...clips]); setShowAIVideoFromImagesModal(false); }} />}
 
       {showSampleVideosModal && <SampleVideosModal onClose={() => setShowSampleVideosModal(false)} onApply={(clip) => { setClips(prev => [...prev, clip]); setShowSampleVideosModal(false); }} />}
+
+      {showKlingCharacterModal && <KlingCharacterModal onClose={() => setShowKlingCharacterModal(false)} onApply={(clip) => { setClips(prev => [...prev, clip]); setShowKlingCharacterModal(false); }} />}
 
       {showExportModal && (
         <ExportVideoModal 
