@@ -27,12 +27,11 @@ Deno.serve(async (req) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-Access-Key': accessKey,
-        'X-Secret-Key': secretKey
+        'Authorization': `Bearer ${accessKey}`
       },
       body: JSON.stringify({
-        model_name: 'kling-v1-5',
-        image_url: image_url,
+        model_name: 'kling-v1',
+        image: image_url,
         prompt: prompt,
         negative_prompt: 'blurry, low quality, distorted, static',
         cfg_scale: 0.5,
@@ -66,8 +65,7 @@ Deno.serve(async (req) => {
       
       const statusResponse = await fetch(`https://api.klingai.com/v1/videos/image2video/${taskId}`, {
         headers: {
-          'X-Access-Key': accessKey,
-          'X-Secret-Key': secretKey
+          'Authorization': `Bearer ${accessKey}`
         }
       });
 
