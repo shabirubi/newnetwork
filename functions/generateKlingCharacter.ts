@@ -10,10 +10,10 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { image_url, prompt, duration = 5 } = await req.json();
-    
-    if (!image_url || !prompt) {
-      return Response.json({ error: 'image_url and prompt are required' }, { status: 400 });
+    const { image_url, text_script, audio_url, duration = 5 } = await req.json();
+
+    if (!image_url || (!text_script && !audio_url)) {
+      return Response.json({ error: 'image_url and either text_script or audio_url are required' }, { status: 400 });
     }
 
     const accessKey = Deno.env.get('KLING_ACCESS_KEY');
@@ -34,24 +34,30 @@ Deno.serve(async (req) => {
       { algorithm: 'HS256' }
     );
     
-    console.log('JWT Token created for Kling API');
+    console.log('JWT Token created for Kling Avatar API');
 
-    // Create video generation task using Kling API
-    const createResponse = await fetch('https://api-singapore.klingai.com/v1/videos/image2video', {
+    // Prepare request body for Avatar API
+    const requestBody = {
+      model_name: 'kling-v2.6',
+      image: image_url,
+      mode: 'std'
+    };
+
+    // Add audio or text
+    if (audio_url) {
+      requestBody.audio = audio_url;
+    } else if (text_script) {
+      requestBody.text = text_script;
+    }
+
+    // Create avatar video using Kling Avatar API
+    const createResponse = await fetch('https://api-singapore.klingai.com/v1/videos/avatar', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${jwtToken}`
       },
-      body: JSON.stringify({
-        model_name: 'kling-v1',
-        image: image_url,
-        prompt: prompt,
-        negative_prompt: 'blurry, low quality, distorted, static',
-        cfg_scale: 0.5,
-        mode: 'std',
-        duration: '5'
-      })
+      body: JSON.stringify(requestBody)
     });
 
     if (!createResponse.ok) {
@@ -76,8 +82,8 @@ Deno.serve(async (req) => {
     
     for (let i = 0; i < maxAttempts; i++) {
       await new Promise(resolve => setTimeout(resolve, pollInterval));
-      
-      const statusResponse = await fetch(`https://api-singapore.klingai.com/v1/videos/image2video/${taskId}`, {
+
+      const statusResponse = await fetch(`https://api-singapore.klingai.com/v1/videos/avatar/${taskId}`, {
         headers: {
           'Authorization': `Bearer ${jwtToken}`
         }
