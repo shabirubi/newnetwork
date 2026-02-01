@@ -90,7 +90,7 @@ Deno.serve(async (req) => {
     for (let i = 0; i < maxAttempts; i++) {
       await new Promise(resolve => setTimeout(resolve, pollInterval));
       
-      const statusResponse = await fetch(`https://api.heygen.com/v2/video_status/${videoId}`, {
+      const statusResponse = await fetch(`https://api.heygen.com/v2/video/${videoId}`, {
         headers: {
           'X-API-KEY': apiKey
         }
