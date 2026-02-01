@@ -1,0 +1,247 @@
+import React, { useState } from 'react';
+import { Play, Download, X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
+
+const SAMPLE_VIDEOS = [
+  {
+    id: 1,
+    title: 'Big Buck Bunny',
+    url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+    thumbnail: 'https://storage.googleapis.com/gtv-videos-bucket/sample/images/BigBuckBunny.jpg',
+    duration: 10,
+    description: 'ארנב ענק עם לב גדול'
+  },
+  {
+    id: 2,
+    title: 'Elephant Dream',
+    url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+    thumbnail: 'https://storage.googleapis.com/gtv-videos-bucket/sample/images/ElephantsDream.jpg',
+    duration: 11,
+    description: 'סרט אנימציה ראשון של Blender'
+  },
+  {
+    id: 3,
+    title: 'For Bigger Blazes',
+    url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+    thumbnail: 'https://storage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerBlazes.jpg',
+    duration: 15,
+    description: 'סרטון דמו של Chromecast'
+  },
+  {
+    id: 4,
+    title: 'For Bigger Escape',
+    url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
+    thumbnail: 'https://storage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerEscapes.jpg',
+    duration: 15,
+    description: 'הבריחות של באטמן'
+  },
+  {
+    id: 5,
+    title: 'For Bigger Fun',
+    url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
+    thumbnail: 'https://storage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerFun.jpg',
+    duration: 60,
+    description: 'כיף גדול יותר עם Chromecast'
+  },
+  {
+    id: 6,
+    title: 'For Bigger Joyrides',
+    url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4',
+    thumbnail: 'https://storage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerJoyrides.jpg',
+    duration: 15,
+    description: 'טיולים גדולים יותר'
+  },
+  {
+    id: 7,
+    title: 'For Bigger Meltdowns',
+    url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4',
+    thumbnail: 'https://storage.googleapis.com/gtv-videos-bucket/sample/images/ForBiggerMeltdowns.jpg',
+    duration: 15,
+    description: 'התמוטטויות גדולות יותר'
+  },
+  {
+    id: 8,
+    title: 'Sintel',
+    url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
+    thumbnail: 'https://storage.googleapis.com/gtv-videos-bucket/sample/images/Sintel.jpg',
+    duration: 15,
+    description: 'סרט אנימציה של Blender Foundation'
+  },
+  {
+    id: 9,
+    title: 'Subaru Outback',
+    url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/SubaruOutbackOnStreetAndDirt.mp4',
+    thumbnail: 'https://storage.googleapis.com/gtv-videos-bucket/sample/images/SubaruOutbackOnStreetAndDirt.jpg',
+    duration: 25,
+    description: 'סובארו ברחוב ובשטח'
+  },
+  {
+    id: 10,
+    title: 'Tears of Steel',
+    url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/TearsOfSteel.mp4',
+    thumbnail: 'https://storage.googleapis.com/gtv-videos-bucket/sample/images/TearsOfSteel.jpg',
+    duration: 12,
+    description: 'סרט מדע בדיוני מאמסטרדם'
+  },
+  {
+    id: 11,
+    title: 'Volkswagen GTI',
+    url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4',
+    thumbnail: 'https://storage.googleapis.com/gtv-videos-bucket/sample/images/VolkswagenGTIReview.jpg',
+    duration: 20,
+    description: 'ביקורת על פולקסווגן GTI'
+  },
+  {
+    id: 12,
+    title: 'We Are Going On Bullrun',
+    url: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4',
+    thumbnail: 'https://storage.googleapis.com/gtv-videos-bucket/sample/images/WeAreGoingOnBullrun.jpg',
+    duration: 30,
+    description: 'שלבי GT500 ב-Bullrun Rally'
+  }
+];
+
+export default function SampleVideosModal({ onClose, onApply }) {
+  const [previewingVideo, setPreviewingVideo] = useState(null);
+
+  const handleAddVideo = async (video) => {
+    const newClip = {
+      id: Date.now(),
+      url: video.url,
+      duration: video.duration,
+      name: video.title,
+      thumbnail: video.thumbnail,
+      filters: { brightness: 100, contrast: 100, saturation: 100 },
+      volume: 100,
+      type: 'video'
+    };
+    onApply(newClip);
+    toast.success(`"${video.title}" נוסף! 🎥`);
+  };
+
+  return (
+    <div 
+      className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50"
+      onClick={onClose}
+    >
+      <div 
+        className="bg-gradient-to-br from-gray-900 to-black border border-white/20 rounded-2xl p-6 max-w-6xl w-full max-h-[85vh] overflow-hidden flex flex-col"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6 pb-4 border-b border-white/10">
+          <div>
+            <h3 className="text-2xl font-bold text-white flex items-center gap-2">
+              <Play size={24} className="text-green-500" />
+              סרטוני דוגמה
+            </h3>
+            <p className="text-sm text-gray-400 mt-1">12 סרטונים איכותיים מ-Google Cloud CDN</p>
+          </div>
+          <button
+            onClick={onClose}
+            className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+          >
+            <X size={24} className="text-white" />
+          </button>
+        </div>
+
+        {/* Videos Grid */}
+        <div className="flex-1 overflow-y-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pr-2">
+            {SAMPLE_VIDEOS.map(video => (
+              <div
+                key={video.id}
+                className="group relative bg-black/40 border border-white/10 rounded-xl overflow-hidden hover:border-green-500/50 transition-all"
+              >
+                {/* Thumbnail */}
+                <div className="relative aspect-video overflow-hidden bg-black">
+                  <img
+                    src={video.thumbnail}
+                    alt={video.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                    onError={(e) => {
+                      e.target.src = 'https://via.placeholder.com/400x225/1a1a1a/4ade80?text=' + encodeURIComponent(video.title);
+                    }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                    <button
+                      onClick={() => setPreviewingVideo(video)}
+                      className="bg-green-600/80 hover:bg-green-600 p-3 rounded-full transition-all transform scale-75 group-hover:scale-100"
+                    >
+                      <Play size={20} className="text-white fill-white" />
+                    </button>
+                  </div>
+                  {/* Duration Badge */}
+                  <div className="absolute bottom-2 left-2 bg-black/80 px-2 py-1 rounded text-xs text-white font-bold">
+                    {video.duration}s
+                  </div>
+                </div>
+
+                {/* Info */}
+                <div className="p-3">
+                  <h4 className="font-semibold text-white text-sm truncate group-hover:text-green-400 transition-colors mb-1">
+                    {video.title}
+                  </h4>
+                  <p className="text-xs text-gray-400 truncate mb-3">{video.description}</p>
+                  <Button
+                    onClick={() => handleAddVideo(video)}
+                    size="sm"
+                    className="w-full bg-green-600 hover:bg-green-700 text-white text-xs h-8"
+                  >
+                    <Download size={14} className="mr-1" />
+                    הוסף לעורך
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className="mt-4 pt-4 border-t border-white/10">
+          <p className="text-xs text-gray-500 flex items-center justify-center gap-2">
+            <span className="text-green-500">✓</span>
+            סרטונים חינמיים מ-Google Cloud CDN • מהירות ואמינות מקסימלית
+          </p>
+        </div>
+      </div>
+
+      {/* Video Preview Modal */}
+      {previewingVideo && (
+        <div
+          className="fixed inset-0 bg-black/90 backdrop-blur-sm flex items-center justify-center p-4 z-[60]"
+          onClick={() => setPreviewingVideo(null)}
+        >
+          <div
+            className="max-w-4xl w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <video
+              src={previewingVideo.url}
+              controls
+              autoPlay
+              className="w-full rounded-xl border border-white/20 shadow-2xl"
+            />
+            <div className="mt-4 flex items-center justify-between bg-black/60 backdrop-blur-sm p-4 rounded-xl">
+              <div>
+                <h4 className="font-bold text-white text-lg">{previewingVideo.title}</h4>
+                <p className="text-sm text-gray-400">{previewingVideo.description} • {previewingVideo.duration}s</p>
+              </div>
+              <Button
+                onClick={() => {
+                  handleAddVideo(previewingVideo);
+                  setPreviewingVideo(null);
+                }}
+                className="bg-green-600 hover:bg-green-700 text-white"
+              >
+                <Download size={18} className="mr-2" />
+                הוסף לעורך
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}

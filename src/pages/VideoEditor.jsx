@@ -29,6 +29,7 @@ import AdCreatorModal from '../components/videoeditor/AdCreatorModal';
       import TimelineEditor from '../components/videoeditor/TimelineEditor';
 import AIVideoFromImagesModal from '../components/videoeditor/AIVideoFromImagesModal';
 import ExportVideoModal from '../components/videoeditor/ExportVideoModal';
+import SampleVideosModal from '../components/videoeditor/SampleVideosModal';
 
 // Projects Modal Component
 function ProjectsModal({ onClose, onLoad }) {
@@ -135,6 +136,7 @@ export default function VideoEditor() {
   const [showExportModal, setShowExportModal] = useState(false);
   const [contextMenu, setContextMenu] = useState(null);
   const [contextClipIndex, setContextClipIndex] = useState(null);
+  const [showSampleVideosModal, setShowSampleVideosModal] = useState(false);
   const videoRef = useRef(null);
   const audioRef = useRef(null);
 
@@ -970,10 +972,16 @@ export default function VideoEditor() {
 
           <div className="space-y-2">
             <input type="file" accept="video/mp4,video/webm,video/ogg,video/quicktime,video/x-msvideo,video/x-matroska,image/png,image/jpeg,image/jpg,image/gif" onChange={handleAddClip} className="hidden" id="video-upload" />
-            <Button onClick={() => document.getElementById('video-upload').click()} className="w-full bg-white/10 hover:bg-white/20 text-white text-sm" disabled={loading}>
-              {loading ? <Loader2 size={16} className="ml-1 animate-spin" /> : <Upload size={16} className="ml-1" />}
-              העלה סרטון
-            </Button>
+            <div className="flex gap-2">
+              <Button onClick={() => document.getElementById('video-upload').click()} className="flex-1 bg-white/10 hover:bg-white/20 text-white text-sm" disabled={loading}>
+                {loading ? <Loader2 size={16} className="ml-1 animate-spin" /> : <Upload size={16} className="ml-1" />}
+                העלה
+              </Button>
+              <Button onClick={() => setShowSampleVideosModal(true)} className="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white text-sm">
+                <Play size={16} className="ml-1" />
+                דוגמאות
+              </Button>
+            </div>
 
             <Button onClick={() => setShowLumaGeneratorModal(true)} className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white text-sm" disabled={loading}>
               <Sparkles size={16} className="ml-1" />
@@ -1189,6 +1197,8 @@ export default function VideoEditor() {
 
 
       {showAIVideoFromImagesModal && <AIVideoFromImagesModal onClose={() => setShowAIVideoFromImagesModal(false)} onApply={(clips) => { setClips(prev => [...prev, ...clips]); setShowAIVideoFromImagesModal(false); }} />}
+
+      {showSampleVideosModal && <SampleVideosModal onClose={() => setShowSampleVideosModal(false)} onApply={(clip) => { setClips(prev => [...prev, clip]); setShowSampleVideosModal(false); }} />}
 
       {showExportModal && (
         <ExportVideoModal 
