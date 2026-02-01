@@ -105,13 +105,13 @@ export default function KlingCharacterModal({ onClose, onApply }) {
             </Button>
             <Button
               onClick={handleGenerate}
-              disabled={loading || !imageFile || !prompt.trim()}
+              disabled={loading || !prompt.trim()}
               className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white"
             >
               {loading ? (
                 <>
                   <Loader2 size={18} className="mr-2 animate-spin" />
-                  יוצר...
+                  יוצר דמות...
                 </>
               ) : (
                 <>
