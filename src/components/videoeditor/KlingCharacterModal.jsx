@@ -82,13 +82,14 @@ export default function KlingCharacterModal({ onClose, onApply }) {
           <div className="bg-purple-600/10 border border-purple-500/30 rounded-xl p-4">
             <p className="text-sm text-purple-200 font-semibold mb-2 flex items-center gap-2">
               <Sparkles size={16} />
-              טיפים:
+              איך זה עובד:
             </p>
             <ul className="text-xs text-purple-300 space-y-1">
-              <li>• השתמש בתמונה ברורה של אדם או דמות</li>
-              <li>• תאר תנועות ספציפיות: "הולך", "מנופף", "מדבר"</li>
-              <li>• הוסף פרטי סביבה: "ביער", "ברחוב"</li>
-              <li>• התהליך לוקח עד 2 דקות</li>
+              <li>✨ HeyGen יוצר דמות מדברת עם אבטار מובנה</li>
+              <li>🎤 הטקסט שלך יוקרא בקול טבעי (Chill Brian voice)</li>
+              <li>🎬 הדמות תזוז ותדבר בהתאם לטקסט</li>
+              <li>⏱️ התהליך לוקח בדרך כלל עד דקה</li>
+              <li>💾 הסרטון מוסף ישירות לעורך</li>
             </ul>
           </div>
 
