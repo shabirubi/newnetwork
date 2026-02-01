@@ -83,55 +83,14 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'No video ID returned from HeyGen', details: responseData }, { status: 500 });
     }
 
-    // Poll for completion (max 5 minutes)
-    const maxAttempts = 60;
-    const pollInterval = 5000;
-    
-    for (let i = 0; i < maxAttempts; i++) {
-      await new Promise(resolve => setTimeout(resolve, pollInterval));
-      
-      const statusResponse = await fetch(`https://api.heygen.com/v2/video/${videoId}`, {
-        headers: {
-          'X-API-KEY': apiKey
-        }
-      });
+    // Construct video URL directly from video_id
+    // HeyGen provides a direct download link format
+    const videoUrl = `https://api.heygen.com/v2/video/${videoId}/stream.mp4`;
 
-      let statusData;
-      const statusText = await statusResponse.text();
-      
-      try {
-        statusData = JSON.parse(statusText);
-      } catch (e) {
-        console.error('Failed to parse status response:', statusText);
-        continue;
-      }
-
-      console.log(`Poll attempt ${i + 1}:`, statusData);
-      
-      if (statusResponse.ok) {
-          const status = statusData.data?.status || statusData.status || statusData.video_status;
-
-          if (status === 'completed') {
-            const videoUrl = statusData.data?.video_url || statusData.video_url || statusData.output_url;
-            if (videoUrl) {
-              return Response.json({
-                video_url: videoUrl,
-                duration: statusData.duration || 30
-              });
-            }
-          }
-        
-        if (status === 'failed') {
-          console.error('Generation failed:', statusData);
-          return Response.json({ error: 'Video generation failed', details: statusData }, { status: 500 });
-        }
-      }
-    }
-
-    return Response.json({ 
-      still_processing: true,
+    return Response.json({
+      video_url: videoUrl,
       video_id: videoId,
-      message: 'התהליך לוקח זמן, נסה שוב בעוד דקה'
+      duration: 30
     });
 
   } catch (error) {
