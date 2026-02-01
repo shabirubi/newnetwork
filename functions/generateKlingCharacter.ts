@@ -1,5 +1,55 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
 
+// Helper function for base64url encoding
+function base64UrlEncode(str) {
+  return btoa(str)
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_')
+    .replace(/=/g, '');
+}
+
+// Helper to create JWT token
+async function createJWT(accessKey, secretKey) {
+  const now = Math.floor(Date.now() / 1000);
+  
+  const header = {
+    alg: 'HS256',
+    typ: 'JWT'
+  };
+  
+  const payload = {
+    iss: accessKey,
+    exp: now + 1800,
+    nbf: now - 5
+  };
+  
+  const encodedHeader = base64UrlEncode(JSON.stringify(header));
+  const encodedPayload = base64UrlEncode(JSON.stringify(payload));
+  
+  const data = `${encodedHeader}.${encodedPayload}`;
+  
+  const encoder = new TextEncoder();
+  const key = await crypto.subtle.importKey(
+    'raw',
+    encoder.encode(secretKey),
+    { name: 'HMAC', hash: 'SHA-256' },
+    false,
+    ['sign']
+  );
+  
+  const signature = await crypto.subtle.sign(
+    'HMAC',
+    key,
+    encoder.encode(data)
+  );
+  
+  const encodedSignature = base64UrlEncode(
+    String.fromCharCode(...new Uint8Array(signature))
+  );
+  
+  return `${data}.${encodedSignature}`;
+}
+
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
@@ -22,15 +72,15 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Kling API keys not configured' }, { status: 500 });
     }
 
-    console.log('Using Kling API with Access Key:', accessKey.substring(0, 10) + '...');
+    const jwtToken = await createJWT(accessKey, secretKey);
+    console.log('JWT Token created for Kling API');
 
     // Create video generation task using Kling API
-    const createResponse = await fetch('https://api-singapore.klingai.com/v1/videos/image2video', {
+    const createResponse = await fetch('https://api.klingai.com/v1/videos/image2video', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-Api-Key': accessKey,
-        'X-Secret-Key': secretKey
+        'Authorization': `Bearer ${jwtToken}`
       },
       body: JSON.stringify({
         model_name: 'kling-v1',
@@ -66,10 +116,9 @@ Deno.serve(async (req) => {
     for (let i = 0; i < maxAttempts; i++) {
       await new Promise(resolve => setTimeout(resolve, pollInterval));
       
-      const statusResponse = await fetch(`https://api-singapore.klingai.com/v1/videos/image2video/${taskId}`, {
+      const statusResponse = await fetch(`https://api.klingai.com/v1/videos/image2video/${taskId}`, {
         headers: {
-          'X-Api-Key': accessKey,
-          'X-Secret-Key': secretKey
+          'Authorization': `Bearer ${jwtToken}`
         }
       });
 
