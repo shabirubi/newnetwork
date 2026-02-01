@@ -26,7 +26,7 @@ Deno.serve(async (req) => {
     
     console.log('Creating HeyGen avatar video with avatar:', selectedAvatarId);
 
-    // Create video using v2 API with image URL
+    // Create video using v2 API
     const createResponse = await fetch('https://api.heygen.com/v2/video/generate', {
       method: 'POST',
       headers: {
@@ -38,17 +38,11 @@ Deno.serve(async (req) => {
           {
             character: {
               type: 'avatar',
-              avatar_id: 'a1b2c3d4-e5f6',
-              emotion: 'neutral'
+              avatar_id: selectedAvatarId
             },
             voice: {
               type: 'text',
-              input_text: script,
-              voice_id: 'en-US-Neural2-C'
-            },
-            background: {
-              type: 'image',
-              url: image_url
+              input_text: script
             }
           }
         ],
