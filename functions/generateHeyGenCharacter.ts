@@ -83,59 +83,14 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'No video ID returned from HeyGen', details: responseData }, { status: 500 });
     }
 
-    // Poll for completion (max 5 minutes with longer intervals)
-    const maxAttempts = 30;
-    const pollInterval = 10000; // 10 seconds between checks
+    // חזר מיד עם וידאו ID לתהליך אסינכרוני
+    // HeyGen תשלח מייל כשהוידאו מוכן
+    console.log('Video creation initiated with ID:', videoId);
     
-    for (let i = 0; i < maxAttempts; i++) {
-      await new Promise(resolve => setTimeout(resolve, pollInterval));
-      
-      console.log(`Poll attempt ${i + 1}/${maxAttempts}`);
-      
-      try {
-        const statusResponse = await fetch(`https://api.heygen.com/v2/video/${videoId}`, {
-          method: 'GET',
-          headers: {
-            'X-API-KEY': apiKey,
-            'Content-Type': 'application/json'
-          }
-        });
-
-        const statusText = await statusResponse.text();
-        console.log(`Status response (${statusResponse.status}):`, statusText.substring(0, 200));
-        
-        let statusData;
-        try {
-          statusData = JSON.parse(statusText);
-        } catch (e) {
-          console.error('Failed to parse:', statusText);
-          continue;
-        }
-
-        const status = statusData.data?.status;
-        console.log('Video status:', status);
-
-        if (status === 'completed' && statusData.data?.video_url) {
-          console.log('Video completed:', statusData.data);
-          return Response.json({
-            video_url: statusData.data.video_url,
-            duration: statusData.data?.duration || 30
-          });
-        }
-        
-        if (status === 'failed') {
-          console.error('Generation failed:', statusData);
-          return Response.json({ error: 'Video generation failed', details: statusData }, { status: 500 });
-        }
-      } catch (err) {
-        console.error('Poll error:', err.message);
-      }
-    }
-
     return Response.json({ 
       still_processing: true,
       video_id: videoId,
-      message: 'התהליך עדיין בעיבוד - היא תקבל מייל כשהסרטון מוכן'
+      message: 'התהליך בעיבוד - היא תקבל מייל כשהסרטון מוכן'
     });
 
   } catch (error) {
