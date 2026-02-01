@@ -132,6 +132,26 @@ export default function KlingCharacterModal({ onClose, onApply }) {
             </ul>
           </div>
 
+          {videoId && (
+            <div className="bg-blue-600/10 border border-blue-500/30 rounded-xl p-4 text-center">
+              <p className="text-sm text-blue-200 mb-2">✉️ קיבלת מייל? הסרטון כנראה מוכן!</p>
+              <Button
+                onClick={handleCheckStatus}
+                disabled={loading}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+              >
+                {loading ? (
+                  <>
+                    <Loader2 size={18} className="mr-2 animate-spin" />
+                    בודק...
+                  </>
+                ) : (
+                  'בדוק סטטוס'
+                )}
+              </Button>
+            </div>
+          )}
+
           {/* Actions */}
           <div className="flex gap-2 pt-2">
             <Button
@@ -160,8 +180,8 @@ export default function KlingCharacterModal({ onClose, onApply }) {
               )}
             </Button>
           </div>
-        </div>
-      </div>
-    </div>
-  );
-}
+          </div>
+          </div>
+          </div>
+          );
+          }
