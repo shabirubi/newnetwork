@@ -344,57 +344,7 @@ export default function SampleVideosModal({ onClose, onApply }) {
           )}
         </div>
 
-        {/* Original Sample Videos Grid - Hidden */}
-        <div className="hidden">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pr-2">
-            {SAMPLE_VIDEOS.map(video => (
-              <div
-                key={video.id}
-                className="group relative bg-black/40 border border-white/10 rounded-xl overflow-hidden hover:border-green-500/50 transition-all"
-              >
-                {/* Thumbnail */}
-                <div className="relative aspect-video overflow-hidden bg-black">
-                  <img
-                    src={video.thumbnail}
-                    alt={video.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                    onError={(e) => {
-                      e.target.src = 'https://via.placeholder.com/400x225/1a1a1a/4ade80?text=' + encodeURIComponent(video.title);
-                    }}
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                    <button
-                      onClick={() => setPreviewingVideo(video)}
-                      className="bg-green-600/80 hover:bg-green-600 p-3 rounded-full transition-all transform scale-75 group-hover:scale-100"
-                    >
-                      <Play size={20} className="text-white fill-white" />
-                    </button>
-                  </div>
-                  {/* Duration Badge */}
-                  <div className="absolute bottom-2 left-2 bg-black/80 px-2 py-1 rounded text-xs text-white font-bold">
-                    {video.duration}s
-                  </div>
-                </div>
 
-                {/* Info */}
-                <div className="p-3">
-                  <h4 className="font-semibold text-white text-sm truncate group-hover:text-green-400 transition-colors mb-1">
-                    {video.title}
-                  </h4>
-                  <p className="text-xs text-gray-400 truncate mb-3">{video.description}</p>
-                  <Button
-                    onClick={() => handleAddVideo(video)}
-                    size="sm"
-                    className="w-full bg-green-600 hover:bg-green-700 text-white text-xs h-8"
-                  >
-                    <Download size={14} className="mr-1" />
-                    הוסף לעורך
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
 
         {/* Footer */}
         <div className="mt-4 pt-4 border-t border-white/10">
@@ -424,14 +374,14 @@ export default function SampleVideosModal({ onClose, onApply }) {
             <div className="mt-4 flex items-center justify-between bg-black/60 backdrop-blur-sm p-4 rounded-xl">
               <div>
                 <h4 className="font-bold text-white text-lg">{previewingVideo.title}</h4>
-                <p className="text-sm text-gray-400">{previewingVideo.description} • {previewingVideo.duration}s</p>
+                <p className="text-sm text-gray-400">{previewingVideo.description} • {Math.round(previewingVideo.duration)}s</p>
               </div>
               <Button
                 onClick={() => {
                   handleAddVideo(previewingVideo);
                   setPreviewingVideo(null);
                 }}
-                className="bg-green-600 hover:bg-green-700 text-white"
+                className={`${activeTab === 'samples' ? 'bg-green-600 hover:bg-green-700' : 'bg-blue-600 hover:bg-blue-700'} text-white`}
               >
                 <Download size={18} className="mr-2" />
                 הוסף לעורך
