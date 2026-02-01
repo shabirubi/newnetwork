@@ -46,37 +46,12 @@ Deno.serve(async (req) => {
     const status = statusData.data?.status;
     console.log('Video status:', status);
 
-    if (status === 'completed') {
-      const videoUrl = statusData.data?.video_url;
-      console.log('Video ready:', videoUrl);
-      if (videoUrl) {
-        try {
-          // Download video from HeyGen
-          console.log('Downloading video from HeyGen:', videoUrl);
-          const videoResponse = await fetch(videoUrl);
-          if (!videoResponse.ok) {
-            throw new Error(`Failed to download: ${videoResponse.status}`);
-          }
-          
-          const videoBuffer = await videoResponse.arrayBuffer();
-          const videoBlob = new Blob([videoBuffer], { type: 'video/mp4' });
-          
-          // Upload to our storage
-          console.log('Uploading to storage...');
-          const uploadedUrl = await base44.integrations.Core.UploadFile({
-            file: videoBlob
-          });
-          
-          console.log('Video uploaded:', uploadedUrl.file_url);
-          return Response.json({
-            video_url: uploadedUrl.file_url,
-            duration: statusData.data?.duration || 30
-          });
-        } catch (err) {
-          console.error('Download/upload error:', err.message);
-          throw err;
-        }
-      }
+    if (status === 'completed' && statusData.data?.video_url) {
+      console.log('Video ready:', statusData.data.video_url);
+      return Response.json({
+        video_url: statusData.data.video_url,
+        duration: statusData.data?.duration || 30
+      });
     }
     
     if (status === 'failed') {
