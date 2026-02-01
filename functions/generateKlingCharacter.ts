@@ -1,5 +1,4 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
-import { createHmac } from 'node:crypto';
 
 Deno.serve(async (req) => {
   try {
@@ -10,7 +9,7 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { image_url, prompt, duration = 5, mode = 'std' } = await req.json();
+    const { image_url, prompt, duration = 5 } = await req.json();
     
     if (!image_url || !prompt) {
       return Response.json({ error: 'image_url and prompt are required' }, { status: 400 });
@@ -23,43 +22,43 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Kling API keys not configured' }, { status: 500 });
     }
 
-    // Kling API signature
-    const timestamp = Math.floor(Date.now() / 1000).toString();
-    const signString = `${accessKey}${timestamp}`;
-    const signature = createHmac('sha256', secretKey).update(signString).digest('hex');
-
-    // Create video generation task
+    // Create video generation task using Kling API
     const createResponse = await fetch('https://api.klingai.com/v1/videos/image2video', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessKey}`
+        'X-Access-Key': accessKey,
+        'X-Secret-Key': secretKey
       },
       body: JSON.stringify({
-        model_name: 'kling-v1',
+        model_name: 'kling-v1-5',
         image_url: image_url,
         prompt: prompt,
-        negative_prompt: 'blurry, low quality, distorted',
-        duration: duration,
-        mode: mode,
-        aspect_ratio: '16:9'
+        negative_prompt: 'blurry, low quality, distorted, static',
+        cfg_scale: 0.5,
+        mode: 'std',
+        duration: '5'
       })
     });
 
     if (!createResponse.ok) {
       const errorText = await createResponse.text();
+      console.error('Kling API error:', errorText);
       return Response.json({ error: 'Kling API error: ' + errorText }, { status: createResponse.status });
     }
 
     const createData = await createResponse.json();
+    console.log('Kling create response:', createData);
+    
     const taskId = createData.data?.task_id;
 
     if (!taskId) {
-      return Response.json({ error: 'No task_id returned from Kling' }, { status: 500 });
+      console.error('No task_id in response:', createData);
+      return Response.json({ error: 'No task_id returned from Kling', details: createData }, { status: 500 });
     }
 
-    // Poll for completion (max 2 minutes)
-    const maxAttempts = 24;
+    // Poll for completion (max 3 minutes)
+    const maxAttempts = 36;
     const pollInterval = 5000;
     
     for (let i = 0; i < maxAttempts; i++) {
@@ -67,24 +66,32 @@ Deno.serve(async (req) => {
       
       const statusResponse = await fetch(`https://api.klingai.com/v1/videos/image2video/${taskId}`, {
         headers: {
-          'Authorization': `Bearer ${accessKey}`
+          'X-Access-Key': accessKey,
+          'X-Secret-Key': secretKey
         }
       });
 
       if (statusResponse.ok) {
         const statusData = await statusResponse.json();
+        console.log(`Poll attempt ${i + 1}:`, statusData);
         
-        if (statusData.data?.status === 'succeed' && statusData.data?.works?.[0]?.resource) {
-          return Response.json({
-            video_url: statusData.data.works[0].resource,
-            thumbnail_url: image_url,
-            duration: duration
-          });
+        if (statusData.data?.task_status === 'succeed') {
+          const videoUrl = statusData.data?.task_result?.videos?.[0]?.url;
+          if (videoUrl) {
+            return Response.json({
+              video_url: videoUrl,
+              thumbnail_url: image_url,
+              duration: duration
+            });
+          }
         }
         
-        if (statusData.data?.status === 'failed') {
-          return Response.json({ error: 'Video generation failed' }, { status: 500 });
+        if (statusData.data?.task_status === 'failed') {
+          console.error('Generation failed:', statusData);
+          return Response.json({ error: 'Video generation failed', details: statusData }, { status: 500 });
         }
+      } else {
+        console.error('Status check failed:', await statusResponse.text());
       }
     }
 
