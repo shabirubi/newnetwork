@@ -7,27 +7,10 @@ import { toast } from 'sonner';
 import { base44 } from '@/api/base44Client';
 
 export default function KlingCharacterModal({ onClose, onApply }) {
-  const [imageFile, setImageFile] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);
   const [prompt, setPrompt] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (!file) return;
-
-    setImageFile(file);
-    const reader = new FileReader();
-    reader.onload = (e) => setImagePreview(e.target.result);
-    reader.readAsDataURL(file);
-  };
-
   const handleGenerate = async () => {
-    if (!imageFile) {
-      toast.error('העלה תמונה של דמות');
-      return;
-    }
-
     if (!prompt.trim()) {
       toast.error('הזן תיאור תנועה');
       return;
@@ -35,9 +18,6 @@ export default function KlingCharacterModal({ onClose, onApply }) {
 
     setLoading(true);
     try {
-      toast.info('מעלה תמונה...');
-      const { file_url } = await base44.integrations.Core.UploadFile({ file: imageFile });
-
       toast.info('יוצר דמות מדברת עם HeyGen... עד דקה ⏳');
       const { data } = await base44.functions.invoke('generateHeyGenCharacter', {
         script: prompt
