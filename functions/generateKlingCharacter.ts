@@ -36,6 +36,8 @@ Deno.serve(async (req) => {
     );
     
     console.log('Generated JWT Token for Kling API');
+    console.log('Access Key (first 10 chars):', accessKey.substring(0, 10));
+    console.log('JWT Token (first 50 chars):', jwtToken.substring(0, 50));
 
     // Create video generation task using Kling API
     const createResponse = await fetch('https://api-singapore.klingai.com/v1/videos/image2video', {
