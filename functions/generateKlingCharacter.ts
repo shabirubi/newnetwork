@@ -23,10 +23,15 @@ Deno.serve(async (req) => {
     }
 
     // Generate JWT Token for Kling API
-    const jwtHeader = btoa(JSON.stringify({ alg: "HS256", typ: "JWT" }));
-    const jwtPayload = btoa(JSON.stringify({
+    function base64UrlEncode(str) {
+      const base64 = btoa(str);
+      return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+    }
+
+    const jwtHeader = base64UrlEncode(JSON.stringify({ alg: "HS256", typ: "JWT" }));
+    const jwtPayload = base64UrlEncode(JSON.stringify({
       iss: accessKey,
-      exp: Math.floor(Date.now() / 1000) + 1800, // 30 minutes
+      exp: Math.floor(Date.now() / 1000) + 1800,
       nbf: Math.floor(Date.now() / 1000) - 5
     }));
 
@@ -43,13 +48,14 @@ Deno.serve(async (req) => {
       ['sign']
     );
     
-    const signature = await crypto.subtle.sign('HMAC', cryptoKey, messageData);
-    const jwtSignature = btoa(String.fromCharCode(...new Uint8Array(signature)))
-      .replace(/\+/g, '-')
-      .replace(/\//g, '_')
-      .replace(/=/g, '');
+    const signatureArrayBuffer = await crypto.subtle.sign('HMAC', cryptoKey, messageData);
+    const signatureArray = new Uint8Array(signatureArrayBuffer);
+    const signatureBase64 = btoa(String.fromCharCode.apply(null, signatureArray));
+    const jwtSignature = signatureBase64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
     
     const jwtToken = `${jwtHeader}.${jwtPayload}.${jwtSignature}`;
+    
+    console.log('Generated JWT Token for Kling API');
 
     // Create video generation task using Kling API
     const createResponse = await fetch('https://api-singapore.klingai.com/v1/videos/image2video', {
