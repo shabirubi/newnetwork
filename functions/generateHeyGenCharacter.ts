@@ -28,7 +28,7 @@ Deno.serve(async (req) => {
     const imageBlob = await fetch(image_url).then(r => r.blob());
     uploadFormData.append('file', imageBlob, 'avatar.jpg');
 
-    const uploadResponse = await fetch('https://api.heygen.com/v2/assets/upload', {
+    const uploadResponse = await fetch('https://api.heygen.com/v1/asset/upload', {
       method: 'POST',
       headers: {
         'X-API-KEY': apiKey
