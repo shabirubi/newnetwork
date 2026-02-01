@@ -555,14 +555,14 @@ export default function VideoEditor() {
         {/* Left Side - Timeline + Preview */}
         <div className="flex-1 flex flex-col bg-gradient-to-br from-gray-900 to-black overflow-hidden">
           {/* Professional Timeline - Top */}
-          <div className="h-48 bg-gradient-to-b from-black via-gray-900 to-black border-b border-white/10 p-4 overflow-x-auto overflow-y-hidden shrink-0 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-            <div className="flex items-center justify-between mb-3">
+          <div className="h-52 bg-gradient-to-b from-black via-gray-900 to-black border-b border-white/10 p-3 overflow-x-auto overflow-y-hidden shrink-0 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+            <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
-                <Film size={18} className="text-[#E31E24]" />
-                <h3 className="font-bold">ציר זמן מקצועי</h3>
-                <span className="text-xs text-gray-400">({clips.length} קליפים, {totalDuration.toFixed(2)}s)</span>
+                <Film size={14} className="text-[#E31E24]" />
+                <h3 className="text-xs font-bold">ציר זמן</h3>
+                <span className="text-[10px] text-gray-500">({clips.length} קליפים • {totalDuration.toFixed(1)}s)</span>
               </div>
-              <div className="text-xs text-gray-500">גרור קליפ • מתח קצוות • שנה סדר</div>
+              <div className="text-[9px] text-gray-600">גרור • מתח • סדר</div>
             </div>
 
             {clips.length === 0 ? (
@@ -575,24 +575,24 @@ export default function VideoEditor() {
               ) : (
                 <div className="relative bg-black/40 rounded-xl border border-white/10 p-2 overflow-x-auto overflow-y-visible" style={{ maxHeight: '400px' }}>
                   {/* Time ruler */}
-                  <div className="flex items-center gap-1 mb-2 text-[10px] text-gray-500 px-2 flex-shrink-0 sticky top-0 bg-black/60 backdrop-blur-sm z-10 pb-2 border-b border-white/10">
+                  <div className="flex items-center gap-1 mb-1 text-[8px] text-gray-600 px-1 flex-shrink-0 sticky top-0 bg-black/80 backdrop-blur-sm z-10 pb-1 border-b border-white/5">
                   {Array.from({ length: Math.ceil(totalDuration) + 1 }).map((_, i) => (
                     <div key={i} className="flex-shrink-0 flex flex-col items-start" style={{ width: '60px' }}>
-                      <div className="border-l border-[#E31E24]/40 h-3 w-px"></div>
-                      <span className="text-[#E31E24] font-bold">{i}s</span>
+                      <div className="border-l border-[#E31E24]/30 h-2 w-px"></div>
+                      <span className="text-[#E31E24] font-semibold text-[9px]">{i}s</span>
                     </div>
                   ))}
-                </div>
+                  </div>
 
                 {/* Multiple Tracks */}
                 <div className="space-y-2">
                   {/* Video Clips Track */}
-                  <div className="relative bg-gradient-to-r from-purple-900/20 to-black/20 rounded-lg border border-purple-500/30 p-2">
-                    <div className="text-[11px] font-bold text-purple-300 mb-2 px-2 flex items-center gap-2">
-                      <Film size={14} className="text-purple-400" />
+                  <div className="relative bg-gradient-to-r from-purple-900/10 to-black/10 rounded-lg border border-purple-500/20 p-2">
+                    <div className="text-[9px] font-semibold text-purple-400 mb-1 px-1 flex items-center gap-1">
+                      <Film size={11} className="text-purple-400" />
                       וידאו ({clips.length})
                     </div>
-                    <div className="flex items-center gap-0 h-20 relative">
+                    <div className="flex items-center gap-0 h-24 relative">
                       {clips.length === 0 ? (
                         <div className="text-gray-500 text-xs ml-2">אין קליפים</div>
                       ) : (
@@ -608,10 +608,10 @@ export default function VideoEditor() {
                                 initial={{ scale: 0.8, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
                                 exit={{ scale: 0.8, opacity: 0 }}
-                                className={`relative rounded-lg overflow-hidden flex-shrink-0 transition-all group border-2 ${selectedClipIndex === index ? 'ring-4 ring-[#E31E24] shadow-2xl shadow-[#E31E24]/50 border-[#E31E24]' : 'border-white/20 hover:border-white/40'}`}
+                                className={`relative rounded-lg overflow-hidden flex-shrink-0 transition-all group border ${selectedClipIndex === index ? 'ring-2 ring-[#E31E24] shadow-lg shadow-[#E31E24]/40 border-[#E31E24]' : 'border-white/10 hover:border-white/30'}`}
                                 style={{ 
                                   width: `${clipWidth}px`,
-                                  height: '70px',
+                                  height: '85px',
                                   cursor: 'grab'
                                 }}
                                 onClick={() => setSelectedClipIndex(index)}
@@ -642,23 +642,37 @@ export default function VideoEditor() {
                                   }
                                 }}
                               >
-                                {/* Thumbnail */}
-                                <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${clip.thumbnail || clip.url})` }}>
-                                  <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-transparent" />
+                                {/* Thumbnail - Visible Video Preview */}
+                                <div className="absolute inset-0">
+                                  {clip.type === 'image' ? (
+                                    <img 
+                                      src={clip.thumbnail || clip.url} 
+                                      alt={clip.name}
+                                      className="w-full h-full object-cover"
+                                    />
+                                  ) : (
+                                    <video 
+                                      src={clip.url} 
+                                      className="w-full h-full object-cover"
+                                      muted
+                                      playsInline
+                                    />
+                                  )}
+                                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
                                 </div>
 
                                 {/* Duration Bar */}
-                                <div className="absolute top-1 left-1 right-1 h-1 bg-black/60 rounded-full overflow-hidden">
+                                <div className="absolute top-0.5 left-0.5 right-0.5 h-0.5 bg-black/60 rounded-full overflow-hidden">
                                   <div className="h-full bg-gradient-to-r from-[#E31E24] to-pink-500" style={{ width: '100%' }}></div>
                                 </div>
 
                                 {/* Clip Info */}
-                                <div className="absolute bottom-0 left-0 right-0 p-1.5 text-[9px]">
-                                  <div className="font-bold truncate text-white mb-0.5">{clip.name}</div>
+                                <div className="absolute bottom-0 left-0 right-0 p-1 text-[8px]">
+                                  <div className="font-semibold truncate text-white mb-0.5 drop-shadow-lg">{clip.name}</div>
                                   <div className="flex items-center justify-between">
-                                    <div className="text-[#E31E24] font-bold bg-black/60 px-1.5 py-0.5 rounded">{clip.duration?.toFixed(2)}s</div>
+                                    <div className="text-[#E31E24] font-bold bg-black/80 px-1 py-0.5 rounded text-[9px]">{clip.duration?.toFixed(1)}s</div>
                                     {clip.filters?.effect && (
-                                      <div className="text-purple-300 text-[8px] bg-purple-900/60 px-1 py-0.5 rounded">✨ {clip.filters.effect}</div>
+                                      <div className="text-purple-300 text-[7px] bg-purple-900/80 px-1 py-0.5 rounded">✨ {clip.filters.effect}</div>
                                     )}
                                   </div>
                                 </div>
@@ -666,9 +680,9 @@ export default function VideoEditor() {
                                 {/* Delete Button */}
                                 <button 
                                   onClick={(e) => { e.stopPropagation(); removeClip(index); }} 
-                                  className="absolute top-1 left-1 p-1 bg-red-600/90 rounded-full hover:bg-red-600 transition-colors opacity-0 group-hover:opacity-100 z-10 shadow-lg"
+                                  className="absolute top-0.5 left-0.5 p-0.5 bg-red-600/90 rounded-full hover:bg-red-600 transition-colors opacity-0 group-hover:opacity-100 z-10 shadow-lg"
                                 >
-                                  <Trash2 size={12} />
+                                  <Trash2 size={10} />
                                 </button>
 
                                 {/* Resize Handles */}
@@ -766,20 +780,23 @@ export default function VideoEditor() {
 
                   {/* Audio Track */}
                   {audioTrack && (
-                    <div className="relative bg-purple-900/20 border border-purple-500/30 rounded-lg p-1">
-                      <div className="text-[10px] font-bold text-purple-400 mb-1 px-2">🎵 אודיו</div>
-                      <div className="flex items-center gap-1 h-12">
+                    <div className="relative bg-purple-900/10 border border-purple-500/20 rounded-lg p-1.5">
+                      <div className="text-[8px] font-semibold text-purple-400 mb-1 px-1 flex items-center gap-1">
+                        <Music size={10} className="text-purple-400" />
+                        אודיו
+                      </div>
+                      <div className="flex items-center gap-1 h-10">
                         <div 
-                          className="relative rounded-lg overflow-hidden flex-shrink-0 bg-purple-600/30 border border-purple-500/50 p-2"
+                          className="relative rounded-lg overflow-hidden flex-shrink-0 bg-purple-600/20 border border-purple-500/30 p-1.5"
                           style={{ 
                             width: `${Math.max(100, totalDuration * 60)}px`,
-                            height: '40px'
+                            height: '35px'
                           }}
                         >
-                          <div className="text-[9px] text-purple-300 truncate font-bold">
+                          <div className="text-[8px] text-purple-300 truncate font-semibold">
                             {audioTrack.name}
                           </div>
-                          <div className="text-[9px] text-purple-400">
+                          <div className="text-[7px] text-purple-400">
                             {audioTrack.loop ? '🔄 לופ' : 'חד פעמי'}
                           </div>
                         </div>
@@ -789,15 +806,18 @@ export default function VideoEditor() {
 
                   {/* Overlays Track */}
                   {overlays.length > 0 && (
-                    <div className="relative bg-blue-900/20 border border-blue-500/30 rounded-lg p-1">
-                      <div className="text-[10px] font-bold text-blue-400 mb-1 px-2">✨ אלמנטים ({overlays.length})</div>
-                      <div className="flex items-center gap-1 h-12 flex-wrap">
+                    <div className="relative bg-blue-900/10 border border-blue-500/20 rounded-lg p-1.5">
+                      <div className="text-[8px] font-semibold text-blue-400 mb-1 px-1 flex items-center gap-1">
+                        <Sparkles size={10} className="text-blue-400" />
+                        אלמנטים ({overlays.length})
+                      </div>
+                      <div className="flex items-center gap-1 h-8 flex-wrap">
                         {overlays.map((overlay) => (
                           <div 
                             key={overlay.id}
-                            className="rounded-lg overflow-hidden flex-shrink-0 bg-blue-600/30 border border-blue-500/50 p-2 text-[9px] text-blue-300 font-bold truncate max-w-[150px]"
+                            className="rounded-lg overflow-hidden flex-shrink-0 bg-blue-600/20 border border-blue-500/30 p-1 text-[7px] text-blue-300 font-semibold truncate max-w-[120px]"
                           >
-                            {overlay.type === 'text' ? '📝' : '🖼️'} {overlay.type === 'text' ? overlay.content.substring(0, 15) : 'תמונה'}
+                            {overlay.type === 'text' ? '📝' : '🖼️'} {overlay.type === 'text' ? overlay.content.substring(0, 12) : 'תמונה'}
                           </div>
                         ))}
                       </div>
@@ -806,13 +826,13 @@ export default function VideoEditor() {
 
                   {/* PIP Layers Track */}
                   {pipLayers.length > 0 && (
-                    <div className="relative bg-cyan-900/20 border border-cyan-500/30 rounded-lg p-1">
-                      <div className="text-[10px] font-bold text-cyan-400 mb-1 px-2">📹 PIP ({pipLayers.length})</div>
-                      <div className="flex items-center gap-1 h-12">
+                    <div className="relative bg-cyan-900/10 border border-cyan-500/20 rounded-lg p-1.5">
+                      <div className="text-[8px] font-semibold text-cyan-400 mb-1 px-1">📹 PIP ({pipLayers.length})</div>
+                      <div className="flex items-center gap-1 h-8">
                         {pipLayers.map((pip, idx) => (
                           <div 
                             key={idx}
-                            className="rounded-lg overflow-hidden flex-shrink-0 bg-cyan-600/30 border border-cyan-500/50 p-2 text-[9px] text-cyan-300 font-bold"
+                            className="rounded-lg overflow-hidden flex-shrink-0 bg-cyan-600/20 border border-cyan-500/30 p-1 text-[7px] text-cyan-300 font-semibold"
                           >
                             PIP {idx + 1}
                           </div>
