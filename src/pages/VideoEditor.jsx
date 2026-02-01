@@ -1374,14 +1374,14 @@ export default function VideoEditor() {
 
                           if (data.audio_url) {
                             setAudioTrack({ url: data.audio_url, name: 'דיבוב - ' + prompt.substring(0, 20), volume: 100, loop: false });
-                            toast.success('סרטון + דיבוב נוספו לציר הזמן! 🎬🎤');
+                            toast.success('סרטון חדש + דיבוב נוספו! 🎬🎤');
                           } else {
-                            toast.warning('סרטון בלי קול - בעיה בדיבוב');
+                            toast.success('סרטון חדש נוסף! 🎬');
                           }
                         } else if (data?.still_processing) {
                           toast.info('הסרטון בתהליך... נסה שוב בעוד רגע');
                         } else {
-                          toast.error('לא התקבל סרטון מהשרת');
+                          toast.error('לא התקבל סרטון: ' + JSON.stringify(data));
                         }
                       } catch (error) {
                         toast.error('שגיאה: ' + error.message);
