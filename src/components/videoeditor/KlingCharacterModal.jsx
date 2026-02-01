@@ -28,8 +28,10 @@ export default function KlingCharacterModal({ onClose, onApply }) {
         const newClip = {
           id: Date.now(),
           url: data.video_url,
+          localUrl: data.video_url,
           duration: data.duration || 5,
           name: 'דמות - ' + prompt.substring(0, 30),
+          thumbnail: data.video_url,
           filters: { brightness: 100, contrast: 100, saturation: 100 },
           volume: 100,
           type: 'video'
