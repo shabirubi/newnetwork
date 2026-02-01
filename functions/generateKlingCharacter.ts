@@ -1,54 +1,5 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
-
-// Helper function for base64url encoding
-function base64UrlEncode(str) {
-  return btoa(str)
-    .replace(/\+/g, '-')
-    .replace(/\//g, '_')
-    .replace(/=/g, '');
-}
-
-// Helper to create JWT token
-async function createJWT(accessKey, secretKey) {
-  const now = Math.floor(Date.now() / 1000);
-  
-  const header = {
-    alg: 'HS256',
-    typ: 'JWT'
-  };
-  
-  const payload = {
-    iss: accessKey,
-    exp: now + 1800,
-    nbf: now - 5
-  };
-  
-  const encodedHeader = base64UrlEncode(JSON.stringify(header));
-  const encodedPayload = base64UrlEncode(JSON.stringify(payload));
-  
-  const data = `${encodedHeader}.${encodedPayload}`;
-  
-  const encoder = new TextEncoder();
-  const key = await crypto.subtle.importKey(
-    'raw',
-    encoder.encode(secretKey),
-    { name: 'HMAC', hash: 'SHA-256' },
-    false,
-    ['sign']
-  );
-  
-  const signature = await crypto.subtle.sign(
-    'HMAC',
-    key,
-    encoder.encode(data)
-  );
-  
-  const encodedSignature = base64UrlEncode(
-    String.fromCharCode(...new Uint8Array(signature))
-  );
-  
-  return `${data}.${encodedSignature}`;
-}
+import jwt from 'npm:jsonwebtoken@9.0.2';
 
 Deno.serve(async (req) => {
   try {
@@ -72,7 +23,17 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Kling API keys not configured' }, { status: 500 });
     }
 
-    const jwtToken = await createJWT(accessKey, secretKey);
+    // Create JWT token using proper library
+    const jwtToken = jwt.sign(
+      {
+        iss: accessKey,
+        exp: Math.floor(Date.now() / 1000) + 1800,
+        nbf: Math.floor(Date.now() / 1000) - 5
+      },
+      secretKey,
+      { algorithm: 'HS256' }
+    );
+    
     console.log('JWT Token created for Kling API');
 
     // Create video generation task using Kling API
