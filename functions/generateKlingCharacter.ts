@@ -22,38 +22,18 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Kling API keys not configured' }, { status: 500 });
     }
 
-    // Generate JWT Token for Kling API
-    function base64UrlEncode(str) {
-      const base64 = btoa(str);
-      return base64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
-    }
-
-    const jwtHeader = base64UrlEncode(JSON.stringify({ alg: "HS256", typ: "JWT" }));
-    const jwtPayload = base64UrlEncode(JSON.stringify({
-      iss: accessKey,
-      exp: Math.floor(Date.now() / 1000) + 1800,
-      nbf: Math.floor(Date.now() / 1000) - 5
-    }));
-
-    const signatureBase = `${jwtHeader}.${jwtPayload}`;
-    const encoder = new TextEncoder();
-    const keyData = encoder.encode(secretKey);
-    const messageData = encoder.encode(signatureBase);
+    // Generate JWT Token using npm:jsonwebtoken
+    const jwt = await import('npm:jsonwebtoken@9.0.2');
     
-    const cryptoKey = await crypto.subtle.importKey(
-      'raw',
-      keyData,
-      { name: 'HMAC', hash: 'SHA-256' },
-      false,
-      ['sign']
+    const jwtToken = jwt.default.sign(
+      {
+        iss: accessKey,
+        exp: Math.floor(Date.now() / 1000) + 1800, // 30 minutes
+        nbf: Math.floor(Date.now() / 1000) - 5 // 5 seconds ago
+      },
+      secretKey,
+      { algorithm: 'HS256', header: { alg: 'HS256', typ: 'JWT' } }
     );
-    
-    const signatureArrayBuffer = await crypto.subtle.sign('HMAC', cryptoKey, messageData);
-    const signatureArray = new Uint8Array(signatureArrayBuffer);
-    const signatureBase64 = btoa(String.fromCharCode.apply(null, signatureArray));
-    const jwtSignature = signatureBase64.replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
-    
-    const jwtToken = `${jwtHeader}.${jwtPayload}.${jwtSignature}`;
     
     console.log('Generated JWT Token for Kling API');
 
