@@ -8,6 +8,7 @@ import { base44 } from '@/api/base44Client';
 
 export default function KlingCharacterModal({ onClose, onApply }) {
   const [prompt, setPrompt] = useState('');
+  const [videoId, setVideoId] = useState('');
   const [loading, setLoading] = useState(false);
 
   const handleGenerate = async () => {
@@ -37,7 +38,45 @@ export default function KlingCharacterModal({ onClose, onApply }) {
         onClose();
         toast.success('דמות מונפשת נוספה! 🎭');
       } else if (data.still_processing) {
-        toast.info(data.message || 'עדיין מעבד... נסה שוב בעוד דקה');
+        setVideoId(data.video_id);
+        toast.info('הוידאו בעיבוד - בדוק הודעה במייל שלך כשהוא מוכן');
+      } else {
+        toast.error('לא התקבל סרטון');
+      }
+    } catch (error) {
+      toast.error('שגיאה: ' + error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleCheckStatus = async () => {
+    if (!videoId) {
+      toast.error('אין ID של וידאו');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const { data } = await base44.functions.invoke('checkHeyGenVideo', {
+        video_id: videoId
+      });
+
+      if (data.video_url) {
+        const newClip = {
+          id: Date.now(),
+          url: data.video_url,
+          duration: data.duration || 5,
+          name: 'דמות - ' + prompt.substring(0, 30),
+          filters: { brightness: 100, contrast: 100, saturation: 100 },
+          volume: 100,
+          type: 'video'
+        };
+        onApply(newClip);
+        onClose();
+        toast.success('דמות מונפשת נוספה! 🎭');
+      } else if (data.still_processing) {
+        toast.info('עדיין בעיבוד... נסה שוב בעוד דקה');
       } else {
         toast.error('לא התקבל סרטון');
       }
