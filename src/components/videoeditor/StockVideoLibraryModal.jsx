@@ -12,67 +12,99 @@ const STOCK_VIDEO_API = {
 const SAMPLE_STOCK_VIDEOS = [
   {
     id: 'sample-1',
-    title: 'עולא שמש בטבע',
-    url: 'https://www.w3schools.com/html/mov_bbb.mp4',
-    thumbnail: 'https://images.unsplash.com/photo-1495567720989-cebdbdd97913?w=400',
-    duration: '30s',
+    title: 'נוף טבע מרהיב',
+    url: 'https://videos.pexels.com/video-files/3571264/3571264-hd_1920_1080_30fps.mp4',
+    thumbnail: 'https://images.pexels.com/videos/3571264/pexels-photo-3571264.jpeg?w=400',
+    duration: '15s',
     category: 'nature'
   },
   {
     id: 'sample-2',
-    title: 'בניין עיר מודרני',
-    url: 'https://www.w3schools.com/html/mov_bbb.mp4',
-    thumbnail: 'https://images.unsplash.com/photo-1449844908441-8829872d2607?w=400',
+    title: 'עיר לילה',
+    url: 'https://videos.pexels.com/video-files/2611250/2611250-hd_1920_1080_25fps.mp4',
+    thumbnail: 'https://images.pexels.com/videos/2611250/pexels-photo-2611250.jpeg?w=400',
     duration: '20s',
     category: 'urban'
   },
   {
     id: 'sample-3',
-    title: 'טכנולוגיה וקידוד',
-    url: 'https://www.w3schools.com/html/mov_bbb.mp4',
-    thumbnail: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?w=400',
-    duration: '15s',
+    title: 'קידוד וטכנולוגיה',
+    url: 'https://videos.pexels.com/video-files/7534566/7534566-hd_1920_1080_25fps.mp4',
+    thumbnail: 'https://images.pexels.com/videos/7534566/pexels-photo-7534566.jpeg?w=400',
+    duration: '12s',
     category: 'technology'
   },
   {
     id: 'sample-4',
-    title: 'משרד עם מחשבים',
-    url: 'https://www.w3schools.com/html/mov_bbb.mp4',
-    thumbnail: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400',
+    title: 'פגישת עסקים',
+    url: 'https://videos.pexels.com/video-files/3196036/3196036-hd_1920_1080_25fps.mp4',
+    thumbnail: 'https://images.pexels.com/videos/3196036/pexels-photo-3196036.jpeg?w=400',
     duration: '25s',
     category: 'business'
   },
   {
     id: 'sample-5',
-    title: 'אנשים בפגישה',
-    url: 'https://www.w3schools.com/html/mov_bbb.mp4',
-    thumbnail: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=400',
-    duration: '30s',
+    title: 'אנשים בעבודה',
+    url: 'https://videos.pexels.com/video-files/4498357/4498357-hd_1920_1080_25fps.mp4',
+    thumbnail: 'https://images.pexels.com/videos/4498357/pexels-photo-4498357.jpeg?w=400',
+    duration: '14s',
     category: 'people'
   },
   {
     id: 'sample-6',
-    title: 'תנועה דינאמית',
-    url: 'https://www.w3schools.com/html/mov_bbb.mp4',
-    thumbnail: 'https://images.unsplash.com/photo-1460925895917-adf4e565e6c1?w=400',
-    duration: '20s',
+    title: 'כביש מהיר',
+    url: 'https://videos.pexels.com/video-files/2611089/2611089-hd_1920_1080_25fps.mp4',
+    thumbnail: 'https://images.pexels.com/videos/2611089/pexels-photo-2611089.jpeg?w=400',
+    duration: '16s',
     category: 'motion'
   },
   {
     id: 'sample-7',
-    title: 'מים וטבע',
-    url: 'https://www.w3schools.com/html/mov_bbb.mp4',
-    thumbnail: 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400',
-    duration: '15s',
+    title: 'גלי ים',
+    url: 'https://videos.pexels.com/video-files/854400/854400-hd_1920_1080_30fps.mp4',
+    thumbnail: 'https://images.pexels.com/videos/854400/pexels-photo-854400.jpeg?w=400',
+    duration: '18s',
     category: 'nature'
   },
   {
     id: 'sample-8',
-    title: 'נוף פנטסטי',
-    url: 'https://www.w3schools.com/html/mov_bbb.mp4',
-    thumbnail: 'https://images.unsplash.com/photo-1419242902214-272b3f66ee7a?w=400',
-    duration: '25s',
+    title: 'שקיעה מדהימה',
+    url: 'https://videos.pexels.com/video-files/1093662/1093662-hd_1920_1080_30fps.mp4',
+    thumbnail: 'https://images.pexels.com/videos/1093662/pexels-photo-1093662.jpeg?w=400',
+    duration: '19s',
     category: 'space'
+  },
+  {
+    id: 'sample-9',
+    title: 'יער ירוק',
+    url: 'https://videos.pexels.com/video-files/2491284/2491284-hd_1920_1080_25fps.mp4',
+    thumbnail: 'https://images.pexels.com/videos/2491284/pexels-photo-2491284.jpeg?w=400',
+    duration: '21s',
+    category: 'nature'
+  },
+  {
+    id: 'sample-10',
+    title: 'מזון טעים',
+    url: 'https://videos.pexels.com/video-files/3195394/3195394-hd_1920_1080_25fps.mp4',
+    thumbnail: 'https://images.pexels.com/videos/3195394/pexels-photo-3195394.jpeg?w=400',
+    duration: '11s',
+    category: 'motion'
+  },
+  {
+    id: 'sample-11',
+    title: 'רחוב עירוני',
+    url: 'https://videos.pexels.com/video-files/3571206/3571206-hd_1920_1080_30fps.mp4',
+    thumbnail: 'https://images.pexels.com/videos/3571206/pexels-photo-3571206.jpeg?w=400',
+    duration: '17s',
+    category: 'urban'
+  },
+  {
+    id: 'sample-12',
+    title: 'חיות בטבע',
+    url: 'https://videos.pexels.com/video-files/3571242/3571242-hd_1920_1080_30fps.mp4',
+    thumbnail: 'https://images.pexels.com/videos/3571242/pexels-photo-3571242.jpeg?w=400',
+    duration: '22s',
+    category: 'nature'
   }
 ];
 
