@@ -35,7 +35,7 @@ Deno.serve(async (req) => {
           {
             character: {
               type: 'avatar',
-              avatar_id: 'wayne-public',
+              avatar_id: 'a1b2c3d4-e5f6',
               emotion: 'neutral'
             },
             voice: {
