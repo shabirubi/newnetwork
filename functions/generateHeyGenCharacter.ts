@@ -83,59 +83,62 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'No video ID returned from HeyGen', details: responseData }, { status: 500 });
     }
 
-    // Poll for completion (max 2 minutes)
-    const maxAttempts = 24;
-    const pollInterval = 5000;
+    // Poll for completion (max 5 minutes with longer intervals)
+    const maxAttempts = 30;
+    const pollInterval = 10000; // 10 seconds between checks
     
     for (let i = 0; i < maxAttempts; i++) {
       await new Promise(resolve => setTimeout(resolve, pollInterval));
       
-      const statusResponse = await fetch(`https://api.heygen.com/v2/video/${videoId}`, {
-        headers: {
-          'X-API-KEY': apiKey
-        }
-      });
-
-      const statusText = await statusResponse.text();
+      console.log(`Poll attempt ${i + 1}/${maxAttempts}`);
       
-      // Check if we got HTML error (404, etc)
-      if (statusText.includes('<!DOCTYPE') || statusText.includes('404')) {
-        console.log(`Poll attempt ${i + 1}: Still processing (not ready yet)`);
-        continue;
-      }
-
-      let statusData;
       try {
-        statusData = JSON.parse(statusText);
-      } catch (e) {
-        console.error('Failed to parse status response:', statusText);
-        continue;
-      }
+        const statusResponse = await fetch(`https://api.heygen.com/v2/video/${videoId}`, {
+          method: 'GET',
+          headers: {
+            'X-API-KEY': apiKey,
+            'Content-Type': 'application/json'
+          }
+        });
 
-      console.log(`Poll attempt ${i + 1}:`, statusData);
-      
-      const status = statusData.data?.status;
-
-      if (status === 'completed') {
-        const videoUrl = statusData.data?.video_url;
-        if (videoUrl) {
-          return Response.json({
-            video_url: videoUrl,
-            duration: statusData.data?.duration || 30
-          });
+        const statusText = await statusResponse.text();
+        console.log(`Status response (${statusResponse.status}):`, statusText.substring(0, 200));
+        
+        let statusData;
+        try {
+          statusData = JSON.parse(statusText);
+        } catch (e) {
+          console.error('Failed to parse:', statusText);
+          continue;
         }
-      }
-      
-      if (status === 'failed') {
-        console.error('Generation failed:', statusData);
-        return Response.json({ error: 'Video generation failed', details: statusData }, { status: 500 });
+
+        const status = statusData.data?.status;
+        console.log('Video status:', status);
+
+        if (status === 'completed') {
+          const videoUrl = statusData.data?.video_url;
+          console.log('Video ready:', videoUrl);
+          if (videoUrl) {
+            return Response.json({
+              video_url: videoUrl,
+              duration: statusData.data?.duration || 30
+            });
+          }
+        }
+        
+        if (status === 'failed') {
+          console.error('Generation failed:', statusData);
+          return Response.json({ error: 'Video generation failed', details: statusData }, { status: 500 });
+        }
+      } catch (err) {
+        console.error('Poll error:', err.message);
       }
     }
 
     return Response.json({ 
       still_processing: true,
       video_id: videoId,
-      message: 'התהליך לוקח זמן, נסה שוב בעוד דקה'
+      message: 'התהליך עדיין בעיבוד - היא תקבל מייל כשהסרטון מוכן'
     });
 
   } catch (error) {
