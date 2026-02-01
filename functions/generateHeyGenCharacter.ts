@@ -83,13 +83,48 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'No video ID returned from HeyGen', details: responseData }, { status: 500 });
     }
 
-    // החזר וידאו עובד מיד לבדיקה
-    const testVideoUrl = 'https://cdn.pixabay.com/vimeo/259340224/character-introduction-8192.mp4';
+    // בדוק סטטוס כל שנייה לתוך 2 דקות
+    const maxTime = 120000; // 2 דקות
+    const startTime = Date.now();
+    const checkInterval = 1000; // 1 שנייה
     
-    return Response.json({
-      video_url: testVideoUrl,
-      duration: 5,
-      video_id: videoId
+    while (Date.now() - startTime < maxTime) {
+      await new Promise(resolve => setTimeout(resolve, checkInterval));
+      
+      try {
+        const statusResponse = await fetch(`https://api.heygen.com/v2/video/${videoId}`, {
+          method: 'GET',
+          headers: {
+            'X-API-KEY': apiKey,
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        if (statusResponse.ok) {
+          const statusData = await statusResponse.json();
+          const status = statusData.data?.status;
+          
+          if (status === 'completed' && statusData.data?.video_url) {
+            return Response.json({
+              video_url: statusData.data.video_url,
+              duration: statusData.data?.duration || 5,
+              video_id: videoId
+            });
+          }
+          
+          if (status === 'failed') {
+            return Response.json({ error: 'Video generation failed' }, { status: 500 });
+          }
+        }
+      } catch (err) {
+        // המשך ניסיון
+      }
+    }
+    
+    return Response.json({ 
+      still_processing: true,
+      video_id: videoId,
+      message: 'הווידאו בעיבוד, אם לא הופיע בדוק את הדוא"ל'
     });
 
   } catch (error) {
