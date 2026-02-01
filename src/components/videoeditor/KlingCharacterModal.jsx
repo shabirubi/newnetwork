@@ -19,7 +19,7 @@ export default function KlingCharacterModal({ onClose, onApply }) {
 
     setLoading(true);
     try {
-      toast.info('יוצר דמות מדברת עם HeyGen... עד דקה ⏳');
+      toast.info('יוצר דמות מדברת... עד דקה ⏳');
       const { data } = await base44.functions.invoke('generateHeyGenCharacter', {
         script: prompt
       });
