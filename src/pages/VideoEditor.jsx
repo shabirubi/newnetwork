@@ -571,146 +571,191 @@ export default function VideoEditor() {
                   </div>
                 </div>
               ) : (
-                <div className="relative h-32 bg-black/40 rounded-xl border border-white/10 p-2 overflow-x-auto overflow-y-hidden scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+                <div className="relative bg-black/40 rounded-xl border border-white/10 p-2 overflow-x-auto overflow-y-visible" style={{ maxHeight: '400px' }}>
                   {/* Time ruler */}
-                  <div className="flex items-center gap-1 mb-2 text-[10px] text-gray-500 px-2 flex-shrink-0">
+                  <div className="flex items-center gap-1 mb-2 text-[10px] text-gray-500 px-2 flex-shrink-0 sticky top-0 bg-black/60 backdrop-blur-sm z-10 pb-2 border-b border-white/10">
                   {Array.from({ length: Math.ceil(totalDuration) + 1 }).map((_, i) => (
-                    <div key={i} className="flex-shrink-0" style={{ width: '60px' }}>
-                      <div className="border-l border-white/20 h-2"></div>
-                      <span>{i}s</span>
+                    <div key={i} className="flex-shrink-0 flex flex-col items-start" style={{ width: '60px' }}>
+                      <div className="border-l border-[#E31E24]/40 h-3 w-px"></div>
+                      <span className="text-[#E31E24] font-bold">{i}s</span>
                     </div>
                   ))}
                 </div>
 
                 {/* Multiple Tracks */}
-                <div className="space-y-1">
+                <div className="space-y-2">
                   {/* Video Clips Track */}
-                  <div className="relative bg-black/20 rounded-lg border border-white/5 p-1">
-                    <div className="text-[10px] font-bold text-gray-400 mb-1 px-2">📹 וידאו</div>
-                    <div className="flex items-center gap-1 h-16">
+                  <div className="relative bg-gradient-to-r from-purple-900/20 to-black/20 rounded-lg border border-purple-500/30 p-2">
+                    <div className="text-[11px] font-bold text-purple-300 mb-2 px-2 flex items-center gap-2">
+                      <Film size={14} className="text-purple-400" />
+                      וידאו ({clips.length})
+                    </div>
+                    <div className="flex items-center gap-0 h-20 relative">
                       {clips.length === 0 ? (
                         <div className="text-gray-500 text-xs ml-2">אין קליפים</div>
                       ) : (
                         clips.map((clip, index) => {
                           const widthPerSecond = 60;
                           const clipWidth = Math.max(60, (clip.duration || 1) * widthPerSecond);
+                          const transition = transitions[index];
 
                           return (
-                            <motion.div
-                              key={clip.id}
-                              layout
-                              initial={{ scale: 0.8, opacity: 0 }}
-                              animate={{ scale: 1, opacity: 1 }}
-                              exit={{ scale: 0.8, opacity: 0 }}
-                              className={`relative rounded-lg overflow-hidden flex-shrink-0 transition-all group ${selectedClipIndex === index ? 'ring-2 ring-[#E31E24] shadow-lg shadow-[#E31E24]/30' : 'hover:ring-2 hover:ring-white/30'}`}
-                              style={{ 
-                                width: `${clipWidth}px`,
-                                height: '60px',
-                                cursor: 'grab'
-                              }}
-                              onClick={() => setSelectedClipIndex(index)}
-                              onContextMenu={(e) => {
-                                e.preventDefault();
-                                setContextMenu({ x: e.clientX, y: e.clientY });
-                                setContextClipIndex(index);
-                              }}
-                              draggable
-                              onDragStart={(e) => {
-                                e.dataTransfer.effectAllowed = 'move';
-                                e.dataTransfer.setData('clipIndex', index.toString());
-                                setSelectedClipIndex(index);
-                              }}
-                              onDragOver={(e) => {
-                                e.preventDefault();
-                                e.dataTransfer.dropEffect = 'move';
-                              }}
-                              onDrop={(e) => {
-                                e.preventDefault();
-                                const sourceIndex = parseInt(e.dataTransfer.getData('clipIndex'));
-                                if (sourceIndex !== index) {
-                                  const newClips = [...clips];
-                                  const [movedClip] = newClips.splice(sourceIndex, 1);
-                                  newClips.splice(index, 0, movedClip);
-                                  setClips(newClips);
-                                  toast.success('קליפים סודרו מחדש!');
-                                }
-                              }}
-                            >
-                              {/* Thumbnail */}
-                              <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${clip.thumbnail || clip.url})` }}>
-                                <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent" />
-                              </div>
-
-                              {/* Clip Info */}
-                              <div className="absolute bottom-0 left-0 right-0 p-1 text-[9px]">
-                                <div className="font-bold truncate text-white">{clip.name}</div>
-                                <div className="text-[#E31E24] font-semibold">{clip.duration?.toFixed(2)}s</div>
-                              </div>
-
-                              {/* Delete Button */}
-                              <button 
-                                onClick={(e) => { e.stopPropagation(); removeClip(index); }} 
-                                className="absolute top-0.5 left-0.5 p-0.5 bg-red-600/90 rounded hover:bg-red-600 transition-colors opacity-0 group-hover:opacity-100 z-10"
+                            <React.Fragment key={clip.id}>
+                              <motion.div
+                                layout
+                                initial={{ scale: 0.8, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                exit={{ scale: 0.8, opacity: 0 }}
+                                className={`relative rounded-lg overflow-hidden flex-shrink-0 transition-all group border-2 ${selectedClipIndex === index ? 'ring-4 ring-[#E31E24] shadow-2xl shadow-[#E31E24]/50 border-[#E31E24]' : 'border-white/20 hover:border-white/40'}`}
+                                style={{ 
+                                  width: `${clipWidth}px`,
+                                  height: '70px',
+                                  cursor: 'grab'
+                                }}
+                                onClick={() => setSelectedClipIndex(index)}
+                                onContextMenu={(e) => {
+                                  e.preventDefault();
+                                  setContextMenu({ x: e.clientX, y: e.clientY });
+                                  setContextClipIndex(index);
+                                }}
+                                draggable
+                                onDragStart={(e) => {
+                                  e.dataTransfer.effectAllowed = 'move';
+                                  e.dataTransfer.setData('clipIndex', index.toString());
+                                  setSelectedClipIndex(index);
+                                }}
+                                onDragOver={(e) => {
+                                  e.preventDefault();
+                                  e.dataTransfer.dropEffect = 'move';
+                                }}
+                                onDrop={(e) => {
+                                  e.preventDefault();
+                                  const sourceIndex = parseInt(e.dataTransfer.getData('clipIndex'));
+                                  if (sourceIndex !== index) {
+                                    const newClips = [...clips];
+                                    const [movedClip] = newClips.splice(sourceIndex, 1);
+                                    newClips.splice(index, 0, movedClip);
+                                    setClips(newClips);
+                                    toast.success('קליפים סודרו מחדש!');
+                                  }
+                                }}
                               >
-                                <Trash2 size={10} />
-                              </button>
+                                {/* Thumbnail */}
+                                <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url(${clip.thumbnail || clip.url})` }}>
+                                  <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/50 to-transparent" />
+                                </div>
 
-                              {/* Resize Handles */}
-                              <div
-                                className="absolute left-0 top-0 bottom-0 w-2 bg-[#E31E24]/80 cursor-ew-resize hover:bg-[#E31E24] hover:w-3 transition-all z-40"
-                                onMouseDown={(e) => {
-                                  e.stopPropagation();
-                                  e.preventDefault();
-                                  const startX = e.clientX;
-                                  const startDuration = clip.duration || 1;
-                                  const widthPerSecond = 60;
+                                {/* Duration Bar */}
+                                <div className="absolute top-1 left-1 right-1 h-1 bg-black/60 rounded-full overflow-hidden">
+                                  <div className="h-full bg-gradient-to-r from-[#E31E24] to-pink-500" style={{ width: '100%' }}></div>
+                                </div>
 
-                                  const handleMouseMove = (moveE) => {
-                                    const deltaX = startX - moveE.clientX;
-                                    const deltaDuration = deltaX / widthPerSecond;
-                                    const newDuration = Math.max(0.5, startDuration + deltaDuration);
-                                    setClips(prev => prev.map((c, i) => 
-                                      i === index ? { ...c, duration: parseFloat(newDuration.toFixed(2)) } : c
-                                    ));
-                                  };
+                                {/* Clip Info */}
+                                <div className="absolute bottom-0 left-0 right-0 p-1.5 text-[9px]">
+                                  <div className="font-bold truncate text-white mb-0.5">{clip.name}</div>
+                                  <div className="flex items-center justify-between">
+                                    <div className="text-[#E31E24] font-bold bg-black/60 px-1.5 py-0.5 rounded">{clip.duration?.toFixed(2)}s</div>
+                                    {clip.filters?.effect && (
+                                      <div className="text-purple-300 text-[8px] bg-purple-900/60 px-1 py-0.5 rounded">✨ {clip.filters.effect}</div>
+                                    )}
+                                  </div>
+                                </div>
 
-                                  const handleMouseUp = () => {
-                                    document.removeEventListener('mousemove', handleMouseMove);
-                                    document.removeEventListener('mouseup', handleMouseUp);
-                                  };
+                                {/* Delete Button */}
+                                <button 
+                                  onClick={(e) => { e.stopPropagation(); removeClip(index); }} 
+                                  className="absolute top-1 left-1 p-1 bg-red-600/90 rounded-full hover:bg-red-600 transition-colors opacity-0 group-hover:opacity-100 z-10 shadow-lg"
+                                >
+                                  <Trash2 size={12} />
+                                </button>
 
-                                  document.addEventListener('mousemove', handleMouseMove);
-                                  document.addEventListener('mouseup', handleMouseUp);
-                                }}
-                              />
-                              <div
-                                className="absolute right-0 top-0 bottom-0 w-2 bg-[#E31E24]/80 cursor-ew-resize hover:bg-[#E31E24] hover:w-3 transition-all z-40"
-                                onMouseDown={(e) => {
-                                  e.stopPropagation();
-                                  e.preventDefault();
-                                  const startX = e.clientX;
-                                  const startDuration = clip.duration || 1;
-                                  const widthPerSecond = 60;
+                                {/* Resize Handles */}
+                                <div
+                                  className="absolute left-0 top-0 bottom-0 w-2 bg-[#E31E24] cursor-ew-resize hover:w-3 transition-all z-40 opacity-0 group-hover:opacity-100"
+                                  onMouseDown={(e) => {
+                                    e.stopPropagation();
+                                    e.preventDefault();
+                                    const startX = e.clientX;
+                                    const startDuration = clip.duration || 1;
+                                    const widthPerSecond = 60;
 
-                                  const handleMouseMove = (moveE) => {
-                                    const deltaX = moveE.clientX - startX;
-                                    const deltaDuration = deltaX / widthPerSecond;
-                                    const newDuration = Math.max(0.5, startDuration + deltaDuration);
-                                    setClips(prev => prev.map((c, i) => 
-                                      i === index ? { ...c, duration: parseFloat(newDuration.toFixed(2)) } : c
-                                    ));
-                                  };
+                                    const handleMouseMove = (moveE) => {
+                                      const deltaX = startX - moveE.clientX;
+                                      const deltaDuration = deltaX / widthPerSecond;
+                                      const newDuration = Math.max(0.5, startDuration + deltaDuration);
+                                      setClips(prev => prev.map((c, i) => 
+                                        i === index ? { ...c, duration: parseFloat(newDuration.toFixed(2)) } : c
+                                      ));
+                                    };
 
-                                  const handleMouseUp = () => {
-                                    document.removeEventListener('mousemove', handleMouseMove);
-                                    document.removeEventListener('mouseup', handleMouseUp);
-                                  };
+                                    const handleMouseUp = () => {
+                                      document.removeEventListener('mousemove', handleMouseMove);
+                                      document.removeEventListener('mouseup', handleMouseUp);
+                                    };
 
-                                  document.addEventListener('mousemove', handleMouseMove);
-                                  document.addEventListener('mouseup', handleMouseUp);
-                                }}
-                              />
-                            </motion.div>
+                                    document.addEventListener('mousemove', handleMouseMove);
+                                    document.addEventListener('mouseup', handleMouseUp);
+                                  }}
+                                />
+                                <div
+                                  className="absolute right-0 top-0 bottom-0 w-2 bg-[#E31E24] cursor-ew-resize hover:w-3 transition-all z-40 opacity-0 group-hover:opacity-100"
+                                  onMouseDown={(e) => {
+                                    e.stopPropagation();
+                                    e.preventDefault();
+                                    const startX = e.clientX;
+                                    const startDuration = clip.duration || 1;
+                                    const widthPerSecond = 60;
+
+                                    const handleMouseMove = (moveE) => {
+                                      const deltaX = moveE.clientX - startX;
+                                      const deltaDuration = deltaX / widthPerSecond;
+                                      const newDuration = Math.max(0.5, startDuration + deltaDuration);
+                                      setClips(prev => prev.map((c, i) => 
+                                        i === index ? { ...c, duration: parseFloat(newDuration.toFixed(2)) } : c
+                                      ));
+                                    };
+
+                                    const handleMouseUp = () => {
+                                      document.removeEventListener('mousemove', handleMouseMove);
+                                      document.removeEventListener('mouseup', handleMouseUp);
+                                    };
+
+                                    document.addEventListener('mousemove', handleMouseMove);
+                                    document.addEventListener('mouseup', handleMouseUp);
+                                  }}
+                                />
+                              </motion.div>
+
+                              {/* Transition Indicator */}
+                              {index < clips.length - 1 && (
+                                <div className="relative flex-shrink-0 group/trans cursor-pointer" style={{ width: '40px' }}>
+                                  <div className="absolute inset-0 flex items-center justify-center">
+                                    {transition && transition !== 'cut' ? (
+                                      <div className="relative">
+                                        <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center animate-pulse shadow-lg shadow-purple-500/50">
+                                          <Sparkles size={16} className="text-white" />
+                                        </div>
+                                        <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-[8px] text-purple-300 font-bold whitespace-nowrap bg-black/80 px-2 py-0.5 rounded opacity-0 group-hover/trans:opacity-100 transition-opacity">
+                                          {transition}
+                                        </div>
+                                      </div>
+                                    ) : (
+                                      <div className="w-px h-full bg-gradient-to-b from-transparent via-white/40 to-transparent"></div>
+                                    )}
+                                  </div>
+                                  <button
+                                    onClick={() => {
+                                      const newTransition = prompt('בחר מעבר:\n1. cut\n2. fade\n3. dissolve\n4. slide');
+                                      if (newTransition) updateTransition(index, newTransition);
+                                    }}
+                                    className="absolute inset-0 opacity-0 hover:opacity-100 bg-purple-600/20 backdrop-blur-sm rounded flex items-center justify-center transition-all"
+                                    title="הוסף מעבר"
+                                  >
+                                    <Plus size={14} className="text-white" />
+                                  </button>
+                                </div>
+                              )}
+                            </React.Fragment>
                           );
                         })
                       )}
