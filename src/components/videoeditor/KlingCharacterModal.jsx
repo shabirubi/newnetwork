@@ -40,7 +40,6 @@ export default function KlingCharacterModal({ onClose, onApply }) {
 
       toast.info('יוצר דמות מדברת עם HeyGen... עד דקה ⏳');
       const { data } = await base44.functions.invoke('generateHeyGenCharacter', {
-        image_url: file_url,
         script: prompt
       });
 
