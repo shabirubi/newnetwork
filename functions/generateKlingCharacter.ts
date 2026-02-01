@@ -22,12 +22,41 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Kling API keys not configured' }, { status: 500 });
     }
 
+    // Generate JWT Token for Kling API
+    const jwtHeader = btoa(JSON.stringify({ alg: "HS256", typ: "JWT" }));
+    const jwtPayload = btoa(JSON.stringify({
+      iss: accessKey,
+      exp: Math.floor(Date.now() / 1000) + 1800, // 30 minutes
+      nbf: Math.floor(Date.now() / 1000) - 5
+    }));
+
+    const signatureBase = `${jwtHeader}.${jwtPayload}`;
+    const encoder = new TextEncoder();
+    const keyData = encoder.encode(secretKey);
+    const messageData = encoder.encode(signatureBase);
+    
+    const cryptoKey = await crypto.subtle.importKey(
+      'raw',
+      keyData,
+      { name: 'HMAC', hash: 'SHA-256' },
+      false,
+      ['sign']
+    );
+    
+    const signature = await crypto.subtle.sign('HMAC', cryptoKey, messageData);
+    const jwtSignature = btoa(String.fromCharCode(...new Uint8Array(signature)))
+      .replace(/\+/g, '-')
+      .replace(/\//g, '_')
+      .replace(/=/g, '');
+    
+    const jwtToken = `${jwtHeader}.${jwtPayload}.${jwtSignature}`;
+
     // Create video generation task using Kling API
-    const createResponse = await fetch('https://api.klingai.com/v1/videos/image2video', {
+    const createResponse = await fetch('https://api-singapore.klingai.com/v1/videos/image2video', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${accessKey}`
+        'Authorization': `Bearer ${jwtToken}`
       },
       body: JSON.stringify({
         model_name: 'kling-v1',
@@ -63,9 +92,9 @@ Deno.serve(async (req) => {
     for (let i = 0; i < maxAttempts; i++) {
       await new Promise(resolve => setTimeout(resolve, pollInterval));
       
-      const statusResponse = await fetch(`https://api.klingai.com/v1/videos/image2video/${taskId}`, {
+      const statusResponse = await fetch(`https://api-singapore.klingai.com/v1/videos/image2video/${taskId}`, {
         headers: {
-          'Authorization': `Bearer ${accessKey}`
+          'Authorization': `Bearer ${jwtToken}`
         }
       });
 
