@@ -25,7 +25,7 @@ import MusicLibraryModal from '../components/videoeditor/MusicLibraryModal';
 import PIPOverlay from '../components/videoeditor/PIPOverlay';
 import AIImageGeneratorModal from '../components/videoeditor/AIImageGeneratorModal';
 import AdCreatorModal from '../components/videoeditor/AdCreatorModal';
-      import StockVideoLibraryModal from '../components/videoeditor/StockVideoLibraryModal';
+      
       import TimelineEditor from '../components/videoeditor/TimelineEditor';
 import AIVideoFromImagesModal from '../components/videoeditor/AIVideoFromImagesModal';
 import ExportVideoModal from '../components/videoeditor/ExportVideoModal';
@@ -128,7 +128,7 @@ export default function VideoEditor() {
   const [showAIImageModal, setShowAIImageModal] = useState(false);
   const [showAdvancedTTSModal, setShowAdvancedTTSModal] = useState(false);
   const [showAdCreatorModal, setShowAdCreatorModal] = useState(false);
-  const [showStockVideoModal, setShowStockVideoModal] = useState(false);
+
   const [videoLoop, setVideoLoop] = useState(false);
   const [showAIVideoFromImagesModal, setShowAIVideoFromImagesModal] = useState(false);
   const [showLumaGeneratorModal, setShowLumaGeneratorModal] = useState(false);
@@ -970,16 +970,10 @@ export default function VideoEditor() {
 
           <div className="space-y-2">
             <input type="file" accept="video/mp4,video/webm,video/ogg,video/quicktime,video/x-msvideo,video/x-matroska,image/png,image/jpeg,image/jpg,image/gif" onChange={handleAddClip} className="hidden" id="video-upload" />
-            <div className="flex gap-2">
-              <Button onClick={() => document.getElementById('video-upload').click()} className="flex-1 bg-white/10 hover:bg-white/20 text-white text-sm" disabled={loading}>
-                {loading ? <Loader2 size={16} className="ml-1 animate-spin" /> : <Upload size={16} className="ml-1" />}
-                העלה
-              </Button>
-              <Button onClick={() => setShowStockVideoModal(true)} className="flex-1 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white text-sm">
-                <Play size={16} className="ml-1" />
-                ספריה
-              </Button>
-            </div>
+            <Button onClick={() => document.getElementById('video-upload').click()} className="w-full bg-white/10 hover:bg-white/20 text-white text-sm" disabled={loading}>
+              {loading ? <Loader2 size={16} className="ml-1 animate-spin" /> : <Upload size={16} className="ml-1" />}
+              העלה סרטון
+            </Button>
 
             <Button onClick={() => setShowLumaGeneratorModal(true)} className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white text-sm" disabled={loading}>
               <Sparkles size={16} className="ml-1" />
@@ -1192,7 +1186,7 @@ export default function VideoEditor() {
 
       {showAdCreatorModal && <AdCreatorModal onClose={() => setShowAdCreatorModal(false)} onApply={(adClip) => { setClips(prev => [...prev, adClip]); setShowAdCreatorModal(false); toast.success('פרסומה נוספה לעורך! 📢'); }} />}
 
-      {showStockVideoModal && <StockVideoLibraryModal onClose={() => setShowStockVideoModal(false)} onApply={(videoData) => { setClips(prev => [...prev, videoData]); setShowStockVideoModal(false); }} />}
+
 
       {showAIVideoFromImagesModal && <AIVideoFromImagesModal onClose={() => setShowAIVideoFromImagesModal(false)} onApply={(clips) => { setClips(prev => [...prev, ...clips]); setShowAIVideoFromImagesModal(false); }} />}
 
