@@ -50,10 +50,35 @@ Deno.serve(async (req) => {
       const videoUrl = statusData.data?.video_url;
       console.log('Video ready:', videoUrl);
       if (videoUrl) {
-        return Response.json({
-          video_url: videoUrl,
-          duration: statusData.data?.duration || 30
-        });
+        try {
+          // Download the video from HeyGen
+          console.log('Downloading video from:', videoUrl);
+          const videoResponse = await fetch(videoUrl);
+          if (!videoResponse.ok) {
+            throw new Error(`Failed to download video: ${videoResponse.status}`);
+          }
+          
+          const videoBlob = await videoResponse.blob();
+          
+          // Upload to our storage
+          const uploadResponse = await base44.integrations.Core.UploadFile({
+            file: videoBlob
+          });
+          
+          console.log('Video uploaded successfully:', uploadResponse.file_url);
+          
+          return Response.json({
+            video_url: uploadResponse.file_url,
+            duration: statusData.data?.duration || 30
+          });
+        } catch (downloadErr) {
+          console.error('Failed to download/upload video:', downloadErr.message);
+          // Return HeyGen URL as fallback
+          return Response.json({
+            video_url: videoUrl,
+            duration: statusData.data?.duration || 30
+          });
+        }
       }
     }
     
