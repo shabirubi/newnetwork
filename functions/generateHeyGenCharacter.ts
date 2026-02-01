@@ -23,29 +23,14 @@ Deno.serve(async (req) => {
 
     console.log('Creating HeyGen avatar video...');
 
-    // First get an avatar ID
-    const avatarListResponse = await fetch('https://api.heygen.com/v2/avatars', {
-      headers: {
-        'X-API-KEY': apiKey
-      }
-    });
-
-    if (!avatarListResponse.ok) {
-      return Response.json({ error: 'Failed to get avatar list' }, { status: 500 });
-    }
-
-    const avatarListData = await avatarListResponse.json();
-    const avatarId = avatarListData.avatars?.[0]?.avatar_id || 'Wayne_20200820';
-
-    // Create video generation task with HeyGen Avatar Video API
-    const createResponse = await fetch('https://api.heygen.com/v2/video_avatar/create', {
+    // Create video generation task with HeyGen Avatar Video API V2
+    const createResponse = await fetch('https://api.heygen.com/v2/video/generate', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'X-API-KEY': apiKey
       },
       body: JSON.stringify({
-        avatar_id: avatarId,
         caption: script,
         dimension: {
           width: 1280,
