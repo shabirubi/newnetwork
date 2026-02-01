@@ -105,18 +105,17 @@ Deno.serve(async (req) => {
       console.log(`Poll attempt ${i + 1}:`, statusData);
       
       if (statusResponse.ok) {
-        const status = statusData.data?.status || statusData.status || statusData.video_status;
-        
-        if (status === 'completed') {
-          const videoUrl = statusData.data?.video_url || statusData.video_url || statusData.output_url;
-          if (videoUrl) {
-            return Response.json({
-              video_url: videoUrl,
-              thumbnail_url: image_url,
-              duration: statusData.duration || 30
-            });
+          const status = statusData.data?.status || statusData.status || statusData.video_status;
+
+          if (status === 'completed') {
+            const videoUrl = statusData.data?.video_url || statusData.video_url || statusData.output_url;
+            if (videoUrl) {
+              return Response.json({
+                video_url: videoUrl,
+                duration: statusData.duration || 30
+              });
+            }
           }
-        }
         
         if (status === 'failed') {
           console.error('Generation failed:', statusData);
