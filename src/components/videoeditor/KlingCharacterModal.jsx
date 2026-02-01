@@ -65,16 +65,17 @@ export default function KlingCharacterModal({ onClose, onApply }) {
         </div>
 
         <div className="space-y-4">
-          {/* Prompt */}
+          {/* Script */}
           <div>
-            <label className="block text-sm font-semibold text-white mb-2">תיאור תנועה</label>
+            <label className="block text-sm font-semibold text-white mb-2">📝 הטקסט שהדמות תדבר</label>
             <Textarea
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
-              placeholder="לדוגמה: הדמות מהלכת קדימה, מניפה יד, מדברת ומחייכת"
+              placeholder="לדוגמה: שלום, אני דמות מדברת בעזרת HeyGen. אני יכולה להניף יד ולחייך בזמן שאני מדברת."
               className="bg-black/60 border-white/20 text-white placeholder-white/40 resize-none"
-              rows={3}
+              rows={4}
             />
+            <p className="text-xs text-gray-400 mt-1">💡 כתוב את הטקסט בדיוק כפי שתרצה שהדמות תדבר אותו</p>
           </div>
 
           {/* Tips */}
