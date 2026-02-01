@@ -38,11 +38,11 @@ export default function KlingCharacterModal({ onClose, onApply }) {
       toast.info('מעלה תמונה...');
       const { file_url } = await base44.integrations.Core.UploadFile({ file: imageFile });
 
-      toast.info('יוצר דמות מונפשת... עד 2 דקות ⏳');
-      const { data } = await base44.functions.invoke('generateKlingCharacter', {
+      toast.info('יוצר דמות מדברת וזזה... עד דקה ⏳');
+      const { data } = await base44.functions.invoke('generateDIDCharacter', {
         image_url: file_url,
-        prompt: prompt,
-        duration: 5
+        text_script: prompt,
+        voice_id: 'en-US-GuyNeural'
       });
 
       if (data.video_url) {
