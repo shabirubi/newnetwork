@@ -21,20 +21,36 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'HeyGen API key not configured' }, { status: 500 });
     }
 
-    console.log('Creating HeyGen talking photo avatar...');
+    console.log('Creating HeyGen avatar video...');
 
-    // Create video generation task with HeyGen Avatar IV API
-    const createResponse = await fetch('https://api.heygen.com/v1/avatar_iv/generate_video', {
+    // First get an avatar ID
+    const avatarListResponse = await fetch('https://api.heygen.com/v2/avatars', {
+      headers: {
+        'X-API-KEY': apiKey
+      }
+    });
+
+    if (!avatarListResponse.ok) {
+      return Response.json({ error: 'Failed to get avatar list' }, { status: 500 });
+    }
+
+    const avatarListData = await avatarListResponse.json();
+    const avatarId = avatarListData.avatars?.[0]?.avatar_id || 'Wayne_20200820';
+
+    // Create video generation task with HeyGen Avatar Video API
+    const createResponse = await fetch('https://api.heygen.com/v2/video_avatar/create', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-HEYGEN-KEY': apiKey
+        'X-API-KEY': apiKey
       },
       body: JSON.stringify({
-        input_photo: image_url,
-        caption_text: script,
-        quality: 'high',
-        motion: 'default'
+        avatar_id: avatarId,
+        caption: script,
+        dimension: {
+          width: 1280,
+          height: 720
+        }
       })
     });
 
@@ -55,7 +71,7 @@ Deno.serve(async (req) => {
 
     console.log('HeyGen create response:', responseData);
     
-    const videoId = responseData.video_id || responseData.id;
+    const videoId = responseData.video_id || responseData.data?.video_id;
 
     if (!videoId) {
       console.error('No video ID in response:', responseData);
@@ -69,9 +85,9 @@ Deno.serve(async (req) => {
     for (let i = 0; i < maxAttempts; i++) {
       await new Promise(resolve => setTimeout(resolve, pollInterval));
       
-      const statusResponse = await fetch(`https://api.heygen.com/v1/avatar_iv/video/${videoId}`, {
+      const statusResponse = await fetch(`https://api.heygen.com/v1/video_status/${videoId}`, {
         headers: {
-          'X-HEYGEN-KEY': apiKey
+          'X-API-KEY': apiKey
         }
       });
 
@@ -90,18 +106,18 @@ Deno.serve(async (req) => {
       if (statusResponse.ok) {
         const status = statusData.status || statusData.video_status;
         
-        if (status === 'COMPLETED' || status === 'completed') {
-          const videoUrl = statusData.video_url || statusData.output_video_url;
+        if (status === 'completed') {
+          const videoUrl = statusData.video_url || statusData.output_url;
           if (videoUrl) {
             return Response.json({
               video_url: videoUrl,
               thumbnail_url: image_url,
-              duration: 30
+              duration: statusData.duration || 30
             });
           }
         }
         
-        if (status === 'FAILED' || status === 'failed') {
+        if (status === 'failed') {
           console.error('Generation failed:', statusData);
           return Response.json({ error: 'Video generation failed', details: statusData }, { status: 500 });
         }
