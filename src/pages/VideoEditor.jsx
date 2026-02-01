@@ -1314,22 +1314,29 @@ export default function VideoEditor() {
                             volume: 100,
                             type: 'video'
                           };
+                          
+                          // הוסף את הקליפ החדש מיד אחרי הקליפ הנוכחי
                           setClips(prev => {
-                            const updated = [...prev, newClip];
-                            setTimeout(() => setSelectedClipIndex(updated.length - 1), 200);
+                            const currentIndex = selectedClipIndex;
+                            const updated = [
+                              ...prev.slice(0, currentIndex + 1),
+                              newClip,
+                              ...prev.slice(currentIndex + 1)
+                            ];
+                            setTimeout(() => setSelectedClipIndex(currentIndex + 1), 200);
                             return updated;
                           });
 
                           if (data.audio_url) {
                             setAudioTrack({ url: data.audio_url, name: 'דיבוב - ' + prompt.substring(0, 20), volume: 100, loop: false });
-                            toast.success('סרטון + דיבוב נוספו לציר הזמן! 🎬🎤');
+                            toast.success('סרטון המשך + דיבוב נוספו! 🎬🎤');
                           } else {
-                            toast.warning('סרטון בלי קול - בעיה בדיבוב');
+                            toast.success('סרטון המשך נוסף! 🎬');
                           }
                         } else if (data?.still_processing) {
                           toast.info('הסרטון בתהליך... נסה שוב בעוד רגע');
                         } else {
-                          toast.error('לא התקבל סרטון מהשרת');
+                          toast.error('לא התקבל סרטון: ' + JSON.stringify(data));
                         }
                       } catch (error) {
                         toast.error('שגיאה: ' + error.message);
