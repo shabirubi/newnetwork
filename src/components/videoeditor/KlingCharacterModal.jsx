@@ -55,9 +55,9 @@ export default function KlingCharacterModal({ onClose, onApply }) {
           <div>
             <h3 className="text-2xl font-bold text-white flex items-center gap-2">
               <User size={24} className="text-purple-400" />
-              דמות מונפשת
+              דמות מדברת HeyGen
             </h3>
-            <p className="text-sm text-gray-400 mt-1">העלה תמונה ותאר תנועה</p>
+            <p className="text-sm text-gray-400 mt-1">תאר מה הדמות תעשה ויוצר אותה AI</p>
           </div>
           <button onClick={onClose} className="p-2 hover:bg-white/10 rounded-lg transition-colors">
             <X size={24} className="text-white" />
@@ -65,31 +65,6 @@ export default function KlingCharacterModal({ onClose, onApply }) {
         </div>
 
         <div className="space-y-4">
-          {/* Image Upload */}
-          <div>
-            <label className="block text-sm font-semibold text-white mb-2">תמונת דמות</label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageUpload}
-              className="hidden"
-              id="kling-image-upload"
-            />
-            <div
-              onClick={() => document.getElementById('kling-image-upload').click()}
-              className="border-2 border-dashed border-white/20 rounded-xl p-6 cursor-pointer hover:border-purple-500/50 transition-all"
-            >
-              {imagePreview ? (
-                <img src={imagePreview} alt="Preview" className="w-full h-64 object-contain rounded-lg" />
-              ) : (
-                <div className="text-center text-gray-400">
-                  <Upload size={48} className="mx-auto mb-2 opacity-50" />
-                  <p className="text-sm">לחץ להעלאת תמונה</p>
-                </div>
-              )}
-            </div>
-          </div>
-
           {/* Prompt */}
           <div>
             <label className="block text-sm font-semibold text-white mb-2">תיאור תנועה</label>
