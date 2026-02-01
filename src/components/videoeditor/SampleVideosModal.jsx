@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
-import { Play, Download, X } from 'lucide-react';
+import { Play, Download, X, Search, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
+import { base44 } from '@/api/base44Client';
 
 const SAMPLE_VIDEOS = [
   {
@@ -104,6 +106,10 @@ const SAMPLE_VIDEOS = [
 
 export default function SampleVideosModal({ onClose, onApply }) {
   const [previewingVideo, setPreviewingVideo] = useState(null);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [activeTab, setActiveTab] = useState('samples'); // 'samples' or 'search'
 
   const handleAddVideo = async (video) => {
     const newClip = {
@@ -120,6 +126,36 @@ export default function SampleVideosModal({ onClose, onApply }) {
     toast.success(`"${video.title}" נוסף! 🎥`);
   };
 
+  const handleSearch = async () => {
+    if (!searchQuery.trim()) {
+      toast.error('הזן מילת חיפוש');
+      return;
+    }
+
+    setIsSearching(true);
+    try {
+      const { data } = await base44.functions.invoke('searchPexelsVideos', {
+        query: searchQuery,
+        per_page: 20
+      });
+
+      if (data.videos && data.videos.length > 0) {
+        setSearchResults(data.videos);
+        setActiveTab('search');
+        toast.success(`נמצאו ${data.videos.length} סרטונים! 🎬`);
+      } else {
+        toast.error('לא נמצאו סרטונים');
+        setSearchResults([]);
+      }
+    } catch (error) {
+      console.error('Search error:', error);
+      toast.error('שגיאה בחיפוש: ' + error.message);
+      setSearchResults([]);
+    } finally {
+      setIsSearching(false);
+    }
+  };
+
   return (
     <div 
       className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50"
@@ -130,24 +166,186 @@ export default function SampleVideosModal({ onClose, onApply }) {
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center justify-between mb-6 pb-4 border-b border-white/10">
-          <div>
-            <h3 className="text-2xl font-bold text-white flex items-center gap-2">
-              <Play size={24} className="text-green-500" />
-              סרטוני דוגמה
-            </h3>
-            <p className="text-sm text-gray-400 mt-1">12 סרטונים איכותיים מ-Google Cloud CDN</p>
+        <div className="mb-6 pb-4 border-b border-white/10">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h3 className="text-2xl font-bold text-white flex items-center gap-2">
+                <Play size={24} className="text-green-500" />
+                ספריית סרטונים
+              </h3>
+              <p className="text-sm text-gray-400 mt-1">12 דוגמאות + מיליוני סרטונים מ-Pexels</p>
+            </div>
+            <button
+              onClick={onClose}
+              className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+            >
+              <X size={24} className="text-white" />
+            </button>
           </div>
-          <button
-            onClick={onClose}
-            className="p-2 hover:bg-white/10 rounded-lg transition-colors"
-          >
-            <X size={24} className="text-white" />
-          </button>
+
+          {/* Search Bar */}
+          <div className="flex gap-2">
+            <Input
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+              placeholder="חפש סרטונים: טבע, ים, חתול, מכונית..."
+              className="flex-1 bg-black/40 border-white/20 text-white placeholder-gray-500"
+            />
+            <Button
+              onClick={handleSearch}
+              disabled={isSearching || !searchQuery.trim()}
+              className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
+            >
+              {isSearching ? (
+                <Loader2 size={18} className="animate-spin" />
+              ) : (
+                <>
+                  <Search size={18} className="mr-2" />
+                  חפש
+                </>
+              )}
+            </Button>
+          </div>
+
+          {/* Tabs */}
+          <div className="flex gap-2 mt-4">
+            <button
+              onClick={() => setActiveTab('samples')}
+              className={`px-4 py-2 rounded-lg font-semibold transition-all ${
+                activeTab === 'samples'
+                  ? 'bg-green-600 text-white'
+                  : 'bg-white/5 text-gray-400 hover:bg-white/10'
+              }`}
+            >
+              דוגמאות (12)
+            </button>
+            <button
+              onClick={() => setActiveTab('search')}
+              className={`px-4 py-2 rounded-lg font-semibold transition-all ${
+                activeTab === 'search'
+                  ? 'bg-blue-600 text-white'
+                  : 'bg-white/5 text-gray-400 hover:bg-white/10'
+              }`}
+            >
+              חיפוש ({searchResults.length})
+            </button>
+          </div>
         </div>
 
         {/* Videos Grid */}
         <div className="flex-1 overflow-y-auto">
+          {activeTab === 'samples' ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pr-2">
+              {SAMPLE_VIDEOS.map(video => (
+                <div
+                  key={video.id}
+                  className="group relative bg-black/40 border border-white/10 rounded-xl overflow-hidden hover:border-green-500/50 transition-all"
+                >
+                  {/* Thumbnail */}
+                  <div className="relative aspect-video overflow-hidden bg-black">
+                    <img
+                      src={video.thumbnail}
+                      alt={video.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                      onError={(e) => {
+                        e.target.src = 'https://via.placeholder.com/400x225/1a1a1a/4ade80?text=' + encodeURIComponent(video.title);
+                      }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                      <button
+                        onClick={() => setPreviewingVideo(video)}
+                        className="bg-green-600/80 hover:bg-green-600 p-3 rounded-full transition-all transform scale-75 group-hover:scale-100"
+                      >
+                        <Play size={20} className="text-white fill-white" />
+                      </button>
+                    </div>
+                    {/* Duration Badge */}
+                    <div className="absolute bottom-2 left-2 bg-black/80 px-2 py-1 rounded text-xs text-white font-bold">
+                      {video.duration}s
+                    </div>
+                  </div>
+
+                  {/* Info */}
+                  <div className="p-3">
+                    <h4 className="font-semibold text-white text-sm truncate group-hover:text-green-400 transition-colors mb-1">
+                      {video.title}
+                    </h4>
+                    <p className="text-xs text-gray-400 truncate mb-3">{video.description}</p>
+                    <Button
+                      onClick={() => handleAddVideo(video)}
+                      size="sm"
+                      className="w-full bg-green-600 hover:bg-green-700 text-white text-xs h-8"
+                    >
+                      <Download size={14} className="mr-1" />
+                      הוסף לעורך
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pr-2">
+              {searchResults.length === 0 ? (
+                <div className="col-span-full text-center py-12 text-gray-400">
+                  <Search size={48} className="mx-auto mb-4 opacity-30" />
+                  <p>חפש סרטונים מ-Pexels...</p>
+                  <p className="text-xs mt-2">מיליוני סרטונים חינמיים ב-HD</p>
+                </div>
+              ) : (
+                searchResults.map(video => (
+                  <div
+                    key={video.id}
+                    className="group relative bg-black/40 border border-white/10 rounded-xl overflow-hidden hover:border-blue-500/50 transition-all"
+                  >
+                    {/* Thumbnail */}
+                    <div className="relative aspect-video overflow-hidden bg-black">
+                      <img
+                        src={video.thumbnail}
+                        alt={video.title}
+                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                        onError={(e) => {
+                          e.target.src = 'https://via.placeholder.com/400x225/1a1a1a/60a5fa?text=' + encodeURIComponent(video.title);
+                        }}
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                        <button
+                          onClick={() => setPreviewingVideo(video)}
+                          className="bg-blue-600/80 hover:bg-blue-600 p-3 rounded-full transition-all transform scale-75 group-hover:scale-100"
+                        >
+                          <Play size={20} className="text-white fill-white" />
+                        </button>
+                      </div>
+                      {/* Duration Badge */}
+                      <div className="absolute bottom-2 left-2 bg-black/80 px-2 py-1 rounded text-xs text-white font-bold">
+                        {Math.round(video.duration)}s
+                      </div>
+                    </div>
+
+                    {/* Info */}
+                    <div className="p-3">
+                      <h4 className="font-semibold text-white text-sm truncate group-hover:text-blue-400 transition-colors mb-1">
+                        {video.title}
+                      </h4>
+                      <p className="text-xs text-gray-400 truncate mb-3">{video.description}</p>
+                      <Button
+                        onClick={() => handleAddVideo(video)}
+                        size="sm"
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white text-xs h-8"
+                      >
+                        <Download size={14} className="mr-1" />
+                        הוסף לעורך
+                      </Button>
+                    </div>
+                  </div>
+                ))
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* Original Sample Videos Grid - Hidden */}
+        <div className="hidden">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pr-2">
             {SAMPLE_VIDEOS.map(video => (
               <div
@@ -202,7 +400,7 @@ export default function SampleVideosModal({ onClose, onApply }) {
         <div className="mt-4 pt-4 border-t border-white/10">
           <p className="text-xs text-gray-500 flex items-center justify-center gap-2">
             <span className="text-green-500">✓</span>
-            סרטונים חינמיים מ-Google Cloud CDN • מהירות ואמינות מקסימלית
+            {activeTab === 'samples' ? 'Google Cloud CDN • מהיר ויציב' : 'Pexels • מיליוני סרטונים בחינם'}
           </p>
         </div>
       </div>
