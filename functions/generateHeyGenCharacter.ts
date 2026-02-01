@@ -24,6 +24,9 @@ Deno.serve(async (req) => {
     // Get default avatar if not specified
     let selectedAvatarId = avatar_id || 'Abigail_expressive_2024112501';
     
+    // Default voice
+    const defaultVoiceId = 'f38a635bee7a4d1f9b0a654a31d050d2'; // Chill Brian
+    
     console.log('Creating HeyGen avatar video with avatar:', selectedAvatarId);
 
     // Create video using v2 API
