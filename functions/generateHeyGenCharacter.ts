@@ -45,7 +45,7 @@ Deno.serve(async (req) => {
             },
             background: {
               type: 'image',
-              image_url: image_url
+              url: image_url
             }
           }
         ],
