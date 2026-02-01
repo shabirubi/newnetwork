@@ -22,29 +22,16 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Kling API keys not configured' }, { status: 500 });
     }
 
-    // Generate JWT Token using npm:jsonwebtoken
-    const jwt = await import('npm:jsonwebtoken@9.0.2');
-    
-    const jwtToken = jwt.default.sign(
-      {
-        iss: accessKey,
-        exp: Math.floor(Date.now() / 1000) + 1800, // 30 minutes
-        nbf: Math.floor(Date.now() / 1000) - 5 // 5 seconds ago
-      },
-      secretKey,
-      { algorithm: 'HS256', header: { alg: 'HS256', typ: 'JWT' } }
-    );
-    
-    console.log('Generated JWT Token for Kling API');
-    console.log('Access Key (first 10 chars):', accessKey.substring(0, 10));
-    console.log('JWT Token (first 50 chars):', jwtToken.substring(0, 50));
+    // Try simple authentication with Access Key and Secret Key in headers
+    console.log('Using Kling API with Access Key:', accessKey.substring(0, 10) + '...');
 
     // Create video generation task using Kling API
     const createResponse = await fetch('https://api-singapore.klingai.com/v1/videos/image2video', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${jwtToken}`
+        'X-Access-Key': accessKey,
+        'X-Secret-Key': secretKey
       },
       body: JSON.stringify({
         model_name: 'kling-v1',
