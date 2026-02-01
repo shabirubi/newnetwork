@@ -1,4 +1,5 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
+import jwt from 'npm:jsonwebtoken@9.0.2';
 
 Deno.serve(async (req) => {
   try {
@@ -22,42 +23,19 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Kling API keys not configured' }, { status: 500 });
     }
 
-    // Manual JWT construction for Kling API
-    const base64url = (str) => {
-      return btoa(String.fromCharCode(...new Uint8Array(str)))
-        .replace(/\+/g, '-')
-        .replace(/\//g, '_')
-        .replace(/=/g, '');
-    };
-    
+    // Create JWT token using jsonwebtoken library
     const now = Math.floor(Date.now() / 1000);
-    const header = { alg: 'HS256', typ: 'JWT' };
-    const payload = {
-      iss: accessKey,
-      exp: now + 1800,
-      nbf: now
-    };
-    
-    const encodedHeader = base64url(new TextEncoder().encode(JSON.stringify(header)));
-    const encodedPayload = base64url(new TextEncoder().encode(JSON.stringify(payload)));
-    const message = `${encodedHeader}.${encodedPayload}`;
-    
-    // Sign with HMAC SHA-256
-    const encoder = new TextEncoder();
-    const keyData = encoder.encode(secretKey);
-    const cryptoKey = await crypto.subtle.importKey(
-      'raw',
-      keyData,
-      { name: 'HMAC', hash: 'SHA-256' },
-      false,
-      ['sign']
+    const jwtToken = jwt.sign(
+      {
+        iss: accessKey,
+        exp: now + 1800,
+        nbf: now
+      },
+      secretKey,
+      { algorithm: 'HS256' }
     );
     
-    const signature = await crypto.subtle.sign('HMAC', cryptoKey, encoder.encode(message));
-    const encodedSignature = base64url(signature);
-    const jwtToken = `${message}.${encodedSignature}`;
-    
-    console.log('Manual JWT created for Kling');
+    console.log('JWT created with library for Kling');
 
     // Create video generation task using Kling API
     const createResponse = await fetch('https://api-singapore.klingai.com/v1/videos/image2video', {
