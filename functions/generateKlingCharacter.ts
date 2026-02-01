@@ -29,17 +29,15 @@ Deno.serve(async (req) => {
     const signature = createHmac('sha256', secretKey).update(signString).digest('hex');
 
     // Create video generation task
-    const createResponse = await fetch('https://api.klingai.com/v1/images/generations', {
+    const createResponse = await fetch('https://api.klingai.com/v1/videos/image2video', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'X-Api-Key': accessKey,
-        'X-Timestamp': timestamp,
-        'X-Signature': signature
+        'Authorization': `Bearer ${accessKey}`
       },
       body: JSON.stringify({
         model_name: 'kling-v1',
-        image: image_url,
+        image_url: image_url,
         prompt: prompt,
         negative_prompt: 'blurry, low quality, distorted',
         duration: duration,
@@ -67,15 +65,9 @@ Deno.serve(async (req) => {
     for (let i = 0; i < maxAttempts; i++) {
       await new Promise(resolve => setTimeout(resolve, pollInterval));
       
-      const newTimestamp = Math.floor(Date.now() / 1000).toString();
-      const newSignString = `${accessKey}${newTimestamp}`;
-      const newSignature = createHmac('sha256', secretKey).update(newSignString).digest('hex');
-      
-      const statusResponse = await fetch(`https://api.klingai.com/v1/images/generations/${taskId}`, {
+      const statusResponse = await fetch(`https://api.klingai.com/v1/videos/image2video/${taskId}`, {
         headers: {
-          'X-Api-Key': accessKey,
-          'X-Timestamp': newTimestamp,
-          'X-Signature': newSignature
+          'Authorization': `Bearer ${accessKey}`
         }
       });
 
