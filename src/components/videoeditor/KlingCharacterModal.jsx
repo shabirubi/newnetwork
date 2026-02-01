@@ -49,7 +49,6 @@ export default function KlingCharacterModal({ onClose, onApply }) {
           url: data.video_url,
           duration: data.duration || 5,
           name: 'דמות - ' + prompt.substring(0, 30),
-          thumbnail: data.thumbnail_url || file_url,
           filters: { brightness: 100, contrast: 100, saturation: 100 },
           volume: 100,
           type: 'video'
