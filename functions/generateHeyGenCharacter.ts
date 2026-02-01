@@ -9,10 +9,10 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { image_url, script } = await req.json();
+    const { script, avatar_id } = await req.json();
     
-    if (!image_url || !script) {
-      return Response.json({ error: 'image_url and script are required' }, { status: 400 });
+    if (!script) {
+      return Response.json({ error: 'script is required' }, { status: 400 });
     }
 
     const apiKey = Deno.env.get('HEYGEN_API_KEY');
@@ -21,7 +21,10 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'HeyGen API key not configured' }, { status: 500 });
     }
 
-    console.log('Creating HeyGen avatar video from image URL...');
+    // Get default avatar if not specified
+    let selectedAvatarId = avatar_id || 'Abigail_expressive_2024112501';
+    
+    console.log('Creating HeyGen avatar video with avatar:', selectedAvatarId);
 
     // Create video using v2 API with image URL
     const createResponse = await fetch('https://api.heygen.com/v2/video/generate', {
