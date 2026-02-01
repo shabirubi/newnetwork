@@ -31,21 +31,30 @@ Deno.serve(async (req) => {
         'X-API-KEY': apiKey
       },
       body: JSON.stringify({
+        video_inputs: [
+          {
+            character: {
+              type: 'avatar',
+              avatar_id: 'wayne-public',
+              emotion: 'neutral'
+            },
+            voice: {
+              type: 'text',
+              input_text: script,
+              voice_id: 'en-US-Neural2-C'
+            },
+            background: {
+              type: 'image',
+              image_url: image_url
+            }
+          }
+        ],
         dimension: {
           width: 1280,
           height: 720
         },
         duration: 5,
-        test: false,
-        source: {
-          type: 'image',
-          image_url: image_url
-        },
-        voice: {
-          type: 'text',
-          input_text: script,
-          voice_id: 'en-US-Neural2-C'
-        }
+        test: false
       })
     });
 
