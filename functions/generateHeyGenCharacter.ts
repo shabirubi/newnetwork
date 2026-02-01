@@ -42,7 +42,8 @@ Deno.serve(async (req) => {
             },
             voice: {
               type: 'text',
-              input_text: script
+              input_text: script,
+              voice_id: 'en-US-Neural2-C'
             }
           }
         ],
