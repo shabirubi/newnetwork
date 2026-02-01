@@ -64,7 +64,7 @@ Deno.serve(async (req) => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Basic ${encodedCredentials}`
+        'Authorization': `Bearer ${jwtToken}`
       },
       body: JSON.stringify({
         model_name: 'kling-v1',
