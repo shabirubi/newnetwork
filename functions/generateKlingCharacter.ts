@@ -102,7 +102,7 @@ Deno.serve(async (req) => {
       
       const statusResponse = await fetch(`https://api-singapore.klingai.com/v1/videos/image2video/${taskId}`, {
         headers: {
-          'Authorization': `Basic ${encodedCredentials}`
+          'Authorization': `Bearer ${jwtToken}`
         }
       });
 
