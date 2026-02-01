@@ -124,8 +124,8 @@ export default function KlingCharacterModal({ onClose, onApply }) {
               איך זה עובד:
             </p>
             <ul className="text-xs text-purple-300 space-y-1">
-              <li>✨ HeyGen יוצר דמות מדברת עם אבטار מובנה</li>
-              <li>🎤 הטקסט שלך יוקרא בקול טבעי (Chill Brian voice)</li>
+              <li>✨ יוצר דמות מדברת עם אבטר מובנה</li>
+              <li>🎤 הטקסט שלך יוקרא בקול טבעי</li>
               <li>🎬 הדמות תזוז ותדבר בהתאם לטקסט</li>
               <li>⏱️ התהליך לוקח בדרך כלל עד דקה</li>
               <li>💾 הסרטון מוסף ישירות לעורך</li>
