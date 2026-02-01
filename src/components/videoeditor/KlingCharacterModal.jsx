@@ -110,7 +110,7 @@ export default function KlingCharacterModal({ onClose, onApply }) {
             <Textarea
               value={prompt}
               onChange={(e) => setPrompt(e.target.value)}
-              placeholder="לדוגמה: שלום, אני דמות מדברת בעזרת HeyGen. אני יכולה להניף יד ולחייך בזמן שאני מדברת."
+              placeholder="לדוגמה: שלום, אני דמות מדברת. אני יכולה להניף יד ולחייך בזמן שאני מדברת."
               className="bg-black/60 border-white/20 text-white placeholder-white/40 resize-none"
               rows={4}
             />
