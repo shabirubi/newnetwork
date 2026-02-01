@@ -115,15 +115,13 @@ Deno.serve(async (req) => {
         const status = statusData.data?.status;
         console.log('Video status:', status);
 
-        if (status === 'completed') {
+        if (status === 'completed' && statusData.data?.video_url) {
           const videoUrl = statusData.data?.video_url;
           console.log('Video ready:', videoUrl);
-          if (videoUrl) {
-            return Response.json({
-              video_url: videoUrl,
-              duration: statusData.data?.duration || 30
-            });
-          }
+          return Response.json({
+            video_url: videoUrl,
+            duration: statusData.data?.duration || 30
+          });
         }
         
         if (status === 'failed') {
