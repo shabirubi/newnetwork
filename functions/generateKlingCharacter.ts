@@ -76,7 +76,7 @@ Deno.serve(async (req) => {
     console.log('JWT Token created for Kling API');
 
     // Create video generation task using Kling API
-    const createResponse = await fetch('https://api.klingai.com/v1/videos/image2video', {
+    const createResponse = await fetch('https://api-singapore.klingai.com/v1/videos/image2video', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -116,7 +116,7 @@ Deno.serve(async (req) => {
     for (let i = 0; i < maxAttempts; i++) {
       await new Promise(resolve => setTimeout(resolve, pollInterval));
       
-      const statusResponse = await fetch(`https://api.klingai.com/v1/videos/image2video/${taskId}`, {
+      const statusResponse = await fetch(`https://api-singapore.klingai.com/v1/videos/image2video/${taskId}`, {
         headers: {
           'Authorization': `Bearer ${jwtToken}`
         }
