@@ -70,34 +70,46 @@ Deno.serve(async (req) => {
 
     console.log('Video ID:', videoId);
 
-    // Try quick check (15 seconds only)
-    for (let i = 0; i < 15; i++) {
+    // Wait up to 90 seconds for completion
+    for (let i = 0; i < 90; i++) {
       await new Promise(r => setTimeout(r, 1000));
-      
-      const statusRes = await fetch(`https://api.heygen.com/v1/video_status.get?video_id=${videoId}`, {
-        headers: { 'X-Api-Key': apiKey }
+
+      const statusRes = await fetch(`https://api.heygen.com/v2/video/${videoId}`, {
+        method: 'GET',
+        headers: {
+          'X-API-KEY': apiKey,
+          'Content-Type': 'application/json'
+        }
       });
 
       if (statusRes.ok) {
         const statusData = await statusRes.json();
-        
-        if (statusData?.data?.status === 'completed' && statusData?.data?.video_url) {
-          console.log('Quick success!');
+        const status = statusData?.data?.status;
+
+        console.log(`Status check ${i + 1}/90: ${status}`);
+
+        if (status === 'completed' && statusData?.data?.video_url) {
+          console.log('Video ready:', statusData.data.video_url);
           return Response.json({
             video_url: statusData.data.video_url,
             duration: statusData.data.duration || 5,
             video_id: videoId
           });
         }
+
+        if (status === 'failed') {
+          console.error('Video failed:', statusData);
+          return Response.json({ error: 'Video generation failed', details: statusData }, { status: 500 });
+        }
       }
     }
 
-    // Return video_id for later check
-    console.log('Still processing, returning ID');
+    // After 90 seconds, still not ready
+    console.log('Timeout after 90s, returning ID for manual check');
     return Response.json({ 
       still_processing: true,
       video_id: videoId,
-      message: 'הווידאו בעיבוד - לחץ על "בדוק סטטוס" בעוד 30 שניות'
+      message: 'הווידאו לוקח יותר זמן - בדוק שוב בעוד דקה או קיבלת מייל'
     });
 
   } catch (error) {
