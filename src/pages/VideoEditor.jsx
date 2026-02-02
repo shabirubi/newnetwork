@@ -554,312 +554,10 @@ export default function VideoEditor() {
       </div>
 
       <div className="flex-1 flex overflow-hidden" dir="rtl">
-        {/* Left Side - Timeline + Preview */}
-        <div className="flex-1 flex flex-col bg-gradient-to-br from-gray-900 to-black overflow-hidden">
-          {/* Professional Timeline - Top */}
-          <div className="h-52 bg-gradient-to-b from-black via-gray-900 to-black border-b border-white/10 p-3 shrink-0">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <Film size={14} className="text-[#E31E24]" />
-                <h3 className="text-xs font-bold">ציר זמן</h3>
-                <span className="text-[10px] text-gray-500">({clips.length} קליפים • {totalDuration.toFixed(1)}s)</span>
-              </div>
-              <div className="text-[9px] text-gray-600">גרור • מתח • סדר</div>
-            </div>
-
-            {clips.length === 0 ? (
-                <div className="flex items-center justify-center h-32 border-2 border-dashed border-white/20 rounded-xl">
-                  <div className="text-center">
-                    <Film size={48} className="mx-auto mb-2 opacity-30 text-gray-500" />
-                    <p className="text-gray-500">גרור סרטונים לכאן או לחץ "העלה"</p>
-                  </div>
-                </div>
-              ) : (
-                <div className="relative bg-black/40 rounded-xl border border-white/10 p-2 overflow-x-scroll overflow-y-hidden" style={{ maxHeight: '200px' }}>
-                  {/* Time ruler */}
-                  <div className="flex items-center gap-1 mb-1 text-[8px] text-gray-600 px-1 flex-shrink-0 sticky right-0 bg-black/80 backdrop-blur-sm z-10 pb-1 border-b border-white/5">
-                  {Array.from({ length: Math.ceil(totalDuration) + 1 }).map((_, i) => (
-                    <div key={i} className="flex-shrink-0 flex flex-col items-start" style={{ width: '60px' }}>
-                      <div className="border-l border-[#E31E24]/30 h-2 w-px"></div>
-                      <span className="text-[#E31E24] font-semibold text-[9px]">{i}s</span>
-                    </div>
-                  ))}
-                  </div>
-
-                {/* Multiple Tracks */}
-                <div className="space-y-2 min-w-max">
-                  {/* Video Clips Track */}
-                  <div className="relative bg-gradient-to-r from-purple-900/10 to-black/10 rounded-lg border border-purple-500/20 p-2 min-w-max">
-                    <div className="text-[9px] font-semibold text-purple-400 mb-1 px-1 flex items-center gap-1">
-                      <Film size={11} className="text-purple-400" />
-                      וידאו ({clips.length})
-                    </div>
-                    <div className="flex items-center gap-0 h-24 relative min-w-max">
-                      {clips.length === 0 ? (
-                        <div className="text-gray-500 text-xs ml-2">אין קליפים</div>
-                      ) : (
-                        clips.map((clip, index) => {
-                          const widthPerSecond = 60;
-                          const clipWidth = Math.max(60, (clip.duration || 1) * widthPerSecond);
-                          const transition = transitions[index];
-
-                          return (
-                            <React.Fragment key={clip.id}>
-                              <motion.div
-                                layout
-                                initial={{ scale: 0.8, opacity: 0 }}
-                                animate={{ scale: 1, opacity: 1 }}
-                                exit={{ scale: 0.8, opacity: 0 }}
-                                className={`relative rounded-lg overflow-hidden flex-shrink-0 transition-all group border ${selectedClipIndex === index ? 'ring-2 ring-[#E31E24] shadow-lg shadow-[#E31E24]/40 border-[#E31E24]' : 'border-white/10 hover:border-white/30'}`}
-                                style={{ 
-                                  width: `${clipWidth}px`,
-                                  height: '85px',
-                                  cursor: 'grab'
-                                }}
-                                onClick={() => setSelectedClipIndex(index)}
-                                onContextMenu={(e) => {
-                                  e.preventDefault();
-                                  setContextMenu({ x: e.clientX, y: e.clientY });
-                                  setContextClipIndex(index);
-                                }}
-                                draggable
-                                onDragStart={(e) => {
-                                  e.dataTransfer.effectAllowed = 'move';
-                                  e.dataTransfer.setData('clipIndex', index.toString());
-                                  setSelectedClipIndex(index);
-                                }}
-                                onDragOver={(e) => {
-                                  e.preventDefault();
-                                  e.dataTransfer.dropEffect = 'move';
-                                }}
-                                onDrop={(e) => {
-                                  e.preventDefault();
-                                  const sourceIndex = parseInt(e.dataTransfer.getData('clipIndex'));
-                                  if (sourceIndex !== index) {
-                                    const newClips = [...clips];
-                                    const [movedClip] = newClips.splice(sourceIndex, 1);
-                                    newClips.splice(index, 0, movedClip);
-                                    setClips(newClips);
-                                    toast.success('קליפים סודרו מחדש!');
-                                  }
-                                }}
-                              >
-                                {/* Thumbnail - Visible Video Preview */}
-                                <div className="absolute inset-0">
-                                  {clip.type === 'image' ? (
-                                    <img 
-                                      src={clip.thumbnail || clip.url} 
-                                      alt={clip.name}
-                                      className="w-full h-full object-cover"
-                                    />
-                                  ) : (
-                                    <video 
-                                      src={clip.url} 
-                                      className="w-full h-full object-cover"
-                                      muted
-                                      playsInline
-                                    />
-                                  )}
-                                  <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
-                                </div>
-
-                                {/* Duration Bar */}
-                                <div className="absolute top-0.5 left-0.5 right-0.5 h-0.5 bg-black/60 rounded-full overflow-hidden">
-                                  <div className="h-full bg-gradient-to-r from-[#E31E24] to-pink-500" style={{ width: '100%' }}></div>
-                                </div>
-
-                                {/* Clip Info */}
-                                <div className="absolute bottom-0 left-0 right-0 p-1 text-[8px]">
-                                  <div className="font-semibold truncate text-white mb-0.5 drop-shadow-lg">{clip.name}</div>
-                                  <div className="flex items-center justify-between">
-                                    <div className="text-[#E31E24] font-bold bg-black/80 px-1 py-0.5 rounded text-[9px]">{clip.duration?.toFixed(1)}s</div>
-                                    {clip.filters?.effect && (
-                                      <div className="text-purple-300 text-[7px] bg-purple-900/80 px-1 py-0.5 rounded">✨ {clip.filters.effect}</div>
-                                    )}
-                                  </div>
-                                </div>
-
-                                {/* Delete Button */}
-                                <button 
-                                  onClick={(e) => { e.stopPropagation(); removeClip(index); }} 
-                                  className="absolute top-0.5 left-0.5 p-0.5 bg-red-600/90 rounded-full hover:bg-red-600 transition-colors opacity-0 group-hover:opacity-100 z-10 shadow-lg"
-                                >
-                                  <Trash2 size={10} />
-                                </button>
-
-                                {/* Resize Handles */}
-                                <div
-                                  className="absolute left-0 top-0 bottom-0 w-2 bg-[#E31E24] cursor-ew-resize hover:w-3 transition-all z-40 opacity-0 group-hover:opacity-100"
-                                  onMouseDown={(e) => {
-                                    e.stopPropagation();
-                                    e.preventDefault();
-                                    const startX = e.clientX;
-                                    const startDuration = clip.duration || 1;
-                                    const widthPerSecond = 60;
-
-                                    const handleMouseMove = (moveE) => {
-                                      const deltaX = startX - moveE.clientX;
-                                      const deltaDuration = deltaX / widthPerSecond;
-                                      const newDuration = Math.max(0.5, startDuration + deltaDuration);
-                                      setClips(prev => prev.map((c, i) => 
-                                        i === index ? { ...c, duration: parseFloat(newDuration.toFixed(2)) } : c
-                                      ));
-                                    };
-
-                                    const handleMouseUp = () => {
-                                      document.removeEventListener('mousemove', handleMouseMove);
-                                      document.removeEventListener('mouseup', handleMouseUp);
-                                    };
-
-                                    document.addEventListener('mousemove', handleMouseMove);
-                                    document.addEventListener('mouseup', handleMouseUp);
-                                  }}
-                                />
-                                <div
-                                  className="absolute right-0 top-0 bottom-0 w-2 bg-[#E31E24] cursor-ew-resize hover:w-3 transition-all z-40 opacity-0 group-hover:opacity-100"
-                                  onMouseDown={(e) => {
-                                    e.stopPropagation();
-                                    e.preventDefault();
-                                    const startX = e.clientX;
-                                    const startDuration = clip.duration || 1;
-                                    const widthPerSecond = 60;
-
-                                    const handleMouseMove = (moveE) => {
-                                      const deltaX = moveE.clientX - startX;
-                                      const deltaDuration = deltaX / widthPerSecond;
-                                      const newDuration = Math.max(0.5, startDuration + deltaDuration);
-                                      setClips(prev => prev.map((c, i) => 
-                                        i === index ? { ...c, duration: parseFloat(newDuration.toFixed(2)) } : c
-                                      ));
-                                    };
-
-                                    const handleMouseUp = () => {
-                                      document.removeEventListener('mousemove', handleMouseMove);
-                                      document.removeEventListener('mouseup', handleMouseUp);
-                                    };
-
-                                    document.addEventListener('mousemove', handleMouseMove);
-                                    document.addEventListener('mouseup', handleMouseUp);
-                                  }}
-                                />
-                              </motion.div>
-
-                              {/* Transition Indicator - with + button always visible */}
-                              {index < clips.length - 1 && (
-                                <div className="relative flex-shrink-0 group/trans cursor-pointer" style={{ width: '50px' }}>
-                                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-1">
-                                    {transition && transition !== 'cut' ? (
-                                      <>
-                                        <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center animate-pulse shadow-lg shadow-purple-500/50">
-                                          <Sparkles size={16} className="text-white" />
-                                        </div>
-                                        <div className="text-[7px] text-purple-300 font-bold whitespace-nowrap bg-black/80 px-1.5 py-0.5 rounded">
-                                          {transition}
-                                        </div>
-                                      </>
-                                    ) : (
-                                      <>
-                                        <div className="w-px h-12 bg-gradient-to-b from-transparent via-white/20 to-transparent"></div>
-                                        <button
-                                          onClick={() => {
-                                            const newTransition = prompt('בחר מעבר:\n1. cut\n2. fade\n3. dissolve\n4. slide\n5. wipe\n6. zoom');
-                                            if (newTransition) updateTransition(index, newTransition);
-                                          }}
-                                          className="w-8 h-8 rounded-full bg-purple-600/30 hover:bg-purple-600/60 border border-purple-500/50 flex items-center justify-center transition-all shadow-lg hover:scale-110"
-                                          title="הוסף מעבר"
-                                        >
-                                          <Plus size={16} className="text-white" />
-                                        </button>
-                                      </>
-                                    )}
-                                  </div>
-                                  {transition && transition !== 'cut' && (
-                                    <button
-                                      onClick={() => updateTransition(index, 'cut')}
-                                      className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-red-600/90 hover:bg-red-600 flex items-center justify-center transition-all opacity-0 group-hover/trans:opacity-100 z-20"
-                                      title="הסר מעבר"
-                                    >
-                                      <X size={12} className="text-white" />
-                                    </button>
-                                  )}
-                                </div>
-                              )}
-                            </React.Fragment>
-                          );
-                        })
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Audio Track */}
-                  {audioTrack && (
-                    <div className="relative bg-purple-900/10 border border-purple-500/20 rounded-lg p-1.5">
-                      <div className="text-[8px] font-semibold text-purple-400 mb-1 px-1 flex items-center gap-1">
-                        <Music size={10} className="text-purple-400" />
-                        אודיו
-                      </div>
-                      <div className="flex items-center gap-1 h-10">
-                        <div 
-                          className="relative rounded-lg overflow-hidden flex-shrink-0 bg-purple-600/20 border border-purple-500/30 p-1.5"
-                          style={{ 
-                            width: `${Math.max(100, totalDuration * 60)}px`,
-                            height: '35px'
-                          }}
-                        >
-                          <div className="text-[8px] text-purple-300 truncate font-semibold">
-                            {audioTrack.name}
-                          </div>
-                          <div className="text-[7px] text-purple-400">
-                            {audioTrack.loop ? '🔄 לופ' : 'חד פעמי'}
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Overlays Track */}
-                  {overlays.length > 0 && (
-                    <div className="relative bg-blue-900/10 border border-blue-500/20 rounded-lg p-1.5">
-                      <div className="text-[8px] font-semibold text-blue-400 mb-1 px-1 flex items-center gap-1">
-                        <Sparkles size={10} className="text-blue-400" />
-                        אלמנטים ({overlays.length})
-                      </div>
-                      <div className="flex items-center gap-1 h-8 flex-wrap">
-                        {overlays.map((overlay) => (
-                          <div 
-                            key={overlay.id}
-                            className="rounded-lg overflow-hidden flex-shrink-0 bg-blue-600/20 border border-blue-500/30 p-1 text-[7px] text-blue-300 font-semibold truncate max-w-[120px]"
-                          >
-                            {overlay.type === 'text' ? '📝' : '🖼️'} {overlay.type === 'text' ? overlay.content.substring(0, 12) : 'תמונה'}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* PIP Layers Track */}
-                  {pipLayers.length > 0 && (
-                    <div className="relative bg-cyan-900/10 border border-cyan-500/20 rounded-lg p-1.5">
-                      <div className="text-[8px] font-semibold text-cyan-400 mb-1 px-1">📹 PIP ({pipLayers.length})</div>
-                      <div className="flex items-center gap-1 h-8">
-                        {pipLayers.map((pip, idx) => (
-                          <div 
-                            key={idx}
-                            className="rounded-lg overflow-hidden flex-shrink-0 bg-cyan-600/20 border border-cyan-500/30 p-1 text-[7px] text-cyan-300 font-semibold"
-                          >
-                            PIP {idx + 1}
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
-                                    </div>
-            )}
-          </div>
-
-          {/* Preview - Below Timeline */}
-          <div className="flex-1 flex items-center justify-center p-4 relative overflow-auto">
+        {/* Main Content - Preview + Timeline */}
+        <div className="flex-1 flex flex-col bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
+          {/* Preview - Top Center */}
+          <div className="flex-1 flex items-center justify-center p-6 relative overflow-auto">
             {selectedClip ? (
               <div className="relative w-full max-w-5xl">
                 <div className="absolute -top-2 -left-2 z-20 flex gap-2">
@@ -983,169 +681,271 @@ export default function VideoEditor() {
                   )}
                 </div>
                 <div className="mt-3 flex items-center justify-between text-sm">
-                  <div className="text-gray-400">קליפ {selectedClipIndex + 1}/{clips.length} • {selectedClip.name}</div>
-                  {pipLayers.length > 0 && <div className="text-cyan-400 text-xs">{pipLayers.length} PIP Layers</div>}
+                  <div className="text-gray-600">קליפ {selectedClipIndex + 1}/{clips.length} • {selectedClip.name}</div>
+                  {pipLayers.length > 0 && <div className="text-cyan-600 text-xs">{pipLayers.length} PIP Layers</div>}
                 </div>
               </div>
             ) : (
-              <div className="text-center text-gray-500">
+              <div className="text-center text-gray-400">
                 <Film size={64} className="mx-auto mb-4 opacity-30" />
-                <p className="text-lg">הוסף קליפים כדי להתחיל לערוך</p>
+                <p className="text-lg">בחר קליפ מציר הזמן למטה</p>
               </div>
+            )}
+          </div>
+
+          {/* Timeline - Bottom */}
+          <div className="h-48 bg-white border-t border-gray-300 p-3 shrink-0 overflow-x-scroll overflow-y-hidden">
+            {clips.length === 0 ? (
+                <div className="flex items-center justify-center h-full border-2 border-dashed border-gray-300 rounded-xl bg-gray-50">
+                  <div className="text-center">
+                    <Film size={48} className="mx-auto mb-2 opacity-30 text-gray-400" />
+                    <p className="text-gray-500">גרור סרטונים לכאן או לחץ "העלה"</p>
+                  </div>
+                </div>
+              ) : (
+                <div className="relative bg-gray-100 rounded-xl border border-gray-300 p-3 overflow-x-scroll overflow-y-hidden min-w-max">
+                  {/* Time ruler */}
+                  <div className="flex items-center gap-1 mb-2 text-[9px] text-gray-500 px-1 flex-shrink-0">
+                  {Array.from({ length: Math.ceil(totalDuration) + 1 }).map((_, i) => (
+                    <div key={i} className="flex-shrink-0 flex flex-col items-start" style={{ width: '70px' }}>
+                      <div className="border-l border-gray-400 h-3 w-px"></div>
+                      <span className="text-gray-600 font-semibold text-[10px]">{i}s</span>
+                    </div>
+                  ))}
+                  </div>
+
+                {/* Clips Track */}
+                <div className="relative min-w-max">
+                    <div className="flex items-center gap-0 h-28 relative min-w-max bg-gray-50 rounded-lg p-2 border border-gray-200">
+                      {clips.map((clip, index) => {
+                          const widthPerSecond = 70;
+                          const clipWidth = Math.max(80, (clip.duration || 1) * widthPerSecond);
+                          const transition = transitions[index];
+
+                          return (
+                            <React.Fragment key={clip.id}>
+                              <motion.div
+                                layout
+                                initial={{ scale: 0.9, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                exit={{ scale: 0.9, opacity: 0 }}
+                                className={`relative rounded-xl overflow-hidden flex-shrink-0 transition-all group border-2 ${selectedClipIndex === index ? 'ring-4 ring-blue-500 shadow-xl border-blue-500' : 'border-gray-300 hover:border-blue-400'}`}
+                                style={{ 
+                                  width: `${clipWidth}px`,
+                                  height: '100px',
+                                  cursor: 'pointer',
+                                  backgroundColor: '#fff'
+                                }}
+                                onClick={() => setSelectedClipIndex(index)}
+                                onContextMenu={(e) => {
+                                  e.preventDefault();
+                                  setContextMenu({ x: e.clientX, y: e.clientY });
+                                  setContextClipIndex(index);
+                                }}
+                                draggable
+                                onDragStart={(e) => {
+                                  e.dataTransfer.effectAllowed = 'move';
+                                  e.dataTransfer.setData('clipIndex', index.toString());
+                                  setSelectedClipIndex(index);
+                                }}
+                                onDragOver={(e) => {
+                                  e.preventDefault();
+                                  e.dataTransfer.dropEffect = 'move';
+                                }}
+                                onDrop={(e) => {
+                                  e.preventDefault();
+                                  const sourceIndex = parseInt(e.dataTransfer.getData('clipIndex'));
+                                  if (sourceIndex !== index) {
+                                    const newClips = [...clips];
+                                    const [movedClip] = newClips.splice(sourceIndex, 1);
+                                    newClips.splice(index, 0, movedClip);
+                                    setClips(newClips);
+                                    toast.success('קליפים סודרו מחדש!');
+                                  }
+                                }}
+                              >
+                                {/* Thumbnail - Visible Video Preview */}
+                                <div className="absolute inset-0">
+                                  {clip.type === 'image' ? (
+                                    <img 
+                                      src={clip.thumbnail || clip.url} 
+                                      alt={clip.name}
+                                      className="w-full h-full object-cover"
+                                    />
+                                  ) : (
+                                    <video 
+                                      src={clip.url} 
+                                      className="w-full h-full object-cover"
+                                      muted
+                                      playsInline
+                                    />
+                                  )}
+                                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                                </div>
+
+                                {/* Clip Info */}
+                                <div className="absolute bottom-0 left-0 right-0 p-2 text-[9px]">
+                                  <div className="font-semibold truncate text-white mb-1 drop-shadow-lg">{clip.name}</div>
+                                  <div className="flex items-center justify-between">
+                                    <div className="text-white font-bold bg-black/70 px-1.5 py-0.5 rounded text-[10px]">{clip.duration?.toFixed(1)}s</div>
+                                  </div>
+                                </div>
+
+                                {/* Delete Button */}
+                                <button 
+                                  onClick={(e) => { e.stopPropagation(); removeClip(index); }} 
+                                  className="absolute top-1 left-1 p-1 bg-red-500 rounded-full hover:bg-red-600 transition-colors opacity-0 group-hover:opacity-100 z-10 shadow-lg"
+                                >
+                                  <Trash2 size={12} className="text-white" />
+                                </button>
+
+                                {/* Resize Handles */}
+                                <div
+                                  className="absolute left-0 top-0 bottom-0 w-3 bg-blue-500 cursor-ew-resize hover:w-4 transition-all z-40 opacity-0 group-hover:opacity-90"
+                                  onMouseDown={(e) => {
+                                    e.stopPropagation();
+                                    e.preventDefault();
+                                    const startX = e.clientX;
+                                    const startDuration = clip.duration || 1;
+                                    const widthPerSecond = 60;
+
+                                    const handleMouseMove = (moveE) => {
+                                      const deltaX = startX - moveE.clientX;
+                                      const deltaDuration = deltaX / widthPerSecond;
+                                      const newDuration = Math.max(0.5, startDuration + deltaDuration);
+                                      setClips(prev => prev.map((c, i) => 
+                                        i === index ? { ...c, duration: parseFloat(newDuration.toFixed(2)) } : c
+                                      ));
+                                    };
+
+                                    const handleMouseUp = () => {
+                                      document.removeEventListener('mousemove', handleMouseMove);
+                                      document.removeEventListener('mouseup', handleMouseUp);
+                                    };
+
+                                    document.addEventListener('mousemove', handleMouseMove);
+                                    document.addEventListener('mouseup', handleMouseUp);
+                                  }}
+                                />
+                                <div
+                                  className="absolute right-0 top-0 bottom-0 w-3 bg-blue-500 cursor-ew-resize hover:w-4 transition-all z-40 opacity-0 group-hover:opacity-90"
+                                  onMouseDown={(e) => {
+                                    e.stopPropagation();
+                                    e.preventDefault();
+                                    const startX = e.clientX;
+                                    const startDuration = clip.duration || 1;
+                                    const widthPerSecond = 60;
+
+                                    const handleMouseMove = (moveE) => {
+                                      const deltaX = moveE.clientX - startX;
+                                      const deltaDuration = deltaX / widthPerSecond;
+                                      const newDuration = Math.max(0.5, startDuration + deltaDuration);
+                                      setClips(prev => prev.map((c, i) => 
+                                        i === index ? { ...c, duration: parseFloat(newDuration.toFixed(2)) } : c
+                                      ));
+                                    };
+
+                                    const handleMouseUp = () => {
+                                      document.removeEventListener('mousemove', handleMouseMove);
+                                      document.removeEventListener('mouseup', handleMouseUp);
+                                    };
+
+                                    document.addEventListener('mousemove', handleMouseMove);
+                                    document.addEventListener('mouseup', handleMouseUp);
+                                  }}
+                                />
+                              </motion.div>
+
+                              {/* Transition Button */}
+                              {index < clips.length - 1 && (
+                                <div className="relative flex-shrink-0 cursor-pointer flex items-center justify-center" style={{ width: '50px' }}>
+                                  {transition && transition !== 'cut' ? (
+                                    <div className="flex flex-col items-center gap-1">
+                                      <div className="w-10 h-10 rounded-lg bg-purple-500 flex items-center justify-center shadow-md">
+                                        <Sparkles size={18} className="text-white" />
+                                      </div>
+                                      <div className="text-[8px] text-gray-600 font-semibold">
+                                        {transition}
+                                      </div>
+                                    </div>
+                                  ) : (
+                                    <button
+                                      onClick={() => {
+                                        const newTransition = prompt('בחר מעבר:\ncut, fade, dissolve, slide, wipe, zoom');
+                                        if (newTransition) updateTransition(index, newTransition);
+                                      }}
+                                      className="w-10 h-10 rounded-lg bg-gray-200 hover:bg-gray-300 border-2 border-dashed border-gray-400 flex items-center justify-center transition-all"
+                                      title="הוסף מעבר"
+                                    >
+                                      <Plus size={20} className="text-gray-600" />
+                                    </button>
+                                  )}
+                                </div>
+                              )}
+                            </React.Fragment>
+                          );
+                        })}
+                    </div>
+                </div>
             )}
           </div>
         </div>
 
         {/* Right Sidebar - Tools */}
-        <div className="w-80 bg-black/50 border-r border-white/10 p-4 overflow-y-auto relative z-10">
-          <h3 className="font-bold mb-4 flex items-center gap-2">
-            <Plus size={18} className="text-[#E31E24]" />
-            הוסף תוכן
-          </h3>
+        <div className="w-20 bg-white border-r border-gray-300 p-2 overflow-y-auto flex flex-col gap-3 items-center relative z-10">
+          <input type="file" accept="video/mp4,video/webm,video/ogg,video/quicktime,video/x-msvideo,video/x-matroska,image/png,image/jpeg,image/jpg,image/gif" onChange={handleAddClip} className="hidden" id="video-upload" />
+          <button onClick={() => document.getElementById('video-upload').click()} className="flex flex-col items-center gap-1 p-3 hover:bg-gray-100 rounded-lg transition-colors w-full group" title="העלה">
+            <Upload size={24} className="text-gray-700 group-hover:text-blue-600" />
+            <span className="text-[9px] text-gray-600 group-hover:text-blue-600">העלה</span>
+          </button>
 
-          <div className="space-y-2">
-            <input type="file" accept="video/mp4,video/webm,video/ogg,video/quicktime,video/x-msvideo,video/x-matroska,image/png,image/jpeg,image/jpg,image/gif" onChange={handleAddClip} className="hidden" id="video-upload" />
-            <div className="flex gap-2">
-              <Button onClick={() => document.getElementById('video-upload').click()} className="flex-1 bg-white/10 hover:bg-white/20 text-white text-sm" disabled={loading}>
-                {loading ? <Loader2 size={16} className="ml-1 animate-spin" /> : <Upload size={16} className="ml-1" />}
-                העלה
-              </Button>
-              <Button onClick={() => setShowSampleVideosModal(true)} className="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white text-sm">
-                <Play size={16} className="ml-1" />
-                דוגמאות
-              </Button>
-            </div>
+          <button onClick={() => setShowSampleVideosModal(true)} className="flex flex-col items-center gap-1 p-3 hover:bg-gray-100 rounded-lg transition-colors w-full group" title="דוגמאות">
+            <Play size={24} className="text-gray-700 group-hover:text-green-600" />
+            <span className="text-[9px] text-gray-600 group-hover:text-green-600">סרטונים</span>
+          </button>
 
-            <Button onClick={() => setShowLumaGeneratorModal(true)} className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white text-sm" disabled={loading}>
-              <Sparkles size={16} className="ml-1" />
-              סרטון AI
-            </Button>
+          <button onClick={() => setShowLumaGeneratorModal(true)} className="flex flex-col items-center gap-1 p-3 hover:bg-gray-100 rounded-lg transition-colors w-full group" title="AI">
+            <Sparkles size={24} className="text-gray-700 group-hover:text-purple-600" />
+            <span className="text-[9px] text-gray-600 group-hover:text-purple-600">AI</span>
+          </button>
 
-            <Button onClick={() => { if (!selectedClip || selectedClip.type === 'image') { toast.error('בחר סרטון כדי להאריך אותו'); return; } setShowLumaGeneratorModal(true); }} className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-700 hover:to-blue-700 text-white text-sm" disabled={loading || !selectedClip || selectedClip?.type === 'image'}>
-              <Clock size={16} className="ml-1" />
-              המשך סרטון
-            </Button>
+          <button onClick={() => setShowAIImageModal(true)} className="flex flex-col items-center gap-1 p-3 hover:bg-gray-100 rounded-lg transition-colors w-full group" title="תמונה">
+            <ImageIcon size={24} className="text-gray-700 group-hover:text-pink-600" />
+            <span className="text-[9px] text-gray-600 group-hover:text-pink-600">תמונה</span>
+          </button>
 
-            <Button onClick={() => setShowAIVideoFromImagesModal(true)} className="w-full bg-gradient-to-r from-yellow-600 to-orange-600 hover:from-yellow-700 hover:to-orange-700 text-white text-sm" disabled={loading}>
-              <Film size={16} className="ml-1" />
-              מתמונות
-            </Button>
+          <button onClick={() => setShowKlingCharacterModal(true)} className="flex flex-col items-center gap-1 p-3 hover:bg-gray-100 rounded-lg transition-colors w-full group" title="דמות">
+            <User size={24} className="text-gray-700 group-hover:text-purple-600" />
+            <span className="text-[9px] text-gray-600 group-hover:text-purple-600">דמות</span>
+          </button>
 
-            <Button onClick={() => setShowAIImageModal(true)} className="w-full bg-gradient-to-r from-pink-600 to-orange-600 hover:from-pink-700 hover:to-orange-700 text-white text-sm">
-              <ImageIcon size={16} className="ml-1" />
-              תמונה AI
-            </Button>
+          <input type="file" accept="audio/*" onChange={handleAddAudio} className="hidden" id="audio-upload" />
+          <button onClick={() => document.getElementById('audio-upload').click()} className="flex flex-col items-center gap-1 p-3 hover:bg-gray-100 rounded-lg transition-colors w-full group" title="מוזיקה">
+            <Music size={24} className="text-gray-700 group-hover:text-blue-600" />
+            <span className="text-[9px] text-gray-600 group-hover:text-blue-600">מוזיקה</span>
+          </button>
 
-            <Button onClick={() => setShowKlingCharacterModal(true)} className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white text-sm">
-              <User size={16} className="ml-1" />
-              דמות
-            </Button>
+          <button onClick={() => setShowOverlayModal(true)} className="flex flex-col items-center gap-1 p-3 hover:bg-gray-100 rounded-lg transition-colors w-full group" title="טקסט">
+            <Type size={24} className="text-gray-700 group-hover:text-blue-600" />
+            <span className="text-[9px] text-gray-600 group-hover:text-blue-600">טקסט</span>
+          </button>
 
-            <input type="file" accept="audio/*" onChange={handleAddAudio} className="hidden" id="audio-upload" />
-            <div className="flex gap-2">
-              <Button onClick={() => document.getElementById('audio-upload').click()} className="flex-1 bg-white/10 hover:bg-white/20 text-white text-sm">
-                <Music size={16} className="ml-1" />
-                מוזיקה
-              </Button>
-              <Button onClick={() => setShowMusicLibraryModal(true)} className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white text-sm">
-                <Music size={16} className="ml-1" />
-                ספרייה
-              </Button>
-            </div>
+          <button onClick={() => setShowElementsModal(true)} className="flex flex-col items-center gap-1 p-3 hover:bg-gray-100 rounded-lg transition-colors w-full group" title="אלמנטים">
+            <Sparkles size={24} className="text-gray-700 group-hover:text-yellow-600" />
+            <span className="text-[9px] text-gray-600 group-hover:text-yellow-600">אלמנטים</span>
+          </button>
 
-            <Button onClick={() => setShowOverlayModal(true)} className="w-full bg-blue-600/20 hover:bg-blue-600/40 border border-blue-500/30 text-white text-sm">
-              <Type size={16} className="ml-1" />
-              טקסט/לוגו
-            </Button>
+          <div className="border-t border-gray-300 w-full my-2"></div>
 
-            <Button onClick={() => setShowElementsModal(true)} className="w-full bg-yellow-600/20 hover:bg-yellow-600/40 border border-yellow-500/30 text-white text-sm">
-              <Sparkles size={16} className="ml-1" />
-              אלמנטים
-            </Button>
+          <button onClick={() => setShowEffectsModal(true)} className="flex flex-col items-center gap-1 p-3 hover:bg-gray-100 rounded-lg transition-colors w-full group" title="אפקטים">
+            <Sparkles size={24} className="text-gray-700 group-hover:text-pink-600" />
+            <span className="text-[9px] text-gray-600 group-hover:text-pink-600">אפקטים</span>
+          </button>
 
-            <div className="border-t border-white/10 pt-2 mt-2">
-              <p className="text-xs text-gray-400 mb-2 font-bold">כלים מתקדמים</p>
-              
-              <div className="space-y-1">
-                <Button onClick={() => setShowCaptionsModal(true)} className="w-full bg-blue-600/20 hover:bg-blue-600/40 border border-blue-500/30 text-white text-xs justify-start">
-                  <Type size={14} className="ml-1" />
-                  כיתובים
-                </Button>
-
-                <Button onClick={() => setShowAdvancedTTSModal(true)} className="w-full bg-purple-600/20 hover:bg-purple-600/40 border border-purple-500/30 text-white text-xs justify-start">
-                  <Volume2 size={14} className="ml-1" />
-                  דיבוב
-                </Button>
-                
-                <Button onClick={() => setShowEffectsModal(true)} className="w-full bg-pink-600/20 hover:bg-pink-600/40 border border-pink-500/30 text-white text-xs justify-start">
-                  <Sparkles size={14} className="ml-1" />
-                  אפקטים
-                </Button>
-
-                <Button onClick={() => setShowSpeedModal(true)} disabled={!selectedClip} className="w-full bg-indigo-600/20 hover:bg-indigo-600/40 border border-indigo-500/30 text-white text-xs justify-start">
-                  <MoveHorizontal size={14} className="ml-1" />
-                  מהירות
-                </Button>
-
-                <Button onClick={() => setShowResizeModal(true)} className="w-full bg-green-600/20 hover:bg-green-600/40 border border-green-500/30 text-white text-xs justify-start">
-                  <Film size={14} className="ml-1" />
-                  גודל
-                </Button>
-
-                <Button onClick={() => setShowPIPModal(true)} className="w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white text-xs justify-start">
-                  <Film size={14} className="ml-1" />
-                  PIP
-                </Button>
-
-                <Button onClick={() => setShowAdCreatorModal(true)} className="w-full bg-gradient-to-r from-red-600 to-orange-600 hover:from-red-500 hover:to-orange-500 text-white text-xs justify-start">
-                  <Sparkles size={14} className="ml-1" />
-                  פרסומת
-                </Button>
-              </div>
-            </div>
-
-            {audioTrack && (
-              <div className="mt-3 p-2 bg-green-500/10 border border-green-500/30 rounded-lg">
-                <div className="flex items-center justify-between mb-1">
-                  <div className="text-xs text-green-400 flex items-center gap-1">
-                    <Music size={10} />
-                    {audioTrack.name}
-                  </div>
-                  <button onClick={() => setAudioTrack(null)} className="text-red-400 hover:text-red-300">
-                    <Trash2 size={12} />
-                  </button>
-                </div>
-                <Slider value={[audioTrack.volume]} onValueChange={(val) => setAudioTrack(prev => ({ ...prev, volume: val[0] }))} max={100} step={1} className="w-full" />
-              </div>
-            )}
-
-            {selectedClip && (
-              <div className="mt-3 border-t border-white/10 pt-3">
-                <h4 className="text-xs font-bold mb-2 flex items-center gap-1">
-                  <Scissors size={14} className="text-[#E31E24]" />
-                  עריכת קליפ
-                </h4>
-                <div className="space-y-2">
-                  <div>
-                    <label className="text-[10px] text-gray-400 block mb-1">בהירות</label>
-                    <Slider value={[selectedClip.filters.brightness]} onValueChange={(val) => updateClipFilter(selectedClipIndex, 'brightness', val[0])} max={200} step={1} />
-                  </div>
-                  <div>
-                    <label className="text-[10px] text-gray-400 block mb-1">ניגודיות</label>
-                    <Slider value={[selectedClip.filters.contrast]} onValueChange={(val) => updateClipFilter(selectedClipIndex, 'contrast', val[0])} max={200} step={1} />
-                  </div>
-                  <div>
-                    <label className="text-[10px] text-gray-400 block mb-1">רוויה</label>
-                    <Slider value={[selectedClip.filters.saturation]} onValueChange={(val) => updateClipFilter(selectedClipIndex, 'saturation', val[0])} max={200} step={1} />
-                  </div>
-                  <div>
-                    <label className="text-[10px] text-gray-400 block mb-1">שמע</label>
-                    <Slider value={[selectedClip.volume]} onValueChange={(val) => setClips(prev => prev.map((clip, i) => i === selectedClipIndex ? { ...clip, volume: val[0] } : clip))} max={100} step={1} />
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
+          <button onClick={() => setShowResizeModal(true)} className="flex flex-col items-center gap-1 p-3 hover:bg-gray-100 rounded-lg transition-colors w-full group" title="גודל">
+            <Film size={24} className="text-gray-700 group-hover:text-green-600" />
+            <span className="text-[9px] text-gray-600 group-hover:text-green-600">גודל</span>
+          </button>
         </div>
       </div>
 
