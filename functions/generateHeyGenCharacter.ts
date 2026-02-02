@@ -9,7 +9,7 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { script, avatar_id } = await req.json();
+    const { script } = await req.json();
     
     if (!script) {
       return Response.json({ error: 'script is required' }, { status: 400 });
@@ -21,16 +21,10 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'HeyGen API key not configured' }, { status: 500 });
     }
 
-    // Get default avatar if not specified
-    let selectedAvatarId = avatar_id || 'Abigail_expressive_2024112501';
-    
-    // Default voice
-    const defaultVoiceId = 'f38a635bee7a4d1f9b0a654a31d050d2'; // Chill Brian
-    
-    console.log('Creating HeyGen avatar video with avatar:', selectedAvatarId);
+    console.log('Creating HeyGen video with script:', script);
 
-    // Create video using v2 API
-    const createResponse = await fetch('https://api.heygen.com/v2/video/generate', {
+    // יצירת וידאו עם HeyGen API v2
+    const response = await fetch('https://api.heygen.com/v2/video/generate', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -41,12 +35,13 @@ Deno.serve(async (req) => {
           {
             character: {
               type: 'avatar',
-              avatar_id: selectedAvatarId
+              avatar_id: 'Kristin-insuit-20220818',
+              avatar_style: 'normal'
             },
             voice: {
               type: 'text',
               input_text: script,
-              voice_id: defaultVoiceId
+              voice_id: '1bd001e7e50f421d891986aad5158bc8'
             }
           }
         ],
@@ -54,81 +49,79 @@ Deno.serve(async (req) => {
           width: 1280,
           height: 720
         },
-        duration: 5,
+        aspect_ratio: '16:9',
         test: false
       })
     });
 
-    let responseData;
-    const responseText = await createResponse.text();
-    
-    try {
-      responseData = JSON.parse(responseText);
-    } catch (e) {
-      console.error('Failed to parse response:', responseText);
-      return Response.json({ error: 'Failed to parse HeyGen API response', details: responseText }, { status: 500 });
+    const responseText = await response.text();
+    console.log('HeyGen response status:', response.status);
+    console.log('HeyGen response:', responseText);
+
+    if (!response.ok) {
+      return Response.json({ 
+        error: 'HeyGen API error',
+        status: response.status,
+        details: responseText
+      }, { status: response.status });
     }
 
-    if (!createResponse.ok) {
-      console.error('HeyGen API error:', responseData);
-      return Response.json({ error: 'HeyGen API error: ' + JSON.stringify(responseData) }, { status: createResponse.status });
-    }
-
-    console.log('HeyGen create response:', responseData);
-    
-    const videoId = responseData.data?.video_id || responseData.video_id;
+    const data = JSON.parse(responseText);
+    const videoId = data.data?.video_id;
 
     if (!videoId) {
-      console.error('No video ID in response:', responseData);
-      return Response.json({ error: 'No video ID returned from HeyGen', details: responseData }, { status: 500 });
+      return Response.json({ 
+        error: 'No video ID returned',
+        details: data
+      }, { status: 500 });
     }
 
-    // בדוק סטטוס כל שנייה לתוך 2 דקות
-    const maxTime = 120000; // 2 דקות
-    const startTime = Date.now();
-    const checkInterval = 1000; // 1 שנייה
-    
-    while (Date.now() - startTime < maxTime) {
-      await new Promise(resolve => setTimeout(resolve, checkInterval));
+    console.log('Video ID created:', videoId);
+
+    // המתן לווידאו עד 90 שניות
+    const maxAttempts = 90;
+    for (let i = 0; i < maxAttempts; i++) {
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
-      try {
-        const statusResponse = await fetch(`https://api.heygen.com/v2/video/${videoId}`, {
-          method: 'GET',
-          headers: {
-            'X-API-KEY': apiKey,
-            'Content-Type': 'application/json'
-          }
-        });
-        
-        if (statusResponse.ok) {
-          const statusData = await statusResponse.json();
-          const status = statusData.data?.status;
-          
-          if (status === 'completed' && statusData.data?.video_url) {
-            return Response.json({
-              video_url: statusData.data.video_url,
-              duration: statusData.data?.duration || 5,
-              video_id: videoId
-            });
-          }
-          
-          if (status === 'failed') {
-            return Response.json({ error: 'Video generation failed' }, { status: 500 });
-          }
+      const statusResponse = await fetch(`https://api.heygen.com/v2/video_status.get?video_id=${videoId}`, {
+        method: 'GET',
+        headers: {
+          'X-API-KEY': apiKey
         }
-      } catch (err) {
-        // המשך ניסיון
+      });
+
+      if (statusResponse.ok) {
+        const statusData = await statusResponse.json();
+        const status = statusData.data?.status;
+        
+        console.log(`Check ${i + 1}/${maxAttempts} - Status:`, status);
+
+        if (status === 'completed' && statusData.data?.video_url) {
+          return Response.json({
+            video_url: statusData.data.video_url,
+            duration: statusData.data.duration || 5,
+            video_id: videoId
+          });
+        }
+        
+        if (status === 'failed') {
+          return Response.json({ 
+            error: 'Video generation failed',
+            video_id: videoId
+          }, { status: 500 });
+        }
       }
     }
-    
+
+    // אם לא הצלחנו אחרי 90 שניות
     return Response.json({ 
       still_processing: true,
       video_id: videoId,
-      message: 'הווידאו בעיבוד, אם לא הופיע בדוק את הדוא"ל'
+      message: 'הווידאו בעיבוד - בדוק במייל או נסה שוב'
     });
 
   } catch (error) {
-    console.error('Error:', error);
+    console.error('Error:', error.message);
     return Response.json({ error: error.message }, { status: 500 });
   }
 });
