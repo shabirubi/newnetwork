@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
@@ -312,8 +311,6 @@ export default function VideoEditor() {
     setContextClipIndex(null);
   };
 
-
-
   // Update transition
   const updateTransition = (afterClipIndex, transitionType) => {
     setTransitions(prev => ({
@@ -518,454 +515,245 @@ export default function VideoEditor() {
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Header */}
-      <div className="bg-gradient-to-r from-purple-600 to-blue-600 border-b border-purple-300 p-4 shrink-0">
+      <div className="bg-gradient-to-r from-purple-600 to-blue-600 p-4 shrink-0 shadow-lg">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
             <a 
               href="/"
-              className="px-4 py-2 border border-white/30 text-white hover:bg-white/20 rounded-md transition-colors text-sm"
+              className="px-4 py-2 border border-white/30 text-white hover:bg-white/20 rounded-lg transition-colors text-sm font-semibold"
             >
-              ← חזרה לאתר
+              ← חזרה
             </a>
             <div>
-              <h1 className="text-2xl font-bold text-white">עורך סרטונים מתקדם</h1>
-              <p className="text-sm text-purple-100">ערוך, חבר והוסף אפקטים לסרטונים שלך</p>
+              <h1 className="text-2xl font-bold text-white">עורך סרטונים</h1>
             </div>
           </div>
           <div className="flex gap-2">
             <Button onClick={() => setShowProjectsModal(true)} variant="outline" className="border-white/30 text-white hover:bg-white/20">
               <FolderOpen size={18} className="mr-2" />
-              הפרויקטים שלי
+              פרויקטים
             </Button>
-            <Button onClick={handleSaveProject} disabled={clips.length === 0} variant="outline" className="border-white/30 text-white hover:bg-white/20">
+            <Button onClick={handleSaveProject} disabled={clips.length === 0} className="bg-green-600 hover:bg-green-700 text-white">
               <Save size={18} className="mr-2" />
-              שמור פרויקט
+              שמור
             </Button>
-            <Button onClick={handlePlayAll} disabled={clips.length === 0} className="bg-green-600 hover:bg-green-700 text-white font-bold">
-              {playingAll ? <><Pause size={20} className="mr-2" />מפעיל...</> : <><Play size={20} className="mr-2" />הפעל הכל</>}
+            <Button onClick={handlePlayAll} disabled={clips.length === 0} className="bg-blue-600 hover:bg-blue-700 text-white">
+              <Play size={18} className="mr-2" />
+              הפעל
             </Button>
             <Button onClick={handleExport} disabled={clips.length === 0} className="bg-purple-600 hover:bg-purple-700 text-white">
-              <><Download size={18} className="mr-2" />ייצוא סרטון</>
+              <Download size={18} className="mr-2" />
+              ייצוא
             </Button>
           </div>
         </div>
       </div>
 
       <div className="flex-1 flex overflow-hidden" dir="rtl">
-        {/* Main Content - Preview + Timeline */}
-        <div className="flex-1 flex flex-col bg-gray-50 overflow-hidden">
-          {/* Preview - Top Center */}
-          <div className="flex-1 flex items-center justify-center p-6 bg-gradient-to-br from-gray-100 to-gray-200">
+        {/* Main Area */}
+        <div className="flex-1 flex flex-col">
+          {/* Preview */}
+          <div className="flex-1 flex items-center justify-center p-6 bg-gray-100">
             {selectedClip ? (
-              <div className="relative w-full max-w-4xl">
-                <div className="relative bg-black rounded-2xl shadow-2xl overflow-hidden">
+              <div className="w-full max-w-4xl">
+                <div className="bg-black rounded-2xl shadow-2xl overflow-hidden">
                   {selectedClip.type === 'image' ? (
-                    <img 
-                      src={selectedClip.url} 
-                      className="w-full" 
-                      style={{ filter: `brightness(${selectedClip.filters.brightness}%) contrast(${selectedClip.filters.contrast}%) saturate(${selectedClip.filters.saturation}%)` }} 
-                      alt={selectedClip.name} 
-                    />
+                    <img src={selectedClip.url} className="w-full" alt={selectedClip.name} />
                   ) : (
-                    <video 
-                      ref={videoRef} 
-                      src={selectedClip.localUrl || selectedClip.url} 
-                      className="w-full" 
-                      style={{ filter: `brightness(${selectedClip.filters.brightness}%) contrast(${selectedClip.filters.contrast}%) saturate(${selectedClip.filters.saturation}%)` }} 
-                      controls 
-                    />
+                    <video ref={videoRef} src={selectedClip.localUrl || selectedClip.url} className="w-full" controls />
                   )}
                 </div>
-                <div className="mt-3 text-center">
-                  <p className="text-gray-600 text-sm">קליפ {selectedClipIndex + 1}/{clips.length}</p>
-                  <p className="text-gray-500 text-xs">{selectedClip.duration?.toFixed(1)}s • {selectedClip.name}</p>
+                <div className="text-center mt-3">
+                  <p className="text-gray-600 text-sm">{selectedClip.duration?.toFixed(1)}s</p>
                 </div>
               </div>
             ) : (
               <div className="text-center text-gray-400">
                 <Film size={64} className="mx-auto mb-4 opacity-30" />
-                <p className="text-lg">בחר קליפ מציר הזמן למטה</p>
+                <p className="text-lg">בחר קליפ מציר הזמן</p>
               </div>
             )}
           </div>
 
-          {/* Timeline - Bottom */}
-          <div className="h-40 bg-white border-t border-gray-300 p-3 shrink-0">
+          {/* Timeline */}
+          <div className="h-40 bg-white border-t border-gray-300 p-3 overflow-x-scroll">
             {clips.length === 0 ? (
-                <div className="flex items-center justify-center h-full border-2 border-dashed border-gray-300 rounded-xl bg-gray-50">
-                  <div className="text-center">
-                    <Film size={48} className="mx-auto mb-2 opacity-30 text-gray-400" />
-                    <p className="text-gray-500 text-sm">גרור סרטונים לכאן או לחץ "העלה" בסרגל הימני</p>
-                  </div>
+              <div className="flex items-center justify-center h-full border-2 border-dashed border-gray-300 rounded-xl">
+                <div className="text-center">
+                  <Film size={40} className="mx-auto mb-2 opacity-30 text-gray-400" />
+                  <p className="text-gray-500 text-sm">לחץ "העלה" להוספת סרטונים</p>
                 </div>
-              ) : (
-                <div className="h-full overflow-x-scroll overflow-y-hidden">
-                  <div className="flex items-center gap-1 h-full min-w-max pb-2">
-                      {clips.map((clip, index) => {
-                          const widthPerSecond = 70;
-                          const clipWidth = Math.max(80, (clip.duration || 1) * widthPerSecond);
-                          const transition = transitions[index];
+              </div>
+            ) : (
+              <div className="flex gap-1 h-full items-center min-w-max">
+                {clips.map((clip, index) => {
+                  const widthPerSecond = 70;
+                  const clipWidth = Math.max(80, (clip.duration || 1) * widthPerSecond);
 
-                          return (
-                            <React.Fragment key={clip.id}>
-                              <motion.div
-                                layout
-                                initial={{ scale: 0.9, opacity: 0 }}
-                                animate={{ scale: 1, opacity: 1 }}
-                                exit={{ scale: 0.9, opacity: 0 }}
-                                className={`relative rounded-lg overflow-hidden flex-shrink-0 transition-all group border-2 cursor-pointer ${selectedClipIndex === index ? 'ring-4 ring-blue-500 border-blue-500' : 'border-gray-300 hover:border-blue-400'}`}
-                                style={{ 
-                                  width: `${clipWidth}px`,
-                                  height: '110px',
-                                  backgroundColor: '#fff'
-                                }}
-                                onClick={() => setSelectedClipIndex(index)}
-                              >
-                                {/* Thumbnail - Visible Video Preview */}
-                                <div className="absolute inset-0">
-                                  {clip.type === 'image' ? (
-                                    <img 
-                                      src={clip.thumbnail || clip.url} 
-                                      alt={clip.name}
-                                      className="w-full h-full object-cover"
-                                    />
-                                  ) : (
-                                    <video 
-                                      src={clip.url} 
-                                      className="w-full h-full object-cover"
-                                      muted
-                                      playsInline
-                                    />
-                                  )}
-                                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-                                </div>
+                  return (
+                    <React.Fragment key={clip.id}>
+                      <motion.div
+                        layout
+                        className={`relative rounded-lg overflow-hidden flex-shrink-0 cursor-pointer group border-2 ${selectedClipIndex === index ? 'ring-4 ring-blue-500 border-blue-500' : 'border-gray-300 hover:border-blue-400'}`}
+                        style={{ width: `${clipWidth}px`, height: '110px' }}
+                        onClick={() => setSelectedClipIndex(index)}
+                      >
+                        <div className="absolute inset-0">
+                          {clip.type === 'image' ? (
+                            <img src={clip.thumbnail || clip.url} alt={clip.name} className="w-full h-full object-cover" />
+                          ) : (
+                            <video src={clip.url} className="w-full h-full object-cover" muted playsInline />
+                          )}
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+                        </div>
 
-                                {/* Clip Info */}
-                                <div className="absolute bottom-0 left-0 right-0 p-2">
-                                  <p className="text-white text-[10px] font-semibold truncate drop-shadow">{clip.name}</p>
-                                  <p className="text-white text-[9px] bg-black/60 px-1 py-0.5 rounded inline-block">{clip.duration?.toFixed(1)}s</p>
-                                </div>
+                        <div className="absolute bottom-0 left-0 right-0 p-2">
+                          <p className="text-white text-[10px] font-semibold truncate">{clip.name}</p>
+                          <p className="text-white text-[9px] bg-black/60 px-1 rounded inline-block">{clip.duration?.toFixed(1)}s</p>
+                        </div>
 
-                                {/* Delete Button */}
-                                <button 
-                                  onClick={(e) => { e.stopPropagation(); removeClip(index); }} 
-                                  className="absolute top-1 left-1 p-1 bg-red-500 rounded-full hover:bg-red-600 opacity-0 group-hover:opacity-100 transition-all z-10 shadow-lg"
-                                >
-                                  <Trash2 size={12} className="text-white" />
-                                </button>
-                              </motion.div>
+                        <button 
+                          onClick={(e) => { e.stopPropagation(); removeClip(index); }} 
+                          className="absolute top-1 left-1 p-1 bg-red-500 rounded-full hover:bg-red-600 opacity-0 group-hover:opacity-100 transition-opacity z-10"
+                        >
+                          <Trash2 size={12} className="text-white" />
+                        </button>
+                      </motion.div>
 
-                              {/* Transition Button */}
-                              {index < clips.length - 1 && (
-                                <div className="flex-shrink-0 flex items-center justify-center" style={{ width: '50px' }}>
-                                  {transition && transition !== 'cut' ? (
-                                    <div className="flex flex-col items-center gap-1">
-                                      <div className="w-10 h-10 rounded-lg bg-purple-500 flex items-center justify-center shadow-md">
-                                        <Sparkles size={18} className="text-white" />
-                                      </div>
-                                      <span className="text-[8px] text-gray-600 font-semibold">
-                                        {transition}
-                                      </span>
-                                    </div>
-                                  ) : (
-                                    <button
-                                      onClick={() => {
-                                        const newTransition = prompt('בחר מעבר:\ncut, fade, dissolve, slide, wipe, zoom');
-                                        if (newTransition) updateTransition(index, newTransition);
-                                      }}
-                                      className="w-10 h-10 rounded-lg bg-gray-200 hover:bg-gray-300 border-2 border-dashed border-gray-400 flex items-center justify-center transition-all"
-                                      title="הוסף מעבר"
-                                    >
-                                      <Plus size={20} className="text-gray-600" />
-                                    </button>
-                                  )}
-                                </div>
-                              )}
-                            </React.Fragment>
-                          );
-                        })}
-                    </div>
-                </div>
+                      {index < clips.length - 1 && (
+                        <div className="flex-shrink-0 flex items-center justify-center" style={{ width: '50px' }}>
+                          <button
+                            onClick={() => {
+                              const t = prompt('מעבר: fade, dissolve, slide');
+                              if (t) updateTransition(index, t);
+                            }}
+                            className="w-10 h-10 rounded-lg bg-gray-200 hover:bg-gray-300 border-2 border-dashed border-gray-400 flex items-center justify-center"
+                          >
+                            <Plus size={20} className="text-gray-600" />
+                          </button>
+                        </div>
+                      )}
+                    </React.Fragment>
+                  );
+                })}
+              </div>
             )}
           </div>
         </div>
 
-        {/* Right Sidebar - Tools */}
-        <div className="w-20 bg-white border-r border-gray-300 p-2 overflow-y-auto flex flex-col gap-2 items-center relative z-10">
-          <input type="file" accept="video/mp4,video/webm,video/ogg,video/quicktime,video/x-msvideo,video/x-matroska,image/png,image/jpeg,image/jpg,image/gif" onChange={handleAddClip} className="hidden" id="video-upload" />
+        {/* Right Sidebar */}
+        <div className="w-20 bg-white border-r border-gray-300 p-2 flex flex-col gap-2 items-center overflow-y-auto">
+          <input type="file" accept="video/*,image/*" onChange={handleAddClip} className="hidden" id="video-upload" />
           <button onClick={() => document.getElementById('video-upload').click()} className="flex flex-col items-center gap-1 p-2 hover:bg-gray-100 rounded-lg w-full" title="העלה">
             <Upload size={24} className="text-gray-700" />
             <span className="text-[9px] text-gray-600">העלה</span>
           </button>
 
-          <button onClick={() => setShowSampleVideosModal(true)} className="flex flex-col items-center gap-1 p-2 hover:bg-gray-100 rounded-lg w-full" title="דוגמאות">
-            <Play size={24} className="text-gray-700" />
+          <button onClick={() => setShowSampleVideosModal(true)} className="flex flex-col items-center gap-1 p-2 hover:bg-gray-100 rounded-lg w-full">
+            <Film size={24} className="text-gray-700" />
             <span className="text-[9px] text-gray-600">סרטונים</span>
           </button>
 
-          <button onClick={() => setShowLumaGeneratorModal(true)} className="flex flex-col items-center gap-1 p-2 hover:bg-gray-100 rounded-lg w-full" title="AI">
+          <button onClick={() => setShowLumaGeneratorModal(true)} className="flex flex-col items-center gap-1 p-2 hover:bg-gray-100 rounded-lg w-full">
             <Sparkles size={24} className="text-gray-700" />
             <span className="text-[9px] text-gray-600">AI</span>
           </button>
 
-          <button onClick={() => setShowAIImageModal(true)} className="flex flex-col items-center gap-1 p-2 hover:bg-gray-100 rounded-lg w-full" title="תמונה">
+          <button onClick={() => setShowAIImageModal(true)} className="flex flex-col items-center gap-1 p-2 hover:bg-gray-100 rounded-lg w-full">
             <ImageIcon size={24} className="text-gray-700" />
             <span className="text-[9px] text-gray-600">תמונה</span>
           </button>
 
-          <button onClick={() => setShowKlingCharacterModal(true)} className="flex flex-col items-center gap-1 p-2 hover:bg-gray-100 rounded-lg w-full" title="דמות">
+          <button onClick={() => setShowKlingCharacterModal(true)} className="flex flex-col items-center gap-1 p-2 hover:bg-gray-100 rounded-lg w-full">
             <User size={24} className="text-gray-700" />
             <span className="text-[9px] text-gray-600">דמות</span>
           </button>
 
           <input type="file" accept="audio/*" onChange={handleAddAudio} className="hidden" id="audio-upload" />
-          <button onClick={() => document.getElementById('audio-upload').click()} className="flex flex-col items-center gap-1 p-2 hover:bg-gray-100 rounded-lg w-full" title="מוזיקה">
+          <button onClick={() => document.getElementById('audio-upload').click()} className="flex flex-col items-center gap-1 p-2 hover:bg-gray-100 rounded-lg w-full">
             <Music size={24} className="text-gray-700" />
             <span className="text-[9px] text-gray-600">מוזיקה</span>
           </button>
 
-          <button onClick={() => setShowOverlayModal(true)} className="flex flex-col items-center gap-1 p-2 hover:bg-gray-100 rounded-lg w-full" title="טקסט">
+          <button onClick={() => setShowOverlayModal(true)} className="flex flex-col items-center gap-1 p-2 hover:bg-gray-100 rounded-lg w-full">
             <Type size={24} className="text-gray-700" />
             <span className="text-[9px] text-gray-600">טקסט</span>
           </button>
 
-          <button onClick={() => setShowElementsModal(true)} className="flex flex-col items-center gap-1 p-2 hover:bg-gray-100 rounded-lg w-full" title="אלמנטים">
+          <button onClick={() => setShowElementsModal(true)} className="flex flex-col items-center gap-1 p-2 hover:bg-gray-100 rounded-lg w-full">
             <Sparkles size={24} className="text-gray-700" />
             <span className="text-[9px] text-gray-600">אלמנטים</span>
           </button>
 
-          <div className="border-t border-gray-300 w-full my-1"></div>
+          <div className="border-t border-gray-300 w-full"></div>
 
-          <button onClick={() => setShowEffectsModal(true)} className="flex flex-col items-center gap-1 p-2 hover:bg-gray-100 rounded-lg w-full" title="אפקטים">
-            <Sparkles size={24} className="text-gray-700" />
-            <span className="text-[9px] text-gray-600">אפקטים</span>
+          <button onClick={() => setShowEffectsModal(true)} className="flex flex-col items-center gap-1 p-2 hover:bg-gray-100 rounded-lg w-full">
+            <Sparkles size={22} className="text-gray-700" />
+            <span className="text-[8px] text-gray-600">אפקטים</span>
           </button>
 
-          <button onClick={() => setShowResizeModal(true)} className="flex flex-col items-center gap-1 p-2 hover:bg-gray-100 rounded-lg w-full" title="גודל">
-            <Film size={24} className="text-gray-700" />
-            <span className="text-[9px] text-gray-600">גודל</span>
+          <button onClick={() => setShowResizeModal(true)} className="flex flex-col items-center gap-1 p-2 hover:bg-gray-100 rounded-lg w-full">
+            <Film size={22} className="text-gray-700" />
+            <span className="text-[8px] text-gray-600">גודל</span>
           </button>
         </div>
       </div>
 
+      {/* Modals */}
       {showProjectsModal && <ProjectsModal onClose={() => setShowProjectsModal(false)} onLoad={handleLoadProject} />}
-
-      {showCaptionsModal && (
-        <AutoCaptionsModal 
-          onClose={() => setShowCaptionsModal(false)}
-          selectedClip={selectedClip}
-          onApply={(captions) => {
-            setOverlays(prev => [...prev, ...captions]);
-            toast.success('כיתובים נוספו! 🎤');
-          }}
-        />
-      )}
-
-      {showTTSModal && (
-        <TTSModal 
-          onClose={() => setShowTTSModal(false)}
-          onApply={async (text, voice) => {
-            setLoading(true);
-            try {
-              const { data } = await base44.functions.invoke('generateElevenLabsSpeech', { text, voice_id: voice });
-              if (data.audio_url) {
-                setAudioTrack({ url: data.audio_url, name: 'דיבוב - ' + voice, volume: 100, loop: false });
-                toast.success('דיבוב ElevenLabs נוסף! 🎙️');
-              } else {
-                toast.error('לא הצליח ליצור דיבוב');
-              }
-            } catch (error) {
-              toast.error('שגיאה: ' + error.message);
-            } finally {
-              setLoading(false);
-            }
-          }}
-        />
-      )}
-
-      {showEffectsModal && <EffectsLibraryModal onClose={() => setShowEffectsModal(false)} onApplyEffect={(effect) => { if (selectedClipIndex !== null) { updateClipFilter(selectedClipIndex, 'effect', effect); toast.success(`אפקט ${effect} הוחל! ✨`); } }} onApplyTransition={(transition) => { if (selectedClipIndex !== null && selectedClipIndex < clips.length - 1) { updateTransition(selectedClipIndex, transition); toast.success(`מעבר ${transition} הוחל! 🎬`); } }} />}
-
-      {showSpeedModal && selectedClip && <SpeedControlModal onClose={() => setShowSpeedModal(false)} currentSpeed={selectedClip.speed || 1} onApply={(speed) => { setClips(prev => prev.map((clip, i) => i === selectedClipIndex ? { ...clip, speed } : clip)); toast.success(`מהירות שונתה ל-${speed}x! ⚡`); }} />}
-
-      {showResizeModal && <ResizeModal onClose={() => setShowResizeModal(false)} onApply={(aspectRatio) => { setClips(prev => prev.map(clip => ({ ...clip, aspectRatio }))); toast.success(`שונה ל-${aspectRatio}! 📐`); }} />}
-
-      {showElementsModal && <ElementsLibraryModal onClose={() => setShowElementsModal(false)} onApply={(element) => { 
-        const processedElement = {
-          ...element,
-          // Ensure all required properties exist for timeline display
-          style: element.style || { color: element.color || '#FFFFFF', fontSize: 24 },
-          content: element.content || element.text || element.name || 'אלמנט',
-        };
-        setOverlays(prev => [...prev, processedElement]); 
-        toast.success('אלמנט נוסף לציר הזמן! ✨'); 
-      }} />}
-
-      {showMusicLibraryModal && <MusicLibraryModal onClose={() => setShowMusicLibraryModal(false)} onApply={(music) => { setAudioTrack({ url: music.url, name: music.name, volume: 100, loop: true }); toast.success(`${music.name} נוסף! 🎵`); }} />}
-
-      {showPIPModal && <PIPOverlay onClose={() => setShowPIPModal(false)} onApply={(pipData) => { setPipLayers(prev => [...prev, pipData]); toast.success('PIP נוסף בהצלחה! 📹'); }} />}
-
+      {showCaptionsModal && <AutoCaptionsModal onClose={() => setShowCaptionsModal(false)} selectedClip={selectedClip} onApply={(captions) => { setOverlays(prev => [...prev, ...captions]); toast.success('כיתובים נוספו!'); }} />}
+      {showEffectsModal && <EffectsLibraryModal onClose={() => setShowEffectsModal(false)} onApplyEffect={(effect) => { if (selectedClipIndex !== null) updateClipFilter(selectedClipIndex, 'effect', effect); }} onApplyTransition={(t) => { if (selectedClipIndex !== null && selectedClipIndex < clips.length - 1) updateTransition(selectedClipIndex, t); }} />}
+      {showSpeedModal && selectedClip && <SpeedControlModal onClose={() => setShowSpeedModal(false)} currentSpeed={selectedClip.speed || 1} onApply={(speed) => { setClips(prev => prev.map((clip, i) => i === selectedClipIndex ? { ...clip, speed } : clip)); }} />}
+      {showResizeModal && <ResizeModal onClose={() => setShowResizeModal(false)} onApply={(aspectRatio) => { setClips(prev => prev.map(clip => ({ ...clip, aspectRatio }))); }} />}
+      {showElementsModal && <ElementsLibraryModal onClose={() => setShowElementsModal(false)} onApply={(element) => { setOverlays(prev => [...prev, element]); }} />}
+      {showMusicLibraryModal && <MusicLibraryModal onClose={() => setShowMusicLibraryModal(false)} onApply={(music) => { setAudioTrack({ url: music.url, name: music.name, volume: 100, loop: true }); }} />}
+      {showPIPModal && <PIPOverlay onClose={() => setShowPIPModal(false)} onApply={(pipData) => { setPipLayers(prev => [...prev, pipData]); }} />}
       {showAIImageModal && <AIImageGeneratorModal onClose={() => setShowAIImageModal(false)} onApply={(imageData) => { setClips(prev => [...prev, { id: Date.now(), ...imageData, filters: { brightness: 100, contrast: 100, saturation: 100 }, volume: 0 }]); setShowAIImageModal(false); }} />}
-
-      {showAdvancedTTSModal && (
-        <AdvancedTTSModal 
-          onClose={() => setShowAdvancedTTSModal(false)}
-          onApply={async (text, voice) => {
-            setLoading(true);
-            try {
-              const { data } = await base44.functions.invoke('generateElevenLabsSpeech', { text, voice_id: voice });
-              if (data.audio_url) {
-                setAudioTrack({ url: data.audio_url, name: 'דיבוב - ' + voice, volume: 100, loop: false });
-                toast.success('דיבוב ElevenLabs נוסף! 🎙️');
-                setShowAdvancedTTSModal(false);
-              } else {
-                toast.error('לא הצליח ליצור דיבוב');
-              }
-            } catch (error) {
-              toast.error('שגיאה: ' + error.message);
-            } finally {
-              setLoading(false);
-            }
-          }}
-        />
-      )}
-
-      {showAdCreatorModal && <AdCreatorModal onClose={() => setShowAdCreatorModal(false)} onApply={(adClip) => { setClips(prev => [...prev, adClip]); setShowAdCreatorModal(false); toast.success('פרסומת נוספה לעורך! 📢'); }} />}
-
-
-      {showAIVideoFromImagesModal && <AIVideoFromImagesModal onClose={() => setShowAIVideoFromImagesModal(false)} onApply={(clips) => { setClips(prev => [...prev, ...clips]); setShowAIVideoFromImagesModal(false); }} />}
-
+      {showAdvancedTTSModal && <AdvancedTTSModal onClose={() => setShowAdvancedTTSModal(false)} onApply={async (text, voice) => { try { const { data } = await base44.functions.invoke('generateElevenLabsSpeech', { text, voice_id: voice }); if (data.audio_url) { setAudioTrack({ url: data.audio_url, name: 'דיבוב', volume: 100 }); setShowAdvancedTTSModal(false); } } catch (e) {} }} />}
+      {showAdCreatorModal && <AdCreatorModal onClose={() => setShowAdCreatorModal(false)} onApply={(adClip) => { setClips(prev => [...prev, adClip]); setShowAdCreatorModal(false); }} />}
+      {showAIVideoFromImagesModal && <AIVideoFromImagesModal onClose={() => setShowAIVideoFromImagesModal(false)} onApply={(newClips) => { setClips(prev => [...prev, ...newClips]); setShowAIVideoFromImagesModal(false); }} />}
       {showSampleVideosModal && <SampleVideosModal onClose={() => setShowSampleVideosModal(false)} onApply={(clip) => { setClips(prev => [...prev, clip]); setShowSampleVideosModal(false); }} />}
-
       {showKlingCharacterModal && <KlingCharacterModal onClose={() => setShowKlingCharacterModal(false)} onApply={(clip) => { setClips(prev => [...prev, clip]); setShowKlingCharacterModal(false); }} />}
-
-      {showExportModal && (
-        <ExportVideoModal 
-          onClose={() => setShowExportModal(false)}
-          clips={clips}
-          totalDuration={totalDuration}
-          userEmail={userEmail}
-          loading={exporting}
-          setLoading={setExporting}
-        />
-      )}
-
-      {/* Context Menu */}
-      {contextMenu && (
-        <>
-          <div 
-            className="fixed inset-0 z-40"
-            onClick={() => {
-              setContextMenu(null);
-              setContextClipIndex(null);
-            }}
-          />
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            className="fixed z-50 bg-gray-900 border border-white/20 rounded-xl shadow-lg overflow-hidden"
-            style={{
-              left: `${contextMenu.x}px`,
-              top: `${contextMenu.y}px`
-            }}
-          >
-            <button
-              onClick={() => {
-                if (contextClipIndex !== null) {
-                  duplicateClip(contextClipIndex);
-                }
-              }}
-              className="w-full px-4 py-2 text-sm text-white hover:bg-white/10 transition-colors flex items-center gap-2 whitespace-nowrap"
-            >
-              <Film size={16} />
-              שכפל קליפ
-            </button>
-            <button
-              onClick={() => {
-                if (contextClipIndex !== null) {
-                  removeClip(contextClipIndex);
-                }
-              }}
-              className="w-full px-4 py-2 text-sm text-red-400 hover:bg-red-500/20 transition-colors flex items-center gap-2 whitespace-nowrap"
-            >
-              <Trash2 size={16} />
-              מחק קליפ
-            </button>
-          </motion.div>
-        </>
-      )}
-
-      {showLumaGeneratorModal && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50">
-          <div className="bg-white rounded-2xl p-6 max-w-xl w-full" onClick={(e) => e.stopPropagation()}>
-            <h3 className="text-xl font-bold mb-4 text-gray-900">צור סרטון AI</h3>
-            <Textarea id="luma-prompt" placeholder="תאר את הסרטון..." rows={3} className="mb-4" />
-            <div className="flex gap-2">
-              <Button onClick={() => setShowLumaGeneratorModal(false)} variant="outline" className="flex-1">ביטול</Button>
-              <Button onClick={async () => {
-                const prompt = document.getElementById('luma-prompt')?.value;
-                if (!prompt?.trim()) { toast.error('הזן תיאור'); return; }
-                setShowLumaGeneratorModal(false);
-                setLoading(true);
-                try {
-                  toast.info('יוצר סרטון... ⏳');
-                  const { data } = await base44.functions.invoke('createLumaVideo', { prompt, aspectRatio: '16:9' });
-                  if (data?.video_url) {
-                    const newClip = {
-                      id: Date.now(),
-                      url: data.video_url,
-                      localUrl: data.video_url,
-                      duration: 5, // Default duration, actual might be different
-                      name: prompt.substring(0, 30),
-                      thumbnail: data.thumbnail_url || data.video_url,
-                      filters: { brightness: 100, contrast: 100, saturation: 100 },
-                      volume: 100,
-                      type: 'video'
-                    };
-                    setClips(prev => {
-                      const updated = [...prev, newClip];
-                      setTimeout(() => setSelectedClipIndex(updated.length - 1), 200);
-                      return updated;
-                    });
-                    if (data.audio_url) {
-                      setAudioTrack({ url: data.audio_url, name: 'דיבוב - ' + prompt.substring(0, 20), volume: 100, loop: false });
-                      toast.success('סרטון חדש + דיבוב נוספו! 🎬🎤');
-                    } else {
-                      toast.success('סרטון חדש נוסף! 🎬');
-                    }
-                  } else if (data?.still_processing) {
-                    toast.info('הסרטון בתהליך... נסה שוב בעוד רגע');
-                  } else {
-                    toast.error('לא התקבל סרטון: ' + JSON.stringify(data));
-                  }
-                } catch (err) { toast.error('שגיאה: ' + err.message); } finally { setLoading(false); }
-              }} className="flex-1 bg-purple-600 text-white">
-                {loading ? <><Loader2 size={18} className="mr-2 animate-spin" />יוצר...</> : <><Sparkles size={18} className="mr-2" />צור סרטון</>}
-              </Button>
-            </div>
-          </div>
-        </div>
-      )}
+      {showExportModal && <ExportVideoModal onClose={() => setShowExportModal(false)} clips={clips} totalDuration={totalDuration} userEmail={userEmail} loading={exporting} setLoading={setExporting} />}
 
       {showOverlayModal && (
         <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50">
           <div className="bg-white rounded-2xl p-6 max-w-md w-full">
-            <h3 className="text-xl font-bold mb-4 text-gray-900">הוסף טקסט</h3>
-            <Input id="overlay-text" placeholder="הכנס טקסט..." className="mb-3" />
-            <div className="flex gap-2 mb-4">
-              <Input id="text-color" type="color" defaultValue="#ffffff" className="w-20" />
-              <Input id="text-size" type="number" placeholder="גודל" defaultValue="24" />
-            </div>
+            <h3 className="text-xl font-bold mb-4">הוסף טקסט</h3>
+            <Input id="overlay-text" placeholder="טקסט..." className="mb-3" />
             <div className="flex gap-2">
               <Button onClick={() => setShowOverlayModal(false)} variant="outline" className="flex-1">ביטול</Button>
               <Button onClick={() => {
                 const text = document.getElementById('overlay-text')?.value;
                 if (text?.trim()) {
-                  setOverlays(prev => [...prev, { id: Date.now(), type: 'text', content: text, position: { x: 50, y: 50 }, style: { fontSize: parseInt(document.getElementById('text-size')?.value || '24'), color: document.getElementById('text-color')?.value || '#ffffff' } }]);
+                  setOverlays(prev => [...prev, { id: Date.now(), type: 'text', content: text, position: { x: 50, y: 50 }, style: { fontSize: 24, color: '#ffffff' } }]);
                   setShowOverlayModal(false);
-                  toast.success('טקסט נוסף!');
                 }
-              }} className="flex-1 bg-blue-600">הוסף</Button>
+              }} className="flex-1">הוסף</Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showLumaGeneratorModal && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl p-6 max-w-xl w-full">
+            <h3 className="text-xl font-bold mb-4">צור סרטון AI</h3>
+            <Textarea id="luma-prompt" placeholder="תאר את הסרטון..." rows={3} className="mb-4" />
+            <div className="flex gap-2">
+              <Button onClick={() => setShowLumaGeneratorModal(false)} variant="outline" className="flex-1">ביטול</Button>
+              <Button onClick={async () => {
+                const prompt = document.getElementById('luma-prompt')?.value;
+                if (!prompt?.trim()) return;
+                setShowLumaGeneratorModal(false);
+                setLoading(true);
+                try {
+                  const { data } = await base44.functions.invoke('createLumaVideo', { prompt, aspectRatio: '16:9' });
+                  if (data?.video_url) {
+                    setClips(prev => [...prev, { id: Date.now(), url: data.video_url, localUrl: data.video_url, duration: 5, name: prompt.substring(0, 30), thumbnail: data.video_url, filters: { brightness: 100, contrast: 100, saturation: 100 }, volume: 100, type: 'video' }]);
+                  }
+                } finally { setLoading(false); }
+              }} className="flex-1 bg-purple-600">צור</Button>
             </div>
           </div>
         </div>
