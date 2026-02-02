@@ -21,90 +21,93 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'HeyGen API key not configured' }, { status: 500 });
     }
 
-    console.log('Creating HeyGen video with script:', script);
+    console.log('=== Starting HeyGen Video Generation ===');
+    console.log('Script:', script);
 
-    // יצירת וידאו עם HeyGen API v2
-    const response = await fetch('https://api.heygen.com/v2/video/generate', {
+    // יצירת וידאו
+    const createResponse = await fetch('https://api.heygen.com/v2/video/generate', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'X-API-KEY': apiKey
+        'X-Api-Key': apiKey,
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        video_inputs: [
-          {
-            character: {
-              type: 'avatar',
-              avatar_id: 'Kristin-insuit-20220818',
-              avatar_style: 'normal'
-            },
-            voice: {
-              type: 'text',
-              input_text: script,
-              voice_id: '1bd001e7e50f421d891986aad5158bc8'
-            }
+        video_inputs: [{
+          character: {
+            type: 'avatar',
+            avatar_id: 'Kristin-insuit-20220818'
+          },
+          voice: {
+            type: 'text',
+            input_text: script,
+            voice_id: '1bd001e7e50f421d891986aad5158bc8'
           }
-        ],
+        }],
         dimension: {
           width: 1280,
           height: 720
         },
-        aspect_ratio: '16:9',
         test: false
       })
     });
 
-    const responseText = await response.text();
-    console.log('HeyGen response status:', response.status);
-    console.log('HeyGen response:', responseText);
+    const createText = await createResponse.text();
+    console.log('Create Response Status:', createResponse.status);
+    console.log('Create Response Body:', createText);
 
-    if (!response.ok) {
+    if (!createResponse.ok) {
+      console.error('Failed to create video');
       return Response.json({ 
-        error: 'HeyGen API error',
-        status: response.status,
-        details: responseText
-      }, { status: response.status });
-    }
-
-    const data = JSON.parse(responseText);
-    const videoId = data.data?.video_id;
-
-    if (!videoId) {
-      return Response.json({ 
-        error: 'No video ID returned',
-        details: data
+        error: 'Failed to create video',
+        status: createResponse.status,
+        details: createText
       }, { status: 500 });
     }
 
-    console.log('Video ID created:', videoId);
+    const createData = JSON.parse(createText);
+    const videoId = createData.data?.video_id;
 
-    // המתן לווידאו עד 90 שניות
-    const maxAttempts = 90;
-    for (let i = 0; i < maxAttempts; i++) {
+    if (!videoId) {
+      console.error('No video_id in response:', createData);
+      return Response.json({ 
+        error: 'No video_id returned',
+        response: createData
+      }, { status: 500 });
+    }
+
+    console.log('Video ID:', videoId);
+    console.log('=== Polling for completion ===');
+
+    // המתן עד 2 דקות
+    for (let attempt = 1; attempt <= 120; attempt++) {
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      const statusResponse = await fetch(`https://api.heygen.com/v2/video_status.get?video_id=${videoId}`, {
+      const statusResponse = await fetch(`https://api.heygen.com/v1/video_status.get?video_id=${videoId}`, {
         method: 'GET',
         headers: {
-          'X-API-KEY': apiKey
+          'X-Api-Key': apiKey
         }
       });
 
       if (statusResponse.ok) {
         const statusData = await statusResponse.json();
         const status = statusData.data?.status;
+        const videoUrl = statusData.data?.video_url;
         
-        console.log(`Check ${i + 1}/${maxAttempts} - Status:`, status);
+        console.log(`Attempt ${attempt}: status = ${status}`);
 
-        if (status === 'completed' && statusData.data?.video_url) {
+        if (status === 'completed' && videoUrl) {
+          console.log('=== Video Ready! ===');
+          console.log('URL:', videoUrl);
           return Response.json({
-            video_url: statusData.data.video_url,
-            duration: statusData.data.duration || 5,
+            video_url: videoUrl,
+            duration: statusData.data?.duration || 5,
             video_id: videoId
           });
         }
-        
+
         if (status === 'failed') {
+          console.error('Video generation failed');
           return Response.json({ 
             error: 'Video generation failed',
             video_id: videoId
@@ -113,15 +116,17 @@ Deno.serve(async (req) => {
       }
     }
 
-    // אם לא הצלחנו אחרי 90 שניות
+    console.log('Timeout after 2 minutes');
     return Response.json({ 
       still_processing: true,
       video_id: videoId,
-      message: 'הווידאו בעיבוד - בדוק במייל או נסה שוב'
+      message: 'הווידאו עדיין בעיבוד'
     });
 
   } catch (error) {
-    console.error('Error:', error.message);
+    console.error('=== ERROR ===');
+    console.error(error.message);
+    console.error(error.stack);
     return Response.json({ error: error.message }, { status: 500 });
   }
 });
