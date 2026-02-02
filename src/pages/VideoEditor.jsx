@@ -557,7 +557,7 @@ export default function VideoEditor() {
         {/* Left Side - Timeline + Preview */}
         <div className="flex-1 flex flex-col bg-gradient-to-br from-gray-900 to-black overflow-hidden">
           {/* Professional Timeline - Top */}
-          <div className="h-52 bg-gradient-to-b from-black via-gray-900 to-black border-b border-white/10 p-3 overflow-x-auto overflow-y-hidden shrink-0 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+          <div className="h-52 bg-gradient-to-b from-black via-gray-900 to-black border-b border-white/10 p-3 shrink-0">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
                 <Film size={14} className="text-[#E31E24]" />
@@ -575,9 +575,9 @@ export default function VideoEditor() {
                   </div>
                 </div>
               ) : (
-                <div className="relative bg-black/40 rounded-xl border border-white/10 p-2 overflow-x-auto overflow-y-visible" style={{ maxHeight: '400px' }}>
+                <div className="relative bg-black/40 rounded-xl border border-white/10 p-2 overflow-x-scroll overflow-y-hidden" style={{ maxHeight: '200px' }}>
                   {/* Time ruler */}
-                  <div className="flex items-center gap-1 mb-1 text-[8px] text-gray-600 px-1 flex-shrink-0 sticky top-0 bg-black/80 backdrop-blur-sm z-10 pb-1 border-b border-white/5">
+                  <div className="flex items-center gap-1 mb-1 text-[8px] text-gray-600 px-1 flex-shrink-0 sticky right-0 bg-black/80 backdrop-blur-sm z-10 pb-1 border-b border-white/5">
                   {Array.from({ length: Math.ceil(totalDuration) + 1 }).map((_, i) => (
                     <div key={i} className="flex-shrink-0 flex flex-col items-start" style={{ width: '60px' }}>
                       <div className="border-l border-[#E31E24]/30 h-2 w-px"></div>
@@ -587,14 +587,14 @@ export default function VideoEditor() {
                   </div>
 
                 {/* Multiple Tracks */}
-                <div className="space-y-2">
+                <div className="space-y-2 min-w-max">
                   {/* Video Clips Track */}
-                  <div className="relative bg-gradient-to-r from-purple-900/10 to-black/10 rounded-lg border border-purple-500/20 p-2">
+                  <div className="relative bg-gradient-to-r from-purple-900/10 to-black/10 rounded-lg border border-purple-500/20 p-2 min-w-max">
                     <div className="text-[9px] font-semibold text-purple-400 mb-1 px-1 flex items-center gap-1">
                       <Film size={11} className="text-purple-400" />
                       וידאו ({clips.length})
                     </div>
-                    <div className="flex items-center gap-0 h-24 relative">
+                    <div className="flex items-center gap-0 h-24 relative min-w-max">
                       {clips.length === 0 ? (
                         <div className="text-gray-500 text-xs ml-2">אין קליפים</div>
                       ) : (
@@ -744,33 +744,44 @@ export default function VideoEditor() {
                                 />
                               </motion.div>
 
-                              {/* Transition Indicator */}
+                              {/* Transition Indicator - with + button always visible */}
                               {index < clips.length - 1 && (
-                                <div className="relative flex-shrink-0 group/trans cursor-pointer" style={{ width: '40px' }}>
-                                  <div className="absolute inset-0 flex items-center justify-center">
+                                <div className="relative flex-shrink-0 group/trans cursor-pointer" style={{ width: '50px' }}>
+                                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-1">
                                     {transition && transition !== 'cut' ? (
-                                      <div className="relative">
+                                      <>
                                         <div className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center animate-pulse shadow-lg shadow-purple-500/50">
                                           <Sparkles size={16} className="text-white" />
                                         </div>
-                                        <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 text-[8px] text-purple-300 font-bold whitespace-nowrap bg-black/80 px-2 py-0.5 rounded opacity-0 group-hover/trans:opacity-100 transition-opacity">
+                                        <div className="text-[7px] text-purple-300 font-bold whitespace-nowrap bg-black/80 px-1.5 py-0.5 rounded">
                                           {transition}
                                         </div>
-                                      </div>
+                                      </>
                                     ) : (
-                                      <div className="w-px h-full bg-gradient-to-b from-transparent via-white/40 to-transparent"></div>
+                                      <>
+                                        <div className="w-px h-12 bg-gradient-to-b from-transparent via-white/20 to-transparent"></div>
+                                        <button
+                                          onClick={() => {
+                                            const newTransition = prompt('בחר מעבר:\n1. cut\n2. fade\n3. dissolve\n4. slide\n5. wipe\n6. zoom');
+                                            if (newTransition) updateTransition(index, newTransition);
+                                          }}
+                                          className="w-8 h-8 rounded-full bg-purple-600/30 hover:bg-purple-600/60 border border-purple-500/50 flex items-center justify-center transition-all shadow-lg hover:scale-110"
+                                          title="הוסף מעבר"
+                                        >
+                                          <Plus size={16} className="text-white" />
+                                        </button>
+                                      </>
                                     )}
                                   </div>
-                                  <button
-                                    onClick={() => {
-                                      const newTransition = prompt('בחר מעבר:\n1. cut\n2. fade\n3. dissolve\n4. slide');
-                                      if (newTransition) updateTransition(index, newTransition);
-                                    }}
-                                    className="absolute inset-0 opacity-0 hover:opacity-100 bg-purple-600/20 backdrop-blur-sm rounded flex items-center justify-center transition-all"
-                                    title="הוסף מעבר"
-                                  >
-                                    <Plus size={14} className="text-white" />
-                                  </button>
+                                  {transition && transition !== 'cut' && (
+                                    <button
+                                      onClick={() => updateTransition(index, 'cut')}
+                                      className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-red-600/90 hover:bg-red-600 flex items-center justify-center transition-all opacity-0 group-hover/trans:opacity-100 z-20"
+                                      title="הסר מעבר"
+                                    >
+                                      <X size={12} className="text-white" />
+                                    </button>
+                                  )}
                                 </div>
                               )}
                             </React.Fragment>
