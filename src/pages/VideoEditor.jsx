@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
@@ -26,7 +27,7 @@ import PIPOverlay from '../components/videoeditor/PIPOverlay';
 import AIImageGeneratorModal from '../components/videoeditor/AIImageGeneratorModal';
 import AdCreatorModal from '../components/videoeditor/AdCreatorModal';
       
-      import TimelineEditor from '../components/videoeditor/TimelineEditor';
+import TimelineEditor from '../components/videoeditor/TimelineEditor';
 import AIVideoFromImagesModal from '../components/videoeditor/AIVideoFromImagesModal';
 import ExportVideoModal from '../components/videoeditor/ExportVideoModal';
 import SampleVideosModal from '../components/videoeditor/SampleVideosModal';
@@ -46,7 +47,7 @@ function ProjectsModal({ onClose, onLoad }) {
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50" onClick={onClose}>
       <div className="bg-gradient-to-br from-gray-900 to-black border border-white/20 rounded-2xl p-6 max-w-3xl w-full max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
-        <h3 className="text-2xl font-bold mb-4 flex items-center gap-2">
+        <h3 className="text-2xl font-bold mb-4 flex items-center gap-2 text-white">
           <FolderOpen size={24} className="text-[#E31E24]" />
           הפרויקטים שלי
         </h3>
@@ -515,38 +516,35 @@ export default function VideoEditor() {
   }
 
   return (
-    <div className="min-h-screen bg-black text-white flex flex-col">
+    <div className="min-h-screen bg-gray-50 flex flex-col">
       {/* Header */}
-      <div className="bg-gradient-to-r from-[#E31E24]/20 to-black border-b border-[#E31E24]/30 p-4 shrink-0">
+      <div className="bg-gradient-to-r from-purple-600 to-blue-600 border-b border-purple-300 p-4 shrink-0">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
             <a 
               href="/"
-              className="px-4 py-2 border border-white/20 text-white hover:bg-white/10 rounded-md transition-colors text-sm"
+              className="px-4 py-2 border border-white/30 text-white hover:bg-white/20 rounded-md transition-colors text-sm"
             >
               ← חזרה לאתר
             </a>
             <div>
-              <h1 className="text-2xl font-bold">עורך סרטונים מתקדם</h1>
-              <p className="text-sm text-gray-400">ערוך, חבר והוסף אפקטים לסרטונים שלך</p>
+              <h1 className="text-2xl font-bold text-white">עורך סרטונים מתקדם</h1>
+              <p className="text-sm text-purple-100">ערוך, חבר והוסף אפקטים לסרטונים שלך</p>
             </div>
           </div>
           <div className="flex gap-2">
-            <Button onClick={() => setShowProjectsModal(true)} variant="outline" className="border-white/20 text-white hover:bg-white/10">
+            <Button onClick={() => setShowProjectsModal(true)} variant="outline" className="border-white/30 text-white hover:bg-white/20">
               <FolderOpen size={18} className="mr-2" />
               הפרויקטים שלי
             </Button>
-            <Button onClick={handleSaveProject} disabled={clips.length === 0} variant="outline" className="border-green-500/30 text-green-400 hover:bg-green-600/20">
+            <Button onClick={handleSaveProject} disabled={clips.length === 0} variant="outline" className="border-white/30 text-white hover:bg-white/20">
               <Save size={18} className="mr-2" />
               שמור פרויקט
             </Button>
             <Button onClick={handlePlayAll} disabled={clips.length === 0} className="bg-green-600 hover:bg-green-700 text-white font-bold">
               {playingAll ? <><Pause size={20} className="mr-2" />מפעיל...</> : <><Play size={20} className="mr-2" />הפעל הכל</>}
             </Button>
-            <button onClick={() => setVideoLoop(!videoLoop)} className={`px-3 py-2 rounded-lg text-sm font-semibold transition-all ${videoLoop ? 'bg-cyan-600/40 text-cyan-300 border border-cyan-500' : 'bg-white/10 text-gray-300 border border-white/20 hover:bg-white/20'}`}>
-              {videoLoop ? '🔄 לופ פעיל' : '🔄 לופ'}
-            </button>
-            <Button onClick={handleExport} disabled={clips.length === 0} className="bg-[#E31E24] hover:bg-[#B91C1C] text-white">
+            <Button onClick={handleExport} disabled={clips.length === 0} className="bg-purple-600 hover:bg-purple-700 text-white">
               <><Download size={18} className="mr-2" />ייצוא סרטון</>
             </Button>
           </div>
@@ -555,134 +553,32 @@ export default function VideoEditor() {
 
       <div className="flex-1 flex overflow-hidden" dir="rtl">
         {/* Main Content - Preview + Timeline */}
-        <div className="flex-1 flex flex-col bg-gradient-to-br from-gray-50 to-gray-100 overflow-hidden">
+        <div className="flex-1 flex flex-col bg-gray-50 overflow-hidden">
           {/* Preview - Top Center */}
-          <div className="flex-1 flex items-center justify-center p-6 relative overflow-auto">
+          <div className="flex-1 flex items-center justify-center p-6 bg-gradient-to-br from-gray-100 to-gray-200">
             {selectedClip ? (
-              <div className="relative w-full max-w-5xl">
-                <div className="absolute -top-2 -left-2 z-20 flex gap-2">
-                  {selectedClip.type === 'video' && (
-                    <button 
-                      onClick={async () => {
-                        try {
-                          const response = await fetch(selectedClip.url);
-                          const blob = await response.blob();
-                          const url = window.URL.createObjectURL(blob);
-                          const a = document.createElement('a');
-                          a.href = url;
-                          a.download = selectedClip.name || 'video.mp4';
-                          document.body.appendChild(a);
-                          a.click();
-                          window.URL.revokeObjectURL(url);
-                          document.body.removeChild(a);
-                          toast.success('הסרטון הורד בהצלחה! ⬇️');
-                        } catch (err) {
-                          toast.error('שגיאה בהורדה');
-                        }
-                      }}
-                      className="bg-green-600 hover:bg-green-700 p-3 rounded-full transition-all shadow-2xl"
-                      title="הורד סרטון"
-                    >
-                      <Download size={24} className="text-white" />
-                    </button>
-                  )}
-                  <button onClick={() => setSelectedClipIndex(null)} className="bg-red-600 hover:bg-red-700 p-3 rounded-full transition-all shadow-2xl">
-                    <X size={24} className="text-white" />
-                  </button>
-                </div>
-
-                <div className="relative bg-black rounded-2xl shadow-2xl p-2">
-                  <div className="relative">
-                    {selectedClip.type === 'image' ? (
-                      <img src={selectedClip.url} className="w-full rounded-xl" style={{ filter: `brightness(${selectedClip.filters.brightness}%) contrast(${selectedClip.filters.contrast}%) saturate(${selectedClip.filters.saturation}%)` }} alt={selectedClip.name} />
-                    ) : (
-                      <video ref={videoRef} src={selectedClip.localUrl || selectedClip.url} className="w-full rounded-xl" style={{ filter: `brightness(${selectedClip.filters.brightness}%) contrast(${selectedClip.filters.contrast}%) saturate(${selectedClip.filters.saturation}%)` }} controls />
-                    )}
-
-                    {/* Overlays Display */}
-                    {overlays.map((overlay, index) => (
-                      <div
-                        key={overlay.id}
-                        className="absolute cursor-move"
-                        style={{
-                          left: `${overlay.position.x}%`,
-                          top: `${overlay.position.y}%`,
-                          zIndex: 20 + index
-                        }}
-                        draggable
-                        onDragEnd={(e) => {
-                          const rect = e.currentTarget.parentElement.getBoundingClientRect();
-                          const x = ((e.clientX - rect.left) / rect.width) * 100;
-                          const y = ((e.clientY - rect.top) / rect.height) * 100;
-                          setOverlays(prev => prev.map(o => 
-                            o.id === overlay.id ? { ...o, position: { x: Math.max(0, Math.min(100, x)), y: Math.max(0, Math.min(100, y)) } } : o
-                          ));
-                        }}
-                      >
-                        {overlay.type === 'text' ? (
-                          <div
-                            style={{
-                              color: overlay.style.color,
-                              fontSize: `${overlay.style.fontSize}px`,
-                              textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
-                              fontWeight: 'bold',
-                              whiteSpace: 'nowrap'
-                            }}
-                          >
-                            {overlay.content}
-                          </div>
-                        ) : overlay.type === 'logo' ? (
-                          <img 
-                            src={overlay.url} 
-                            style={{ 
-                              width: `${overlay.size.width}px`, 
-                              height: `${overlay.size.height}px` 
-                            }} 
-                            alt="logo" 
-                          />
-                        ) : null}
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            setOverlays(prev => prev.filter(o => o.id !== overlay.id));
-                            toast.success('אלמנט הוסר');
-                          }}
-                          className="absolute -top-2 -right-2 bg-red-600 p-1 rounded-full hover:bg-red-700 transition-colors"
-                        >
-                          <X size={12} className="text-white" />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-
-                  {pipLayers.map((pip, index) => {
-                    const positionStyles = {
-                      'top-left': { top: `${pip.config.offsetY}px`, left: `${pip.config.offsetX}px` },
-                      'top-right': { top: `${pip.config.offsetY}px`, right: `${pip.config.offsetX}px` },
-                      'bottom-left': { bottom: `${pip.config.offsetY}px`, left: `${pip.config.offsetX}px` },
-                      'bottom-right': { bottom: `${pip.config.offsetY}px`, right: `${pip.config.offsetX}px` }
-                    };
-
-                    return (
-                      <div key={index} className="absolute" style={{ ...positionStyles[pip.config.position], width: `${pip.config.size}%`, opacity: pip.config.opacity / 100, zIndex: 10 + index }}>
-                        <video src={pip.video.localUrl || pip.video.url} className={`w-full ${pip.config.shape === 'circle' ? 'rounded-full' : 'rounded-xl'}`} style={{ border: `${pip.config.borderWidth}px solid ${pip.config.borderColor}`, boxShadow: pip.config.shadow ? '0 10px 40px rgba(0,0,0,0.5)' : 'none' }} autoPlay loop muted />
-                        <button onClick={() => setPipLayers(prev => prev.filter((_, i) => i !== index))} className="absolute -top-2 -right-2 bg-red-600 p-1 rounded-full hover:bg-red-700 transition-colors">
-                          <X size={14} className="text-white" />
-                        </button>
-                      </div>
-                    );
-                  })}
-
-                  {playingAll && (
-                    <div className="absolute top-4 left-4 bg-green-600/90 backdrop-blur-sm px-4 py-2 rounded-full flex items-center gap-2 animate-pulse">
-                      <Play size={16} className="text-white" />
-                      <span className="text-white font-bold text-sm">מפעיל {selectedClipIndex + 1}/{clips.length}</span>
-                    </div>
+              <div className="relative w-full max-w-4xl">
+                <div className="relative bg-black rounded-2xl shadow-2xl overflow-hidden">
+                  {selectedClip.type === 'image' ? (
+                    <img 
+                      src={selectedClip.url} 
+                      className="w-full" 
+                      style={{ filter: `brightness(${selectedClip.filters.brightness}%) contrast(${selectedClip.filters.contrast}%) saturate(${selectedClip.filters.saturation}%)` }} 
+                      alt={selectedClip.name} 
+                    />
+                  ) : (
+                    <video 
+                      ref={videoRef} 
+                      src={selectedClip.localUrl || selectedClip.url} 
+                      className="w-full" 
+                      style={{ filter: `brightness(${selectedClip.filters.brightness}%) contrast(${selectedClip.filters.contrast}%) saturate(${selectedClip.filters.saturation}%)` }} 
+                      controls 
+                    />
                   )}
                 </div>
-                <div className="mt-3 flex items-center justify-between text-sm">
-                  <div className="text-gray-600">קליפ {selectedClipIndex + 1}/{clips.length} • {selectedClip.name}</div>
-                  {pipLayers.length > 0 && <div className="text-cyan-600 text-xs">{pipLayers.length} PIP Layers</div>}
+                <div className="mt-3 text-center">
+                  <p className="text-gray-600 text-sm">קליפ {selectedClipIndex + 1}/{clips.length}</p>
+                  <p className="text-gray-500 text-xs">{selectedClip.duration?.toFixed(1)}s • {selectedClip.name}</p>
                 </div>
               </div>
             ) : (
@@ -694,29 +590,17 @@ export default function VideoEditor() {
           </div>
 
           {/* Timeline - Bottom */}
-          <div className="h-48 bg-white border-t border-gray-300 p-3 shrink-0 overflow-x-scroll overflow-y-hidden">
+          <div className="h-40 bg-white border-t border-gray-300 p-3 shrink-0">
             {clips.length === 0 ? (
                 <div className="flex items-center justify-center h-full border-2 border-dashed border-gray-300 rounded-xl bg-gray-50">
                   <div className="text-center">
                     <Film size={48} className="mx-auto mb-2 opacity-30 text-gray-400" />
-                    <p className="text-gray-500">גרור סרטונים לכאן או לחץ "העלה"</p>
+                    <p className="text-gray-500 text-sm">גרור סרטונים לכאן או לחץ "העלה" בסרגל הימני</p>
                   </div>
                 </div>
               ) : (
-                <div className="relative bg-gray-100 rounded-xl border border-gray-300 p-3 overflow-x-scroll overflow-y-hidden min-w-max">
-                  {/* Time ruler */}
-                  <div className="flex items-center gap-1 mb-2 text-[9px] text-gray-500 px-1 flex-shrink-0">
-                  {Array.from({ length: Math.ceil(totalDuration) + 1 }).map((_, i) => (
-                    <div key={i} className="flex-shrink-0 flex flex-col items-start" style={{ width: '70px' }}>
-                      <div className="border-l border-gray-400 h-3 w-px"></div>
-                      <span className="text-gray-600 font-semibold text-[10px]">{i}s</span>
-                    </div>
-                  ))}
-                  </div>
-
-                {/* Clips Track */}
-                <div className="relative min-w-max">
-                    <div className="flex items-center gap-0 h-28 relative min-w-max bg-gray-50 rounded-lg p-2 border border-gray-200">
+                <div className="h-full overflow-x-scroll overflow-y-hidden">
+                  <div className="flex items-center gap-1 h-full min-w-max pb-2">
                       {clips.map((clip, index) => {
                           const widthPerSecond = 70;
                           const clipWidth = Math.max(80, (clip.duration || 1) * widthPerSecond);
@@ -729,40 +613,13 @@ export default function VideoEditor() {
                                 initial={{ scale: 0.9, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
                                 exit={{ scale: 0.9, opacity: 0 }}
-                                className={`relative rounded-xl overflow-hidden flex-shrink-0 transition-all group border-2 ${selectedClipIndex === index ? 'ring-4 ring-blue-500 shadow-xl border-blue-500' : 'border-gray-300 hover:border-blue-400'}`}
+                                className={`relative rounded-lg overflow-hidden flex-shrink-0 transition-all group border-2 cursor-pointer ${selectedClipIndex === index ? 'ring-4 ring-blue-500 border-blue-500' : 'border-gray-300 hover:border-blue-400'}`}
                                 style={{ 
                                   width: `${clipWidth}px`,
-                                  height: '100px',
-                                  cursor: 'pointer',
+                                  height: '110px',
                                   backgroundColor: '#fff'
                                 }}
                                 onClick={() => setSelectedClipIndex(index)}
-                                onContextMenu={(e) => {
-                                  e.preventDefault();
-                                  setContextMenu({ x: e.clientX, y: e.clientY });
-                                  setContextClipIndex(index);
-                                }}
-                                draggable
-                                onDragStart={(e) => {
-                                  e.dataTransfer.effectAllowed = 'move';
-                                  e.dataTransfer.setData('clipIndex', index.toString());
-                                  setSelectedClipIndex(index);
-                                }}
-                                onDragOver={(e) => {
-                                  e.preventDefault();
-                                  e.dataTransfer.dropEffect = 'move';
-                                }}
-                                onDrop={(e) => {
-                                  e.preventDefault();
-                                  const sourceIndex = parseInt(e.dataTransfer.getData('clipIndex'));
-                                  if (sourceIndex !== index) {
-                                    const newClips = [...clips];
-                                    const [movedClip] = newClips.splice(sourceIndex, 1);
-                                    newClips.splice(index, 0, movedClip);
-                                    setClips(newClips);
-                                    toast.success('קליפים סודרו מחדש!');
-                                  }
-                                }}
                               >
                                 {/* Thumbnail - Visible Video Preview */}
                                 <div className="absolute inset-0">
@@ -780,93 +637,35 @@ export default function VideoEditor() {
                                       playsInline
                                     />
                                   )}
-                                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
                                 </div>
 
                                 {/* Clip Info */}
-                                <div className="absolute bottom-0 left-0 right-0 p-2 text-[9px]">
-                                  <div className="font-semibold truncate text-white mb-1 drop-shadow-lg">{clip.name}</div>
-                                  <div className="flex items-center justify-between">
-                                    <div className="text-white font-bold bg-black/70 px-1.5 py-0.5 rounded text-[10px]">{clip.duration?.toFixed(1)}s</div>
-                                  </div>
+                                <div className="absolute bottom-0 left-0 right-0 p-2">
+                                  <p className="text-white text-[10px] font-semibold truncate drop-shadow">{clip.name}</p>
+                                  <p className="text-white text-[9px] bg-black/60 px-1 py-0.5 rounded inline-block">{clip.duration?.toFixed(1)}s</p>
                                 </div>
 
                                 {/* Delete Button */}
                                 <button 
                                   onClick={(e) => { e.stopPropagation(); removeClip(index); }} 
-                                  className="absolute top-1 left-1 p-1 bg-red-500 rounded-full hover:bg-red-600 transition-colors opacity-0 group-hover:opacity-100 z-10 shadow-lg"
+                                  className="absolute top-1 left-1 p-1 bg-red-500 rounded-full hover:bg-red-600 opacity-0 group-hover:opacity-100 transition-all z-10 shadow-lg"
                                 >
                                   <Trash2 size={12} className="text-white" />
                                 </button>
-
-                                {/* Resize Handles */}
-                                <div
-                                  className="absolute left-0 top-0 bottom-0 w-3 bg-blue-500 cursor-ew-resize hover:w-4 transition-all z-40 opacity-0 group-hover:opacity-90"
-                                  onMouseDown={(e) => {
-                                    e.stopPropagation();
-                                    e.preventDefault();
-                                    const startX = e.clientX;
-                                    const startDuration = clip.duration || 1;
-                                    const widthPerSecond = 60;
-
-                                    const handleMouseMove = (moveE) => {
-                                      const deltaX = startX - moveE.clientX;
-                                      const deltaDuration = deltaX / widthPerSecond;
-                                      const newDuration = Math.max(0.5, startDuration + deltaDuration);
-                                      setClips(prev => prev.map((c, i) => 
-                                        i === index ? { ...c, duration: parseFloat(newDuration.toFixed(2)) } : c
-                                      ));
-                                    };
-
-                                    const handleMouseUp = () => {
-                                      document.removeEventListener('mousemove', handleMouseMove);
-                                      document.removeEventListener('mouseup', handleMouseUp);
-                                    };
-
-                                    document.addEventListener('mousemove', handleMouseMove);
-                                    document.addEventListener('mouseup', handleMouseUp);
-                                  }}
-                                />
-                                <div
-                                  className="absolute right-0 top-0 bottom-0 w-3 bg-blue-500 cursor-ew-resize hover:w-4 transition-all z-40 opacity-0 group-hover:opacity-90"
-                                  onMouseDown={(e) => {
-                                    e.stopPropagation();
-                                    e.preventDefault();
-                                    const startX = e.clientX;
-                                    const startDuration = clip.duration || 1;
-                                    const widthPerSecond = 60;
-
-                                    const handleMouseMove = (moveE) => {
-                                      const deltaX = moveE.clientX - startX;
-                                      const deltaDuration = deltaX / widthPerSecond;
-                                      const newDuration = Math.max(0.5, startDuration + deltaDuration);
-                                      setClips(prev => prev.map((c, i) => 
-                                        i === index ? { ...c, duration: parseFloat(newDuration.toFixed(2)) } : c
-                                      ));
-                                    };
-
-                                    const handleMouseUp = () => {
-                                      document.removeEventListener('mousemove', handleMouseMove);
-                                      document.removeEventListener('mouseup', handleMouseUp);
-                                    };
-
-                                    document.addEventListener('mousemove', handleMouseMove);
-                                    document.addEventListener('mouseup', handleMouseUp);
-                                  }}
-                                />
                               </motion.div>
 
                               {/* Transition Button */}
                               {index < clips.length - 1 && (
-                                <div className="relative flex-shrink-0 cursor-pointer flex items-center justify-center" style={{ width: '50px' }}>
+                                <div className="flex-shrink-0 flex items-center justify-center" style={{ width: '50px' }}>
                                   {transition && transition !== 'cut' ? (
                                     <div className="flex flex-col items-center gap-1">
                                       <div className="w-10 h-10 rounded-lg bg-purple-500 flex items-center justify-center shadow-md">
                                         <Sparkles size={18} className="text-white" />
                                       </div>
-                                      <div className="text-[8px] text-gray-600 font-semibold">
+                                      <span className="text-[8px] text-gray-600 font-semibold">
                                         {transition}
-                                      </div>
+                                      </span>
                                     </div>
                                   ) : (
                                     <button
@@ -892,59 +691,59 @@ export default function VideoEditor() {
         </div>
 
         {/* Right Sidebar - Tools */}
-        <div className="w-20 bg-white border-r border-gray-300 p-2 overflow-y-auto flex flex-col gap-3 items-center relative z-10">
+        <div className="w-20 bg-white border-r border-gray-300 p-2 overflow-y-auto flex flex-col gap-2 items-center relative z-10">
           <input type="file" accept="video/mp4,video/webm,video/ogg,video/quicktime,video/x-msvideo,video/x-matroska,image/png,image/jpeg,image/jpg,image/gif" onChange={handleAddClip} className="hidden" id="video-upload" />
-          <button onClick={() => document.getElementById('video-upload').click()} className="flex flex-col items-center gap-1 p-3 hover:bg-gray-100 rounded-lg transition-colors w-full group" title="העלה">
-            <Upload size={24} className="text-gray-700 group-hover:text-blue-600" />
-            <span className="text-[9px] text-gray-600 group-hover:text-blue-600">העלה</span>
+          <button onClick={() => document.getElementById('video-upload').click()} className="flex flex-col items-center gap-1 p-2 hover:bg-gray-100 rounded-lg w-full" title="העלה">
+            <Upload size={24} className="text-gray-700" />
+            <span className="text-[9px] text-gray-600">העלה</span>
           </button>
 
-          <button onClick={() => setShowSampleVideosModal(true)} className="flex flex-col items-center gap-1 p-3 hover:bg-gray-100 rounded-lg transition-colors w-full group" title="דוגמאות">
-            <Play size={24} className="text-gray-700 group-hover:text-green-600" />
-            <span className="text-[9px] text-gray-600 group-hover:text-green-600">סרטונים</span>
+          <button onClick={() => setShowSampleVideosModal(true)} className="flex flex-col items-center gap-1 p-2 hover:bg-gray-100 rounded-lg w-full" title="דוגמאות">
+            <Play size={24} className="text-gray-700" />
+            <span className="text-[9px] text-gray-600">סרטונים</span>
           </button>
 
-          <button onClick={() => setShowLumaGeneratorModal(true)} className="flex flex-col items-center gap-1 p-3 hover:bg-gray-100 rounded-lg transition-colors w-full group" title="AI">
-            <Sparkles size={24} className="text-gray-700 group-hover:text-purple-600" />
-            <span className="text-[9px] text-gray-600 group-hover:text-purple-600">AI</span>
+          <button onClick={() => setShowLumaGeneratorModal(true)} className="flex flex-col items-center gap-1 p-2 hover:bg-gray-100 rounded-lg w-full" title="AI">
+            <Sparkles size={24} className="text-gray-700" />
+            <span className="text-[9px] text-gray-600">AI</span>
           </button>
 
-          <button onClick={() => setShowAIImageModal(true)} className="flex flex-col items-center gap-1 p-3 hover:bg-gray-100 rounded-lg transition-colors w-full group" title="תמונה">
-            <ImageIcon size={24} className="text-gray-700 group-hover:text-pink-600" />
-            <span className="text-[9px] text-gray-600 group-hover:text-pink-600">תמונה</span>
+          <button onClick={() => setShowAIImageModal(true)} className="flex flex-col items-center gap-1 p-2 hover:bg-gray-100 rounded-lg w-full" title="תמונה">
+            <ImageIcon size={24} className="text-gray-700" />
+            <span className="text-[9px] text-gray-600">תמונה</span>
           </button>
 
-          <button onClick={() => setShowKlingCharacterModal(true)} className="flex flex-col items-center gap-1 p-3 hover:bg-gray-100 rounded-lg transition-colors w-full group" title="דמות">
-            <User size={24} className="text-gray-700 group-hover:text-purple-600" />
-            <span className="text-[9px] text-gray-600 group-hover:text-purple-600">דמות</span>
+          <button onClick={() => setShowKlingCharacterModal(true)} className="flex flex-col items-center gap-1 p-2 hover:bg-gray-100 rounded-lg w-full" title="דמות">
+            <User size={24} className="text-gray-700" />
+            <span className="text-[9px] text-gray-600">דמות</span>
           </button>
 
           <input type="file" accept="audio/*" onChange={handleAddAudio} className="hidden" id="audio-upload" />
-          <button onClick={() => document.getElementById('audio-upload').click()} className="flex flex-col items-center gap-1 p-3 hover:bg-gray-100 rounded-lg transition-colors w-full group" title="מוזיקה">
-            <Music size={24} className="text-gray-700 group-hover:text-blue-600" />
-            <span className="text-[9px] text-gray-600 group-hover:text-blue-600">מוזיקה</span>
+          <button onClick={() => document.getElementById('audio-upload').click()} className="flex flex-col items-center gap-1 p-2 hover:bg-gray-100 rounded-lg w-full" title="מוזיקה">
+            <Music size={24} className="text-gray-700" />
+            <span className="text-[9px] text-gray-600">מוזיקה</span>
           </button>
 
-          <button onClick={() => setShowOverlayModal(true)} className="flex flex-col items-center gap-1 p-3 hover:bg-gray-100 rounded-lg transition-colors w-full group" title="טקסט">
-            <Type size={24} className="text-gray-700 group-hover:text-blue-600" />
-            <span className="text-[9px] text-gray-600 group-hover:text-blue-600">טקסט</span>
+          <button onClick={() => setShowOverlayModal(true)} className="flex flex-col items-center gap-1 p-2 hover:bg-gray-100 rounded-lg w-full" title="טקסט">
+            <Type size={24} className="text-gray-700" />
+            <span className="text-[9px] text-gray-600">טקסט</span>
           </button>
 
-          <button onClick={() => setShowElementsModal(true)} className="flex flex-col items-center gap-1 p-3 hover:bg-gray-100 rounded-lg transition-colors w-full group" title="אלמנטים">
-            <Sparkles size={24} className="text-gray-700 group-hover:text-yellow-600" />
-            <span className="text-[9px] text-gray-600 group-hover:text-yellow-600">אלמנטים</span>
+          <button onClick={() => setShowElementsModal(true)} className="flex flex-col items-center gap-1 p-2 hover:bg-gray-100 rounded-lg w-full" title="אלמנטים">
+            <Sparkles size={24} className="text-gray-700" />
+            <span className="text-[9px] text-gray-600">אלמנטים</span>
           </button>
 
-          <div className="border-t border-gray-300 w-full my-2"></div>
+          <div className="border-t border-gray-300 w-full my-1"></div>
 
-          <button onClick={() => setShowEffectsModal(true)} className="flex flex-col items-center gap-1 p-3 hover:bg-gray-100 rounded-lg transition-colors w-full group" title="אפקטים">
-            <Sparkles size={24} className="text-gray-700 group-hover:text-pink-600" />
-            <span className="text-[9px] text-gray-600 group-hover:text-pink-600">אפקטים</span>
+          <button onClick={() => setShowEffectsModal(true)} className="flex flex-col items-center gap-1 p-2 hover:bg-gray-100 rounded-lg w-full" title="אפקטים">
+            <Sparkles size={24} className="text-gray-700" />
+            <span className="text-[9px] text-gray-600">אפקטים</span>
           </button>
 
-          <button onClick={() => setShowResizeModal(true)} className="flex flex-col items-center gap-1 p-3 hover:bg-gray-100 rounded-lg transition-colors w-full group" title="גודל">
-            <Film size={24} className="text-gray-700 group-hover:text-green-600" />
-            <span className="text-[9px] text-gray-600 group-hover:text-green-600">גודל</span>
+          <button onClick={() => setShowResizeModal(true)} className="flex flex-col items-center gap-1 p-2 hover:bg-gray-100 rounded-lg w-full" title="גודל">
+            <Film size={24} className="text-gray-700" />
+            <span className="text-[9px] text-gray-600">גודל</span>
           </button>
         </div>
       </div>
@@ -970,7 +769,7 @@ export default function VideoEditor() {
             try {
               const { data } = await base44.functions.invoke('generateElevenLabsSpeech', { text, voice_id: voice });
               if (data.audio_url) {
-                setAudioTrack({ url: data.audio_url, name: 'דיבוב - ' + voice, volume: 100 });
+                setAudioTrack({ url: data.audio_url, name: 'דיבוב - ' + voice, volume: 100, loop: false });
                 toast.success('דיבוב ElevenLabs נוסף! 🎙️');
               } else {
                 toast.error('לא הצליח ליצור דיבוב');
@@ -1015,7 +814,7 @@ export default function VideoEditor() {
             try {
               const { data } = await base44.functions.invoke('generateElevenLabsSpeech', { text, voice_id: voice });
               if (data.audio_url) {
-                setAudioTrack({ url: data.audio_url, name: 'דיבוב - ' + voice, volume: 100 });
+                setAudioTrack({ url: data.audio_url, name: 'דיבוב - ' + voice, volume: 100, loop: false });
                 toast.success('דיבוב ElevenLabs נוסף! 🎙️');
                 setShowAdvancedTTSModal(false);
               } else {
@@ -1030,8 +829,7 @@ export default function VideoEditor() {
         />
       )}
 
-      {showAdCreatorModal && <AdCreatorModal onClose={() => setShowAdCreatorModal(false)} onApply={(adClip) => { setClips(prev => [...prev, adClip]); setShowAdCreatorModal(false); toast.success('פרסומה נוספה לעורך! 📢'); }} />}
-
+      {showAdCreatorModal && <AdCreatorModal onClose={() => setShowAdCreatorModal(false)} onApply={(adClip) => { setClips(prev => [...prev, adClip]); setShowAdCreatorModal(false); toast.success('פרסומת נוספה לעורך! 📢'); }} />}
 
 
       {showAIVideoFromImagesModal && <AIVideoFromImagesModal onClose={() => setShowAIVideoFromImagesModal(false)} onApply={(clips) => { setClips(prev => [...prev, ...clips]); setShowAIVideoFromImagesModal(false); }} />}
@@ -1098,292 +896,77 @@ export default function VideoEditor() {
       )}
 
       {showLumaGeneratorModal && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50" onClick={() => setShowLumaGeneratorModal(false)}>
-          <div className="bg-gradient-to-br from-purple-900/90 to-black border border-purple-500/30 rounded-2xl p-6 max-w-2xl w-full" onClick={(e) => e.stopPropagation()}>
-            <h3 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
-              <Sparkles size={24} className="text-purple-400" />
-              {selectedClip && selectedClip.type === 'video' ? 'המשך סרטון קיים' : 'מחולל סרטונים AI'}
-            </h3>
-            
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-semibold text-white mb-2">תיאור הסרטון</label>
-                <Textarea id="luma-prompt" placeholder="לדוגמה: דרקון זהוב עף מעל הרים מושלגים בשקיעה..." className="bg-black/60 border-purple-500/30 text-white placeholder-white/40 resize-none" rows={3} />
-                <p className="text-xs text-gray-400 mt-1">💡 תאר תנועות, אפקטים, ושינויים שתרצה לראות</p>
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-white mb-2 flex items-center gap-2">
-                  <Volume2 size={16} className="text-purple-400" />
-                  טקסט לדיבוב (אופציונלי)
-                </label>
-                <Textarea id="luma-voice-script" placeholder="הטקסט שיוקרא בסרטון... אם ריק - ישתמש בתיאור הסרטון" className="bg-black/60 border-purple-500/30 text-white placeholder-white/40 resize-none" rows={2} />
-                <div className="flex items-center gap-2 mt-2">
-                  <input type="checkbox" id="add-voice-checkbox" defaultChecked className="w-4 h-4 rounded bg-black/60 border-purple-500/30" />
-                  <label htmlFor="add-voice-checkbox" className="text-xs text-gray-300">הוסף דיבוב אוטומטי (ElevenLabs)</label>
-                </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-white mb-2">יחס תצוגה</label>
-                <div className="grid grid-cols-3 gap-3">
-                  {[
-                    { value: "16:9", label: "רחב (16:9)", icon: Film },
-                    { value: "9:16", label: "אנכי (9:16)", icon: Film },
-                    { value: "1:1", label: "מרובע (1:1)", icon: Film }
-                  ].map((option) => (
-                    <button
-                      key={option.value}
-                      onClick={(e) => {
-                        document.querySelectorAll('[data-aspect-ratio]').forEach(el => el.classList.remove('border-purple-500', 'bg-purple-500/20'));
-                        e.currentTarget.classList.add('border-purple-500', 'bg-purple-500/20');
-                        e.currentTarget.setAttribute('data-selected', 'true');
-                      }}
-                      data-aspect-ratio={option.value}
-                      className={`p-3 rounded-xl border-2 transition-all flex flex-col items-center gap-1 ${option.value === '16:9' ? 'border-purple-500 bg-purple-500/20 text-white' : 'border-purple-500/30 bg-black/40 text-gray-400 hover:border-purple-500/50'}`}
-                    >
-                      <option.icon size={20} />
-                      <span className="text-xs font-semibold">{option.label}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="bg-purple-600/10 border border-purple-500/30 rounded-xl p-4">
-                <p className="text-sm text-purple-200 font-semibold mb-2 flex items-center gap-2">
-                  <Sparkles size={16} />
-                  טיפים ליצירת סרטון מושלם:
-                </p>
-                <ul className="text-xs text-purple-300 space-y-1">
-                  <li>• תאר תנועות ספציפיות: "הדמות מסתובבת ימינה"</li>
-                  <li>• הוסף פרטי תאורה: "באור זהוב", "בשקיעה"</li>
-                  <li>• ציין מהירות: "בתנועה איטית", "במהירות"</li>
-                  <li>• תאר אפקטים: "עם עשן ברקע", "ניצוצות"</li>
-                </ul>
-              </div>
-
-              <div className="flex gap-2">
-                <Button onClick={() => setShowLumaGeneratorModal(false)} variant="outline" className="flex-1 border-white/20 text-white hover:bg-white/10">
-                  ביטול
-                </Button>
-                <Button
-                  onClick={async () => {
-                    const prompt = document.getElementById('luma-prompt').value;
-                    if (!prompt.trim()) {
-                      toast.error('אנא הזן תיאור לסרטון');
-                      return;
-                    }
-                    const aspectButton = document.querySelector('[data-aspect-ratio][data-selected="true"]');
-                    const aspectRatio = aspectButton?.getAttribute('data-aspect-ratio') || '16:9';
-                    
-                    const addVoice = document.getElementById('add-voice-checkbox')?.checked || false;
-                    const voiceScript = document.getElementById('luma-voice-script')?.value?.trim() || prompt;
-                    
-                    if (selectedClip && selectedClip.type === 'video') {
-                      setLoading(true);
-                      setShowLumaGeneratorModal(false);
-                      try {
-                        toast.info('מאריך סרטון עם דיבוב... עד דקה וחצי');
-                        const { data } = await base44.functions.invoke('createLumaVideo', { 
-                          prompt: prompt,
-                          aspectRatio: aspectRatio,
-                          imageUrl: selectedClip.url, // שלח את הסרטון הקודם כ-reference
-                          voice_script: voiceScript
-                        });
-
-                        if (data?.video_url) {
-                          const newClip = {
-                            id: Date.now(),
-                            url: data.video_url,
-                            localUrl: data.video_url,
-                            duration: 5,
-                            name: 'המשך - ' + prompt.substring(0, 30),
-                            thumbnail: data.thumbnail_url || data.video_url,
-                            filters: { brightness: 100, contrast: 100, saturation: 100 },
-                            volume: 100,
-                            type: 'video'
-                          };
-                          
-                          // הוסף את הקליפ החדש מיד אחרי הקליפ הנוכחי
-                          setClips(prev => {
-                            const currentIndex = selectedClipIndex;
-                            const updated = [
-                              ...prev.slice(0, currentIndex + 1),
-                              newClip,
-                              ...prev.slice(currentIndex + 1)
-                            ];
-                            setTimeout(() => setSelectedClipIndex(currentIndex + 1), 200);
-                            return updated;
-                          });
-
-                          if (data.audio_url) {
-                            setAudioTrack({ url: data.audio_url, name: 'דיבוב - ' + prompt.substring(0, 20), volume: 100, loop: false });
-                            toast.success('סרטון המשך + דיבוב נוספו! 🎬🎤');
-                          } else {
-                            toast.success('סרטון המשך נוסף! 🎬');
-                          }
-                        } else if (data?.still_processing) {
-                          toast.info('הסרטון בתהליך... נסה שוב בעוד רגע');
-                        } else {
-                          toast.error('לא התקבל סרטון: ' + JSON.stringify(data));
-                        }
-                      } catch (error) {
-                        toast.error('שגיאה: ' + error.message);
-                      } finally {
-                        setLoading(false);
-                      }
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl p-6 max-w-xl w-full" onClick={(e) => e.stopPropagation()}>
+            <h3 className="text-xl font-bold mb-4 text-gray-900">צור סרטון AI</h3>
+            <Textarea id="luma-prompt" placeholder="תאר את הסרטון..." rows={3} className="mb-4" />
+            <div className="flex gap-2">
+              <Button onClick={() => setShowLumaGeneratorModal(false)} variant="outline" className="flex-1">ביטול</Button>
+              <Button onClick={async () => {
+                const prompt = document.getElementById('luma-prompt')?.value;
+                if (!prompt?.trim()) { toast.error('הזן תיאור'); return; }
+                setShowLumaGeneratorModal(false);
+                setLoading(true);
+                try {
+                  toast.info('יוצר סרטון... ⏳');
+                  const { data } = await base44.functions.invoke('createLumaVideo', { prompt, aspectRatio: '16:9' });
+                  if (data?.video_url) {
+                    const newClip = {
+                      id: Date.now(),
+                      url: data.video_url,
+                      localUrl: data.video_url,
+                      duration: 5, // Default duration, actual might be different
+                      name: prompt.substring(0, 30),
+                      thumbnail: data.thumbnail_url || data.video_url,
+                      filters: { brightness: 100, contrast: 100, saturation: 100 },
+                      volume: 100,
+                      type: 'video'
+                    };
+                    setClips(prev => {
+                      const updated = [...prev, newClip];
+                      setTimeout(() => setSelectedClipIndex(updated.length - 1), 200);
+                      return updated;
+                    });
+                    if (data.audio_url) {
+                      setAudioTrack({ url: data.audio_url, name: 'דיבוב - ' + prompt.substring(0, 20), volume: 100, loop: false });
+                      toast.success('סרטון חדש + דיבוב נוספו! 🎬🎤');
                     } else {
-                      setLoading(true);
-                      setShowLumaGeneratorModal(false);
-                      try {
-                        toast.info('יוצר סרטון עם דיבוב... עד דקה');
-                        const { data } = await base44.functions.invoke('createLumaVideo', { 
-                          prompt: prompt,
-                          aspectRatio: aspectRatio,
-                          voice_script: voiceScript
-                        });
-
-                        if (data?.video_url) {
-                          const newClip = {
-                            id: Date.now(),
-                            url: data.video_url,
-                            localUrl: data.video_url,
-                            duration: 5,
-                            name: prompt.substring(0, 30),
-                            thumbnail: data.thumbnail_url || data.video_url,
-                            filters: { brightness: 100, contrast: 100, saturation: 100 },
-                            volume: 100,
-                            type: 'video'
-                          };
-                          setClips(prev => {
-                            const updated = [...prev, newClip];
-                            setTimeout(() => setSelectedClipIndex(updated.length - 1), 200);
-                            return updated;
-                          });
-
-                          if (data.audio_url) {
-                            setAudioTrack({ url: data.audio_url, name: 'דיבוב - ' + prompt.substring(0, 20), volume: 100, loop: false });
-                            toast.success('סרטון חדש + דיבוב נוספו! 🎬🎤');
-                          } else {
-                            toast.success('סרטון חדש נוסף! 🎬');
-                          }
-                        } else if (data?.still_processing) {
-                          toast.info('הסרטון בתהליך... נסה שוב בעוד רגע');
-                        } else {
-                          toast.error('לא התקבל סרטון: ' + JSON.stringify(data));
-                        }
-                      } catch (error) {
-                        toast.error('שגיאה: ' + error.message);
-                      } finally {
-                        setLoading(false);
-                      }
+                      toast.success('סרטון חדש נוסף! 🎬');
                     }
-                  }}
-                  disabled={loading}
-                  className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-500 hover:to-pink-500 text-white"
-                >
-                  {loading ? <><Loader2 size={18} className="mr-2 animate-spin" />יוצר...</> : <><Sparkles size={18} className="mr-2" />{selectedClip && selectedClip.type === 'video' ? 'המשך סרטון' : 'צור סרטון'}</>}
-                </Button>
-              </div>
+                  } else if (data?.still_processing) {
+                    toast.info('הסרטון בתהליך... נסה שוב בעוד רגע');
+                  } else {
+                    toast.error('לא התקבל סרטון: ' + JSON.stringify(data));
+                  }
+                } catch (err) { toast.error('שגיאה: ' + err.message); } finally { setLoading(false); }
+              }} className="flex-1 bg-purple-600 text-white">
+                {loading ? <><Loader2 size={18} className="mr-2 animate-spin" />יוצר...</> : <><Sparkles size={18} className="mr-2" />צור סרטון</>}
+              </Button>
             </div>
           </div>
         </div>
       )}
 
       {showOverlayModal && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 z-50">
-          <div className="bg-gradient-to-br from-gray-900 to-black border border-white/20 rounded-2xl p-6 max-w-md w-full">
-            <h3 className="text-xl font-bold mb-4">הוסף טקסט או לוגו</h3>
-            
-            <div className="space-y-4">
-              <div>
-                <label className="text-sm text-gray-400 mb-2 block">טקסט</label>
-                <Input id="overlay-text" placeholder="הכנס טקסט..." className="bg-white/5 border-white/20 text-white" />
-                <div className="flex gap-2 mt-2">
-                  <Input id="text-color" type="color" defaultValue="#ffffff" className="w-20 h-10" />
-                  <Input id="text-size" type="number" placeholder="גודל" defaultValue="24" className="flex-1 bg-white/5 border-white/20 text-white" />
-                </div>
-                <Button onClick={() => {
-                  const text = document.getElementById('overlay-text')?.value;
-                  const color = document.getElementById('text-color')?.value || '#ffffff';
-                  const fontSize = parseInt(document.getElementById('text-size')?.value || '24');
-                  if (text && text.trim()) {
-                    const newOverlay = {
-                      id: Date.now(),
-                      type: 'text',
-                      content: text,
-                      position: { x: 50, y: 50 },
-                      style: { fontSize, color }
-                    };
-                    setOverlays(prev => [...prev, newOverlay]);
-                    setShowOverlayModal(false);
-                    toast.success('טקסט נוסף בהצלחה!');
-                    
-                    // Clear inputs
-                    if (document.getElementById('overlay-text')) document.getElementById('overlay-text').value = '';
-                  } else {
-                    toast.error('אנא הזן טקסט');
-                  }
-                }} className="w-full mt-2 bg-blue-600 hover:bg-blue-700 text-white">
-                  <Type size={18} className="mr-2" />
-                  הוסף טקסט
-                </Button>
-              </div>
-
-              <div className="border-t border-white/20 pt-4">
-                <label className="text-sm text-gray-400 mb-2 block">לוגו / תמונה</label>
-                <input type="file" accept="image/*" id="logo-upload" className="hidden" onChange={async (e) => {
-                  const file = e.target.files[0];
-                  if (file) {
-                    try {
-                      setLoading(true);
-                      const uploadResult = await base44.integrations.Core.UploadFile({ file });
-                      const newOverlay = {
-                        id: Date.now(),
-                        type: 'logo',
-                        url: uploadResult.file_url,
-                        position: { x: 10, y: 10 },
-                        size: { width: 100, height: 100 }
-                      };
-                      setOverlays(prev => [...prev, newOverlay]);
-                      setShowOverlayModal(false);
-                      toast.success('לוגו נוסף בהצלחה!');
-                    } catch (error) {
-                      console.error('Logo upload error:', error);
-                      toast.error('שגיאה בהעלאת לוגו: ' + (error.message || 'Unknown error'));
-                    } finally {
-                      setLoading(false);
-                    }
-                  }
-                }} />
-                <Button onClick={() => document.getElementById('logo-upload').click()} className="w-full bg-purple-600 hover:bg-purple-700 text-white">
-                  <ImageIcon size={18} className="mr-2" />
-                  העלה לוגו
-                </Button>
-              </div>
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center p-4 z-50">
+          <div className="bg-white rounded-2xl p-6 max-w-md w-full">
+            <h3 className="text-xl font-bold mb-4 text-gray-900">הוסף טקסט</h3>
+            <Input id="overlay-text" placeholder="הכנס טקסט..." className="mb-3" />
+            <div className="flex gap-2 mb-4">
+              <Input id="text-color" type="color" defaultValue="#ffffff" className="w-20" />
+              <Input id="text-size" type="number" placeholder="גודל" defaultValue="24" />
             </div>
-
-            <div className="flex gap-2 mt-6">
-              <Button onClick={() => setShowOverlayModal(false)} variant="outline" className="flex-1 border-white/20 text-white hover:bg-white/10">
-                סגור
-              </Button>
+            <div className="flex gap-2">
+              <Button onClick={() => setShowOverlayModal(false)} variant="outline" className="flex-1">ביטול</Button>
+              <Button onClick={() => {
+                const text = document.getElementById('overlay-text')?.value;
+                if (text?.trim()) {
+                  setOverlays(prev => [...prev, { id: Date.now(), type: 'text', content: text, position: { x: 50, y: 50 }, style: { fontSize: parseInt(document.getElementById('text-size')?.value || '24'), color: document.getElementById('text-color')?.value || '#ffffff' } }]);
+                  setShowOverlayModal(false);
+                  toast.success('טקסט נוסף!');
+                }
+              }} className="flex-1 bg-blue-600">הוסף</Button>
             </div>
-
-            {overlays.length > 0 && (
-              <div className="mt-4 border-t border-white/20 pt-4">
-                <p className="text-xs text-gray-400 mb-2">אלמנטים קיימים:</p>
-                <div className="space-y-1">
-                  {overlays.map(overlay => (
-                    <div key={overlay.id} className="flex items-center justify-between text-xs bg-white/5 p-2 rounded">
-                      <span>{overlay.type === 'text' ? overlay.content : 'לוגו'}</span>
-                      <button onClick={() => setOverlays(prev => prev.filter(o => o.id !== overlay.id))} className="text-red-400 hover:text-red-300">
-                        <Trash2 size={14} />
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
         </div>
       )}
