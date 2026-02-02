@@ -34,13 +34,13 @@ Deno.serve(async (req) => {
         video_inputs: [{
           character: {
             type: 'avatar',
-            avatar_id: 'josh_lite3_20230714',
+            avatar_id: 'Kristin_public_3_20240108',
             avatar_style: 'normal'
           },
           voice: {
             type: 'text',
             input_text: script,
-            voice_id: '2d5b0e6cf36f460aa7fc47e3eee4ba54'
+            voice_id: '1bd001e7e50f421d891986aad5158bc8'
           }
         }],
         dimension: {
