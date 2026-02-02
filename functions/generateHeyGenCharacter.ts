@@ -2,26 +2,37 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
 
 Deno.serve(async (req) => {
   try {
+    console.log('========== START ==========');
+    
     const base44 = createClientFromRequest(req);
+    console.log('✓ Base44 client created');
+    
     const user = await base44.auth.me();
+    console.log('✓ User authenticated:', user?.email);
     
     if (!user) {
+      console.error('✗ No user');
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { script } = await req.json();
+    const body = await req.json();
+    console.log('✓ Body parsed:', body);
+    
+    const { script } = body;
     
     if (!script || !script.trim()) {
+      console.error('✗ No script');
       return Response.json({ error: 'Script is required' }, { status: 400 });
     }
 
     const apiKey = Deno.env.get('HEYGEN_API_KEY');
+    console.log('✓ API Key exists:', apiKey ? 'YES' : 'NO');
     
     if (!apiKey) {
       return Response.json({ error: 'HEYGEN_API_KEY not configured' }, { status: 500 });
     }
 
-    console.log('Starting video generation...');
+    console.log('✓ Starting generation with script:', script.substring(0, 50) + '...');
     console.log('Script length:', script.length);
 
     // Create video
@@ -116,7 +127,14 @@ Deno.serve(async (req) => {
     });
 
   } catch (error) {
-    console.error('ERROR:', error);
-    return Response.json({ error: error.message, stack: error.stack }, { status: 500 });
+    console.error('========== ERROR ==========');
+    console.error('Message:', error.message);
+    console.error('Stack:', error.stack);
+    console.error('===========================');
+    return Response.json({ 
+      error: error.message, 
+      details: error.stack,
+      type: error.name 
+    }, { status: 500 });
   }
 });
