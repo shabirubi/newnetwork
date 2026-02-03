@@ -24,11 +24,10 @@ Deno.serve(async (req) => {
     console.log('Checking HeyGen video status:', video_id);
 
     // Check video status
-    const statusResponse = await fetch(`https://api.heygen.com/v2/video/${video_id}`, {
+    const statusResponse = await fetch(`https://api.heygen.com/v1/video_status.get?video_id=${video_id}`, {
       method: 'GET',
       headers: {
-        'X-API-KEY': apiKey,
-        'Content-Type': 'application/json'
+        'X-Api-Key': apiKey
       }
     });
 
