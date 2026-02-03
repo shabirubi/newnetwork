@@ -71,6 +71,20 @@ export default function Layout({ children, currentPageName }) {
     if (darkMode) {
       document.documentElement.classList.add('dark');
     }
+    
+    // Cleanup video elements on unmount to prevent removeChild errors
+    return () => {
+      const videos = document.querySelectorAll('video');
+      videos.forEach(video => {
+        try {
+          video.pause();
+          video.src = '';
+          video.load();
+        } catch (e) {
+          // Ignore cleanup errors
+        }
+      });
+    };
   }, []);
 
   // בדיקת משתמש מחובר
