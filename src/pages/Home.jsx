@@ -233,9 +233,9 @@ export default function Home() {
           <TikTokNewsFeed articles={articles} />
         </div>
 
-        {/* Right Sidebar - Studio Options */}
+        {/* Right Sidebar - Breaking News Updates */}
         <aside className="lg:col-span-3">
-          <StudioSidebar />
+          <UpdatesFeed />
         </aside>
       </section>
 
