@@ -19,14 +19,13 @@ export default function LiveAvatarChatModal({ isOpen, onClose }) {
     setLoading(true);
     setError(null);
     
-    // שימוש ישיר ב-embed URL של LiveAvatar
-    const avatarId = 'bb1f6ebc-b388-4a39-9e2b-8df618e0377c';
-    const embedUrl = `https://app.liveavatar.com/embed/${avatarId}`;
+    // שימוש ישיר ב-URL של LiveAvatar
+    const liveAvatarUrl = 'https://app.liveavatar.com/f0a9978d-634a-4063-8164-42ba6670542f';
     
     setTimeout(() => {
-      setSessionUrl(embedUrl);
+      setSessionUrl(liveAvatarUrl);
       setLoading(false);
-    }, 500);
+    }, 300);
   };
 
   return (
