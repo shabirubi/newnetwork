@@ -1036,6 +1036,11 @@ export default function VideoEditor() {
               תמונה AI
             </Button>
 
+            <Button onClick={() => setShowKlingCharacterModal(true)} className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white text-sm">
+              <User size={16} className="ml-1" />
+              דמות
+            </Button>
+
             <input type="file" accept="audio/*" onChange={handleAddAudio} className="hidden" id="audio-upload" />
             <div className="flex gap-2">
               <Button onClick={() => document.getElementById('audio-upload').click()} className="flex-1 bg-white/10 hover:bg-white/20 text-white text-sm">
