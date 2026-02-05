@@ -353,13 +353,6 @@ export default function Home() {
       {/* Talking Avatar */}
       <TalkingAvatar />
 
-      {/* User Uploaded Videos - Lazy Loaded */}
-      <div id="user-videos-section">
-        <React.Suspense fallback={<div className="h-96 bg-black animate-pulse rounded-2xl mx-4" />}>
-          <UserUploadedVideos onUploadClick={() => setUploadVideoModalOpen(true)} />
-        </React.Suspense>
-      </div>
-
       {/* All Videos Gallery - Lazy Loaded */}
       <React.Suspense fallback={<div className="h-96 bg-black animate-pulse rounded-2xl mx-4" />}>
         <AllVideosGallery />
