@@ -22,8 +22,8 @@ export default function LiveAvatarChatModal({ isOpen, onClose }) {
     try {
       const { data } = await base44.functions.invoke('createLiveAvatarSession', {});
       
-      if (data.success && data.session_url) {
-        setSessionUrl(data.session_url);
+      if (data.success && data.livekit_url) {
+        setSessionUrl(data.livekit_url);
       } else {
         setError('לא הצליח ליצור חיבור לדמות');
         toast.error('שגיאה בטעינת הדמות');
