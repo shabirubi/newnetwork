@@ -40,6 +40,7 @@ export default function Home() {
   const [a11yOpen, setA11yOpen] = React.useState(false);
   const [uploadVideoModalOpen, setUploadVideoModalOpen] = React.useState(false);
   const [reportersModalOpen, setReportersModalOpen] = React.useState(false);
+  const [liveAvatarChatOpen, setLiveAvatarChatOpen] = React.useState(false);
   const [page, setPage] = React.useState(1);
   const [hasMore, setHasMore] = React.useState(true);
   const [selectedChannel, setSelectedChannel] = React.useState(() => {
@@ -353,6 +354,64 @@ export default function Home() {
       {/* Talking Avatar */}
       <TalkingAvatar />
 
+      {/* LiveAvatar Chat Modal */}
+      <AnimatePresence>
+        {liveAvatarChatOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[9999] bg-black/80 backdrop-blur-sm flex items-center justify-center p-4"
+            onClick={() => setLiveAvatarChatOpen(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-gradient-to-br from-gray-900 to-black rounded-2xl overflow-hidden w-full max-w-4xl shadow-2xl border border-green-500/30"
+            >
+              {/* Header */}
+              <div className="bg-gradient-to-r from-green-600 to-emerald-600 p-4 flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center">
+                    <MessageCircle className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-bold text-white">צ'אט חי עם דמות AI</h2>
+                    <p className="text-green-100 text-sm">דבר עם הדמות באמצעות המיקרופון</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setLiveAvatarChatOpen(false)}
+                  className="w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors"
+                >
+                  <X className="w-5 h-5 text-white" />
+                </button>
+              </div>
+
+              {/* iframe Content */}
+              <div className="bg-black" style={{ aspectRatio: '16/9' }}>
+                <iframe 
+                  src="https://app.myliveavatar.com/agent/66a73b1b5a61c4fc67a0e2bb" 
+                  allow="microphone" 
+                  title="LiveAvatar Embed" 
+                  className="w-full h-full"
+                  style={{ border: 'none' }}
+                />
+              </div>
+
+              {/* Footer Info */}
+              <div className="bg-gradient-to-r from-gray-900 to-black p-4 border-t border-green-500/20">
+                <p className="text-gray-400 text-sm text-center">
+                  🎤 הפעל את המיקרופון שלך כדי לדבר עם הדמות
+                </p>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* All Videos Gallery - Lazy Loaded */}
       <React.Suspense fallback={<div className="h-96 bg-black animate-pulse rounded-2xl mx-4" />}>
         <AllVideosGallery />
@@ -373,6 +432,20 @@ export default function Home() {
         <Droplet className="w-7 h-7 text-white fill-white" />
         <span className="absolute right-full mr-3 top-1/2 -translate-y-1/2 px-3 py-1 bg-red-600 text-white text-sm font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
           העלה סרטון
+        </span>
+      </motion.button>
+
+      {/* LiveAvatar Chat Button */}
+      <motion.button
+        onClick={() => setLiveAvatarChatOpen(true)}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+        className="fixed bottom-72 right-4 z-[9998] w-16 h-16 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 shadow-2xl flex items-center justify-center border-2 border-green-300/50 transition-all group"
+        title="צ'אט עם דמות"
+      >
+        <MessageCircle className="w-7 h-7 text-white" />
+        <span className="absolute right-full mr-3 top-1/2 -translate-y-1/2 px-3 py-1 bg-green-600 text-white text-sm font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+          צ'אט חי
         </span>
       </motion.button>
 
