@@ -70,7 +70,7 @@ export default function TikTokNewsContainer() {
                   muted
                   playsInline
                   poster={video.thumbnail}
-                />
+                ></video>
               </div>
             ) : (
               <div className="relative w-full h-full bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
@@ -145,7 +145,7 @@ export default function TikTokNewsContainer() {
                   autoPlay
                   playsInline
                   style={{ objectFit: 'contain' }}
-                />
+                ></video>
               ) : (
                 <div className="w-full h-full bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
                   <p className="text-white/60">הוידאו לא זמין</p>
