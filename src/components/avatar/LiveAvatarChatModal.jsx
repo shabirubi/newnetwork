@@ -16,16 +16,10 @@ export default function LiveAvatarChatModal({ isOpen, onClose }) {
   }, [isOpen]);
 
   const initSession = async () => {
-    setLoading(true);
-    setError(null);
-    
-    // שימוש ישיר ב-URL של LiveAvatar
+    // פתיחה ישירות בחלון חדש
     const liveAvatarUrl = 'https://app.liveavatar.com/f0a9978d-634a-4063-8164-42ba6670542f';
-    
-    setTimeout(() => {
-      setSessionUrl(liveAvatarUrl);
-      setLoading(false);
-    }, 300);
+    window.open(liveAvatarUrl, '_blank');
+    onClose();
   };
 
   return (
