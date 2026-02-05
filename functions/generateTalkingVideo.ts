@@ -87,8 +87,17 @@ Deno.serve(async (req) => {
         }
       }
 
+      // Ensure avatar URL has proper extension for D-ID validation
+      let processedAvatarUrl = avatarUrl;
+      if (!avatarUrl.match(/\.(jpg|jpeg|png)(\?.*)?$/i)) {
+        // If URL doesn't have extension, add .png
+        processedAvatarUrl = avatarUrl.includes('?') 
+          ? avatarUrl.replace('?', '.png?')
+          : avatarUrl + '.png';
+      }
+
       payload = {
-        source_url: avatarUrl,
+        source_url: processedAvatarUrl,
         script: script,
         config: {
           fluent: true,
