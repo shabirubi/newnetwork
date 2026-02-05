@@ -93,7 +93,7 @@ export default function AllVideosGallery() {
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   muted
                   playsInline
-                />
+                ></video>
               )}
               
               {/* Play Overlay */}
@@ -205,7 +205,7 @@ export default function AllVideosGallery() {
                       }}
                       onCanPlay={() => setIsVideoLoading(false)}
                       onError={() => setIsVideoLoading(false)}
-                      />
+                    ></video>
 
                       {/* Loading Indicator */}
                       {isVideoLoading && (

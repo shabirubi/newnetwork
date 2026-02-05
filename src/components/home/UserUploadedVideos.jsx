@@ -108,7 +108,7 @@ export default function UserUploadedVideos({ onUploadClick }) {
                     className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
                     muted
                     playsInline
-                  />
+                  ></video>
                   {/* Overlay */}
                   <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-all duration-300 flex items-center justify-center">
                     <motion.div
@@ -207,7 +207,7 @@ export default function UserUploadedVideos({ onUploadClick }) {
                   controls
                   autoPlay
                   className="w-full aspect-video bg-black"
-                />
+                ></video>
                 
                 <div className="p-6 space-y-6">
                   <div>
