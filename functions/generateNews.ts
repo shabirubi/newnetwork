@@ -29,8 +29,8 @@ Deno.serve(async (req) => {
     
     const results = [];
     
-    // מעבד 3 קטגוריות בכל קריאה
-    const batchSize = 3;
+    // מעבד רק 1 קטגוריה בכל קריאה כדי למנוע timeout
+    const batchSize = 1;
     const startIdx = batch * batchSize;
     const categoriesToProcess = categories.slice(startIdx, startIdx + batchSize);
     
