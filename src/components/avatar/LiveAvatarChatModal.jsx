@@ -3,13 +3,11 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, X, Loader2, Mic, MicOff } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { toast } from 'sonner';
-import StreamingAvatar, { AvatarQuality, StreamingEvents } from '@heygen/liveavatar-web-sdk';
 
 export default function LiveAvatarChatModal({ isOpen, onClose }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isRecording, setIsRecording] = useState(false);
-  const avatarRef = useRef(null);
   const videoRef = useRef(null);
   const avatarInstance = useRef(null);
 
@@ -20,7 +18,7 @@ export default function LiveAvatarChatModal({ isOpen, onClose }) {
     
     return () => {
       if (avatarInstance.current) {
-        avatarInstance.current.stopAvatar();
+        avatarInstance.current.stopAvatar?.();
       }
     };
   }, [isOpen]);
@@ -36,6 +34,9 @@ export default function LiveAvatarChatModal({ isOpen, onClose }) {
       if (data.error) {
         throw new Error(data.error);
       }
+
+      // ייבוא דינמי של ה-SDK
+      const { default: StreamingAvatar, AvatarQuality, StreamingEvents } = await import('@heygen/liveavatar-web-sdk');
 
       // אתחול ה-SDK
       avatarInstance.current = new StreamingAvatar({
