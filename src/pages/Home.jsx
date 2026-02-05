@@ -280,10 +280,10 @@ export default function Home() {
         <TrendingTopicsContainer />
       </React.Suspense>
 
-      {/* Kan Archive - עמוד האש */}
-      <div id="kan-archive-section">
+      {/* User Uploaded Videos - Lazy Loaded */}
+      <div id="user-videos-section">
         <React.Suspense fallback={<div className="h-96 bg-black animate-pulse rounded-2xl mx-4" />}>
-          <KanArchiveContainer />
+          <UserUploadedVideos onUploadClick={() => setUploadVideoModalOpen(true)} />
         </React.Suspense>
       </div>
 
