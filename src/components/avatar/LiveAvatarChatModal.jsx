@@ -19,22 +19,14 @@ export default function LiveAvatarChatModal({ isOpen, onClose }) {
     setLoading(true);
     setError(null);
     
-    try {
-      const { data } = await base44.functions.invoke('createLiveAvatarSession', {});
-      
-      if (data.success && data.livekit_url) {
-        setSessionUrl(data.livekit_url);
-      } else {
-        setError('לא הצליח ליצור חיבור לדמות');
-        toast.error('שגיאה בטעינת הדמות');
-      }
-    } catch (err) {
-      console.error('LiveAvatar session error:', err);
-      setError('שגיאת חיבור');
-      toast.error('לא הצליח להתחבר לשירות');
-    } finally {
+    // שימוש ישיר ב-embed URL של LiveAvatar
+    const avatarId = 'bb1f6ebc-b388-4a39-9e2b-8df618e0377c';
+    const embedUrl = `https://app.liveavatar.com/embed/${avatarId}`;
+    
+    setTimeout(() => {
+      setSessionUrl(embedUrl);
       setLoading(false);
-    }
+    }, 500);
   };
 
   return (
