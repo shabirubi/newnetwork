@@ -9,32 +9,34 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const apiKey = Deno.env.get('HEYGEN_API_KEY');
+    const apiKey = Deno.env.get('LIVEAVATAR_API_KEY');
     if (!apiKey) {
-      return Response.json({ error: 'HeyGen API key not configured' }, { status: 500 });
+      return Response.json({ error: 'LiveAvatar API key not configured' }, { status: 500 });
     }
 
-    // קבלת access token מ-HeyGen
-    const response = await fetch('https://api.heygen.com/v1/streaming.new', {
+    // יצירת session token
+    const response = await fetch('https://api.liveavatar.com/v1/sessions/token', {
       method: 'POST',
       headers: {
-        'x-api-key': apiKey,
-        'Content-Type': 'application/json'
+        'X-API-KEY': apiKey,
+        'accept': 'application/json',
+        'content-type': 'application/json'
       },
       body: JSON.stringify({
-        quality: 'high',
-        avatar_name: 'Wayne_20240711',
-        voice: {
-          voice_id: 'en-US-JennyNeural'
+        mode: 'FULL',
+        avatar_id: 'default',
+        avatar_persona: {
+          voice_id: 'default',
+          language: 'he'
         }
       })
     });
 
     if (!response.ok) {
       const error = await response.text();
-      console.error('HeyGen API error:', error);
+      console.error('LiveAvatar API error:', error);
       return Response.json({ 
-        error: 'Failed to get HeyGen token',
+        error: 'Failed to create session token',
         details: error 
       }, { status: response.status });
     }
@@ -42,12 +44,12 @@ Deno.serve(async (req) => {
     const data = await response.json();
     
     return Response.json({
-      token: data.data.session_id,
-      serverUrl: data.data.server_url
+      session_token: data.session_token,
+      session_id: data.session_id
     });
 
   } catch (error) {
-    console.error('Error getting HeyGen token:', error);
+    console.error('Error getting LiveAvatar token:', error);
     return Response.json({ 
       error: error.message 
     }, { status: 500 });
