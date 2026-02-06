@@ -14,7 +14,8 @@ Deno.serve(async (req) => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        mode: 'LITE'
+        mode: 'LITE',
+        avatar_id: 'e6a6e9b3-1a21-4a82-8ba0-a4135c6e6c68'
       })
     });
 
