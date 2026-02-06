@@ -15,7 +15,8 @@ Deno.serve(async (req) => {
       },
       body: JSON.stringify({
         mode: 'LITE',
-        avatar_id: 'e6a6e9b3-1a21-4a82-8ba0-a4135c6e6c68'
+        avatar_id: 'Anna_public_3_20240108',
+        voice_id: '7a1c045c-af31-49ae-8960-9d8a8c9d5e9e'
       })
     });
 
