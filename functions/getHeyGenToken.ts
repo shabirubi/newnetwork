@@ -14,7 +14,34 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'LiveAvatar API key not configured' }, { status: 500 });
     }
 
-    // יצירת session token - בלי avatar_persona כדי להשתמש בברירת מחדל
+    // שלב 1: קבלת רשימת דמויות זמינות
+    const avatarsResponse = await fetch('https://api.liveavatar.com/v1/avatars/public', {
+      headers: {
+        'X-API-KEY': apiKey,
+        'accept': 'application/json'
+      }
+    });
+
+    if (!avatarsResponse.ok) {
+      const error = await avatarsResponse.text();
+      console.error('Failed to fetch avatars:', error);
+      return Response.json({ 
+        error: 'Failed to fetch avatars',
+        details: error 
+      }, { status: avatarsResponse.status });
+    }
+
+    const avatarsData = await avatarsResponse.json();
+    
+    // בחירת הדמות הראשונה הזמינה
+    const firstAvatar = avatarsData.data?.results?.find(a => a.status === 'ACTIVE');
+    if (!firstAvatar) {
+      return Response.json({ 
+        error: 'No active avatars available' 
+      }, { status: 404 });
+    }
+
+    // שלב 2: יצירת session token עם הדמות הראשונה
     const response = await fetch('https://api.liveavatar.com/v1/sessions/token', {
       method: 'POST',
       headers: {
@@ -23,7 +50,12 @@ Deno.serve(async (req) => {
         'content-type': 'application/json'
       },
       body: JSON.stringify({
-        mode: 'FULL'
+        mode: 'FULL',
+        avatar_id: firstAvatar.id,
+        avatar_persona: {
+          voice_id: firstAvatar.default_voice?.id || 'default',
+          language: 'en'
+        }
       })
     });
 
@@ -40,7 +72,8 @@ Deno.serve(async (req) => {
     
     return Response.json({
       session_token: data.session_token,
-      session_id: data.session_id
+      session_id: data.session_id,
+      avatar_name: firstAvatar.name
     });
 
   } catch (error) {
