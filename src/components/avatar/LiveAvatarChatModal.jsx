@@ -30,17 +30,17 @@ export default function LiveAvatarChatModal({ isOpen, onClose }) {
       setLoading(true);
       setError(null);
 
-      const { data } = await base44.functions.invoke('getLiveAvatarToken');
+      const { data } = await base44.functions.invoke('getHeyGenToken');
       
       if (data.error) {
         throw new Error(data.error);
       }
 
-      if (!data.token) {
+      if (!data.session_token) {
         throw new Error('No token received');
       }
 
-      sessionRef.current = new LiveAvatarSession({ token: data.token });
+      sessionRef.current = new LiveAvatarSession({ token: data.session_token });
       
       await sessionRef.current.start({ video: videoRef.current });
       
