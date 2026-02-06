@@ -14,7 +14,7 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'LiveAvatar API key not configured' }, { status: 500 });
     }
 
-    // יצירת session token
+    // יצירת session token - בלי avatar_persona כדי להשתמש בברירת מחדל
     const response = await fetch('https://api.liveavatar.com/v1/sessions/token', {
       method: 'POST',
       headers: {
@@ -23,12 +23,7 @@ Deno.serve(async (req) => {
         'content-type': 'application/json'
       },
       body: JSON.stringify({
-        mode: 'FULL',
-        avatar_id: 'default',
-        avatar_persona: {
-          voice_id: 'default',
-          language: 'he'
-        }
+        mode: 'FULL'
       })
     });
 
