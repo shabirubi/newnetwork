@@ -1,26 +1,30 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageCircle, X, Loader2, Mic, MicOff } from 'lucide-react';
+import { MessageCircle, X, Loader2, Send } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { toast } from 'sonner';
-import { LiveAvatarSession } from '@heygen/liveavatar-web-sdk';
 
 export default function LiveAvatarChatModal({ isOpen, onClose }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [isRecording, setIsRecording] = useState(false);
+  const [message, setMessage] = useState('');
+  const [isSpeaking, setIsSpeaking] = useState(false);
   const videoRef = useRef(null);
-  const sessionRef = useRef(null);
+  const streamRef = useRef(null);
+  const peerConnectionRef = useRef(null);
 
   useEffect(() => {
-    if (isOpen && !sessionRef.current) {
+    if (isOpen && !streamRef.current) {
       initSession();
     }
     
     return () => {
-      if (sessionRef.current) {
-        sessionRef.current.stop().catch(console.error);
-        sessionRef.current = null;
+      if (peerConnectionRef.current) {
+        peerConnectionRef.current.close();
+        peerConnectionRef.current = null;
+      }
+      if (streamRef.current) {
+        streamRef.current = null;
       }
     };
   }, [isOpen]);
@@ -30,24 +34,28 @@ export default function LiveAvatarChatModal({ isOpen, onClose }) {
       setLoading(true);
       setError(null);
 
-      // קבלת session token מהשרת
-      const { data } = await base44.functions.invoke('getHeyGenToken');
+      const { data } = await base44.functions.invoke('createDIDStream');
       
       if (data.error) {
         throw new Error(data.error);
       }
 
-      if (!data.session_token) {
-        throw new Error('No session token received');
-      }
+      const { id, offer, ice_servers, session_id } = data;
 
-      console.log('Session token received:', data.session_token);
+      const peerConnection = new RTCPeerConnection({ iceServers: ice_servers });
+      peerConnectionRef.current = peerConnection;
 
-      // יצירת session חדש
-      sessionRef.current = new LiveAvatarSession({ token: data.session_token });
-      
-      // התחלת ה-session עם וידאו
-      await sessionRef.current.start({ video: videoRef.current });
+      peerConnection.ontrack = (event) => {
+        if (videoRef.current && event.streams[0]) {
+          videoRef.current.srcObject = event.streams[0];
+        }
+      };
+
+      await peerConnection.setRemoteDescription(offer);
+      const sessionClientAnswer = await peerConnection.createAnswer();
+      await peerConnection.setLocalDescription(sessionClientAnswer);
+
+      streamRef.current = { id, session_id };
       
       setLoading(false);
       toast.success('הדמות מוכנה!');
@@ -60,30 +68,28 @@ export default function LiveAvatarChatModal({ isOpen, onClose }) {
     }
   };
 
-  const handleStartRecording = async () => {
+  const handleSendMessage = async () => {
+    if (!message.trim() || !streamRef.current || isSpeaking) return;
+    
     try {
-      if (!sessionRef.current) {
-        toast.error('Session לא מאותחל');
-        return;
-      }
-      setIsRecording(true);
-      await sessionRef.current.startVoiceChat();
-      toast.success('מאזין...');
-    } catch (err) {
-      console.error('Error starting voice chat:', err);
-      toast.error('שגיאה בהקלטה');
-      setIsRecording(false);
-    }
-  };
+      setIsSpeaking(true);
+      const { data } = await base44.functions.invoke('sendDIDMessage', {
+        stream_id: streamRef.current.id,
+        session_id: streamRef.current.session_id,
+        text: message
+      });
 
-  const handleStopRecording = async () => {
-    try {
-      if (!sessionRef.current) return;
-      await sessionRef.current.stopVoiceChat();
-      setIsRecording(false);
+      if (data.error) {
+        throw new Error(data.error);
+      }
+
+      setMessage('');
+      toast.success('ההודעה נשלחה!');
     } catch (err) {
-      console.error('Error stopping voice chat:', err);
-      setIsRecording(false);
+      console.error('Error sending message:', err);
+      toast.error('שגיאה בשליחת ההודעה');
+    } finally {
+      setIsSpeaking(false);
     }
   };
 
@@ -157,28 +163,30 @@ export default function LiveAvatarChatModal({ isOpen, onClose }) {
 
             {/* Footer Controls */}
             <div className="bg-gradient-to-r from-gray-900 to-black p-4 border-t border-green-500/20">
-              <div className="flex items-center justify-center gap-4">
-                {!isRecording ? (
-                  <button
-                    onClick={handleStartRecording}
-                    disabled={loading || error}
-                    className="flex items-center gap-2 px-6 py-3 bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed rounded-full text-white font-bold transition-colors"
-                  >
-                    <Mic className="w-5 h-5" />
-                    התחל דיבור
-                  </button>
-                ) : (
-                  <button
-                    onClick={handleStopRecording}
-                    className="flex items-center gap-2 px-6 py-3 bg-red-600 hover:bg-red-700 rounded-full text-white font-bold transition-colors animate-pulse"
-                  >
-                    <MicOff className="w-5 h-5" />
-                    עצור דיבור
-                  </button>
-                )}
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  value={message}
+                  onChange={(e) => setMessage(e.target.value)}
+                  onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                  placeholder="כתוב הודעה לדמות..."
+                  disabled={loading || error || isSpeaking}
+                  className="flex-1 px-4 py-3 bg-gray-800 text-white rounded-full border border-green-500/30 focus:border-green-500 focus:outline-none disabled:opacity-50"
+                />
+                <button
+                  onClick={handleSendMessage}
+                  disabled={loading || error || !message.trim() || isSpeaking}
+                  className="flex items-center justify-center w-12 h-12 bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed rounded-full text-white transition-colors"
+                >
+                  {isSpeaking ? (
+                    <Loader2 className="w-5 h-5 animate-spin" />
+                  ) : (
+                    <Send className="w-5 h-5" />
+                  )}
+                </button>
               </div>
               <p className="text-gray-400 text-xs text-center mt-2">
-                לחץ על הכפתור והתחל לדבר עם הדמות
+                כתוב הודעה והדמות תענה לך
               </p>
             </div>
           </motion.div>
