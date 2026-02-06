@@ -42,21 +42,14 @@ Deno.serve(async (req) => {
     }
 
     // שלב 2: יצירת session token עם הדמות הראשונה
-    const response = await fetch('https://api.liveavatar.com/v1/sessions/token', {
+    const response = await fetch('https://api.heygen.com/v1/streaming.create_token', {
       method: 'POST',
       headers: {
-        'X-API-KEY': apiKey,
+        'x-api-key': apiKey,
         'accept': 'application/json',
         'content-type': 'application/json'
       },
-      body: JSON.stringify({
-        mode: 'FULL',
-        avatar_id: firstAvatar.id,
-        avatar_persona: {
-          voice_id: firstAvatar.default_voice?.id || 'default',
-          language: 'en'
-        }
-      })
+      body: JSON.stringify({})
     });
 
     if (!response.ok) {
@@ -69,12 +62,13 @@ Deno.serve(async (req) => {
     }
 
     const data = await response.json();
-    
-    console.log('LiveAvatar response:', JSON.stringify(data, null, 2));
-    
+
+    console.log('HeyGen response:', JSON.stringify(data, null, 2));
+
     return Response.json({
-      session_token: data.data?.session_token || data.session_token,
-      session_id: data.data?.session_id || data.session_id,
+      session_token: data.data?.token,
+      avatar_id: firstAvatar.id,
+      voice_id: firstAvatar.default_voice?.id,
       avatar_name: firstAvatar.name
     });
 

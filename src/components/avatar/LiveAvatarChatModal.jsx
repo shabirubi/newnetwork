@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, X, Loader2, Mic, MicOff } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { toast } from 'sonner';
-import { LiveAvatarSession } from '@heygen/liveavatar-web-sdk';
+import StreamingAvatar from '@heygen/streaming-avatar';
 
 export default function LiveAvatarChatModal({ isOpen, onClose }) {
   const [loading, setLoading] = useState(false);
@@ -43,26 +43,27 @@ export default function LiveAvatarChatModal({ isOpen, onClose }) {
 
       console.log('Session token received:', data.session_token);
 
-      // יצירת session חדש
-      sessionRef.current = new LiveAvatarSession({
-        sessionToken: data.session_token,
-        onConnect: () => {
-          console.log('Avatar connected');
-          toast.success('הדמות מוכנה!');
-          setLoading(false);
-        },
-        onDisconnect: () => {
-          console.log('Avatar disconnected');
-        },
-        onError: (error) => {
-          console.error('Avatar error:', error);
-          setError(error.message);
-          setLoading(false);
-        }
+      // יצירת avatar instance
+      sessionRef.current = new StreamingAvatar({ 
+        token: data.session_token 
       });
       
       // התחלת ה-session
-      await sessionRef.current.connect(videoRef.current);
+      const sessionData = await sessionRef.current.createStartAvatar({
+        quality: 'high',
+        avatarName: data.avatar_id,
+        voice: {
+          voiceId: data.voice_id
+        }
+      });
+      
+      console.log('Session started:', sessionData);
+      
+      // חיבור הוידאו
+      await sessionRef.current.startSession();
+      
+      setLoading(false);
+      toast.success('הדמות מוכנה!');
 
     } catch (err) {
       console.error('Error initializing avatar:', err);
@@ -79,7 +80,7 @@ export default function LiveAvatarChatModal({ isOpen, onClose }) {
         return;
       }
       setIsRecording(true);
-      await sessionRef.current.startVoiceChat?.();
+      await sessionRef.current.startVoiceChat();
       toast.success('מאזין...');
     } catch (err) {
       console.error('Error starting voice chat:', err);
@@ -91,7 +92,7 @@ export default function LiveAvatarChatModal({ isOpen, onClose }) {
   const handleStopRecording = async () => {
     try {
       if (!sessionRef.current) return;
-      await sessionRef.current.stopVoiceChat?.();
+      await sessionRef.current.closeVoiceChat();
       setIsRecording(false);
     } catch (err) {
       console.error('Error stopping voice chat:', err);
