@@ -7,32 +7,60 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'LiveAvatar API key not configured' }, { status: 500 });
     }
 
-    const response = await fetch('https://api.liveavatar.com/v1/sessions/token', {
+    // Step 1: Create session token
+    const tokenResponse = await fetch('https://api.liveavatar.com/v1/sessions/token', {
       method: 'POST',
       headers: {
-        'x-api-key': apiKey,
-        'Content-Type': 'application/json'
+        'X-API-KEY': apiKey,
+        'accept': 'application/json',
+        'content-type': 'application/json'
       },
       body: JSON.stringify({
-        mode: 'LITE',
+        mode: 'FULL',
         avatar_id: 'Anna_public_3_20240108',
-        voice_id: '7a1c045c-af31-49ae-8960-9d8a8c9d5e9e'
+        avatar_persona: {
+          voice_id: '7a1c045c-af31-49ae-8960-9d8a8c9d5e9e',
+          language: 'en'
+        }
       })
     });
 
-    if (!response.ok) {
-      const error = await response.text();
+    if (!tokenResponse.ok) {
+      const error = await tokenResponse.text();
       console.error('LiveAvatar API error:', error);
       return Response.json({ 
         error: 'Failed to create token',
         details: error 
-      }, { status: response.status });
+      }, { status: tokenResponse.status });
     }
 
-    const data = await response.json();
+    const tokenData = await tokenResponse.json();
+    
+    // Step 2: Start the session
+    const startResponse = await fetch('https://api.liveavatar.com/v1/sessions/start', {
+      method: 'POST',
+      headers: {
+        'accept': 'application/json',
+        'authorization': `Bearer ${tokenData.session_token}`
+      }
+    });
+
+    if (!startResponse.ok) {
+      const error = await startResponse.text();
+      console.error('LiveAvatar start session error:', error);
+      return Response.json({ 
+        error: 'Failed to start session',
+        details: error 
+      }, { status: startResponse.status });
+    }
+
+    const startData = await startResponse.json();
     
     return Response.json({
-      token: data.token
+      session_id: tokenData.session_id,
+      session_token: tokenData.session_token,
+      livekit_url: startData.livekit_url,
+      livekit_token: startData.livekit_client_token
     });
 
   } catch (error) {

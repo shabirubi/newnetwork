@@ -30,8 +30,8 @@ export default function LiveAvatarChatModal({ isOpen, onClose }) {
       setLoading(true);
       setError(null);
 
-      const { data } = await base44.functions.invoke('getHeyGenToken');
-      
+      const { data } = await base44.functions.invoke('getLiveAvatarToken');
+
       if (data.error) {
         throw new Error(data.error);
       }
@@ -41,7 +41,7 @@ export default function LiveAvatarChatModal({ isOpen, onClose }) {
       }
 
       sessionRef.current = new LiveAvatarSession({ token: data.session_token });
-      
+
       await sessionRef.current.start({ video: videoRef.current });
       
       setLoading(false);
