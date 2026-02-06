@@ -14,11 +14,7 @@ Deno.serve(async (req) => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        mode: 'text',
-        avatar_id: 'default',
-        persona: {
-          language: 'he'
-        }
+        mode: 'LITE'
       })
     });
 
