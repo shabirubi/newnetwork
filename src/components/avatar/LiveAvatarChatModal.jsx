@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { MessageCircle, X, Loader2, Mic, MicOff } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { toast } from 'sonner';
-import StreamingAvatar from '@heygen/streaming-avatar';
+import { LiveAvatarSession } from '@heygen/liveavatar-web-sdk';
 
 export default function LiveAvatarChatModal({ isOpen, onClose }) {
   const [loading, setLoading] = useState(false);
@@ -43,24 +43,11 @@ export default function LiveAvatarChatModal({ isOpen, onClose }) {
 
       console.log('Session token received:', data.session_token);
 
-      // יצירת avatar instance
-      sessionRef.current = new StreamingAvatar({ 
-        token: data.session_token 
-      });
+      // יצירת session חדש
+      sessionRef.current = new LiveAvatarSession({ token: data.session_token });
       
-      // התחלת ה-session
-      const sessionData = await sessionRef.current.createStartAvatar({
-        quality: 'high',
-        avatarName: data.avatar_id,
-        voice: {
-          voiceId: data.voice_id
-        }
-      });
-      
-      console.log('Session started:', sessionData);
-      
-      // חיבור הוידאו
-      await sessionRef.current.startSession();
+      // התחלת ה-session עם וידאו
+      await sessionRef.current.start({ video: videoRef.current });
       
       setLoading(false);
       toast.success('הדמות מוכנה!');
@@ -92,7 +79,7 @@ export default function LiveAvatarChatModal({ isOpen, onClose }) {
   const handleStopRecording = async () => {
     try {
       if (!sessionRef.current) return;
-      await sessionRef.current.closeVoiceChat();
+      await sessionRef.current.stopVoiceChat();
       setIsRecording(false);
     } catch (err) {
       console.error('Error stopping voice chat:', err);
