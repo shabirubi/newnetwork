@@ -37,18 +37,32 @@ export default function LiveAvatarChatModal({ isOpen, onClose }) {
         throw new Error(data.error);
       }
 
-      // יצירת session חדש
-      const userConfig = {
-        voiceChat: true,
-      };
+      if (!data.session_token) {
+        throw new Error('No session token received');
+      }
 
-      sessionRef.current = new LiveAvatarSession(data.session_token, userConfig);
+      console.log('Session token received:', data.session_token);
+
+      // יצירת session חדש
+      sessionRef.current = new LiveAvatarSession({
+        sessionToken: data.session_token,
+        onConnect: () => {
+          console.log('Avatar connected');
+          toast.success('הדמות מוכנה!');
+          setLoading(false);
+        },
+        onDisconnect: () => {
+          console.log('Avatar disconnected');
+        },
+        onError: (error) => {
+          console.error('Avatar error:', error);
+          setError(error.message);
+          setLoading(false);
+        }
+      });
       
       // התחלת ה-session
-      await sessionRef.current.start();
-      
-      setLoading(false);
-      toast.success('הדמות מוכנה!');
+      await sessionRef.current.connect(videoRef.current);
 
     } catch (err) {
       console.error('Error initializing avatar:', err);
