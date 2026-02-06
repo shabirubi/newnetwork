@@ -1,18 +1,89 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageCircle, X, Loader2 } from 'lucide-react';
+import { MessageCircle, X, Loader2, Mic, MicOff } from 'lucide-react';
+import { base44 } from '@/api/base44Client';
+import { toast } from 'sonner';
+import { LiveAvatarSession } from '@heygen/liveavatar-web-sdk';
 
 export default function LiveAvatarChatModal({ isOpen, onClose }) {
-  const [loading, setLoading] = useState(true);
-  const iframeRef = useRef(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [isRecording, setIsRecording] = useState(false);
+  const videoRef = useRef(null);
+  const sessionRef = useRef(null);
 
   useEffect(() => {
-    if (isOpen) {
-      // סימולציה של טעינה
-      const timer = setTimeout(() => setLoading(false), 1000);
-      return () => clearTimeout(timer);
+    if (isOpen && !sessionRef.current) {
+      initSession();
     }
+    
+    return () => {
+      if (sessionRef.current) {
+        sessionRef.current.stop().catch(console.error);
+        sessionRef.current = null;
+      }
+    };
   }, [isOpen]);
+
+  const initSession = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      // קבלת session token מהשרת
+      const { data } = await base44.functions.invoke('getHeyGenToken');
+      
+      if (data.error) {
+        throw new Error(data.error);
+      }
+
+      // יצירת session חדש
+      const userConfig = {
+        voiceChat: true,
+      };
+
+      sessionRef.current = new LiveAvatarSession(data.session_token, userConfig);
+      
+      // התחלת ה-session
+      await sessionRef.current.start();
+      
+      setLoading(false);
+      toast.success('הדמות מוכנה!');
+
+    } catch (err) {
+      console.error('Error initializing avatar:', err);
+      setError(err.message || 'שגיאה באתחול הדמות');
+      setLoading(false);
+      toast.error('שגיאה באתחול הדמות');
+    }
+  };
+
+  const handleStartRecording = async () => {
+    try {
+      if (!sessionRef.current) {
+        toast.error('Session לא מאותחל');
+        return;
+      }
+      setIsRecording(true);
+      await sessionRef.current.startVoiceChat?.();
+      toast.success('מאזין...');
+    } catch (err) {
+      console.error('Error starting voice chat:', err);
+      toast.error('שגיאה בהקלטה');
+      setIsRecording(false);
+    }
+  };
+
+  const handleStopRecording = async () => {
+    try {
+      if (!sessionRef.current) return;
+      await sessionRef.current.stopVoiceChat?.();
+      setIsRecording(false);
+    } catch (err) {
+      console.error('Error stopping voice chat:', err);
+      setIsRecording(false);
+    }
+  };
 
   return (
     <AnimatePresence>
@@ -61,19 +132,51 @@ export default function LiveAvatarChatModal({ isOpen, onClose }) {
                 </div>
               )}
 
-              <iframe 
-                ref={iframeRef}
-                src="https://app.liveavatar.com/f0a9978d-634a-4063-8164-42ba6670542f"
-                allow="microphone; camera"
-                title="LiveAvatar Chat"
-                className="w-full h-full border-0"
+              {error && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black/90 z-10">
+                  <div className="text-center p-8">
+                    <div className="text-red-400 text-xl mb-4">⚠️</div>
+                    <p className="text-white mb-4">{error}</p>
+                    <button
+                      onClick={initSession}
+                      className="px-6 py-2 bg-green-600 hover:bg-green-700 rounded-lg text-white transition-colors"
+                    >
+                      נסה שוב
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              <div 
+                ref={videoRef}
+                className="w-full h-full"
               />
             </div>
 
-            {/* Footer Info */}
+            {/* Footer Controls */}
             <div className="bg-gradient-to-r from-gray-900 to-black p-4 border-t border-green-500/20">
-              <p className="text-gray-400 text-sm text-center">
-                🎤 דבר עם הדמות ישירות דרך הממשק
+              <div className="flex items-center justify-center gap-4">
+                {!isRecording ? (
+                  <button
+                    onClick={handleStartRecording}
+                    disabled={loading || error}
+                    className="flex items-center gap-2 px-6 py-3 bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed rounded-full text-white font-bold transition-colors"
+                  >
+                    <Mic className="w-5 h-5" />
+                    התחל דיבור
+                  </button>
+                ) : (
+                  <button
+                    onClick={handleStopRecording}
+                    className="flex items-center gap-2 px-6 py-3 bg-red-600 hover:bg-red-700 rounded-full text-white font-bold transition-colors animate-pulse"
+                  >
+                    <MicOff className="w-5 h-5" />
+                    עצור דיבור
+                  </button>
+                )}
+              </div>
+              <p className="text-gray-400 text-xs text-center mt-2">
+                לחץ על הכפתור והתחל לדבר עם הדמות
               </p>
             </div>
           </motion.div>
