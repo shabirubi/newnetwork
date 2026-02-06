@@ -144,9 +144,11 @@ export default function LiveAvatarChatModal({ isOpen, onClose }) {
                 </div>
               )}
 
-              <div 
+              <video 
                 ref={videoRef}
-                className="w-full h-full"
+                autoPlay
+                playsInline
+                className="w-full h-full object-cover"
               />
             </div>
 
