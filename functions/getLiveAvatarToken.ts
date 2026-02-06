@@ -13,7 +13,13 @@ Deno.serve(async (req) => {
         'x-api-key': apiKey,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({})
+      body: JSON.stringify({
+        mode: 'text',
+        avatar_id: 'default',
+        persona: {
+          language: 'he'
+        }
+      })
     });
 
     if (!response.ok) {
