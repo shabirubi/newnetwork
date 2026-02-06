@@ -70,9 +70,11 @@ Deno.serve(async (req) => {
 
     const data = await response.json();
     
+    console.log('LiveAvatar response:', JSON.stringify(data, null, 2));
+    
     return Response.json({
-      session_token: data.session_token,
-      session_id: data.session_id,
+      session_token: data.data?.session_token || data.session_token,
+      session_id: data.data?.session_id || data.session_id,
       avatar_name: firstAvatar.name
     });
 
