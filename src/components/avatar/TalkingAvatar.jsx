@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { motion, AnimatePresence } from "framer-motion";
-import { Video, Loader2, X, Download, Sparkles, User } from "lucide-react";
+import { Video, Loader2, X, Download, Sparkles, User, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+import DIDLiveChat from "./DIDLiveChat";
 
 export default function TalkingAvatar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -16,6 +17,7 @@ export default function TalkingAvatar() {
   const [gender, setGender] = useState("male");
   const [voiceProvider, setVoiceProvider] = useState("microsoft");
   const [backgroundType, setBackgroundType] = useState("static");
+  const [showLiveChat, setShowLiveChat] = useState(false);
 
   const handleImageUpload = async (e) => {
     const file = e.target.files?.[0];
@@ -133,6 +135,7 @@ export default function TalkingAvatar() {
 
   return (
     <>
+      <DIDLiveChat isOpen={showLiveChat} onClose={() => setShowLiveChat(false)} />
 
       {/* Modal */}
       <AnimatePresence>
@@ -163,13 +166,25 @@ export default function TalkingAvatar() {
                       <p className="text-purple-100 text-sm">טכנולוגיית D-ID מתקדמת</p>
                     </div>
                   </div>
-                  <button
+                  <div className="flex items-center gap-2">
+                    <Button
+                      onClick={() => {
+                        setIsOpen(false);
+                        setShowLiveChat(true);
+                      }}
+                      className="bg-white/20 hover:bg-white/30 text-white"
+                    >
+                      <MessageCircle className="w-4 h-4 ml-2" />
+                      צ'אט חי
+                    </Button>
+                    <button
                     onClick={() => !isGenerating && setIsOpen(false)}
                     disabled={isGenerating}
                     className="w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors disabled:opacity-50"
                   >
                     <X className="w-5 h-5 text-white" />
-                  </button>
+                    </button>
+                  </div>
                 </div>
               </div>
 
