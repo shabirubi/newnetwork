@@ -36,6 +36,8 @@ Deno.serve(async (req) => {
 
     const tokenData = await tokenResponse.json();
     
+    console.log('Token data received:', JSON.stringify(tokenData, null, 2));
+    
     // Step 2: Start the session
     const startResponse = await fetch('https://api.liveavatar.com/v1/sessions/start', {
       method: 'POST',
