@@ -60,10 +60,10 @@ Deno.serve(async (req) => {
     const startData = await startResponse.json();
     
     return Response.json({
-      session_id: tokenData.session_id,
-      session_token: tokenData.session_token,
-      livekit_url: startData.livekit_url,
-      livekit_token: startData.livekit_client_token
+      session_id: tokenData.data.session_id,
+      session_token: tokenData.data.session_token,
+      livekit_url: startData.data.livekit_url,
+      livekit_token: startData.data.livekit_client_token
     });
 
   } catch (error) {
