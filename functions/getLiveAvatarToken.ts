@@ -17,7 +17,7 @@ Deno.serve(async (req) => {
       },
       body: JSON.stringify({
         mode: 'FULL',
-        avatar_id: '513fd1b7-7ef9-466d-9af2-344e51eeb833',
+        avatar_id: 'f0a9978d-634a-4063-8164-42ba6670542f',
         avatar_persona: {
           voice_id: 'de5574fc-009e-4a01-a881-9919ef8f5a0c',
           language: 'en'
