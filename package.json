@@ -85,7 +85,8 @@
     "mpegts.js": "^1.7.3",
     "@heygen/liveavatar-web-sdk": "^0.0.10",
     "@heygen/streaming-avatar": "^1.0.0",
-    "livekit-client": "^2.0.0"
+    "livekit-client": "^2.0.0",
+    "@d-id/client-sdk": "^1.1.48"
   },
   "devDependencies": {
     "@eslint/js": "^9.19.0",
