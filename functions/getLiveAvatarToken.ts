@@ -42,8 +42,9 @@ Deno.serve(async (req) => {
     const startResponse = await fetch('https://api.liveavatar.com/v1/sessions/start', {
       method: 'POST',
       headers: {
+        'X-API-KEY': apiKey,
         'accept': 'application/json',
-        'authorization': `Bearer ${tokenData.session_token}`
+        'authorization': `Bearer ${tokenData.data.session_token}`
       }
     });
 
