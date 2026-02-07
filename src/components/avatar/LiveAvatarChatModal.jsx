@@ -1,28 +1,18 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageCircle, X, Loader2, Mic, MicOff } from 'lucide-react';
+import { MessageCircle, X, Loader2 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { toast } from 'sonner';
-import { LiveAvatarSession } from '@heygen/liveavatar-web-sdk';
 
 export default function LiveAvatarChatModal({ isOpen, onClose }) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [isRecording, setIsRecording] = useState(false);
-  const videoRef = useRef(null);
-  const sessionRef = useRef(null);
+  const [iframeUrl, setIframeUrl] = useState(null);
 
   useEffect(() => {
-    if (isOpen && !sessionRef.current) {
+    if (isOpen && !iframeUrl) {
       initSession();
     }
-    
-    return () => {
-      if (sessionRef.current) {
-        sessionRef.current.stop().catch(console.error);
-        sessionRef.current = null;
-      }
-    };
   }, [isOpen]);
 
   const initSession = async () => {
@@ -40,9 +30,9 @@ export default function LiveAvatarChatModal({ isOpen, onClose }) {
         throw new Error('No token received');
       }
 
-      sessionRef.current = new LiveAvatarSession({ token: data.session_token });
-
-      await sessionRef.current.start({ video: videoRef.current });
+      // Use session_token as iframe URL parameter
+      const url = `https://app.liveavatar.com/embed?token=${data.session_token}`;
+      setIframeUrl(url);
       
       setLoading(false);
       toast.success('הדמות מוכנה!');
@@ -52,33 +42,6 @@ export default function LiveAvatarChatModal({ isOpen, onClose }) {
       setError(err.message || 'שגיאה באתחול הדמות');
       setLoading(false);
       toast.error('שגיאה באתחול הדמות');
-    }
-  };
-
-  const handleStartRecording = async () => {
-    try {
-      if (!sessionRef.current) {
-        toast.error('Session לא מאותחל');
-        return;
-      }
-      setIsRecording(true);
-      await sessionRef.current.startVoiceChat();
-      toast.success('מאזין...');
-    } catch (err) {
-      console.error('Error starting voice chat:', err);
-      toast.error('שגיאה בהקלטה');
-      setIsRecording(false);
-    }
-  };
-
-  const handleStopRecording = async () => {
-    try {
-      if (!sessionRef.current) return;
-      await sessionRef.current.stopVoiceChat();
-      setIsRecording(false);
-    } catch (err) {
-      console.error('Error stopping voice chat:', err);
-      setIsRecording(false);
     }
   };
 
@@ -144,38 +107,20 @@ export default function LiveAvatarChatModal({ isOpen, onClose }) {
                 </div>
               )}
 
-              <video 
-                ref={videoRef}
-                autoPlay
-                playsInline
-                className="w-full h-full object-cover"
-              />
+              {iframeUrl && (
+                <iframe 
+                  src={iframeUrl}
+                  allow="microphone; camera"
+                  title="LiveAvatar Embed"
+                  className="w-full h-full border-0"
+                />
+              )}
             </div>
 
-            {/* Footer Controls */}
+            {/* Footer Info */}
             <div className="bg-gradient-to-r from-gray-900 to-black p-4 border-t border-green-500/20">
-              <div className="flex items-center justify-center gap-4">
-                {!isRecording ? (
-                  <button
-                    onClick={handleStartRecording}
-                    disabled={loading || error}
-                    className="flex items-center gap-2 px-6 py-3 bg-green-600 hover:bg-green-700 disabled:bg-gray-600 disabled:cursor-not-allowed rounded-full text-white font-bold transition-colors"
-                  >
-                    <Mic className="w-5 h-5" />
-                    התחל דיבור
-                  </button>
-                ) : (
-                  <button
-                    onClick={handleStopRecording}
-                    className="flex items-center gap-2 px-6 py-3 bg-red-600 hover:bg-red-700 rounded-full text-white font-bold transition-colors animate-pulse"
-                  >
-                    <MicOff className="w-5 h-5" />
-                    עצור דיבור
-                  </button>
-                )}
-              </div>
-              <p className="text-gray-400 text-xs text-center mt-2">
-                לחץ על הכפתור והתחל לדבר עם הדמות
+              <p className="text-gray-400 text-sm text-center">
+                דבר עם הדמות ישירות דרך המיקרופון
               </p>
             </div>
           </motion.div>
