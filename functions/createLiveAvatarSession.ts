@@ -3,45 +3,45 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
-    const didApiKey = Deno.env.get('DID_API_KEY');
+    const heygenApiKey = Deno.env.get('HEYGEN_API_KEY');
 
-    if (!didApiKey) {
-      return Response.json({ error: 'DID_API_KEY not configured' }, { status: 500 });
+    if (!heygenApiKey) {
+      return Response.json({ error: 'HEYGEN_API_KEY not configured' }, { status: 500 });
     }
 
-    // Create D-ID stream for real-time interaction
-    const streamResponse = await fetch('https://api.d-id.com/talks', {
+    // Create HeyGen Streaming Avatar session
+    const sessionResponse = await fetch('https://api.heygen.com/v1/streaming_avatar/create_session', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${didApiKey}`,
+        'X-Api-Key': heygenApiKey,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        source_url: 'https://assets.d-id.com/avatars/TM-F-H.png',
-        script: {
-          type: 'audio',
-          audio_url: 'https://d-id-talks-prod.s3.amazonaws.com/audio/8dd5c3d0-3e80-41bc-b5eb-c3d6b4b1c3d0.wav',
-          subtitles: 'שלום! אני כאן לשוחח איתך. בואו נדבר!'
+        quality: 'medium',
+        avatar_id: 'Wayne_20240711',
+        voice: {
+          voice_id: '3d3b23fa-acaa-4ba6-a498-e6f7c34d37c8'
         }
       })
     });
 
-    if (!streamResponse.ok) {
-      const error = await streamResponse.text();
-      console.error('Stream creation failed:', streamResponse.status, error);
-      return Response.json({ error: `Failed to create stream: ${error}` }, { status: 500 });
+    if (!sessionResponse.ok) {
+      const error = await sessionResponse.text();
+      console.error('HeyGen session creation failed:', sessionResponse.status, error);
+      return Response.json({ error: `Failed to create HeyGen session: ${error}` }, { status: 500 });
     }
 
-    const streamData = await streamResponse.json();
+    const sessionData = await sessionResponse.json();
 
     return Response.json({
-      livekit_url: 'wss://livekit.d-id.com',
-      livekit_client_token: 'mock-token-' + Date.now(),
-      stream_id: streamData.id || 'stream-' + Date.now(),
+      session_id: sessionData.data?.session_id,
+      access_token: sessionData.data?.access_token,
+      livekit_url: sessionData.data?.livekit_server,
+      livekit_client_token: sessionData.data?.livekit_token,
       success: true
     });
   } catch (error) {
-    console.error('D-ID session error:', error);
+    console.error('HeyGen session error:', error);
     return Response.json({ error: error.message }, { status: 500 });
   }
 });
