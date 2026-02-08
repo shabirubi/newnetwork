@@ -9,8 +9,8 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'HEYGEN_API_KEY not configured' }, { status: 500 });
     }
 
-    // Create HeyGen Streaming Avatar session
-    const sessionResponse = await fetch('https://api.heygen.com/v1/streaming_avatar/create_session', {
+    // Create HeyGen Interactive Avatar session
+    const sessionResponse = await fetch('https://api.heygen.com/v1/interactive_avatar/start', {
       method: 'POST',
       headers: {
         'X-Api-Key': heygenApiKey,
