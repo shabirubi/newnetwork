@@ -275,15 +275,13 @@ export default function Layout({ children, currentPageName }) {
 
 
 
-            <a
-              href="https://studio.d-id.com/agents/share?id=v2_agt_pW1vqMCQ&utm_source=copy&key=WjI5dloyeGxMVzloZFhSb01ud3hNRGt3TlRBd01qRTROall3TURjMU9ESTBPVFk2TVVsNFJ6Tk5kelJMWmtSWFZHVTNUREJmTjNkMw=="
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              onClick={() => window.dispatchEvent(new CustomEvent('openDIDChat'))}
               className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-gradient-to-r from-green-600 to-green-700 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-green-500/50 transition-all hover:scale-105 hover:from-green-700 hover:to-green-800 active:scale-95 cursor-pointer text-xs sm:text-sm animate-pulse"
             >
               <MessageCircle className="w-4 h-4 text-white" />
               <span className="text-white font-bold hidden sm:inline">צ'אט חי</span>
-            </a>
+            </button>
 
             <Link 
               to={createPageUrl("AIDesignStudio")}
