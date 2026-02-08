@@ -1,194 +1,38 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageCircle, X, Send, Loader2, Settings, Video, VideoOff } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { toast } from 'sonner';
-import * as sdk from '@d-id/client-sdk';
+import { X, Video } from 'lucide-react';
 
 export default function DIDLiveChat({ isOpen, onClose }) {
-  const [agentId, setAgentId] = useState('');
-  const [clientKey, setClientKey] = useState('');
-  const [isConfigured, setIsConfigured] = useState(false);
-  const [isConnecting, setIsConnecting] = useState(false);
-  const [isConnected, setIsConnected] = useState(false);
-  const [loadingConfig, setLoadingConfig] = useState(true);
-  const [message, setMessage] = useState('');
-  const [messages, setMessages] = useState([]);
-  const [isSpeaking, setIsSpeaking] = useState(false);
-  const [connectionState, setConnectionState] = useState('');
-  const [showSettings, setShowSettings] = useState(false);
-
-  const videoRef = useRef(null);
-  const agentManagerRef = useRef(null);
-  const srcObjectRef = useRef(null);
-
-  // Load D-ID configuration from backend
   useEffect(() => {
-    if (isOpen) {
-      loadDIDConfig();
-    }
-  }, [isOpen]);
+    if (!isOpen) return;
 
-  const loadDIDConfig = async () => {
-    try {
-      setLoadingConfig(true);
-      const { data } = await base44.functions.invoke('getDIDConfig');
-      
-      if (data.error) {
-        toast.error(data.error);
-        return;
-      }
+    // Load D-ID agent script
+    const script = document.createElement('script');
+    script.type = 'module';
+    script.src = 'https://agent.d-id.com/v2/index.js';
+    script.setAttribute('data-mode', 'fabio');
+    script.setAttribute('data-client-key', 'Z29vZ2xlLW9hdXRoMnwxMDkwNTAwMjE4NjYwMDc1ODI0OTY6MUl4RzNNdzRLZkRXVGU3TDBfN3d3');
+    script.setAttribute('data-agent-id', 'v2_agt_pW1vqMCQ');
+    script.setAttribute('data-name', 'did-agent');
+    script.setAttribute('data-monitor', 'true');
+    script.setAttribute('data-orientation', 'horizontal');
+    script.setAttribute('data-position', 'right');
 
-      setAgentId(data.agentId);
-      setClientKey(data.clientKey);
-      
-      // Auto-connect
-      await handleConnectWithConfig(data.agentId, data.clientKey);
-    } catch (error) {
-      console.error('Failed to load D-ID config:', error);
-      toast.error('שגיאה בטעינת הגדרות D-ID');
-    } finally {
-      setLoadingConfig(false);
-    }
-  };
+    document.body.appendChild(script);
 
-  useEffect(() => {
     return () => {
-      if (agentManagerRef.current) {
-        agentManagerRef.current.disconnect();
+      // Cleanup script when modal closes
+      const existingScript = document.querySelector('script[src="https://agent.d-id.com/v2/index.js"]');
+      if (existingScript) {
+        existingScript.remove();
+      }
+      // Remove the agent widget
+      const widget = document.querySelector('did-agent');
+      if (widget) {
+        widget.remove();
       }
     };
-  }, []);
-
-  const handleConnectWithConfig = async (aid, ckey) => {
-    try {
-      setIsConnecting(true);
-
-      const auth = { 
-        type: 'key', 
-        clientKey: ckey 
-      };
-
-      const callbacks = {
-        onSrcObjectReady: (value) => {
-          if (videoRef.current) {
-            videoRef.current.srcObject = value;
-            srcObjectRef.current = value;
-          }
-        },
-        onVideoStateChange: (state) => {
-          console.log('Video state:', state);
-          if (state === 'STOP') {
-            setIsSpeaking(false);
-            if (videoRef.current && agentManagerRef.current?.agent?.presenter?.idle_video) {
-              videoRef.current.srcObject = undefined;
-              videoRef.current.src = agentManagerRef.current.agent.presenter.idle_video;
-            }
-          } else if (state === 'PLAY') {
-            setIsSpeaking(true);
-            if (videoRef.current) {
-              videoRef.current.src = '';
-              videoRef.current.srcObject = srcObjectRef.current;
-            }
-          }
-        },
-        onConnectionStateChange: (state) => {
-          console.log('Connection state:', state);
-          setConnectionState(state);
-          if (state === 'connected') {
-            setIsConnected(true);
-            toast.success('התחברת בהצלחה!');
-          } else if (state === 'disconnected' || state === 'closed') {
-            setIsConnected(false);
-          }
-        },
-        onNewMessage: (msgs, type) => {
-          console.log('New messages:', msgs, type);
-          if (type === 'answer') {
-            setMessages(msgs);
-          }
-        }
-      };
-
-      const streamOptions = { 
-        compatibilityMode: 'auto', 
-        streamWarmup: true 
-      };
-
-      const agentManager = await sdk.createAgentManager(aid, { 
-        auth, 
-        callbacks, 
-        streamOptions 
-      });
-
-      agentManagerRef.current = agentManager;
-
-      await agentManager.connect();
-
-      setIsConfigured(true);
-      setShowSettings(false);
-
-      // Load idle video
-      if (videoRef.current && agentManager.agent?.presenter?.idle_video) {
-        videoRef.current.src = agentManager.agent.presenter.idle_video;
-      }
-
-    } catch (error) {
-      console.error('Connection error:', error);
-      toast.error('שגיאה בהתחברות: ' + error.message);
-    } finally {
-      setIsConnecting(false);
-    }
-  };
-
-  const handleConnect = async () => {
-    if (!agentId || !clientKey) {
-      toast.error('נא להזין Agent ID ו-Client Key');
-      return;
-    }
-
-    await handleConnectWithConfig(agentId, clientKey);
-  };
-
-
-
-  const handleSendMessage = async () => {
-    if (!message.trim() || !agentManagerRef.current || !isConnected) return;
-
-    try {
-      const userMessage = message.trim();
-      setMessage('');
-
-      // Add user message to chat
-      setMessages(prev => [...prev, {
-        role: 'user',
-        content: userMessage,
-        timestamp: new Date().toISOString()
-      }]);
-
-      // Send to agent
-      await agentManagerRef.current.chat(userMessage);
-
-    } catch (error) {
-      console.error('Send message error:', error);
-      toast.error('שגיאה בשליחת הודעה');
-    }
-  };
-
-  const handleDisconnect = () => {
-    if (agentManagerRef.current) {
-      agentManagerRef.current.disconnect();
-      agentManagerRef.current = null;
-    }
-    setIsConnected(false);
-    setIsConfigured(false);
-    setMessages([]);
-    if (videoRef.current) {
-      videoRef.current.srcObject = null;
-      videoRef.current.src = '';
-    }
-  };
+  }, [isOpen]);
 
   return (
     <AnimatePresence>
@@ -231,7 +75,7 @@ export default function DIDLiveChat({ isOpen, onClose }) {
               <div className="text-center text-gray-400">
                 <Video className="w-16 h-16 mx-auto mb-4 opacity-50 animate-pulse" />
                 <p>טוען ווידג'ט צ'אט...</p>
-                <p className="text-xs mt-2">הווידג'ט של D-ID יופיע כאן</p>
+                <p className="text-xs mt-2">הווידג'ט של D-ID יופיע באתר</p>
               </div>
             </div>
           </motion.div>
