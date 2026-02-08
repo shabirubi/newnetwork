@@ -29,8 +29,8 @@ Deno.serve(async (req) => {
 
     if (!tokenResponse.ok) {
       const error = await tokenResponse.text();
-      console.error('Token creation failed:', error);
-      return Response.json({ error: 'Failed to create session token' }, { status: 500 });
+      console.error('Token creation failed:', tokenResponse.status, error);
+      return Response.json({ error: `Failed to create session token: ${error}` }, { status: 500 });
     }
 
     const { session_id, session_token } = await tokenResponse.json();
@@ -46,8 +46,8 @@ Deno.serve(async (req) => {
 
     if (!startResponse.ok) {
       const error = await startResponse.text();
-      console.error('Session start failed:', error);
-      return Response.json({ error: 'Failed to start session' }, { status: 500 });
+      console.error('Session start failed:', startResponse.status, error);
+      return Response.json({ error: `Failed to start session: ${error}` }, { status: 500 });
     }
 
     const sessionData = await startResponse.json();
