@@ -18,6 +18,7 @@ import RightSidebarUpdates from "./components/sidebar/RightSidebarUpdates";
 import LeftSidebarCategories from "./components/sidebar/LeftSidebarCategories";
 import KanArchiveModal from "./components/home/KanArchiveModal";
 import TalkingAvatar from "./components/avatar/TalkingAvatar";
+import DIDLiveChat from "./components/avatar/DIDLiveChat";
 import { base44 } from "@/api/base44Client";
 
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png";
@@ -55,6 +56,7 @@ export default function Layout({ children, currentPageName }) {
   });
   const [user, setUser] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
+  const [didChatOpen, setDidChatOpen] = useState(false);
 
   useEffect(() => {
     if (darkMode) {
@@ -102,35 +104,7 @@ export default function Layout({ children, currentPageName }) {
     checkAuth();
   }, []);
 
-  // טעינת D-ID Agent
-  useEffect(() => {
-    const script = document.createElement('script');
-    script.type = 'module';
-    script.src = 'https://agent.d-id.com/v2/index.js';
-    script.setAttribute('data-mode', 'fabio');
-    script.setAttribute('data-client-key', 'Z29vZ2xlLW9hdXRoMnwxMDkwNTAwMjE4NjYwMDc1ODI0OTY6MUl4RzNNdzRLZkRXVGU3TDBfN3d3');
-    script.setAttribute('data-agent-id', 'v2_agt_pW1vqMCQ');
-    script.setAttribute('data-name', 'did-agent');
-    script.setAttribute('data-monitor', 'true');
-    script.setAttribute('data-orientation', 'horizontal');
-    script.setAttribute('data-position', 'right');
-    
-    script.onload = () => {
-      console.log('D-ID script loaded successfully');
-      setTimeout(() => {
-        const agent = document.querySelector('[data-name="did-agent"]');
-        console.log('Agent element found:', agent);
-      }, 1000);
-    };
-    
-    document.body.appendChild(script);
 
-    return () => {
-      if (document.body.contains(script)) {
-        document.body.removeChild(script);
-      }
-    };
-  }, []);
 
   const handleLogout = async () => {
     try {
@@ -288,48 +262,7 @@ export default function Layout({ children, currentPageName }) {
             </Link>
 
             <button
-              onClick={() => {
-                console.log('Button clicked');
-                const checkAndClick = () => {
-                  // Try multiple selectors
-                  const selectors = [
-                    '[data-name="did-agent"]',
-                    'button[aria-label="Open chat"]',
-                    '.fabio-button',
-                    'button.fabio',
-                    '[class*="fabio"]',
-                    'iframe[src*="d-id"]'
-                  ];
-                  
-                  let found = false;
-                  for (const selector of selectors) {
-                    const element = document.querySelector(selector);
-                    console.log(`Checking ${selector}:`, element);
-                    if (element) {
-                      if (element.tagName === 'BUTTON') {
-                        element.click();
-                        found = true;
-                        console.log('Clicked button');
-                        break;
-                      } else if (element.tagName === 'IFRAME') {
-                        // Try to trigger the iframe's internal button
-                        found = true;
-                        break;
-                      }
-                    }
-                  }
-                  
-                  if (!found) {
-                    console.log('No agent found, opening in new tab');
-                    window.open('https://studio.d-id.com/agents/share?id=v2_agt_pW1vqMCQ&utm_source=copy&key=WjI5dloyeGxMVzloZFhSb01ud3hNRGt3TlRBd01qRTROall3TURjMU9ESTBPVFk2TVVsNFJ6Tk5kelJMWmtSWFZHVTNUREJmTjNkMw==', '_blank');
-                  }
-                };
-                
-                // Try immediately and after delays
-                checkAndClick();
-                setTimeout(checkAndClick, 500);
-                setTimeout(checkAndClick, 1500);
-              }}
+              onClick={() => setDidChatOpen(true)}
               className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-gradient-to-r from-green-600 to-green-700 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-green-500/50 transition-all hover:scale-105 hover:from-green-700 hover:to-green-800 active:scale-95 cursor-pointer text-xs sm:text-sm animate-pulse"
             >
               <MessageCircle className="w-4 h-4 text-white" />
@@ -434,6 +367,9 @@ export default function Layout({ children, currentPageName }) {
 
       {/* Talking Avatar Creator */}
       <TalkingAvatar />
+
+      {/* D-ID Live Chat */}
+      <DIDLiveChat isOpen={didChatOpen} onClose={() => setDidChatOpen(false)} />
 
 
 
