@@ -170,11 +170,15 @@ export default function Home() {
     [articles]
   );
   
-  const breakingNews = React.useMemo(() => {
-    const breaking = articles.filter(a => a.is_breaking);
-    // אם אין חדשות חמות, נציג את כל הכתבות
-    return breaking.length > 0 ? breaking : articles;
-  }, [articles]);
+  const breakingNews = React.useMemo(() => 
+    articles.filter(a => a.is_breaking), 
+    [articles]
+  );
+  
+  const allNewsForHome = React.useMemo(() => 
+    breakingNews.length > 0 ? breakingNews : articles.slice(0, 12),
+    [articles, breakingNews]
+  );
   
   const regularNews = React.useMemo(() => 
     articles.filter(a => a.id !== featuredArticle?.id).slice(0, 8), 
@@ -237,23 +241,31 @@ export default function Home() {
         </section>
       )}
 
-      {/* חדשות חמות - כל הכרטיסיות */}
+      {/* חדשות - הצגת כל הכתבות */}
       <section className="px-4 sm:px-4 mt-6">
         <div className="flex items-center gap-2 mb-6">
           <Flame className="w-6 h-6 text-[#E31E24]" />
-          <h2 className="text-2xl font-bold text-white">חדשות חמות</h2>
+          <h2 className="text-2xl font-bold text-white">
+            {breakingNews.length > 0 ? 'חדשות חמות' : 'חדשות'}
+          </h2>
         </div>
 
-        {breakingNews.length > 0 ? (
+        {isLoading ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {breakingNews.map((article) => (
+            {[...Array(8)].map((_, i) => (
+              <div key={i} className="h-64 bg-gray-800 rounded-xl animate-pulse"></div>
+            ))}
+          </div>
+        ) : allNewsForHome.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {allNewsForHome.map((article) => (
               <NewsCard key={article.id} article={article} />
             ))}
           </div>
         ) : (
           <div className="text-center py-12 text-white/40">
             <Flame className="w-12 h-12 mx-auto mb-3 opacity-30" />
-            <p>אין חדשות חמות כרגע</p>
+            <p>אין כתבות להצגה</p>
           </div>
         )}
       </section>
