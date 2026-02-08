@@ -312,9 +312,13 @@ export default function ArticleCreatorModal({ isOpen, onClose }) {
                       <SelectTrigger className="bg-black/50 border-white/20 text-white">
                         <SelectValue placeholder="בחר קטגוריה" />
                       </SelectTrigger>
-                      <SelectContent className="bg-black border-white/20">
+                      <SelectContent className="bg-gray-900 border-white/20 text-white max-h-[300px]">
                         {categories.map((cat) => (
-                          <SelectItem key={cat.value} value={cat.value} className="text-white hover:bg-white/10">
+                          <SelectItem 
+                            key={cat.value} 
+                            value={cat.value} 
+                            className="text-white hover:bg-[#E31E24]/30 focus:bg-[#E31E24]/30 cursor-pointer"
+                          >
                             {cat.label}
                           </SelectItem>
                         ))}
