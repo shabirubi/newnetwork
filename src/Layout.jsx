@@ -124,6 +124,17 @@ export default function Layout({ children, currentPageName }) {
 
   return (
     <div className="min-h-screen bg-black transition-colors duration-300 flex flex-col overflow-x-hidden" dir="rtl">
+      <script 
+        type="module"
+        src="https://agent.d-id.com/v2/index.js"
+        data-mode="fabio"
+        data-client-key="Z29vZ2xlLW9hdXRoMnwxMDkwNTAwMjE4NjYwMDc1ODI0OTY6MUl4RzNNdzRLZkRXVGU3TDBfN3d3"
+        data-agent-id="v2_agt_pW1vqMCQ"
+        data-name="did-agent"
+        data-monitor="true"
+        data-orientation="horizontal"
+        data-position="right"
+      />
       <style>{`
         :root {
           --primary: #E31E24;
@@ -275,13 +286,7 @@ export default function Layout({ children, currentPageName }) {
 
 
 
-            <button
-              onClick={() => window.dispatchEvent(new CustomEvent('openDIDChat'))}
-              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-gradient-to-r from-green-600 to-green-700 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-green-500/50 transition-all hover:scale-105 hover:from-green-700 hover:to-green-800 active:scale-95 cursor-pointer text-xs sm:text-sm animate-pulse"
-            >
-              <MessageCircle className="w-4 h-4 text-white" />
-              <span className="text-white font-bold hidden sm:inline">צ'אט חי</span>
-            </button>
+
 
             <Link 
               to={createPageUrl("AIDesignStudio")}
