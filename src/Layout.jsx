@@ -114,6 +114,15 @@ export default function Layout({ children, currentPageName }) {
     script.setAttribute('data-monitor', 'true');
     script.setAttribute('data-orientation', 'horizontal');
     script.setAttribute('data-position', 'right');
+    
+    script.onload = () => {
+      console.log('D-ID script loaded successfully');
+      setTimeout(() => {
+        const agent = document.querySelector('[data-name="did-agent"]');
+        console.log('Agent element found:', agent);
+      }, 1000);
+    };
+    
     document.body.appendChild(script);
 
     return () => {
@@ -280,14 +289,46 @@ export default function Layout({ children, currentPageName }) {
 
             <button
               onClick={() => {
-                setTimeout(() => {
-                  const fabioButton = document.querySelector('button[aria-label="Open chat"], .fabio-button, [data-name="did-agent"]');
-                  if (fabioButton) {
-                    fabioButton.click();
-                  } else {
+                console.log('Button clicked');
+                const checkAndClick = () => {
+                  // Try multiple selectors
+                  const selectors = [
+                    '[data-name="did-agent"]',
+                    'button[aria-label="Open chat"]',
+                    '.fabio-button',
+                    'button.fabio',
+                    '[class*="fabio"]',
+                    'iframe[src*="d-id"]'
+                  ];
+                  
+                  let found = false;
+                  for (const selector of selectors) {
+                    const element = document.querySelector(selector);
+                    console.log(`Checking ${selector}:`, element);
+                    if (element) {
+                      if (element.tagName === 'BUTTON') {
+                        element.click();
+                        found = true;
+                        console.log('Clicked button');
+                        break;
+                      } else if (element.tagName === 'IFRAME') {
+                        // Try to trigger the iframe's internal button
+                        found = true;
+                        break;
+                      }
+                    }
+                  }
+                  
+                  if (!found) {
+                    console.log('No agent found, opening in new tab');
                     window.open('https://studio.d-id.com/agents/share?id=v2_agt_pW1vqMCQ&utm_source=copy&key=WjI5dloyeGxMVzloZFhSb01ud3hNRGt3TlRBd01qRTROall3TURjMU9ESTBPVFk2TVVsNFJ6Tk5kelJMWmtSWFZHVTNUREJmTjNkMw==', '_blank');
                   }
-                }, 100);
+                };
+                
+                // Try immediately and after delays
+                checkAndClick();
+                setTimeout(checkAndClick, 500);
+                setTimeout(checkAndClick, 1500);
               }}
               className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-gradient-to-r from-green-600 to-green-700 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-green-500/50 transition-all hover:scale-105 hover:from-green-700 hover:to-green-800 active:scale-95 cursor-pointer text-xs sm:text-sm animate-pulse"
             >
