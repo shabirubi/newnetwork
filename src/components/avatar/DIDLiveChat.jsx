@@ -6,28 +6,39 @@ export default function DIDLiveChat({ isOpen, onClose }) {
   const containerRef = useRef(null);
 
   useEffect(() => {
-    if (!isOpen || !containerRef.current) return;
+    if (!isOpen) return;
 
-    // Clean up any existing widget
+    // Remove any existing script first
+    const existingScript = document.querySelector('script[src="https://agent.d-id.com/v2/index.js"]');
+    if (existingScript) {
+      existingScript.remove();
+    }
+
+    // Remove any existing widget
     const existingWidget = document.querySelector('did-agent');
     if (existingWidget) {
       existingWidget.remove();
     }
 
-    // Create the widget element
-    const widget = document.createElement('did-agent');
-    widget.setAttribute('data-mode', 'embed');
-    widget.setAttribute('data-client-key', 'Z29vZ2xlLW9hdXRoMnwxMDkwNTAwMjE4NjYwMDc1ODI0OTY6MUl4RzNNdzRLZkRXVGU3TDBfN3d3');
-    widget.setAttribute('data-agent-id', 'v2_agt_pW1vqMCQ');
-    
-    // Add to container
-    containerRef.current.appendChild(widget);
+    // Wait a bit then load
+    setTimeout(() => {
+      if (!containerRef.current) return;
 
-    // Load the script
-    const script = document.createElement('script');
-    script.type = 'module';
-    script.src = 'https://agent.d-id.com/v2/index.js';
-    document.head.appendChild(script);
+      // Create the widget element
+      const widget = document.createElement('did-agent');
+      widget.setAttribute('data-mode', 'embed');
+      widget.setAttribute('data-client-key', 'Z29vZ2xlLW9hdXRoMnwxMDkwNTAwMjE4NjYwMDc1ODI0OTY6MUl4RzNNdzRLZkRXVGU3TDBfN3d3');
+      widget.setAttribute('data-agent-id', 'v2_agt_pW1vqMCQ');
+      
+      // Add to container
+      containerRef.current.appendChild(widget);
+
+      // Load the script
+      const script = document.createElement('script');
+      script.type = 'module';
+      script.src = 'https://agent.d-id.com/v2/index.js';
+      document.head.appendChild(script);
+    }, 100);
 
     return () => {
       // Cleanup
