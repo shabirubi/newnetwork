@@ -12,6 +12,7 @@ export default function DIDLiveChat({ isOpen, onClose }) {
   const [isConfigured, setIsConfigured] = useState(false);
   const [isConnecting, setIsConnecting] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
+  const [loadingConfig, setLoadingConfig] = useState(true);
   const [message, setMessage] = useState('');
   const [messages, setMessages] = useState([]);
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -22,6 +23,36 @@ export default function DIDLiveChat({ isOpen, onClose }) {
   const agentManagerRef = useRef(null);
   const srcObjectRef = useRef(null);
 
+  // Load D-ID configuration from backend
+  useEffect(() => {
+    if (isOpen) {
+      loadDIDConfig();
+    }
+  }, [isOpen]);
+
+  const loadDIDConfig = async () => {
+    try {
+      setLoadingConfig(true);
+      const { data } = await base44.functions.invoke('getDIDConfig');
+      
+      if (data.error) {
+        toast.error(data.error);
+        return;
+      }
+
+      setAgentId(data.agentId);
+      setClientKey(data.clientKey);
+      
+      // Auto-connect
+      await handleConnectWithConfig(data.agentId, data.clientKey);
+    } catch (error) {
+      console.error('Failed to load D-ID config:', error);
+      toast.error('שגיאה בטעינת הגדרות D-ID');
+    } finally {
+      setLoadingConfig(false);
+    }
+  };
+
   useEffect(() => {
     return () => {
       if (agentManagerRef.current) {
@@ -30,18 +61,13 @@ export default function DIDLiveChat({ isOpen, onClose }) {
     };
   }, []);
 
-  const handleConnect = async () => {
-    if (!agentId || !clientKey) {
-      toast.error('נא להזין Agent ID ו-Client Key');
-      return;
-    }
-
+  const handleConnectWithConfig = async (aid, ckey) => {
     try {
       setIsConnecting(true);
 
       const auth = { 
         type: 'key', 
-        clientKey: clientKey 
+        clientKey: ckey 
       };
 
       const callbacks = {
@@ -90,7 +116,7 @@ export default function DIDLiveChat({ isOpen, onClose }) {
         streamWarmup: true 
       };
 
-      const agentManager = await sdk.createAgentManager(agentId, { 
+      const agentManager = await sdk.createAgentManager(aid, { 
         auth, 
         callbacks, 
         streamOptions 
@@ -115,6 +141,17 @@ export default function DIDLiveChat({ isOpen, onClose }) {
       setIsConnecting(false);
     }
   };
+
+  const handleConnect = async () => {
+    if (!agentId || !clientKey) {
+      toast.error('נא להזין Agent ID ו-Client Key');
+      return;
+    }
+
+    await handleConnectWithConfig(agentId, clientKey);
+  };
+
+
 
   const handleSendMessage = async () => {
     if (!message.trim() || !agentManagerRef.current || !isConnected) return;
@@ -221,7 +258,15 @@ export default function DIDLiveChat({ isOpen, onClose }) {
                     מדבר
                   </div>
                 )}
-                {!isConfigured && (
+                {loadingConfig && (
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-pink-600/20 backdrop-blur-sm flex items-center justify-center">
+                    <div className="text-center p-8">
+                      <Loader2 className="w-16 h-16 text-white/60 mx-auto mb-4 animate-spin" />
+                      <p className="text-white/80 text-lg">מתחבר...</p>
+                    </div>
+                  </div>
+                )}
+                {!isConfigured && !loadingConfig && (
                   <div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-pink-600/20 backdrop-blur-sm flex items-center justify-center">
                     <div className="text-center p-8">
                       <Video className="w-16 h-16 text-white/60 mx-auto mb-4" />

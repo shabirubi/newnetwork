@@ -31,6 +31,7 @@ import AIVideoFromImagesModal from '../components/videoeditor/AIVideoFromImagesM
 import ExportVideoModal from '../components/videoeditor/ExportVideoModal';
 import SampleVideosModal from '../components/videoeditor/SampleVideosModal';
 import KlingCharacterModal from '../components/videoeditor/KlingCharacterModal';
+import ArticleCreatorModal from '../components/videoeditor/ArticleCreatorModal';
 
 // Projects Modal Component
 function ProjectsModal({ onClose, onLoad }) {
@@ -139,6 +140,7 @@ export default function VideoEditor() {
   const [contextClipIndex, setContextClipIndex] = useState(null);
   const [showSampleVideosModal, setShowSampleVideosModal] = useState(false);
   const [showKlingCharacterModal, setShowKlingCharacterModal] = useState(false);
+  const [showArticleCreatorModal, setShowArticleCreatorModal] = useState(false);
   const videoRef = useRef(null);
   const audioRef = useRef(null);
 
@@ -548,6 +550,10 @@ export default function VideoEditor() {
             </button>
             <Button onClick={handleExport} disabled={clips.length === 0} className="bg-[#E31E24] hover:bg-[#B91C1C] text-white">
               <><Download size={18} className="mr-2" />ייצוא סרטון</>
+            </Button>
+            <Button onClick={() => setShowArticleCreatorModal(true)} className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white">
+              <Sparkles size={18} className="mr-2" />
+              כתבה חדשה
             </Button>
           </div>
         </div>
@@ -1239,6 +1245,11 @@ export default function VideoEditor() {
       {showSampleVideosModal && <SampleVideosModal onClose={() => setShowSampleVideosModal(false)} onApply={(clip) => { setClips(prev => [...prev, clip]); setShowSampleVideosModal(false); }} />}
 
       {showKlingCharacterModal && <KlingCharacterModal onClose={() => setShowKlingCharacterModal(false)} onApply={(clip) => { setClips(prev => [...prev, clip]); setShowKlingCharacterModal(false); }} />}
+
+      <ArticleCreatorModal 
+        isOpen={showArticleCreatorModal}
+        onClose={() => setShowArticleCreatorModal(false)}
+      />
 
       {showExportModal && (
         <ExportVideoModal 
