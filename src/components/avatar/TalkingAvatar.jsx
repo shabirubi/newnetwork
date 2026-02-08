@@ -129,12 +129,12 @@ export default function TalkingAvatar() {
   // Floating button will be added to header via layout
   React.useEffect(() => {
     const handleAvatarCreator = () => setIsOpen(true);
-    const handleLiveChat = () => setShowLiveChat(true);
+    const handleDIDChat = () => setShowLiveChat(true);
     window.addEventListener('openAvatarCreator', handleAvatarCreator);
-    window.addEventListener('openLiveChat', handleLiveChat);
+    window.addEventListener('openDIDChat', handleDIDChat);
     return () => {
       window.removeEventListener('openAvatarCreator', handleAvatarCreator);
-      window.removeEventListener('openLiveChat', handleLiveChat);
+      window.removeEventListener('openDIDChat', handleDIDChat);
     };
   }, []);
 
