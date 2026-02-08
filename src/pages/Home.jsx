@@ -265,7 +265,7 @@ export default function Home() {
         ) : (
           <div className="text-center py-12 text-white/40">
             <Flame className="w-12 h-12 mx-auto mb-3 opacity-30" />
-            <p>אין כתבות להצגה</p>
+            <p>מה יהיה?</p>
           </div>
         )}
       </section>
