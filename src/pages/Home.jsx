@@ -246,63 +246,20 @@ export default function Home() {
         </section>
       )}
 
-      {/* חדשות חמות - כתבה מרכזית + כרטיסיות */}
+      {/* חדשות חמות - כל הכרטיסיות */}
       <section className="px-4 sm:px-4 mt-6">
         <div className="flex items-center gap-2 mb-6">
           <Flame className="w-6 h-6 text-[#E31E24]" />
           <h2 className="text-2xl font-bold text-white">חדשות חמות</h2>
         </div>
 
-        {breakingNews.length > 0 && (
-          <div className="space-y-6">
-            {/* כתבה מרכזית גדולה */}
-            <Link to={createPageUrl(`Article?id=${breakingNews[0].id}`)}>
-              <motion.div
-                whileHover={{ scale: 1.01 }}
-                className="relative bg-gradient-to-br from-[#E31E24]/20 to-black border-2 border-[#E31E24]/50 rounded-2xl overflow-hidden group cursor-pointer"
-              >
-                <div className="relative h-[400px] sm:h-[500px]">
-                  <img
-                    src={breakingNews[0].image_url}
-                    alt={breakingNews[0].title}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent"></div>
-                  <div className="absolute top-4 right-4">
-                    <span className="bg-[#E31E24] text-white px-4 py-2 rounded-full font-bold text-sm flex items-center gap-2 animate-pulse">
-                      <Flame className="w-4 h-4" />
-                      חדשה חמה
-                    </span>
-                  </div>
-                  <div className="absolute bottom-0 left-0 right-0 p-6 sm:p-8">
-                    <h3 className="text-2xl sm:text-4xl font-bold text-white mb-3 group-hover:text-[#E31E24] transition-colors">
-                      {breakingNews[0].title}
-                    </h3>
-                    {breakingNews[0].subtitle && (
-                      <p className="text-white/80 text-lg mb-4">{breakingNews[0].subtitle}</p>
-                    )}
-                    <div className="flex items-center gap-4 text-white/60 text-sm">
-                      <span>{new Date(breakingNews[0].created_date).toLocaleDateString('he-IL')}</span>
-                      <span>•</span>
-                      <span>{breakingNews[0].source || 'הרשת החדשה'}</span>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            </Link>
-
-            {/* שאר החדשות החמות בכרטיסיות רגילות */}
-            {breakingNews.length > 1 && (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
-                {breakingNews.slice(1).map((article) => (
-                  <NewsCard key={article.id} article={article} />
-                ))}
-              </div>
-            )}
+        {breakingNews.length > 0 ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+            {breakingNews.map((article) => (
+              <NewsCard key={article.id} article={article} />
+            ))}
           </div>
-        )}
-
-        {breakingNews.length === 0 && (
+        ) : (
           <div className="text-center py-12 text-white/40">
             <Flame className="w-12 h-12 mx-auto mb-3 opacity-30" />
             <p>אין חדשות חמות כרגע</p>
