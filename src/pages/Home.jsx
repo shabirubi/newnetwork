@@ -78,35 +78,25 @@ export default function Home() {
   const queryClient = useQueryClient();
 
   const { data: articles = [], isLoading, fetchNextPage, isFetchingNextPage } = useQuery({
-    queryKey: ['news-articles', selectedChannel, page],
+    queryKey: ['news-articles', selectedChannel],
     queryFn: async () => {
       try {
-        const limit = 15; // הפחתת כמות הכתבות עוד יותר
-        const skip = (page - 1) * limit;
-        
-        let allArticles = [];
         if (selectedChannel === 'all') {
-          allArticles = await base44.entities.NewsArticle.list('-created_date', 100); // הפחתה ל-100 בלבד
+          return await base44.entities.NewsArticle.list('-created_date', 500);
         } else {
-          allArticles = await base44.entities.NewsArticle.filter({ channel_id: selectedChannel }, '-created_date', 100);
+          return await base44.entities.NewsArticle.filter({ channel_id: selectedChannel }, '-created_date', 500);
         }
-        
-        const paginated = allArticles.slice(skip, skip + limit);
-        if (paginated.length < limit) {
-          setHasMore(false);
-        }
-        return paginated;
       } catch (err) {
+        console.error('Error loading articles:', err);
         return [];
       }
     },
-    staleTime: 10 * 60 * 1000,
-    gcTime: 15 * 60 * 1000,
-    refetchInterval: false,
-    refetchOnWindowFocus: false,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+    refetchInterval: 60000, // רענון כל דקה
+    refetchOnWindowFocus: true,
     initialData: [],
-    keepPreviousData: true,
-    retry: 1,
+    retry: 2,
     enabled: true
   });
 
