@@ -19,7 +19,7 @@ export default function DIDLiveChat({ isOpen, onClose }) {
           animate={{ scale: 1, y: 0 }}
           exit={{ scale: 0.9, y: 20 }}
           onClick={(e) => e.stopPropagation()}
-          className="bg-black rounded-2xl overflow-hidden w-full max-w-5xl shadow-2xl border border-purple-500/50 h-[85vh] flex flex-col"
+          className="bg-black rounded-2xl overflow-hidden w-full max-w-[95vw] shadow-2xl border border-purple-500/50 h-[95vh] flex flex-col"
         >
           <div className="bg-gradient-to-r from-purple-600 to-pink-600 p-4 flex items-center justify-between shrink-0">
             <div className="flex items-center gap-3">
