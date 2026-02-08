@@ -276,11 +276,11 @@ export default function Layout({ children, currentPageName }) {
 
 
             <button
-              onClick={() => window.dispatchEvent(new CustomEvent('openAvatarCreator'))}
-              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-gradient-to-r from-[#E31E24]/30 to-[#E31E24]/20 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-[#E31E24]/50 transition-all hover:scale-105 hover:from-[#E31E24]/50 hover:to-[#E31E24]/40 active:scale-95 cursor-pointer text-xs sm:text-sm"
+              onClick={() => window.dispatchEvent(new CustomEvent('openLiveChat'))}
+              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-gradient-to-r from-green-600 to-green-700 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-green-500/50 transition-all hover:scale-105 hover:from-green-700 hover:to-green-800 active:scale-95 cursor-pointer text-xs sm:text-sm animate-pulse"
             >
-              <Sparkles className="w-4 h-4 text-white" />
-              <span className="text-white font-bold hidden sm:inline">דמויות</span>
+              <MessageCircle className="w-4 h-4 text-white" />
+              <span className="text-white font-bold hidden sm:inline">צ'אט חי</span>
             </button>
 
             <Link 
