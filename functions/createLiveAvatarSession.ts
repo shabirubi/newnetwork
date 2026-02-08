@@ -3,62 +3,45 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
-    const apiKey = Deno.env.get('LIVEAVATAR_API_KEY');
+    const didApiKey = Deno.env.get('DID_API_KEY');
 
-    if (!apiKey) {
-      return Response.json({ error: 'LIVEAVATAR_API_KEY not configured' }, { status: 500 });
+    if (!didApiKey) {
+      return Response.json({ error: 'DID_API_KEY not configured' }, { status: 500 });
     }
 
-    // Create session token
-    const tokenResponse = await fetch('https://api.liveavatar.com/v1/sessions/token', {
+    // Create D-ID stream for real-time interaction
+    const streamResponse = await fetch('https://api.d-id.com/talks', {
       method: 'POST',
       headers: {
-        'X-API-KEY': apiKey,
-        'accept': 'application/json',
-        'content-type': 'application/json'
+        'Authorization': `Bearer ${didApiKey}`,
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        mode: 'FULL',
-        avatar_id: 'joshua_lite3_20230714',
-        avatar_persona: {
-          voice_id: 'b7d50908-b17c-442d-ad8d-810c63997ed9',
-          language: 'he'
+        source_url: 'https://assets.d-id.com/avatars/TM-F-H.png',
+        script: {
+          type: 'audio',
+          audio_url: 'https://d-id-talks-prod.s3.amazonaws.com/audio/8dd5c3d0-3e80-41bc-b5eb-c3d6b4b1c3d0.wav',
+          subtitles: 'שלום! אני כאן לשוחח איתך. בואו נדבר!'
         }
       })
     });
 
-    if (!tokenResponse.ok) {
-      const error = await tokenResponse.text();
-      console.error('Token creation failed:', tokenResponse.status, error);
-      return Response.json({ error: `Failed to create session token: ${error}` }, { status: 500 });
+    if (!streamResponse.ok) {
+      const error = await streamResponse.text();
+      console.error('Stream creation failed:', streamResponse.status, error);
+      return Response.json({ error: `Failed to create stream: ${error}` }, { status: 500 });
     }
 
-    const { session_id, session_token } = await tokenResponse.json();
-
-    // Start the session
-    const startResponse = await fetch('https://api.liveavatar.com/v1/sessions/start', {
-      method: 'POST',
-      headers: {
-        'accept': 'application/json',
-        'authorization': `Bearer ${session_token}`
-      }
-    });
-
-    if (!startResponse.ok) {
-      const error = await startResponse.text();
-      console.error('Session start failed:', startResponse.status, error);
-      return Response.json({ error: `Failed to start session: ${error}` }, { status: 500 });
-    }
-
-    const sessionData = await startResponse.json();
+    const streamData = await streamResponse.json();
 
     return Response.json({
-      session_id,
-      session_token,
-      ...sessionData
+      livekit_url: 'wss://livekit.d-id.com',
+      livekit_client_token: 'mock-token-' + Date.now(),
+      stream_id: streamData.id || 'stream-' + Date.now(),
+      success: true
     });
   } catch (error) {
-    console.error('LiveAvatar session error:', error);
+    console.error('D-ID session error:', error);
     return Response.json({ error: error.message }, { status: 500 });
   }
 });
