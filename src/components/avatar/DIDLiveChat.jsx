@@ -41,11 +41,17 @@ export default function DIDLiveChat({ isOpen, onClose }) {
 
           <div className="flex-1 bg-black relative overflow-hidden">
             <iframe
-              src="https://studio.d-id.com/agents/share?id=v2_agt_pW1vqMCQ&key=WjI5dloyeGxMVzloZFhSb01ud3hNRGt3TlRBd01qRTROall3TURjMU9ESTBPVFk2TVVsNFJ6Tk5kelJMWmtSWFZHVTNUREJmTjNkMw==&camera=true&autostart=true"
-              allow="camera *; microphone *; fullscreen; autoplay; display-capture"
+              src="https://studio.d-id.com/agents/share?id=v2_agt_pW1vqMCQ&key=WjI5dloyeGxMVzloZFhSb01ud3hNRGt3TlRBd01qRTROall3TURjMU9ESTBPVFk2TVVsNFJ6Tk5kelJMWmtSWFZHVTNUREJmTjNkMw=="
+              allow="camera *; microphone *; fullscreen; autoplay; display-capture; geolocation"
               className="w-full h-full border-0"
               title="D-ID Agent Chat"
-              style={{ width: '100%', height: '100%', border: 'none' }}
+              style={{ 
+                width: '100%', 
+                height: '100%', 
+                border: 'none',
+                transform: 'scale(1.2)',
+                transformOrigin: 'center center'
+              }}
             />
           </div>
         </motion.div>
