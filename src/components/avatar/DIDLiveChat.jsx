@@ -41,7 +41,7 @@ export default function DIDLiveChat({ isOpen, onClose }) {
 
           <div className="flex-1 bg-black relative overflow-hidden">
             <iframe
-              src="https://studio.d-id.com/agents/share?id=v2_agt_pW1vqMCQ&key=WjI5dloyeGxMVzloZFhSb01ud3hNRGt3TlRBd01qRTROall3TURjMU9ESTBPVFk2TVVsNFJ6Tk5kelJMWmtSWFZHVTNUREJmTjNkMw=="
+              src="https://studio.d-id.com/agents/share?id=v2_agt_pW1vqMCQ&key=WjI5dloyeGxMVzloZFhSb01ud3hNRGt3TlRBd01qRTROall3TURjMU9ESTBPVFk2TVVsNFJ6Tk5kelJMWmtSWFZHVTNUREJmTjNkMw==&camera=true&autostart=true"
               allow="camera *; microphone *; fullscreen; autoplay; display-capture; geolocation"
               className="w-full h-full border-0"
               title="D-ID Agent Chat"
@@ -49,7 +49,7 @@ export default function DIDLiveChat({ isOpen, onClose }) {
                 width: '100%', 
                 height: '100%', 
                 border: 'none',
-                transform: 'scale(1.2)',
+                transform: 'scale(1.8) translateY(-5%)',
                 transformOrigin: 'center center'
               }}
             />
