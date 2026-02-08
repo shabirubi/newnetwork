@@ -4,7 +4,7 @@ import { X, Upload, Loader2, Newspaper, Image as ImageIcon, Video, Send } from '
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+
 import { base44 } from '@/api/base44Client';
 import { toast } from 'sonner';
 
@@ -308,22 +308,18 @@ export default function ArticleCreatorModal({ isOpen, onClose }) {
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="text-white text-sm font-bold mb-2 block">קטגוריה *</label>
-                    <Select value={category} onValueChange={setCategory} disabled={publishing}>
-                      <SelectTrigger className="bg-black/50 border-white/20 text-white">
-                        <SelectValue placeholder="בחר קטגוריה" />
-                      </SelectTrigger>
-                      <SelectContent className="bg-gray-900 border-white/20 text-white max-h-[300px]">
-                        {categories.map((cat) => (
-                          <SelectItem 
-                            key={cat.value} 
-                            value={cat.value} 
-                            className="text-white hover:bg-[#E31E24]/30 focus:bg-[#E31E24]/30 cursor-pointer"
-                          >
-                            {cat.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                    <select
+                      value={category}
+                      onChange={(e) => setCategory(e.target.value)}
+                      disabled={publishing}
+                      className="w-full bg-black/50 border border-white/20 text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#E31E24]"
+                    >
+                      {categories.map((cat) => (
+                        <option key={cat.value} value={cat.value}>
+                          {cat.label}
+                        </option>
+                      ))}
+                    </select>
                   </div>
 
                   <div className="space-y-2">
