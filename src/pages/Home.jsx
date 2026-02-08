@@ -180,10 +180,11 @@ export default function Home() {
     [articles]
   );
   
-  const breakingNews = React.useMemo(() => 
-    articles.filter(a => a.is_breaking), 
-    [articles]
-  );
+  const breakingNews = React.useMemo(() => {
+    const breaking = articles.filter(a => a.is_breaking);
+    // אם אין חדשות חמות, נציג את כל הכתבות
+    return breaking.length > 0 ? breaking : articles;
+  }, [articles]);
   
   const regularNews = React.useMemo(() => 
     articles.filter(a => a.id !== featuredArticle?.id).slice(0, 8), 
