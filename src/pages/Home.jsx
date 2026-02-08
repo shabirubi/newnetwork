@@ -205,61 +205,64 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-black space-y-0 sm:space-y-6">
 
-      {/* Featured Article Section */}
+      {/* Featured Article Section - Full Screen */}
           {featuredArticle && (
-            <section className="px-0 mb-6 -mx-4 sm:mx-0 sm:px-0">
-              <div className="relative rounded-none sm:rounded-2xl overflow-hidden bg-black">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
-                  {/* Image */}
-                  <div className="relative h-80 md:h-96">
-                    {featuredArticle.image_url && (
-                      <img 
-                        src={featuredArticle.image_url} 
-                        alt={featuredArticle.title}
-                        className="w-full h-full object-cover"
-                      />
-                    )}
-                    {featuredArticle.is_breaking && (
-                      <div className="absolute top-4 left-4 bg-[#E31E24] text-white px-4 py-2 rounded-full font-bold text-sm">
-                        חדשה חמה
-                      </div>
-                    )}
-                  </div>
+            <section className="px-0 mb-8 -mx-4 sm:mx-0">
+              <Link to={createPageUrl(`Article?id=${featuredArticle.id}`)}>
+                <div className="relative h-[400px] sm:h-[500px] lg:h-[600px] rounded-none sm:rounded-3xl overflow-hidden group cursor-pointer">
+                  {/* Background Image */}
+                  {featuredArticle.image_url && (
+                    <img 
+                      src={featuredArticle.image_url} 
+                      alt={featuredArticle.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                  )}
 
-                  {/* Content */}
-                  <div className="p-6 md:p-10 flex flex-col justify-center bg-gradient-to-b from-black to-black/80">
-                    <Link to={createPageUrl(`Article?id=${featuredArticle.id}`)}>
-                      <h1 className="text-3xl md:text-4xl font-bold text-white mb-4 hover:text-[#E31E24] transition-colors">
+                  {/* Gradient Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
+
+                  {/* Content Overlay */}
+                  <div className="absolute inset-0 flex flex-col justify-end p-4 sm:p-8 lg:p-12">
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.6 }}
+                      className="space-y-4"
+                    >
+                      {/* Badge */}
+                      {featuredArticle.is_breaking && (
+                        <div className="inline-flex w-fit bg-[#E31E24] text-white px-4 py-2 rounded-full font-bold text-sm animate-pulse">
+                          🔴 חדשה חמה
+                        </div>
+                      )}
+
+                      {/* Title */}
+                      <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight drop-shadow-lg">
                         {featuredArticle.title}
                       </h1>
-                    </Link>
 
-                    {featuredArticle.subtitle && (
-                      <p className="text-lg text-gray-300 mb-6">
-                        {featuredArticle.subtitle}
-                      </p>
-                    )}
+                      {/* Subtitle */}
+                      {featuredArticle.subtitle && (
+                        <p className="text-lg sm:text-xl text-gray-200 drop-shadow-md max-w-2xl">
+                          {featuredArticle.subtitle}
+                        </p>
+                      )}
 
-                    <div className="flex items-center gap-4 text-sm text-gray-400 mb-6">
-                      <span className="bg-[#E31E24]/20 px-3 py-1 rounded-full">
-                        {featuredArticle.category}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Clock className="w-4 h-4" />
-                        {new Date(featuredArticle.created_date).toLocaleDateString('he-IL')}
-                      </span>
-                    </div>
-
-                    <Link 
-                      to={createPageUrl(`Article?id=${featuredArticle.id}`)}
-                      className="inline-flex items-center gap-2 w-fit bg-[#E31E24] hover:bg-[#B91C1C] text-white px-6 py-3 rounded-lg font-bold transition-colors"
-                    >
-                      קרא עוד
-                      <ChevronLeft className="w-4 h-4" />
-                    </Link>
+                      {/* Meta Info */}
+                      <div className="flex flex-wrap items-center gap-3 pt-2">
+                        <span className="bg-[#E31E24]/80 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm font-semibold">
+                          {featuredArticle.category}
+                        </span>
+                        <span className="flex items-center gap-1 text-gray-300 text-sm">
+                          <Clock className="w-4 h-4" />
+                          {new Date(featuredArticle.created_date).toLocaleDateString('he-IL')}
+                        </span>
+                      </div>
+                    </motion.div>
                   </div>
                 </div>
-              </div>
+              </Link>
             </section>
           )}
 
