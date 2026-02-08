@@ -10,7 +10,7 @@ Deno.serve(async (req) => {
     }
 
     // Create D-ID Talk session for real-time video interaction
-    const sessionResponse = await fetch('https://api.d-id.com/talks/stream', {
+    const sessionResponse = await fetch('https://api.d-id.com/v1/talks/start', {
       method: 'POST',
       headers: {
         'Authorization': `Bearer ${didApiKey}`,
