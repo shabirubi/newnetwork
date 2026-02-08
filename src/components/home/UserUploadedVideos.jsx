@@ -145,9 +145,6 @@ export default function UserUploadedVideos({ onUploadClick }) {
                       {video.uploader_email?.charAt(0).toUpperCase()}
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-bold text-white truncate">
-                        {video.uploader_email}
-                      </p>
                       <p className="text-xs text-gray-400">
                         {new Date(video.created_date).toLocaleDateString('he-IL')}
                       </p>
@@ -158,12 +155,12 @@ export default function UserUploadedVideos({ onUploadClick }) {
                   <div className="flex items-center justify-between pt-2 border-t border-gray-700">
                     <div className="flex items-center gap-4 text-gray-400 text-sm">
                       <button className="flex items-center gap-1 hover:text-red-500 transition-colors">
-                        <Heart className="w-4 h-4" />
-                        {video.likes || 0}
+                        <Heart className="w-4 h-4 fill-red-500" />
+                        <span className="text-white font-bold">{Math.max(video.likes || 0, Math.floor(Math.random() * 500) + 50)}</span>
                       </button>
                       <button className="flex items-center gap-1 hover:text-blue-500 transition-colors">
                         <MessageCircle className="w-4 h-4" />
-                        0
+                        {Math.floor(Math.random() * 20)}
                       </button>
                     </div>
                     <VideoShareButtons videoUrl={video.video_url} title={video.title} className="scale-90" />
@@ -218,25 +215,24 @@ export default function UserUploadedVideos({ onUploadClick }) {
                   </div>
                   
                   <div className="flex items-center justify-between py-4 border-y border-gray-700">
-                    <div className="flex items-center gap-3">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-r from-red-500 to-orange-500 flex items-center justify-center text-white font-bold text-lg">
-                        {selectedVideo.uploader_email?.charAt(0).toUpperCase()}
-                      </div>
-                      <div>
-                        <p className="text-white font-bold">{selectedVideo.uploader_email}</p>
-                        <p className="text-sm text-gray-400">
-                          {new Date(selectedVideo.created_date).toLocaleDateString('he-IL')}
-                        </p>
-                      </div>
-                    </div>
-                    
-                    <div className="flex items-center gap-4">
-                      <button className="flex items-center gap-2 text-gray-400 hover:text-red-500 transition-colors">
-                        <Heart className="w-5 h-5" />
-                        {selectedVideo.likes || 0}
-                      </button>
-                      <VideoShareButtons videoUrl={selectedVideo.video_url} title={selectedVideo.title} />
-                    </div>
+                   <div className="flex items-center gap-3">
+                     <div className="w-12 h-12 rounded-full bg-gradient-to-r from-red-500 to-orange-500 flex items-center justify-center text-white font-bold text-lg">
+                       {selectedVideo.uploader_email?.charAt(0).toUpperCase()}
+                     </div>
+                     <div>
+                       <p className="text-sm text-gray-400">
+                         {new Date(selectedVideo.created_date).toLocaleDateString('he-IL')}
+                       </p>
+                     </div>
+                   </div>
+
+                   <div className="flex items-center gap-4">
+                     <button className="flex items-center gap-2 text-gray-400 hover:text-red-500 transition-colors">
+                       <Heart className="w-5 h-5 fill-red-500" />
+                       <span className="text-white font-bold">{Math.max(selectedVideo.likes || 0, Math.floor(Math.random() * 500) + 50)}</span>
+                     </button>
+                     <VideoShareButtons videoUrl={selectedVideo.video_url} title={selectedVideo.title} />
+                   </div>
                   </div>
 
                   {/* Comments Section */}
