@@ -1,85 +1,8 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Video, Loader2 } from 'lucide-react';
-import { base44 } from '@/api/base44Client';
-import { toast } from 'sonner';
+import { X, Video } from 'lucide-react';
 
 export default function DIDLiveChat({ isOpen, onClose }) {
-  const containerRef = useRef(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    if (!isOpen) return;
-
-    let scriptLoaded = false;
-
-    const initDID = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-
-        // Get D-ID config from backend
-        const response = await base44.functions.invoke('getDIDConfig');
-        const { agentId, clientKey } = response.data;
-
-        if (!agentId || !clientKey) {
-          throw new Error('Missing D-ID configuration');
-        }
-
-        // Remove existing scripts and widgets
-        const existingScripts = document.querySelectorAll('script[src*="agent.d-id.com"]');
-        existingScripts.forEach(s => s.remove());
-        const existingWidgets = document.querySelectorAll('did-agent');
-        existingWidgets.forEach(w => w.remove());
-
-        // Load D-ID script
-        const script = document.createElement('script');
-        script.type = 'module';
-        script.src = 'https://agent.d-id.com/v2/index.js';
-        
-        script.onload = () => {
-          scriptLoaded = true;
-          if (containerRef.current) {
-            // Create the D-ID widget
-            const widgetHTML = `
-              <did-agent 
-                data-mode="embed" 
-                data-client-key="${clientKey}"
-                data-agent-id="${agentId}">
-              </did-agent>
-            `;
-            containerRef.current.innerHTML = widgetHTML;
-            setLoading(false);
-          }
-        };
-
-        script.onerror = () => {
-          setError('Failed to load D-ID script');
-          setLoading(false);
-        };
-
-        document.head.appendChild(script);
-
-      } catch (err) {
-        console.error('D-ID init error:', err);
-        setError(err.message);
-        setLoading(false);
-        toast.error('שגיאה בטעינת D-ID');
-      }
-    };
-
-    initDID();
-
-    return () => {
-      // Cleanup
-      const scripts = document.querySelectorAll('script[src*="agent.d-id.com"]');
-      scripts.forEach(s => s.remove());
-      const widgets = document.querySelectorAll('did-agent');
-      widgets.forEach(w => w.remove());
-    };
-  }, [isOpen]);
-
   if (!isOpen) return null;
 
   return (
@@ -116,27 +39,12 @@ export default function DIDLiveChat({ isOpen, onClose }) {
             </button>
           </div>
 
-          <div className="flex-1 bg-black relative overflow-hidden flex items-center justify-center">
-            {loading && (
-              <div className="flex flex-col items-center gap-3">
-                <Loader2 className="w-12 h-12 text-purple-400 animate-spin" />
-                <p className="text-white">טוען D-ID Agent...</p>
-              </div>
-            )}
-            {error && (
-              <div className="flex flex-col items-center gap-3">
-                <p className="text-red-400">{error}</p>
-                <button
-                  onClick={() => window.location.reload()}
-                  className="px-4 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
-                >
-                  נסה שוב
-                </button>
-              </div>
-            )}
-            <div 
-              ref={containerRef} 
-              className={`w-full h-full ${loading || error ? 'hidden' : ''}`}
+          <div className="flex-1 bg-black relative overflow-hidden">
+            <iframe
+              src="https://studio.d-id.com/agents/share?id=v2_agt_pW1vqMCQ&utm_source=copy&key=WjI5dloyeGxMVzloZFhSb01ud3hNRGt3TlRBd01qRTROall3TURjMU9ESTBPVFk2TVVsNFJ6Tk5kelJMWmtSWFZHVTNUREJmTjNkMw=="
+              allow="camera; microphone; fullscreen; autoplay"
+              className="w-full h-full border-0"
+              title="D-ID Agent Chat"
             />
           </div>
         </motion.div>
