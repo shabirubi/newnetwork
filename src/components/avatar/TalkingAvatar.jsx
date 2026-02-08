@@ -17,7 +17,7 @@ export default function TalkingAvatar() {
   const [gender, setGender] = useState("male");
   const [voiceProvider, setVoiceProvider] = useState("microsoft");
   const [backgroundType, setBackgroundType] = useState("static");
-  const [showLiveChat, setShowLiveChat] = useState(false);
+  const [showDIDChat, setShowDIDChat] = useState(false);
 
   const handleImageUpload = async (e) => {
     const file = e.target.files?.[0];
@@ -129,7 +129,10 @@ export default function TalkingAvatar() {
   // Floating button will be added to header via layout
   React.useEffect(() => {
     const handleAvatarCreator = () => setIsOpen(true);
-    const handleDIDChat = () => setShowLiveChat(true);
+    const handleDIDChat = () => {
+      console.log('Opening D-ID Chat');
+      setShowDIDChat(true);
+    };
     window.addEventListener('openAvatarCreator', handleAvatarCreator);
     window.addEventListener('openDIDChat', handleDIDChat);
     return () => {
@@ -140,7 +143,7 @@ export default function TalkingAvatar() {
 
   return (
     <>
-      <DIDLiveChat isOpen={showLiveChat} onClose={() => setShowLiveChat(false)} />
+      <DIDLiveChat isOpen={showDIDChat} onClose={() => setShowDIDChat(false)} />
 
       {/* Modal */}
       <AnimatePresence>
