@@ -267,28 +267,9 @@ export default function Home() {
         )}
       </section>
 
-      {/* TikTok News with Sidebars */}
-      <section className="grid grid-cols-1 lg:grid-cols-12 gap-4 -mx-0 sm:mx-0 px-0 sm:px-4 mt-6">
-        {/* Left Sidebar - Entertainment Updates Feed */}
-        <aside className="lg:col-span-3 hidden lg:block bg-black space-y-4">
-          <EntertainmentUpdatesFeed />
-        </aside>
-
-        {/* Center - TikTok News Feed */}
-        <div className="lg:col-span-6">
-          <TikTokNewsFeed articles={articles} />
-        </div>
-
-        {/* Right Sidebar - Breaking News Updates */}
-        <aside className="lg:col-span-3">
-          <UpdatesFeed />
-        </aside>
-      </section>
-
-      {/* Category News Section */}
+      {/* Category News Section - ללא breaking */}
       <section className="px-4 sm:px-4 mt-8 space-y-8">
         {[
-          { category: 'breaking', label: 'חדשות עכשיו' },
           { category: 'security', label: 'ביטחון ומדיניות' },
           { category: 'economy', label: 'כלכלה ועסקים' },
           { category: 'politics', label: 'פוליטיקה' },
@@ -314,6 +295,24 @@ export default function Home() {
             </div>
           );
         })}
+      </section>
+
+      {/* TikTok News with Sidebars */}
+      <section className="grid grid-cols-1 lg:grid-cols-12 gap-4 -mx-0 sm:mx-0 px-0 sm:px-4 mt-8">
+        {/* Left Sidebar - Entertainment Updates Feed */}
+        <aside className="lg:col-span-3 hidden lg:block bg-black space-y-4">
+          <EntertainmentUpdatesFeed />
+        </aside>
+
+        {/* Center - TikTok News Feed */}
+        <div className="lg:col-span-6">
+          <TikTokNewsFeed articles={articles} />
+        </div>
+
+        {/* Right Sidebar - Breaking News Updates */}
+        <aside className="lg:col-span-3">
+          <UpdatesFeed />
+        </aside>
       </section>
 
       {/* News Reels Section - Lazy Loaded */}
