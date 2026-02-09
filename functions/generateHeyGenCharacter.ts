@@ -9,11 +9,15 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { script } = await req.json();
+    const { script, avatar_id, voice_id } = await req.json();
     
     if (!script || !script.trim()) {
       return Response.json({ error: 'Script is required' }, { status: 400 });
     }
+
+    // Default HeyGen avatar if not provided
+    const avatarId = avatar_id || 'Kristin_public_3_20240108';
+    const voiceId = voice_id || 'b5a94a36d2a6445b8a26eccf90a4aa00';
 
     const apiKey = Deno.env.get('HEYGEN_API_KEY');
     
@@ -34,13 +38,13 @@ Deno.serve(async (req) => {
         video_inputs: [{
           character: {
             type: 'avatar',
-            avatar_id: 'Kristin_public_3_20240108',
+            avatar_id: avatarId,
             avatar_style: 'normal'
           },
           voice: {
             type: 'text',
             input_text: script,
-            voice_id: 'b5a94a36d2a6445b8a26eccf90a4aa00'
+            voice_id: voiceId
           }
         }],
         dimension: {
