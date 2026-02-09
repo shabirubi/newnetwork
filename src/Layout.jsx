@@ -245,6 +245,18 @@ export default function Layout({ children, currentPageName }) {
               </button>
             )}
 
+            {user?.role === 'admin' && (
+              <a
+                href={createPageUrl("AdminPanel")}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-gradient-to-r from-orange-600 to-orange-700 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-orange-400/30 transition-all hover:scale-105 text-xs sm:text-sm"
+              >
+                <Shield className="w-5 h-5 text-white" />
+                <span className="text-white font-bold">Admin</span>
+              </a>
+            )}
+
             <Link 
               to={createPageUrl("Live")}
               className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-gradient-to-r from-[#E31E24] to-[#B91C1C] backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-white/20 transition-all hover:scale-105 animate-pulse text-xs sm:text-sm"
