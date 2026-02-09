@@ -134,7 +134,7 @@ export default function Layout({ children, currentPageName }) {
   };
 
   // דפים ללא Layout
-  if (currentPageName === 'VODContent' || currentPageName === 'ReporterStudio' || currentPageName === 'BroadcastStudio' || currentPageName === 'VideoEditor') {
+  if (currentPageName === 'VODContent' || currentPageName === 'ReporterStudio' || currentPageName === 'BroadcastStudio' || currentPageName === 'VideoEditor' || currentPageName === 'VideoCreator') {
     return children;
   }
 
@@ -309,13 +309,15 @@ export default function Layout({ children, currentPageName }) {
               <span className="text-white font-bold hidden sm:inline">AI Design</span>
             </Link>
 
-            <Link 
-              to={createPageUrl("VideoCreator")}
+            <a 
+              href={createPageUrl("VideoCreator")}
+              target="_blank"
+              rel="noopener noreferrer"
               className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-gradient-to-r from-purple-600 to-purple-700 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-purple-500/50 transition-all hover:scale-105 hover:from-purple-700 hover:to-purple-800 active:scale-95 cursor-pointer text-xs sm:text-sm animate-pulse"
             >
               <Sparkles className="w-4 h-4 text-white" />
               <span className="text-white font-bold hidden sm:inline">יוצר AI</span>
-            </Link>
+            </a>
 
             <Link 
               to={createPageUrl("LumaStudio")}
@@ -515,8 +517,10 @@ export default function Layout({ children, currentPageName }) {
                     <ChevronLeft size={18} className="text-[#E31E24]" />
                   </Link>
 
-                  <Link
-                    to={createPageUrl("VideoCreator")}
+                  <a
+                    href={createPageUrl("VideoCreator")}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     onClick={() => setMenuSidebarOpen(false)}
                     className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#E31E24]/20 active:bg-[#E31E24]/40 transition-all border border-transparent hover:border-[#E31E24]/30 animate-pulse"
                   >
@@ -525,7 +529,7 @@ export default function Layout({ children, currentPageName }) {
                     </div>
                     <span className="flex-1 font-medium text-purple-300">יוצר AI</span>
                     <ChevronLeft size={18} className="text-purple-500" />
-                  </Link>
+                  </a>
 
                   <Link
                     to={createPageUrl("LumaStudio")}
