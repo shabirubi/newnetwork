@@ -774,7 +774,8 @@ export default function VideoCreator() {
                     <Camera className="w-4 h-4" />
                   </Button>
 
-                  <Input
+                  <input
+                    type="text"
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={(e) => {
@@ -784,7 +785,7 @@ export default function VideoCreator() {
                       }
                     }}
                     placeholder="שאל שאלה..."
-                    className="bg-gray-900 border-gray-700 text-white"
+                    className="flex-1 px-3 py-2 rounded-md bg-gray-900 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-[#E31E24]"
                     disabled={loading || !conversationId}
                   />
                   <Button
