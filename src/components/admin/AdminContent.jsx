@@ -1,13 +1,15 @@
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
-import { Trash2, Video, Newspaper, Users, MessageCircle, Loader2, RefreshCw, Eye } from "lucide-react";
+import { Trash2, Video, Newspaper, Users, MessageCircle, Loader2, RefreshCw, Eye, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { motion } from "framer-motion";
 
 export default function AdminContent() {
   const [selectedTab, setSelectedTab] = useState('videos');
+  const [searchQuery, setSearchQuery] = useState('');
   const queryClient = useQueryClient();
 
   const { data: videos = [], isLoading: loadingVideos, refetch: refetchVideos } = useQuery({
@@ -142,10 +144,25 @@ export default function AdminContent() {
         })}
       </div>
 
-      <Button onClick={currentData.refetch} variant="outline" className="bg-gray-800 border-gray-700">
-        <RefreshCw className="w-4 h-4 ml-2" />
-        רענן
-      </Button>
+      <div className="flex gap-3 items-center">
+        <div className="flex-1 relative">
+          <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+          <Input
+            placeholder={`חפש ${
+              selectedTab === 'videos' ? 'סרטונים' : 
+              selectedTab === 'articles' ? 'כתבות' : 
+              selectedTab === 'reporters' ? 'כתבים' : 'תגובות'
+            }...`}
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="bg-gray-800 border-gray-700 text-white pr-10"
+          />
+        </div>
+        <Button onClick={currentData.refetch} variant="outline" className="bg-gray-800 border-gray-700">
+          <RefreshCw className="w-4 h-4 ml-2" />
+          רענן
+        </Button>
+      </div>
 
       {currentData.loading ? (
         <div className="flex items-center justify-center py-20">
@@ -153,7 +170,30 @@ export default function AdminContent() {
         </div>
       ) : (
         <div className="space-y-2">
-          {currentData.data.map((item) => (
+          {currentData.data
+            .filter(item => {
+              if (!searchQuery) return true;
+              const query = searchQuery.toLowerCase();
+              
+              if (selectedTab === 'videos') {
+                return item.title?.toLowerCase().includes(query) || 
+                       item.uploader_email?.toLowerCase().includes(query);
+              }
+              if (selectedTab === 'articles') {
+                return item.title?.toLowerCase().includes(query) || 
+                       item.category?.toLowerCase().includes(query);
+              }
+              if (selectedTab === 'reporters') {
+                return item.name?.toLowerCase().includes(query) || 
+                       item.role?.toLowerCase().includes(query);
+              }
+              if (selectedTab === 'comments') {
+                return item.content?.toLowerCase().includes(query) || 
+                       item.user_name?.toLowerCase().includes(query);
+              }
+              return true;
+            })
+            .map((item) => (
             <motion.div
               key={item.id}
               initial={{ opacity: 0, y: 10 }}
