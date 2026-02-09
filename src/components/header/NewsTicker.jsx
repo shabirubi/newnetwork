@@ -195,9 +195,16 @@ export default function NewsTicker({ darkMode, setDarkMode, onMenuClick }) {
 
 
 
+          <div className="hidden sm:block">
+             <ClockWidget />
+           </div>
+           <div className="hidden md:block">
+             <WeatherWidget />
+           </div>
+
           <div className="relative z-[70]">
-            <ChannelSelector />
-          </div>
+             <ChannelSelector />
+           </div>
 
           <button 
             onClick={() => {
