@@ -15,21 +15,31 @@ export default function AdminUsers() {
   });
 
   const deleteUserMutation = useMutation({
-    mutationFn: (id) => base44.entities.User.delete(id),
+    mutationFn: async (id) => {
+      await base44.asServiceRole.entities.User.delete(id);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries(['admin-all-users']);
       toast.success('המשתמש נמחק בהצלחה');
     },
-    onError: () => toast.error('שגיאה במחיקת המשתמש')
+    onError: (error) => {
+      console.error('Delete error:', error);
+      toast.error('שגיאה במחיקת המשתמש');
+    }
   });
 
   const updateUserMutation = useMutation({
-    mutationFn: ({ id, data }) => base44.entities.User.update(id, data),
+    mutationFn: async ({ id, data }) => {
+      await base44.asServiceRole.entities.User.update(id, data);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries(['admin-all-users']);
       toast.success('המשתמש עודכן בהצלחה');
     },
-    onError: () => toast.error('שגיאה בעדכון המשתמש')
+    onError: (error) => {
+      console.error('Update error:', error);
+      toast.error('שגיאה בעדכון המשתמש');
+    }
   });
 
   const handleDelete = (id) => {

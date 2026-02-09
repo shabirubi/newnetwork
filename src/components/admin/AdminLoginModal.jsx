@@ -15,8 +15,15 @@ export default function AdminLoginModal({ isOpen, onClose }) {
     setLoading(true);
 
     if (password === '02486') {
+      // Store admin session
+      localStorage.setItem('admin_authenticated', 'true');
+      localStorage.setItem('admin_auth_time', Date.now().toString());
+      
       toast.success('כניסה מאושרת');
-      window.location.href = createPageUrl('AdminPanel');
+      
+      // Navigate to admin panel in new tab
+      window.open(createPageUrl('AdminPanel'), '_blank');
+      onClose();
     } else {
       toast.error('סיסמה שגויה');
       setPassword('');

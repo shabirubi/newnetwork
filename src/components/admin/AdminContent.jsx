@@ -35,39 +35,59 @@ export default function AdminContent() {
   });
 
   const deleteVideoMutation = useMutation({
-    mutationFn: (id) => base44.entities.UserVideo.delete(id),
+    mutationFn: async (id) => {
+      await base44.asServiceRole.entities.UserVideo.delete(id);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries(['admin-content-videos']);
-      toast.success('הסרטון נמחק');
+      toast.success('הסרטון נמחק בהצלחה');
     },
-    onError: () => toast.error('שגיאה במחיקה')
+    onError: (error) => {
+      console.error('Delete error:', error);
+      toast.error('שגיאה במחיקת הסרטון');
+    }
   });
 
   const deleteArticleMutation = useMutation({
-    mutationFn: (id) => base44.entities.NewsArticle.delete(id),
+    mutationFn: async (id) => {
+      await base44.asServiceRole.entities.NewsArticle.delete(id);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries(['admin-content-articles']);
-      toast.success('הכתבה נמחקה');
+      toast.success('הכתבה נמחקה בהצלחה');
     },
-    onError: () => toast.error('שגיאה במחיקה')
+    onError: (error) => {
+      console.error('Delete error:', error);
+      toast.error('שגיאה במחיקת הכתבה');
+    }
   });
 
   const deleteReporterMutation = useMutation({
-    mutationFn: (id) => base44.entities.Reporter.delete(id),
+    mutationFn: async (id) => {
+      await base44.asServiceRole.entities.Reporter.delete(id);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries(['admin-content-reporters']);
-      toast.success('הכתב נמחק');
+      toast.success('הכתב נמחק בהצלחה');
     },
-    onError: () => toast.error('שגיאה במחיקה')
+    onError: (error) => {
+      console.error('Delete error:', error);
+      toast.error('שגיאה במחיקת הכתב');
+    }
   });
 
   const deleteCommentMutation = useMutation({
-    mutationFn: (id) => base44.entities.VideoComment.delete(id),
+    mutationFn: async (id) => {
+      await base44.asServiceRole.entities.VideoComment.delete(id);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries(['admin-content-comments']);
-      toast.success('התגובה נמחקה');
+      toast.success('התגובה נמחקה בהצלחה');
     },
-    onError: () => toast.error('שגיאה במחיקה')
+    onError: (error) => {
+      console.error('Delete error:', error);
+      toast.error('שגיאה במחיקת התגובה');
+    }
   });
 
   const handleDelete = (id, type) => {
