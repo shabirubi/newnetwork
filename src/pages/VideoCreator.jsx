@@ -336,6 +336,16 @@ export default function VideoCreator() {
               חזרה לאתר
             </Button>
           </Link>
+          <a
+            href={createPageUrl("AdminPanel")}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Button variant="outline" size="sm" className="gap-2 bg-purple-600/20 hover:bg-purple-600/30 border-purple-500/50">
+              <Shield className="w-4 h-4" />
+              Admin
+            </Button>
+          </a>
           <Button
             onClick={() => setDidChatOpen(true)}
             variant="outline"
