@@ -734,21 +734,22 @@ export default function VideoCreator() {
                   </div>
                 )}
 
-                <div className="flex gap-2">
-                  <input
-                    ref={fileInputRef}
-                    type="file"
-                    multiple
-                    accept="image/*,video/*,audio/*"
-                    onChange={(e) => handleFileUpload(Array.from(e.target.files))}
-                    className="hidden"
-                  />
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  multiple
+                  accept="image/*,video/*,audio/*"
+                  onChange={(e) => handleFileUpload(Array.from(e.target.files))}
+                  className="hidden"
+                />
 
+                <div className="flex items-center gap-2">
                   <Button
                     size="sm"
                     variant="ghost"
                     onClick={() => fileInputRef.current?.click()}
-                    className="text-gray-400 hover:text-white"
+                    className="text-gray-400 hover:text-white shrink-0"
+                    type="button"
                   >
                     <Paperclip className="w-4 h-4" />
                   </Button>
@@ -757,7 +758,8 @@ export default function VideoCreator() {
                     size="sm"
                     variant="ghost"
                     onClick={isRecording ? stopRecording : startRecording}
-                    className={isRecording ? "text-red-400" : "text-gray-400 hover:text-white"}
+                    className={isRecording ? "text-red-400 shrink-0" : "text-gray-400 hover:text-white shrink-0"}
+                    type="button"
                   >
                     <Mic className="w-4 h-4" />
                   </Button>
@@ -766,7 +768,8 @@ export default function VideoCreator() {
                     size="sm"
                     variant="ghost"
                     onClick={openCamera}
-                    className="text-gray-400 hover:text-white"
+                    className="text-gray-400 hover:text-white shrink-0"
+                    type="button"
                   >
                     <Camera className="w-4 h-4" />
                   </Button>
@@ -781,14 +784,15 @@ export default function VideoCreator() {
                       }
                     }}
                     placeholder="שאל שאלה..."
-                    className="bg-gray-900 border-gray-700 text-white flex-1"
+                    className="bg-gray-900 border-gray-700 text-white"
                     disabled={loading || !conversationId}
                   />
                   <Button
                     onClick={handleSend}
                     disabled={(!input.trim() && attachments.length === 0) || loading || !conversationId}
                     size="sm"
-                    className="bg-gradient-to-br from-[#E31E24] to-[#B91C1C]"
+                    className="bg-gradient-to-br from-[#E31E24] to-[#B91C1C] shrink-0"
+                    type="button"
                   >
                     <Send className="w-4 h-4" />
                   </Button>
