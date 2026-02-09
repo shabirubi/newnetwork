@@ -13,6 +13,7 @@ import AdminFinance from "../components/admin/AdminFinance";
 import AdminContent from "../components/admin/AdminContent";
 import AdminAnalytics from "../components/admin/AdminAnalytics";
 import AdminSettings from "../components/admin/AdminSettings";
+import AdminNotes from "../components/admin/AdminNotes";
 
 export default function AdminPanel() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -51,6 +52,7 @@ export default function AdminPanel() {
     { id: 'finance', label: 'כספים', icon: DollarSign },
     { id: 'content', label: 'תוכן', icon: Video },
     { id: 'analytics', label: 'אנליטיקס', icon: TrendingUp },
+    { id: 'notes', label: 'הערות מנהלים', icon: AlertCircle },
     { id: 'settings', label: 'הגדרות', icon: Settings },
   ];
 
@@ -61,6 +63,7 @@ export default function AdminPanel() {
       case 'finance': return <AdminFinance />;
       case 'content': return <AdminContent />;
       case 'analytics': return <AdminAnalytics />;
+      case 'notes': return <AdminNotes />;
       case 'settings': return <AdminSettings />;
       default: return <AdminDashboard />;
     }

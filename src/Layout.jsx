@@ -19,6 +19,7 @@ import LeftSidebarCategories from "./components/sidebar/LeftSidebarCategories";
 import KanArchiveModal from "./components/home/KanArchiveModal";
 import TalkingAvatar from "./components/avatar/TalkingAvatar";
 import DIDLiveChat from "./components/avatar/DIDLiveChat";
+import AdminLoginModal from "./components/admin/AdminLoginModal";
 import { base44 } from "@/api/base44Client";
 
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png";
@@ -57,6 +58,7 @@ export default function Layout({ children, currentPageName }) {
   const [user, setUser] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [didChatOpen, setDidChatOpen] = useState(false);
+  const [adminLoginOpen, setAdminLoginOpen] = useState(false);
 
   useEffect(() => {
     if (darkMode) {
@@ -322,6 +324,14 @@ export default function Layout({ children, currentPageName }) {
               <MessageCircle className="w-4 h-4 text-white" />
               <span className="text-white font-bold hidden sm:inline">WhatsApp</span>
             </a>
+
+            <button
+              onClick={() => setAdminLoginOpen(true)}
+              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-gradient-to-r from-purple-600 to-purple-700 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-purple-500/50 transition-all hover:scale-105 hover:from-purple-700 hover:to-purple-800 active:scale-95 cursor-pointer text-xs sm:text-sm"
+            >
+              <Shield className="w-4 h-4 text-white" />
+              <span className="text-white font-bold hidden sm:inline">אדמין</span>
+            </button>
             </div>
 
             {/* Mobile: Logo Only */}
@@ -370,6 +380,9 @@ export default function Layout({ children, currentPageName }) {
 
       {/* D-ID Live Chat */}
       <DIDLiveChat isOpen={didChatOpen} onClose={() => setDidChatOpen(false)} />
+
+      {/* Admin Login Modal */}
+      <AdminLoginModal isOpen={adminLoginOpen} onClose={() => setAdminLoginOpen(false)} />
 
 
 
