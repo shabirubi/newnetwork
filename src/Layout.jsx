@@ -67,7 +67,6 @@ export default function Layout({ children, currentPageName }) {
   const [user, setUser] = useState(null);
   const [authLoading, setAuthLoading] = useState(true);
   const [didChatOpen, setDidChatOpen] = useState(false);
-  const [adminLoginOpen, setAdminLoginOpen] = useState(false);
   const [menuSidebarOpen, setMenuSidebarOpen] = useState(false);
 
   useEffect(() => {
@@ -255,103 +254,33 @@ export default function Layout({ children, currentPageName }) {
               </button>
             )}
 
-            <button
-              onClick={() => setReportersModalOpen(true)}
-              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-gradient-to-r from-[#E31E24]/30 to-[#E31E24]/20 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-[#E31E24]/50 transition-all hover:scale-105 hover:from-[#E31E24]/50 hover:to-[#E31E24]/40 active:scale-95 text-xs sm:text-sm cursor-pointer"
-            >
-              <Users className="w-4 h-4 text-white" />
-              <span className="text-white font-bold hidden sm:inline">כתבים</span>
-            </button>
-
-
-
             <Link 
-              to={createPageUrl("VODContent")}
-              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-gradient-to-r from-[#E31E24]/30 to-[#E31E24]/20 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-[#E31E24]/50 transition-all hover:scale-105 hover:from-[#E31E24]/50 hover:to-[#E31E24]/40 active:scale-95 text-xs sm:text-sm cursor-pointer"
+              to={createPageUrl("Live")}
+              className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-gradient-to-r from-[#E31E24] to-[#B91C1C] backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-white/20 transition-all hover:scale-105 animate-pulse text-xs sm:text-sm"
             >
-              <Tv className="w-4 h-4 text-white" />
-              <span className="text-white font-bold hidden sm:inline">VOD</span>
+              <Radio className="w-5 h-5 text-white" />
+              <span className="text-white font-bold">שידור חי</span>
             </Link>
-
-            <button
-              onClick={() => setDidChatOpen(true)}
-              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-gradient-to-r from-green-600 to-green-700 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-green-500/50 transition-all hover:scale-105 hover:from-green-700 hover:to-green-800 active:scale-95 cursor-pointer text-xs sm:text-sm animate-pulse"
-            >
-              <MessageCircle className="w-4 h-4 text-white" />
-              <span className="text-white font-bold hidden sm:inline">צ'אט חי</span>
-            </button>
 
             <button
               onClick={() => setMenuSidebarOpen(true)}
-              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-gradient-to-r from-[#E31E24]/30 to-[#E31E24]/20 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-[#E31E24]/50 transition-all hover:scale-105 hover:from-[#E31E24]/50 hover:to-[#E31E24]/40 active:scale-95 text-xs sm:text-sm cursor-pointer"
+              className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-gradient-to-r from-[#E31E24]/30 to-[#E31E24]/20 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-[#E31E24]/50 transition-all hover:scale-105 hover:from-[#E31E24]/50 hover:to-[#E31E24]/40 active:scale-95 text-xs sm:text-sm cursor-pointer"
             >
-              <Menu className="w-4 h-4 text-white" />
-              <span className="text-white font-bold hidden sm:inline">תפריט</span>
+              <Menu className="w-5 h-5 text-white" />
+              <span className="text-white font-bold">תפריט</span>
             </button>
 
-            <Link 
-              to={createPageUrl("Live")}
-              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-gradient-to-r from-[#E31E24] to-[#B91C1C] backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-white/20 transition-all hover:scale-105 animate-pulse text-xs sm:text-sm"
-            >
-              <Radio className="w-4 h-4 text-white" />
-              <span className="text-white font-bold hidden sm:inline">שידור חי</span>
-            </Link>
-
-
-
-
-
-            <Link 
-              to={createPageUrl("AIDesignStudio")}
-              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-gradient-to-r from-[#E31E24]/30 to-[#E31E24]/20 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-[#E31E24]/50 transition-all hover:scale-105 hover:from-[#E31E24]/50 hover:to-[#E31E24]/40 active:scale-95 cursor-pointer text-xs sm:text-sm"
-            >
-              <Sparkles className="w-4 h-4 text-white" />
-              <span className="text-white font-bold hidden sm:inline">AI Design</span>
-            </Link>
-
-            <a 
-              href={createPageUrl("VideoCreator")}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-gradient-to-r from-purple-600 to-purple-700 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-purple-500/50 transition-all hover:scale-105 hover:from-purple-700 hover:to-purple-800 active:scale-95 cursor-pointer text-xs sm:text-sm animate-pulse"
-            >
-              <Sparkles className="w-4 h-4 text-white" />
-              <span className="text-white font-bold hidden sm:inline">יוצר AI</span>
-            </a>
-
-            <Link 
-              to={createPageUrl("LumaStudio")}
-              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-gradient-to-r from-[#E31E24]/30 to-[#E31E24]/20 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-[#E31E24]/50 transition-all hover:scale-105 hover:from-[#E31E24]/50 hover:to-[#E31E24]/40 active:scale-95 cursor-pointer text-xs sm:text-sm"
-            >
-              <Clapperboard className="w-4 h-4 text-white" />
-              <span className="text-white font-bold hidden sm:inline">ייצור</span>
-            </Link>
-
-            <Link 
-              to={createPageUrl("VideoEditor")}
-              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-gradient-to-r from-[#E31E24]/30 to-[#E31E24]/20 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-[#E31E24]/50 transition-all hover:scale-105 hover:from-[#E31E24]/50 hover:to-[#E31E24]/40 active:scale-95 cursor-pointer text-xs sm:text-sm"
-            >
-              <Film className="w-4 h-4 text-white" />
-              <span className="text-white font-bold hidden sm:inline">עורך</span>
-            </Link>
-
-            <a 
-              href={base44.agents.getWhatsAppConnectURL('general_reporter')}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-gradient-to-r from-[#E31E24]/30 to-[#E31E24]/20 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-[#E31E24]/50 transition-all hover:scale-105 hover:from-[#E31E24]/50 hover:to-[#E31E24]/40 active:scale-95 cursor-pointer text-xs sm:text-sm"
-            >
-              <MessageCircle className="w-4 h-4 text-white" />
-              <span className="text-white font-bold hidden sm:inline">WhatsApp</span>
-            </a>
-
-            <button
-              onClick={() => setAdminLoginOpen(true)}
-              className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-gradient-to-r from-purple-600 to-purple-700 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-purple-500/50 transition-all hover:scale-105 hover:from-purple-700 hover:to-purple-800 active:scale-95 cursor-pointer text-xs sm:text-sm"
-            >
-              <Shield className="w-4 h-4 text-white" />
-              <span className="text-white font-bold hidden sm:inline">אדמין</span>
-            </button>
+            {user?.role === 'admin' && (
+              <a
+                href={createPageUrl("AdminPanel")}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-gradient-to-r from-purple-600 to-purple-700 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-purple-500/50 transition-all hover:scale-105 hover:from-purple-700 hover:to-purple-800 active:scale-95 cursor-pointer text-xs sm:text-sm"
+              >
+                <Shield className="w-4 h-4 text-white" />
+                <span className="text-white font-bold hidden lg:inline">ניהול</span>
+              </a>
+            )}
             </div>
 
             {/* Mobile: Logo Only */}
@@ -400,9 +329,6 @@ export default function Layout({ children, currentPageName }) {
 
       {/* D-ID Live Chat */}
       <DIDLiveChat isOpen={didChatOpen} onClose={() => setDidChatOpen(false)} />
-
-      {/* Admin Login Modal */}
-      <AdminLoginModal isOpen={adminLoginOpen} onClose={() => setAdminLoginOpen(false)} />
 
 
 
@@ -525,11 +451,27 @@ export default function Layout({ children, currentPageName }) {
                     className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#E31E24]/20 active:bg-[#E31E24]/40 transition-all border border-transparent hover:border-[#E31E24]/30 animate-pulse"
                   >
                     <div className="w-10 h-10 rounded-xl bg-black/40 border border-purple-500/20 flex items-center justify-center">
-                      <Video size={20} className="text-purple-500" />
+                      <Sparkles size={20} className="text-purple-500" />
                     </div>
                     <span className="flex-1 font-medium text-purple-300">יוצר AI</span>
                     <ChevronLeft size={18} className="text-purple-500" />
                   </a>
+
+                  {user?.role === 'admin' && (
+                    <a
+                      href={createPageUrl("AdminPanel")}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      onClick={() => setMenuSidebarOpen(false)}
+                      className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#E31E24]/20 active:bg-[#E31E24]/40 transition-all border border-transparent hover:border-[#E31E24]/30"
+                    >
+                      <div className="w-10 h-10 rounded-xl bg-black/40 border border-purple-500/20 flex items-center justify-center">
+                        <Shield size={20} className="text-purple-500" />
+                      </div>
+                      <span className="flex-1 font-medium">ניהול האתר</span>
+                      <ChevronLeft size={18} className="text-[#E31E24]" />
+                    </a>
+                  )}
 
                   <Link
                     to={createPageUrl("LumaStudio")}
