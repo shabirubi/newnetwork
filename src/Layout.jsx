@@ -197,15 +197,13 @@ export default function Layout({ children, currentPageName }) {
                 מיד מתחילים...
               </motion.p>
             </div>
-            <a
-              href={createPageUrl("AdminPanel")}
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              onClick={() => window.open(createPageUrl("AdminPanel"), "_blank")}
               className="flex items-center gap-1 px-2 py-1.5 bg-gradient-to-r from-orange-600 to-orange-700 backdrop-blur-xl rounded-lg shadow-lg border border-orange-400/30 transition-all hover:scale-105 text-[11px] ml-2"
             >
               <Shield className="w-4 h-4 text-white" />
               <span className="text-white font-bold">Admin</span>
-            </a>
+            </button>
           </div>
           
           <div className="hidden sm:flex items-center gap-2">
