@@ -3,13 +3,14 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Home, Wand2, Image as ImageIcon, Music, Sparkles, 
   Video, Film, Zap, Settings, HelpCircle, User,
-  ChevronDown, Play, Download, Loader2, Check, Upload, X, Send, Bot
+  ChevronDown, Play, Download, Loader2, Check, Upload, X, Send, Bot, ArrowLeft
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { Input } from '@/components/ui/input';
 import { base44 } from '@/api/base44Client';
 import { toast } from 'sonner';
+import { createPageUrl } from '../utils';
 
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png";
 
@@ -143,6 +144,15 @@ export default function ToMovieeStudio() {
 
   return (
     <div className="min-h-screen bg-[#0A0A0F] text-white flex" dir="ltr">
+      {/* Back to Site Button */}
+      <a
+        href={createPageUrl("Home")}
+        className="fixed top-4 left-4 z-50 flex items-center gap-2 px-4 py-2 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-xl border border-white/20 transition-all group"
+      >
+        <ArrowLeft className="w-5 h-5 text-white group-hover:translate-x-[-4px] transition-transform" />
+        <span className="text-white font-medium">Back to Site</span>
+      </a>
+
       {/* Sidebar */}
       <aside className="w-16 bg-[#13131A] border-r border-white/5 flex flex-col items-center py-6 gap-6">
         <div className="w-10 h-10 bg-gradient-to-br from-purple-600 to-blue-600 rounded-xl flex items-center justify-center">
