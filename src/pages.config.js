@@ -49,6 +49,7 @@
  */
 import AIDesignStudio from './pages/AIDesignStudio';
 import Accessibility from './pages/Accessibility';
+import AdminPanel from './pages/AdminPanel';
 import AnimationStudio from './pages/AnimationStudio';
 import Archive from './pages/Archive';
 import Article from './pages/Article';
@@ -79,16 +80,16 @@ import UserProfile from './pages/UserProfile';
 import UserVideos from './pages/UserVideos';
 import VOD from './pages/VOD';
 import VODContent from './pages/VODContent';
+import VideoCreator from './pages/VideoCreator';
 import VideoEditor from './pages/VideoEditor';
 import WarRoom from './pages/WarRoom';
-import AdminPanel from './pages/AdminPanel';
-import VideoCreator from './pages/VideoCreator';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
     "AIDesignStudio": AIDesignStudio,
     "Accessibility": Accessibility,
+    "AdminPanel": AdminPanel,
     "AnimationStudio": AnimationStudio,
     "Archive": Archive,
     "Article": Article,
@@ -119,10 +120,9 @@ export const PAGES = {
     "UserVideos": UserVideos,
     "VOD": VOD,
     "VODContent": VODContent,
+    "VideoCreator": VideoCreator,
     "VideoEditor": VideoEditor,
     "WarRoom": WarRoom,
-    "AdminPanel": AdminPanel,
-    "VideoCreator": VideoCreator,
 }
 
 export const pagesConfig = {
