@@ -256,7 +256,22 @@ export default function Layout({ children, currentPageName }) {
               </button>
             )}
 
-
+            <button
+              onClick={() => {
+                const newMode = !darkMode;
+                setDarkMode(newMode);
+                if (newMode) {
+                  document.documentElement.classList.add('dark');
+                } else {
+                  document.documentElement.classList.remove('dark');
+                }
+                localStorage.setItem('darkMode', String(newMode));
+              }}
+              className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-white/10 hover:bg-white/20 text-white active:scale-95 transition-all touch-manipulation relative z-[70]"
+              title={darkMode ? "מצב בהיר" : "מצב חשוך"}
+            >
+              {darkMode ? <Sun size={16} className="sm:w-5 sm:h-5" /> : <Moon size={16} className="sm:w-5 sm:h-5" />}
+            </button>
 
               <Link 
                 to={createPageUrl("Live")}
