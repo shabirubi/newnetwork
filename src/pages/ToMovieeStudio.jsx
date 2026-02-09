@@ -350,7 +350,7 @@ export default function ToMovieeStudio() {
           {/* Generate Button */}
           <Button
             onClick={handleGenerate}
-            disabled={isGenerating || !prompt.trim()}
+            disabled={isGenerating}
             className="w-full h-12 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 text-white font-semibold text-base rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {isGenerating ? (
