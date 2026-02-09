@@ -75,6 +75,10 @@ export default function DIDLiveChat({ isOpen, onClose }) {
               allow="microphone; camera; autoplay"
               className="w-full h-full border-0"
               title="D-ID Agent Chat"
+              style={{ 
+                transform: 'scale(1.15)',
+                transformOrigin: 'center center'
+              }}
             />
           </div>
 
