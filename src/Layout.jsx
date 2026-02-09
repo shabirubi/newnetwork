@@ -250,18 +250,18 @@ export default function Layout({ children, currentPageName }) {
                 href={createPageUrl("AdminPanel")}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-gradient-to-r from-orange-600 to-orange-700 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-orange-400/30 transition-all hover:scale-105 text-xs sm:text-sm"
+                className="flex items-center gap-1 px-2 py-1.5 bg-gradient-to-r from-orange-600 to-orange-700 backdrop-blur-xl rounded-lg shadow-lg border border-orange-400/30 transition-all hover:scale-105 text-[11px]"
               >
-                <Shield className="w-5 h-5 text-white" />
+                <Shield className="w-4 h-4 text-white" />
                 <span className="text-white font-bold">Admin</span>
               </a>
-            )}
+              )}
 
             <Link 
               to={createPageUrl("Live")}
-              className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-gradient-to-r from-[#E31E24] to-[#B91C1C] backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-white/20 transition-all hover:scale-105 animate-pulse text-xs sm:text-sm"
+              className="flex items-center gap-1 px-2 py-1 bg-gradient-to-r from-[#E31E24] to-[#B91C1C] backdrop-blur-xl rounded-lg shadow-lg border border-white/20 transition-all hover:scale-105 animate-pulse text-[11px]"
             >
-              <Radio className="w-5 h-5 text-white" />
+              <Radio className="w-4 h-4 text-white" />
               <span className="text-white font-bold">שידור חי</span>
             </Link>
 
