@@ -8,7 +8,7 @@ import { Send, Video, Loader2, Sparkles, Download, Play, Plus, Trash2, MessageSq
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
-import { createPageUrl } from "./utils";
+import { createPageUrl } from "../utils";
 
 export default function VideoCreator() {
   const [messages, setMessages] = useState([]);
