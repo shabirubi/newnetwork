@@ -285,10 +285,14 @@ export default function Layout({ children, currentPageName }) {
       </div>
 
       {/* Breaking News Ticker */}
-      <NewsTicker darkMode={darkMode} setDarkMode={setDarkMode} onMenuClick={() => setCategoriesSidebarOpen(true)} />
+      <React.Suspense fallback={<div className="h-12 bg-black/40 animate-pulse" />}>
+        <NewsTicker darkMode={darkMode} setDarkMode={setDarkMode} onMenuClick={() => setCategoriesSidebarOpen(true)} />
+      </React.Suspense>
 
       {/* Reporters Ticker Strip */}
-      <ReportersTickerStrip />
+      <React.Suspense fallback={<div className="h-16 bg-black/40 animate-pulse" />}>
+        <ReportersTickerStrip />
+      </React.Suspense>
 
 
 

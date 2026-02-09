@@ -84,20 +84,20 @@ export default function Home() {
     queryFn: async () => {
       try {
         if (selectedChannel === 'all') {
-          return await base44.entities.NewsArticle.list('-created_date', 100);
+          return await base44.entities.NewsArticle.list('-created_date', 50);
         } else {
-          return await base44.entities.NewsArticle.filter({ channel_id: selectedChannel }, '-created_date', 100);
+          return await base44.entities.NewsArticle.filter({ channel_id: selectedChannel }, '-created_date', 50);
         }
       } catch (err) {
         console.error('Error loading articles:', err);
         return [];
       }
     },
-    staleTime: 30 * 60 * 1000,
-    gcTime: 60 * 60 * 1000,
+    staleTime: 15 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
     refetchOnWindowFocus: false,
     initialData: [],
-    retry: 1,
+    retry: 2,
     enabled: true
   });
 
