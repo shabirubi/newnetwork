@@ -207,65 +207,69 @@ export default function Home() {
     <div className="min-h-screen bg-black space-y-0 sm:space-y-6">
 
       {/* Featured Article Section - Full Screen */}
-          {featuredArticle && (
-            <section className="px-0 mb-8 -mx-4 sm:mx-0">
-              <Link to={createPageUrl(`Article?id=${featuredArticle.id}`)}>
-                <div className="relative h-[400px] sm:h-[500px] lg:h-[600px] rounded-none sm:rounded-3xl overflow-hidden group cursor-pointer">
-                  {/* Background Image */}
-                  {featuredArticle.image_url && (
-                    <img 
-                      src={featuredArticle.image_url} 
-                      alt={featuredArticle.title}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                    />
+      {isLoading ? (
+        <section className="px-0 mb-8 -mx-4 sm:mx-0">
+          <div className="relative h-[400px] sm:h-[500px] lg:h-[600px] rounded-none sm:rounded-3xl overflow-hidden bg-gray-800 animate-pulse" />
+        </section>
+      ) : featuredArticle ? (
+        <section className="px-0 mb-8 -mx-4 sm:mx-0">
+          <Link to={createPageUrl(`Article?id=${featuredArticle.id}`)}>
+            <div className="relative h-[400px] sm:h-[500px] lg:h-[600px] rounded-none sm:rounded-3xl overflow-hidden group cursor-pointer">
+              {/* Background Image */}
+              {featuredArticle.image_url && (
+                <img 
+                  src={featuredArticle.image_url} 
+                  alt={featuredArticle.title}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+              )}
+
+              {/* Gradient Overlay */}
+              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
+
+              {/* Content Overlay */}
+              <div className="absolute inset-0 flex flex-col justify-end p-4 sm:p-8 lg:p-12">
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6 }}
+                  className="space-y-4"
+                >
+                  {/* Badge */}
+                  {featuredArticle.is_breaking && (
+                    <div className="inline-flex w-fit bg-[#E31E24] text-white px-4 py-2 rounded-full font-bold text-sm animate-pulse">
+                      🔴 חדשה חמה
+                    </div>
                   )}
 
-                  {/* Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
+                  {/* Title */}
+                  <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight drop-shadow-lg">
+                    {featuredArticle.title}
+                  </h1>
 
-                  {/* Content Overlay */}
-                  <div className="absolute inset-0 flex flex-col justify-end p-4 sm:p-8 lg:p-12">
-                    <motion.div
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.6 }}
-                      className="space-y-4"
-                    >
-                      {/* Badge */}
-                      {featuredArticle.is_breaking && (
-                        <div className="inline-flex w-fit bg-[#E31E24] text-white px-4 py-2 rounded-full font-bold text-sm animate-pulse">
-                          🔴 חדשה חמה
-                        </div>
-                      )}
+                  {/* Subtitle */}
+                  {featuredArticle.subtitle && (
+                    <p className="text-lg sm:text-xl text-gray-200 drop-shadow-md max-w-2xl">
+                      {featuredArticle.subtitle}
+                    </p>
+                  )}
 
-                      {/* Title */}
-                      <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight drop-shadow-lg">
-                        {featuredArticle.title}
-                      </h1>
-
-                      {/* Subtitle */}
-                      {featuredArticle.subtitle && (
-                        <p className="text-lg sm:text-xl text-gray-200 drop-shadow-md max-w-2xl">
-                          {featuredArticle.subtitle}
-                        </p>
-                      )}
-
-                      {/* Meta Info */}
-                      <div className="flex flex-wrap items-center gap-3 pt-2">
-                        <span className="bg-[#E31E24]/80 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm font-semibold">
-                          {featuredArticle.category}
-                        </span>
-                        <span className="flex items-center gap-1 text-gray-300 text-sm">
-                          <Clock className="w-4 h-4" />
-                          {new Date(featuredArticle.created_date).toLocaleDateString('he-IL')}
-                        </span>
-                      </div>
-                    </motion.div>
+                  {/* Meta Info */}
+                  <div className="flex flex-wrap items-center gap-3 pt-2">
+                    <span className="bg-[#E31E24]/80 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm font-semibold">
+                      {featuredArticle.category}
+                    </span>
+                    <span className="flex items-center gap-1 text-gray-300 text-sm">
+                      <Clock className="w-4 h-4" />
+                      {new Date(featuredArticle.created_date).toLocaleDateString('he-IL')}
+                    </span>
                   </div>
-                </div>
-              </Link>
-            </section>
-          )}
+                </motion.div>
+              </div>
+            </div>
+          </Link>
+        </section>
+      ) : null}
 
           {/* Live Player Section - מוצג רק אם לחצו על הכפתור */}
           {showLivePlayer && (
