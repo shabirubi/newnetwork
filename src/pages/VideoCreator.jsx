@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import { Send, Video, Loader2, Sparkles, Download, Plus, Trash2, MessageSquare, Home, Play, Pause, SkipBack, SkipForward, Scissors, Copy, Volume2 } from "lucide-react";
+import { Send, Video, Loader2, Sparkles, Download, Plus, Trash2, MessageSquare, Home, Play, Pause, SkipBack, SkipForward, Scissors, Copy, Volume2, Paperclip, Mic, Camera, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
@@ -24,6 +24,15 @@ export default function VideoCreator() {
   const [duration, setDuration] = useState(0);
   const messagesEndRef = useRef(null);
   const videoRef = useRef(null);
+  const [attachments, setAttachments] = useState([]);
+  const [isRecording, setIsRecording] = useState(false);
+  const [mediaRecorder, setMediaRecorder] = useState(null);
+  const [recordingTime, setRecordingTime] = useState(0);
+  const [isCameraOpen, setIsCameraOpen] = useState(false);
+  const [cameraStream, setCameraStream] = useState(null);
+  const videoInputRef = useRef(null);
+  const cameraVideoRef = useRef(null);
+  const fileInputRef = useRef(null);
 
   // Fetch reporters
   const { data: reporters = [] } = useQuery({
@@ -84,22 +93,117 @@ export default function VideoCreator() {
   }, [messages]);
 
   const handleSend = async () => {
-    if (!input.trim() || !conversationId || loading) return;
+    if ((!input.trim() && attachments.length === 0) || !conversationId || loading) return;
 
     const userMessage = input.trim();
     setInput("");
+    const filesToSend = [...attachments];
+    setAttachments([]);
     setLoading(true);
 
     try {
       const conversation = await base44.agents.getConversation(conversationId);
       await base44.agents.addMessage(conversation, {
         role: "user",
-        content: userMessage
+        content: userMessage || "📎 קובץ מצורף",
+        file_urls: filesToSend
       });
     } catch (err) {
       console.error(err);
       toast.error("שגיאה בשליחת הודעה");
       setLoading(false);
+    }
+  };
+
+  const handleFileUpload = async (files) => {
+    try {
+      const uploadedUrls = [];
+      for (const file of files) {
+        const { data } = await base44.integrations.Core.UploadFile({ file });
+        uploadedUrls.push(data.file_url);
+        toast.success(`קובץ הועלה: ${file.name}`);
+      }
+      setAttachments([...attachments, ...uploadedUrls]);
+    } catch (err) {
+      toast.error("שגיאה בהעלאת קובץ");
+    }
+  };
+
+  const startRecording = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const recorder = new MediaRecorder(stream);
+      const chunks = [];
+
+      recorder.ondataavailable = (e) => chunks.push(e.data);
+      recorder.onstop = async () => {
+        const blob = new Blob(chunks, { type: 'audio/webm' });
+        const file = new File([blob], 'voice-message.webm', { type: 'audio/webm' });
+        await handleFileUpload([file]);
+        stream.getTracks().forEach(track => track.stop());
+      };
+
+      recorder.start();
+      setMediaRecorder(recorder);
+      setIsRecording(true);
+
+      // Timer
+      let time = 0;
+      const timer = setInterval(() => {
+        time++;
+        setRecordingTime(time);
+      }, 1000);
+
+      recorder.addEventListener('stop', () => clearInterval(timer));
+    } catch (err) {
+      toast.error("שגיאה בגישה למיקרופון");
+    }
+  };
+
+  const stopRecording = () => {
+    if (mediaRecorder) {
+      mediaRecorder.stop();
+      setIsRecording(false);
+      setRecordingTime(0);
+    }
+  };
+
+  const openCamera = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: true });
+      setCameraStream(stream);
+      setIsCameraOpen(true);
+      
+      setTimeout(() => {
+        if (cameraVideoRef.current) {
+          cameraVideoRef.current.srcObject = stream;
+        }
+      }, 100);
+    } catch (err) {
+      toast.error("שגיאה בגישה למצלמה");
+    }
+  };
+
+  const closeCamera = () => {
+    if (cameraStream) {
+      cameraStream.getTracks().forEach(track => track.stop());
+      setCameraStream(null);
+    }
+    setIsCameraOpen(false);
+  };
+
+  const capturePhoto = () => {
+    if (cameraVideoRef.current) {
+      const canvas = document.createElement('canvas');
+      canvas.width = cameraVideoRef.current.videoWidth;
+      canvas.height = cameraVideoRef.current.videoHeight;
+      canvas.getContext('2d').drawImage(cameraVideoRef.current, 0, 0);
+      
+      canvas.toBlob(async (blob) => {
+        const file = new File([blob], 'camera-photo.jpg', { type: 'image/jpeg' });
+        await handleFileUpload([file]);
+        closeCamera();
+      }, 'image/jpeg');
     }
   };
 
@@ -602,7 +706,71 @@ export default function VideoCreator() {
               </div>
 
               <div className="p-3 border-t border-gray-800">
+                {/* Attachments Preview */}
+                {attachments.length > 0 && (
+                  <div className="flex gap-2 mb-2 flex-wrap">
+                    {attachments.map((url, idx) => (
+                      <div key={idx} className="relative group">
+                        <img src={url} alt="" className="w-16 h-16 rounded object-cover" />
+                        <button
+                          onClick={() => setAttachments(attachments.filter((_, i) => i !== idx))}
+                          className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <X className="w-3 h-3 text-white" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Recording Indicator */}
+                {isRecording && (
+                  <div className="flex items-center gap-2 mb-2 p-2 bg-red-500/20 rounded-lg">
+                    <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse" />
+                    <span className="text-red-400 text-sm">מקליט... {recordingTime}s</span>
+                    <Button size="sm" onClick={stopRecording} className="mr-auto bg-red-600">
+                      <Mic className="w-3 h-3" />
+                    </Button>
+                  </div>
+                )}
+
                 <div className="flex gap-2">
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    multiple
+                    accept="image/*,video/*,audio/*"
+                    onChange={(e) => handleFileUpload(Array.from(e.target.files))}
+                    className="hidden"
+                  />
+
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="text-gray-400 hover:text-white"
+                  >
+                    <Paperclip className="w-4 h-4" />
+                  </Button>
+
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={isRecording ? stopRecording : startRecording}
+                    className={isRecording ? "text-red-400" : "text-gray-400 hover:text-white"}
+                  >
+                    <Mic className="w-4 h-4" />
+                  </Button>
+
+                  <Button
+                    size="sm"
+                    variant="ghost"
+                    onClick={openCamera}
+                    className="text-gray-400 hover:text-white"
+                  >
+                    <Camera className="w-4 h-4" />
+                  </Button>
+
                   <Input
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
@@ -613,12 +781,12 @@ export default function VideoCreator() {
                       }
                     }}
                     placeholder="שאל שאלה..."
-                    className="bg-gray-900 border-gray-700 text-white"
+                    className="bg-gray-900 border-gray-700 text-white flex-1"
                     disabled={loading || !conversationId}
                   />
                   <Button
                     onClick={handleSend}
-                    disabled={!input.trim() || loading || !conversationId}
+                    disabled={(!input.trim() && attachments.length === 0) || loading || !conversationId}
                     size="sm"
                     className="bg-gradient-to-br from-[#E31E24] to-[#B91C1C]"
                   >
@@ -630,6 +798,35 @@ export default function VideoCreator() {
           )}
         </AnimatePresence>
       </div>
-    </div>
-  );
-}
+
+        {/* Camera Modal */}
+        {isCameraOpen && (
+          <div className="fixed inset-0 bg-black/90 z-[9999] flex items-center justify-center p-4">
+            <div className="bg-gray-900 rounded-2xl overflow-hidden max-w-2xl w-full">
+              <div className="p-4 bg-gray-800 flex items-center justify-between">
+                <h3 className="text-white font-bold">צילום תמונה</h3>
+                <button onClick={closeCamera} className="text-white hover:text-red-400">
+                  <X className="w-6 h-6" />
+                </button>
+              </div>
+              <video
+                ref={cameraVideoRef}
+                autoPlay
+                playsInline
+                className="w-full"
+              />
+              <div className="p-4 flex gap-3 justify-center">
+                <Button onClick={capturePhoto} className="bg-[#E31E24] hover:bg-[#B91C1C]">
+                  <Camera className="w-5 h-5 ml-2" />
+                  צלם תמונה
+                </Button>
+                <Button variant="outline" onClick={closeCamera}>
+                  ביטול
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+      );
+      }
