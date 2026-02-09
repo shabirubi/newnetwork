@@ -45,11 +45,11 @@ export default function WeatherWidget() {
 
   const getWeatherIcon = (condition) => {
     const cond = condition?.toLowerCase() || "";
-    if (cond.includes("rain") || cond.includes("גשם")) return <CloudRain className="w-3.5 h-3.5 text-blue-400" />;
-    if (cond.includes("snow") || cond.includes("שלג")) return <CloudSnow className="w-3.5 h-3.5 text-blue-200" />;
-    if (cond.includes("cloud") || cond.includes("עננ")) return <Cloud className="w-3.5 h-3.5 text-gray-400" />;
-    if (cond.includes("wind") || cond.includes("רוח")) return <Wind className="w-3.5 h-3.5 text-gray-500" />;
-    return <Sun className="w-3.5 h-3.5 text-yellow-400" />;
+    if (cond.includes("rain") || cond.includes("גשם")) return <CloudRain className="w-3 h-3 text-blue-400" />;
+     if (cond.includes("snow") || cond.includes("שלג")) return <CloudSnow className="w-3 h-3 text-blue-200" />;
+     if (cond.includes("cloud") || cond.includes("עננ")) return <Cloud className="w-3 h-3 text-gray-400" />;
+     if (cond.includes("wind") || cond.includes("רוח")) return <Wind className="w-3 h-3 text-gray-500" />;
+     return <Sun className="w-3 h-3 text-yellow-400" />;
   };
 
   const getSeasonColor = (season) => {
@@ -59,10 +59,10 @@ export default function WeatherWidget() {
 
   if (loading) {
     return (
-      <div className="flex items-center gap-2 px-4 py-2 bg-black/60 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 animate-pulse">
-        <div className="w-4 h-4 bg-white/40 rounded-full" />
-        <div className="w-10 h-4 bg-white/40 rounded" />
-      </div>
+      <div className="flex items-center gap-2 px-2 py-1 bg-black/60 backdrop-blur-xl rounded-lg shadow-lg border border-white/20 animate-pulse">
+           <div className="w-3 h-3 bg-white/40 rounded-full" />
+           <div className="w-8 h-3 bg-white/40 rounded" />
+         </div>
     );
   }
 
@@ -74,18 +74,18 @@ export default function WeatherWidget() {
         className="relative group"
       >
         <button
-          onClick={() => setModalOpen(true)}
-          className="flex items-center gap-2 px-4 py-2 bg-black/60 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20 transition-all hover:scale-105 hover:bg-black/70"
-        >
-          {getWeatherIcon(weather?.condition)}
-          <div className="flex flex-col">
-            <span className="font-bold text-white text-sm leading-none">{weather?.temperature || 25}°</span>
-            <div className="flex items-center gap-1 text-white/80 text-[10px] leading-none mt-0.5">
-              <Droplets className="w-2.5 h-2.5" />
-              <span>{weather?.humidity || 50}%</span>
-            </div>
-          </div>
-        </button>
+           onClick={() => setModalOpen(true)}
+           className="flex items-center gap-2 px-2 py-1 bg-black/60 backdrop-blur-xl rounded-lg shadow-lg border border-white/20 transition-all hover:scale-105 hover:bg-black/70"
+         >
+           {getWeatherIcon(weather?.condition)}
+           <div className="flex flex-col">
+             <span className="font-bold text-white text-xs leading-none">{weather?.temperature || 25}°</span>
+             <div className="flex items-center gap-1 text-white/80 text-[8px] leading-none mt-0.5">
+               <Droplets className="w-2 h-2" />
+               <span>{weather?.humidity || 50}%</span>
+             </div>
+           </div>
+         </button>
       </motion.div>
 
       <WeatherForecastModal 

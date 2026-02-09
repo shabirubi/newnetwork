@@ -32,13 +32,13 @@ export default function ClockWidget() {
       animate={{ opacity: 1, scale: 1 }}
       className="relative group"
     >
-      <div className="flex items-center gap-2 px-4 py-2 bg-black/60 backdrop-blur-xl rounded-2xl shadow-lg border border-white/20">
-        <Clock className="w-4 h-4 text-white" />
-        <div className="flex flex-col">
-          <span className="font-bold text-white text-sm leading-none">{formatTime(time)}</span>
-          <span className="text-white/80 text-[10px] leading-none mt-0.5">{formatDate(time)}</span>
-        </div>
-      </div>
+      <div className="flex items-center gap-2 px-2 py-1 bg-black/60 backdrop-blur-xl rounded-lg shadow-lg border border-white/20">
+         <Clock className="w-3 h-3 text-white" />
+         <div className="flex flex-col">
+           <span className="font-bold text-white text-xs leading-none">{formatTime(time)}</span>
+           <span className="text-white/80 text-[8px] leading-none mt-0.5">{formatDate(time)}</span>
+         </div>
+       </div>
     </motion.div>
   );
 }
