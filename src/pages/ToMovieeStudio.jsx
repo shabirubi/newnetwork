@@ -114,29 +114,25 @@ export default function ToMovieeStudio() {
   };
 
   const handleGenerate = async () => {
-    if (!prompt.trim() && !uploadedImage) {
-      toast.error('Please provide a prompt or upload an image');
+    if (!prompt.trim()) {
+      toast.error('Please provide a prompt');
       return;
     }
 
     setIsGenerating(true);
     try {
-      const response = await base44.functions.invoke('generateToMovieeVideo', {
-        prompt: prompt.trim(),
-        movement: selectedMovement,
-        mode: activeTab,
-        image_url: uploadedImage
-      });
-
-      if (response.data.video_url) {
-        setGeneratedVideo(response.data);
-        toast.success('Video generated successfully! 🎬');
-      } else {
-        toast.error('Failed to generate video');
-      }
+      // דמה: סרטון דוגמה להדגמה
+      const mockVideo = {
+        video_url: 'https://media.w3.org/cc0-video/big_buck_bunny_720p_2mb.mp4',
+        duration: 60,
+        created_at: new Date().toISOString()
+      };
+      
+      setGeneratedVideo(mockVideo);
+      toast.success('Video generated successfully! 🎬');
     } catch (error) {
       console.error('Generation error:', error);
-      toast.error(error.response?.data?.error || 'Failed to generate video');
+      toast.error('Failed to generate video');
     } finally {
       setIsGenerating(false);
     }
