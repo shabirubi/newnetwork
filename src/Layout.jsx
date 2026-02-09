@@ -229,18 +229,18 @@ export default function Layout({ children, currentPageName }) {
                 </Link>
                 <button
                   onClick={handleLogout}
-                  className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-red-600/20 hover:bg-red-600/40 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-red-500/30 transition-all hover:scale-105 text-xs sm:text-sm"
+                  className="flex items-center gap-1 px-2 py-1 bg-red-600/20 hover:bg-red-600/40 backdrop-blur-xl rounded-lg shadow-lg border border-red-500/30 transition-all hover:scale-105 text-[11px]"
                 >
-                  <LogOut className="w-4 h-4 text-red-400" />
+                  <LogOut className="w-3.5 h-3.5 text-red-400" />
                   <span className="text-red-300 font-bold hidden sm:inline">התנתק</span>
                 </button>
               </>
             ) : (
               <button
                 onClick={handleLogin}
-                className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-blue-500/30 transition-all hover:scale-105 text-xs sm:text-sm"
+                className="flex items-center gap-1 px-2 py-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 backdrop-blur-xl rounded-lg shadow-lg border border-blue-500/30 transition-all hover:scale-105 text-[11px]"
               >
-                <LogIn className="w-4 h-4 text-white" />
+                <LogIn className="w-3.5 h-3.5 text-white" />
                 <span className="text-white font-bold hidden sm:inline">התחבר</span>
               </button>
             )}
@@ -265,28 +265,7 @@ export default function Layout({ children, currentPageName }) {
               <span className="text-white font-bold">שידור חי</span>
             </Link>
 
-            {user?.role === 'admin' && (
-              <>
-                <a
-                  href={createPageUrl("AdminPanel")}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-gradient-to-r from-purple-600 to-purple-700 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-purple-500/50 transition-all hover:scale-105 hover:from-purple-700 hover:to-purple-800 active:scale-95 cursor-pointer text-xs sm:text-sm"
-                >
-                  <Shield className="w-4 h-4 text-white" />
-                  <span className="text-white font-bold hidden lg:inline">ניהול</span>
-                </a>
-                <a
-                  href={createPageUrl("VideoCreator")}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-gradient-to-r from-blue-600 to-blue-700 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-blue-500/50 transition-all hover:scale-105 hover:from-blue-700 hover:to-blue-800 active:scale-95 cursor-pointer text-xs sm:text-sm"
-                >
-                  <MessageSquare className="w-4 h-4 text-white" />
-                  <span className="text-white font-bold hidden lg:inline">צ'אט סרטונים</span>
-                </a>
-              </>
-            )}
+
             </div>
 
             {/* Mobile: Logo Only */}
