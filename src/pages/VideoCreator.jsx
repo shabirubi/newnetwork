@@ -4,11 +4,12 @@ import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import { Send, Video, Loader2, Sparkles, Download, Plus, Trash2, MessageSquare, Home } from "lucide-react";
+import { Send, Video, Loader2, Sparkles, Download, Plus, Trash2, MessageSquare, Home, Play, Pause, SkipBack, SkipForward, Scissors, Copy, Volume2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 export default function VideoCreator() {
   const [messages, setMessages] = useState([]);
@@ -18,7 +19,11 @@ export default function VideoCreator() {
   const [showChat, setShowChat] = useState(true);
   const [currentScene, setCurrentScene] = useState(0);
   const [generating, setGenerating] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
   const messagesEndRef = useRef(null);
+  const videoRef = useRef(null);
 
   // Fetch reporters
   const { data: reporters = [] } = useQuery({
@@ -142,23 +147,56 @@ export default function VideoCreator() {
     }
 
     setGenerating(true);
+    toast.loading("מייצר סרטון...", { id: 'gen-scene' });
+    
     try {
       const result = await base44.functions.invoke("generateHeyGenCharacter", {
-        script: scene.script
+        script: scene.script,
+        avatar_id: scene.avatar
       });
 
       if (result.data?.video_url) {
-        updateScene(index, "videoUrl", result.data.video_url);
-        toast.success("הסרטון נוצר בהצלחה!");
+        const newScenes = [...scenes];
+        newScenes[index].videoUrl = result.data.video_url;
+        newScenes[index].duration = result.data.duration || 10;
+        setScenes(newScenes);
+        toast.success("הסרטון נוצר ונוסף לציר הזמן! 🎬", { id: 'gen-scene' });
       } else {
-        toast.error("שגיאה ביצירת הסרטון");
+        toast.error("שגיאה ביצירת הסרטון", { id: 'gen-scene' });
       }
     } catch (err) {
       console.error(err);
-      toast.error("שגיאה ביצירת הסרטון");
+      toast.error("שגיאה ביצירת הסרטון", { id: 'gen-scene' });
     } finally {
       setGenerating(false);
     }
+  };
+
+  const handleDragEnd = (result) => {
+    if (!result.destination) return;
+    
+    const items = Array.from(scenes);
+    const [reorderedItem] = items.splice(result.source.index, 1);
+    items.splice(result.destination.index, 0, reorderedItem);
+    
+    setScenes(items);
+    toast.success("הסצנה הועברה");
+  };
+
+  const duplicateScene = (index) => {
+    const sceneToDuplicate = scenes[index];
+    const newScene = {
+      ...sceneToDuplicate,
+      id: Date.now(),
+    };
+    const newScenes = [...scenes];
+    newScenes.splice(index + 1, 0, newScene);
+    setScenes(newScenes);
+    toast.success("הסצנה שוכפלה");
+  };
+
+  const getTotalDuration = () => {
+    return scenes.reduce((total, scene) => total + (scene.duration || 0), 0);
   };
 
   const generateAllScenes = async () => {
@@ -333,41 +371,180 @@ export default function VideoCreator() {
           </div>
         </div>
 
-        {/* Center Panel - Preview */}
-        <div className="flex-1 bg-black/20 flex flex-col items-center justify-center p-8">
-          {scenes[currentScene]?.videoUrl ? (
-            <div className="w-full max-w-3xl">
-              <video
-                key={scenes[currentScene].videoUrl}
-                src={scenes[currentScene].videoUrl}
-                controls
-                className="w-full rounded-xl shadow-2xl"
-              />
-              <div className="mt-4 flex items-center justify-center gap-3">
+        {/* Center Panel - Video Preview & Timeline */}
+        <div className="flex-1 bg-black/20 flex flex-col overflow-hidden">
+          {/* Video Preview */}
+          <div className="flex-1 flex items-center justify-center p-6">
+            {scenes[currentScene]?.videoUrl ? (
+              <div className="w-full max-w-4xl">
+                <video
+                  ref={videoRef}
+                  key={scenes[currentScene].videoUrl}
+                  src={scenes[currentScene].videoUrl}
+                  className="w-full rounded-xl shadow-2xl bg-black"
+                  onTimeUpdate={(e) => setCurrentTime(e.target.currentTime)}
+                  onLoadedMetadata={(e) => setDuration(e.target.duration)}
+                  onPlay={() => setIsPlaying(true)}
+                  onPause={() => setIsPlaying(false)}
+                />
+              </div>
+            ) : (
+              <div className="text-center">
+                <div className="w-32 h-32 rounded-full bg-gray-800 flex items-center justify-center mx-auto mb-4">
+                  <Video className="w-16 h-16 text-gray-600" />
+                </div>
+                <h3 className="text-white text-xl font-bold mb-2">תצוגה מקדימה</h3>
+                <p className="text-gray-400">הסרטון יופיע כאן לאחר היצירה</p>
+              </div>
+            )}
+          </div>
+
+          {/* Timeline Section */}
+          <div className="border-t border-gray-800 bg-black/40 backdrop-blur-xl p-4">
+            {/* Playback Controls */}
+            <div className="flex items-center gap-4 mb-4">
+              <div className="flex items-center gap-2">
                 <Button
+                  size="sm"
                   variant="outline"
                   onClick={() => {
-                    const a = document.createElement("a");
-                    a.href = scenes[currentScene].videoUrl;
-                    a.download = `scene-${currentScene + 1}.mp4`;
-                    a.click();
+                    if (currentScene > 0) setCurrentScene(currentScene - 1);
                   }}
-                  className="gap-2"
+                  disabled={currentScene === 0}
                 >
-                  <Download className="w-4 h-4" />
-                  הורד סצנה
+                  <SkipBack className="w-4 h-4" />
+                </Button>
+                <Button
+                  size="sm"
+                  className="bg-[#E31E24]"
+                  onClick={() => {
+                    if (videoRef.current) {
+                      if (isPlaying) {
+                        videoRef.current.pause();
+                      } else {
+                        videoRef.current.play();
+                      }
+                    }
+                  }}
+                  disabled={!scenes[currentScene]?.videoUrl}
+                >
+                  {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => {
+                    if (currentScene < scenes.length - 1) setCurrentScene(currentScene + 1);
+                  }}
+                  disabled={currentScene === scenes.length - 1}
+                >
+                  <SkipForward className="w-4 h-4" />
                 </Button>
               </div>
-            </div>
-          ) : (
-            <div className="text-center">
-              <div className="w-32 h-32 rounded-full bg-gray-800 flex items-center justify-center mx-auto mb-4">
-                <Video className="w-16 h-16 text-gray-600" />
+
+              <div className="flex-1">
+                <div className="flex items-center gap-2 text-xs text-gray-400">
+                  <span>{Math.floor(currentTime)}s</span>
+                  <div className="flex-1 h-1 bg-gray-700 rounded-full overflow-hidden">
+                    <div 
+                      className="h-full bg-[#E31E24]"
+                      style={{ width: `${(currentTime / duration) * 100}%` }}
+                    />
+                  </div>
+                  <span>{Math.floor(duration)}s</span>
+                </div>
               </div>
-              <h3 className="text-white text-xl font-bold mb-2">תצוגה מקדימה</h3>
-              <p className="text-gray-400">הסרטון יופיע כאן לאחר היצירה</p>
+
+              <div className="text-white text-sm font-medium">
+                {scenes.filter(s => s.videoUrl).length} / {scenes.length} סצנות
+              </div>
             </div>
-          )}
+
+            {/* Timeline Track */}
+            <div className="bg-gray-900 rounded-lg p-3">
+              <div className="flex items-center gap-2 mb-2">
+                <Video className="w-4 h-4 text-[#E31E24]" />
+                <span className="text-white text-sm font-bold">ציר זמן</span>
+                <span className="text-gray-400 text-xs">({getTotalDuration().toFixed(1)}s)</span>
+              </div>
+              
+              <DragDropContext onDragEnd={handleDragEnd}>
+                <Droppable droppableId="timeline" direction="horizontal">
+                  {(provided) => (
+                    <div
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                      className="flex gap-2 overflow-x-auto pb-2"
+                    >
+                      {scenes.map((scene, index) => (
+                        <Draggable key={scene.id} draggableId={String(scene.id)} index={index}>
+                          {(provided, snapshot) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                              onClick={() => setCurrentScene(index)}
+                              className={`min-w-[120px] rounded-lg overflow-hidden cursor-pointer transition-all ${
+                                currentScene === index
+                                  ? "ring-2 ring-[#E31E24] scale-105"
+                                  : "hover:scale-105"
+                              } ${snapshot.isDragging ? "opacity-50" : ""}`}
+                            >
+                              <div className="relative">
+                                {scene.videoUrl ? (
+                                  <video
+                                    src={scene.videoUrl}
+                                    className="w-full h-20 object-cover bg-black"
+                                  />
+                                ) : (
+                                  <div className="w-full h-20 bg-gray-800 flex items-center justify-center">
+                                    <img
+                                      src={scene.thumbnail}
+                                      alt={scene.avatarName}
+                                      className="w-12 h-12 rounded-full object-cover opacity-50"
+                                    />
+                                  </div>
+                                )}
+                                <div className="absolute top-1 right-1 flex gap-1">
+                                  <button
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      duplicateScene(index);
+                                    }}
+                                    className="p-1 bg-black/60 rounded hover:bg-black/80"
+                                  >
+                                    <Copy className="w-3 h-3 text-white" />
+                                  </button>
+                                  {scenes.length > 1 && (
+                                    <button
+                                      onClick={(e) => {
+                                        e.stopPropagation();
+                                        deleteScene(index);
+                                      }}
+                                      className="p-1 bg-black/60 rounded hover:bg-red-600"
+                                    >
+                                      <Trash2 className="w-3 h-3 text-white" />
+                                    </button>
+                                  )}
+                                </div>
+                              </div>
+                              <div className="bg-gray-800 px-2 py-1">
+                                <p className="text-white text-xs truncate">{scene.avatarName}</p>
+                                <p className="text-gray-400 text-[10px]">
+                                  {scene.duration ? `${scene.duration.toFixed(1)}s` : 'טרם נוצר'}
+                                </p>
+                              </div>
+                            </div>
+                          )}
+                        </Draggable>
+                      ))}
+                      {provided.placeholder}
+                    </div>
+                  )}
+                </Droppable>
+              </DragDropContext>
+            </div>
+          </div>
         </div>
 
         {/* Right Panel - AI Chat */}
