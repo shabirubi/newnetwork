@@ -23,14 +23,14 @@ import TikTokNewsFeed from "../components/news/TikTokNewsFeed";
 import VODModal from "../components/vod/VODModal";
 import AccessibilityPanel from "../components/accessibility/AccessibilityPanel";
 import UploadVideoModal from "../components/home/UploadVideoModal";
+import UserUploadedVideos from "../components/home/UserUploadedVideos";
+import ReportersSpotlight from "../components/home/ReportersSpotlight";
 import { Droplet, Mic, Users, Wand2, FileVideo } from "lucide-react";
 
       // Lazy loaded components
 const NewsReels = React.lazy(() => import("../components/news/NewsReels"));
 const TrendingTopicsContainer = React.lazy(() => import("../components/home/TrendingTopicsContainer"));
 const TikTokNewsContainer = React.lazy(() => import("../components/home/TikTokNewsContainer"));
-const ReportersSpotlight = React.lazy(() => import("../components/home/ReportersSpotlight"));
-const UserUploadedVideos = React.lazy(() => import("../components/home/UserUploadedVideos"));
 const AllVideosGallery = React.lazy(() => import("../components/home/AllVideosGallery"));
 const KanArchiveContainer = React.lazy(() => import("../components/home/KanArchiveContainer"));
 const ReporterResponsesFeed = React.lazy(() => import("../components/home/ReporterResponsesFeed"));
@@ -398,11 +398,9 @@ export default function Home() {
         <TrendingTopicsContainer />
       </React.Suspense>
 
-      {/* User Uploaded Videos - Lazy Loaded */}
+      {/* User Uploaded Videos */}
       <div id="user-videos-section">
-        <React.Suspense fallback={<div className="h-96 bg-black animate-pulse rounded-2xl mx-4" />}>
-          <UserUploadedVideos onUploadClick={() => setUploadVideoModalOpen(true)} />
-        </React.Suspense>
+        <UserUploadedVideos onUploadClick={() => setUploadVideoModalOpen(true)} />
       </div>
 
       {/* TikTok News Container - Lazy Loaded */}
@@ -410,10 +408,8 @@ export default function Home() {
         <TikTokNewsContainer />
       </React.Suspense>
 
-      {/* Reporters Spotlight - Lazy Loaded */}
-      <React.Suspense fallback={<div className="h-96 bg-black animate-pulse rounded-2xl mx-4" />}>
-        <ReportersSpotlight />
-      </React.Suspense>
+      {/* Reporters Spotlight */}
+      <ReportersSpotlight />
 
       {/* Reporter Responses Feed - Lazy Loaded */}
       <section className="px-4 sm:px-4 mt-8">
