@@ -105,11 +105,14 @@ export default function DIDLiveChat({ isOpen, onClose }) {
               title="D-ID Agent Chat"
               style={{ 
                 position: 'absolute',
-                top: '0',
-                left: '0',
+                top: '50%',
+                left: '50%',
+                transform: 'translate(-50%, -50%) scale(2.2)',
                 width: '100%',
                 height: '100%',
-                objectFit: 'cover'
+                maxWidth: '100%',
+                maxHeight: '100%',
+                overflow: 'hidden'
               }}
             />
           </div>
