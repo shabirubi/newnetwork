@@ -525,6 +525,21 @@ export default function Home() {
         </motion.button>
       </Link>
 
+      {/* ToMoviee Studio Button */}
+      <a href={createPageUrl("ToMovieeStudio")} target="_blank" rel="noopener noreferrer">
+        <motion.button
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          className="fixed bottom-48 right-4 z-[9998] w-16 h-16 rounded-full bg-gradient-to-br from-indigo-600 to-purple-700 hover:from-indigo-500 hover:to-purple-600 shadow-2xl flex items-center justify-center border-2 border-indigo-300/50 transition-all group"
+          title="ToMoviee Studio"
+        >
+          <Film className="w-7 h-7 text-white" />
+          <span className="absolute right-full mr-3 top-1/2 -translate-y-1/2 px-3 py-1 bg-indigo-600 text-white text-sm font-bold rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
+            ToMoviee
+          </span>
+        </motion.button>
+      </a>
+
       {/* AI Design Studio Button */}
       <Link to={createPageUrl("AIDesignStudio")}>
         <motion.button
