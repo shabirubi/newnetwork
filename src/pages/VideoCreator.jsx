@@ -774,8 +774,7 @@ export default function VideoCreator() {
                     <Camera className="w-4 h-4" />
                   </Button>
 
-                  <input
-                    type="text"
+                  <textarea
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={(e) => {
@@ -784,16 +783,15 @@ export default function VideoCreator() {
                         handleSend();
                       }
                     }}
-                    placeholder="שאל שאלה..."
-                    className="flex-1 px-3 py-2 rounded-md bg-gray-900 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-[#E31E24]"
-                    disabled={loading || !conversationId}
+                    placeholder="שאל שאלה על יצירת הסרטון..."
+                    className="flex-1 px-3 py-2 rounded-md bg-gray-900 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-[#E31E24] resize-none min-h-[40px] max-h-[120px]"
+                    rows={1}
                   />
                   <Button
                     onClick={handleSend}
-                    disabled={(!input.trim() && attachments.length === 0) || loading || !conversationId}
+                    disabled={!input.trim() && attachments.length === 0}
                     size="sm"
                     className="bg-gradient-to-br from-[#E31E24] to-[#B91C1C] shrink-0"
-                    type="button"
                   >
                     <Send className="w-4 h-4" />
                   </Button>
