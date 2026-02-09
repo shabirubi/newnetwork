@@ -575,6 +575,7 @@ export default function VideoCreator() {
           </div>
         )}
       </div>
+      </div>
     </div>
   );
 }
