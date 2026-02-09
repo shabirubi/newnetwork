@@ -40,6 +40,10 @@ const categories = [
   { id: "culture", label: "תרבות", icon: Clapperboard, href: "Category?cat=culture" },
   { id: "environment", label: "סביבה", icon: Globe, href: "Category?cat=environment" },
   { id: "science", label: "מדע", icon: Cpu, href: "Category?cat=science" },
+  { id: "israel", label: "חדשות ישראל", icon: Newspaper, href: "Category?cat=israel" },
+  { id: "military", label: "צבא וביטחון", icon: Shield, href: "Category?cat=military" },
+  { id: "law", label: "משפט ופלילים", icon: AlertTriangle, href: "Category?cat=law" },
+  { id: "local", label: "חדשות מקומיות", icon: Home, href: "Category?cat=local" },
   ];
 
   const additionalPages = [

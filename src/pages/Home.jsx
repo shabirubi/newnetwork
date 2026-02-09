@@ -349,8 +349,12 @@ export default function Home() {
           { category: 'education', label: 'חינוך' },
           { category: 'culture', label: 'תרבות' },
           { category: 'environment', label: 'סביבה' },
-          { category: 'science', label: 'מדע' }
-        ].map(({ category, label }) => {
+          { category: 'science', label: 'מדע' },
+          { category: 'israel', label: 'חדשות ישראל' },
+          { category: 'military', label: 'צבא וביטחון' },
+          { category: 'law', label: 'משפט ופלילים' },
+          { category: 'local', label: 'חדשות מקומיות' }
+          ].map(({ category, label }) => {
           const categoryArticles = articles.filter(a => a.category === category).slice(0, 4);
           if (categoryArticles.length === 0) return null;
           return (
