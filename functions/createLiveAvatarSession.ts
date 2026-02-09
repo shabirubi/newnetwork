@@ -3,48 +3,43 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
-    const didApiKey = Deno.env.get('DID_API_KEY');
+    const heygenApiKey = Deno.env.get('HEYGEN_API_KEY');
 
-    if (!didApiKey) {
-      return Response.json({ error: 'DID_API_KEY not configured' }, { status: 500 });
+    if (!heygenApiKey) {
+      return Response.json({ error: 'HEYGEN_API_KEY not configured' }, { status: 500 });
     }
 
-    // Create D-ID Talk session for real-time video interaction
-    const sessionResponse = await fetch('https://api.d-id.com/v1/talks/start', {
+    // Create HeyGen Interactive Avatar session
+    const sessionResponse = await fetch('https://api.heygen.com/v1/streaming.new', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${didApiKey}`,
+        'x-api-key': heygenApiKey,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        source_url: 'https://assets.d-id.com/avatars/Niki_20240123_20240502_1080p_sad.png',
-        driver_url: 'bank://lipsync--v2',
-        config: {
-          sharpen: true,
-          motion_factor: 1,
-          normalization_factor: 1,
-          stitch: false
+        quality: 'high',
+        avatar_name: 'Wayne_20240711',
+        voice: {
+          voice_id: 'en-US-JennyNeural'
         }
       })
     });
 
     if (!sessionResponse.ok) {
       const error = await sessionResponse.text();
-      console.error('D-ID session creation failed:', sessionResponse.status, error);
-      return Response.json({ error: `Failed to create D-ID session: ${error}` }, { status: 500 });
+      console.error('HeyGen session creation failed:', sessionResponse.status, error);
+      return Response.json({ error: `Failed to create HeyGen session: ${error}` }, { status: 500 });
     }
 
     const sessionData = await sessionResponse.json();
 
     return Response.json({
-      session_id: sessionData.session_id,
-      session_token: sessionData.session_token,
-      livekit_url: 'wss://livekit.d-id.com',
-      livekit_client_token: sessionData.session_token,
+      session_id: sessionData.data?.session_id,
+      access_token: sessionData.data?.access_token,
       success: true
     });
   } catch (error) {
-    console.error('D-ID session error:', error);
+    console.error('HeyGen session error:', error);
     return Response.json({ error: error.message }, { status: 500 });
   }
 });
