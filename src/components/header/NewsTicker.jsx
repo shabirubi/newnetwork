@@ -193,12 +193,7 @@ export default function NewsTicker({ darkMode, setDarkMode, onMenuClick }) {
             {darkMode ? <Sun size={16} className="sm:w-5 sm:h-5" /> : <Moon size={16} className="sm:w-5 sm:h-5" />}
           </button>
 
-          <div className="hidden sm:block">
-            <ClockWidget />
-          </div>
-          <div className="hidden md:block">
-            <WeatherWidget />
-          </div>
+
 
           <div className="relative z-[70]">
             <ChannelSelector />
@@ -262,7 +257,7 @@ function TickerContent({ news, currencies }) {
 
   return (
     <motion.div
-      className="flex whitespace-nowrap text-base sm:text-lg pointer-events-none items-center font-bold"
+      className="flex whitespace-nowrap text-xs sm:text-sm pointer-events-none items-center font-bold"
       animate={{ x: `-${(news.length * 300 + currencies.length * 250 + updates.length * 350)}px` }}
       transition={{ duration: (news.length + currencies.length + updates.length) * 3, repeat: Infinity, ease: "linear" }}
     >
@@ -305,12 +300,12 @@ function TickerContent({ news, currencies }) {
             border: '1px solid rgba(227, 31, 36, 0.4)'
           }}
         >
-          {currency.code === 'USD' && <DollarSign className="w-4 h-4 text-[#E31E24] animate-pulse" />}
-          {currency.code === 'EUR' && <Euro className="w-4 h-4 text-[#E31E24] animate-pulse" />}
-          {currency.code === 'BTC' && <span className="text-[#E31E24] font-bold text-sm animate-pulse">₿</span>}
-          {currency.code === 'GBP' && <span className="text-[#E31E24] font-bold text-sm animate-pulse">£</span>}
-          <span className="font-bold text-white text-sm">{currency.name}</span>
-          <span className="text-red-400 font-bold text-sm">
+          {currency.code === 'USD' && <DollarSign className="w-3 h-3 text-[#E31E24] animate-pulse" />}
+          {currency.code === 'EUR' && <Euro className="w-3 h-3 text-[#E31E24] animate-pulse" />}
+          {currency.code === 'BTC' && <span className="text-[#E31E24] font-bold text-xs animate-pulse">₿</span>}
+          {currency.code === 'GBP' && <span className="text-[#E31E24] font-bold text-xs animate-pulse">£</span>}
+          <span className="font-bold text-white text-xs">{currency.name}</span>
+          <span className="text-red-400 font-bold text-xs">
             ₪{currency.code === 'BTC' ? (currency.rate || 0).toFixed(0) : (currency.rate || 0).toFixed(2)}
           </span>
           <motion.span 
