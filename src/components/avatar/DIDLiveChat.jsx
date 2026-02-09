@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Video, Mic, MicOff, VideoIcon, VideoOff, Loader2, MessageCircle } from 'lucide-react';
+import { X, Video, Mic, MicOff, VideoIcon, VideoOff, Loader2, MessageCircle, Radio } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
+
+const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png";
 
 export default function DIDLiveChat({ isOpen, onClose }) {
   const [isLoading, setIsLoading] = useState(true);
@@ -38,22 +40,35 @@ export default function DIDLiveChat({ isOpen, onClose }) {
           onClick={(e) => e.stopPropagation()}
           className="bg-gradient-to-br from-gray-900 to-black rounded-2xl overflow-hidden w-full max-w-6xl shadow-2xl border border-purple-500/50 h-[90vh] flex flex-col"
         >
-          {/* Header */}
-          <div className="bg-gradient-to-r from-purple-600 to-pink-600 p-4 flex items-center justify-between shrink-0">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center animate-pulse">
-                <MessageCircle className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h2 className="text-xl font-bold text-white">שיחה חיה עם D-ID Agent</h2>
-                <p className="text-purple-100 text-sm">
-                  {isLoading ? 'טוען...' : '🟢 מוכן לשיחה - דבר במיקרופון'}
-                </p>
+          {/* Branded Header */}
+          <div className="bg-black p-4 flex items-center justify-between shrink-0 border-b border-[#E31E24]/30"
+            style={{
+              boxShadow: '0 4px 20px rgba(0, 0, 0, 0.8)'
+            }}
+          >
+            <motion.img 
+              src={LOGO_URL}
+              alt="הרשת החדשה"
+              className="h-16 w-auto drop-shadow-2xl"
+              animate={{ 
+                scale: [1, 1.05, 1],
+                filter: ['brightness(1)', 'brightness(1.2)', 'brightness(1)']
+              }}
+              transition={{ 
+                duration: 3, 
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            />
+            <div className="text-right flex-1 px-4">
+              <div className="text-white font-bold text-xl drop-shadow-lg">הרשת החדשה</div>
+              <div className="text-[#E31E24] font-bold text-sm" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>
+                {isLoading ? 'טוען אווטר...' : 'צ\'אט חי עם אווטר AI'}
               </div>
             </div>
             <button
               onClick={onClose}
-              className="w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors"
+              className="w-10 h-10 rounded-full bg-[#E31E24]/20 hover:bg-[#E31E24]/40 flex items-center justify-center transition-colors border border-[#E31E24]/30"
             >
               <X className="w-5 h-5 text-white" />
             </button>
@@ -61,6 +76,19 @@ export default function DIDLiveChat({ isOpen, onClose }) {
 
           {/* D-ID Agent Iframe */}
           <div className="flex-1 bg-black relative overflow-hidden">
+            {/* Left Frame */}
+            <div className="absolute top-0 bottom-0 left-0 w-12 bg-black z-30"
+              style={{
+                boxShadow: '4px 0 20px rgba(0, 0, 0, 0.8)'
+              }}
+            />
+
+            {/* Right Frame */}
+            <div className="absolute top-0 bottom-0 right-0 w-12 bg-black z-30"
+              style={{
+                boxShadow: '-4px 0 20px rgba(0, 0, 0, 0.8)'
+              }}
+            />
             {isLoading && (
               <div className="absolute inset-0 flex items-center justify-center bg-black z-10">
                 <div className="text-center">
@@ -87,11 +115,19 @@ export default function DIDLiveChat({ isOpen, onClose }) {
             />
           </div>
 
-          {/* Footer Info */}
-          <div className="bg-gradient-to-br from-gray-900 to-black p-4 border-t border-purple-500/30">
-            <p className="text-center text-gray-400 text-sm">
-              💬 דבר ישירות עם האגנט דרך המיקרופון
-            </p>
+          {/* Branded Footer */}
+          <div className="bg-black p-4 border-t border-[#E31E24]/30 flex items-center justify-center"
+            style={{
+              boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.8)'
+            }}
+          >
+            <div className="flex items-center gap-2 bg-[#E31E24]/20 backdrop-blur-sm px-4 py-2 rounded-full border border-[#E31E24]/50">
+              <span className="relative flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E31E24] opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-[#E31E24]"></span>
+              </span>
+              <span className="text-white font-bold">שיחה חיה</span>
+            </div>
           </div>
         </motion.div>
       </motion.div>
