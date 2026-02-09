@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import DIDLiveChat from "../components/avatar/DIDLiveChat";
 
 export default function VideoCreator() {
   const [messages, setMessages] = useState([]);
@@ -33,6 +34,7 @@ export default function VideoCreator() {
   const videoInputRef = useRef(null);
   const cameraVideoRef = useRef(null);
   const fileInputRef = useRef(null);
+  const [didChatOpen, setDidChatOpen] = useState(false);
 
   // Fetch reporters
   const { data: reporters = [] } = useQuery({
@@ -335,13 +337,22 @@ export default function VideoCreator() {
             </Button>
           </Link>
           <Button
+            onClick={() => setDidChatOpen(true)}
+            variant="outline"
+            size="sm"
+            className="gap-2 bg-green-600/20 hover:bg-green-600/30 border-green-500/50"
+          >
+            <MessageSquare className="w-4 h-4" />
+            צ'אט עם D-ID
+          </Button>
+          <Button
             onClick={() => setShowChat(!showChat)}
             variant="outline"
             size="sm"
             className="gap-2"
           >
             <MessageSquare className="w-4 h-4" />
-            {showChat ? "הסתר צ'אט" : "הצג צ'אט"}
+            {showChat ? "הסתר עוזר" : "הצג עוזר"}
           </Button>
           <Button
             onClick={generateAllScenes}
@@ -830,6 +841,9 @@ export default function VideoCreator() {
             </div>
           </div>
         )}
+
+        {/* D-ID Live Chat */}
+        <DIDLiveChat isOpen={didChatOpen} onClose={() => setDidChatOpen(false)} />
       </div>
       );
       }
