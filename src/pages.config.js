@@ -76,6 +76,7 @@ import Subscription from './pages/Subscription';
 import Terms from './pages/Terms';
 import TestApps from './pages/TestApps';
 import TestDID from './pages/TestDID';
+import ToMovieeStudio from './pages/ToMovieeStudio';
 import UserProfile from './pages/UserProfile';
 import UserVideos from './pages/UserVideos';
 import VOD from './pages/VOD';
@@ -83,7 +84,6 @@ import VODContent from './pages/VODContent';
 import VideoCreator from './pages/VideoCreator';
 import VideoEditor from './pages/VideoEditor';
 import WarRoom from './pages/WarRoom';
-import ToMovieeStudio from './pages/ToMovieeStudio';
 import __Layout from './Layout.jsx';
 
 
@@ -117,6 +117,7 @@ export const PAGES = {
     "Terms": Terms,
     "TestApps": TestApps,
     "TestDID": TestDID,
+    "ToMovieeStudio": ToMovieeStudio,
     "UserProfile": UserProfile,
     "UserVideos": UserVideos,
     "VOD": VOD,
@@ -124,7 +125,6 @@ export const PAGES = {
     "VideoCreator": VideoCreator,
     "VideoEditor": VideoEditor,
     "WarRoom": WarRoom,
-    "ToMovieeStudio": ToMovieeStudio,
 }
 
 export const pagesConfig = {
