@@ -35,6 +35,11 @@ const categories = [
   { id: "entertainment", label: "בידור ודרמה", icon: Clapperboard, href: "Category?cat=entertainment" },
   { id: "world", label: "חדשות עולם", icon: Globe, href: "Category?cat=world" },
   { id: "health", label: "בריאות", icon: Heart, href: "Category?cat=health" },
+  { id: "crime", label: "פלילים", icon: AlertTriangle, href: "Category?cat=crime" },
+  { id: "education", label: "חינוך", icon: Users, href: "Category?cat=education" },
+  { id: "culture", label: "תרבות", icon: Clapperboard, href: "Category?cat=culture" },
+  { id: "environment", label: "סביבה", icon: Globe, href: "Category?cat=environment" },
+  { id: "science", label: "מדע", icon: Cpu, href: "Category?cat=science" },
   ];
 
   const additionalPages = [

@@ -344,7 +344,12 @@ export default function Home() {
           { category: 'health', label: 'בריאות' },
           { category: 'music', label: 'מוזיקה' },
           { category: 'horoscope', label: 'אסטרולוגיה' },
-          { category: 'finance', label: 'פיננסים' }
+          { category: 'finance', label: 'פיננסים' },
+          { category: 'crime', label: 'פלילים' },
+          { category: 'education', label: 'חינוך' },
+          { category: 'culture', label: 'תרבות' },
+          { category: 'environment', label: 'סביבה' },
+          { category: 'science', label: 'מדע' }
         ].map(({ category, label }) => {
           const categoryArticles = articles.filter(a => a.category === category).slice(0, 4);
           if (categoryArticles.length === 0) return null;
