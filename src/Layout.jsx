@@ -68,6 +68,7 @@ export default function Layout({ children, currentPageName }) {
   const [authLoading, setAuthLoading] = useState(true);
   const [didChatOpen, setDidChatOpen] = useState(false);
   const [adminLoginOpen, setAdminLoginOpen] = useState(false);
+  const [menuSidebarOpen, setMenuSidebarOpen] = useState(false);
 
   useEffect(() => {
     if (darkMode) {
@@ -281,11 +282,11 @@ export default function Layout({ children, currentPageName }) {
             </button>
 
             <button
-              onClick={() => setCategoriesSidebarOpen(true)}
+              onClick={() => setMenuSidebarOpen(true)}
               className="flex items-center gap-1 sm:gap-2 px-2 sm:px-3 py-1.5 sm:py-2 bg-gradient-to-r from-[#E31E24]/30 to-[#E31E24]/20 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-[#E31E24]/50 transition-all hover:scale-105 hover:from-[#E31E24]/50 hover:to-[#E31E24]/40 active:scale-95 text-xs sm:text-sm cursor-pointer"
             >
-              <Newspaper className="w-4 h-4 text-white" />
-              <span className="text-white font-bold hidden sm:inline">קטגוריות</span>
+              <Menu className="w-4 h-4 text-white" />
+              <span className="text-white font-bold hidden sm:inline">תפריט</span>
             </button>
 
             <Link 
@@ -402,6 +403,158 @@ export default function Layout({ children, currentPageName }) {
       <AdminLoginModal isOpen={adminLoginOpen} onClose={() => setAdminLoginOpen(false)} />
 
 
+
+      {/* Main Menu Sidebar */}
+      <AnimatePresence>
+        {menuSidebarOpen && (
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 z-[9999]"
+            >
+              <div 
+                className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+                onClick={() => setMenuSidebarOpen(false)}
+              />
+              <motion.nav 
+                initial={{ x: "100%" }}
+                animate={{ x: 0 }}
+                exit={{ x: "100%" }}
+                transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                className="absolute right-0 top-0 bottom-0 w-80 bg-black/90 backdrop-blur-xl border-l border-[#E31E24]/30 shadow-2xl shadow-[#E31E24]/20 overflow-y-auto"
+              >
+                <div className="sticky top-0 bg-gradient-to-br from-black via-[#E31E24]/20 to-black p-4 shadow-lg border-b border-[#E31E24]/30">
+                  <div className="flex items-center justify-between">
+                    <h2 className="text-white font-bold text-xl">תפריט ראשי</h2>
+                    <button
+                      onClick={() => setMenuSidebarOpen(false)}
+                      className="p-2 rounded-full bg-[#E31E24]/20 hover:bg-[#E31E24]/40 text-white active:scale-95 transition-all"
+                    >
+                      <X size={22} />
+                    </button>
+                  </div>
+                </div>
+
+                <div className="p-4 space-y-1">
+                  <button
+                    onClick={() => {
+                      setReportersModalOpen(true);
+                      setMenuSidebarOpen(false);
+                    }}
+                    className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#E31E24]/20 active:bg-[#E31E24]/40 transition-all border border-transparent hover:border-[#E31E24]/30 w-full"
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-black/40 border border-[#E31E24]/20 flex items-center justify-center">
+                      <Users size={20} className="text-[#E31E24]" />
+                    </div>
+                    <span className="flex-1 font-medium text-right">כתבים</span>
+                    <ChevronLeft size={18} className="text-[#E31E24]" />
+                  </button>
+
+                  <Link
+                    to={createPageUrl("VODContent")}
+                    onClick={() => setMenuSidebarOpen(false)}
+                    className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#E31E24]/20 active:bg-[#E31E24]/40 transition-all border border-transparent hover:border-[#E31E24]/30"
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-black/40 border border-[#E31E24]/20 flex items-center justify-center">
+                      <Tv size={20} className="text-[#E31E24]" />
+                    </div>
+                    <span className="flex-1 font-medium">VOD</span>
+                    <ChevronLeft size={18} className="text-[#E31E24]" />
+                  </Link>
+
+                  <button
+                    onClick={() => {
+                      setDidChatOpen(true);
+                      setMenuSidebarOpen(false);
+                    }}
+                    className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#E31E24]/20 active:bg-[#E31E24]/40 transition-all border border-transparent hover:border-[#E31E24]/30 w-full animate-pulse"
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-black/40 border border-green-500/20 flex items-center justify-center">
+                      <MessageCircle size={20} className="text-green-500" />
+                    </div>
+                    <span className="flex-1 font-medium text-green-300">צ'אט חי</span>
+                    <ChevronLeft size={18} className="text-green-500" />
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setCategoriesSidebarOpen(true);
+                      setMenuSidebarOpen(false);
+                    }}
+                    className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#E31E24]/20 active:bg-[#E31E24]/40 transition-all border border-transparent hover:border-[#E31E24]/30 w-full"
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-black/40 border border-[#E31E24]/20 flex items-center justify-center">
+                      <Newspaper size={20} className="text-[#E31E24]" />
+                    </div>
+                    <span className="flex-1 font-medium">קטגוריות</span>
+                    <ChevronLeft size={18} className="text-[#E31E24]" />
+                  </button>
+
+                  <Link
+                    to={createPageUrl("Live")}
+                    onClick={() => setMenuSidebarOpen(false)}
+                    className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#E31E24]/20 active:bg-[#E31E24]/40 transition-all border border-transparent hover:border-[#E31E24]/30 animate-pulse"
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-black/40 border border-[#E31E24]/20 flex items-center justify-center">
+                      <Radio size={20} className="text-[#E31E24]" />
+                    </div>
+                    <span className="flex-1 font-medium text-[#E31E24]">שידור חי</span>
+                    <ChevronLeft size={18} className="text-[#E31E24]" />
+                  </Link>
+
+                  <Link
+                    to={createPageUrl("AIDesignStudio")}
+                    onClick={() => setMenuSidebarOpen(false)}
+                    className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#E31E24]/20 active:bg-[#E31E24]/40 transition-all border border-transparent hover:border-[#E31E24]/30"
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-black/40 border border-purple-500/20 flex items-center justify-center">
+                      <Sparkles size={20} className="text-purple-500" />
+                    </div>
+                    <span className="flex-1 font-medium">AI Design</span>
+                    <ChevronLeft size={18} className="text-[#E31E24]" />
+                  </Link>
+
+                  <Link
+                    to={createPageUrl("VideoCreator")}
+                    onClick={() => setMenuSidebarOpen(false)}
+                    className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#E31E24]/20 active:bg-[#E31E24]/40 transition-all border border-transparent hover:border-[#E31E24]/30 animate-pulse"
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-black/40 border border-purple-500/20 flex items-center justify-center">
+                      <Video size={20} className="text-purple-500" />
+                    </div>
+                    <span className="flex-1 font-medium text-purple-300">יוצר AI</span>
+                    <ChevronLeft size={18} className="text-purple-500" />
+                  </Link>
+
+                  <Link
+                    to={createPageUrl("LumaStudio")}
+                    onClick={() => setMenuSidebarOpen(false)}
+                    className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#E31E24]/20 active:bg-[#E31E24]/40 transition-all border border-transparent hover:border-[#E31E24]/30"
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-black/40 border border-[#E31E24]/20 flex items-center justify-center">
+                      <Clapperboard size={20} className="text-[#E31E24]" />
+                    </div>
+                    <span className="flex-1 font-medium">ייצור</span>
+                    <ChevronLeft size={18} className="text-[#E31E24]" />
+                  </Link>
+
+                  <Link
+                    to={createPageUrl("VideoEditor")}
+                    onClick={() => setMenuSidebarOpen(false)}
+                    className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#E31E24]/20 active:bg-[#E31E24]/40 transition-all border border-transparent hover:border-[#E31E24]/30"
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-black/40 border border-[#E31E24]/20 flex items-center justify-center">
+                      <Film size={20} className="text-[#E31E24]" />
+                    </div>
+                    <span className="flex-1 font-medium">עורך</span>
+                    <ChevronLeft size={18} className="text-[#E31E24]" />
+                  </Link>
+                </div>
+              </motion.nav>
+            </motion.div>
+          )}
+      </AnimatePresence>
 
       {/* Categories Sidebar */}
       <AnimatePresence>
