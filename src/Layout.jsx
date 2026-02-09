@@ -262,14 +262,6 @@ export default function Layout({ children, currentPageName }) {
               <span className="text-white font-bold">שידור חי</span>
             </Link>
 
-            <button
-              onClick={() => setMenuSidebarOpen(true)}
-              className="flex items-center gap-1 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 bg-gradient-to-r from-[#E31E24]/30 to-[#E31E24]/20 backdrop-blur-xl rounded-xl sm:rounded-2xl shadow-lg border border-[#E31E24]/50 transition-all hover:scale-105 hover:from-[#E31E24]/50 hover:to-[#E31E24]/40 active:scale-95 text-xs sm:text-sm cursor-pointer"
-            >
-              <Menu className="w-5 h-5 text-white" />
-              <span className="text-white font-bold">תפריט</span>
-            </button>
-
             {user?.role === 'admin' && (
               <a
                 href={createPageUrl("AdminPanel")}
