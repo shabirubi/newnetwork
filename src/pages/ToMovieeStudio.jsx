@@ -1,12 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Home, Wand2, Image as ImageIcon, Music, Sparkles, 
   Video, Film, Zap, Settings, HelpCircle, User,
-  ChevronDown, Play, Download, Loader2, Check
+  ChevronDown, Play, Download, Loader2, Check, Upload, X, Send, Bot
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
+import { Input } from '@/components/ui/input';
 import { base44 } from '@/api/base44Client';
 import { toast } from 'sonner';
 
@@ -19,6 +20,15 @@ export default function ToMovieeStudio() {
   const [isGenerating, setIsGenerating] = useState(false);
   const [generatedVideo, setGeneratedVideo] = useState(null);
   const [activeFilter, setActiveFilter] = useState('All');
+  const [uploadedImage, setUploadedImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
+  const [showCreativeAssistant, setShowCreativeAssistant] = useState(false);
+  const [showMyPrompts, setShowMyPrompts] = useState(false);
+  const [aiMessages, setAiMessages] = useState([]);
+  const [aiInput, setAiInput] = useState('');
+  const [isAiThinking, setIsAiThinking] = useState(false);
+  const [savedPrompts, setSavedPrompts] = useState([]);
+  const fileInputRef = useRef(null);
 
   const sidebarIcons = [
     { icon: Home, label: 'Home' },
@@ -40,9 +50,71 @@ export default function ToMovieeStudio() {
     { id: 'pan-left', label: 'Pan Left', description: 'Pan camera left' }
   ];
 
+  const handleImageUpload = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please upload an image file');
+      return;
+    }
+
+    try {
+      toast.info('Uploading image...');
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      setUploadedImage(file_url);
+      setImagePreview(URL.createObjectURL(file));
+      toast.success('Image uploaded successfully!');
+    } catch (error) {
+      console.error('Upload error:', error);
+      toast.error('Failed to upload image');
+    }
+  };
+
+  const handleAiChat = async () => {
+    if (!aiInput.trim()) return;
+
+    const userMessage = { role: 'user', content: aiInput };
+    setAiMessages(prev => [...prev, userMessage]);
+    setAiInput('');
+    setIsAiThinking(true);
+
+    try {
+      const response = await base44.integrations.Core.InvokeLLM({
+        prompt: `You are a creative assistant for video generation. Help the user refine their video idea: "${aiInput}". Provide a detailed, cinematic prompt for AI video generation.`,
+      });
+
+      const aiMessage = { role: 'assistant', content: response };
+      setAiMessages(prev => [...prev, aiMessage]);
+    } catch (error) {
+      toast.error('Failed to get AI response');
+    } finally {
+      setIsAiThinking(false);
+    }
+  };
+
+  const handleSavePrompt = () => {
+    if (!prompt.trim()) return;
+    const newPrompt = {
+      id: Date.now(),
+      text: prompt,
+      movement: selectedMovement,
+      timestamp: new Date().toISOString()
+    };
+    setSavedPrompts(prev => [newPrompt, ...prev]);
+    toast.success('Prompt saved!');
+  };
+
+  const handleLoadPrompt = (savedPrompt) => {
+    setPrompt(savedPrompt.text);
+    setSelectedMovement(savedPrompt.movement);
+    setShowMyPrompts(false);
+    toast.success('Prompt loaded!');
+  };
+
   const handleGenerate = async () => {
-    if (!prompt.trim()) {
-      toast.error('אנא הזן תיאור לסרטון');
+    if (!prompt.trim() && !uploadedImage) {
+      toast.error('Please provide a prompt or upload an image');
       return;
     }
 
@@ -51,18 +123,19 @@ export default function ToMovieeStudio() {
       const response = await base44.functions.invoke('generateToMovieeVideo', {
         prompt: prompt.trim(),
         movement: selectedMovement,
-        mode: activeTab
+        mode: activeTab,
+        image_url: uploadedImage
       });
 
       if (response.data.video_url) {
         setGeneratedVideo(response.data);
-        toast.success('הסרטון נוצר בהצלחה! 🎬');
+        toast.success('Video generated successfully! 🎬');
       } else {
-        toast.error('שגיאה ביצירת הסרטון');
+        toast.error('Failed to generate video');
       }
     } catch (error) {
       console.error('Generation error:', error);
-      toast.error(error.response?.data?.error || 'שגיאה ביצירת הסרטון');
+      toast.error(error.response?.data?.error || 'Failed to generate video');
     } finally {
       setIsGenerating(false);
     }
@@ -156,16 +229,58 @@ export default function ToMovieeStudio() {
             </div>
           </div>
 
+          {/* Image Upload for Image to Video */}
+          {activeTab === 'image-to-video' && (
+            <div className="mb-6">
+              <label className="text-sm font-medium mb-3 block">Upload Image</label>
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="hidden"
+              />
+              {imagePreview ? (
+                <div className="relative rounded-lg overflow-hidden border border-white/10">
+                  <img src={imagePreview} alt="Preview" className="w-full h-48 object-cover" />
+                  <button
+                    onClick={() => {
+                      setUploadedImage(null);
+                      setImagePreview(null);
+                    }}
+                    className="absolute top-2 right-2 p-1.5 bg-black/60 rounded-full hover:bg-black/80"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+              ) : (
+                <button
+                  onClick={() => fileInputRef.current?.click()}
+                  className="w-full h-48 border-2 border-dashed border-white/20 rounded-lg hover:border-purple-500/50 transition-colors flex flex-col items-center justify-center gap-2 group"
+                >
+                  <Upload className="w-8 h-8 text-gray-400 group-hover:text-purple-400" />
+                  <span className="text-sm text-gray-400 group-hover:text-purple-400">Click to upload image</span>
+                </button>
+              )}
+            </div>
+          )}
+
           {/* Prompt Section */}
           <div className="mb-6">
             <div className="flex items-center justify-between mb-3">
               <label className="text-sm font-medium">Prompt</label>
               <div className="flex gap-2">
-                <button className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-xs">
+                <button 
+                  onClick={() => setShowCreativeAssistant(true)}
+                  className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-xs"
+                >
                   <Sparkles className="w-3 h-3" />
                   Creative Assistant
                 </button>
-                <button className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-xs">
+                <button 
+                  onClick={() => setShowMyPrompts(true)}
+                  className="px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/10 text-xs"
+                >
                   My Prompts
                 </button>
               </div>
@@ -177,6 +292,12 @@ export default function ToMovieeStudio() {
               placeholder="Describe the video you want to generate. Refine ideas with Creative Assistant"
               className="min-h-[120px] bg-black/40 border-white/10 text-white placeholder:text-gray-500 resize-none"
             />
+            <button
+              onClick={handleSavePrompt}
+              className="mt-2 text-xs text-purple-400 hover:text-purple-300"
+            >
+              Save this prompt
+            </button>
           </div>
 
           {/* Camera Movement */}
@@ -346,6 +467,184 @@ export default function ToMovieeStudio() {
           )}
         </div>
       </div>
+
+      {/* Creative Assistant Modal */}
+      <AnimatePresence>
+        {showCreativeAssistant && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            onClick={() => setShowCreativeAssistant(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-[#13131A] rounded-2xl border border-white/10 w-full max-w-2xl max-h-[80vh] flex flex-col"
+            >
+              <div className="flex items-center justify-between p-6 border-b border-white/10">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center">
+                    <Bot className="w-6 h-6 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-lg font-bold">Creative Assistant</h2>
+                    <p className="text-xs text-gray-400">Let AI help you craft the perfect prompt</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowCreativeAssistant(false)}
+                  className="p-2 hover:bg-white/5 rounded-lg transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="flex-1 overflow-y-auto p-6 space-y-4">
+                {aiMessages.length === 0 ? (
+                  <div className="text-center py-12">
+                    <Sparkles className="w-12 h-12 text-purple-400 mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold mb-2">Start a conversation</h3>
+                    <p className="text-sm text-gray-400">
+                      Tell me about your video idea and I'll help you refine it!
+                    </p>
+                  </div>
+                ) : (
+                  aiMessages.map((msg, idx) => (
+                    <div
+                      key={idx}
+                      className={`flex gap-3 ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}
+                    >
+                      {msg.role === 'assistant' && (
+                        <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center flex-shrink-0">
+                          <Bot className="w-4 h-4 text-white" />
+                        </div>
+                      )}
+                      <div
+                        className={`max-w-[80%] p-4 rounded-2xl ${
+                          msg.role === 'user'
+                            ? 'bg-purple-600 text-white'
+                            : 'bg-white/5 text-gray-200'
+                        }`}
+                      >
+                        <p className="text-sm whitespace-pre-wrap">{msg.content}</p>
+                        {msg.role === 'assistant' && (
+                          <button
+                            onClick={() => {
+                              setPrompt(msg.content);
+                              setShowCreativeAssistant(false);
+                              toast.success('Prompt applied!');
+                            }}
+                            className="mt-2 text-xs text-purple-400 hover:text-purple-300"
+                          >
+                            Use this prompt
+                          </button>
+                        )}
+                      </div>
+                      {msg.role === 'user' && (
+                        <div className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center flex-shrink-0">
+                          <User className="w-4 h-4 text-white" />
+                        </div>
+                      )}
+                    </div>
+                  ))
+                )}
+                {isAiThinking && (
+                  <div className="flex gap-3">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center">
+                      <Loader2 className="w-4 h-4 text-white animate-spin" />
+                    </div>
+                    <div className="bg-white/5 p-4 rounded-2xl">
+                      <p className="text-sm text-gray-400">Thinking...</p>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="p-6 border-t border-white/10">
+                <div className="flex gap-2">
+                  <Input
+                    value={aiInput}
+                    onChange={(e) => setAiInput(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && handleAiChat()}
+                    placeholder="Describe your video idea..."
+                    className="flex-1 bg-black/40 border-white/10"
+                  />
+                  <Button
+                    onClick={handleAiChat}
+                    disabled={!aiInput.trim() || isAiThinking}
+                    className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                  >
+                    <Send className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* My Prompts Modal */}
+      <AnimatePresence>
+        {showMyPrompts && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            onClick={() => setShowMyPrompts(false)}
+          >
+            <motion.div
+              initial={{ scale: 0.9, y: 20 }}
+              animate={{ scale: 1, y: 0 }}
+              exit={{ scale: 0.9, y: 20 }}
+              onClick={(e) => e.stopPropagation()}
+              className="bg-[#13131A] rounded-2xl border border-white/10 w-full max-w-2xl max-h-[80vh] flex flex-col"
+            >
+              <div className="flex items-center justify-between p-6 border-b border-white/10">
+                <h2 className="text-lg font-bold">My Saved Prompts</h2>
+                <button
+                  onClick={() => setShowMyPrompts(false)}
+                  className="p-2 hover:bg-white/5 rounded-lg transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="flex-1 overflow-y-auto p-6">
+                {savedPrompts.length === 0 ? (
+                  <div className="text-center py-12">
+                    <Video className="w-12 h-12 text-purple-400 mx-auto mb-4" />
+                    <h3 className="text-lg font-semibold mb-2">No saved prompts yet</h3>
+                    <p className="text-sm text-gray-400">
+                      Save your prompts to quickly reuse them later
+                    </p>
+                  </div>
+                ) : (
+                  <div className="space-y-3">
+                    {savedPrompts.map((savedPrompt) => (
+                      <div
+                        key={savedPrompt.id}
+                        className="p-4 bg-white/5 hover:bg-white/10 rounded-xl border border-white/10 cursor-pointer transition-colors group"
+                        onClick={() => handleLoadPrompt(savedPrompt)}
+                      >
+                        <p className="text-sm text-gray-200 mb-2 line-clamp-2">{savedPrompt.text}</p>
+                        <div className="flex items-center justify-between text-xs text-gray-400">
+                          <span>Movement: {savedPrompt.movement}</span>
+                          <span>{new Date(savedPrompt.timestamp).toLocaleDateString()}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
