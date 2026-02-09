@@ -100,19 +100,10 @@ export default function Layout({ children, currentPageName }) {
     };
   }, []);
 
-  // בדיקת משתמש מחובר
+  // בדיקת משתמש מחובר - מושבת זמנית
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const userData = await base44.auth.me();
-        setUser(userData);
-      } catch (err) {
-        setUser(null);
-      } finally {
-        setAuthLoading(false);
-      }
-    };
-    checkAuth();
+    setAuthLoading(false);
+    setUser(null);
   }, []);
 
 

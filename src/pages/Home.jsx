@@ -70,7 +70,9 @@ export default function Home() {
         return [];
       }
     },
-    initialData: []
+    initialData: [],
+    staleTime: 60 * 60 * 1000,
+    enabled: false
   });
 
   const defaultStreamUrl = "https://www.youtube.com/embed/OeEDtjuqinU?autoplay=0&mute=1&rel=0";
@@ -82,21 +84,20 @@ export default function Home() {
     queryFn: async () => {
       try {
         if (selectedChannel === 'all') {
-          return await base44.entities.NewsArticle.list('-created_date', 500);
+          return await base44.entities.NewsArticle.list('-created_date', 100);
         } else {
-          return await base44.entities.NewsArticle.filter({ channel_id: selectedChannel }, '-created_date', 500);
+          return await base44.entities.NewsArticle.filter({ channel_id: selectedChannel }, '-created_date', 100);
         }
       } catch (err) {
         console.error('Error loading articles:', err);
         return [];
       }
     },
-    staleTime: 5 * 60 * 1000,
-    gcTime: 10 * 60 * 1000,
-    refetchInterval: 60000, // רענון כל דקה
-    refetchOnWindowFocus: true,
+    staleTime: 30 * 60 * 1000,
+    gcTime: 60 * 60 * 1000,
+    refetchOnWindowFocus: false,
     initialData: [],
-    retry: 2,
+    retry: 1,
     enabled: true
   });
 
@@ -136,9 +137,9 @@ export default function Home() {
       }
     },
     initialData: [],
-    refetchInterval: 60000, // רענן כל דקה
     refetchOnWindowFocus: false,
-    retry: 1
+    retry: 0,
+    enabled: false
   });
 
   const { data: livePlayerVideos = [] } = useQuery({
@@ -151,9 +152,9 @@ export default function Home() {
       }
     },
     initialData: [],
-    refetchInterval: 60000, // רענן כל דקה
     refetchOnWindowFocus: false,
-    retry: 1
+    retry: 0,
+    enabled: false
   });
 
   // האזן לעדכונים בסרטונים להעלאה
