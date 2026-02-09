@@ -26,32 +26,26 @@ export default function VideoCreator() {
     queryFn: () => base44.entities.Reporter.list()
   });
 
-  // Scene management
+  // Scene management - default to first reporter
   const [scenes, setScenes] = useState([
     {
       id: 1,
-      avatar: "Kristin_public_3_20240108",
-      avatarName: "Kristin",
+      avatar: reporters[0]?.id || "",
+      avatarName: reporters[0]?.name || "",
       script: "",
       videoUrl: null,
-      thumbnail: "https://img.heygen.ai/avatars/Kristin_public_3_20240108.png"
+      thumbnail: reporters[0]?.image || ""
     }
   ]);
 
-  // Available avatars - combine HeyGen and our reporters
-  const avatars = [
-    { id: "Kristin_public_3_20240108", name: "Kristin", image: "https://img.heygen.ai/avatars/Kristin_public_3_20240108.png" },
-    { id: "Wayne_20240711", name: "Wayne", image: "https://img.heygen.ai/avatars/Wayne_20240711.png" },
-    { id: "Angela_public_3_20240108", name: "Angela", image: "https://img.heygen.ai/avatars/Angela_public_3_20240108.png" },
-    { id: "josh_lite3_20230714", name: "Josh", image: "https://img.heygen.ai/avatars/josh_lite3_20230714.png" },
-    ...reporters.map(r => ({ 
-      id: r.id, 
-      name: r.name, 
-      image: r.image, 
-      gender: r.gender,
-      specialty: r.specialty
-    }))
-  ];
+  // Available avatars - only our reporters
+  const avatars = reporters.map(r => ({ 
+    id: r.id, 
+    name: r.name, 
+    image: r.image, 
+    gender: r.gender,
+    specialty: r.specialty
+  }));
 
   useEffect(() => {
     const initConversation = async () => {
@@ -105,13 +99,14 @@ export default function VideoCreator() {
   };
 
   const addScene = () => {
+    const firstReporter = reporters[0] || avatars[0];
     setScenes([...scenes, {
       id: Date.now(),
-      avatar: "Kristin_public_3_20240108",
-      avatarName: "Kristin",
+      avatar: firstReporter?.id || "",
+      avatarName: firstReporter?.name || "",
       script: "",
       videoUrl: null,
-      thumbnail: "https://img.heygen.ai/avatars/Kristin_public_3_20240108.png"
+      thumbnail: firstReporter?.image || ""
     }]);
     setCurrentScene(scenes.length);
   };
