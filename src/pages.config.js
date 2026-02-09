@@ -82,6 +82,7 @@ import VODContent from './pages/VODContent';
 import VideoEditor from './pages/VideoEditor';
 import WarRoom from './pages/WarRoom';
 import AdminPanel from './pages/AdminPanel';
+import VideoCreator from './pages/VideoCreator';
 import __Layout from './Layout.jsx';
 
 
@@ -121,6 +122,7 @@ export const PAGES = {
     "VideoEditor": VideoEditor,
     "WarRoom": WarRoom,
     "AdminPanel": AdminPanel,
+    "VideoCreator": VideoCreator,
 }
 
 export const pagesConfig = {
