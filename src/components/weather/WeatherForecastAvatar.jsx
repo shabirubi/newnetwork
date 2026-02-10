@@ -1,18 +1,30 @@
-import React, { useState, useEffect, useRef } from "react";
-import { motion } from "framer-motion";
-import { Cloud, Users, Send, Paperclip, Mic, Loader2, FileText, Image as ImageIcon, X } from "lucide-react";
+import React, { useState, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Cloud, Users, Send, Paperclip, Mic, Loader2, FileText, X, MessageCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { base44 } from "@/api/base44Client";
-import ReporterChat from "../apps/ReporterChat";
+import { useQuery } from "@tanstack/react-query";
 
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png";
 
 export default function WeatherForecastAvatar() {
-  const [reporterChatOpen, setReporterChatOpen] = useState(false);
   const messagesEndRef = useRef(null);
   const iframeRef = useRef(null);
+  const [messages, setMessages] = useState([
+    { id: 1, sender: 'reporter', name: 'דיווח מהשדה', text: 'שלום! אני אחדש אתכם על תחזיית מזג האוויר החדשה', timestamp: new Date() }
+  ]);
+  const [inputMessage, setInputMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { data: reporters = [] } = useQuery({
+    queryKey: ['reporters-weather'],
+    queryFn: async () => {
+      return await base44.entities.Reporter.list('name');
+    },
+    initialData: []
+  });
 
 
 
