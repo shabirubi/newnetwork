@@ -130,9 +130,10 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
           animate={{ scale: 1, y: 0 }}
           exit={{ scale: 0.9, y: 20 }}
           onClick={(e) => e.stopPropagation()}
-          className="bg-gradient-to-br from-[#000510] via-[#001030] to-[#000510] rounded-3xl overflow-hidden w-full max-w-7xl shadow-2xl border-4 border-[#0080FF]/40 h-[95vh] flex flex-col"
+          className="bg-gradient-to-br from-[#000510] via-[#001030] to-[#000510] rounded-3xl overflow-hidden w-full max-w-4xl shadow-2xl border-4 border-[#0080FF]/40 flex flex-col"
           style={{
-            boxShadow: '0 0 80px rgba(0, 128, 255, 0.4), inset 0 0 60px rgba(0, 128, 255, 0.05)'
+            boxShadow: '0 0 80px rgba(0, 128, 255, 0.4), inset 0 0 60px rgba(0, 128, 255, 0.05)',
+            height: '600px'
           }}
         >
           {/* Premium Branded Header */}
