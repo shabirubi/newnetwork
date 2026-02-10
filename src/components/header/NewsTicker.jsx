@@ -66,23 +66,33 @@ export default function NewsTicker({ darkMode, setDarkMode, onMenuClick }) {
 
   return (
     <div className="bg-gradient-to-r from-black via-[#0080FF]/30 to-black border-b-2 border-[#0080FF]/50 backdrop-blur-xl shadow-xl shadow-[#0080FF]/30 relative overflow-hidden z-[37] text-white w-full">
-      {/* Breaking News Strip */}
-      <div className="flex items-center gap-1 sm:gap-3 px-0 py-3 w-full">
-        {/* Menu Button - Right Side */}
-        <button
-          onClick={onMenuClick}
-          className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-lg hover:bg-white/20 text-[#E31E24] active:scale-95 transition-all touch-manipulation relative z-[70] group shrink-0"
-          title="תפריט"
+      {/* News Ticker */}
+      <div className="flex items-center h-16 overflow-hidden">
+        <button 
+          onClick={() => {
+            window.location.href = createPageUrl("Category?cat=breaking");
+          }}
+          className="flex-1 overflow-hidden cursor-pointer hover:opacity-90 transition-opacity"
         >
-          <div className="flex flex-col gap-1.5">
-            <div className="w-5 h-0.5 bg-[#E31E24] rounded-full group-hover:w-6 transition-all"></div>
-            <div className="w-5 h-0.5 bg-[#E31E24] rounded-full group-hover:w-6 transition-all"></div>
-            <div className="w-5 h-0.5 bg-[#E31E24] rounded-full group-hover:w-6 transition-all"></div>
-          </div>
+          <TickerContent news={news} currencies={currencies} />
         </button>
+      </div>
 
-        {/* Logo + Radio Button */}
+      {/* Control Bar */}
+      <div className="flex items-center justify-between gap-2 px-4 py-3 border-t border-[#0080FF]/20 bg-black/40">
+        {/* Left: Menu & Logo */}
         <div className="flex items-center gap-2 shrink-0">
+          <button
+            onClick={onMenuClick}
+            className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-lg hover:bg-white/20 text-[#E31E24] active:scale-95 transition-all group"
+            title="תפריט"
+          >
+            <div className="flex flex-col gap-1.5">
+              <div className="w-5 h-0.5 bg-[#E31E24] rounded-full group-hover:w-6 transition-all"></div>
+              <div className="w-5 h-0.5 bg-[#E31E24] rounded-full group-hover:w-6 transition-all"></div>
+              <div className="w-5 h-0.5 bg-[#E31E24] rounded-full group-hover:w-6 transition-all"></div>
+            </div>
+          </button>
           <img 
             src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png" 
             alt="הרשת החדשה" 
@@ -97,19 +107,8 @@ export default function NewsTicker({ darkMode, setDarkMode, onMenuClick }) {
           </button>
         </div>
 
-
-
-        <button 
-          onClick={() => {
-            window.location.href = createPageUrl("Category?cat=breaking");
-          }}
-          className="ticker-wrapper overflow-hidden flex-1 cursor-pointer hover:opacity-90 transition-opacity min-w-0 relative z-10"
-        >
-          <TickerContent news={news} currencies={currencies} />
-        </button>
-
-        <div className="flex items-center gap-1 sm:gap-2 shrink-0 relative z-[60]">
-          {/* Currency Strip next to other buttons */}
+        {/* Right: Controls */}
+        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
           {currencies.length > 0 && (
             <div className="flex items-center gap-1 sm:gap-2 bg-black/60 backdrop-blur-sm rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 border border-red-900/30">
               {currencies.slice(0, 2).map((currency, idx) => (
@@ -148,23 +147,21 @@ export default function NewsTicker({ darkMode, setDarkMode, onMenuClick }) {
               e.stopPropagation();
               setDarkMode(!darkMode);
             }}
-            className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-gradient-to-r from-[#0080FF] to-[#0066FF] hover:shadow-2xl hover:shadow-[#0080FF]/80 text-white active:scale-95 transition-all touch-manipulation relative z-[70] animate-pulse shadow-[0_0_20px_#0080FF]"
+            className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-gradient-to-r from-[#0080FF] to-[#0066FF] hover:shadow-2xl hover:shadow-[#0080FF]/80 text-white active:scale-95 transition-all animate-pulse shadow-[0_0_20px_#0080FF]"
           >
             {darkMode ? <Sun size={16} className="sm:w-5 sm:h-5 drop-shadow-[0_0_5px_#0080FF]" /> : <Moon size={16} className="sm:w-5 sm:h-5 drop-shadow-[0_0_5px_#0080FF]" />}
           </button>
 
-
-
           <div className="hidden sm:block">
-             <ClockWidget />
-           </div>
-           <div className="hidden md:block">
-             <WeatherWidget />
-           </div>
+            <ClockWidget />
+          </div>
+          <div className="hidden md:block">
+            <WeatherWidget />
+          </div>
 
-          <div className="relative z-[70]">
-             <ChannelSelector />
-           </div>
+          <div className="relative">
+            <ChannelSelector />
+          </div>
 
           <button 
             onClick={() => {
