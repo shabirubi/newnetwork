@@ -112,7 +112,16 @@ Deno.serve(async (req) => {
                 breaking: 'dramatic breaking news scene, urgent situation, emergency response, crisis management, important moment',
                 music: 'live concert stage, musical performance, recording studio, music festival, artist performing',
                 horoscope: 'mystical zodiac symbols, cosmic space imagery, astrological charts, celestial patterns, spiritual atmosphere',
-                finance: 'financial trading floor, investment banking, money markets, wealth management, economic indicators'
+                finance: 'financial trading floor, investment banking, money markets, wealth management, economic indicators',
+                crime: 'crime scene investigation, police action, justice system, law enforcement, legal proceedings',
+                education: 'school classroom, university campus, learning environment, educational technology, graduation ceremony',
+                culture: 'cultural heritage, museum display, artistic performance, traditional arts, cultural celebration',
+                environment: 'natural landscape, climate change imagery, environmental protection, nature conservation, ecology',
+                science: 'scientific laboratory, research equipment, scientists working, breakthrough discovery, innovation',
+                israel: 'israeli landscape, historic sites, israeli culture, vibrant cities, mediterranean scenery',
+                military: 'military personnel, defense equipment, strategic operations, armed forces, tactical training',
+                law: 'courtroom interior, legal documents, justice symbol, courthouse building, legal profession',
+                local: 'neighborhood street, community gathering, local shops, urban landscape, city streets'
               };
 
               const categoryStyle = categoryStyles[cat.category] || 'professional news photography, current events, journalistic style';
