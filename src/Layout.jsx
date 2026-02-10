@@ -50,8 +50,8 @@ function TypewriterDate() {
   }, []);
 
   return (
-    <div className="flex items-center gap-3">
-      <div className="text-lg md:text-xl font-bold text-white tracking-wider font-mono">
+    <div className="flex items-center gap-2">
+      <div className="text-sm md:text-base font-bold text-white tracking-wide font-mono">
         {displayText}
         <motion.span
           animate={{ opacity: [1, 0] }}
