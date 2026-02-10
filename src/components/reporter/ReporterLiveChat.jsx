@@ -71,14 +71,14 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
           animate={{ scale: 1, y: 0 }}
           exit={{ scale: 0.9, y: 20 }}
           onClick={(e) => e.stopPropagation()}
-          className="bg-gradient-to-br from-black via-gray-900 to-black rounded-3xl overflow-hidden w-full max-w-7xl shadow-2xl border-4 border-[#0080FF]/60 h-[95vh] flex flex-col"
+          className="bg-gradient-to-br from-[#000510] via-[#001030] to-[#000510] rounded-3xl overflow-hidden w-full max-w-7xl shadow-2xl border-4 border-[#0080FF]/40 h-[95vh] flex flex-col"
           style={{
-            boxShadow: '0 0 80px rgba(0, 128, 255, 0.6), inset 0 0 40px rgba(0, 128, 255, 0.1)'
+            boxShadow: '0 0 80px rgba(0, 128, 255, 0.4), inset 0 0 60px rgba(0, 128, 255, 0.05)'
           }}
         >
           {/* Premium Branded Header */}
-          <div className="relative bg-gradient-to-r from-black via-[#0080FF]/30 to-black p-3 sm:p-5 border-b-4 border-[#0080FF]/50 shadow-lg">
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#0080FF]/20 to-transparent animate-pulse"></div>
+          <div className="relative bg-gradient-to-r from-[#000510] via-[#001540]/80 to-[#000510] p-3 sm:p-5 border-b-4 border-[#0080FF]/30 shadow-lg">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#0080FF]/10 to-transparent animate-pulse"></div>
             <div className="relative flex items-center justify-between">
               <motion.img 
                 src={LOGO_URL}
@@ -131,7 +131,7 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
 
               {/* Loading State */}
               {isLoading && (
-                <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-black via-gray-900 to-black z-20">
+                <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[#000510] via-[#001030] to-[#000510] z-20">
                   <div className="text-center">
                     <Loader2 className="w-20 h-20 text-[#0080FF] animate-spin mx-auto mb-6" />
                     <p className="text-white text-xl font-bold mb-2">מתחבר ל{reporter.name}...</p>
@@ -145,12 +145,12 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
                 ref={iframeRef}
                 src={agentUrl}
                 allow="microphone; camera; autoplay"
-                className="w-full h-full border-0 bg-black"
+                className="w-full h-full border-0 bg-[#000510]"
                 title={`${reporter.name} Live Chat`}
               />
 
               {/* Branding Overlay Bottom */}
-              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 bg-black/80 backdrop-blur-md px-4 py-2 rounded-full border border-[#0080FF]/50">
+              <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 bg-[#000510]/90 backdrop-blur-md px-4 py-2 rounded-full border border-[#0080FF]/40">
                 <div className="flex items-center gap-2 text-xs">
                   <span className="text-white font-bold">{reporter.name}</span>
                   <span className="text-gray-400">•</span>
@@ -160,9 +160,9 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
             </div>
 
             {/* Chat Panel - Side */}
-            <div className="w-80 sm:w-96 bg-gradient-to-b from-gray-900 via-black to-gray-900 border-r-4 border-[#0080FF]/30 flex flex-col">
+            <div className="w-80 sm:w-96 bg-gradient-to-b from-[#001030] via-[#000510] to-[#001030] border-r-4 border-[#0080FF]/20 flex flex-col">
               {/* Chat Header */}
-              <div className="bg-gradient-to-r from-[#0080FF]/20 to-transparent p-4 border-b-2 border-[#0080FF]/30">
+              <div className="bg-gradient-to-r from-[#0080FF]/15 to-transparent p-4 border-b-2 border-[#0080FF]/20">
                 <div className="flex items-center gap-2 mb-2">
                   <MessageCircle className="w-5 h-5 text-[#0080FF]" />
                   <span className="text-white font-bold">צ'אט עם {reporter.name}</span>
@@ -189,7 +189,7 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
                         className={`max-w-[85%] p-3 rounded-2xl ${
                           msg.sender === 'user'
                             ? 'bg-gradient-to-br from-[#0080FF] to-[#0066FF] text-white shadow-lg shadow-[#0080FF]/30'
-                            : 'bg-gray-800 text-gray-100 border border-gray-700'
+                            : 'bg-[#001540]/80 text-gray-100 border border-[#0080FF]/20'
                         }`}
                       >
                         <p className="text-sm leading-relaxed">{msg.text}</p>
@@ -204,12 +204,12 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
               </div>
 
               {/* Input Area */}
-              <div className="p-4 bg-gradient-to-t from-black to-transparent border-t-2 border-[#0080FF]/30">
+              <div className="p-4 bg-gradient-to-t from-[#000510] to-transparent border-t-2 border-[#0080FF]/20">
                 <div className="flex gap-2 mb-3">
                   <Button
                     variant="outline"
                     size="icon"
-                    className="bg-gray-900 border-[#0080FF]/30 hover:bg-[#0080FF]/20 text-white rounded-xl"
+                    className="bg-[#001030] border-[#0080FF]/20 hover:bg-[#0080FF]/15 text-white rounded-xl"
                     title="הקלטה קולית"
                   >
                     <Mic className="w-4 h-4" />
@@ -217,7 +217,7 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
                   <Button
                     variant="outline"
                     size="icon"
-                    className="bg-gray-900 border-[#0080FF]/30 hover:bg-[#0080FF]/20 text-white rounded-xl"
+                    className="bg-[#001030] border-[#0080FF]/20 hover:bg-[#0080FF]/15 text-white rounded-xl"
                     title="אמוג'י"
                   >
                     😊
@@ -227,7 +227,7 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
                     onChange={(e) => setInputMessage(e.target.value)}
                     onKeyPress={handleKeyPress}
                     placeholder="הקלד הודעה..."
-                    className="flex-1 bg-gray-900 border-[#0080FF]/30 text-white placeholder:text-gray-500 focus:border-[#0080FF] rounded-xl"
+                    className="flex-1 bg-[#001030] border-[#0080FF]/20 text-white placeholder:text-gray-500 focus:border-[#0080FF] rounded-xl"
                   />
                   <Button
                     onClick={handleSendMessage}
@@ -243,8 +243,8 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
           </div>
 
           {/* Premium Footer */}
-          <div className="relative bg-gradient-to-r from-black via-[#0080FF]/20 to-black p-3 border-t-4 border-[#0080FF]/50 shadow-lg">
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#0080FF]/10 to-transparent"></div>
+          <div className="relative bg-gradient-to-r from-[#000510] via-[#001540]/60 to-[#000510] p-3 border-t-4 border-[#0080FF]/30 shadow-lg">
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#0080FF]/8 to-transparent"></div>
             <div className="relative flex items-center justify-center gap-3 text-sm">
               <motion.img 
                 src={LOGO_URL}
