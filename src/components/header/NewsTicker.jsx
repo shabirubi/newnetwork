@@ -220,9 +220,9 @@ function TickerContent({ news, currencies }) {
 
   return (
     <motion.div
-      className="flex whitespace-nowrap text-sm sm:text-lg pointer-events-none items-center font-bold"
-      animate={{ x: `-${(news.length * 350 + currencies.length * 280 + updates.length * 400)}px` }}
-      transition={{ duration: (news.length + currencies.length + updates.length) * 3, repeat: Infinity, ease: "linear" }}
+      className="flex whitespace-nowrap text-base sm:text-xl pointer-events-none items-center font-bold"
+      animate={{ x: `-${(news.length * 400 + currencies.length * 320 + updates.length * 450)}px` }}
+      transition={{ duration: (news.length + currencies.length + updates.length) * 3.5, repeat: Infinity, ease: "linear" }}
     >
       {[...news, ...news, ...news].map((item, index) => {
         const colors = ['text-[#E31E24]', 'text-yellow-400', 'text-white', 'text-blue-400', 'text-red-400'];
@@ -230,7 +230,7 @@ function TickerContent({ news, currencies }) {
         return (
           <span 
             key={`news-${index}`} 
-            className={`mx-8 sm:mx-16 ${colorClass} font-bold`}
+            className={`mx-10 sm:mx-20 ${colorClass} font-bold`}
           >
             • {item}
           </span>
