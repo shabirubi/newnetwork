@@ -188,10 +188,16 @@ export default function RealTimeAlertsContainer() {
                     </button>
 
                     <button
-                      className="flex items-center gap-1.5 px-3 py-1.5 bg-purple-600/80 hover:bg-purple-600 text-white rounded-lg transition-colors text-xs font-semibold"
+                      onClick={() => handleGenerateVideo(alert)}
+                      disabled={generatingVideoId === alert.id}
+                      className="flex items-center gap-1.5 px-3 py-1.5 bg-[#0080FF]/80 hover:bg-[#0080FF] disabled:bg-gray-600 text-white rounded-lg transition-colors text-xs font-semibold"
                     >
-                      <Film className="w-3.5 h-3.5" />
-                      וידאו
+                      {generatingVideoId === alert.id ? (
+                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                      ) : (
+                        <Film className="w-3.5 h-3.5" />
+                      )}
+                      {generatingVideoId === alert.id ? 'יוצר...' : 'וידאו'}
                     </button>
                   </div>
                 </div>
