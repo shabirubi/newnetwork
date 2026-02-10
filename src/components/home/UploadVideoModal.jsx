@@ -31,11 +31,11 @@ export default function UploadVideoModal({ isOpen, onClose }) {
       console.log('📤 מתחיל להעלות קובץ...', formData.videoFile.name);
       
       // העלה את הקובץ דרך backend function
-      const uploadResponse = await base44.functions.invoke('uploadUserVideo', { 
-        file: formData.videoFile 
+      const uploadResponse = await base44.integrations.Core.UploadFile({
+        file: formData.videoFile
       });
       
-      const videoUrl = uploadResponse.data.file_url;
+      const videoUrl = uploadResponse.file_url;
       console.log('✅ קובץ הועלה:', videoUrl);
 
       // שמור ב-UserVideo
