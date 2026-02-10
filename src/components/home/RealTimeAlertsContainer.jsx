@@ -42,7 +42,7 @@ export default function RealTimeAlertsContainer() {
     setLoadingId(alert.id);
     try {
       const { data } = await base44.functions.invoke('generateElevenLabsSpeech', {
-        text: alert.content || alert.subtitle,
+        text: alert.title + '. ' + (alert.content || alert.subtitle || ''),
         voice_id: 'onwK4ZeVeZw25vXSwVNc'
       });
 
@@ -51,11 +51,40 @@ export default function RealTimeAlertsContainer() {
         audio.play();
         setPlayingId(alert.id);
         audio.onended = () => setPlayingId(null);
+        toast.success('קול בהפעלה');
+      } else {
+        toast.error('קובץ קול לא זמין');
       }
     } catch (error) {
-      toast.error('שגיאה בהפעלת הקול');
+      console.error('Audio error:', error);
+      toast.error('שגיאה בהפעלת הקול: ' + error.message);
     } finally {
       setLoadingId(null);
+    }
+  };
+
+  const handleGenerateVideo = async (alert) => {
+    setGeneratingVideoId(alert.id);
+    setSelectedVideoAlert(alert);
+    setGeneratedVideoUrl(null);
+    
+    try {
+      const { data } = await base44.functions.invoke('createLumaVideo', {
+        prompt: `${alert.title}. ${alert.content || alert.subtitle || ''}`,
+        duration: 15
+      });
+
+      if (data?.video_url) {
+        setGeneratedVideoUrl(data.video_url);
+        toast.success('וידאו נוצר בהצלחה');
+      } else {
+        toast.error('שגיאה ביצירת וידאו');
+      }
+    } catch (error) {
+      console.error('Video generation error:', error);
+      toast.error('שגיאה ביצירת וידאו: ' + error.message);
+    } finally {
+      setGeneratingVideoId(null);
     }
   };
 
