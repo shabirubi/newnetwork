@@ -64,14 +64,9 @@ export default function Home() {
   const { data: channels = [] } = useQuery({
     queryKey: ['channels'],
     queryFn: async () => {
-      try {
-        return await base44.entities.NewsChannel.filter({ is_active: true }, 'name');
-      } catch {
-        return [];
-      }
+      return [];
     },
     initialData: [],
-    staleTime: 60 * 60 * 1000,
     enabled: false
   });
 
@@ -82,23 +77,10 @@ export default function Home() {
   const { data: articles = [], isLoading, fetchNextPage, isFetchingNextPage } = useQuery({
     queryKey: ['news-articles', selectedChannel],
     queryFn: async () => {
-      try {
-        if (selectedChannel === 'all') {
-          return await base44.entities.NewsArticle.list('-created_date', 50);
-        } else {
-          return await base44.entities.NewsArticle.filter({ channel_id: selectedChannel }, '-created_date', 50);
-        }
-      } catch (err) {
-        console.error('Error loading articles:', err);
-        return [];
-      }
+      return [];
     },
-    staleTime: 15 * 60 * 1000,
-    gcTime: 30 * 60 * 1000,
-    refetchOnWindowFocus: false,
     initialData: [],
-    retry: 2,
-    enabled: true
+    enabled: false
   });
 
   // Infinite scroll handler with debounce
@@ -130,30 +112,18 @@ export default function Home() {
   const { data: liveStream, refetch: refetchLiveStream } = useQuery({
     queryKey: ['live-stream'],
     queryFn: async () => {
-      try {
-        return await base44.entities.LiveStream.list('-created_date', 1);
-      } catch {
-        return [];
-      }
+      return [];
     },
     initialData: [],
-    refetchOnWindowFocus: false,
-    retry: 0,
     enabled: false
   });
 
   const { data: livePlayerVideos = [] } = useQuery({
     queryKey: ['livePlayerVideos'],
     queryFn: async () => {
-      try {
-        return await base44.entities.UserVideo.filter({ feed: 'live-player', status: 'ready' }, '-created_date', 1);
-      } catch {
-        return [];
-      }
+      return [];
     },
     initialData: [],
-    refetchOnWindowFocus: false,
-    retry: 0,
     enabled: false
   });
 
