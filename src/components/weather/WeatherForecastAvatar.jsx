@@ -90,9 +90,9 @@ export default function WeatherForecastAvatar() {
       </div>
 
       {/* Main Content - Avatar + Chat */}
-      <div className="flex flex-col lg:flex-row overflow-hidden" style={{ minHeight: '500px' }}>
+      <div className="flex flex-row overflow-hidden" style={{ minHeight: '600px' }}>
         {/* Avatar Section - Left */}
-        <div className="flex-1 relative bg-gradient-to-br from-[#001a4d] via-[#0033CC] to-[#0066FF] border-b-4 lg:border-b-0 lg:border-r-4 border-[#0080FF]/40 min-h-[300px] lg:min-h-auto">
+        <div className="flex-1 relative bg-gradient-to-br from-[#001a4d] via-[#0033CC] to-[#0066FF] border-r-4 border-[#0080FF]/40">
           {/* Avatar Label Top Left */}
           <div className="absolute top-4 left-4 z-10 bg-gradient-to-r from-[#0080FF] to-[#00D4FF] px-4 py-1.5 rounded-full border-2 border-white/30 shadow-xl">
             <div className="flex items-center gap-2">
