@@ -74,141 +74,14 @@ export default function WeatherForecastAvatar() {
         </div>
 
         {/* Chat Panel - Right */}
-        <div className="w-full lg:w-80 bg-gradient-to-b from-[#001a4d] via-[#0033CC] to-[#001a4d] border-r-4 border-[#0080FF]/40 flex flex-col">
-          {/* Chat Header */}
-          <div className="bg-gradient-to-r from-[#0080FF]/30 to-transparent p-3 sm:p-4 border-b-2 border-[#0080FF]/40">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <Users className="w-5 h-5 text-[#00D4FF]" />
-                <span className="text-white font-bold text-sm">צ'אט חיה</span>
-              </div>
-              <div className="flex items-center gap-1 text-xs bg-[#0080FF]/40 px-2 py-1 rounded-full border border-[#0080FF]/60">
-                <span className="relative flex h-2 w-2">
-                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-400"></span>
-                </span>
-                <span className="text-white font-bold text-xs">{onlineUsers} צופים</span>
-              </div>
-            </div>
-            <p className="text-[#00D4FF] text-xs">שאלו שאלות על מזג האוויר</p>
-          </div>
-
-          {/* Messages Area */}
-          <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3">
-            {chatMessages.length === 0 ? (
-              <div className="text-center text-gray-400 mt-12">
-                <Cloud className="w-12 h-12 mx-auto mb-3 opacity-30" />
-                <p className="text-sm">היה הראשון להגיב</p>
-                <p className="text-xs mt-2">שאל שאלות על התחזיה</p>
-              </div>
-            ) : (
-              chatMessages.map((msg, idx) => (
-                <motion.div
-                  key={idx}
-                  initial={{ opacity: 0, x: msg.sender === 'user' ? 20 : -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-                >
-                  <div
-                    className={`max-w-[85%] p-3 rounded-2xl ${
-                      msg.sender === 'user'
-                        ? 'bg-gradient-to-br from-[#0080FF] to-[#0066FF] text-white shadow-lg shadow-[#0080FF]/40'
-                        : 'bg-[#0033CC]/60 text-gray-100 border border-[#0080FF]/40'
-                    }`}
-                  >
-                    {msg.userName && (
-                      <p className="text-xs font-bold mb-1 opacity-80">{msg.userName}</p>
-                    )}
-                    <p className="text-sm leading-relaxed">{msg.text}</p>
-                    
-                    {msg.files && msg.files.length > 0 && (
-                      <div className="mt-2 space-y-1">
-                        {msg.files.map((file, fileIdx) => (
-                          <div key={fileIdx} className="flex items-center gap-2 text-xs bg-black/30 rounded-lg p-2">
-                            {file.type.startsWith('image/') ? (
-                              <ImageIcon className="w-4 h-4" />
-                            ) : (
-                              <FileText className="w-4 h-4" />
-                            )}
-                            <span className="flex-1 truncate">{file.name}</span>
-                            <span className="text-xs opacity-60">{(file.size / 1024).toFixed(1)}KB</span>
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                    
-                    <p className="text-xs opacity-60 mt-1">
-                      {msg.timestamp.toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' })}
-                    </p>
-                  </div>
-                </motion.div>
-              ))
-            )}
-            <div ref={messagesEndRef} />
-          </div>
-
-          {/* Input Area */}
-          <div className="p-3 sm:p-4 bg-gradient-to-t from-[#001a4d] to-transparent border-t-2 border-[#0080FF]/40">
-            <input
-              ref={fileInputRef}
-              type="file"
-              multiple
-              accept="image/*,video/*,.pdf,.doc,.docx,.txt"
-              onChange={handleFileUpload}
-              className="hidden"
-            />
-            
-            {/* Action Buttons Row */}
-            <div className="flex gap-2 mb-3">
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => fileInputRef.current?.click()}
-                disabled={isUploading}
-                className="bg-[#0033CC] border-[#0080FF]/40 hover:bg-[#0080FF]/30 text-white rounded-xl h-10 w-10"
-                title="העלה קבצים"
-              >
-                {isUploading ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
-                ) : (
-                  <Paperclip className="w-4 h-4" />
-                )}
-              </Button>
-              
-              <Button
-                variant="outline"
-                size="icon"
-                className="bg-[#0033CC] border-[#0080FF]/40 hover:bg-[#0080FF]/30 text-white rounded-xl h-10 w-10"
-                title="הקלטה קולית"
-              >
-                <Mic className="w-4 h-4" />
-              </Button>
-              
-              <Input
-                value={inputMessage}
-                onChange={(e) => setInputMessage(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="שאל שאלה..."
-                className="flex-1 bg-[#0033CC] border-[#0080FF]/40 text-white placeholder:text-gray-400 focus:border-[#0080FF] rounded-xl text-sm"
-              />
-              
-              <Button
-                onClick={handleSendMessage}
-                disabled={!inputMessage.trim()}
-                className="bg-gradient-to-r from-[#0080FF] to-[#00D4FF] hover:from-[#00D4FF] hover:to-[#0080FF] text-white rounded-xl shadow-lg shadow-[#0080FF]/50 px-3 h-10 w-10"
-              >
-                <Send className="w-4 h-4" />
-              </Button>
-            </div>
-            
-            {uploadedFiles.length > 0 && (
-              <div className="text-xs text-[#00D4FF] text-center mb-2">
-                {uploadedFiles.length} קבצים הועלו
-              </div>
-            )}
-            
-            <p className="text-xs text-gray-400 text-center">שוחח עם {onlineUsers} צופים מחוברים</p>
-          </div>
+        <div className="w-full lg:w-96 bg-gradient-to-b from-[#001a4d] via-[#0033CC] to-[#001a4d] flex flex-col">
+          <Button
+            onClick={() => setReporterChatOpen(true)}
+            className="w-full m-4 bg-gradient-to-r from-[#0080FF] to-[#00D4FF] hover:from-[#00D4FF] hover:to-[#0080FF] text-white shadow-lg shadow-[#0080FF]/50"
+          >
+            <Users className="w-5 h-5 ml-2" />
+            פתח צ'אט כתבים
+          </Button>
         </div>
       </div>
 
