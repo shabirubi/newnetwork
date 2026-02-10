@@ -19,7 +19,12 @@ export default function WeatherForecastAvatar() {
   const weatherAgentUrl = "https://studio.d-id.com/agents/share?id=v2_agt_cim3LvE9&utm_source=copy&key=WjI5dloyeGxMVzloZFhSb01ud3hNRGt3TlRBd01qRTROall3TURjMU9ESTBPVFk2TVVsNFJ6Tk5kelJMWmtSWFZHVTNUREJmTjNkMw==";
 
   return (
-    <div className="w-full bg-gradient-to-br from-[#001a4d]/80 via-[#0033CC]/70 to-[#0080FF]/60 rounded-3xl overflow-hidden shadow-2xl shadow-[#0080FF]/40 border-2 border-[#0080FF]/60">
+    <>
+      <ReporterChat 
+        externalIsOpen={reporterChatOpen}
+        externalSetIsOpen={setReporterChatOpen}
+      />
+      <div className="w-full bg-gradient-to-br from-[#001a4d]/80 via-[#0033CC]/70 to-[#0080FF]/60 rounded-3xl overflow-hidden shadow-2xl shadow-[#0080FF]/40 border-2 border-[#0080FF]/60">
       {/* Premium Branded Header */}
       <div className="relative bg-gradient-to-r from-[#0066FF] via-[#0080FF]/90 to-[#0066FF] p-4 sm:p-6 border-b-4 border-[#0080FF]/80 shadow-xl shadow-[#0080FF]/40" style={{ direction: 'rtl' }}>
         <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-pulse"></div>
