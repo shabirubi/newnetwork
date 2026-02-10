@@ -449,24 +449,7 @@ export default function VideoEditor() {
 
   const selectedClip = selectedClipIndex !== null ? clips[selectedClipIndex] : null;
 
-  // אם עדיין בודק
-  if (checkingAccess) {
-    return (
-      <div className="min-h-screen bg-black text-white flex items-center justify-center">
-        <Loader2 size={48} className="animate-spin text-purple-400" />
-      </div>
-    );
-  }
 
-  // אם אין גישה - הפנה לדף מנוי
-  if (!hasAccess) {
-    window.location.href = '/Subscription';
-    return (
-      <div className="min-h-screen bg-black text-white flex items-center justify-center">
-        <Loader2 size={48} className="animate-spin text-purple-400" />
-      </div>
-    );
-  }
 
   return (
     <div className="min-h-screen bg-black text-white flex flex-col">
