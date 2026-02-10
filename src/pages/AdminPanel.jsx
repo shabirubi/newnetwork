@@ -23,33 +23,11 @@ export default function AdminPanel() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        // Check admin authentication from localStorage
-        const adminAuth = localStorage.getItem('admin_authenticated');
-        const authTime = localStorage.getItem('admin_auth_time');
-        
-        // Session expires after 24 hours
-        const isSessionValid = adminAuth === 'true' && 
-          authTime && 
-          (Date.now() - parseInt(authTime)) < 24 * 60 * 60 * 1000;
-        
-        if (!isSessionValid) {
-          localStorage.removeItem('admin_authenticated');
-          localStorage.removeItem('admin_auth_time');
-          window.location.href = '/';
-          return;
-        }
-
-        try {
-          const userData = await base44.auth.me();
-          setUser(userData);
-        } catch (err) {
-          // If not authenticated, create a mock admin user
-          setUser({ full_name: 'מנהל', role: 'admin' });
-        }
-      } catch {
-        localStorage.removeItem('admin_authenticated');
-        localStorage.removeItem('admin_auth_time');
-        window.location.href = '/';
+        const userData = await base44.auth.me();
+        setUser(userData);
+      } catch (err) {
+        // If not authenticated, create a mock admin user
+        setUser({ full_name: 'מנהל', role: 'admin' });
       } finally {
         setLoading(false);
       }
