@@ -98,19 +98,27 @@ export default function NewsTicker({ darkMode, setDarkMode, onMenuClick }) {
         </div>
 
         {/* Broadcast Strip */}
-        <div className="overflow-hidden w-32 sm:w-40 md:w-60 shrink-0">
-          <motion.div
-            className="flex whitespace-nowrap"
-            animate={{ x: ["0%", "-50%"] }}
-            transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-          >
-            <span className="font-bold text-xs sm:text-sm md:text-base text-white">
+        <style>{`
+          @keyframes scrollWithPause {
+            0% { transform: translateX(0); }
+            45% { transform: translateX(-100%); }
+            50% { transform: translateX(-100%); }
+            55% { transform: translateX(-100%); }
+            100% { transform: translateX(-100%); }
+          }
+          .broadcast-scroll {
+            animation: scrollWithPause 12s infinite linear;
+          }
+        `}</style>
+        <div className="overflow-hidden flex-1 shrink-0">
+          <div className="broadcast-scroll flex whitespace-nowrap">
+            <span className="font-bold text-sm md:text-lg text-white">
               מהדורת החדשות בשידור חי - כל יום בשעה 21:00 • עדכוני חדשות 24/7 • 
             </span>
-            <span className="font-bold text-xs sm:text-sm md:text-base text-white">
+            <span className="font-bold text-sm md:text-lg text-white">
               מהדורת החדשות בשידור חי - כל יום בשעה 21:00 • עדכוני חדשות 24/7 • 
             </span>
-          </motion.div>
+          </div>
         </div>
 
         <button 
