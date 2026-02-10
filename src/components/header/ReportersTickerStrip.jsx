@@ -17,7 +17,7 @@ export default function ReportersTickerStrip() {
   const containerRef = useRef(null);
   const scrollContainerRef = useRef(null);
 
-  // CSS for grayscale images with animated transition
+  // CSS for grayscale images with animated transition + floating effect
   React.useEffect(() => {
     const style = document.createElement('style');
     style.innerHTML = `
@@ -25,8 +25,14 @@ export default function ReportersTickerStrip() {
         0%, 100% { filter: grayscale(0%); -webkit-filter: grayscale(0%); }
         50% { filter: grayscale(100%); -webkit-filter: grayscale(100%); }
       }
+      @keyframes floatMove {
+        0%, 100% { transform: translateY(0px) scale(1); }
+        25% { transform: translateY(-6px) scale(1.05) rotate(2deg); }
+        50% { transform: translateY(0px) scale(1) rotate(0deg); }
+        75% { transform: translateY(-3px) scale(1.02) rotate(-2deg); }
+      }
       .reporter-ticker-image-animate {
-        animation: colorPulse 4s ease-in-out infinite;
+        animation: colorPulse 4s ease-in-out infinite, floatMove 3s ease-in-out infinite;
         filter: grayscale(0%);
         -webkit-filter: grayscale(0%);
       }
