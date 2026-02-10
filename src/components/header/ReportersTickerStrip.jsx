@@ -25,14 +25,12 @@ export default function ReportersTickerStrip() {
         0%, 100% { filter: grayscale(0%); -webkit-filter: grayscale(0%); }
         50% { filter: grayscale(100%); -webkit-filter: grayscale(100%); }
       }
-      @keyframes floatMove {
-        0%, 100% { transform: translateY(0px) scale(1); }
-        25% { transform: translateY(-6px) scale(1.05) rotate(2deg); }
-        50% { transform: translateY(0px) scale(1) rotate(0deg); }
-        75% { transform: translateY(-3px) scale(1.02) rotate(-2deg); }
+      @keyframes slideHorizontal {
+        0%, 100% { transform: translateX(0px); }
+        50% { transform: translateX(4px); }
       }
       .reporter-ticker-image-animate {
-        animation: colorPulse 4s ease-in-out infinite, floatMove 3s ease-in-out infinite;
+        animation: colorPulse 4s ease-in-out infinite, slideHorizontal 2s ease-in-out infinite;
         filter: grayscale(0%);
         -webkit-filter: grayscale(0%);
       }
