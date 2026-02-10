@@ -51,15 +51,15 @@ export default function AccessibilityFloatingButton() {
       {/* Floating Button */}
       <motion.button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed right-6 bottom-32 sm:bottom-24 lg:bottom-32 z-[130] w-16 h-16 rounded-full shadow-2xl flex items-center justify-center border-3 bg-purple-600 border-white transition-all"
+        className="fixed right-6 bottom-32 sm:bottom-24 lg:bottom-32 z-[130] w-16 h-16 rounded-full shadow-2xl flex items-center justify-center border-3 bg-[#0080FF] border-white transition-all"
         whileHover={{ scale: 1.15 }}
         whileTap={{ scale: 0.9 }}
         animate={{
           scale: [1, 1.08, 1],
           boxShadow: [
-            '0 0 20px rgba(147, 78, 221, 0.6)',
-            '0 0 40px rgba(147, 78, 221, 0.8)',
-            '0 0 20px rgba(147, 78, 221, 0.6)'
+            '0 0 20px rgba(0, 128, 255, 0.6)',
+            '0 0 40px rgba(0, 128, 255, 0.8)',
+            '0 0 20px rgba(0, 128, 255, 0.6)'
           ]
         }}
         transition={{ duration: 2, repeat: Infinity }}

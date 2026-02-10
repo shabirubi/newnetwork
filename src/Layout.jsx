@@ -220,19 +220,8 @@ export default function Layout({ children, currentPageName }) {
       </div>
 
       {/* Logo Header */}
-      <div className="bg-gradient-to-b from-[#001a4d]/90 via-[#003d99]/80 to-[#0066FF]/70 border-b border-[#00D4FF]/50 py-2 shadow-[0_8px_32px_rgba(0,212,255,0.3)] relative overflow-hidden">
-        {/* Water Wave Animation */}
-        <motion.div 
-          className="absolute inset-0 opacity-20"
-          animate={{
-            backgroundPosition: ["0% 0%", "100% 0%"]
-          }}
-          transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-          style={{
-            backgroundImage: "linear-gradient(90deg, #00D4FF 0%, #0099FF 25%, #00D4FF 50%, #0099FF 75%, #00D4FF 100%)",
-            backgroundSize: "200% 100%",
-          }}
-        />
+      <div className="bg-gradient-to-br from-black/90 via-[#0080FF]/30 to-black/90 border-b border-[#0080FF]/50 py-2 shadow-lg shadow-[#0080FF]/30 relative overflow-hidden">
+        {/* Removed Water Wave Animation - replaced with simpler effect */}
         <div className="max-w-7xl mx-auto px-4 flex items-center justify-between gap-3 relative z-10">
           <div className="flex items-center gap-3 bg-gradient-to-r from-[#00D4FF]/10 via-transparent to-transparent px-4 py-2 rounded-lg">
             <motion.img 
