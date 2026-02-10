@@ -335,14 +335,14 @@ export default function Home() {
       {/* Floating Live Chat Button */}
       <motion.button
         onClick={() => setLiveChatOpen(true)}
-        className="fixed bottom-24 left-6 z-[100] w-16 h-16 bg-gradient-to-br from-[#E31E24] via-red-600 to-[#E31E24] rounded-full shadow-2xl shadow-[#E31E24]/50 flex items-center justify-center border-2 border-white/20"
+        className="fixed bottom-24 left-6 z-[100] w-16 h-16 bg-gradient-to-br from-[#0080FF]/30 via-[#0066FF]/30 to-[#0080FF]/30 backdrop-blur-md rounded-full shadow-2xl shadow-[#0080FF]/30 flex items-center justify-center border-2 border-[#0080FF]/50"
         initial={{ scale: 0 }}
         animate={{ 
           scale: [1, 1.1, 1],
           boxShadow: [
-            '0 0 20px rgba(227, 30, 36, 0.5)',
-            '0 0 40px rgba(227, 30, 36, 0.8)',
-            '0 0 20px rgba(227, 30, 36, 0.5)'
+            '0 0 20px rgba(0, 128, 255, 0.5)',
+            '0 0 40px rgba(0, 128, 255, 0.8)',
+            '0 0 20px rgba(0, 128, 255, 0.5)'
           ]
         }}
         transition={{ 
@@ -368,10 +368,10 @@ export default function Home() {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: -20 }}
-            className="fixed bottom-24 left-24 z-[99] bg-gradient-to-r from-[#E31E24] to-red-600 text-white px-4 py-2 rounded-lg shadow-xl text-sm font-bold whitespace-nowrap pointer-events-none"
+            className="fixed bottom-24 left-24 z-[99] bg-gradient-to-r from-[#0080FF] to-[#0066FF] text-white px-4 py-2 rounded-lg shadow-xl text-sm font-bold whitespace-nowrap pointer-events-none"
           >
             דברו עם הכתבים בשידור חי! 🎙️
-            <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-8 border-r-[#E31E24]"></div>
+            <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-8 border-r-[#0080FF]"></div>
           </motion.div>
         )}
       </AnimatePresence>
