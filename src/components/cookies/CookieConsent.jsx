@@ -40,17 +40,17 @@ export default function CookieConsent() {
         >
           {/* Blur Background */}
           <div 
-            className="absolute inset-0 bg-black/40 backdrop-blur-sm rounded-3xl"
+            className="absolute inset-0 bg-black/50 backdrop-blur-md rounded-3xl"
             onClick={handleReject}
           />
 
           {/* Cookie Card */}
           <motion.div
-            initial={{ scale: 0.95 }}
-            animate={{ scale: 1 }}
+            initial={{ scale: 0.95, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
             className="relative max-w-2xl mx-auto"
           >
-            <div className="bg-gradient-to-br from-[#0080FF]/95 via-[#0066FF]/95 to-[#0080FF]/95 backdrop-blur-xl rounded-3xl p-6 sm:p-8 border-2 border-[#0080FF]/50 shadow-2xl shadow-[#0080FF]/50">
+            <div className="bg-gradient-to-br from-[#0080FF]/40 via-[#0066FF]/30 to-[#0080FF]/25 backdrop-blur-xl rounded-3xl p-6 sm:p-8 border-2 border-[#0080FF]/50 shadow-2xl shadow-[#0080FF]/40">
               {/* Close Button */}
               <button
                 onClick={handleReject}
@@ -61,24 +61,28 @@ export default function CookieConsent() {
 
               {/* Content */}
               <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
-                {/* Cookie Icon with Animation */}
+                {/* Shield Icon with Animation */}
                 <motion.div
                   animate={{ 
-                    rotate: [0, 10, -10, 0],
-                    scale: [1, 1.05, 1]
+                    scale: [1, 1.1, 1],
+                    boxShadow: [
+                      '0 0 20px rgba(0, 128, 255, 0.3)',
+                      '0 0 40px rgba(0, 128, 255, 0.5)',
+                      '0 0 20px rgba(0, 128, 255, 0.3)'
+                    ]
                   }}
                   transition={{ duration: 3, repeat: Infinity }}
-                  className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-white/20 flex items-center justify-center"
+                  className="flex-shrink-0 w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-[#0080FF]/20 border-2 border-[#0080FF]/50 flex items-center justify-center"
                 >
-                  <Cookie className="w-6 h-6 sm:w-8 sm:h-8 text-white drop-shadow-lg" />
+                  <Shield className="w-6 h-6 sm:w-8 sm:h-8 text-white drop-shadow-lg" />
                 </motion.div>
 
                 {/* Text Content */}
                 <div className="flex-1 text-right sm:text-right">
                   <h3 className="text-lg sm:text-xl font-bold text-white mb-2">
-                    🍪 אנחנו משתמשים בעוגיות
+                    אנחנו משתמשים בעוגיות
                   </h3>
-                  <p className="text-white/90 text-sm sm:text-base leading-relaxed">
+                  <p className="text-white/85 text-sm sm:text-base leading-relaxed">
                     אנו משתמשים בעוגיות לשיפור החוויה שלך, ניתוח תעבורה והתאמה אישית של תוכן. על ידי המשך השימוש באתר, אתה מסכים לשימוש שלנו בעוגיות.
                   </p>
                 </div>
