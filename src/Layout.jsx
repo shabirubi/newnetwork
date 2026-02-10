@@ -126,7 +126,7 @@ export default function Layout({ children, currentPageName }) {
   };
 
   // דפים ללא Layout
-  if (currentPageName === 'VODContent' || currentPageName === 'ReporterStudio' || currentPageName === 'BroadcastStudio' || currentPageName === 'VideoEditor' || currentPageName === 'VideoCreator' || currentPageName === 'ToMovieeStudio') {
+  if (currentPageName === 'VODContent' || currentPageName === 'ReporterStudio' || currentPageName === 'BroadcastStudio' || currentPageName === 'VideoEditor' || currentPageName === 'VideoCreator' || currentPageName === 'ToMovieeStudio' || currentPageName === 'AdminPanel') {
     return children;
   }
 
