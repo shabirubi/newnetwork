@@ -307,7 +307,25 @@ export default function Layout({ children, currentPageName }) {
                     root.style.setProperty('--primary', item.color);
                     root.style.setProperty('--accent', item.color);
                     localStorage.setItem('themeColor', item.color);
-                    window.location.reload();
+
+                    // עדכון תכנים בזמן אמת
+                    document.documentElement.style.setProperty('--primary-rgb', item.color);
+
+                    // עדכון כל הטקסטים בעלי צבע קודם
+                    const updateColorInDOM = () => {
+                      document.querySelectorAll('*').forEach(el => {
+                        const computedStyle = window.getComputedStyle(el);
+                        const bgColor = computedStyle.backgroundColor;
+                        const textColor = computedStyle.color;
+                        const borderColor = computedStyle.borderColor;
+
+                        // אם יש צבע קודם, החלף בצבע חדש
+                        if (bgColor.includes('rgb') && (bgColor.includes('225, 31, 36') || bgColor.includes('0, 128, 255') || bgColor.includes('0, 212, 255'))) {
+                          el.style.backgroundColor = item.color + '22';
+                        }
+                      });
+                    };
+                    updateColorInDOM();
                   }}
                   className="w-5 h-5 rounded-full border-2 border-white/40 hover:border-white transition-all"
                   style={{ backgroundColor: item.color }}
