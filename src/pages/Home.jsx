@@ -30,6 +30,7 @@ import { Droplet, Mic, Users, Wand2, FileVideo } from "lucide-react";
 import ReporterLiveChat from "../components/reporter/ReporterLiveChat";
 import RealTimeAlertsContainer from "../components/home/RealTimeAlertsContainer";
 import ZakaMediaKitContainer from "../components/home/ZakaMediaKitContainer";
+import WeatherForecastAvatar from "../components/weather/WeatherForecastAvatar";
 
       // Lazy loaded components
 const NewsReels = React.lazy(() => import("../components/news/NewsReels"));
@@ -247,6 +248,11 @@ export default function Home() {
 
 
 
+
+      {/* Weather Forecast Avatar Section */}
+      <section className="px-0 sm:px-4 mb-8">
+        <WeatherForecastAvatar />
+      </section>
 
       {/* Weather Alerts Container */}
       <section className="px-4 sm:px-4 mb-8">
