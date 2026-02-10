@@ -199,10 +199,11 @@ export default function Home() {
                   📰 {featuredArticle.source}
                 </span>
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
+              </div>
+              </div>
+              </div>
+              </Link>
+              </section>
 
           {/* Live Player Section - מוצג רק אם לחצו על הכפתור */}
           {showLivePlayer && (
