@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Loader2, Send, Mic, Video, MessageCircle } from 'lucide-react';
+import { X, Loader2, Send, Mic, Video, MessageCircle, Paperclip, Camera, FileText, Image as ImageIcon } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
+import { base44 } from '@/api/base44Client';
 
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png";
 
@@ -10,8 +12,14 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
   const [isLoading, setIsLoading] = useState(true);
   const [chatMessages, setChatMessages] = useState([]);
   const [inputMessage, setInputMessage] = useState('');
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [isUploading, setIsUploading] = useState(false);
+  const [cameraEnabled, setCameraEnabled] = useState(false);
+  const [localStream, setLocalStream] = useState(null);
   const messagesEndRef = useRef(null);
   const iframeRef = useRef(null);
+  const fileInputRef = useRef(null);
+  const videoRef = useRef(null);
 
   useEffect(() => {
     if (isOpen) {
@@ -47,6 +55,86 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
       handleSendMessage();
     }
   };
+
+  const handleFileUpload = async (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
+
+    setIsUploading(true);
+    try {
+      const uploadPromises = files.map(async (file) => {
+        const formData = new FormData();
+        formData.append('file', file);
+        
+        const response = await base44.integrations.Core.UploadFile({ file });
+        
+        return {
+          name: file.name,
+          url: response.file_url,
+          type: file.type,
+          size: file.size
+        };
+      });
+
+      const uploaded = await Promise.all(uploadPromises);
+      setUploadedFiles(prev => [...prev, ...uploaded]);
+      
+      setChatMessages(prev => [...prev, {
+        text: `העלה ${uploaded.length} קבצים`,
+        files: uploaded,
+        timestamp: new Date(),
+        sender: 'user'
+      }]);
+
+      toast.success(`${uploaded.length} קבצים הועלו בהצלחה`);
+    } catch (error) {
+      console.error('Upload error:', error);
+      toast.error('שגיאה בהעלאת קבצים');
+    } finally {
+      setIsUploading(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
+
+  const toggleCamera = async () => {
+    if (cameraEnabled) {
+      // Stop camera
+      if (localStream) {
+        localStream.getTracks().forEach(track => track.stop());
+        setLocalStream(null);
+      }
+      setCameraEnabled(false);
+      toast.success('המצלמה כובתה');
+    } else {
+      // Start camera
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ 
+          video: true, 
+          audio: true 
+        });
+        setLocalStream(stream);
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+        }
+        setCameraEnabled(true);
+        toast.success('המצלמה הופעלה - כעת אתה בשיחת וידאו!');
+      } catch (error) {
+        console.error('Camera error:', error);
+        toast.error('לא ניתן להפעיל את המצלמה');
+      }
+    }
+  };
+
+  // Cleanup camera on unmount
+  useEffect(() => {
+    return () => {
+      if (localStream) {
+        localStream.getTracks().forEach(track => track.stop());
+      }
+    };
+  }, [localStream]);
 
   if (!isOpen || !reporter) return null;
 
@@ -149,6 +237,26 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
                 title={`${reporter.name} Live Chat`}
               />
 
+              {/* User Camera Preview */}
+              {cameraEnabled && (
+                <div className="absolute bottom-20 right-8 z-20 w-48 h-36 rounded-xl overflow-hidden border-2 border-[#0080FF] shadow-lg shadow-[#0080FF]/50">
+                  <video
+                    ref={videoRef}
+                    autoPlay
+                    playsInline
+                    muted
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full flex items-center gap-1">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+                    </span>
+                    LIVE
+                  </div>
+                </div>
+              )}
+
               {/* Branding Overlay Bottom */}
               <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 bg-[#000510]/90 backdrop-blur-md px-4 py-2 rounded-full border border-[#0080FF]/40">
                 <div className="flex items-center gap-2 text-xs">
@@ -176,6 +284,7 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
                   <div className="text-center text-gray-500 mt-12">
                     <MessageCircle className="w-12 h-12 mx-auto mb-3 opacity-30" />
                     <p className="text-sm">התחל שיחה עם {reporter.name}</p>
+                    <p className="text-xs mt-2">העלה קבצים או הפעל מצלמה</p>
                   </div>
                 ) : (
                   chatMessages.map((msg, idx) => (
@@ -193,6 +302,24 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
                         }`}
                       >
                         <p className="text-sm leading-relaxed">{msg.text}</p>
+                        
+                        {/* Display uploaded files */}
+                        {msg.files && msg.files.length > 0 && (
+                          <div className="mt-2 space-y-1">
+                            {msg.files.map((file, fileIdx) => (
+                              <div key={fileIdx} className="flex items-center gap-2 text-xs bg-black/20 rounded-lg p-2">
+                                {file.type.startsWith('image/') ? (
+                                  <ImageIcon className="w-4 h-4" />
+                                ) : (
+                                  <FileText className="w-4 h-4" />
+                                )}
+                                <span className="flex-1 truncate">{file.name}</span>
+                                <span className="text-xs opacity-60">{(file.size / 1024).toFixed(1)}KB</span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                        
                         <p className="text-xs opacity-60 mt-1">
                           {msg.timestamp.toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' })}
                         </p>
@@ -205,7 +332,46 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
 
               {/* Input Area */}
               <div className="p-4 bg-gradient-to-t from-[#000510] to-transparent border-t-2 border-[#0080FF]/20">
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  multiple
+                  accept="image/*,video/*,.pdf,.doc,.docx,.txt"
+                  onChange={handleFileUpload}
+                  className="hidden"
+                />
+                
+                {/* Action Buttons Row */}
                 <div className="flex gap-2 mb-3">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={toggleCamera}
+                    className={`${
+                      cameraEnabled 
+                        ? 'bg-red-500/20 border-red-500/50 hover:bg-red-500/30' 
+                        : 'bg-[#001030] border-[#0080FF]/20 hover:bg-[#0080FF]/15'
+                    } text-white rounded-xl transition-all`}
+                    title={cameraEnabled ? 'כבה מצלמה' : 'הפעל מצלמה'}
+                  >
+                    <Camera className={`w-4 h-4 ${cameraEnabled ? 'text-red-300' : ''}`} />
+                  </Button>
+                  
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={isUploading}
+                    className="bg-[#001030] border-[#0080FF]/20 hover:bg-[#0080FF]/15 text-white rounded-xl"
+                    title="העלה קבצים"
+                  >
+                    {isUploading ? (
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                    ) : (
+                      <Paperclip className="w-4 h-4" />
+                    )}
+                  </Button>
+                  
                   <Button
                     variant="outline"
                     size="icon"
@@ -214,6 +380,7 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
                   >
                     <Mic className="w-4 h-4" />
                   </Button>
+                  
                   <Button
                     variant="outline"
                     size="icon"
@@ -222,6 +389,7 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
                   >
                     😊
                   </Button>
+                  
                   <Input
                     value={inputMessage}
                     onChange={(e) => setInputMessage(e.target.value)}
@@ -229,6 +397,7 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
                     placeholder="הקלד הודעה..."
                     className="flex-1 bg-[#001030] border-[#0080FF]/20 text-white placeholder:text-gray-500 focus:border-[#0080FF] rounded-xl"
                   />
+                  
                   <Button
                     onClick={handleSendMessage}
                     disabled={!inputMessage.trim()}
@@ -237,7 +406,22 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
                     <Send className="w-4 h-4" />
                   </Button>
                 </div>
-                <p className="text-xs text-gray-500 text-center">ההודעות נשלחות לאווטר בזמן אמת</p>
+                
+                {/* Status Messages */}
+                {cameraEnabled && (
+                  <div className="flex items-center justify-center gap-2 mb-2 text-xs text-green-400">
+                    <Video className="w-3 h-3" />
+                    <span>מצלמה פעילה - אתה בשיחת וידאו חיה</span>
+                  </div>
+                )}
+                
+                {uploadedFiles.length > 0 && (
+                  <div className="text-xs text-[#0080FF] text-center mb-2">
+                    {uploadedFiles.length} קבצים הועלו ונשלחו לאווטר
+                  </div>
+                )}
+                
+                <p className="text-xs text-gray-500 text-center">ההודעות והקבצים נשלחים לאווטר בזמן אמת</p>
               </div>
             </div>
           </div>
