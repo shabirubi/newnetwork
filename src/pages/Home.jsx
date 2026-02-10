@@ -13,6 +13,7 @@ import NewsCard from "../components/news/NewsCard";
 import UpdatesFeed from "../components/news/UpdatesFeed";
 import EntertainmentUpdatesFeed from "../components/news/EntertainmentUpdatesFeed";
 import StudioSidebar from "../components/home/StudioSidebar";
+import WeatherAlertsContainer from "../components/weather/WeatherAlertsContainer";
 
 import CategoriesMenu from "../components/shared/CategoriesMenu";
 import TalkingAvatar from "../components/avatar/TalkingAvatar";
@@ -246,6 +247,11 @@ export default function Home() {
 
 
 
+
+      {/* Weather Alerts Container */}
+      <section className="px-4 sm:px-4 mb-8">
+        <WeatherAlertsContainer />
+      </section>
 
       {/* Real Time Alerts */}
       <section className="px-0 sm:px-4 mb-8">
