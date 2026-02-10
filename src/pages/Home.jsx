@@ -90,29 +90,7 @@ export default function Home() {
   const articles = [];
   const isLoading = false;
 
-  // Infinite scroll handler with debounce
-  React.useEffect(() => {
-    let timeout;
-    const handleScroll = () => {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        if (
-          window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 1000 &&
-          !isLoading &&
-          !isFetchingNextPage &&
-          hasMore
-        ) {
-          setPage(prev => prev + 1);
-        }
-      }, 300);
-    };
 
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    return () => {
-      clearTimeout(timeout);
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [isLoading, isFetchingNextPage, hasMore]);
 
 
 
