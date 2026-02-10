@@ -2,7 +2,7 @@ import React from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
-import { Radio, TrendingUp, Clock, ChevronLeft, Flame, Zap, Target, Shield, DollarSign, Landmark, Cpu, Trophy, Clapperboard, Globe, Heart, Tv, Newspaper, MessageCircle, Settings, X, Film } from "lucide-react";
+import { Radio, TrendingUp, Clock, ChevronLeft, Flame, Zap, Target, Shield, DollarSign, Landmark, Cpu, Trophy, Clapperboard, Globe, Heart, Tv, Newspaper, MessageCircle, Settings, X, Film, Video } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
 import { Button } from "@/components/ui/button";
@@ -26,6 +26,7 @@ import UploadVideoModal from "../components/home/UploadVideoModal";
 import UserUploadedVideos from "../components/home/UserUploadedVideos";
 import ReportersSpotlight from "../components/home/ReportersSpotlight";
 import { Droplet, Mic, Users, Wand2, FileVideo } from "lucide-react";
+import DIDLiveChat from "../components/avatar/DIDLiveChat";
 
       // Lazy loaded components
 const NewsReels = React.lazy(() => import("../components/news/NewsReels"));
@@ -43,6 +44,7 @@ export default function Home() {
   const [reportersModalOpen, setReportersModalOpen] = React.useState(false);
   const [liveAvatarChatOpen, setLiveAvatarChatOpen] = React.useState(false);
   const [showLivePlayer, setShowLivePlayer] = React.useState(false);
+  const [liveChatOpen, setLiveChatOpen] = React.useState(false);
   const [page, setPage] = React.useState(1);
   const [hasMore, setHasMore] = React.useState(true);
   const [selectedChannel, setSelectedChannel] = React.useState(() => {
@@ -326,6 +328,53 @@ export default function Home() {
         isOpen={liveAvatarChatOpen} 
         onClose={() => setLiveAvatarChatOpen(false)} 
       />
+
+      {/* DID Live Chat */}
+      <DIDLiveChat isOpen={liveChatOpen} onClose={() => setLiveChatOpen(false)} />
+
+      {/* Floating Live Chat Button */}
+      <motion.button
+        onClick={() => setLiveChatOpen(true)}
+        className="fixed bottom-24 left-6 z-[100] w-16 h-16 bg-gradient-to-br from-[#E31E24] via-red-600 to-[#E31E24] rounded-full shadow-2xl shadow-[#E31E24]/50 flex items-center justify-center border-2 border-white/20"
+        initial={{ scale: 0 }}
+        animate={{ 
+          scale: [1, 1.1, 1],
+          boxShadow: [
+            '0 0 20px rgba(227, 30, 36, 0.5)',
+            '0 0 40px rgba(227, 30, 36, 0.8)',
+            '0 0 20px rgba(227, 30, 36, 0.5)'
+          ]
+        }}
+        transition={{ 
+          scale: { duration: 2, repeat: Infinity },
+          boxShadow: { duration: 2, repeat: Infinity }
+        }}
+        whileHover={{ scale: 1.15 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        <Video className="w-7 h-7 text-white drop-shadow-lg" />
+        <div className="absolute -top-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
+          <span className="relative flex h-3 w-3">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+          </span>
+        </div>
+      </motion.button>
+
+      {/* Live Chat Tooltip */}
+      <AnimatePresence>
+        {!liveChatOpen && (
+          <motion.div
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -20 }}
+            className="fixed bottom-24 left-24 z-[99] bg-gradient-to-r from-[#E31E24] to-red-600 text-white px-4 py-2 rounded-lg shadow-xl text-sm font-bold whitespace-nowrap pointer-events-none"
+          >
+            דברו עם הכתבים בשידור חי! 🎙️
+            <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-8 border-r-[#E31E24]"></div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Studio Sidebar */}
       <StudioSidebar />
