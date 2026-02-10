@@ -18,8 +18,14 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
     }
   }, [isOpen]);
 
-  // Use the same D-ID agent for all reporters (you can customize per reporter later)
-  const agentUrl = "https://studio.d-id.com/agents/share?id=v2_agt_DMY3wZsg&utm_source=copy&key=WjI5dloyeGxMVzloZFhSb01ud3hNRGt3TlRBd01qRTROall3TURjMU9ESTBPVFk2TVVsNFJ6Tk5kelJMWmtSWFZHVTNUREJmTjNkMw==";
+  // Map reporters to their specific D-ID agents
+  const reporterAgents = {
+    'עדי': "https://studio.d-id.com/agents/share?id=v2_agt_DMY3wZsg&utm_source=copy&key=WjI5dloyeGxMVzloZFhSb01ud3hNRGt3TlRBd01qRTROall3TURjMU9ESTBPVFk2TVVsNFJ6Tk5kelJMWmtSWFZHVTNUREJmTjNkMw==",
+    // הוסף כאן כתבים נוספים עם ה-agents שלהם
+  };
+
+  // Get agent URL for current reporter, fallback to Adi's agent if not found
+  const agentUrl = reporterAgents[reporter.name] || reporterAgents['עדי'];
 
   if (!isOpen || !reporter) return null;
 
