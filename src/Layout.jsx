@@ -16,6 +16,7 @@ import ReportersModal from "./components/reporter/ReportersModal";
 import AIAnnouncer from "./components/news/AIAnnouncer";
 import RightSidebarUpdates from "./components/sidebar/RightSidebarUpdates";
 import LeftSidebarCategories from "./components/sidebar/LeftSidebarCategories";
+import RightSidebarCategories from "./components/sidebar/RightSidebarCategories";
 import KanArchiveModal from "./components/home/KanArchiveModal";
 import TalkingAvatar from "./components/avatar/TalkingAvatar";
 import DIDLiveChat from "./components/avatar/DIDLiveChat";
