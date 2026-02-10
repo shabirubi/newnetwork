@@ -55,7 +55,7 @@ export default function WeatherAlertsContainer() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-gradient-to-br from-[#000033]/90 via-[#0066FF]/70 to-[#0099FF]/60 rounded-2xl p-4 border border-[#0080FF]/60 shadow-lg shadow-[#0080FF]/40 overflow-hidden relative"
+      className="bg-gradient-to-br from-[#000033]/90 via-[#0080FF]/80 to-[#0080FF]/70 rounded-2xl p-4 border border-[#0080FF]/80 shadow-lg shadow-[#0080FF]/60 overflow-hidden relative"
     >
       {/* Animated Background */}
       <motion.div
@@ -65,7 +65,7 @@ export default function WeatherAlertsContainer() {
       }}
       transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
       style={{
-        backgroundImage: "linear-gradient(135deg, #0080FF, #0099FF, #0080FF)",
+        backgroundImage: "linear-gradient(135deg, #0080FF, #0080FF, #0080FF)",
         backgroundSize: "200% 200%"
       }}
       />
