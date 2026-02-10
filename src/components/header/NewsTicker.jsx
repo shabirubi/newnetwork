@@ -66,6 +66,7 @@ export default function NewsTicker({ darkMode, setDarkMode, onMenuClick }) {
 
   return (
     <div className="bg-gradient-to-r from-black via-[#0080FF]/30 to-black border-b-2 border-[#0080FF]/50 backdrop-blur-xl shadow-xl shadow-[#0080FF]/30 relative overflow-hidden z-[37] text-white w-full">
+      {/* Breaking News Strip */}
       <div className="flex items-center gap-1 sm:gap-3 px-0 py-3 w-full">
         {/* Menu Button - Right Side */}
         <button
@@ -94,6 +95,30 @@ export default function NewsTicker({ darkMode, setDarkMode, onMenuClick }) {
             <Radio className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             <span className="hidden sm:inline">רדיו</span>
           </button>
+        </div>
+
+        {/* Broadcast Strip */}
+        <style>{`
+          @keyframes scrollWithPause {
+            0% { transform: translateX(0); }
+            45% { transform: translateX(-100%); }
+            50% { transform: translateX(-100%); }
+            55% { transform: translateX(-100%); }
+            100% { transform: translateX(-100%); }
+          }
+          .broadcast-scroll {
+            animation: scrollWithPause 12s infinite linear;
+          }
+        `}</style>
+        <div className="overflow-hidden flex-1 shrink-0">
+          <div className="broadcast-scroll flex whitespace-nowrap">
+            <span className="font-bold text-sm md:text-lg text-white">
+              מהדורת החדשות בשידור חי - כל יום בשעה 21:00 • עדכוני חדשות 24/7 • 
+            </span>
+            <span className="font-bold text-sm md:text-lg text-white">
+              מהדורת החדשות בשידור חי - כל יום בשעה 21:00 • עדכוני חדשות 24/7 • 
+            </span>
+          </div>
         </div>
 
         <button 
@@ -150,6 +175,8 @@ export default function NewsTicker({ darkMode, setDarkMode, onMenuClick }) {
             {darkMode ? <Sun size={16} className="sm:w-5 sm:h-5 drop-shadow-[0_0_5px_#0080FF]" /> : <Moon size={16} className="sm:w-5 sm:h-5 drop-shadow-[0_0_5px_#0080FF]" />}
           </button>
 
+
+
           <div className="hidden sm:block">
              <ClockWidget />
            </div>
@@ -193,9 +220,9 @@ function TickerContent({ news, currencies }) {
 
   return (
     <motion.div
-      className="flex whitespace-nowrap text-base sm:text-lg pointer-events-none items-center font-bold"
-      animate={{ x: `-${(news.length * 500 + currencies.length * 350 + updates.length * 550)}px` }}
-      transition={{ duration: (news.length + currencies.length + updates.length) * 6, repeat: Infinity, ease: "linear" }}
+      className="flex whitespace-nowrap text-sm sm:text-lg pointer-events-none items-center font-bold"
+      animate={{ x: `-${(news.length * 350 + currencies.length * 280 + updates.length * 400)}px` }}
+      transition={{ duration: (news.length + currencies.length + updates.length) * 3, repeat: Infinity, ease: "linear" }}
     >
       {[...news, ...news, ...news].map((item, index) => {
         const colors = ['text-[#E31E24]', 'text-yellow-400', 'text-white', 'text-blue-400', 'text-red-400'];
@@ -203,7 +230,7 @@ function TickerContent({ news, currencies }) {
         return (
           <span 
             key={`news-${index}`} 
-            className={`mx-10 sm:mx-20 ${colorClass} font-bold`}
+            className={`mx-8 sm:mx-16 ${colorClass} font-bold`}
           >
             • {item}
           </span>

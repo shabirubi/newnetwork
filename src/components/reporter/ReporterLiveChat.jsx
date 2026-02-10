@@ -214,7 +214,7 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
             </div>
 
             {/* Chat Panel - Side */}
-            <div className="w-52 bg-gradient-to-b from-[#001030] via-[#000510] to-[#001030] border-r-4 border-[#0080FF]/20 flex flex-col">
+            <div className="w-80 sm:w-96 bg-gradient-to-b from-[#001030] via-[#000510] to-[#001030] border-r-4 border-[#0080FF]/20 flex flex-col">
               {/* Chat Header */}
               <div className="bg-gradient-to-r from-[#0080FF]/15 to-transparent p-4 border-b-2 border-[#0080FF]/20">
                 <div className="flex items-center justify-between mb-2">
