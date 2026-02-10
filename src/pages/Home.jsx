@@ -74,14 +74,21 @@ export default function Home() {
 
   const queryClient = useQueryClient();
 
-  const { data: articles = [], isLoading, fetchNextPage, isFetchingNextPage } = useQuery({
-    queryKey: ['news-articles', selectedChannel],
-    queryFn: async () => {
-      return [];
-    },
-    initialData: [],
-    enabled: false
-  });
+  // הכתבה האחרונה שהועלתה
+  const featuredArticle = {
+    id: '698a72b65aab44eb627fd899',
+    title: 'שוקי המניות מחקו את הירידות, אך ישנם איומים מחזיתות אחרות',
+    subtitle: 'ההתפתחויות האחרונות יוצרות סביבה נוחה יותר לנכסי סיכון, אך ישנם איומים נוספים',
+    content: 'שוקי המניות התאוששו מהירידות שנרשמו לאחר הכרזת טראמפ על תכנית המכסים השאפתנית. עם זאת, ישנם איומים נוספים, כגון אי-ודאות פוליטית והתפתחויות כלכליות בלתי צפויות, שעלולות להשפיע על השוק.',
+    category: 'finance',
+    image_url: 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/8df32e9f1_generated_image.png',
+    source: 'אייס',
+    created_date: '2026-02-09T23:50:14.552Z',
+    created_by: 'service+0a06552f-b47f-487a-84bb-eb2bdeb5769c@no-reply.base44.com'
+  };
+
+  const articles = [];
+  const isLoading = false;
 
   // Infinite scroll handler with debounce
   React.useEffect(() => {
@@ -136,30 +143,7 @@ export default function Home() {
     return () => window.removeEventListener('videoUploaded', handleVideoUploaded);
   }, [refetchLiveStream]);
 
-  const featuredArticle = React.useMemo(() => 
-    articles.find(a => a.is_featured || a.is_breaking) || articles[0], 
-    [articles]
-  );
-  
-  const breakingNews = React.useMemo(() => 
-    articles.filter(a => a.is_breaking), 
-    [articles]
-  );
-  
-  const allNewsForHome = React.useMemo(() => 
-    breakingNews.length > 0 ? breakingNews : articles.slice(0, 12),
-    [articles, breakingNews]
-  );
-  
-  const regularNews = React.useMemo(() => 
-    articles.filter(a => a.id !== featuredArticle?.id).slice(0, 8), 
-    [articles, featuredArticle]
-  );
-  
-  const trendingNews = React.useMemo(() => 
-    [...articles].sort((a, b) => new Date(b.created_date) - new Date(a.created_date)).slice(0, 5),
-    [articles]
-  );
+  // No memos needed - using static data
 
   const activeLive = liveStream[0];
   const currentChannel = selectedChannel === 'all' ? null : channels.find(c => c.id === selectedChannel);
@@ -177,69 +161,61 @@ export default function Home() {
     <div className="min-h-screen bg-black space-y-0 sm:space-y-6">
 
       {/* Featured Article Section - Full Screen */}
-      {isLoading ? (
-        <section className="px-0 mb-8 -mx-4 sm:mx-0">
-          <div className="relative h-[400px] sm:h-[500px] lg:h-[600px] rounded-none sm:rounded-3xl overflow-hidden bg-gray-800 animate-pulse" />
-        </section>
-      ) : featuredArticle ? (
-        <section className="px-0 mb-8 -mx-4 sm:mx-0">
-          <Link to={createPageUrl(`Article?id=${featuredArticle.id}`)}>
-            <div className="relative h-[400px] sm:h-[500px] lg:h-[600px] rounded-none sm:rounded-3xl overflow-hidden group cursor-pointer">
-              {/* Background Image */}
-              {featuredArticle.image_url && (
-                <img 
-                  src={featuredArticle.image_url} 
-                  alt={featuredArticle.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                />
-              )}
+      <section className="px-0 mb-8 -mx-4 sm:mx-0">
+        <div className="relative h-[500px] sm:h-[600px] lg:h-[700px] rounded-none sm:rounded-3xl overflow-hidden">
+          {/* Background Image */}
+          <img 
+            src={featuredArticle.image_url} 
+            alt={featuredArticle.title}
+            className="w-full h-full object-cover"
+          />
 
-              {/* Gradient Overlay */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
+          {/* Gradient Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
 
-              {/* Content Overlay */}
-              <div className="absolute inset-0 flex flex-col justify-end p-4 sm:p-8 lg:p-12">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.6 }}
-                  className="space-y-4"
-                >
-                  {/* Badge */}
-                  {featuredArticle.is_breaking && (
-                    <div className="inline-flex w-fit bg-[#E31E24] text-white px-4 py-2 rounded-full font-bold text-sm animate-pulse">
-                      🔴 חדשה חמה
-                    </div>
-                  )}
+          {/* Content Overlay */}
+          <div className="absolute inset-0 flex flex-col justify-end p-6 sm:p-10 lg:p-16">
+            <div className="space-y-6 max-w-4xl">
+              {/* Badge */}
+              <div className="inline-flex w-fit bg-[#E31E24] text-white px-5 py-2 rounded-full font-bold text-base">
+                📈 כלכלה ופיננסים
+              </div>
 
-                  {/* Title */}
-                  <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight drop-shadow-lg">
-                    {featuredArticle.title}
-                  </h1>
+              {/* Title */}
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight drop-shadow-2xl">
+                {featuredArticle.title}
+              </h1>
 
-                  {/* Subtitle */}
-                  {featuredArticle.subtitle && (
-                    <p className="text-lg sm:text-xl text-gray-200 drop-shadow-md max-w-2xl">
-                      {featuredArticle.subtitle}
-                    </p>
-                  )}
+              {/* Subtitle */}
+              <p className="text-xl sm:text-2xl text-gray-100 drop-shadow-lg">
+                {featuredArticle.subtitle}
+              </p>
 
-                  {/* Meta Info */}
-                  <div className="flex flex-wrap items-center gap-3 pt-2">
-                    <span className="bg-[#E31E24]/80 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm font-semibold">
-                      {featuredArticle.category}
-                    </span>
-                    <span className="flex items-center gap-1 text-gray-300 text-sm">
-                      <Clock className="w-4 h-4" />
-                      {new Date(featuredArticle.created_date).toLocaleDateString('he-IL')}
-                    </span>
-                  </div>
-                </motion.div>
+              {/* Content Preview */}
+              <p className="text-base sm:text-lg text-gray-300 leading-relaxed max-w-3xl">
+                {featuredArticle.content}
+              </p>
+
+              {/* Meta Info */}
+              <div className="flex flex-wrap items-center gap-4 pt-4">
+                <span className="flex items-center gap-2 text-gray-200 text-sm bg-black/30 px-4 py-2 rounded-full backdrop-blur-sm">
+                  <Clock className="w-4 h-4" />
+                  {new Date(featuredArticle.created_date).toLocaleDateString('he-IL', { 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  })}
+                </span>
+                <span className="text-gray-200 text-sm bg-black/30 px-4 py-2 rounded-full backdrop-blur-sm">
+                  📰 {featuredArticle.source}
+                </span>
               </div>
             </div>
-          </Link>
-        </section>
-      ) : null}
+          </div>
+        </div>
+      </section>
 
           {/* Live Player Section - מוצג רק אם לחצו על הכפתור */}
           {showLivePlayer && (
@@ -277,152 +253,13 @@ export default function Home() {
         </section>
       )}
 
-      {/* חדשות - הצגת כל הכתבות */}
-      <section className="px-4 sm:px-4 mt-6">
-        <div className="flex items-center gap-2 mb-6">
-          <Flame className="w-6 h-6 text-[#E31E24]" />
-          <h2 className="text-2xl font-bold text-white">
-            {breakingNews.length > 0 ? 'חדשות חמות' : 'חדשות'}
-          </h2>
-        </div>
 
-        {isLoading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {[...Array(8)].map((_, i) => (
-              <div key={i} className="h-64 bg-gray-800 rounded-xl animate-pulse"></div>
-            ))}
-          </div>
-        ) : allNewsForHome.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-            {allNewsForHome.map((article) => (
-              <NewsCard key={article.id} article={article} />
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-12 text-white/40">
-            <Flame className="w-12 h-12 mx-auto mb-3 opacity-30" />
-            <p>מה יהיה?</p>
-          </div>
-        )}
-      </section>
 
-      {/* Category News Section - ללא breaking */}
-      <section className="px-4 sm:px-4 mt-8 space-y-8">
-        {[
-          { category: 'security', label: 'ביטחון ומדיניות' },
-          { category: 'economy', label: 'כלכלה ועסקים' },
-          { category: 'politics', label: 'פוליטיקה' },
-          { category: 'technology', label: 'טכנולוגיה' },
-          { category: 'sports', label: 'ספורט' },
-          { category: 'entertainment', label: 'בידור ודרמה' },
-          { category: 'world', label: 'חדשות עולם' },
-          { category: 'health', label: 'בריאות' },
-          { category: 'music', label: 'מוזיקה' },
-          { category: 'horoscope', label: 'אסטרולוגיה' },
-          { category: 'finance', label: 'פיננסים' },
-          { category: 'crime', label: 'פלילים' },
-          { category: 'education', label: 'חינוך' },
-          { category: 'culture', label: 'תרבות' },
-          { category: 'environment', label: 'סביבה' },
-          { category: 'science', label: 'מדע' },
-          { category: 'israel', label: 'חדשות ישראל' },
-          { category: 'military', label: 'צבא וביטחון' },
-          { category: 'law', label: 'משפט ופלילים' },
-          { category: 'local', label: 'חדשות מקומיות' }
-          ].map(({ category, label }) => {
-          const categoryArticles = articles.filter(a => a.category === category).slice(0, 4);
-          if (categoryArticles.length === 0) return null;
-          return (
-            <div key={category}>
-              <h3 className="text-xl font-bold dark:text-white mb-4">{label}</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                {categoryArticles.map((article) => (
-                  <NewsCard key={article.id} article={article} />
-                ))}
-              </div>
-            </div>
-          );
-        })}
-      </section>
 
-      {/* TikTok News with Sidebars */}
-      <section className="grid grid-cols-1 lg:grid-cols-12 gap-4 -mx-0 sm:mx-0 px-0 sm:px-4 mt-8">
-        {/* Left Sidebar - Entertainment Updates Feed */}
-        <aside className="lg:col-span-3 hidden lg:block bg-black space-y-4">
-          <EntertainmentUpdatesFeed />
-        </aside>
 
-        {/* Center - TikTok News Feed */}
-        <div className="lg:col-span-6">
-          <TikTokNewsFeed articles={articles} />
-        </div>
 
-        {/* Right Sidebar - Breaking News Updates */}
-        <aside className="lg:col-span-3">
-          <UpdatesFeed />
-        </aside>
-      </section>
 
-      {/* News Reels Section - Lazy Loaded */}
-      <React.Suspense fallback={<div className="h-96 bg-black animate-pulse rounded-2xl" />}>
-        <NewsReels />
-      </React.Suspense>
 
-      {/* Trending Topics Container - Lazy Loaded */}
-      <React.Suspense fallback={<div className="h-64 bg-black animate-pulse rounded-2xl mx-4" />}>
-        <TrendingTopicsContainer />
-      </React.Suspense>
-
-      {/* User Uploaded Videos */}
-      <div id="user-videos-section">
-        <UserUploadedVideos onUploadClick={() => setUploadVideoModalOpen(true)} />
-      </div>
-
-      {/* TikTok News Container - Lazy Loaded */}
-      <React.Suspense fallback={<div className="h-96 bg-black animate-pulse rounded-2xl mx-4" />}>
-        <TikTokNewsContainer />
-      </React.Suspense>
-
-      {/* Reporters Spotlight */}
-      <ReportersSpotlight />
-
-      {/* Reporter Responses Feed - Lazy Loaded */}
-      <section className="px-4 sm:px-4 mt-8">
-        <React.Suspense fallback={<div className="h-96 bg-black animate-pulse rounded-2xl" />}>
-          <ReporterResponsesFeed />
-        </React.Suspense>
-      </section>
-
-      {/* All News Section */}
-      {articles.length > 0 && (
-        <section className="px-4 sm:px-4 mt-8">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-2">
-              <Clock className="w-5 h-5 text-[#E31E24]" />
-              <h2 className="text-xl font-bold dark:text-white">חדשות אחרונות</h2>
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-            {articles.map((article, index) => (
-              <NewsCard key={article.id} article={article} index={index} />
-            ))}
-          </div>
-
-          {isFetchingNextPage && (
-            <div className="text-center py-8">
-              <div className="w-12 h-12 border-4 border-[#E31E24]/20 border-t-[#E31E24] rounded-full animate-spin mx-auto"></div>
-              <p className="text-white/60 mt-4">טוען עוד חדשות...</p>
-            </div>
-          )}
-
-          {!hasMore && articles.length > 0 && (
-            <div className="text-center py-8">
-              <p className="text-white/40 text-sm">אין עוד חדשות להצגה</p>
-            </div>
-          )}
-        </section>
-      )}
 
       {/* VOD Modal */}
       <VODModal isOpen={vodModalOpen} onClose={() => setVodModalOpen(false)} />
@@ -448,10 +285,7 @@ export default function Home() {
         onClose={() => setLiveAvatarChatOpen(false)} 
       />
 
-      {/* All Videos Gallery - Lazy Loaded */}
-      <React.Suspense fallback={<div className="h-96 bg-black animate-pulse rounded-2xl mx-4" />}>
-        <AllVideosGallery />
-      </React.Suspense>
+
 
 
 
