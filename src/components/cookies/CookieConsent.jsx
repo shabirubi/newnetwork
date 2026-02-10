@@ -38,11 +38,24 @@ export default function CookieConsent() {
           exit={{ opacity: 0, y: 100 }}
           className="fixed bottom-0 left-0 right-0 z-[10000] p-4 sm:p-6"
         >
-          {/* Blur Background */}
+          {/* Water Flow Background */}
           <div 
-            className="absolute inset-0 bg-black/50 backdrop-blur-md rounded-3xl"
+            className="absolute inset-0 rounded-3xl overflow-hidden"
             onClick={handleReject}
-          />
+          >
+            <div className="absolute inset-0 bg-gradient-to-b from-[#001a4d]/50 via-[#003d99]/40 to-[#0066FF]/30" />
+            <motion.div 
+              className="absolute inset-0 opacity-30"
+              animate={{
+                backgroundPosition: ["0% 0%", "100% 100%"]
+              }}
+              transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+              style={{
+                backgroundImage: "linear-gradient(45deg, #00D4FF 25%, transparent 25%, transparent 50%, #00D4FF 50%, #00D4FF 75%, transparent 75%, transparent)",
+                backgroundSize: "40px 40px",
+              }}
+            />
+          </div>
 
           {/* Cookie Card */}
           <motion.div
@@ -50,7 +63,21 @@ export default function CookieConsent() {
             animate={{ scale: 1, opacity: 1 }}
             className="relative max-w-2xl mx-auto"
           >
-            <div className="bg-gradient-to-br from-[#0080FF]/40 via-[#0066FF]/30 to-[#0080FF]/25 backdrop-blur-xl rounded-3xl p-6 sm:p-8 border-2 border-[#0080FF]/50 shadow-2xl shadow-[#0080FF]/40">
+            <div className="bg-gradient-to-br from-[#001a4d]/90 via-[#003d99]/80 to-[#0066FF]/70 rounded-3xl p-6 sm:p-8 border-2 border-[#00D4FF]/60 shadow-2xl shadow-[#00D4FF]/30 relative overflow-hidden">
+              {/* Animated Water Waves */}
+              <motion.div 
+                className="absolute -inset-1 opacity-20"
+                animate={{
+                  x: [0, 10, -10, 0],
+                  y: [0, -5, 5, 0]
+                }}
+                transition={{ duration: 4, repeat: Infinity }}
+                style={{
+                  background: "linear-gradient(135deg, #00D4FF, #0099FF, #00D4FF)",
+                  filter: "blur(40px)"
+                }}
+              />
+              <div className="relative z-10">
               {/* Close Button */}
               <button
                 onClick={handleReject}
