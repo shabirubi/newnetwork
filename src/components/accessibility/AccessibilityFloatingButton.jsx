@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Settings, Palette } from "lucide-react";
+import { X, Palette, Accessibility } from "lucide-react";
 import AccessibilityPanel from "./AccessibilityPanel";
 
 export default function AccessibilityFloatingButton() {
@@ -39,25 +39,25 @@ export default function AccessibilityFloatingButton() {
       {/* Floating Button */}
       <motion.button
         onClick={() => setIsOpen(true)}
-        className="fixed right-6 bottom-32 sm:bottom-24 lg:bottom-32 z-[130] w-16 h-16 rounded-full shadow-2xl flex items-center justify-center border-2 transition-all"
+        className="fixed right-6 bottom-32 sm:bottom-24 lg:bottom-32 z-[130] w-16 h-16 rounded-full shadow-2xl flex items-center justify-center border-3 transition-all"
         style={{
-          backgroundColor: `${themeColor}20`,
-          borderColor: themeColor,
-          boxShadow: `0 0 30px ${themeColor}60`
+          backgroundColor: themeColor,
+          borderColor: 'white',
+          boxShadow: `0 0 30px ${themeColor}80`
         }}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
+        whileHover={{ scale: 1.15 }}
+        whileTap={{ scale: 0.9 }}
         animate={{
-          scale: [1, 1.05, 1],
+          scale: [1, 1.08, 1],
           boxShadow: [
-            `0 0 20px ${themeColor}40`,
-            `0 0 40px ${themeColor}80`,
-            `0 0 20px ${themeColor}40`
+            `0 0 20px ${themeColor}60`,
+            `0 0 40px ${themeColor}a0`,
+            `0 0 20px ${themeColor}60`
           ]
         }}
         transition={{ duration: 2, repeat: Infinity }}
       >
-        <Settings className="w-8 h-8 drop-shadow-lg" style={{ color: themeColor }} />
+        <Accessibility className="w-9 h-9 text-white drop-shadow-xl" />
       </motion.button>
 
       {/* Accessibility Panel Modal */}
@@ -148,14 +148,14 @@ export default function AccessibilityFloatingButton() {
         <motion.button
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          className="fixed bottom-24 right-6 z-[155] w-14 h-14 rounded-full shadow-xl flex items-center justify-center transition-all"
+          className="fixed bottom-24 right-6 z-[155] w-14 h-14 rounded-full shadow-xl flex items-center justify-center border-2 border-white transition-all"
           style={{
-            backgroundColor: `${themeColor}80`,
-            boxShadow: `0 0 20px ${themeColor}60`
+            backgroundColor: themeColor,
+            boxShadow: `0 0 20px ${themeColor}80`
           }}
           onClick={() => setShowColorPicker(true)}
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
+          whileHover={{ scale: 1.12 }}
+          whileTap={{ scale: 0.9 }}
         >
           <Palette className="w-6 h-6 text-white drop-shadow-lg" />
         </motion.button>
