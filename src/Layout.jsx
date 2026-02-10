@@ -173,7 +173,7 @@ export default function Layout({ children, currentPageName }) {
 
       {/* Logo Header */}
       <div className="bg-black/80 backdrop-blur-xl border-b border-white/10 py-2">
-        <div className="max-w-7xl mx-auto px-4 flex items-center justify-between gap-3">
+        <div className="max-w-7xl mx-auto px-4 flex items-center justify-end gap-3">
           <motion.img 
                 src={LOGO_URL} 
                 alt="הרשת החדשה" 
@@ -188,7 +188,7 @@ export default function Layout({ children, currentPageName }) {
                   ease: "easeInOut"
                 }}
               />
-              <div className="flex flex-col mr-4">
+              <div className="flex flex-col text-right">
                 <h1 className="text-lg sm:text-xl font-bold text-white">הרשת החדשה</h1>
                 <motion.p 
                   className="text-xs sm:text-sm text-white/70"
@@ -200,12 +200,11 @@ export default function Layout({ children, currentPageName }) {
               </div>
             <button
               onClick={() => window.open(createPageUrl("AdminPanel"), "_blank")}
-              className="flex items-center gap-1 px-2 py-1.5 bg-gradient-to-r from-[#0080FF] to-[#0066FF] backdrop-blur-xl rounded-lg shadow-lg shadow-[#0080FF]/50 border border-[#0080FF]/50 transition-all hover:scale-105 text-[11px] ml-2"
+              className="flex items-center gap-1 px-2 py-1.5 bg-gradient-to-r from-[#0080FF] to-[#0066FF] backdrop-blur-xl rounded-lg shadow-lg shadow-[#0080FF]/50 border border-[#0080FF]/50 transition-all hover:scale-105 text-[11px] ml-auto"
             >
               <Shield className="w-4 h-4 text-white" />
               <span className="text-white font-bold">Admin</span>
             </button>
-          </div>
           
           <div className="hidden sm:flex items-center gap-2">
             {/* Auth Buttons */}
