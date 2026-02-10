@@ -73,7 +73,7 @@ export default function ReportersTickerStrip() {
   return (
     <>
       {reporters.length > 0 && (
-      <div ref={containerRef} className="relative bg-black/90 backdrop-blur-xl border-b border-[#A855F7]/30 shadow-xl shadow-[#A855F7]/20 z-[35] block">
+      <div ref={containerRef} className="relative bg-black/90 backdrop-blur-xl border-b border-[#00D4FF]/30 shadow-xl shadow-[#00D4FF]/20 z-[35] block">
         {/* Left Arrow */}
         <button
           onClick={() => scroll('left')}

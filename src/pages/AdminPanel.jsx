@@ -6,6 +6,7 @@ import {
   Settings, TrendingUp, AlertCircle, Loader2, Sparkles,
   Film, Clapperboard, Wand2, MessageCircle, Camera
 } from "lucide-react";
+import DIDLiveChat from "../components/avatar/DIDLiveChat";
 import { motion } from "framer-motion";
 
 import AdminDashboard from "../components/admin/AdminDashboard";
@@ -20,6 +21,7 @@ export default function AdminPanel() {
   const [activeTab, setActiveTab] = useState('dashboard');
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [didChatOpen, setDidChatOpen] = useState(false);
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -51,6 +53,7 @@ export default function AdminPanel() {
     { id: 'content', label: 'תוכן', icon: Video },
     { id: 'analytics', label: 'אנליטיקס', icon: TrendingUp },
     { id: 'notes', label: 'הערות מנהלים', icon: AlertCircle },
+    { id: 'didchat', label: 'צ\'אט D-ID לייב', icon: MessageCircle, isAction: true },
     { id: 'creator', label: 'יוצר AI', icon: Sparkles, isExternal: true, url: '/VideoCreator' },
     { id: 'editor', label: 'עורך מתקדם', icon: Film, isExternal: true, url: '/VideoEditor' },
     { id: 'luma', label: 'Luma AI', icon: Clapperboard, isExternal: true, url: '/LumaStudio' },
@@ -89,6 +92,19 @@ export default function AdminPanel() {
             {tabs.map((tab) => {
               const Icon = tab.icon;
               
+              if (tab.isAction) {
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setDidChatOpen(true)}
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-green-400 hover:bg-green-600/20 transition-all border border-green-500/30"
+                  >
+                    <Icon className="w-5 h-5" />
+                    {tab.label}
+                  </button>
+                );
+              }
+              
               if (tab.isExternal) {
                 return (
                   <a
@@ -110,7 +126,7 @@ export default function AdminPanel() {
                   onClick={() => setActiveTab(tab.id)}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all ${
                     activeTab === tab.id
-                      ? 'bg-[#E31E24] text-white shadow-lg'
+                      ? 'bg-[#00D4FF] text-black shadow-lg'
                       : 'text-gray-400 hover:bg-gray-800/50'
                   }`}
                 >
@@ -127,6 +143,9 @@ export default function AdminPanel() {
           {renderContent()}
         </div>
       </div>
+
+      {/* D-ID Live Chat */}
+      <DIDLiveChat isOpen={didChatOpen} onClose={() => setDidChatOpen(false)} />
     </div>
   );
 }

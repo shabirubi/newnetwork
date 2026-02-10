@@ -155,7 +155,7 @@ export default function Home() {
           <div className="absolute inset-0 flex flex-col justify-end p-6 sm:p-10 lg:p-16">
             <div className="space-y-6 max-w-4xl">
               {/* Badge */}
-              <div className="inline-flex w-fit bg-gradient-to-r from-[#A855F7] to-[#EC4899] text-white px-5 py-2 rounded-full font-bold text-base">
+              <div className="inline-flex w-fit bg-gradient-to-r from-[#00D4FF] to-[#3B82F6] text-white px-5 py-2 rounded-full font-bold text-base">
                   📈 כלכלה ופיננסים
                 </div>
 
@@ -223,7 +223,7 @@ export default function Home() {
           onClick={() => setShowLivePlayer(true)}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          className="w-full bg-gradient-to-r from-[#A855F7] via-[#EC4899] to-[#7C3AED] hover:from-[#7C3AED] hover:to-[#A855F7] text-white py-4 rounded-xl shadow-lg flex items-center justify-center gap-3 font-bold text-lg transition-all"
+          className="w-full bg-gradient-to-r from-[#00D4FF] via-[#3B82F6] to-[#0EA5E9] hover:from-[#0EA5E9] hover:to-[#00D4FF] text-white py-4 rounded-xl shadow-lg flex items-center justify-center gap-3 font-bold text-lg transition-all"
           >
           <Radio className="w-6 h-6" />
           הפעל שידור חי
