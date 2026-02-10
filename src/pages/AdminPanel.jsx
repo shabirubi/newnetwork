@@ -3,7 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { 
   LayoutDashboard, Users, DollarSign, Video, Newspaper, 
-  Settings, TrendingUp, AlertCircle, Loader2
+  Settings, TrendingUp, AlertCircle, Loader2, Sparkles
 } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -72,6 +72,7 @@ export default function AdminPanel() {
     { id: 'content', label: 'תוכן', icon: Video },
     { id: 'analytics', label: 'אנליטיקס', icon: TrendingUp },
     { id: 'notes', label: 'הערות מנהלים', icon: AlertCircle },
+    { id: 'creator', label: 'יוצר AI', icon: Sparkles, isExternal: true },
     { id: 'settings', label: 'הגדרות', icon: Settings },
   ];
 
@@ -101,6 +102,22 @@ export default function AdminPanel() {
           <nav className="space-y-2">
             {tabs.map((tab) => {
               const Icon = tab.icon;
+              
+              if (tab.isExternal) {
+                return (
+                  <a
+                    key={tab.id}
+                    href="/VideoCreator"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-purple-400 hover:bg-purple-600/20 transition-all border border-purple-500/30"
+                  >
+                    <Icon className="w-5 h-5" />
+                    {tab.label}
+                  </a>
+                );
+              }
+              
               return (
                 <button
                   key={tab.id}
