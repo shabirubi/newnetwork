@@ -14,79 +14,7 @@ export default function WeatherForecastAvatar() {
   const messagesEndRef = useRef(null);
   const iframeRef = useRef(null);
 
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
 
-  useEffect(() => {
-    scrollToBottom();
-  }, [chatMessages]);
-
-  const handleSendMessage = () => {
-    if (!inputMessage.trim()) return;
-    
-    setChatMessages(prev => [...prev, {
-      text: inputMessage,
-      timestamp: new Date(),
-      sender: 'user',
-      userName: 'אתה'
-    }]);
-    
-    setInputMessage('');
-  };
-
-  const handleKeyPress = (e) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSendMessage();
-    }
-  };
-
-  const handleFileUpload = async (e) => {
-    const files = Array.from(e.target.files);
-    if (files.length === 0) return;
-
-    setIsUploading(true);
-    try {
-      const uploadPromises = files.map(async (file) => {
-        const response = await base44.integrations.Core.UploadFile({ file });
-        
-        return {
-          name: file.name,
-          url: response.file_url,
-          type: file.type,
-          size: file.size
-        };
-      });
-
-      const uploaded = await Promise.all(uploadPromises);
-      setUploadedFiles(prev => [...prev, ...uploaded]);
-      
-      setChatMessages(prev => [...prev, {
-        text: `העלה ${uploaded.length} קבצים`,
-        files: uploaded,
-        timestamp: new Date(),
-        sender: 'user'
-      }]);
-
-      toast.success(`${uploaded.length} קבצים הועלו בהצלחה`);
-    } catch (error) {
-      console.error('Upload error:', error);
-      toast.error('שגיאה בהעלאת קבצים');
-    } finally {
-      setIsUploading(false);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
-    }
-  };
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setOnlineUsers(prev => Math.max(1, prev + Math.floor(Math.random() * 3 - 1)));
-    }, 15000);
-    return () => clearInterval(interval);
-  }, []);
 
   const weatherAgentUrl = "https://studio.d-id.com/agents/share?id=v2_agt_cim3LvE9&utm_source=copy&key=WjI5dloyeGxMVzloZFhSb01ud3hNRGt3TlRBd01qRTROall3TURjMU9ESTBPVFk2TVVsNFJ6Tk5kelJMWmtSWFZHVTNUREJmTjNkMw==";
 
