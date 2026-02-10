@@ -243,6 +243,13 @@ export default function Home() {
 
 
 
+      {/* Real Time Alerts */}
+      <section className="px-0 sm:px-4 mb-8">
+        <React.Suspense fallback={<Skeleton className="w-full h-64 bg-gray-800" />}>
+          <RealTimeAlertsContainer />
+        </React.Suspense>
+      </section>
+
       {/* Breaking News Updates Feed */}
       <section className="px-0 sm:px-4 mb-8">
         <React.Suspense fallback={<Skeleton className="w-full h-96 bg-gray-800" />}>
