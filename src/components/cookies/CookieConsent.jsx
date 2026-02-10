@@ -5,9 +5,12 @@ import { X, Check, Shield } from "lucide-react";
 export default function CookieConsent() {
   const [isOpen, setIsOpen] = useState(false);
   const [accepted, setAccepted] = useState(false);
+  const [language, setLanguage] = useState('he');
 
   useEffect(() => {
     const hasAccepted = localStorage.getItem('cookieConsent');
+    const savedLang = localStorage.getItem('cookieLanguage') || 'he';
+    setLanguage(savedLang);
     if (!hasAccepted) {
       setIsOpen(true);
     } else {
@@ -17,6 +20,7 @@ export default function CookieConsent() {
 
   const handleAccept = () => {
     localStorage.setItem('cookieConsent', 'true');
+    localStorage.setItem('cookieLanguage', language);
     setAccepted(true);
     setIsOpen(false);
   };
@@ -105,35 +109,53 @@ export default function CookieConsent() {
                   </motion.div>
 
                   {/* Text Content */}
-                  <div className="flex-1 text-right sm:text-right">
+                  <div className="flex-1">
                     <h3 className="text-lg sm:text-xl font-bold text-white mb-2">
-                      אנחנו משתמשים בעוגיות
+                      {language === 'he' ? 'אנחנו משתמשים בעוגיות' : 'We Use Cookies'}
                     </h3>
                     <p className="text-white/85 text-sm sm:text-base leading-relaxed">
-                      אנו משתמשים בעוגיות לשיפור החוויה שלך, ניתוח תעבורה והתאמה אישית של תוכן. על ידי המשך השימוש באתר, אתה מסכים לשימוש שלנו בעוגיות.
+                      {language === 'he' 
+                        ? 'אנו משתמשים בעוגיות לשיפור החוויה שלך, ניתוח תעבורה והתאמה אישית של תוכן. על ידי המשך השימוש באתר, אתה מסכים לשימוש שלנו בעוגיות.'
+                        : 'We use cookies to improve your experience, analyze traffic, and personalize content. By continuing to use our site, you agree to our cookie usage.'}
                     </p>
                   </div>
                 </div>
 
-                {/* Buttons */}
-                <div className="flex flex-col-reverse sm:flex-row gap-3 mt-6 sm:mt-4">
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={handleReject}
-                    className="flex-1 px-6 py-3 rounded-xl bg-[#00D4FF]/20 hover:bg-[#00D4FF]/40 text-white font-semibold transition-all border border-[#00D4FF]/40 hover:border-[#00D4FF]/60"
-                  >
-                    דחה
-                  </motion.button>
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    onClick={handleAccept}
-                    className="flex-1 px-6 py-3 rounded-xl bg-[#00D4FF]/80 hover:bg-[#00D4FF] text-white font-bold transition-all shadow-lg shadow-[#00D4FF]/40 hover:shadow-xl flex items-center justify-center gap-2 border border-[#00D4FF]/50"
-                  >
-                    <Check className="w-5 h-5" />
-                    אני מסכים
-                  </motion.button>
+                {/* Language & Buttons */}
+                <div className="space-y-3">
+                  <div className="flex gap-2 justify-center">
+                    <button
+                      onClick={() => setLanguage('he')}
+                      className={`px-4 py-2 rounded-lg font-bold transition-all ${language === 'he' ? 'bg-white/20 text-white' : 'bg-white/10 text-white/70'}`}
+                    >
+                      עברית
+                    </button>
+                    <button
+                      onClick={() => setLanguage('en')}
+                      className={`px-4 py-2 rounded-lg font-bold transition-all ${language === 'en' ? 'bg-white/20 text-white' : 'bg-white/10 text-white/70'}`}
+                    >
+                      English
+                    </button>
+                  </div>
+                  <div className="flex flex-col-reverse sm:flex-row gap-3">
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={handleReject}
+                      className="flex-1 px-6 py-3 rounded-xl bg-[#00D4FF]/20 hover:bg-[#00D4FF]/40 text-white font-semibold transition-all border border-[#00D4FF]/40 hover:border-[#00D4FF]/60"
+                    >
+                      {language === 'he' ? 'דחה' : 'Reject'}
+                    </motion.button>
+                    <motion.button
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      onClick={handleAccept}
+                      className="flex-1 px-6 py-3 rounded-xl bg-[#00D4FF]/80 hover:bg-[#00D4FF] text-white font-bold transition-all shadow-lg shadow-[#00D4FF]/40 hover:shadow-xl flex items-center justify-center gap-2 border border-[#00D4FF]/50"
+                    >
+                      <Check className="w-5 h-5" />
+                      {language === 'he' ? 'אני מסכים' : 'I Accept'}
+                    </motion.button>
+                  </div>
                 </div>
               </div>
             </div>
