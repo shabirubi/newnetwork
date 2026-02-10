@@ -1,181 +1,304 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { Cloud, Thermometer, Wind, Eye, AlertTriangle, CloudRain } from "lucide-react";
-import WeatherForecastLiveChat from "./WeatherForecastLiveChat";
+import { Cloud, Users, Send, Paperclip, Mic, Loader2, FileText, Image as ImageIcon } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { base44 } from "@/api/base44Client";
+
+const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png";
 
 export default function WeatherForecastAvatar() {
-  const [avatarUrl, setAvatarUrl] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [chatOpen, setChatOpen] = useState(false);
+  const [chatMessages, setChatMessages] = useState([]);
+  const [inputMessage, setInputMessage] = useState('');
+  const [uploadedFiles, setUploadedFiles] = useState([]);
+  const [isUploading, setIsUploading] = useState(false);
+  const [onlineUsers, setOnlineUsers] = useState(5);
+  const messagesEndRef = useRef(null);
+  const iframeRef = useRef(null);
+  const fileInputRef = useRef(null);
 
-  useEffect(() => {
-    // HeyGen professional weather forecaster avatar
-    // Using a professional female avatar for weather forecasting
-    const generateAvatarVideo = async () => {
-      try {
-        // Using HeyGen's professional female avatar
-        // Avatar ID: 1bd9390c-a1b3-4a50-9852-b3e0a4799fea (Professional Female)
-        setAvatarUrl("https://d-id-public-bucket.s3.amazonaws.com/videos/avatar_samples/professional_female_avatar.mp4");
-        setLoading(false);
-      } catch (error) {
-        console.log('שגיאה בטעינת אווטאר:', error);
-        setLoading(false);
-      }
-    };
-
-    generateAvatarVideo();
-  }, []);
-
-  const currentWeather = {
-    temp: 22,
-    condition: 'מעוננן',
-    humidity: 65,
-    windSpeed: 12,
-    visibility: 10,
-    rainChance: 15
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const forecast = [
-    { day: 'היום', high: 24, low: 18, condition: 'מעוננן', icon: Cloud },
-    { day: 'מחר', high: 26, low: 19, condition: 'שמש', icon: Cloud },
-    { day: 'יום שלישי', high: 23, low: 17, condition: 'גשום', icon: CloudRain },
-    { day: 'יום רביעי', high: 25, low: 18, condition: 'שמש', icon: Cloud }
-  ];
+  useEffect(() => {
+    scrollToBottom();
+  }, [chatMessages]);
+
+  const handleSendMessage = () => {
+    if (!inputMessage.trim()) return;
+    
+    setChatMessages(prev => [...prev, {
+      text: inputMessage,
+      timestamp: new Date(),
+      sender: 'user',
+      userName: 'אתה'
+    }]);
+    
+    setInputMessage('');
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
+
+  const handleFileUpload = async (e) => {
+    const files = Array.from(e.target.files);
+    if (files.length === 0) return;
+
+    setIsUploading(true);
+    try {
+      const uploadPromises = files.map(async (file) => {
+        const response = await base44.integrations.Core.UploadFile({ file });
+        
+        return {
+          name: file.name,
+          url: response.file_url,
+          type: file.type,
+          size: file.size
+        };
+      });
+
+      const uploaded = await Promise.all(uploadPromises);
+      setUploadedFiles(prev => [...prev, ...uploaded]);
+      
+      setChatMessages(prev => [...prev, {
+        text: `העלה ${uploaded.length} קבצים`,
+        files: uploaded,
+        timestamp: new Date(),
+        sender: 'user'
+      }]);
+
+      toast.success(`${uploaded.length} קבצים הועלו בהצלחה`);
+    } catch (error) {
+      console.error('Upload error:', error);
+      toast.error('שגיאה בהעלאת קבצים');
+    } finally {
+      setIsUploading(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setOnlineUsers(prev => Math.max(1, prev + Math.floor(Math.random() * 3 - 1)));
+    }, 15000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const weatherAgentUrl = "https://studio.d-id.com/agents/share?id=v2_agt_cim3LvE9&utm_source=copy&key=WjI5dloyeGxMVzloZFhSb01ud3hNRGt3TlRBd01qRTROall3TURjMU9ESTBPVFk2TVVsNFJ6Tk5kelJMWmtSWFZHVTNUREJmTjNkMw==";
 
   return (
-    <div className="w-full bg-gradient-to-br from-[#001a4d]/80 via-[#0033CC]/70 to-[#0080FF]/60 rounded-3xl overflow-hidden border-2 border-[#0080FF]/60 shadow-2xl shadow-[#0080FF]/40">
-      {/* Header */}
-      <div className="bg-gradient-to-r from-[#0066FF] via-[#0080FF]/90 to-[#0066FF] p-6 border-b-4 border-[#0080FF]/80 shadow-xl shadow-[#0080FF]/40">
-        <div className="flex items-center justify-center gap-3">
-          <Cloud className="w-8 h-8 text-white drop-shadow-lg" />
-          <div className="text-center">
-            <h2 className="text-white font-bold text-2xl drop-shadow-lg">תחזיתן הרשת</h2>
-            <p className="text-white/90 text-sm">תחזיית מזג אוויר חיה</p>
+    <div className="w-full bg-gradient-to-br from-[#001a4d]/80 via-[#0033CC]/70 to-[#0080FF]/60 rounded-3xl overflow-hidden shadow-2xl shadow-[#0080FF]/40 border-2 border-[#0080FF]/60">
+      {/* Premium Branded Header */}
+      <div className="relative bg-gradient-to-r from-[#0066FF] via-[#0080FF]/90 to-[#0066FF] p-4 sm:p-6 border-b-4 border-[#0080FF]/80 shadow-xl shadow-[#0080FF]/40" style={{ direction: 'rtl' }}>
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-pulse"></div>
+        <div className="relative flex items-center justify-center gap-4" style={{ direction: 'rtl' }}>
+          <motion.img 
+            src={LOGO_URL}
+            alt="הרשת החדשה"
+            className="h-10 sm:h-14 w-auto drop-shadow-2xl"
+            animate={{ 
+              scale: [1, 1.08, 1],
+              filter: ['brightness(1)', 'brightness(1.3)', 'brightness(1)']
+            }}
+            transition={{ 
+              duration: 2.5, 
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+          <div className="text-center flex-1">
+            <div className="flex items-center justify-center gap-2 mb-1">
+              <Cloud className="w-6 h-6 text-white drop-shadow-lg" />
+              <h2 className="text-white font-bold text-xl sm:text-2xl drop-shadow-lg">תחזיתן הרשת</h2>
+            </div>
+            <p className="text-white/90 text-xs sm:text-sm">תחזיית מזג אוויר חיה</p>
           </div>
         </div>
       </div>
 
-      {/* Main Content Grid */}
-      <div className="p-6">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
-        
-          {/* D-ID Avatar/Chat - Center */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ delay: 0.2 }}
-            className="lg:col-span-1 flex flex-col items-center justify-center bg-gradient-to-b from-[#0066FF]/50 to-[#0033CC]/50 rounded-2xl overflow-hidden border-4 border-[#0080FF]/60 relative shadow-2xl shadow-[#0080FF]/50"
-            style={{ minHeight: '400px' }}
-          >
-            {/* D-ID Agent Iframe */}
-            <iframe
-              src="https://studio.d-id.com/agents/share?id=v2_agt_cim3LvE9&utm_source=copy&key=WjI5dloyeGxMVzloZFhSb01ud3hNRGt3TlRBd01qRTROall3TURjMU9ESTBPVFk2TVVsNFJ6Tk5kelJMWmtSWFZHVTNUREJmTjNkMw=="
-              allow="microphone; camera; autoplay"
-              className="w-full h-full border-0"
-              title="Weather Forecast Agent"
-            />
-          </motion.div>
-
-          {/* Current Weather & Forecast - Right/Bottom */}
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ delay: 0.3 }}
-            className="lg:col-span-2 space-y-4"
-          >
-          {/* Current Weather */}
-          <div className="bg-gradient-to-br from-white/10 via-[#0080FF]/20 to-transparent rounded-2xl p-6 border border-[#0080FF]/40 backdrop-blur-xl">
-            <h3 className="text-white font-bold text-lg mb-4 flex items-center gap-2">
-              <Cloud className="w-5 h-5 text-[#0080FF]" />
-              מזג אוויר כרגע
-            </h3>
-
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-3 mb-4">
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                className="bg-[#0080FF]/30 backdrop-blur-sm rounded-xl p-4 border border-[#0080FF]/50 text-center"
-              >
-                <Thermometer className="w-6 h-6 text-orange-400 mx-auto mb-2" />
-                <p className="text-white font-bold text-2xl">{currentWeather.temp}°</p>
-                <p className="text-[#00D4FF] text-xs">טמפרטורה</p>
-              </motion.div>
-
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                className="bg-[#0080FF]/30 backdrop-blur-sm rounded-xl p-4 border border-[#0080FF]/50 text-center"
-              >
-                <CloudRain className="w-6 h-6 text-blue-300 mx-auto mb-2" />
-                <p className="text-white font-bold text-2xl">{currentWeather.rainChance}%</p>
-                <p className="text-[#00D4FF] text-xs">סיכוי גשם</p>
-              </motion.div>
-
-              <motion.div
-                whileHover={{ scale: 1.05 }}
-                className="bg-[#0080FF]/30 backdrop-blur-sm rounded-xl p-4 border border-[#0080FF]/50 text-center col-span-2 md:col-span-1"
-              >
-                <Wind className="w-6 h-6 text-cyan-400 mx-auto mb-2" />
-                <p className="text-white font-bold text-2xl">{currentWeather.windSpeed}</p>
-                <p className="text-[#00D4FF] text-xs">קמ"ש</p>
-              </motion.div>
+      {/* Main Content - Avatar + Chat */}
+      <div className="flex flex-col lg:flex-row overflow-hidden" style={{ minHeight: '500px' }}>
+        {/* Avatar Section - Left */}
+        <div className="flex-1 relative bg-gradient-to-br from-[#001a4d] via-[#0033CC] to-[#0066FF] border-b-4 lg:border-b-0 lg:border-r-4 border-[#0080FF]/40">
+          {/* Avatar Label Top Left */}
+          <div className="absolute top-4 left-4 z-10 bg-gradient-to-r from-[#0080FF] to-[#00D4FF] px-4 py-1.5 rounded-full border-2 border-white/30 shadow-xl">
+            <div className="flex items-center gap-2">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+              </span>
+              <span className="text-white font-bold text-xs">ON AIR</span>
             </div>
-
-            <p className="text-[#00D4FF] text-sm font-semibold">{currentWeather.condition} • רטוב: {currentWeather.humidity}% • ראות: {currentWeather.visibility} ק״מ</p>
           </div>
 
-          {/* 4 Day Forecast */}
-          <div className="bg-gradient-to-br from-white/5 via-[#0066FF]/10 to-transparent rounded-2xl p-6 border border-[#0080FF]/40 backdrop-blur-xl">
-            <h3 className="text-white font-bold text-lg mb-4">תחזית 4 ימים</h3>
-            <div className="grid grid-cols-4 gap-2 md:gap-3">
-              {forecast.map((day, idx) => (
+          {/* D-ID Agent Iframe */}
+          <iframe
+            ref={iframeRef}
+            src={weatherAgentUrl}
+            allow="microphone; camera; autoplay"
+            className="w-full h-full border-0"
+            title="Weather Forecast Live Chat"
+          />
+        </div>
+
+        {/* Chat Panel - Right */}
+        <div className="w-full lg:w-80 bg-gradient-to-b from-[#001a4d] via-[#0033CC] to-[#001a4d] border-r-4 border-[#0080FF]/40 flex flex-col">
+          {/* Chat Header */}
+          <div className="bg-gradient-to-r from-[#0080FF]/30 to-transparent p-3 sm:p-4 border-b-2 border-[#0080FF]/40">
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2">
+                <Users className="w-5 h-5 text-[#00D4FF]" />
+                <span className="text-white font-bold text-sm">צ'אט חיה</span>
+              </div>
+              <div className="flex items-center gap-1 text-xs bg-[#0080FF]/40 px-2 py-1 rounded-full border border-[#0080FF]/60">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-green-400"></span>
+                </span>
+                <span className="text-white font-bold text-xs">{onlineUsers} צופים</span>
+              </div>
+            </div>
+            <p className="text-[#00D4FF] text-xs">שאלו שאלות על מזג האוויר</p>
+          </div>
+
+          {/* Messages Area */}
+          <div className="flex-1 overflow-y-auto p-3 sm:p-4 space-y-3">
+            {chatMessages.length === 0 ? (
+              <div className="text-center text-gray-400 mt-12">
+                <Cloud className="w-12 h-12 mx-auto mb-3 opacity-30" />
+                <p className="text-sm">היה הראשון להגיב</p>
+                <p className="text-xs mt-2">שאל שאלות על התחזיה</p>
+              </div>
+            ) : (
+              chatMessages.map((msg, idx) => (
                 <motion.div
                   key={idx}
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 + idx * 0.1 }}
-                  whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(0, 128, 255, 0.6)" }}
-                  className="bg-gradient-to-br from-[#0080FF]/40 to-[#0066FF]/40 rounded-xl p-3 text-center border border-[#0080FF]/50 cursor-pointer transition-all"
+                  initial={{ opacity: 0, x: msg.sender === 'user' ? 20 : -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
-                  <p className="text-white font-bold text-xs mb-2">{day.day}</p>
-                  <div className="text-2xl mb-2">🌤️</div>
-                  <div className="space-y-1">
-                    <p className="text-white font-bold text-sm">{day.high}°</p>
-                    <p className="text-[#00D4FF] text-xs">{day.low}°</p>
+                  <div
+                    className={`max-w-[85%] p-3 rounded-2xl ${
+                      msg.sender === 'user'
+                        ? 'bg-gradient-to-br from-[#0080FF] to-[#0066FF] text-white shadow-lg shadow-[#0080FF]/40'
+                        : 'bg-[#0033CC]/60 text-gray-100 border border-[#0080FF]/40'
+                    }`}
+                  >
+                    {msg.userName && (
+                      <p className="text-xs font-bold mb-1 opacity-80">{msg.userName}</p>
+                    )}
+                    <p className="text-sm leading-relaxed">{msg.text}</p>
+                    
+                    {msg.files && msg.files.length > 0 && (
+                      <div className="mt-2 space-y-1">
+                        {msg.files.map((file, fileIdx) => (
+                          <div key={fileIdx} className="flex items-center gap-2 text-xs bg-black/30 rounded-lg p-2">
+                            {file.type.startsWith('image/') ? (
+                              <ImageIcon className="w-4 h-4" />
+                            ) : (
+                              <FileText className="w-4 h-4" />
+                            )}
+                            <span className="flex-1 truncate">{file.name}</span>
+                            <span className="text-xs opacity-60">{(file.size / 1024).toFixed(1)}KB</span>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                    
+                    <p className="text-xs opacity-60 mt-1">
+                      {msg.timestamp.toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' })}
+                    </p>
                   </div>
                 </motion.div>
-              ))}
-            </div>
+              ))
+            )}
+            <div ref={messagesEndRef} />
           </div>
 
-          {/* Alerts */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.6 }}
-            className="bg-yellow-500/20 backdrop-blur-sm rounded-xl p-4 border border-yellow-500/50 flex items-start gap-3"
-          >
-            <AlertTriangle className="w-5 h-5 text-yellow-400 flex-shrink-0 mt-0.5" />
-            <div>
-              <p className="text-yellow-300 font-bold text-sm">התראה</p>
-              <p className="text-white text-xs mt-1">צפוי גל חום בסוף השבוע - המלצה להימנע מפעילויות בשעות הצהריים</p>
+          {/* Input Area */}
+          <div className="p-3 sm:p-4 bg-gradient-to-t from-[#001a4d] to-transparent border-t-2 border-[#0080FF]/40">
+            <input
+              ref={fileInputRef}
+              type="file"
+              multiple
+              accept="image/*,video/*,.pdf,.doc,.docx,.txt"
+              onChange={handleFileUpload}
+              className="hidden"
+            />
+            
+            {/* Action Buttons Row */}
+            <div className="flex gap-2 mb-3">
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => fileInputRef.current?.click()}
+                disabled={isUploading}
+                className="bg-[#0033CC] border-[#0080FF]/40 hover:bg-[#0080FF]/30 text-white rounded-xl h-10 w-10"
+                title="העלה קבצים"
+              >
+                {isUploading ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Paperclip className="w-4 h-4" />
+                )}
+              </Button>
+              
+              <Button
+                variant="outline"
+                size="icon"
+                className="bg-[#0033CC] border-[#0080FF]/40 hover:bg-[#0080FF]/30 text-white rounded-xl h-10 w-10"
+                title="הקלטה קולית"
+              >
+                <Mic className="w-4 h-4" />
+              </Button>
+              
+              <Input
+                value={inputMessage}
+                onChange={(e) => setInputMessage(e.target.value)}
+                onKeyPress={handleKeyPress}
+                placeholder="שאל שאלה..."
+                className="flex-1 bg-[#0033CC] border-[#0080FF]/40 text-white placeholder:text-gray-400 focus:border-[#0080FF] rounded-xl text-sm"
+              />
+              
+              <Button
+                onClick={handleSendMessage}
+                disabled={!inputMessage.trim()}
+                className="bg-gradient-to-r from-[#0080FF] to-[#00D4FF] hover:from-[#00D4FF] hover:to-[#0080FF] text-white rounded-xl shadow-lg shadow-[#0080FF]/50 px-3 h-10 w-10"
+              >
+                <Send className="w-4 h-4" />
+              </Button>
             </div>
-          </motion.div>
-          </motion.div>
+            
+            {uploadedFiles.length > 0 && (
+              <div className="text-xs text-[#00D4FF] text-center mb-2">
+                {uploadedFiles.length} קבצים הועלו
+              </div>
+            )}
+            
+            <p className="text-xs text-gray-400 text-center">שוחח עם {onlineUsers} צופים מחוברים</p>
           </div>
-          </div>
+        </div>
+      </div>
 
-      {/* Bottom Info Bar */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.7 }}
-        className="flex items-center justify-center gap-2 text-[#00D4FF] text-xs px-6 py-4 border-t border-[#0080FF]/30 bg-gradient-to-r from-[#0080FF]/10 to-transparent"
-      >
-        <span className="flex h-2.5 w-2.5">
-          <span className="animate-ping absolute inline-flex h-2.5 w-2.5 rounded-full bg-[#0080FF] opacity-75"></span>
-          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#00D4FF]"></span>
-        </span>
-        <span className="font-bold">שידור חי • עדכון אחרון: {new Date().toLocaleTimeString('he-IL')}</span>
-      </motion.div>
+      {/* Footer */}
+      <div className="relative bg-gradient-to-r from-[#0066FF] via-[#0080FF]/80 to-[#0066FF] p-3 border-t-4 border-[#00D4FF]/60 shadow-lg shadow-[#0080FF]/40">
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/15 to-transparent"></div>
+        <div className="relative flex items-center justify-center gap-2 text-white text-xs font-bold">
+          <span className="flex h-2 w-2">
+            <span className="animate-ping absolute inline-flex h-2 w-2 rounded-full bg-white opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+          </span>
+          שידור חי • עדכון אחרון: {new Date().toLocaleTimeString('he-IL')}
+        </div>
+      </div>
     </div>
   );
 }
