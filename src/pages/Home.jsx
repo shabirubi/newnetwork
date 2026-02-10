@@ -145,7 +145,11 @@ export default function Home() {
 
       {/* Featured Article Section - Full Screen */}
       <section className="px-0 mb-8 -mx-4 sm:mx-0">
-        <div className="relative h-[500px] sm:h-[600px] lg:h-[700px] rounded-none sm:rounded-3xl overflow-hidden">
+        <Link 
+          to={`${createPageUrl("Article")}?id=${featuredArticle.id}`}
+          className="block group relative h-[500px] sm:h-[600px] lg:h-[700px] rounded-none sm:rounded-3xl overflow-hidden cursor-pointer"
+        >
+          <div className="relative h-full w-full">
           {/* Background Image */}
           <img 
             src={featuredArticle.image_url} 
