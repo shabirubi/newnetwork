@@ -111,16 +111,24 @@ export default function Layout({ children, currentPageName }) {
   const [menuSidebarOpen, setMenuSidebarOpen] = useState(false);
 
   useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-      document.documentElement.style.colorScheme = 'dark';
-      localStorage.setItem('darkMode', 'true');
-    } else {
-      document.documentElement.classList.remove('dark');
-      document.documentElement.style.colorScheme = 'light';
-      localStorage.setItem('darkMode', 'false');
-    }
-  }, [darkMode]);
+      if (darkMode) {
+        document.documentElement.classList.add('dark');
+        document.documentElement.style.colorScheme = 'dark';
+        localStorage.setItem('darkMode', 'true');
+      } else {
+        document.documentElement.classList.remove('dark');
+        document.documentElement.style.colorScheme = 'light';
+        localStorage.setItem('darkMode', 'false');
+      }
+    }, [darkMode]);
+
+  useEffect(() => {
+      const savedColor = localStorage.getItem('themeColor');
+      if (savedColor) {
+        document.documentElement.style.setProperty('--primary', savedColor);
+        document.documentElement.style.setProperty('--accent', savedColor);
+      }
+    }, []);
 
   // Apply dark mode on mount
   useEffect(() => {
