@@ -122,7 +122,7 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4"
+        className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-sm flex items-center justify-center p-4"
         onClick={onClose}
       >
         <motion.div
@@ -130,47 +130,50 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
           animate={{ scale: 1, y: 0 }}
           exit={{ scale: 0.9, y: 20 }}
           onClick={(e) => e.stopPropagation()}
-          className="bg-gradient-to-br from-[#000510] via-[#001030] to-[#000510] rounded-3xl overflow-hidden w-full max-w-4xl shadow-2xl border-4 border-[#0080FF]/40 flex flex-col"
+          className="bg-gradient-to-br from-[#000510] via-[#001030] to-[#000510] rounded-3xl overflow-hidden shadow-2xl border-4 border-[#0080FF]/40 flex flex-col"
           style={{
+            width: '1200px',
+            height: '600px',
+            maxWidth: '95vw',
             boxShadow: '0 0 80px rgba(0, 128, 255, 0.4), inset 0 0 60px rgba(0, 128, 255, 0.05)',
-            height: '600px'
+            direction: 'rtl'
           }}
         >
           {/* Premium Branded Header */}
-          <div className="relative bg-gradient-to-r from-[#000510] via-[#001540]/80 to-[#000510] p-3 sm:p-5 border-b-4 border-[#0080FF]/30 shadow-lg">
+          <div className="relative bg-gradient-to-r from-[#000510] via-[#001540]/80 to-[#000510] p-3 sm:p-5 border-b-4 border-[#0080FF]/30 shadow-lg" style={{ direction: 'rtl' }}>
             <div className="absolute inset-0 bg-gradient-to-r from-transparent via-[#0080FF]/10 to-transparent animate-pulse"></div>
-            <div className="relative flex items-center justify-between">
-              <motion.img 
-                src={LOGO_URL}
-                alt="הרשת החדשה"
-                className="h-10 sm:h-14 w-auto drop-shadow-2xl"
-                animate={{ 
-                  scale: [1, 1.08, 1],
-                  filter: ['brightness(1)', 'brightness(1.3)', 'brightness(1)']
-                }}
-                transition={{ 
-                  duration: 2.5, 
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-              />
-              <div className="text-center flex-1 px-2 sm:px-6">
-                <div className="text-white font-bold text-xl sm:text-2xl drop-shadow-lg mb-1">{reporter.name}</div>
-                <div className="flex items-center justify-center gap-2 text-xs sm:text-sm">
-                  <Video className="w-4 h-4 text-[#0080FF] animate-pulse" />
-                  <span className="text-[#0080FF] font-bold">שיחת וידאו חיה</span>
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
-                  </span>
-                </div>
-              </div>
+            <div className="relative flex items-center justify-between gap-4" style={{ direction: 'rtl' }}>
               <button
                 onClick={onClose}
-                className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-red-500/30 to-red-600/30 hover:from-red-500/50 hover:to-red-600/50 flex items-center justify-center transition-all border-2 border-red-500/50 shadow-lg shadow-red-500/30"
+                className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-gradient-to-br from-red-500/30 to-red-600/30 hover:from-red-500/50 hover:to-red-600/50 flex items-center justify-center transition-all border-2 border-red-500/50 shadow-lg shadow-red-500/30 shrink-0"
               >
                 <X className="w-5 h-5 sm:w-6 sm:h-6 text-white drop-shadow-lg" />
               </button>
+              <div className="text-right flex-1 px-2 sm:px-6">
+                <div className="text-white font-bold text-xl sm:text-2xl drop-shadow-lg mb-1">{reporter.name}</div>
+                <div className="flex items-center justify-center gap-2 text-xs sm:text-sm">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-500 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+                    </span>
+                    <span className="text-[#0080FF] font-bold">שיחת וידאו חיה</span>
+                    <Video className="w-4 h-4 text-[#0080FF] animate-pulse" />
+                  </div>
+                </div>
+                <motion.img 
+                  src={LOGO_URL}
+                  alt="הרשת החדשה"
+                  className="h-10 sm:h-14 w-auto drop-shadow-2xl shrink-0"
+                  animate={{ 
+                    scale: [1, 1.08, 1],
+                    filter: ['brightness(1)', 'brightness(1.3)', 'brightness(1)']
+                  }}
+                  transition={{ 
+                    duration: 2.5, 
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                />
             </div>
           </div>
 
