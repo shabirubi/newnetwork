@@ -158,7 +158,7 @@ export default function Home() {
           />
 
           {/* Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent group-hover:via-black/80 transition-all duration-300" />
 
           {/* Content Overlay */}
           <div className="absolute inset-0 flex flex-col justify-end p-6 sm:p-10 lg:p-16">
