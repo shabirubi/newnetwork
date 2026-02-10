@@ -21,6 +21,7 @@ import TalkingAvatar from "./components/avatar/TalkingAvatar";
 import DIDLiveChat from "./components/avatar/DIDLiveChat";
 import AdminLoginModal from "./components/admin/AdminLoginModal";
 import CookieConsent from "./components/cookies/CookieConsent";
+import AccessibilityFloatingButton from "./components/accessibility/AccessibilityFloatingButton";
 import { base44 } from "@/api/base44Client";
 
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png";
@@ -448,7 +449,8 @@ export default function Layout({ children, currentPageName }) {
       {/* Cookie Consent */}
       <CookieConsent />
 
-
+      {/* Accessibility Floating Button */}
+      <AccessibilityFloatingButton />
 
       {/* Main Menu Sidebar */}
       <AnimatePresence>
