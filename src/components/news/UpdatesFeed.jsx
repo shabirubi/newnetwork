@@ -87,7 +87,7 @@ export default function UpdatesFeed() {
 
               {/* Content */}
               <div>
-                <p className="text-xs text-white font-bold line-clamp-2 leading-snug mb-1.5 group-hover:text-[#E31E24] transition-colors">
+                <p className="text-xs text-white font-bold line-clamp-2 leading-snug mb-1.5 group-hover:text-[#0080FF] transition-colors">
                   {article.title}
                 </p>
                 {article.subtitle && (
