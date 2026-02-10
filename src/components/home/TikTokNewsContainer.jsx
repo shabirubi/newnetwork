@@ -34,14 +34,14 @@ export default function TikTokNewsContainer() {
     <section className="px-4 sm:px-4 mt-8">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2">
-          <Music className="w-6 h-6 text-[#E31E24]" />
+          <Music className="w-6 h-6 text-[#0080FF]" />
           <h2 className="text-2xl font-bold dark:text-white">סרטוני חדשות בטיקטוק</h2>
         </div>
         <a
           href="https://www.tiktok.com"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-[#E31E24] hover:text-red-700 font-bold text-sm transition-colors"
+          className="text-[#0080FF] hover:text-[#0066FF] font-bold text-sm transition-colors"
         >
           עיין הכל →
         </a>
@@ -56,9 +56,9 @@ export default function TikTokNewsContainer() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.1 }}
             whileHover={{ scale: 1.05 }}
-            className="group relative rounded-2xl overflow-hidden aspect-[9/16] bg-gradient-to-br from-black/80 via-[#E31E24]/30 to-black/80 backdrop-blur-sm cursor-pointer border-2 border-[#E31E24]/40 hover:border-[#E31E24]/80 transition-all"
+            className="group relative rounded-2xl overflow-hidden aspect-[9/16] bg-gradient-to-br from-black/80 via-[#0080FF]/30 to-black/80 backdrop-blur-sm cursor-pointer border-2 border-[#0080FF]/40 hover:border-[#0080FF]/80 transition-all"
             style={{
-              boxShadow: '0 0 20px rgba(227, 30, 36, 0.3), inset 0 0 20px rgba(227, 30, 36, 0.1)'
+              boxShadow: '0 0 20px rgba(0, 128, 255, 0.3), inset 0 0 20px rgba(0, 128, 255, 0.1)'
             }}
           >
             {/* Video Preview */}
@@ -102,7 +102,7 @@ export default function TikTokNewsContainer() {
 
             {/* Play Icon */}
             <div className="absolute inset-0 flex items-center justify-center">
-              <div className="w-16 h-16 rounded-full bg-[#E31E24]/80 backdrop-blur-sm flex items-center justify-center group-hover:scale-110 transition-transform border-2 border-white/30">
+              <div className="w-16 h-16 rounded-full bg-[#0080FF]/80 backdrop-blur-sm flex items-center justify-center group-hover:scale-110 transition-transform border-2 border-white/30">
                 <Play className="w-8 h-8 text-white fill-white ml-1" />
               </div>
             </div>
@@ -125,9 +125,9 @@ export default function TikTokNewsContainer() {
               initial={{ scale: 0.9 }}
               animate={{ scale: 1 }}
               exit={{ scale: 0.9 }}
-              className="relative w-full max-w-md aspect-[9/16] bg-black rounded-2xl overflow-hidden border-2 border-[#E31E24]/60"
+              className="relative w-full max-w-md aspect-[9/16] bg-black rounded-2xl overflow-hidden border-2 border-[#0080FF]/60"
               style={{
-                boxShadow: '0 0 40px rgba(227, 30, 36, 0.5)'
+                boxShadow: '0 0 40px rgba(0, 128, 255, 0.5)'
               }}
               onClick={(e) => e.stopPropagation()}
             >
