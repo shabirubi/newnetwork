@@ -21,6 +21,7 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
   // Map reporters to their specific D-ID agents
   const reporterAgents = {
     'עדי': "https://studio.d-id.com/agents/share?id=v2_agt_DMY3wZsg&utm_source=copy&key=WjI5dloyeGxMVzloZFhSb01ud3hNRGt3TlRBd01qRTROall3TURjMU9ESTBPVFk2TVVsNFJ6Tk5kelJMWmtSWFZHVTNUREJmTjNkMw==",
+    'רון כהן': "https://studio.d-id.com/agents/share?id=v2_agt_vpw--KK0&utm_source=copy&key=WjI5dloyeGxMVzloZFhSb01ud3hNRGt3TlRBd01qRTROall3TURjMU9ESTBPVFk2TVVsNFJ6Tk5kelJMWmtSWFZHVTNUREJmTjNkMw==",
     // הוסף כאן כתבים נוספים עם ה-agents שלהם
   };
 
@@ -88,20 +89,6 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
 
           {/* D-ID Agent Iframe */}
           <div className="flex-1 bg-black relative overflow-hidden">
-            {/* Left Frame */}
-            <div className="absolute top-0 bottom-0 left-0 w-12 bg-black z-30"
-              style={{
-                boxShadow: '4px 0 20px rgba(0, 0, 0, 0.8)'
-              }}
-            />
-
-            {/* Right Frame */}
-            <div className="absolute top-0 bottom-0 right-0 w-12 bg-black z-30"
-              style={{
-                boxShadow: '-4px 0 20px rgba(0, 0, 0, 0.8)'
-              }}
-            />
-            
             {isLoading && (
               <div className="absolute inset-0 flex items-center justify-center bg-black z-10">
                 <div className="text-center">
@@ -117,17 +104,6 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
               allow="microphone; camera; autoplay"
               className="w-full h-full border-0"
               title={`${reporter.name} Live Chat`}
-              style={{ 
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%) scale(2.2)',
-                width: '100%',
-                height: '100%',
-                maxWidth: '100%',
-                maxHeight: '100%',
-                overflow: 'hidden'
-              }}
             />
           </div>
 
