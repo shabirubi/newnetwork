@@ -234,57 +234,7 @@ export default function Layout({ children, currentPageName }) {
             backgroundSize: "200% 100%",
           }}
         />
-        <div className="max-w-7xl mx-auto px-4 flex items-center justify-between gap-3 relative z-10">
-          <div className="flex items-center gap-3 bg-gradient-to-r from-[#00D4FF]/10 via-transparent to-transparent px-4 py-2 rounded-lg">
-            <motion.img 
-                  src={LOGO_URL} 
-                  alt="הרשת החדשה" 
-                  className="h-14 sm:h-16 w-auto drop-shadow-2xl"
-                  animate={{ 
-                    scale: [1, 1.05, 1],
-                    filter: ['brightness(1)', 'brightness(1.2)', 'brightness(1)']
-                  }}
-                  transition={{ 
-                    duration: 3, 
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                />
-                <div className="flex flex-col text-right">
-                  <h1 className="text-lg sm:text-xl font-bold text-white">הרשת החדשה</h1>
-                  <motion.p 
-                    className="text-xs sm:text-sm text-white"
-                    animate={{ opacity: [0.7, 1, 0.7] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  >
-                    7 למרץ • מיד מתחילים
-                  </motion.p>
-                </div>
-            </div>
-
-            {/* Opening Date Display with Typewriter */}
-            <motion.div 
-              className="hidden lg:flex items-center px-6 py-2 bg-gradient-to-r from-[#0080FF] via-[#0099FF] to-[#0080FF] rounded-2xl border border-[#0080FF]"
-              animate={{
-                boxShadow: [
-                  '0 0 25px rgba(0, 128, 255, 0.6)',
-                  '0 0 50px rgba(0, 128, 255, 0.8)',
-                  '0 0 25px rgba(0, 128, 255, 0.6)'
-                ]
-              }}
-              transition={{ duration: 3, repeat: Infinity }}
-            >
-              <TypewriterDate />
-            </motion.div>
-
-            <button
-              onClick={() => window.open(createPageUrl("AdminPanel"), "_blank")}
-              className="flex items-center gap-1 px-2 py-1.5 bg-gradient-to-r from-[#0080FF] to-[#0066FF] backdrop-blur-xl rounded-lg shadow-lg shadow-[#0080FF]/50 border border-[#0080FF]/50 transition-all hover:scale-105 text-[11px]"
-            >
-              <Shield className="w-4 h-4 text-white" />
-              <span className="text-white font-bold">Admin</span>
-            </button>
-
+        <div className="max-w-7xl mx-auto px-4 flex items-center justify-end gap-3 relative z-10">
           <div className="hidden sm:flex items-center gap-4">
 
 
