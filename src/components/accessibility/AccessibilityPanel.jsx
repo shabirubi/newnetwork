@@ -21,33 +21,28 @@ export default function AccessibilityPanel({ isOpen, onClose }) {
           />
           
           <motion.div
-            initial={{ y: "100%", opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: "100%", opacity: 0 }}
-            className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 rounded-t-2xl shadow-2xl z-[150] max-w-md mx-auto sm:max-w-none sm:right-6 sm:bottom-6 sm:rounded-2xl sm:top-auto"
+            initial={{ scale: 0.8, opacity: 0, y: 20 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.8, opacity: 0, y: 20 }}
+            className="fixed bottom-32 right-6 z-[150] w-80 bg-gradient-to-br from-gray-900 via-gray-800 to-black rounded-3xl shadow-2xl border-2 border-purple-500/50"
           >
             {/* Header */}
-            <div className="bg-gradient-to-r from-purple-600 to-purple-700 text-white p-4 rounded-t-2xl flex items-center justify-between sm:rounded-t-lg">
-              <div className="flex items-center gap-2">
-                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
-                </svg>
-                <h2 className="text-lg font-bold">אפשרויות נגישות</h2>
-              </div>
+            <div className="bg-gradient-to-r from-purple-600 to-purple-700 text-white p-4 rounded-t-3xl flex items-center justify-between">
+              <h2 className="text-base font-bold">נגישות</h2>
               <button
                 onClick={onClose}
                 className="p-2 hover:bg-white/20 rounded-full transition-colors"
               >
-                <X className="w-6 h-6" />
+                <X className="w-5 h-5" />
               </button>
             </div>
 
             {/* Content */}
-            <div className="p-6 space-y-6 max-h-[80vh] overflow-y-auto">
+            <div className="p-4 space-y-4 max-h-[60vh] overflow-y-auto">
               {/* Text Size */}
               <div>
-                <label className="flex items-center gap-2 text-gray-900 dark:text-white font-bold mb-3">
-                  <Type className="w-5 h-5 text-purple-600" />
+                <label className="text-white font-bold mb-2 block text-sm">
+                  <Type className="w-4 h-4 inline mr-2 text-purple-400" />
                   גודל טקסט
                 </label>
                 <div className="flex gap-2">
@@ -55,12 +50,12 @@ export default function AccessibilityPanel({ isOpen, onClose }) {
                     <button
                       key={size}
                       onClick={() => setSettings({ ...settings, textSize: size })}
-                      className={`px-4 py-2 rounded-lg font-bold transition-all ${
+                      className={`px-3 py-1.5 rounded-lg font-bold text-xs transition-all ${
                         settings.textSize === size
                           ? 'bg-purple-600 text-white shadow-lg'
-                          : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white hover:bg-gray-300'
+                          : 'bg-gray-700 text-white hover:bg-gray-600'
                       }`}
-                      style={{ fontSize: (14 * size) + 'px' }}
+                      style={{ fontSize: (12 * size) + 'px' }}
                     >
                       {Math.round(size * 100)}%
                     </button>
@@ -70,11 +65,11 @@ export default function AccessibilityPanel({ isOpen, onClose }) {
 
               {/* Contrast */}
               <div>
-                <label className="flex items-center gap-2 text-gray-900 dark:text-white font-bold mb-3">
-                  <Contrast className="w-5 h-5 text-purple-600" />
+                <label className="text-white font-bold mb-2 block text-sm">
+                  <Contrast className="w-4 h-4 inline mr-2 text-purple-400" />
                   ניגודיות
                 </label>
-                <div className="space-y-2">
+                <div className="flex gap-2">
                   {[
                     { value: 'normal', label: 'רגיל' },
                     { value: 'high', label: 'גבוה' }
@@ -82,10 +77,10 @@ export default function AccessibilityPanel({ isOpen, onClose }) {
                     <button
                       key={opt.value}
                       onClick={() => setSettings({ ...settings, contrast: opt.value })}
-                      className={`w-full px-4 py-3 rounded-lg font-bold transition-all text-right ${
+                      className={`flex-1 px-3 py-1.5 rounded-lg font-bold text-xs transition-all ${
                         settings.contrast === opt.value
                           ? 'bg-purple-600 text-white shadow-lg'
-                          : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white hover:bg-gray-300'
+                          : 'bg-gray-700 text-white hover:bg-gray-600'
                       }`}
                     >
                       {opt.label}
@@ -95,41 +90,37 @@ export default function AccessibilityPanel({ isOpen, onClose }) {
               </div>
 
               {/* Dyslexia Font */}
-              <div>
-                <button
-                  onClick={() => setSettings({ ...settings, dyslexia: !settings.dyslexia })}
-                  className={`w-full px-4 py-3 rounded-lg font-bold transition-all text-right flex items-center justify-between ${
-                    settings.dyslexia
-                      ? 'bg-purple-600 text-white shadow-lg'
-                      : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white hover:bg-gray-300'
-                  }`}
-                >
-                  <span>דיסלקסיה</span>
-                  <span className="text-xl">{settings.dyslexia ? '✓' : ''}</span>
-                </button>
-              </div>
+              <button
+                onClick={() => setSettings({ ...settings, dyslexia: !settings.dyslexia })}
+                className={`w-full px-3 py-2 rounded-lg font-bold text-xs transition-all flex items-center justify-between ${
+                  settings.dyslexia
+                    ? 'bg-purple-600 text-white shadow-lg'
+                    : 'bg-gray-700 text-white hover:bg-gray-600'
+                }`}
+              >
+                <span>דיסלקסיה</span>
+                <span>{settings.dyslexia ? '✓' : ''}</span>
+              </button>
 
               {/* Bold Text */}
-              <div>
-                <button
-                  onClick={() => setSettings({ ...settings, boldText: !settings.boldText })}
-                  className={`w-full px-4 py-3 rounded-lg font-bold transition-all text-right flex items-center justify-between ${
-                    settings.boldText
-                      ? 'bg-purple-600 text-white shadow-lg'
-                      : 'bg-gray-200 dark:bg-gray-700 text-gray-900 dark:text-white hover:bg-gray-300'
-                  }`}
-                >
-                  <span>טקסט מודגש</span>
-                  <span className="text-xl">{settings.boldText ? '✓' : ''}</span>
-                </button>
-              </div>
+              <button
+                onClick={() => setSettings({ ...settings, boldText: !settings.boldText })}
+                className={`w-full px-3 py-2 rounded-lg font-bold text-xs transition-all flex items-center justify-between ${
+                  settings.boldText
+                    ? 'bg-purple-600 text-white shadow-lg'
+                    : 'bg-gray-700 text-white hover:bg-gray-600'
+                }`}
+              >
+                <span>טקסט מודגש</span>
+                <span>{settings.boldText ? '✓' : ''}</span>
+              </button>
 
               {/* Reset Button */}
               <button
                 onClick={() => setSettings({ textSize: 1, contrast: 'normal', colorMode: 'auto', dyslexia: false, boldText: false })}
-                className="w-full px-4 py-3 rounded-lg bg-gray-300 dark:bg-gray-600 text-gray-900 dark:text-white font-bold hover:bg-gray-400 transition-all"
+                className="w-full px-3 py-2 rounded-lg bg-red-600/30 text-white font-bold text-xs hover:bg-red-600/50 transition-all"
               >
-                איפוס הגדרות
+                איפוס
               </button>
             </div>
           </motion.div>
