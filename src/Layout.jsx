@@ -344,10 +344,8 @@ export default function Layout({ children, currentPageName }) {
                 <span className="text-white font-bold">שידור חי</span>
               </Link>
             </div>
-
-
-
-
+            </div>
+          </div>
         </div>
       </div>
 
