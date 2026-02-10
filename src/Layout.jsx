@@ -345,6 +345,9 @@ export default function Layout({ children, currentPageName }) {
       {/* D-ID Live Chat */}
       <DIDLiveChat isOpen={didChatOpen} onClose={() => setDidChatOpen(false)} />
 
+      {/* Cookie Consent */}
+      <CookieConsent />
+
 
 
       {/* Main Menu Sidebar */}
