@@ -315,6 +315,13 @@ export default function Home() {
         <EntertainmentUpdatesFeed />
       </section>
 
+      {/* Zaka Media Kit */}
+      <section className="px-0 sm:px-4 mb-8">
+        <React.Suspense fallback={<Skeleton className="w-full h-96 bg-gray-800" />}>
+          <ZakaMediaKitContainer />
+        </React.Suspense>
+      </section>
+
       {/* VOD Modal */}
       <VODModal isOpen={vodModalOpen} onClose={() => setVodModalOpen(false)} />
 
