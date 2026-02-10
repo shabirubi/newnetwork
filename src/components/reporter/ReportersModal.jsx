@@ -129,7 +129,7 @@ export default function ReportersModal({ isOpen, onClose }) {
                     className="group bg-gradient-to-br from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 border border-gray-200 dark:border-gray-700 hover:border-[#E31E24] dark:hover:border-[#E31E24] cursor-pointer"
                   >
                     {/* Image */}
-                    <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800">
+                    <div className="relative aspect-square overflow-hidden bg-gradient-to-br from-[#001a4d] via-[#003d99] to-[#0080FF]">
                       <img
                         src={reporter.image}
                         alt={reporter.name}
