@@ -103,14 +103,14 @@ export default function ReportersTickerStrip() {
               onMouseLeave={() => setHoveredReporter(null)}
               onTouchStart={() => setHoveredReporter(reporter.id)}
               onTouchEnd={() => setHoveredReporter(null)}
-              className="flex-shrink-0 flex flex-col items-center gap-1 p-2 bg-black/50 rounded-lg border border-[#E31E24]/40 hover:border-[#E31E24]/80 hover:bg-[#E31E24]/10 transition-all cursor-pointer group shadow-md"
+              className="flex-shrink-0 flex flex-col items-center gap-1 p-2 bg-black/50 rounded-lg border border-[#0080FF]/40 hover:border-[#0080FF]/80 hover:bg-[#0080FF]/10 transition-all cursor-pointer group shadow-md"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
               <img
                 src={reporter.image}
                 alt={reporter.name}
-                className="w-16 h-16 sm:w-16 sm:h-16 rounded-lg object-cover border border-[#E31E24]/30 shadow-lg reporter-ticker-image-animate"
+                className="w-16 h-16 sm:w-16 sm:h-16 rounded-lg object-cover border border-[#0080FF]/30 shadow-lg reporter-ticker-image-animate"
                 style={{ 
                   display: 'block', 
                   minWidth: '64px', 
