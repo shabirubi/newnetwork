@@ -67,7 +67,7 @@ export default function NewsTicker({ darkMode, setDarkMode, onMenuClick }) {
   return (
     <div className="bg-gradient-to-r from-black via-[#0080FF]/30 to-black border-b-2 border-[#0080FF]/50 backdrop-blur-xl shadow-xl shadow-[#0080FF]/30 relative overflow-hidden z-[37] text-white w-full">
       {/* Breaking News Strip */}
-      <div className="flex items-center gap-1 sm:gap-2 px-0 py-1 w-full">
+      <div className="flex items-center gap-1 sm:gap-3 px-0 py-3 w-full">
         {/* Menu Button - Right Side */}
         <button
           onClick={onMenuClick}
@@ -220,9 +220,9 @@ function TickerContent({ news, currencies }) {
 
   return (
     <motion.div
-      className="flex whitespace-nowrap text-[11px] sm:text-xs pointer-events-none items-center font-bold"
-      animate={{ x: `-${(news.length * 250 + currencies.length * 200 + updates.length * 300)}px` }}
-      transition={{ duration: (news.length + currencies.length + updates.length) * 2.5, repeat: Infinity, ease: "linear" }}
+      className="flex whitespace-nowrap text-sm sm:text-lg pointer-events-none items-center font-bold"
+      animate={{ x: `-${(news.length * 350 + currencies.length * 280 + updates.length * 400)}px` }}
+      transition={{ duration: (news.length + currencies.length + updates.length) * 3, repeat: Infinity, ease: "linear" }}
     >
       {[...news, ...news, ...news].map((item, index) => {
         const colors = ['text-[#E31E24]', 'text-yellow-400', 'text-white', 'text-blue-400', 'text-red-400'];
@@ -230,7 +230,7 @@ function TickerContent({ news, currencies }) {
         return (
           <span 
             key={`news-${index}`} 
-            className={`mx-3 sm:mx-6 ${colorClass} font-bold`}
+            className={`mx-8 sm:mx-16 ${colorClass} font-bold`}
           >
             • {item}
           </span>
