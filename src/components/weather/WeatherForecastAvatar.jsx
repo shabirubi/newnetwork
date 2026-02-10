@@ -152,19 +152,19 @@ export default function WeatherForecastAvatar() {
           </div>
 
           {/* Input Area */}
-          <div className="border-t border-[#0080FF]/40 p-4 space-y-2 bg-black/30">
+          <div className="border-t border-[#0080FF]/40 p-3 bg-gradient-to-b from-black/40 to-black/60 space-y-2">
             <div className="flex gap-2">
               <Input
                 value={inputMessage}
                 onChange={(e) => setInputMessage(e.target.value)}
                 onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
-                placeholder="שאל את הכתבים..."
-                className="bg-black/60 border-[#0080FF]/40 text-white placeholder:text-white/50"
+                placeholder="שאל שאלה..."
+                className="bg-[#0033CC]/40 border-[#0080FF]/50 text-white placeholder:text-white/40 text-sm"
               />
               <Button
                 onClick={handleSendMessage}
                 disabled={isLoading || !inputMessage.trim()}
-                className="bg-gradient-to-r from-[#0080FF] to-[#00D4FF] hover:from-[#00D4FF] hover:to-[#0080FF] text-white shadow-lg shadow-[#0080FF]/50"
+                className="bg-gradient-to-r from-[#0080FF] to-[#00D4FF] hover:from-[#00D4FF] hover:to-[#0080FF] text-white shadow-lg shadow-[#0080FF]/50 px-3"
               >
                 <Send className="w-4 h-4" />
               </Button>
