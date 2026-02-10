@@ -42,7 +42,7 @@ export default function TrendingTopicsContainer() {
     <section className="px-4 sm:px-4 mt-8">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2">
-          <TrendingUp className="w-6 h-6 text-[#E31E24]" />
+          <TrendingUp className="w-6 h-6 text-[#0080FF]" />
           <h2 className="text-2xl font-bold dark:text-white">טרנדים עכשיו</h2>
         </div>
       </div>
@@ -58,9 +58,9 @@ export default function TrendingTopicsContainer() {
             whileHover={{ scale: 1.05 }}
             className="relative group"
           >
-            <div className="bg-gradient-to-br from-black/80 via-[#E31E24]/30 to-black/80 backdrop-blur-sm rounded-xl p-4 border-2 border-[#E31E24]/40 hover:border-[#E31E24]/80 transition-all h-full flex flex-col justify-between"
+            <div className="bg-gradient-to-br from-black/80 via-[#0080FF]/30 to-black/80 backdrop-blur-sm rounded-xl p-4 border-2 border-[#0080FF]/40 hover:border-[#0080FF]/80 transition-all h-full flex flex-col justify-between"
               style={{
-                boxShadow: '0 0 15px rgba(227, 30, 36, 0.3), inset 0 0 15px rgba(227, 30, 36, 0.1)'
+                boxShadow: '0 0 15px rgba(0, 128, 255, 0.3), inset 0 0 15px rgba(0, 128, 255, 0.1)'
               }}
             >
               {/* Header */}
@@ -71,9 +71,9 @@ export default function TrendingTopicsContainer() {
               </div>
 
               {/* Stats */}
-              <div className="flex items-end justify-between pt-4 border-t border-[#E31E24]/30">
+              <div className="flex items-end justify-between pt-4 border-t border-[#0080FF]/30">
                 <div>
-                  <div className="text-[#E31E24] font-bold text-2xl">{item.count}</div>
+                  <div className="text-[#0080FF] font-bold text-2xl">{item.count}</div>
                   <div className="text-gray-400 text-xs">כתבות</div>
                 </div>
                 <Flame className="w-5 h-5 text-orange-500 animate-pulse" />

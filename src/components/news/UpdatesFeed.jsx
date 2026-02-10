@@ -33,7 +33,7 @@ export default function UpdatesFeed() {
       {/* Header */}
       <div className="p-4 pb-3">
         <h2 className="font-bold text-lg text-white flex items-center gap-2">
-          <Flame className="w-5 h-5 text-[#E31E24]" />
+          <Flame className="w-5 h-5 text-[#0080FF]" />
           עדכונים חמים
         </h2>
       </div>
@@ -133,8 +133,8 @@ export default function UpdatesFeed() {
                     />
                     {article.is_breaking && (
                       <div className="absolute -top-1 -right-1 w-3 h-3">
-                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E31E24] opacity-75"></span>
-                        <span className="relative inline-flex rounded-full h-3 w-3 bg-[#E31E24]"></span>
+                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#0080FF] opacity-75"></span>
+                        <span className="relative inline-flex rounded-full h-3 w-3 bg-[#0080FF]"></span>
                       </div>
                     )}
                     <div className="absolute top-2 right-2 bg-black/70 backdrop-blur-sm text-white text-[9px] font-bold px-2 py-1 rounded-full flex items-center gap-1">
@@ -144,7 +144,7 @@ export default function UpdatesFeed() {
                   </div>
                 )}
                 <div>
-                  <p className="text-xs text-white font-bold line-clamp-2 leading-snug mb-1.5 group-hover:text-[#E31E24] transition-colors">
+                  <p className="text-xs text-white font-bold line-clamp-2 leading-snug mb-1.5 group-hover:text-[#0080FF] transition-colors">
                     {article.title}
                   </p>
                   {article.subtitle && (
@@ -172,7 +172,7 @@ export default function UpdatesFeed() {
       {/* Footer */}
       <Link 
         to={createPageUrl("Category?cat=breaking")}
-        className="block p-3 text-center hover:text-[#E31E24] transition-colors border-t border-gray-800 mt-2"
+        className="block p-3 text-center hover:text-[#0080FF] transition-colors border-t border-gray-800 mt-2"
       >
         <span className="text-gray-300 font-bold text-sm">לכל החדשות החמות →</span>
       </Link>

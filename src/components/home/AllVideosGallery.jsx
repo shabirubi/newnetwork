@@ -7,7 +7,7 @@ import moment from "moment";
 import VideoShareButtons from "../shared/VideoShareButtons";
 
 const VideoSkeleton = () => (
-  <div className="group cursor-pointer bg-gradient-to-br from-black/80 via-[#E31E24]/20 to-black/80 backdrop-blur-sm rounded-xl overflow-hidden border-2 border-[#E31E24]/40" style={{ boxShadow: '0 0 20px rgba(227, 30, 36, 0.3)' }}>
+  <div className="group cursor-pointer bg-gradient-to-br from-black/80 via-[#0080FF]/20 to-black/80 backdrop-blur-sm rounded-xl overflow-hidden border-2 border-[#0080FF]/40" style={{ boxShadow: '0 0 20px rgba(0, 128, 255, 0.3)' }}>
     <div className="relative aspect-video bg-gradient-to-br from-gray-800 to-gray-900 animate-pulse"></div>
     <div className="p-4 space-y-3">
       <div className="h-4 bg-gray-800 rounded animate-pulse"></div>
@@ -53,7 +53,7 @@ export default function AllVideosGallery() {
     <section className="px-4 sm:px-4 mt-12 mb-12">
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-2">
-          <Film className="w-6 h-6 text-[#E31E24]" />
+          <Film className="w-6 h-6 text-[#0080FF]" />
           <h2 className="text-3xl font-bold text-white">גלריית וידאו מלאה</h2>
         </div>
         <div className="text-gray-400 text-sm">
@@ -74,9 +74,9 @@ export default function AllVideosGallery() {
             transition={{ delay: idx * 0.05 }}
             whileHover={{ y: -5 }}
             onClick={() => setSelectedVideo(video)}
-            className="group cursor-pointer bg-gradient-to-br from-black/80 via-[#E31E24]/20 to-black/80 backdrop-blur-sm rounded-xl overflow-hidden border-2 border-[#E31E24]/40 hover:border-[#E31E24]/80 transition-all"
+            className="group cursor-pointer bg-gradient-to-br from-black/80 via-[#0080FF]/20 to-black/80 backdrop-blur-sm rounded-xl overflow-hidden border-2 border-[#0080FF]/40 hover:border-[#0080FF]/80 transition-all"
             style={{
-              boxShadow: '0 0 20px rgba(227, 30, 36, 0.3), inset 0 0 20px rgba(227, 30, 36, 0.1)'
+              boxShadow: '0 0 20px rgba(0, 128, 255, 0.3), inset 0 0 20px rgba(0, 128, 255, 0.1)'
             }}
           >
             {/* Thumbnail */}
@@ -98,7 +98,7 @@ export default function AllVideosGallery() {
               
               {/* Play Overlay */}
               <div className="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                <div className="w-16 h-16 rounded-full bg-[#E31E24] flex items-center justify-center">
+                <div className="w-16 h-16 rounded-full bg-[#0080FF] flex items-center justify-center">
                   <Play className="w-8 h-8 text-white mr-1" fill="white" />
                 </div>
               </div>
@@ -111,7 +111,7 @@ export default function AllVideosGallery() {
                     YouTube
                   </div>
                 ) : (
-                  <div className="bg-[#E31E24] text-white px-2 py-1 rounded-md text-xs font-bold">
+                  <div className="bg-[#0080FF] text-white px-2 py-1 rounded-md text-xs font-bold">
                     משתמש
                   </div>
                 )}
@@ -120,7 +120,7 @@ export default function AllVideosGallery() {
 
             {/* Info */}
             <div className="p-4">
-              <h3 className="text-white font-bold text-sm line-clamp-2 mb-2 group-hover:text-[#E31E24] transition-colors">
+              <h3 className="text-white font-bold text-sm line-clamp-2 mb-2 group-hover:text-[#0080FF] transition-colors">
                 {video.title}
               </h3>
               
@@ -162,15 +162,15 @@ export default function AllVideosGallery() {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.8, opacity: 0 }}
               onClick={(e) => e.stopPropagation()}
-              className="relative bg-black rounded-2xl overflow-hidden max-w-5xl w-full border-2 border-[#E31E24]/40"
+              className="relative bg-black rounded-2xl overflow-hidden max-w-5xl w-full border-2 border-[#0080FF]/40"
               style={{
-                boxShadow: '0 0 60px rgba(227, 30, 36, 0.5)'
+                boxShadow: '0 0 60px rgba(0, 128, 255, 0.5)'
               }}
             >
               {/* Close Button */}
               <button
                 onClick={() => setSelectedVideo(null)}
-                className="absolute top-4 right-4 z-10 bg-black/60 backdrop-blur-sm text-white p-2 rounded-full hover:bg-[#E31E24] transition-all border-2 border-[#E31E24]/40"
+                className="absolute top-4 right-4 z-10 bg-black/60 backdrop-blur-sm text-white p-2 rounded-full hover:bg-[#0080FF] transition-all border-2 border-[#0080FF]/40"
               >
                 <X className="w-6 h-6" />
               </button>
@@ -214,7 +214,7 @@ export default function AllVideosGallery() {
                           animate={{ rotate: 360 }}
                           transition={{ duration: 1, repeat: Infinity, ease: 'linear' }}
                         >
-                          <Loader className="w-8 h-8 text-[#E31E24]" />
+                          <Loader className="w-8 h-8 text-[#0080FF]" />
                         </motion.div>
                         <p className="text-white font-bold text-lg">טוען...</p>
                       </div>
@@ -224,7 +224,7 @@ export default function AllVideosGallery() {
               </div>
 
               {/* Video Info */}
-              <div className="p-6 bg-gradient-to-br from-black/80 via-[#E31E24]/20 to-black/80">
+              <div className="p-6 bg-gradient-to-br from-black/80 via-[#0080FF]/20 to-black/80">
                 <h2 className="text-white text-2xl font-bold mb-2">{selectedVideo.title}</h2>
                 <div className="flex items-center justify-between mb-4">
                   <div className="flex items-center gap-4 text-gray-400 text-sm">
@@ -244,7 +244,7 @@ export default function AllVideosGallery() {
                         YouTube
                       </div>
                     ) : (
-                      <div className="bg-[#E31E24] text-white px-3 py-1 rounded-full text-xs font-bold">
+                      <div className="bg-[#0080FF] text-white px-3 py-1 rounded-full text-xs font-bold">
                         הועלה ע"י משתמש
                       </div>
                     )}
@@ -258,8 +258,8 @@ export default function AllVideosGallery() {
       </AnimatePresence>
 
       {allVideos.length === 0 && (
-        <div className="bg-gradient-to-br from-black/80 via-[#E31E24]/20 to-black/80 backdrop-blur-sm rounded-xl p-12 text-center border-2 border-[#E31E24]/40">
-          <Film className="w-16 h-16 text-[#E31E24] mx-auto mb-4" />
+        <div className="bg-gradient-to-br from-black/80 via-[#0080FF]/20 to-black/80 backdrop-blur-sm rounded-xl p-12 text-center border-2 border-[#0080FF]/40">
+          <Film className="w-16 h-16 text-[#0080FF] mx-auto mb-4" />
           <p className="text-gray-400 text-lg">אין סרטונים זמינים כרגע</p>
         </div>
       )}
