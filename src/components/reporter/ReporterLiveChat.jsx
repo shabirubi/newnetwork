@@ -218,35 +218,34 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
             boxShadow: '0 0 60px rgba(0, 128, 255, 0.5)'
           }}
         >
-          {/* Branded Header */}
-          <div className="bg-gradient-to-r from-black via-[#0080FF]/30 to-black p-4 flex items-center justify-between shrink-0 border-b-2 border-[#0080FF]/50"
+          {/* Branded Header with Logo */}
+          <div className="bg-black p-4 flex items-center justify-between shrink-0 border-b-2 border-[#0080FF]/50"
             style={{
-              boxShadow: '0 4px 20px rgba(0, 128, 255, 0.3)'
+              boxShadow: '0 4px 30px rgba(0, 128, 255, 0.4)'
             }}
           >
-            <div className="flex items-center gap-4">
-              <motion.img 
-                src={LOGO_URL}
-                alt="הרשת החדשה"
-                className="h-14 w-auto drop-shadow-2xl"
-                animate={{ 
-                  scale: [1, 1.05, 1]
-                }}
-                transition={{ 
-                  duration: 2, 
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-              />
-              <div>
-                <div className="text-white font-bold text-xl">{reporter.name}</div>
-                <div className="text-[#0080FF] font-semibold text-sm flex items-center gap-2">
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#0080FF] opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-[#0080FF]"></span>
-                  </span>
-                  {isLoading ? 'מכין את האווטאר...' : 'צ\'אט חי'}
-                </div>
+            <motion.img 
+              src={LOGO_URL}
+              alt="הרשת החדשה"
+              className="h-16 w-auto drop-shadow-2xl"
+              animate={{ 
+                scale: [1, 1.05, 1],
+                filter: ['brightness(1)', 'brightness(1.2)', 'brightness(1)']
+              }}
+              transition={{ 
+                duration: 3, 
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
+            />
+            <div className="text-right flex-1 px-4">
+              <div className="text-white font-bold text-xl drop-shadow-lg">{reporter.name}</div>
+              <div className="text-[#0080FF] font-bold text-sm flex items-center justify-end gap-2" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#0080FF] opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-[#0080FF]"></span>
+                </span>
+                {isLoading ? 'מכין אווטר חי...' : 'צ\'אט חי עם אווטר AI'}
               </div>
             </div>
             <button
@@ -336,10 +335,25 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
             </div>
           </div>
 
-          {/* Chat Input */}
-          <div className="bg-gradient-to-t from-black via-black/95 to-black/80 backdrop-blur-xl p-4 border-t-2 border-[#0080FF]/50 safe-area-inset-bottom"
+          {/* Branded Footer with Live Indicator */}
+          <div className="bg-black p-4 border-t-2 border-[#0080FF]/50 flex items-center justify-center"
             style={{
-              boxShadow: '0 -4px 20px rgba(0, 128, 255, 0.3)'
+              boxShadow: '0 -4px 30px rgba(0, 128, 255, 0.4)'
+            }}
+          >
+            <div className="flex items-center gap-2 bg-[#0080FF]/20 backdrop-blur-sm px-4 py-2 rounded-full border-2 border-[#0080FF]/50">
+              <span className="relative flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#0080FF] opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-[#0080FF]"></span>
+              </span>
+              <span className="text-white font-bold">שיחה חיה עם {reporter.name}</span>
+            </div>
+          </div>
+
+          {/* Chat Input */}
+          <div className="bg-black p-4 border-t border-[#0080FF]/30 safe-area-inset-bottom"
+            style={{
+              boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.8)'
             }}
           >
             <div className="max-w-4xl mx-auto">
