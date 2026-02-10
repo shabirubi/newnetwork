@@ -18,6 +18,8 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
     }
   }, [isOpen]);
 
+  if (!isOpen || !reporter) return null;
+
   // Map reporters to their specific D-ID agents
   const reporterAgents = {
     'עדי': "https://studio.d-id.com/agents/share?id=v2_agt_DMY3wZsg&utm_source=copy&key=WjI5dloyeGxMVzloZFhSb01ud3hNRGt3TlRBd01qRTROall3TURjMU9ESTBPVFk2TVVsNFJ6Tk5kelJMWmtSWFZHVTNUREJmTjNkMw==",
@@ -27,8 +29,6 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
 
   // Get agent URL for current reporter, fallback to Adi's agent if not found
   const agentUrl = reporterAgents[reporter.name] || reporterAgents['עדי'];
-
-  if (!isOpen || !reporter) return null;
 
   return (
     <AnimatePresence>
