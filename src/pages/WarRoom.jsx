@@ -273,7 +273,7 @@ export default function WarRoom() {
             {articles.length === 0 ? (
               <div className="p-6 text-center text-gray-500">
                 <Loader2 size={32} className="mx-auto mb-2 animate-spin" />
-                <p>טוען עדכוני חדשות...</p>
+                <p>טוען דיווחים בזמן אמת...</p>
               </div>
             ) : (
               articles.map((article, index) => (
