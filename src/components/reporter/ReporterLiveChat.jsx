@@ -118,14 +118,8 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
           <div className="flex-1 flex overflow-hidden">
             {/* Avatar Section - Focused & Branded */}
             <div className="flex-1 relative">
-              {/* Decorative Frame Corners */}
-              <div className="absolute top-0 left-0 w-20 h-20 border-t-4 border-l-4 border-[#0080FF] rounded-tl-2xl z-10 pointer-events-none"></div>
-              <div className="absolute top-0 right-0 w-20 h-20 border-t-4 border-r-4 border-[#0080FF] rounded-tr-2xl z-10 pointer-events-none"></div>
-              <div className="absolute bottom-0 left-0 w-20 h-20 border-b-4 border-l-4 border-[#0080FF] rounded-bl-2xl z-10 pointer-events-none"></div>
-              <div className="absolute bottom-0 right-0 w-20 h-20 border-b-4 border-r-4 border-[#0080FF] rounded-br-2xl z-10 pointer-events-none"></div>
-
-              {/* Avatar Label Top */}
-              <div className="absolute top-8 left-1/2 -translate-x-1/2 z-10 bg-gradient-to-r from-[#0080FF] to-[#0066FF] px-6 py-2 rounded-full border-2 border-white/20 shadow-xl">
+              {/* Avatar Label Top Left */}
+              <div className="absolute top-8 left-8 z-10 bg-gradient-to-r from-[#0080FF] to-[#0066FF] px-6 py-2 rounded-full border-2 border-white/20 shadow-xl">
                 <div className="flex items-center gap-2">
                   <span className="relative flex h-2 w-2">
                     <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
@@ -211,7 +205,23 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
 
               {/* Input Area */}
               <div className="p-4 bg-gradient-to-t from-black to-transparent border-t-2 border-[#0080FF]/30">
-                <div className="flex gap-2">
+                <div className="flex gap-2 mb-3">
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="bg-gray-900 border-[#0080FF]/30 hover:bg-[#0080FF]/20 text-white rounded-xl"
+                    title="הקלטה קולית"
+                  >
+                    <Mic className="w-4 h-4" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="icon"
+                    className="bg-gray-900 border-[#0080FF]/30 hover:bg-[#0080FF]/20 text-white rounded-xl"
+                    title="אמוג'י"
+                  >
+                    😊
+                  </Button>
                   <Input
                     value={inputMessage}
                     onChange={(e) => setInputMessage(e.target.value)}
@@ -227,7 +237,7 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
                     <Send className="w-4 h-4" />
                   </Button>
                 </div>
-                <p className="text-xs text-gray-500 mt-2 text-center">ההודעות נשלחות לאווטר בזמן אמת</p>
+                <p className="text-xs text-gray-500 text-center">ההודעות נשלחות לאווטר בזמן אמת</p>
               </div>
             </div>
           </div>
@@ -245,7 +255,7 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
               />
               <span className="text-[#0080FF] font-bold">הרשת החדשה</span>
               <span className="text-gray-600">•</span>
-              <span className="text-gray-400 text-xs">Powered by D-ID</span>
+              <span className="text-gray-400 text-xs">Powered by Digital Dreams</span>
             </div>
           </div>
         </motion.div>
