@@ -460,6 +460,32 @@ export default function Layout({ children, currentPageName }) {
                   )}
 
                   <a
+                    href={createPageUrl("VideoCreator")}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => setMenuSidebarOpen(false)}
+                    className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#E31E24]/20 active:bg-[#E31E24]/40 transition-all border border-transparent hover:border-[#E31E24]/30 animate-pulse"
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-black/40 border border-green-500/20 flex items-center justify-center">
+                      <Sparkles size={20} className="text-green-500" />
+                    </div>
+                    <span className="flex-1 font-medium text-green-300">יוצר AI</span>
+                    <ChevronLeft size={18} className="text-green-500" />
+                  </a>
+
+                  <Link
+                    to={createPageUrl("VideoEditor")}
+                    onClick={() => setMenuSidebarOpen(false)}
+                    className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#E31E24]/20 active:bg-[#E31E24]/40 transition-all border border-transparent hover:border-[#E31E24]/30"
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-black/40 border border-[#E31E24]/20 flex items-center justify-center">
+                      <Film size={20} className="text-[#E31E24]" />
+                    </div>
+                    <span className="flex-1 font-medium">עורך מתקדם</span>
+                    <ChevronLeft size={18} className="text-[#E31E24]" />
+                  </Link>
+
+                  <a
                     href={createPageUrl("LumaStudio")}
                     target="_blank"
                     rel="noopener noreferrer"
@@ -469,7 +495,7 @@ export default function Layout({ children, currentPageName }) {
                     <div className="w-10 h-10 rounded-xl bg-black/40 border border-[#E31E24]/20 flex items-center justify-center">
                       <Clapperboard size={20} className="text-[#E31E24]" />
                     </div>
-                    <span className="flex-1 font-medium">ייצור</span>
+                    <span className="flex-1 font-medium">Luma AI</span>
                     <ChevronLeft size={18} className="text-[#E31E24]" />
                   </a>
 
@@ -483,20 +509,20 @@ export default function Layout({ children, currentPageName }) {
                     <div className="w-10 h-10 rounded-xl bg-black/40 border border-purple-500/20 flex items-center justify-center">
                       <Film size={20} className="text-purple-500" />
                     </div>
-                    <span className="flex-1 font-medium">ToMoviee Studio</span>
+                    <span className="flex-1 font-medium">ToMoviee</span>
                     <ChevronLeft size={18} className="text-purple-500" />
                   </a>
 
                   <Link
-                    to={createPageUrl("VideoEditor")}
+                    to={createPageUrl("AIDesignStudio")}
                     onClick={() => setMenuSidebarOpen(false)}
                     className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#E31E24]/20 active:bg-[#E31E24]/40 transition-all border border-transparent hover:border-[#E31E24]/30"
                   >
-                    <div className="w-10 h-10 rounded-xl bg-black/40 border border-[#E31E24]/20 flex items-center justify-center">
-                      <Film size={20} className="text-[#E31E24]" />
+                    <div className="w-10 h-10 rounded-xl bg-black/40 border border-pink-500/20 flex items-center justify-center">
+                      <Sparkles size={20} className="text-pink-500" />
                     </div>
-                    <span className="flex-1 font-medium">עורך</span>
-                    <ChevronLeft size={18} className="text-[#E31E24]" />
+                    <span className="flex-1 font-medium">AI Design</span>
+                    <ChevronLeft size={18} className="text-pink-500" />
                   </Link>
                 </div>
               </motion.nav>
