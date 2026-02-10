@@ -52,12 +52,12 @@ function TypewriterDate() {
 
   return (
     <div className="flex items-center gap-2">
-      <div className="text-sm md:text-base font-bold text-[#0080FF] tracking-wide font-mono drop-shadow-[0_0_10px_#0080FF]">
+      <div className="text-sm md:text-base font-bold text-white tracking-wide font-mono">
         {displayText}
         <motion.span
           animate={{ opacity: [1, 0] }}
           transition={{ duration: 0.6, repeat: Infinity }}
-          className="ml-1 text-[#0080FF]"
+          className="ml-1 text-white"
         >
           |
         </motion.span>
@@ -250,9 +250,9 @@ export default function Layout({ children, currentPageName }) {
                   }}
                 />
                 <div className="flex flex-col text-right">
-                  <h1 className="text-lg sm:text-xl font-bold text-[#0080FF] drop-shadow-[0_0_8px_#0080FF]">הרשת החדשה</h1>
+                  <h1 className="text-lg sm:text-xl font-bold text-white">הרשת החדשה</h1>
                   <motion.p 
-                    className="text-xs sm:text-sm text-[#0080FF] drop-shadow-[0_0_6px_#0080FF]"
+                    className="text-xs sm:text-sm text-white"
                     animate={{ opacity: [0.7, 1, 0.7] }}
                     transition={{ duration: 2, repeat: Infinity }}
                   >
@@ -263,12 +263,12 @@ export default function Layout({ children, currentPageName }) {
 
             {/* Opening Date Display with Typewriter */}
             <motion.div 
-              className="hidden lg:flex items-center px-6 py-2 bg-gradient-to-r from-[#00D4FF]/30 via-[#0099FF]/20 to-[#00D4FF]/20 rounded-2xl border border-[#00D4FF]/50"
+              className="hidden lg:flex items-center px-6 py-2 bg-gradient-to-r from-[#0080FF] via-[#0099FF] to-[#0080FF] rounded-2xl border border-[#0080FF]"
               animate={{
                 boxShadow: [
-                  '0 0 20px rgba(0, 212, 255, 0.3)',
-                  '0 0 40px rgba(0, 212, 255, 0.5)',
-                  '0 0 20px rgba(0, 212, 255, 0.3)'
+                  '0 0 25px rgba(0, 128, 255, 0.6)',
+                  '0 0 50px rgba(0, 128, 255, 0.8)',
+                  '0 0 25px rgba(0, 128, 255, 0.6)'
                 ]
               }}
               transition={{ duration: 3, repeat: Infinity }}
