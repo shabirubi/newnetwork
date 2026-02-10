@@ -121,7 +121,7 @@ export default function CookieConsent() {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={handleReject}
-                  className="flex-1 px-6 py-3 rounded-xl bg-[#0080FF]/20 hover:bg-[#0080FF]/40 text-white font-semibold transition-all border border-[#0080FF]/40 hover:border-[#0080FF]/60 backdrop-blur-sm"
+                  className="flex-1 px-6 py-3 rounded-xl bg-[#00D4FF]/20 hover:bg-[#00D4FF]/40 text-white font-semibold transition-all border border-[#00D4FF]/40 hover:border-[#00D4FF]/60"
                 >
                   דחה
                 </motion.button>
@@ -129,11 +129,12 @@ export default function CookieConsent() {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   onClick={handleAccept}
-                  className="flex-1 px-6 py-3 rounded-xl bg-[#0080FF]/80 hover:bg-[#0080FF] text-white font-bold transition-all shadow-lg shadow-[#0080FF]/40 hover:shadow-xl flex items-center justify-center gap-2 backdrop-blur-sm border border-[#0080FF]/50"
+                  className="flex-1 px-6 py-3 rounded-xl bg-[#00D4FF]/80 hover:bg-[#00D4FF] text-white font-bold transition-all shadow-lg shadow-[#00D4FF]/40 hover:shadow-xl flex items-center justify-center gap-2 border border-[#00D4FF]/50"
                 >
                   <Check className="w-5 h-5" />
                   אני מסכים
                 </motion.button>
+              </div>
               </div>
             </div>
           </motion.div>
