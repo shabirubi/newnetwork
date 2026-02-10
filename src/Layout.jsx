@@ -205,6 +205,7 @@ export default function Layout({ children, currentPageName }) {
               <Shield className="w-4 h-4 text-white" />
               <span className="text-white font-bold">Admin</span>
             </button>
+          </div>
           
           <div className="hidden sm:flex items-center gap-2">
             {/* Auth Buttons */}
