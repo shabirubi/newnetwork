@@ -155,9 +155,9 @@ export default function Home() {
           <div className="absolute inset-0 flex flex-col justify-end p-6 sm:p-10 lg:p-16">
             <div className="space-y-6 max-w-4xl">
               {/* Badge */}
-              <div className="inline-flex w-fit bg-[#E31E24] text-white px-5 py-2 rounded-full font-bold text-base">
-                📈 כלכלה ופיננסים
-              </div>
+              <div className="inline-flex w-fit bg-gradient-to-r from-[#A855F7] to-[#EC4899] text-white px-5 py-2 rounded-full font-bold text-base">
+                  📈 כלכלה ופיננסים
+                </div>
 
               {/* Title */}
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight drop-shadow-2xl">
@@ -220,13 +220,13 @@ export default function Home() {
       {!showLivePlayer && (
         <section className="px-4 sm:px-4 mt-4">
           <motion.button
-            onClick={() => setShowLivePlayer(true)}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            className="w-full bg-gradient-to-r from-[#E31E24] to-[#B91C1C] hover:from-[#B91C1C] hover:to-[#991818] text-white py-4 rounded-xl shadow-lg flex items-center justify-center gap-3 font-bold text-lg transition-all"
+          onClick={() => setShowLivePlayer(true)}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className="w-full bg-gradient-to-r from-[#A855F7] via-[#EC4899] to-[#7C3AED] hover:from-[#7C3AED] hover:to-[#A855F7] text-white py-4 rounded-xl shadow-lg flex items-center justify-center gap-3 font-bold text-lg transition-all"
           >
-            <Radio className="w-6 h-6" />
-            הפעל שידור חי
+          <Radio className="w-6 h-6" />
+          הפעל שידור חי
           </motion.button>
         </section>
       )}

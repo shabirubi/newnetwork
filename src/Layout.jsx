@@ -134,9 +134,11 @@ export default function Layout({ children, currentPageName }) {
     <div className="min-h-screen bg-black transition-colors duration-300 flex flex-col overflow-x-hidden" dir="rtl">
       <style>{`
         :root {
-          --primary: #E31E24;
-          --primary-dark: #B91C1C;
-          --primary-light: #FEE2E2;
+          --primary: #A855F7;
+          --primary-dark: #7C3AED;
+          --primary-light: #F3E8FF;
+          --accent: #EC4899;
+          --accent-dark: #BE185D;
         }
 
         /* Hide scrollbars */
@@ -164,9 +166,9 @@ export default function Layout({ children, currentPageName }) {
         }
       `}</style>
 
-      {/* Animated Red Line */}
+      {/* Animated Purple Line */}
       <div className="fixed top-0 left-0 right-0 h-1.5 bg-transparent overflow-hidden z-[35] pointer-events-none">
-        <div className="absolute top-0 h-full w-32 bg-[#E31E24] animate-[slideRight_3s_ease-in-out_infinite]"></div>
+        <div className="absolute top-0 h-full w-32 bg-gradient-to-r from-[#A855F7] via-[#EC4899] to-[#7C3AED] animate-[slideRight_3s_ease-in-out_infinite]"></div>
       </div>
 
       {/* Logo Header */}
@@ -199,7 +201,7 @@ export default function Layout({ children, currentPageName }) {
             </div>
             <button
               onClick={() => window.open(createPageUrl("AdminPanel"), "_blank")}
-              className="flex items-center gap-1 px-2 py-1.5 bg-gradient-to-r from-orange-600 to-orange-700 backdrop-blur-xl rounded-lg shadow-lg border border-orange-400/30 transition-all hover:scale-105 text-[11px] ml-2"
+              className="flex items-center gap-1 px-2 py-1.5 bg-gradient-to-r from-[#A855F7] to-[#7C3AED] backdrop-blur-xl rounded-lg shadow-lg border border-purple-400/30 transition-all hover:scale-105 text-[11px] ml-2"
             >
               <Shield className="w-4 h-4 text-white" />
               <span className="text-white font-bold">Admin</span>
@@ -256,11 +258,11 @@ export default function Layout({ children, currentPageName }) {
 
               <Link 
                 to={createPageUrl("Live")}
-              className="flex items-center gap-1 px-2 py-1 bg-gradient-to-r from-[#E31E24] to-[#B91C1C] backdrop-blur-xl rounded-lg shadow-lg border border-white/20 transition-all hover:scale-105 animate-pulse text-[11px]"
-            >
+              className="flex items-center gap-1 px-2 py-1 bg-gradient-to-r from-[#A855F7] to-[#EC4899] backdrop-blur-xl rounded-lg shadow-lg border border-white/20 transition-all hover:scale-105 animate-pulse text-[11px]"
+              >
               <Radio className="w-4 h-4 text-white" />
               <span className="text-white font-bold">שידור חי</span>
-            </Link>
+              </Link>
 
 
             </div>
@@ -338,12 +340,12 @@ export default function Layout({ children, currentPageName }) {
                 transition={{ type: "spring", damping: 25, stiffness: 200 }}
                 className="absolute right-0 top-0 bottom-0 w-80 bg-black/90 backdrop-blur-xl border-l border-[#E31E24]/30 shadow-2xl shadow-[#E31E24]/20 overflow-y-auto"
               >
-                <div className="sticky top-0 bg-gradient-to-br from-black via-[#E31E24]/20 to-black p-4 shadow-lg border-b border-[#E31E24]/30">
+                <div className="sticky top-0 bg-gradient-to-br from-black via-[#A855F7]/20 to-black p-4 shadow-lg border-b border-[#A855F7]/30">
                   <div className="flex items-center justify-between">
                     <h2 className="text-white font-bold text-xl">תפריט ראשי</h2>
                     <button
                       onClick={() => setMenuSidebarOpen(false)}
-                      className="p-2 rounded-full bg-[#E31E24]/20 hover:bg-[#E31E24]/40 text-white active:scale-95 transition-all"
+                      className="p-2 rounded-full bg-[#A855F7]/20 hover:bg-[#A855F7]/40 text-white active:scale-95 transition-all"
                     >
                       <X size={22} />
                     </button>
@@ -356,13 +358,13 @@ export default function Layout({ children, currentPageName }) {
                       setReportersModalOpen(true);
                       setMenuSidebarOpen(false);
                     }}
-                    className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#E31E24]/20 active:bg-[#E31E24]/40 transition-all border border-transparent hover:border-[#E31E24]/30 w-full"
+                    className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#A855F7]/20 active:bg-[#A855F7]/40 transition-all border border-transparent hover:border-[#A855F7]/30 w-full"
                   >
-                    <div className="w-10 h-10 rounded-xl bg-black/40 border border-[#E31E24]/20 flex items-center justify-center">
-                      <Users size={20} className="text-[#E31E24]" />
+                    <div className="w-10 h-10 rounded-xl bg-black/40 border border-[#A855F7]/20 flex items-center justify-center">
+                      <Users size={20} className="text-[#A855F7]" />
                     </div>
                     <span className="flex-1 font-medium text-right">כתבים</span>
-                    <ChevronLeft size={18} className="text-[#E31E24]" />
+                    <ChevronLeft size={18} className="text-[#A855F7]" />
                   </button>
 
                   <Link
@@ -729,7 +731,7 @@ export default function Layout({ children, currentPageName }) {
               e.preventDefault();
               window.location.href = createPageUrl("Home");
             }}
-            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-[#E31E24]/20 transition-colors touch-manipulation relative z-[110]"
+            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-[#A855F7]/20 transition-colors touch-manipulation relative z-[110]"
             >
             <Home size={28} className="text-gray-300 mb-1" strokeWidth={2.5} />
             <span className="text-[11px] font-bold text-gray-300">בית</span>
@@ -737,15 +739,15 @@ export default function Layout({ children, currentPageName }) {
 
           <Link
             to={createPageUrl("Live")}
-            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-[#E31E24]/20 transition-colors touch-manipulation"
+            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-[#A855F7]/20 transition-colors touch-manipulation"
           >
-            <Radio size={28} className="text-[#E31E24] mb-1" strokeWidth={2.5} />
-            <span className="text-[11px] font-bold text-[#E31E24]">חי</span>
+            <Radio size={28} className="text-[#A855F7] mb-1" strokeWidth={2.5} />
+            <span className="text-[11px] font-bold text-[#A855F7]">חי</span>
           </Link>
 
           <Link
             to={createPageUrl("Category?cat=breaking")}
-            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-[#E31E24]/20 transition-colors touch-manipulation"
+            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-[#A855F7]/20 transition-colors touch-manipulation"
           >
             <Flame size={28} className="text-gray-300 mb-1" strokeWidth={2.5} />
             <span className="text-[11px] font-bold text-gray-300">חמות</span>
