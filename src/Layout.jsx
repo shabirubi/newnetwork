@@ -123,11 +123,9 @@ export default function Layout({ children, currentPageName }) {
     }, [darkMode]);
 
   useEffect(() => {
-      const savedColor = localStorage.getItem('themeColor');
-      if (savedColor) {
-        document.documentElement.style.setProperty('--primary', savedColor);
-        document.documentElement.style.setProperty('--accent', savedColor);
-      }
+      const savedColor = localStorage.getItem('themeColor') || '#0080FF';
+      document.documentElement.style.setProperty('--primary', savedColor);
+      document.documentElement.style.setProperty('--accent', savedColor);
     }, []);
 
   // Apply dark mode on mount
