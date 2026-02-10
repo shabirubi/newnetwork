@@ -101,7 +101,7 @@ export default function WeatherForecastAvatar() {
           שידור חי • עדכון אחרון: {new Date().toLocaleTimeString('he-IL')}
         </div>
       </div>
-    </div>
-    </>
-  );
-}
+      </div>
+      </>
+      );
+      }
