@@ -25,6 +25,46 @@ import { base44 } from "@/api/base44Client";
 
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png";
 
+// Typewriter Date Component
+function TypewriterDate() {
+  const text = "פתיחה רשמית: 7 למרץ 2026";
+  const [displayText, setDisplayText] = React.useState("");
+
+  React.useEffect(() => {
+    let index = 0;
+    const interval = setInterval(() => {
+      if (index < text.length) {
+        setDisplayText(text.slice(0, index + 1));
+        index++;
+      } else {
+        clearInterval(interval);
+        // הוספת אנימציה חוזרת
+        setTimeout(() => {
+          setDisplayText("");
+          index = 0;
+        }, 2000);
+      }
+    }, 80);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div className="flex items-center gap-3">
+      <div className="text-lg md:text-xl font-bold text-white tracking-wider font-mono">
+        {displayText}
+        <motion.span
+          animate={{ opacity: [1, 0] }}
+          transition={{ duration: 0.6, repeat: Infinity }}
+          className="ml-1 text-[#0080FF]"
+        >
+          |
+        </motion.span>
+      </div>
+    </div>
+  );
+}
+
 const categories = [
   { id: "home", label: "דף הבית", icon: Home, href: "Home" },
   { id: "breaking", label: "חדשות עכשיו", icon: Radio, href: "Category?cat=breaking" },
