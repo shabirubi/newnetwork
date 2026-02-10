@@ -308,12 +308,21 @@ export default function Layout({ children, currentPageName }) {
                     root.style.setProperty('--accent', item.color);
                     localStorage.setItem('themeColor', item.color);
 
-                    // עדכון צבעים מיידי בלי ניווט
-                    document.querySelectorAll('[data-theme-primary]').forEach(el => {
-                      el.style.color = item.color;
-                      el.style.borderColor = item.color;
-                      el.style.backgroundColor = `${item.color}22`;
-                    });
+                    // עדכון צבעים מיידי בכל הרכיבים
+                    const updateElements = () => {
+                      // עדכון תפריט קטגוריות
+                      document.querySelectorAll('[class*="text-[#E31E24]"], [class*="text-[#00D4FF]"]').forEach(el => {
+                        el.className = el.className
+                          .replace(/text-\[#[0-9A-F]{6}\]/g, `text-[${item.color}]`)
+                          .replace(/border-\[#[0-9A-F]{6}\]/g, `border-[${item.color}]`);
+                      });
+                      // עדכון borders
+                      document.querySelectorAll('[class*="border-[#E31E24]"], [class*="border-[#00D4FF]"]').forEach(el => {
+                        el.className = el.className
+                          .replace(/border-\[#[0-9A-F]{6}\]/g, `border-[${item.color}]`);
+                      });
+                    };
+                    updateElements();
                   }}
                   className="w-5 h-5 rounded-full border-2 border-white/40 hover:border-white transition-all"
                   style={{ backgroundColor: item.color }}
