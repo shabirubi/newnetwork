@@ -22,7 +22,16 @@ Deno.serve(async (req) => {
       { category: 'health', count: 3, query: 'health medical science' },
       { category: 'music', count: 2, query: 'music artists concerts' },
       { category: 'horoscope', count: 2, query: 'horoscope astrology' },
-      { category: 'finance', count: 3, query: 'finance market stocks' }
+      { category: 'finance', count: 3, query: 'finance market stocks' },
+      { category: 'crime', count: 3, query: 'crime criminal justice news' },
+      { category: 'education', count: 3, query: 'education schools universities' },
+      { category: 'culture', count: 3, query: 'culture arts cultural events' },
+      { category: 'environment', count: 3, query: 'environment climate nature' },
+      { category: 'science', count: 3, query: 'science research discovery' },
+      { category: 'israel', count: 3, query: 'israel news hebrew' },
+      { category: 'military', count: 3, query: 'military defense IDF' },
+      { category: 'law', count: 3, query: 'law legal justice court' },
+      { category: 'local', count: 3, query: 'local news communities' }
     ];
 
     const { batch = 0 } = await req.json().catch(() => ({}));
