@@ -43,75 +43,46 @@ export default function WeatherForecastAvatar() {
   ];
 
   return (
-    <div className="w-full bg-gradient-to-br from-[#001a4d]/80 via-[#0033CC]/70 to-[#0080FF]/60 rounded-3xl p-6 border-2 border-[#0080FF]/60 shadow-2xl shadow-[#0080FF]/40 overflow-hidden">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
+    <div className="w-full bg-gradient-to-br from-[#001a4d]/80 via-[#0033CC]/70 to-[#0080FF]/60 rounded-3xl overflow-hidden border-2 border-[#0080FF]/60 shadow-2xl shadow-[#0080FF]/40">
+      {/* Header */}
+      <div className="bg-gradient-to-r from-[#0066FF] via-[#0080FF]/90 to-[#0066FF] p-6 border-b-4 border-[#0080FF]/80 shadow-xl shadow-[#0080FF]/40">
+        <div className="flex items-center justify-center gap-3">
+          <Cloud className="w-8 h-8 text-white drop-shadow-lg" />
+          <div className="text-center">
+            <h2 className="text-white font-bold text-2xl drop-shadow-lg">תחזיתן הרשת</h2>
+            <p className="text-white/90 text-sm">תחזיית מזג אוויר חיה</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Main Content Grid */}
+      <div className="p-6">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
         
-        {/* Avatar Section - Left/Top */}
-        <motion.div
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.2 }}
-          className="lg:col-span-1 flex flex-col items-center justify-center bg-gradient-to-b from-[#0066FF]/40 to-[#0033CC]/40 rounded-2xl p-6 border border-[#0080FF]/40 relative overflow-hidden"
-        >
-          {/* Avatar Background Glow */}
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0080FF]/30 to-transparent opacity-50" />
-          
-          {/* Professional Avatar Image */}
+          {/* D-ID Avatar/Chat - Center */}
           <motion.div
-            animate={{
-              y: [0, -5, 0],
-            }}
-            transition={{ duration: 4, repeat: Infinity }}
-            className="relative z-10"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.2 }}
+            className="lg:col-span-1 flex flex-col items-center justify-center bg-gradient-to-b from-[#0066FF]/50 to-[#0033CC]/50 rounded-2xl overflow-hidden border-4 border-[#0080FF]/60 relative shadow-2xl shadow-[#0080FF]/50"
+            style={{ minHeight: '400px' }}
           >
-            <div className="w-48 h-64 rounded-2xl overflow-hidden border-4 border-[#0080FF]/80 shadow-2xl shadow-[#0080FF]/60 bg-gradient-to-b from-gray-900 to-gray-800">
-              {/* Avatar Placeholder with Professional Look */}
-              <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-b from-gray-800 via-gray-900 to-black relative overflow-hidden">
-                {/* Simulated Professional Avatar */}
-                <motion.div
-                  animate={{
-                    opacity: [0.8, 1, 0.8],
-                  }}
-                  transition={{ duration: 3, repeat: Infinity }}
-                  className="text-center"
-                >
-                  <div className="w-32 h-32 rounded-full bg-gradient-to-br from-blue-400 via-blue-500 to-blue-600 mx-auto mb-4 shadow-lg shadow-blue-500/50 flex items-center justify-center">
-                    <div className="text-6xl">👩‍🔬</div>
-                  </div>
-                  <h3 className="text-white font-bold text-lg">תחזיתאית הרשת</h3>
-                  <p className="text-blue-300 text-xs mt-1">שידור חי</p>
-                </motion.div>
-
-                {/* Live Indicator */}
-                <div className="absolute bottom-4 right-4 flex items-center gap-2 bg-red-600 px-3 py-1.5 rounded-full">
-                  <span className="flex h-2.5 w-2.5">
-                    <span className="animate-ping absolute inline-flex h-2.5 w-2.5 rounded-full bg-red-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-red-500"></span>
-                  </span>
-                  <span className="text-white text-xs font-bold">LIVE</span>
-                </div>
-              </div>
-            </div>
+            {/* D-ID Agent Iframe */}
+            <iframe
+              src="https://studio.d-id.com/agents/share?id=v2_agt_cim3LvE9&utm_source=copy&key=WjI5dloyeGxMVzloZFhSb01ud3hNRGt3TlRBd01qRTROall3TURjMU9ESTBPVFk2TVVsNFJ6Tk5kelJMWmtSWFZHVTNUREJmTjNkMw=="
+              allow="microphone; camera; autoplay"
+              className="w-full h-full border-0"
+              title="Weather Forecast Agent"
+            />
           </motion.div>
 
-          {/* Name Badge */}
+          {/* Current Weather & Forecast - Right/Bottom */}
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.4 }}
-            className="mt-4 bg-gradient-to-r from-[#0080FF] to-[#0066FF] px-6 py-2 rounded-full border border-[#0080FF]/50 shadow-lg shadow-[#0080FF]/40"
+            initial={{ opacity: 0, x: 20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.3 }}
+            className="lg:col-span-2 space-y-4"
           >
-            <p className="text-white font-bold text-sm text-center">תחזיתן מקצועי</p>
-          </motion.div>
-        </motion.div>
-
-        {/* Current Weather & Forecast - Right/Bottom */}
-        <motion.div
-          initial={{ opacity: 0, x: 20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.3 }}
-          className="lg:col-span-2 space-y-4"
-        >
           {/* Current Weather */}
           <div className="bg-gradient-to-br from-white/10 via-[#0080FF]/20 to-transparent rounded-2xl p-6 border border-[#0080FF]/40 backdrop-blur-xl">
             <h3 className="text-white font-bold text-lg mb-4 flex items-center gap-2">
@@ -191,37 +162,19 @@ export default function WeatherForecastAvatar() {
         </motion.div>
       </div>
 
-      {/* Bottom Info Bar with Chat Button */}
+      {/* Bottom Info Bar */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.7 }}
-        className="mt-6 pt-4 border-t border-[#0080FF]/30 flex flex-col md:flex-row items-center justify-between gap-4 text-center md:text-right"
+        className="flex items-center justify-center gap-2 text-[#00D4FF] text-xs px-6 py-4 border-t border-[#0080FF]/30 bg-gradient-to-r from-[#0080FF]/10 to-transparent"
       >
-        <div className="text-[#00D4FF] text-xs">
-          עדכון אחרון: {new Date().toLocaleTimeString('he-IL')} • מקור: הרשת החדשה
-        </div>
-        <div className="flex items-center gap-4">
-          <motion.button
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={() => setChatOpen(true)}
-            className="bg-gradient-to-r from-[#0080FF] to-[#00D4FF] hover:from-[#00D4FF] hover:to-[#0080FF] text-white px-6 py-2 rounded-full font-bold text-sm border border-[#0080FF]/50 shadow-lg shadow-[#0080FF]/50 transition-all flex items-center gap-2"
-          >
-            💬 שוחח עם התחזיתן
-          </motion.button>
-          <div className="flex items-center gap-2">
-            <span className="flex h-3 w-3">
-              <span className="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-[#0080FF] opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-[#00D4FF]"></span>
-            </span>
-            <span className="text-white font-bold text-xs">שידור חי</span>
-          </div>
-        </div>
+        <span className="flex h-2.5 w-2.5">
+          <span className="animate-ping absolute inline-flex h-2.5 w-2.5 rounded-full bg-[#0080FF] opacity-75"></span>
+          <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#00D4FF]"></span>
+        </span>
+        <span className="font-bold">שידור חי • עדכון אחרון: {new Date().toLocaleTimeString('he-IL')}</span>
       </motion.div>
-
-      {/* Weather Forecast Live Chat Modal */}
-      <WeatherForecastLiveChat isOpen={chatOpen} onClose={() => setChatOpen(false)} />
     </div>
   );
 }
