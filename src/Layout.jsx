@@ -172,9 +172,9 @@ export default function Layout({ children, currentPageName }) {
       </div>
 
       {/* Logo Header */}
-      <div className="bg-black/80 backdrop-blur-xl border-b border-white/10 py-2">
+      <div className="bg-gradient-to-r from-black via-[#0080FF]/20 to-black backdrop-blur-xl border-b border-[#0080FF]/50 py-2">
         <div className="max-w-7xl mx-auto px-4 flex items-center gap-3">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 bg-gradient-to-r from-[#0080FF]/10 via-transparent to-transparent px-4 py-2 rounded-lg">
             <motion.img 
                   src={LOGO_URL} 
                   alt="הרשת החדשה" 
