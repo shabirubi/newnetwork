@@ -52,7 +52,7 @@ function TypewriterDate() {
 
   return (
     <div className="flex items-center gap-2">
-      <div className="text-sm md:text-base font-bold text-white tracking-wide font-mono">
+      <div className="text-sm md:text-base font-bold text-[#0080FF] tracking-wide font-mono drop-shadow-[0_0_10px_#0080FF]">
         {displayText}
         <motion.span
           animate={{ opacity: [1, 0] }}
@@ -250,9 +250,9 @@ export default function Layout({ children, currentPageName }) {
                   }}
                 />
                 <div className="flex flex-col text-right">
-                  <h1 className="text-lg sm:text-xl font-bold text-white">הרשת החדשה</h1>
+                  <h1 className="text-lg sm:text-xl font-bold text-[#0080FF] drop-shadow-[0_0_8px_#0080FF]">הרשת החדשה</h1>
                   <motion.p 
-                    className="text-xs sm:text-sm text-white/70"
+                    className="text-xs sm:text-sm text-[#0080FF] drop-shadow-[0_0_6px_#0080FF]"
                     animate={{ opacity: [0.7, 1, 0.7] }}
                     transition={{ duration: 2, repeat: Infinity }}
                   >
