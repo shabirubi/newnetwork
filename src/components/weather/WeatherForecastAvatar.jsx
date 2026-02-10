@@ -127,12 +127,12 @@ export default function WeatherForecastAvatar() {
                   className={`flex gap-3 ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                 >
                   <div className={`flex gap-2 max-w-xs ${msg.sender === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-sm font-bold ${msg.sender === 'user' ? 'bg-[#0080FF]' : 'bg-green-600'}`}>
+                    <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold ${msg.sender === 'user' ? 'bg-[#0080FF]' : 'bg-green-500'}`}>
                       {msg.sender === 'user' ? '👤' : '🎙️'}
                     </div>
-                    <div className={`rounded-lg px-3 py-2 ${msg.sender === 'user' ? 'bg-[#0080FF]/80 text-white' : 'bg-gray-700/60 text-white'}`}>
-                      <p className="text-xs font-bold mb-1">{msg.name}</p>
-                      <p className="text-sm">{msg.text}</p>
+                    <div className={`rounded-xl px-3 py-2 ${msg.sender === 'user' ? 'bg-gradient-to-r from-[#0080FF] to-[#0066FF]' : 'bg-gradient-to-r from-gray-700 to-gray-800'} text-white shadow-lg`}>
+                      <p className="text-xs font-bold mb-0.5 opacity-90">{msg.name}</p>
+                      <p className="text-xs leading-relaxed">{msg.text}</p>
                     </div>
                   </div>
                 </motion.div>
