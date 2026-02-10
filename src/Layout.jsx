@@ -723,7 +723,7 @@ export default function Layout({ children, currentPageName }) {
       </div>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-gradient-to-br from-black/90 via-[#E31E24]/20 to-black/90 backdrop-blur-xl border-t border-[#E31E24]/30 z-50 safe-area-inset-bottom shadow-lg">
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-gradient-to-br from-black/90 via-[#0080FF]/30 to-black/90 backdrop-blur-xl border-t-2 border-[#0080FF]/50 z-50 safe-area-inset-bottom shadow-lg shadow-[#0080FF]/30">
         <div className="grid grid-cols-4 gap-1 px-2 py-3">
           <Link
             to={createPageUrl("Home")}
