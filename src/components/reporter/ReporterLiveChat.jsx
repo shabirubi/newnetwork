@@ -42,11 +42,13 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
     if (!isOpen || !reporter) return;
 
     let agent = null;
+    let mounted = true;
 
     const initAgent = async () => {
       try {
         setIsConnecting(true);
         setIsLoading(true);
+        console.log('Initializing D-ID agent:', agentId);
 
         const auth = { 
           type: 'key', 
@@ -55,48 +57,72 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
 
         const callbacks = {
           onSrcObjectReady: (srcObject) => {
-            if (videoRef.current) {
+            console.log('SrcObject ready:', srcObject);
+            if (videoRef.current && mounted) {
               videoRef.current.srcObject = srcObject;
+              videoRef.current.play().catch(err => {
+                console.error('Video play error:', err);
+                toast.error('שגיאה בהפעלת וידאו');
+              });
             }
             setIsLoading(false);
           },
           onConnectionStateChange: (state) => {
-            console.log('Connection state:', state);
+            console.log('Connection state changed:', state);
+            if (!mounted) return;
+            
             setConnectionState(state);
             if (state === 'connected') {
               setIsConnecting(false);
               toast.success(`התחברת ל${reporter.name}!`);
+            } else if (state === 'failed' || state === 'disconnected') {
+              toast.error('החיבור נכשל');
+              setIsConnecting(false);
             }
           },
           onNewMessage: (msgs, type) => {
-            console.log('New messages:', msgs, type);
-            if (type === 'agent') {
+            console.log('New messages received:', msgs, type);
+            if (!mounted || type !== 'agent') return;
+            
+            const lastMsg = msgs[msgs.length - 1];
+            if (lastMsg?.content) {
               setMessages(prev => [...prev, { 
                 type: 'agent', 
-                text: msgs[msgs.length - 1]?.content || '',
+                text: lastMsg.content,
                 timestamp: new Date()
               }]);
             }
+          },
+          onError: (error) => {
+            console.error('D-ID error:', error);
+            toast.error('שגיאה בחיבור לאגנט');
           }
         };
 
+        console.log('Creating agent manager...');
         agent = await did.createAgentManager(agentId, { auth, callbacks });
         agentRef.current = agent;
 
+        console.log('Connecting to agent...');
         await agent.connect();
+        console.log('Agent connected successfully');
         
       } catch (error) {
         console.error('Failed to initialize agent:', error);
-        toast.error('שגיאה בהתחברות לאגנט');
-        setIsLoading(false);
-        setIsConnecting(false);
+        if (mounted) {
+          toast.error(`שגיאה: ${error.message || 'לא ניתן להתחבר'}`);
+          setIsLoading(false);
+          setIsConnecting(false);
+        }
       }
     };
 
     initAgent();
 
     return () => {
+      mounted = false;
       if (agent) {
+        console.log('Disconnecting agent...');
         agent.disconnect().catch(console.error);
       }
     };
@@ -105,9 +131,11 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
   const handleSendMessage = async () => {
     if (!inputMessage.trim() || !agentRef.current || isSending) return;
 
+    const userMsg = inputMessage.trim();
+    
     try {
       setIsSending(true);
-      const userMsg = inputMessage.trim();
+      console.log('Sending message:', userMsg);
       
       setMessages(prev => [...prev, { 
         type: 'user', 
@@ -118,10 +146,14 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
       setInputMessage('');
       
       await agentRef.current.chat(userMsg);
+      console.log('Message sent successfully');
       
     } catch (error) {
       console.error('Failed to send message:', error);
-      toast.error('שגיאה בשליחת הודעה');
+      toast.error(`שגיאה: ${error.message || 'לא ניתן לשלוח'}`);
+      // Return message to input on error
+      setInputMessage(userMsg);
+      setMessages(prev => prev.filter(m => m.text !== userMsg || m.type !== 'user'));
     } finally {
       setIsSending(false);
     }
@@ -205,7 +237,14 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
                 ref={videoRef}
                 autoPlay
                 playsInline
+                muted={false}
                 className="w-full h-full object-cover"
+                onLoadedMetadata={() => console.log('Video metadata loaded')}
+                onPlay={() => console.log('Video started playing')}
+                onError={(e) => {
+                  console.error('Video error:', e);
+                  toast.error('שגיאה בטעינת וידאו');
+                }}
               />
             </div>
 
