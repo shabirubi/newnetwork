@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Cookie, X, Check } from "lucide-react";
+import { X, Check, Shield } from "lucide-react";
 
 export default function CookieConsent() {
   const [isOpen, setIsOpen] = useState(false);
