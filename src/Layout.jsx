@@ -275,22 +275,33 @@ export default function Layout({ children, currentPageName }) {
             {/* Color Picker Bar */}
             <div className="flex items-center gap-1.5 px-3 py-2 bg-black/30 rounded-lg border border-[#0080FF]/30 backdrop-blur-sm">
               {[
-                '#0080FF', '#00D4FF', '#00FF88', '#FFD700', 
-                '#FF6B35', '#E31E24', '#9D4EDD', '#3A86FF'
-              ].map((color) => (
+                { color: '#0080FF', name: 'כחול' }, 
+                { color: '#00D4FF', name: 'ציאן' }, 
+                { color: '#00FF88', name: 'ירוק' }, 
+                { color: '#FFD700', name: 'זהב' }, 
+                { color: '#FF6B35', name: 'כתום' }, 
+                { color: '#E31E24', name: 'אדום' }, 
+                { color: '#9D4EDD', name: 'סגול' }, 
+                { color: '#FF1493', name: 'ורוד' },
+                { color: '#00CED1', name: 'טורקיז' },
+                { color: '#32CD32', name: 'ליים' },
+                { color: '#FF69B4', name: 'חם' },
+                { color: '#00BFFF', name: 'בקיע' }
+              ].map((item) => (
                 <motion.button
-                  key={color}
+                  key={item.color}
                   onClick={() => {
                     const root = document.documentElement;
-                    root.style.setProperty('--primary', color);
-                    root.style.setProperty('--accent', color);
-                    localStorage.setItem('themeColor', color);
+                    root.style.setProperty('--primary', item.color);
+                    root.style.setProperty('--accent', item.color);
+                    localStorage.setItem('themeColor', item.color);
+                    window.location.reload();
                   }}
                   className="w-5 h-5 rounded-full border-2 border-white/40 hover:border-white transition-all"
-                  style={{ backgroundColor: color }}
+                  style={{ backgroundColor: item.color }}
                   whileHover={{ scale: 1.15 }}
                   whileTap={{ scale: 0.9 }}
-                  title={color}
+                  title={item.name}
                 />
               ))}
             </div>
