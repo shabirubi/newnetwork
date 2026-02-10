@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { Cloud, Users, Send, Paperclip, Mic, Loader2, FileText, Image as ImageIcon } from "lucide-react";
+import { Cloud, Users, Send, Paperclip, Mic, Loader2, FileText, Image as ImageIcon, X } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { base44 } from "@/api/base44Client";
+import ReporterChat from "../apps/ReporterChat";
 
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png";
 
