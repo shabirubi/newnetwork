@@ -250,7 +250,7 @@ export default function Home() {
 
 
       {/* Weather Forecast Avatar Section */}
-      <section className="px-0 sm:px-4 mb-8">
+      <section className="px-0 mb-8 -mx-4 sm:mx-0">
         <WeatherForecastAvatar />
       </section>
 
