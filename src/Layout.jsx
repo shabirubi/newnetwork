@@ -134,11 +134,11 @@ export default function Layout({ children, currentPageName }) {
     <div className="min-h-screen bg-black transition-colors duration-300 flex flex-col overflow-x-hidden" dir="rtl">
       <style>{`
         :root {
-          --primary: #00F0FF;
-          --primary-dark: #00D9FF;
-          --primary-light: #E0F2FE;
-          --accent: #0FF;
-          --accent-dark: #00BFFF;
+          --primary: #0080FF;
+          --primary-dark: #0066FF;
+          --primary-light: #4DA6FF;
+          --accent: #0080FF;
+          --accent-dark: #0059B3;
         }
 
         /* Hide scrollbars */
@@ -168,7 +168,7 @@ export default function Layout({ children, currentPageName }) {
 
       {/* Animated Neon Blue Line */}
       <div className="fixed top-0 left-0 right-0 h-2 bg-transparent overflow-hidden z-[35] pointer-events-none">
-        <div className="absolute top-0 h-full w-40 bg-gradient-to-r from-[#0FF] via-[#00F0FF] to-[#00D9FF] shadow-[0_0_20px_#0FF] animate-[slideRight_3s_ease-in-out_infinite]"></div>
+        <div className="absolute top-0 h-full w-40 bg-gradient-to-r from-[#0080FF] via-[#0066FF] to-[#4DA6FF] shadow-[0_0_20px_#0080FF] animate-[slideRight_3s_ease-in-out_infinite]"></div>
       </div>
 
       {/* Logo Header */}
@@ -201,10 +201,10 @@ export default function Layout({ children, currentPageName }) {
             </div>
             <button
               onClick={() => window.open(createPageUrl("AdminPanel"), "_blank")}
-              className="flex items-center gap-1 px-2 py-1.5 bg-gradient-to-r from-[#0FF] to-[#00D9FF] backdrop-blur-xl rounded-lg shadow-lg shadow-[#0FF]/50 border border-[#0FF]/50 transition-all hover:scale-105 text-[11px] ml-2"
+              className="flex items-center gap-1 px-2 py-1.5 bg-gradient-to-r from-[#0080FF] to-[#0066FF] backdrop-blur-xl rounded-lg shadow-lg shadow-[#0080FF]/50 border border-[#0080FF]/50 transition-all hover:scale-105 text-[11px] ml-2"
             >
-              <Shield className="w-4 h-4 text-black" />
-              <span className="text-black font-bold">Admin</span>
+              <Shield className="w-4 h-4 text-white" />
+              <span className="text-white font-bold">Admin</span>
             </button>
           </div>
           
@@ -258,7 +258,7 @@ export default function Layout({ children, currentPageName }) {
 
               <Link 
                 to={createPageUrl("Live")}
-              className="flex items-center gap-1 px-2 py-1 bg-gradient-to-r from-[#0FF] to-[#00D9FF] backdrop-blur-xl rounded-lg shadow-lg shadow-[#0FF]/50 border border-[#0FF]/50 transition-all hover:scale-105 animate-pulse text-[11px]"
+              className="flex items-center gap-1 px-2 py-1 bg-gradient-to-r from-[#0080FF] to-[#0066FF] backdrop-blur-xl rounded-lg shadow-lg shadow-[#0080FF]/50 border border-[#0080FF]/50 transition-all hover:scale-105 animate-pulse text-[11px]"
               >
               <Radio className="w-4 h-4 text-white" />
               <span className="text-white font-bold">שידור חי</span>
@@ -340,12 +340,12 @@ export default function Layout({ children, currentPageName }) {
                 transition={{ type: "spring", damping: 25, stiffness: 200 }}
                 className="absolute right-0 top-0 bottom-0 w-80 bg-black/90 backdrop-blur-xl border-l border-[#E31E24]/30 shadow-2xl shadow-[#E31E24]/20 overflow-y-auto"
               >
-                <div className="sticky top-0 bg-gradient-to-br from-black via-[#0FF]/30 to-black p-4 shadow-lg shadow-[#0FF]/20 border-b-2 border-[#0FF]/50">
+                <div className="sticky top-0 bg-gradient-to-br from-black via-[#0080FF]/30 to-black p-4 shadow-lg shadow-[#0080FF]/20 border-b-2 border-[#0080FF]/50">
                   <div className="flex items-center justify-between">
                     <h2 className="text-white font-bold text-xl">תפריט ראשי</h2>
                     <button
                       onClick={() => setMenuSidebarOpen(false)}
-                      className="p-2 rounded-full bg-[#0FF]/30 hover:bg-[#0FF]/50 text-white active:scale-95 transition-all shadow-[0_0_15px_#0FF]"
+                      className="p-2 rounded-full bg-[#0080FF]/30 hover:bg-[#0080FF]/50 text-white active:scale-95 transition-all shadow-[0_0_15px_#0080FF]"
                     >
                       <X size={22} />
                     </button>
@@ -358,13 +358,13 @@ export default function Layout({ children, currentPageName }) {
                       setReportersModalOpen(true);
                       setMenuSidebarOpen(false);
                     }}
-                    className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#0FF]/30 active:bg-[#0FF]/50 transition-all border border-transparent hover:border-[#0FF]/50 hover:shadow-[0_0_20px_#0FF] w-full"
+                    className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#0080FF]/30 active:bg-[#0080FF]/50 transition-all border border-transparent hover:border-[#0080FF]/50 hover:shadow-[0_0_20px_#0080FF] w-full"
                   >
-                    <div className="w-10 h-10 rounded-xl bg-black/40 border-2 border-[#0FF]/50 flex items-center justify-center shadow-[0_0_15px_#0FF]">
-                      <Users size={20} className="text-[#0FF]" />
+                    <div className="w-10 h-10 rounded-xl bg-black/40 border-2 border-[#0080FF]/50 flex items-center justify-center shadow-[0_0_15px_#0080FF]">
+                      <Users size={20} className="text-[#0080FF]" />
                     </div>
                     <span className="flex-1 font-medium text-right">כתבים</span>
-                    <ChevronLeft size={18} className="text-[#0FF]" />
+                    <ChevronLeft size={18} className="text-[#0080FF]" />
                   </button>
 
                   <Link
@@ -731,7 +731,7 @@ export default function Layout({ children, currentPageName }) {
               e.preventDefault();
               window.location.href = createPageUrl("Home");
             }}
-            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-[#0FF]/30 transition-colors touch-manipulation relative z-[110]"
+            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-[#0080FF]/30 transition-colors touch-manipulation relative z-[110]"
             >
             <Home size={28} className="text-gray-300 mb-1" strokeWidth={2.5} />
             <span className="text-[11px] font-bold text-gray-300">בית</span>
@@ -739,19 +739,19 @@ export default function Layout({ children, currentPageName }) {
 
           <Link
             to={createPageUrl("Live")}
-            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-[#0FF]/30 transition-colors touch-manipulation"
+            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-[#0080FF]/30 transition-colors touch-manipulation"
           >
-            <Radio size={28} className="text-[#0FF] drop-shadow-[0_0_8px_#0FF] mb-1" strokeWidth={2.5} />
-            <span className="text-[11px] font-bold text-[#0FF] drop-shadow-[0_0_8px_#0FF]">חי</span>
+            <Radio size={28} className="text-[#0080FF] drop-shadow-[0_0_8px_#0080FF] mb-1" strokeWidth={2.5} />
+            <span className="text-[11px] font-bold text-[#0080FF] drop-shadow-[0_0_8px_#0080FF]">חי</span>
           </Link>
 
           <Link
             to={createPageUrl("Category?cat=breaking")}
-            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-[#0FF]/30 transition-colors touch-manipulation"
-          >
+            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-[#0080FF]/30 transition-colors touch-manipulation"
+            >
             <Flame size={28} className="text-gray-300 mb-1" strokeWidth={2.5} />
             <span className="text-[11px] font-bold text-gray-300">חמות</span>
-          </Link>
+            </Link>
 
           <button
             onClick={() => setMobileMenuOpen(true)}
@@ -764,7 +764,7 @@ export default function Layout({ children, currentPageName }) {
       </nav>
 
       {/* Footer */}
-      <footer className="bg-gradient-to-br from-black via-[#0FF]/20 to-black border-t-2 border-[#0FF]/50 shadow-[0_-10px_50px_rgba(0,255,255,0.3)] text-white mt-12">
+      <footer className="bg-gradient-to-br from-black via-[#0080FF]/20 to-black border-t-2 border-[#0080FF]/50 shadow-[0_-10px_50px_rgba(0,128,255,0.3)] text-white mt-12">
         <div className="max-w-7xl mx-auto px-4 py-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>

@@ -65,7 +65,7 @@ export default function NewsTicker({ darkMode, setDarkMode, onMenuClick }) {
   }
 
   return (
-    <div className="bg-gradient-to-r from-black via-[#0FF]/30 to-black border-b-2 border-[#0FF]/50 backdrop-blur-xl shadow-xl shadow-[#0FF]/30 relative overflow-hidden z-[37] text-white w-full">
+    <div className="bg-gradient-to-r from-black via-[#0080FF]/30 to-black border-b-2 border-[#0080FF]/50 backdrop-blur-xl shadow-xl shadow-[#0080FF]/30 relative overflow-hidden z-[37] text-white w-full">
       {/* Breaking News Strip */}
       <div className="flex items-center gap-1 sm:gap-3 px-0 py-2 w-full">
         {/* Menu Button - Right Side */}
@@ -162,9 +162,9 @@ export default function NewsTicker({ darkMode, setDarkMode, onMenuClick }) {
               e.stopPropagation();
               setDarkMode(!darkMode);
             }}
-            className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-gradient-to-r from-[#0FF] to-[#00D9FF] hover:shadow-2xl hover:shadow-[#0FF]/80 text-white active:scale-95 transition-all touch-manipulation relative z-[70] animate-pulse shadow-[0_0_20px_#0FF]"
+            className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-gradient-to-r from-[#0080FF] to-[#0066FF] hover:shadow-2xl hover:shadow-[#0080FF]/80 text-white active:scale-95 transition-all touch-manipulation relative z-[70] animate-pulse shadow-[0_0_20px_#0080FF]"
           >
-            {darkMode ? <Sun size={16} className="sm:w-5 sm:h-5 drop-shadow-[0_0_5px_#0FF]" /> : <Moon size={16} className="sm:w-5 sm:h-5 drop-shadow-[0_0_5px_#0FF]" />}
+            {darkMode ? <Sun size={16} className="sm:w-5 sm:h-5 drop-shadow-[0_0_5px_#0080FF]" /> : <Moon size={16} className="sm:w-5 sm:h-5 drop-shadow-[0_0_5px_#0080FF]" />}
           </button>
 
 
