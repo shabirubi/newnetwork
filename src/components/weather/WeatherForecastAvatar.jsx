@@ -10,14 +10,9 @@ import ReporterChat from "../apps/ReporterChat";
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png";
 
 export default function WeatherForecastAvatar() {
-  const [chatMessages, setChatMessages] = useState([]);
-  const [inputMessage, setInputMessage] = useState('');
-  const [uploadedFiles, setUploadedFiles] = useState([]);
-  const [isUploading, setIsUploading] = useState(false);
-  const [onlineUsers, setOnlineUsers] = useState(5);
+  const [reporterChatOpen, setReporterChatOpen] = useState(false);
   const messagesEndRef = useRef(null);
   const iframeRef = useRef(null);
-  const fileInputRef = useRef(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
