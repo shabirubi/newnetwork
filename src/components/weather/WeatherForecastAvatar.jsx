@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Cloud, Thermometer, Wind, Eye, AlertTriangle, CloudRain } from "lucide-react";
+import WeatherForecastLiveChat from "./WeatherForecastLiveChat";
 
 export default function WeatherForecastAvatar() {
   const [avatarUrl, setAvatarUrl] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [chatOpen, setChatOpen] = useState(false);
 
   useEffect(() => {
     // HeyGen professional weather forecaster avatar
@@ -189,7 +191,7 @@ export default function WeatherForecastAvatar() {
         </motion.div>
       </div>
 
-      {/* Bottom Info Bar */}
+      {/* Bottom Info Bar with Chat Button */}
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -199,14 +201,27 @@ export default function WeatherForecastAvatar() {
         <div className="text-[#00D4FF] text-xs">
           עדכון אחרון: {new Date().toLocaleTimeString('he-IL')} • מקור: הרשת החדשה
         </div>
-        <div className="flex items-center gap-2">
-          <span className="flex h-3 w-3">
-            <span className="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-[#0080FF] opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-3 w-3 bg-[#00D4FF]"></span>
-          </span>
-          <span className="text-white font-bold text-xs">שידור חי</span>
+        <div className="flex items-center gap-4">
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            onClick={() => setChatOpen(true)}
+            className="bg-gradient-to-r from-[#0080FF] to-[#00D4FF] hover:from-[#00D4FF] hover:to-[#0080FF] text-white px-6 py-2 rounded-full font-bold text-sm border border-[#0080FF]/50 shadow-lg shadow-[#0080FF]/50 transition-all flex items-center gap-2"
+          >
+            💬 שוחח עם התחזיתן
+          </motion.button>
+          <div className="flex items-center gap-2">
+            <span className="flex h-3 w-3">
+              <span className="animate-ping absolute inline-flex h-3 w-3 rounded-full bg-[#0080FF] opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-[#00D4FF]"></span>
+            </span>
+            <span className="text-white font-bold text-xs">שידור חי</span>
+          </div>
         </div>
       </motion.div>
+
+      {/* Weather Forecast Live Chat Modal */}
+      <WeatherForecastLiveChat isOpen={chatOpen} onClose={() => setChatOpen(false)} />
     </div>
   );
 }
