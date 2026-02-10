@@ -791,18 +791,20 @@ export default function Layout({ children, currentPageName }) {
 
 
       {/* Content with Sidebars */}
-      <div className="flex flex-1">
-        {/* Left Sidebar */}
-        <LeftSidebarCategories />
+            <div className="flex flex-1">
+              {/* Left Sidebar */}
+              <LeftSidebarCategories />
 
-        {/* Main Content */}
-        <main className="flex-1 px-0 sm:px-4 py-0 sm:py-6 pb-16 sm:pb-24 lg:pb-6 max-w-7xl mx-auto">
-          {children}
-        </main>
+              {/* Main Content */}
+              <main className="flex-1 px-0 sm:px-4 py-0 sm:py-6 pb-16 sm:pb-24 lg:pb-6 max-w-7xl mx-auto">
+                {children}
+              </main>
 
-        {/* Right Sidebar - Hidden */}
-        {/* <RightSidebarUpdates /> */}
-      </div>
+              {/* Right Sidebar - Categories */}
+              <React.Suspense fallback={null}>
+                <RightSidebarCategories />
+              </React.Suspense>
+            </div>
 
       {/* Mobile Bottom Navigation */}
       <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-gradient-to-br from-black/90 via-[#0080FF]/30 to-black/90 backdrop-blur-xl border-t-2 border-[#0080FF]/50 z-50 safe-area-inset-bottom shadow-lg shadow-[#0080FF]/30">
