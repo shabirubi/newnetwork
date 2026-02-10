@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Users, ChevronLeft, ChevronRight } from "lucide-react";
 import ReporterCardModal from "./ReporterCardModal";
 import ReporterChat from "../apps/ReporterChat";
+import ReporterLiveChat from "../reporter/ReporterLiveChat";
 
 export default function ReportersTickerStrip() {
   const [selectedReporter, setSelectedReporter] = useState(null);
@@ -12,6 +13,7 @@ export default function ReportersTickerStrip() {
   const [hoveredReporter, setHoveredReporter] = useState(null);
   const [openReporterChat, setOpenReporterChat] = useState(false);
   const [selectedReporterForChat, setSelectedReporterForChat] = useState(null);
+  const [openLiveChat, setOpenLiveChat] = useState(false);
   const containerRef = useRef(null);
   const scrollContainerRef = useRef(null);
 
@@ -97,7 +99,7 @@ export default function ReportersTickerStrip() {
               key={`${reporter.id}-${idx}`}
               onClick={() => {
                 setSelectedReporterForChat(reporter);
-                setOpenReporterChat(true);
+                setOpenLiveChat(true);
               }}
               onMouseEnter={() => setHoveredReporter(reporter.id)}
               onMouseLeave={() => setHoveredReporter(null)}
@@ -131,16 +133,14 @@ export default function ReportersTickerStrip() {
           </div>
           )}
 
-          {selectedReporterForChat && openReporterChat && (
-            <ReporterChat 
-              externalIsOpen={openReporterChat}
-              externalSetIsOpen={(isOpen) => {
-                setOpenReporterChat(isOpen);
-                if (!isOpen) setSelectedReporterForChat(null);
-              }}
-              preSelectedReporter={selectedReporterForChat}
-            />
-          )}
+          <ReporterLiveChat 
+            isOpen={openLiveChat}
+            onClose={() => {
+              setOpenLiveChat(false);
+              setSelectedReporterForChat(null);
+            }}
+            reporter={selectedReporterForChat}
+          />
           </>
           );
           }
