@@ -255,7 +255,7 @@ export default function WarRoom() {
           <div className="flex items-center justify-between">
             <CardTitle className="flex items-center gap-2">
               <Radio className="w-5 h-5 animate-pulse" />
-              עדכוני חדשות עם קול
+              דיווחים בזמן אמת
             </CardTitle>
             <Button
               size="sm"
