@@ -33,22 +33,8 @@ export default function ReportersTickerStrip() {
     return () => document.head.removeChild(style);
   }, []);
 
-  const { data: reporters = [], isError } = useQuery({
-    queryKey: ['reporters-ticker'],
-    queryFn: async () => {
-      try {
-        const result = await base44.entities.Reporter.filter({ is_active: true });
-        return result || [];
-      } catch (error) {
-        console.error('Failed to fetch reporters:', error);
-        return [];
-      }
-    },
-    initialData: [],
-    refetchInterval: 30000,
-    retry: false,
-    enabled: true
-  });
+  const reporters = [];
+  const isError = false;
 
   if (isError || !reporters || reporters.length === 0) {
     return null;
