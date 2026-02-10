@@ -307,7 +307,13 @@ export default function Layout({ children, currentPageName }) {
                     root.style.setProperty('--primary', item.color);
                     root.style.setProperty('--accent', item.color);
                     localStorage.setItem('themeColor', item.color);
-                    window.location.reload();
+
+                    // עדכון צבעים מיידי בלי ניווט
+                    document.querySelectorAll('[data-theme-primary]').forEach(el => {
+                      el.style.color = item.color;
+                      el.style.borderColor = item.color;
+                      el.style.backgroundColor = `${item.color}22`;
+                    });
                   }}
                   className="w-5 h-5 rounded-full border-2 border-white/40 hover:border-white transition-all"
                   style={{ backgroundColor: item.color }}
