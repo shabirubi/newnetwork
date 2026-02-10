@@ -35,29 +35,68 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
   const initializeDIDStream = async () => {
     try {
       setIsLoading(true);
+      console.log('🎬 Starting D-ID stream for reporter:', reporter.name);
       
       // Create D-ID streaming session with reporter's image
       const response = await base44.functions.invoke('createDIDStream', {
         source_url: reporter.image,
-        driver_url: 'bank://lively',
+        driver_url: 'bank://lively'
       });
 
-      if (response.data?.session_id && response.data?.offer) {
-        setSessionId(response.data.session_id);
+      console.log('📡 D-ID response:', response.data);
+
+      if (response.data?.id && response.data?.session_id && response.data?.offer) {
+        const streamId = response.data.id;
+        const sessionIdValue = response.data.session_id;
+        
+        setStreamUrl(streamId);
+        setSessionId(sessionIdValue);
+        
+        console.log('✅ Stream created:', { streamId, sessionIdValue });
         
         // Setup WebRTC connection
         const peerConnection = new RTCPeerConnection({
           iceServers: response.data.ice_servers || [
-            { urls: 'stun:stun.l.google.com:19302' }
+            { urls: 'stun:stun.l.google.com:19302' },
+            { urls: 'stun:stun1.l.google.com:19302' }
           ]
         });
         
         peerConnectionRef.current = peerConnection;
 
+        // Handle ICE candidates
+        peerConnection.onicecandidate = async (event) => {
+          if (event.candidate) {
+            console.log('🧊 ICE candidate:', event.candidate);
+            try {
+              await base44.functions.invoke('sendDIDMessage', {
+                stream_id: streamId,
+                session_id: sessionIdValue,
+                type: 'ice',
+                sdp: event.candidate
+              });
+            } catch (err) {
+              console.error('Failed to send ICE candidate:', err);
+            }
+          }
+        };
+
         // Handle incoming stream
         peerConnection.ontrack = (event) => {
+          console.log('🎥 Received video track');
           if (videoRef.current && event.streams[0]) {
             videoRef.current.srcObject = event.streams[0];
+            videoRef.current.play().catch(e => console.error('Video play error:', e));
+            setIsLoading(false);
+            toast.success('🎬 האווטאר מוכן!');
+          }
+        };
+
+        // Handle connection state
+        peerConnection.onconnectionstatechange = () => {
+          console.log('🔌 Connection state:', peerConnection.connectionState);
+          if (peerConnection.connectionState === 'failed') {
+            toast.error('החיבור נכשל');
             setIsLoading(false);
           }
         };
@@ -67,40 +106,62 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
           new RTCSessionDescription(response.data.offer)
         );
 
+        console.log('📝 Remote description set');
+
         // Create answer
         const answer = await peerConnection.createAnswer();
         await peerConnection.setLocalDescription(answer);
 
+        console.log('💬 Sending answer to D-ID');
+
         // Send answer back to D-ID
         await base44.functions.invoke('sendDIDMessage', {
-          session_id: response.data.session_id,
+          stream_id: streamId,
+          session_id: sessionIdValue,
           type: 'answer',
           sdp: answer.sdp
         });
 
-        // Send welcome message
+        console.log('✅ WebRTC setup complete');
+
+        // Send welcome message after connection is established
         setTimeout(() => {
-          sendMessageToAvatar(`שלום! אני ${reporter.name}, ${reporter.role}. ${reporter.specialty}. במה אוכל לעזור?`);
-        }, 2000);
+          const voiceId = reporter.gender === 'female' ? 'he-IL-HilaNeural' : 'he-IL-AvriNeural';
+          sendMessageToAvatar(`שלום! אני ${reporter.name}, ${reporter.role}. ${reporter.specialty}. במה אוכל לעזור?`, voiceId);
+        }, 3000);
+      } else {
+        throw new Error('Invalid D-ID response structure');
       }
     } catch (error) {
-      console.error('Failed to initialize D-ID stream:', error);
-      toast.error('שגיאה בטעינת האווטאר');
+      console.error('❌ Failed to initialize D-ID stream:', error);
+      toast.error('שגיאה בטעינת האווטאר: ' + error.message);
       setIsLoading(false);
     }
   };
 
-  const sendMessageToAvatar = async (text) => {
-    if (!sessionId) return;
+  const sendMessageToAvatar = async (text, voiceId = null) => {
+    if (!sessionId || !streamUrl) {
+      console.error('Cannot send message: missing session or stream');
+      return;
+    }
 
     try {
+      console.log('🗣️ Sending text to avatar:', text.substring(0, 50) + '...');
+      
+      const voice = voiceId || (reporter.gender === 'female' ? 'he-IL-HilaNeural' : 'he-IL-AvriNeural');
+      
       await base44.functions.invoke('sendDIDMessage', {
+        stream_id: streamUrl,
         session_id: sessionId,
         type: 'talk',
-        text: text
+        text: text,
+        voice_id: voice
       });
+      
+      console.log('✅ Message sent to avatar');
     } catch (error) {
-      console.error('Failed to send message to avatar:', error);
+      console.error('❌ Failed to send message to avatar:', error);
+      toast.error('שגיאה בשליחת הודעה לאווטאר');
     }
   };
 
@@ -126,7 +187,8 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
       setMessages(prev => [...prev, { role: 'assistant', content: aiResponse }]);
 
       // Make avatar speak the response
-      await sendMessageToAvatar(aiResponse);
+      const voiceId = reporter.gender === 'female' ? 'he-IL-HilaNeural' : 'he-IL-AvriNeural';
+      await sendMessageToAvatar(aiResponse, voiceId);
     } catch (error) {
       console.error('Chat error:', error);
       toast.error('שגיאה בשליחת ההודעה');

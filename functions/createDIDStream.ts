@@ -4,8 +4,17 @@ Deno.serve(async (req) => {
   try {
     const apiKey = Deno.env.get('DID_API_KEY');
     if (!apiKey) {
+      console.error('D-ID API key not found');
       return Response.json({ error: 'D-ID API key not configured' }, { status: 500 });
     }
+
+    const { source_url, driver_url } = await req.json();
+    
+    if (!source_url) {
+      return Response.json({ error: 'source_url is required' }, { status: 400 });
+    }
+
+    console.log('Creating D-ID stream with source:', source_url);
 
     const response = await fetch('https://api.d-id.com/talks/streams', {
       method: 'POST',
@@ -14,7 +23,8 @@ Deno.serve(async (req) => {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        source_url: 'https://create-images-results.d-id.com/google-oauth2%7C113633094228589980123/upl_-tCCgOmv_5qfD_TEwhSR8/image.png'
+        source_url: source_url,
+        driver_url: driver_url || 'bank://lively'
       })
     });
 
@@ -28,6 +38,7 @@ Deno.serve(async (req) => {
     }
 
     const data = await response.json();
+    console.log('D-ID stream created:', data.id);
     
     return Response.json(data);
 

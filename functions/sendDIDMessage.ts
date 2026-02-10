@@ -4,14 +4,57 @@ Deno.serve(async (req) => {
   try {
     const apiKey = Deno.env.get('DID_API_KEY');
     if (!apiKey) {
+      console.error('D-ID API key not found');
       return Response.json({ error: 'D-ID API key not configured' }, { status: 500 });
     }
 
-    const { stream_id, session_id, text } = await req.json();
+    const { stream_id, session_id, type, sdp, text, voice_id } = await req.json();
 
-    if (!stream_id || !session_id || !text) {
+    if (!stream_id || !session_id) {
       return Response.json({ 
-        error: 'Missing required parameters' 
+        error: 'stream_id and session_id are required' 
+      }, { status: 400 });
+    }
+
+    let body;
+    
+    // Handle WebRTC signaling (answer)
+    if (type === 'answer' && sdp) {
+      body = {
+        answer: {
+          type: 'answer',
+          sdp: sdp
+        },
+        session_id: session_id
+      };
+      console.log('Sending WebRTC answer for stream:', stream_id);
+    }
+    // Handle ICE candidate
+    else if (type === 'ice') {
+      body = {
+        candidate: sdp,
+        session_id: session_id
+      };
+      console.log('Sending ICE candidate for stream:', stream_id);
+    }
+    // Handle text message to speak
+    else if (type === 'talk' && text) {
+      body = {
+        script: {
+          type: 'text',
+          input: text,
+          provider: {
+            type: 'microsoft',
+            voice_id: voice_id || 'he-IL-AvriNeural'
+          }
+        },
+        session_id: session_id
+      };
+      console.log('Sending text to speak for stream:', stream_id);
+    }
+    else {
+      return Response.json({ 
+        error: 'Invalid message type or missing parameters' 
       }, { status: 400 });
     }
 
@@ -21,17 +64,7 @@ Deno.serve(async (req) => {
         'Authorization': `Basic ${apiKey}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify({
-        script: {
-          type: 'text',
-          input: text,
-          provider: {
-            type: 'microsoft',
-            voice_id: 'he-IL-AvriNeural'
-          }
-        },
-        session_id: session_id
-      })
+      body: JSON.stringify(body)
     });
 
     if (!response.ok) {
@@ -44,6 +77,7 @@ Deno.serve(async (req) => {
     }
 
     const data = await response.json();
+    console.log('D-ID message sent successfully');
     
     return Response.json(data);
 
