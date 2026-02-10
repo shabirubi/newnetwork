@@ -3,7 +3,8 @@ import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { 
   LayoutDashboard, Users, DollarSign, Video, Newspaper, 
-  Settings, TrendingUp, AlertCircle, Loader2, Sparkles
+  Settings, TrendingUp, AlertCircle, Loader2, Sparkles,
+  Film, Clapperboard, Wand2, MessageCircle, Camera
 } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -50,7 +51,14 @@ export default function AdminPanel() {
     { id: 'content', label: 'תוכן', icon: Video },
     { id: 'analytics', label: 'אנליטיקס', icon: TrendingUp },
     { id: 'notes', label: 'הערות מנהלים', icon: AlertCircle },
-    { id: 'creator', label: 'יוצר AI', icon: Sparkles, isExternal: true },
+    { id: 'creator', label: 'יוצר AI', icon: Sparkles, isExternal: true, url: '/VideoCreator' },
+    { id: 'editor', label: 'עורך מתקדם', icon: Film, isExternal: true, url: '/VideoEditor' },
+    { id: 'luma', label: 'Luma AI', icon: Clapperboard, isExternal: true, url: '/LumaStudio' },
+    { id: 'tomoviee', label: 'ToMoviee', icon: Video, isExternal: true, url: '/ToMovieeStudio' },
+    { id: 'design', label: 'AI Design', icon: Wand2, isExternal: true, url: '/AIDesignStudio' },
+    { id: 'avatar', label: 'Avatar Studio', icon: Camera, isExternal: true, url: '/AvatarStudio' },
+    { id: 'animation', label: 'אנימציה', icon: Film, isExternal: true, url: '/AnimationStudio' },
+    { id: 'broadcast', label: 'אולפן שידור', icon: Video, isExternal: true, url: '/BroadcastStudio' },
     { id: 'settings', label: 'הגדרות', icon: Settings },
   ];
 
@@ -85,7 +93,7 @@ export default function AdminPanel() {
                 return (
                   <a
                     key={tab.id}
-                    href="/VideoCreator"
+                    href={tab.url}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-purple-400 hover:bg-purple-600/20 transition-all border border-purple-500/30"
