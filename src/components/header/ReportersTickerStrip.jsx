@@ -135,6 +135,7 @@ export default function ReportersTickerStrip() {
           </div>
           </div>
           </div>
+          </div>
           )}
 
           <ReporterLiveChat 
