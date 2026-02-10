@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { AlertTriangle, Radio, RefreshCw, Play, Pause, Loader2, Film, ChevronRight } from "lucide-react";
+import { AlertTriangle, Radio, RefreshCw, Play, Pause, Loader2, Film, ChevronRight, X } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { toast } from "sonner";
@@ -10,6 +10,9 @@ import { createPageUrl } from "../../utils";
 export default function RealTimeAlertsContainer() {
   const [playingId, setPlayingId] = useState(null);
   const [loadingId, setLoadingId] = useState(null);
+  const [generatingVideoId, setGeneratingVideoId] = useState(null);
+  const [selectedVideoAlert, setSelectedVideoAlert] = useState(null);
+  const [generatedVideoUrl, setGeneratedVideoUrl] = useState(null);
 
   const { data: alerts = [], isLoading, refetch } = useQuery({
     queryKey: ['realtime-alerts-container'],
