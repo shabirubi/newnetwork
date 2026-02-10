@@ -165,11 +165,7 @@ export default function NewsTicker({ darkMode, setDarkMode, onMenuClick }) {
           )}
 
           <button
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setDarkMode(!darkMode);
-            }}
+            onClick={() => setDarkMode(!darkMode)}
             className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-gradient-to-r from-[#0080FF] to-[#0066FF] hover:shadow-2xl hover:shadow-[#0080FF]/80 text-white active:scale-95 transition-all touch-manipulation relative z-[70] animate-pulse shadow-[0_0_20px_#0080FF]"
           >
             {darkMode ? <Sun size={16} className="sm:w-5 sm:h-5 drop-shadow-[0_0_5px_#0080FF]" /> : <Moon size={16} className="sm:w-5 sm:h-5 drop-shadow-[0_0_5px_#0080FF]" />}
