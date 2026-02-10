@@ -21,6 +21,7 @@ import TalkingAvatar from "./components/avatar/TalkingAvatar";
 import DIDLiveChat from "./components/avatar/DIDLiveChat";
 import AdminLoginModal from "./components/admin/AdminLoginModal";
 import CookieConsent from "./components/cookies/CookieConsent";
+import AccessibilityFloatingButton from "./components/accessibility/AccessibilityFloatingButton";
 import { base44 } from "@/api/base44Client";
 
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png";
@@ -284,57 +285,7 @@ export default function Layout({ children, currentPageName }) {
             </button>
 
           <div className="hidden sm:flex items-center gap-4">
-            {/* Color Picker Bar */}
-            <div className="flex items-center gap-1.5 px-3 py-2 bg-black/30 rounded-lg border border-[#0080FF]/30 backdrop-blur-sm">
-              {[
-                { color: '#0080FF', name: 'כחול' }, 
-                { color: '#00D4FF', name: 'ציאן' }, 
-                { color: '#00FF88', name: 'ירוק' }, 
-                { color: '#FFD700', name: 'זהב' }, 
-                { color: '#FF6B35', name: 'כתום' }, 
-                { color: '#E31E24', name: 'אדום' }, 
-                { color: '#9D4EDD', name: 'סגול' }, 
-                { color: '#FF1493', name: 'ורוד' },
-                { color: '#00CED1', name: 'טורקיז' },
-                { color: '#32CD32', name: 'ליים' },
-                { color: '#FF69B4', name: 'חם' },
-                { color: '#00BFFF', name: 'בקיע' }
-              ].map((item) => (
-                <motion.button
-                  key={item.color}
-                  onClick={() => {
-                    const root = document.documentElement;
-                    root.style.setProperty('--primary', item.color);
-                    root.style.setProperty('--accent', item.color);
-                    localStorage.setItem('themeColor', item.color);
 
-                    // עדכון תכנים בזמן אמת
-                    document.documentElement.style.setProperty('--primary-rgb', item.color);
-
-                    // עדכון כל הטקסטים בעלי צבע קודם
-                    const updateColorInDOM = () => {
-                      document.querySelectorAll('*').forEach(el => {
-                        const computedStyle = window.getComputedStyle(el);
-                        const bgColor = computedStyle.backgroundColor;
-                        const textColor = computedStyle.color;
-                        const borderColor = computedStyle.borderColor;
-
-                        // אם יש צבע קודם, החלף בצבע חדש
-                        if (bgColor.includes('rgb') && (bgColor.includes('225, 31, 36') || bgColor.includes('0, 128, 255') || bgColor.includes('0, 212, 255'))) {
-                          el.style.backgroundColor = item.color + '22';
-                        }
-                      });
-                    };
-                    updateColorInDOM();
-                  }}
-                  className="w-5 h-5 rounded-full border-2 border-white/40 hover:border-white transition-all"
-                  style={{ backgroundColor: item.color }}
-                  whileHover={{ scale: 1.15 }}
-                  whileTap={{ scale: 0.9 }}
-                  title={item.name}
-                />
-              ))}
-            </div>
 
             {/* Auth Buttons */}
             {authLoading ? (
@@ -447,6 +398,9 @@ export default function Layout({ children, currentPageName }) {
 
       {/* Cookie Consent */}
       <CookieConsent />
+
+      {/* Accessibility Floating Button */}
+      <AccessibilityFloatingButton />
 
       {/* Main Menu Sidebar */}
       <AnimatePresence>

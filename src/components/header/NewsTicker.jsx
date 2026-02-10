@@ -82,27 +82,11 @@ export default function NewsTicker({ darkMode, setDarkMode, onMenuClick }) {
         </button>
 
         {/* Logo + Radio Button */}
-          <div className="flex items-center gap-2 shrink-0 relative">
-            {/* Water Wave Effect Behind Logo */}
-            <motion.div 
-              className="absolute -inset-2 opacity-40 blur-xl rounded-full"
-              animate={{
-                boxShadow: [
-                  '0 0 20px rgba(0, 212, 255, 0.3)',
-                  '0 0 40px rgba(0, 212, 255, 0.6)',
-                  '0 0 20px rgba(0, 212, 255, 0.3)'
-                ]
-              }}
-              transition={{ duration: 2, repeat: Infinity }}
-              style={{
-                background: 'linear-gradient(135deg, #00D4FF, #0099FF, #00D4FF)',
-                filter: 'blur(20px)'
-              }}
-            />
+          <div className="flex items-center gap-2 shrink-0">
             <img 
               src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png" 
               alt="הרשת החדשה" 
-              className="h-8 sm:h-10 w-auto relative z-10"
+              className="h-8 sm:h-10 w-auto"
             />
           <button
             onClick={() => window.dispatchEvent(new CustomEvent('openAIRadio'))}
