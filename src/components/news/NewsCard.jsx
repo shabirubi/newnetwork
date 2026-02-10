@@ -20,15 +20,15 @@ const categoryLabels = {
 };
 
 const categoryColors = {
-  breaking: "bg-gradient-to-r from-[#E31E24] to-[#B91C1C] text-white border border-red-400/50",
-  security: "bg-gradient-to-r from-black/80 to-[#E31E24]/40 text-white border border-[#E31E24]/50",
-  economy: "bg-gradient-to-r from-black/80 to-[#E31E24]/40 text-white border border-[#E31E24]/50",
-  politics: "bg-gradient-to-r from-black/80 to-[#E31E24]/40 text-white border border-[#E31E24]/50",
-  technology: "bg-gradient-to-r from-black/80 to-[#E31E24]/40 text-white border border-[#E31E24]/50",
-  sports: "bg-gradient-to-r from-black/80 to-[#E31E24]/40 text-white border border-[#E31E24]/50",
-  entertainment: "bg-gradient-to-r from-black/80 to-[#E31E24]/40 text-white border border-[#E31E24]/50",
-  world: "bg-gradient-to-r from-black/80 to-[#E31E24]/40 text-white border border-[#E31E24]/50",
-  health: "bg-gradient-to-r from-black/80 to-[#E31E24]/40 text-white border border-[#E31E24]/50"
+  breaking: "bg-gradient-to-r from-[#0080FF] to-[#0066FF] text-white border border-blue-400/50",
+  security: "bg-gradient-to-r from-black/80 to-[#0080FF]/40 text-white border border-[#0080FF]/50",
+  economy: "bg-gradient-to-r from-black/80 to-[#0080FF]/40 text-white border border-[#0080FF]/50",
+  politics: "bg-gradient-to-r from-black/80 to-[#0080FF]/40 text-white border border-[#0080FF]/50",
+  technology: "bg-gradient-to-r from-black/80 to-[#0080FF]/40 text-white border border-[#0080FF]/50",
+  sports: "bg-gradient-to-r from-black/80 to-[#0080FF]/40 text-white border border-[#0080FF]/50",
+  entertainment: "bg-gradient-to-r from-black/80 to-[#0080FF]/40 text-white border border-[#0080FF]/50",
+  world: "bg-gradient-to-r from-black/80 to-[#0080FF]/40 text-white border border-[#0080FF]/50",
+  health: "bg-gradient-to-r from-black/80 to-[#0080FF]/40 text-white border border-[#0080FF]/50"
 };
 
 export default function NewsCard({ 
@@ -44,9 +44,9 @@ export default function NewsCard({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: index * 0.1 }}
-        className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-black/80 via-[#E31E24]/20 to-black/80 backdrop-blur-sm border-2 border-[#E31E24]/40"
+        className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-black/80 via-[#0080FF]/20 to-black/80 backdrop-blur-sm border-2 border-[#0080FF]/40"
         style={{
-          boxShadow: '0 0 30px rgba(227, 30, 36, 0.3), inset 0 0 30px rgba(227, 30, 36, 0.1)'
+          boxShadow: '0 0 30px rgba(0, 128, 255, 0.3), inset 0 0 30px rgba(0, 128, 255, 0.1)'
         }}
       >
         <Link to={createPageUrl(`Article?id=${id}`)} className="block active:scale-[0.99] transition-transform">
@@ -62,7 +62,7 @@ export default function NewsCard({
                   onMouseEnter={(e) => e.target.play()}
                   onMouseLeave={(e) => e.target.pause()}
                 />
-                <div className="absolute top-3 left-3 bg-[#E31E24] text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
+                <div className="absolute top-3 left-3 bg-[#0080FF] text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
                   <Play size={12} fill="white" />
                   וידאו
                 </div>
@@ -82,7 +82,7 @@ export default function NewsCard({
             <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10">
               <div className="flex items-center gap-3 mb-4">
                 {is_breaking && (
-                  <Badge className="bg-[#E31E24] text-white flex items-center gap-1 animate-pulse">
+                  <Badge className="bg-[#0080FF] text-white flex items-center gap-1 animate-pulse">
                     <AlertTriangle size={14} />
                     חדשות חמות
                   </Badge>
@@ -92,7 +92,7 @@ export default function NewsCard({
                 </Badge>
               </div>
               
-              <h2 className="text-2xl md:text-4xl font-bold text-white mb-3 group-hover:text-[#E31E24] transition-colors">
+              <h2 className="text-2xl md:text-4xl font-bold text-white mb-3 group-hover:text-[#0080FF] transition-colors">
                 {title}
               </h2>
               
@@ -127,11 +127,11 @@ export default function NewsCard({
           to={createPageUrl(`Article?id=${id}`)}
           className="flex items-start gap-4 p-4 rounded-2xl active:bg-gray-100 dark:active:bg-gray-800 transition-colors active:scale-[0.98]"
         >
-          <span className="text-3xl font-bold text-gray-200 group-hover:text-[#E31E24] transition-colors">
+          <span className="text-3xl font-bold text-gray-200 group-hover:text-[#0080FF] transition-colors">
             {String(index + 1).padStart(2, '0')}
           </span>
           <div className="flex-1">
-            <h3 className="font-bold text-gray-900 group-hover:text-[#E31E24] transition-colors line-clamp-2">
+            <h3 className="font-bold text-gray-900 group-hover:text-[#0080FF] transition-colors line-clamp-2">
               {title}
             </h3>
             <div className="flex items-center gap-2 mt-2 text-sm text-gray-500">
@@ -141,7 +141,7 @@ export default function NewsCard({
               <span>{moment(created_date).fromNow()}</span>
             </div>
           </div>
-          <ChevronLeft size={20} className="text-gray-400 group-hover:text-[#E31E24] transition-colors shrink-0" />
+          <ChevronLeft size={20} className="text-gray-400 group-hover:text-[#0080FF] transition-colors shrink-0" />
         </Link>
       </motion.article>
     );
@@ -153,9 +153,9 @@ export default function NewsCard({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1 }}
-      className="group bg-gradient-to-br from-black/80 via-[#E31E24]/20 to-black/80 backdrop-blur-sm rounded-2xl overflow-hidden border-2 border-[#E31E24]/40 hover:border-[#E31E24]/80 transition-all duration-300"
+      className="group bg-gradient-to-br from-black/80 via-[#0080FF]/20 to-black/80 backdrop-blur-sm rounded-2xl overflow-hidden border-2 border-[#0080FF]/40 hover:border-[#0080FF]/80 transition-all duration-300"
       style={{
-        boxShadow: '0 0 20px rgba(227, 30, 36, 0.3), inset 0 0 20px rgba(227, 30, 36, 0.1)'
+        boxShadow: '0 0 20px rgba(0, 128, 255, 0.3), inset 0 0 20px rgba(0, 128, 255, 0.1)'
       }}
     >
       <Link to={createPageUrl(`Article?id=${id}`)} className="block active:scale-[0.98] transition-transform">
@@ -172,7 +172,7 @@ export default function NewsCard({
                 onMouseLeave={(e) => e.target.pause()}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-              <div className="absolute bottom-3 left-3 bg-[#E31E24] text-white px-2 py-1 rounded text-xs font-bold flex items-center gap-1">
+              <div className="absolute bottom-3 left-3 bg-[#0080FF] text-white px-2 py-1 rounded text-xs font-bold flex items-center gap-1">
                 <Play size={12} fill="white" />
                 וידאו
               </div>
@@ -194,7 +194,7 @@ export default function NewsCard({
           
           {is_breaking && (
             <div className="absolute top-3 right-3">
-              <Badge className="bg-[#E31E24] text-white flex items-center gap-1 animate-pulse">
+              <Badge className="bg-[#0080FF] text-white flex items-center gap-1 animate-pulse">
                 <AlertTriangle size={12} />
                 חם
               </Badge>
@@ -207,7 +207,7 @@ export default function NewsCard({
             {categoryLabels[category]}
           </Badge>
           
-          <h3 className="font-bold text-base text-gray-900 dark:text-white group-hover:text-[#E31E24] dark:group-hover:text-[#E31E24] transition-colors line-clamp-2 mb-2 leading-snug">
+          <h3 className="font-bold text-base text-gray-900 dark:text-white group-hover:text-[#0080FF] dark:group-hover:text-[#0080FF] transition-colors line-clamp-2 mb-2 leading-snug">
             {title}
           </h3>
           
