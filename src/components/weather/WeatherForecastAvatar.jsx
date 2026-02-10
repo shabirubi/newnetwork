@@ -115,7 +115,7 @@ export default function WeatherForecastAvatar() {
         </div>
 
         {/* Chat Panel - Right */}
-        <div className="w-full lg:w-96 bg-gradient-to-b from-[#001a4d] via-[#0033CC] to-[#001a4d] flex flex-col border-t-4 lg:border-t-0 lg:border-r-4 border-[#0080FF]/40">
+        <div className="w-96 bg-gradient-to-b from-[#001a4d] via-[#0033CC] to-[#001a4d] flex flex-col border-r-4 border-[#0080FF]/40">
           {/* Messages Container */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gradient-to-b from-black/20 to-transparent">
             <AnimatePresence>
