@@ -50,9 +50,20 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
         setIsLoading(true);
         console.log('Initializing D-ID agent:', agentId);
 
+        // Get client key from backend
+        console.log('Fetching client key from backend...');
+        const { base44 } = await import('@/api/base44Client');
+        const keyResponse = await base44.functions.invoke('getDIDClientKey', {});
+        
+        if (!keyResponse.data?.clientKey) {
+          throw new Error('Failed to get client key: ' + (keyResponse.data?.error || 'Unknown error'));
+        }
+
+        console.log('Client key received, domains:', keyResponse.data.allowedDomains);
+
         const auth = { 
           type: 'key', 
-          clientKey: 'WjI5dloyeGxMVzloZFhSb01ud3hNRGt3TlRBd01qRTROall3TURjMU9ESTBPVFk2TVVsNFJ6Tk5kelJMWmtSWFZHVTNUREJmTjNkMw==' 
+          clientKey: keyResponse.data.clientKey
         };
 
         const callbacks = {
