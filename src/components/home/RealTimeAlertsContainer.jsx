@@ -211,6 +211,61 @@ export default function RealTimeAlertsContainer() {
           <p className="text-gray-400">אין דיווחים בזמן אמת כרגע</p>
         </div>
       )}
+
+      {/* Video Modal */}
+      <AnimatePresence>
+        {selectedVideoAlert && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+            onClick={() => {
+              setSelectedVideoAlert(null);
+              setGeneratedVideoUrl(null);
+            }}
+          >
+            <div className="absolute inset-0 bg-black/95 backdrop-blur-md" />
+            <motion.div
+              initial={{ scale: 0.9 }}
+              animate={{ scale: 1 }}
+              exit={{ scale: 0.9 }}
+              className="relative w-full max-w-2xl bg-black rounded-2xl overflow-hidden border-2 border-[#0080FF]/60"
+              style={{
+                boxShadow: '0 0 40px rgba(0, 128, 255, 0.5)'
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                onClick={() => {
+                  setSelectedVideoAlert(null);
+                  setGeneratedVideoUrl(null);
+                }}
+                className="absolute top-4 right-4 z-10 p-2 bg-black/60 hover:bg-black/80 rounded-full transition-all border border-white/20"
+              >
+                <X className="w-6 h-6 text-white" />
+              </button>
+
+              {!generatedVideoUrl ? (
+                <div className="aspect-video flex flex-col items-center justify-center p-8">
+                  <Loader2 className="w-12 h-12 text-[#0080FF] animate-spin mb-4" />
+                  <p className="text-white text-lg font-semibold">יוצר וידאו...</p>
+                  <p className="text-gray-400 text-sm mt-2">זה עלול לקחת כמה דקות</p>
+                </div>
+              ) : (
+                <video
+                  src={generatedVideoUrl}
+                  className="w-full h-full bg-black"
+                  controls
+                  autoPlay
+                  playsInline
+                  style={{ objectFit: 'contain' }}
+                ></video>
+              )}
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   );
 }
