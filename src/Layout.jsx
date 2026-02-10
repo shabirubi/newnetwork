@@ -296,21 +296,7 @@ export default function Layout({ children, currentPageName }) {
 
 
 
-            {/* Mobile: Logo Only */}
-            <motion.img 
-              src={LOGO_URL} 
-              alt="הרשת החדשה" 
-              className="h-10 w-auto drop-shadow-2xl sm:hidden"
-              animate={{ 
-                scale: [1, 1.05, 1],
-                filter: ['brightness(1)', 'brightness(1.2)', 'brightness(1)']
-              }}
-              transition={{ 
-                duration: 3, 
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-            />
+
         </div>
       </div>
 
