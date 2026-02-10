@@ -251,7 +251,7 @@ export default function Home() {
 
       {/* Weather Forecast Avatar Section */}
       <section className="px-0 mb-8 flex justify-center">
-        <div style={{ width: '1200px', height: '600px' }}>
+        <div style={{ width: '1150px', height: '550px' }}>
           <WeatherForecastAvatar />
         </div>
       </section>
