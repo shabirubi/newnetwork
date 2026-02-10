@@ -28,24 +28,26 @@ export default function WarRoom() {
   const [videoUrl, setVideoUrl] = useState(null);
   const audioRef = useRef(null);
 
-  // Fetch ONLY security news - Israel, Iran, US and IDF Gaza operations
+  // Fetch real-time alerts from all sources
   const { data: articles = [], refetch: refetchNews, isLoading: newsLoading } = useQuery({
-    queryKey: ['news-articles-real'],
+    queryKey: ['warroom-realtime-alerts'],
     queryFn: async () => {
       try {
+        // קבל חדשות ביטחוניות וחדשות חמות
         const allArticles = await base44.entities.NewsArticle.filter(
           { category: 'security' },
           '-created_date',
           50
         );
         
-        // Filter for relevant security topics
+        // סנן לדיווחים בזמן אמת
         const keywordPatterns = [
           /ישראל|israel/i,
           /איראן|iran/i,
           /אמריקה|ארצות הברית|usa|united states|american/i,
-          /צהל|idf|israel defense/i,
-          /עזה|gaza/i
+          /צהל|idf|israel defense|חיל|צה"ל/i,
+          /עזה|gaza|תל אביב|אשדוד|ירושלים|חיפה/i,
+          /חדשות חם|דיווח בזמן אמת|דיווח חי/i
         ];
         
         const filteredArticles = (allArticles || []).filter(article => {
@@ -53,14 +55,21 @@ export default function WarRoom() {
           return keywordPatterns.some(pattern => pattern.test(text));
         });
         
-        return filteredArticles.slice(0, 30);
+        // מיין לפי עדיפות - חדשות חם ראשון
+        const sorted = filteredArticles.sort((a, b) => {
+          if (a.is_breaking && !b.is_breaking) return -1;
+          if (!a.is_breaking && b.is_breaking) return 1;
+          return new Date(b.created_date) - new Date(a.created_date);
+        });
+        
+        return sorted.slice(0, 30);
       } catch (error) {
-        console.error('Error fetching articles:', error);
+        console.error('Error fetching alerts:', error);
         return [];
       }
     },
-    staleTime: 30000,
-    refetchInterval: 30000
+    staleTime: 15000,
+    refetchInterval: 15000
   });
 
   // בדיקת מנוי
