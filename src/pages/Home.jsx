@@ -27,6 +27,7 @@ import UserUploadedVideos from "../components/home/UserUploadedVideos";
 import ReportersSpotlight from "../components/home/ReportersSpotlight";
 import { Droplet, Mic, Users, Wand2, FileVideo } from "lucide-react";
 import ReporterLiveChat from "../components/reporter/ReporterLiveChat";
+import RealTimeAlertsContainer from "../components/home/RealTimeAlertsContainer";
 
       // Lazy loaded components
 const NewsReels = React.lazy(() => import("../components/news/NewsReels"));
