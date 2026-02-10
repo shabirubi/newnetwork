@@ -265,7 +265,30 @@ export default function Layout({ children, currentPageName }) {
               <span className="text-white font-bold">Admin</span>
             </button>
 
-          <div className="hidden sm:flex items-center gap-2">
+          <div className="hidden sm:flex items-center gap-4">
+            {/* Color Picker Bar */}
+            <div className="flex items-center gap-1.5 px-3 py-2 bg-black/30 rounded-lg border border-[#0080FF]/30 backdrop-blur-sm">
+              {[
+                '#0080FF', '#00D4FF', '#00FF88', '#FFD700', 
+                '#FF6B35', '#E31E24', '#9D4EDD', '#3A86FF'
+              ].map((color) => (
+                <motion.button
+                  key={color}
+                  onClick={() => {
+                    const root = document.documentElement;
+                    root.style.setProperty('--primary', color);
+                    root.style.setProperty('--accent', color);
+                    localStorage.setItem('themeColor', color);
+                  }}
+                  className="w-5 h-5 rounded-full border-2 border-white/40 hover:border-white transition-all"
+                  style={{ backgroundColor: color }}
+                  whileHover={{ scale: 1.15 }}
+                  whileTap={{ scale: 0.9 }}
+                  title={color}
+                />
+              ))}
+            </div>
+
             {/* Auth Buttons */}
             {authLoading ? (
               <div className="flex items-center gap-2 px-3 py-2 bg-black/60 rounded-2xl">
