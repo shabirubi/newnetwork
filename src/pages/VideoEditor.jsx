@@ -144,61 +144,13 @@ export default function VideoEditor() {
   const videoRef = useRef(null);
   const audioRef = useRef(null);
 
-  // בדיקת גישה למנוי
   useEffect(() => {
-    const checkSubscription = async () => {
-      setHasAccess(false);
-      
-      try {
-        const storedEmail = localStorage.getItem('user_email');
-        
-        if (!storedEmail) {
-          setCheckingAccess(false);
-          return;
-        }
-        
-        setUserEmail(storedEmail);
-        
-        // בדוק מנוי פעיל
-        const subs = await base44.entities.Subscription.filter(
-          { user_email: storedEmail, status: 'active' }, 
-          '-created_date', 
-          1
-        );
-        
-        if (!subs || subs.length === 0) {
-          setCheckingAccess(false);
-          return;
-        }
-        
-        const activeSub = subs[0];
-
-        // בדיקה שהמנוי לא פג תוקף
-        if (activeSub.end_date && new Date(activeSub.end_date) < new Date()) {
-          setCheckingAccess(false);
-          return;
-        }
-
-        setHasAccess(true);
-        
-        // שלח הודעה שהמשתמש נכנס לעורך
-        try {
-          await base44.functions.invoke('logPaymentSuccess', {
-            userEmail: storedEmail,
-            sessionId: activeSub.stripe_subscription_id,
-            priceId: activeSub.stripe_subscription_id
-          });
-        } catch (e) {
-          console.log('Could not log access:', e);
-        }
-      } catch (err) {
-        console.error('Subscription check error:', err);
-      } finally {
-        setCheckingAccess(false);
-      }
-    };
-    
-    checkSubscription();
+    setHasAccess(true);
+    setCheckingAccess(false);
+    const storedEmail = localStorage.getItem('user_email');
+    if (storedEmail) {
+      setUserEmail(storedEmail);
+    }
   }, []);
 
   // Calculate total duration
