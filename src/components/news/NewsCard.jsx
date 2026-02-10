@@ -58,7 +58,6 @@ export default function NewsCard({
                   className="w-full h-full object-cover"
                   muted
                   loop
-                  autoPlay
                   playsInline
                   onMouseEnter={(e) => e.target.play()}
                   onMouseLeave={(e) => e.target.pause()}
@@ -168,7 +167,6 @@ export default function NewsCard({
                 className="w-full h-full object-cover"
                 muted
                 loop
-                autoPlay
                 playsInline
                 onMouseEnter={(e) => e.target.play()}
                 onMouseLeave={(e) => e.target.pause()}
