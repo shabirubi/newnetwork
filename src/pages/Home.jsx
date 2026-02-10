@@ -26,7 +26,7 @@ import UploadVideoModal from "../components/home/UploadVideoModal";
 import UserUploadedVideos from "../components/home/UserUploadedVideos";
 import ReportersSpotlight from "../components/home/ReportersSpotlight";
 import { Droplet, Mic, Users, Wand2, FileVideo } from "lucide-react";
-import DIDLiveChat from "../components/avatar/DIDLiveChat";
+import ReporterLiveChat from "../components/reporter/ReporterLiveChat";
 
       // Lazy loaded components
 const NewsReels = React.lazy(() => import("../components/news/NewsReels"));
@@ -45,6 +45,7 @@ export default function Home() {
   const [liveAvatarChatOpen, setLiveAvatarChatOpen] = React.useState(false);
   const [showLivePlayer, setShowLivePlayer] = React.useState(false);
   const [liveChatOpen, setLiveChatOpen] = React.useState(false);
+  const [selectedReporterForChat, setSelectedReporterForChat] = React.useState(null);
   const [page, setPage] = React.useState(1);
   const [hasMore, setHasMore] = React.useState(true);
   const [selectedChannel, setSelectedChannel] = React.useState(() => {
@@ -329,12 +330,22 @@ export default function Home() {
         onClose={() => setLiveAvatarChatOpen(false)} 
       />
 
-      {/* DID Live Chat */}
-      <DIDLiveChat isOpen={liveChatOpen} onClose={() => setLiveChatOpen(false)} />
+      {/* Reporter Live Chat Modal */}
+      <ReporterLiveChat 
+        isOpen={liveChatOpen} 
+        onClose={() => {
+          setLiveChatOpen(false);
+          setSelectedReporterForChat(null);
+        }}
+        reporter={selectedReporterForChat || { name: 'עדי', image: 'https://via.placeholder.com/150' }}
+      />
 
       {/* Floating Live Chat Button */}
       <motion.button
-        onClick={() => setLiveChatOpen(true)}
+        onClick={() => {
+          setSelectedReporterForChat({ name: 'כתבי הרשת', image: 'https://via.placeholder.com/150' });
+          setLiveChatOpen(true);
+        }}
         className="fixed bottom-24 left-6 z-[100] w-16 h-16 bg-gradient-to-br from-[#0080FF]/30 via-[#0066FF]/30 to-[#0080FF]/30 backdrop-blur-md rounded-full shadow-2xl shadow-[#0080FF]/30 flex items-center justify-center border-2 border-[#0080FF]/50"
         initial={{ scale: 0 }}
         animate={{ 
