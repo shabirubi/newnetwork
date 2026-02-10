@@ -239,6 +239,70 @@ export default function Home() {
 
 
 
+      {/* Breaking News Updates Feed */}
+      <section className="px-0 sm:px-4 mb-8">
+        <React.Suspense fallback={<Skeleton className="w-full h-96 bg-gray-800" />}>
+          <UpdatesFeed />
+        </React.Suspense>
+      </section>
+
+      {/* News Reels Section */}
+      <section className="px-0 sm:px-4 mb-8">
+        <React.Suspense fallback={<Skeleton className="w-full h-96 bg-gray-800" />}>
+          <NewsReels />
+        </React.Suspense>
+      </section>
+
+      {/* Trending Topics */}
+      <section className="px-0 sm:px-4 mb-8">
+        <React.Suspense fallback={<Skeleton className="w-full h-64 bg-gray-800" />}>
+          <TrendingTopicsContainer />
+        </React.Suspense>
+      </section>
+
+      {/* TikTok News Feed */}
+      <section className="px-0 sm:px-4 mb-8">
+        <React.Suspense fallback={<Skeleton className="w-full h-96 bg-gray-800" />}>
+          <TikTokNewsContainer />
+        </React.Suspense>
+      </section>
+
+      {/* All Videos Gallery */}
+      <section className="px-0 sm:px-4 mb-8">
+        <React.Suspense fallback={<Skeleton className="w-full h-96 bg-gray-800" />}>
+          <AllVideosGallery />
+        </React.Suspense>
+      </section>
+
+      {/* Kan Archive */}
+      <section className="px-0 sm:px-4 mb-8">
+        <React.Suspense fallback={<Skeleton className="w-full h-64 bg-gray-800" />}>
+          <KanArchiveContainer />
+        </React.Suspense>
+      </section>
+
+      {/* Reporter Responses Feed */}
+      <section className="px-0 sm:px-4 mb-8">
+        <React.Suspense fallback={<Skeleton className="w-full h-96 bg-gray-800" />}>
+          <ReporterResponsesFeed />
+        </React.Suspense>
+      </section>
+
+      {/* Reporters Spotlight */}
+      <section className="px-0 sm:px-4 mb-8">
+        <ReportersSpotlight />
+      </section>
+
+      {/* User Uploaded Videos */}
+      <section className="px-0 sm:px-4 mb-8">
+        <UserUploadedVideos />
+      </section>
+
+      {/* Entertainment Updates */}
+      <section className="px-0 sm:px-4 mb-8">
+        <EntertainmentUpdatesFeed />
+      </section>
+
       {/* VOD Modal */}
       <VODModal isOpen={vodModalOpen} onClose={() => setVodModalOpen(false)} />
 
@@ -263,8 +327,8 @@ export default function Home() {
         onClose={() => setLiveAvatarChatOpen(false)} 
       />
 
-
-
+      {/* Studio Sidebar */}
+      <StudioSidebar />
 
 
 
