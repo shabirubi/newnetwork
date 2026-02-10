@@ -259,29 +259,27 @@ export default function Layout({ children, currentPageName }) {
 
               <Link 
                 to={createPageUrl("Live")}
-              className="flex items-center gap-1 px-2 py-1 bg-gradient-to-r from-[#0080FF] to-[#0066FF] backdrop-blur-xl rounded-lg shadow-lg shadow-[#0080FF]/50 border border-[#0080FF]/50 transition-all hover:scale-105 animate-pulse text-[11px]"
+                className="flex items-center gap-1 px-2 py-1 bg-gradient-to-r from-[#0080FF] to-[#0066FF] backdrop-blur-xl rounded-lg shadow-lg shadow-[#0080FF]/50 border border-[#0080FF]/50 transition-all hover:scale-105 animate-pulse text-[11px]"
               >
-              <Radio className="w-4 h-4 text-white" />
-              <span className="text-white font-bold">שידור חי</span>
+                <Radio className="w-4 h-4 text-white" />
+                <span className="text-white font-bold">שידור חי</span>
               </Link>
-
-
             </div>
 
             {/* Mobile: Logo Only */}
             <motion.img 
-            src={LOGO_URL} 
-            alt="הרשת החדשה" 
-            className="h-10 w-auto drop-shadow-2xl sm:hidden"
-            animate={{ 
-              scale: [1, 1.05, 1],
-              filter: ['brightness(1)', 'brightness(1.2)', 'brightness(1)']
-            }}
-            transition={{ 
-              duration: 3, 
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
+              src={LOGO_URL} 
+              alt="הרשת החדשה" 
+              className="h-10 w-auto drop-shadow-2xl sm:hidden"
+              animate={{ 
+                scale: [1, 1.05, 1],
+                filter: ['brightness(1)', 'brightness(1.2)', 'brightness(1)']
+              }}
+              transition={{ 
+                duration: 3, 
+                repeat: Infinity,
+                ease: "easeInOut"
+              }}
             />
         </div>
       </div>
