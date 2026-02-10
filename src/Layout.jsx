@@ -173,7 +173,7 @@ export default function Layout({ children, currentPageName }) {
       </div>
 
       {/* Logo Header */}
-      <div className="bg-[#0073E6] border-b border-[#005BBD] py-2">
+      <div className="bg-gradient-to-b from-[#0080FF]/40 via-[#0066FF]/30 to-[#0080FF]/20 backdrop-blur-xl border-b border-[#0080FF]/40 py-2 shadow-[0_8px_32px_rgba(0,128,255,0.2)]">
         <div className="max-w-7xl mx-auto px-4 flex items-center justify-between gap-3">
           <div className="flex items-center gap-3 bg-gradient-to-r from-[#0080FF]/10 via-transparent to-transparent px-4 py-2 rounded-lg">
             <motion.img 
