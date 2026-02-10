@@ -1,11 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Check, Shield } from "lucide-react";
+import { X, Check, Shield, Type, Contrast } from "lucide-react";
 
 export default function CookieConsent() {
   const [isOpen, setIsOpen] = useState(false);
   const [accepted, setAccepted] = useState(false);
   const [language, setLanguage] = useState('he');
+  const [showAccessibility, setShowAccessibility] = useState(false);
+  const [a11ySettings, setA11ySettings] = useState({
+    textSize: 1,
+    contrast: 'normal',
+    dyslexia: false,
+    boldText: false
+  });
 
   useEffect(() => {
     const hasAccepted = localStorage.getItem('cookieConsent');
@@ -16,7 +23,39 @@ export default function CookieConsent() {
     } else {
       setAccepted(true);
     }
+
+    // Load accessibility settings
+    const savedA11y = localStorage.getItem('a11ySettings');
+    if (savedA11y) {
+      setA11ySettings(JSON.parse(savedA11y));
+    }
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem('a11ySettings', JSON.stringify(a11ySettings));
+
+    if (a11ySettings.textSize !== 1) {
+      document.documentElement.style.fontSize = (16 * a11ySettings.textSize) + 'px';
+    }
+
+    if (a11ySettings.contrast === 'high') {
+      document.documentElement.classList.add('high-contrast');
+    } else {
+      document.documentElement.classList.remove('high-contrast');
+    }
+
+    if (a11ySettings.dyslexia) {
+      document.documentElement.classList.add('dyslexia-font');
+    } else {
+      document.documentElement.classList.remove('dyslexia-font');
+    }
+
+    if (a11ySettings.boldText) {
+      document.documentElement.style.fontWeight = '700';
+    } else {
+      document.documentElement.style.fontWeight = 'normal';
+    }
+  }, [a11ySettings]);
 
   const handleAccept = () => {
     localStorage.setItem('cookieConsent', 'true');
@@ -28,6 +67,127 @@ export default function CookieConsent() {
   const handleReject = () => {
     setIsOpen(false);
   };
+
+  // Show accessibility panel
+  if (showAccessibility) {
+    return (
+      <AnimatePresence>
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 z-[10000] flex items-end justify-end p-4 pointer-events-none"
+        >
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0, y: 20 }}
+            animate={{ scale: 1, opacity: 1, y: 0 }}
+            exit={{ scale: 0.9, opacity: 0, y: 20 }}
+            className="bg-gradient-to-br from-gray-900 via-gray-800 to-black rounded-2xl p-4 border-2 border-purple-500/60 shadow-2xl w-80 pointer-events-auto"
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="font-bold text-white flex items-center gap-2 text-sm">
+                <Shield className="w-4 h-4 text-purple-400" />
+                נגישות
+              </h3>
+              <button
+                onClick={() => setShowAccessibility(false)}
+                className="p-1 hover:bg-white/10 rounded-full transition-colors"
+              >
+                <X className="w-4 h-4 text-white" />
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="space-y-3">
+              {/* Text Size */}
+              <div>
+                <label className="text-white font-bold text-xs mb-1.5 block">
+                  <Type className="w-3 h-3 inline mr-1 text-purple-400" />
+                  גודל טקסט
+                </label>
+                <div className="grid grid-cols-4 gap-1">
+                  {[0.8, 1, 1.2, 1.4].map((size) => (
+                    <button
+                      key={size}
+                      onClick={() => setA11ySettings({ ...a11ySettings, textSize: size })}
+                      className={`px-2 py-1 rounded text-xs font-bold transition-all ${
+                        a11ySettings.textSize === size
+                          ? 'bg-purple-600 text-white'
+                          : 'bg-gray-700 text-white hover:bg-gray-600'
+                      }`}
+                    >
+                      {Math.round(size * 100)}%
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Contrast */}
+              <div>
+                <label className="text-white font-bold text-xs mb-1.5 block">
+                  <Contrast className="w-3 h-3 inline mr-1 text-purple-400" />
+                  ניגודיות
+                </label>
+                <div className="flex gap-1">
+                  {[
+                    { value: 'normal', label: 'רגיל' },
+                    { value: 'high', label: 'גבוה' }
+                  ].map((opt) => (
+                    <button
+                      key={opt.value}
+                      onClick={() => setA11ySettings({ ...a11ySettings, contrast: opt.value })}
+                      className={`flex-1 px-2 py-1 rounded text-xs font-bold transition-all ${
+                        a11ySettings.contrast === opt.value
+                          ? 'bg-purple-600 text-white'
+                          : 'bg-gray-700 text-white hover:bg-gray-600'
+                      }`}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Dyslexia */}
+              <button
+                onClick={() => setA11ySettings({ ...a11ySettings, dyslexia: !a11ySettings.dyslexia })}
+                className={`w-full px-2 py-1.5 rounded text-xs font-bold transition-all flex items-center justify-between ${
+                  a11ySettings.dyslexia
+                    ? 'bg-purple-600 text-white'
+                    : 'bg-gray-700 text-white hover:bg-gray-600'
+                }`}
+              >
+                <span>דיסלקסיה</span>
+                <span>{a11ySettings.dyslexia ? '✓' : ''}</span>
+              </button>
+
+              {/* Bold Text */}
+              <button
+                onClick={() => setA11ySettings({ ...a11ySettings, boldText: !a11ySettings.boldText })}
+                className={`w-full px-2 py-1.5 rounded text-xs font-bold transition-all flex items-center justify-between ${
+                  a11ySettings.boldText
+                    ? 'bg-purple-600 text-white'
+                    : 'bg-gray-700 text-white hover:bg-gray-600'
+                }`}
+              >
+                <span>טקסט מודגש</span>
+                <span>{a11ySettings.boldText ? '✓' : ''}</span>
+              </button>
+
+              {/* Reset */}
+              <button
+                onClick={() => setA11ySettings({ textSize: 1, contrast: 'normal', dyslexia: false, boldText: false })}
+                className="w-full px-2 py-1 rounded text-xs font-bold bg-red-600/30 text-white hover:bg-red-600/50 transition-all"
+              >
+                איפוס
+              </button>
+            </div>
+          </motion.div>
+        </motion.div>
+      </AnimatePresence>
+    );
+  }
 
   if (accepted || !isOpen) {
     return null;
@@ -48,17 +208,6 @@ export default function CookieConsent() {
             onClick={handleReject}
           >
             <div className="absolute inset-0 bg-gradient-to-b from-[#001a4d]/50 via-[#003d99]/40 to-[#0066FF]/30" />
-            <motion.div 
-              className="absolute inset-0 opacity-30"
-              animate={{
-                backgroundPosition: ["0% 0%", "100% 100%"]
-              }}
-              transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-              style={{
-                backgroundImage: "linear-gradient(45deg, #00D4FF 25%, transparent 25%, transparent 50%, #00D4FF 50%, #00D4FF 75%, transparent 75%, transparent)",
-                backgroundSize: "40px 40px",
-              }}
-            />
           </div>
 
           {/* Cookie Card */}
@@ -82,13 +231,22 @@ export default function CookieConsent() {
                 }}
               />
               <div className="relative z-10">
-                {/* Close Button */}
-                <button
-                  onClick={handleReject}
-                  className="absolute top-4 right-4 p-2 rounded-full hover:bg-white/10 transition-all z-20"
-                >
-                  <X className="w-5 h-5 text-white" />
-                </button>
+                {/* Accessibility + Close Buttons */}
+                <div className="absolute top-4 right-4 flex gap-2 z-20">
+                  <motion.button
+                    onClick={() => setShowAccessibility(true)}
+                    className="p-2 rounded-full bg-purple-600/50 hover:bg-purple-600/70 transition-all border border-purple-400"
+                    whileHover={{ scale: 1.1 }}
+                  >
+                    <Shield className="w-5 h-5 text-white" />
+                  </motion.button>
+                  <button
+                    onClick={handleReject}
+                    className="p-2 rounded-full hover:bg-white/10 transition-all"
+                  >
+                    <X className="w-5 h-5 text-white" />
+                  </button>
+                </div>
 
                 {/* Content */}
                 <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
