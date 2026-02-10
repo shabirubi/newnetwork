@@ -159,8 +159,9 @@ export default function WeatherForecastAvatar() {
               <p className="text-white text-xs mt-1">צפוי גל חום בסוף השבוע - המלצה להימנע מפעילויות בשעות הצהריים</p>
             </div>
           </motion.div>
-        </motion.div>
-      </div>
+          </motion.div>
+          </div>
+          </div>
 
       {/* Bottom Info Bar */}
       <motion.div
