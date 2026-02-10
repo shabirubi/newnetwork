@@ -132,9 +132,10 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
           onClick={(e) => e.stopPropagation()}
           className="bg-gradient-to-br from-[#000510] via-[#001030] to-[#000510] rounded-3xl overflow-hidden shadow-2xl border-4 border-[#0080FF]/40 flex flex-col"
           style={{
-            width: '1200px',
-            height: '600px',
-            maxWidth: '95vw',
+            width: '1000px',
+            height: '550px',
+            maxWidth: '90vw',
+            maxHeight: '90vh',
             boxShadow: '0 0 80px rgba(0, 128, 255, 0.4), inset 0 0 60px rgba(0, 128, 255, 0.05)',
             direction: 'rtl'
           }}
