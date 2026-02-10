@@ -149,7 +149,6 @@ export default function Home() {
           to={`${createPageUrl("Article")}?id=${featuredArticle.id}`}
           className="block group relative h-[500px] sm:h-[600px] lg:h-[700px] rounded-none sm:rounded-3xl overflow-hidden cursor-pointer"
         >
-          <div className="relative h-full w-full">
           {/* Background Image */}
           <img 
             src={featuredArticle.image_url} 
@@ -165,8 +164,8 @@ export default function Home() {
             <div className="space-y-6 max-w-4xl">
               {/* Badge */}
               <div className="inline-flex w-fit bg-gradient-to-r from-[#0080FF] to-[#0066FF] text-white px-5 py-2 rounded-full font-bold text-base shadow-[0_0_20px_rgba(0,128,255,0.6)] border-2 border-[#0080FF]/50">
-                  📈 כלכלה ופיננסים
-                </div>
+                📈 כלכלה ופיננסים
+              </div>
 
               {/* Title */}
               <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight drop-shadow-2xl">
@@ -199,11 +198,10 @@ export default function Home() {
                   📰 {featuredArticle.source}
                 </span>
               </div>
-              </div>
-              </div>
-              </div>
-              </Link>
-              </section>
+            </div>
+          </div>
+        </Link>
+      </section>
 
           {/* Live Player Section - מוצג רק אם לחצו על הכפתור */}
           {showLivePlayer && (
