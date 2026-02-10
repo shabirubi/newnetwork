@@ -201,7 +201,32 @@ export default function Layout({ children, currentPageName }) {
                   </motion.p>
                 </div>
             </div>
-            
+
+            {/* Opening Date Display */}
+            <motion.div 
+              className="hidden md:flex items-center gap-3 px-6 py-2 bg-gradient-to-r from-green-500/20 via-emerald-500/20 to-green-500/20 rounded-2xl border-2 border-green-500/50 backdrop-blur-sm"
+              animate={{
+                boxShadow: [
+                  '0 0 20px rgba(34, 197, 94, 0.3)',
+                  '0 0 40px rgba(34, 197, 94, 0.6)',
+                  '0 0 20px rgba(34, 197, 94, 0.3)'
+                ]
+              }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              <motion.span 
+                className="text-2xl"
+                animate={{ scale: [1, 1.2, 1] }}
+                transition={{ duration: 1.5, repeat: Infinity }}
+              >
+                🚀
+              </motion.span>
+              <div className="flex flex-col gap-0.5">
+                <span className="text-xs font-bold text-green-300">פתיחה רשמית</span>
+                <span className="text-sm font-bold text-white">7 למרץ</span>
+              </div>
+            </motion.div>
+
             <button
               onClick={() => window.open(createPageUrl("AdminPanel"), "_blank")}
               className="flex items-center gap-1 px-2 py-1.5 bg-gradient-to-r from-[#0080FF] to-[#0066FF] backdrop-blur-xl rounded-lg shadow-lg shadow-[#0080FF]/50 border border-[#0080FF]/50 transition-all hover:scale-105 text-[11px]"
