@@ -42,39 +42,13 @@ export default function NewsTicker({ darkMode, setDarkMode, onMenuClick }) {
   };
 
   const loadBreakingNews = async () => {
-    try {
-      // Try to get from database first
-      const dbNews = await base44.entities.NewsArticle.filter(
-        { is_breaking: true },
-        '-created_date',
-        10
-      );
-
-      if (dbNews && dbNews.length > 0) {
-        setNews(dbNews.map(item => item.title));
-        setLoading(false);
-        return;
-      }
-
-      // Fallback news only
-      setNews([
-        "מעקב חי: התפתחויות בזירה הביטחונית",
-        "הבורסה בתל אביב עם מגמה חיובית",
-        "ישיבת ממשלה מיוחדת היום בירושלים",
-        "תחזית מזג אוויר: גל חום בסוף השבוע"
-      ]);
-    } catch (error) {
-      console.error('Error loading news:', error);
-      // Fallback news
-      setNews([
-        "מעקב חי: התפתחויות בזירה הביטחונית",
-        "הבורסה בתל אביב עם מגמה חיובית",
-        "ישיבת ממשלה מיוחדת היום בירושלים",
-        "תחזית מזג אוויר: גל חום בסוף השבוע"
-      ]);
-    } finally {
-      setLoading(false);
-    }
+    setNews([
+      "מעקב חי: התפתחויות בזירה הביטחונית",
+      "הבורסה בתל אביב עם מגמה חיובית",
+      "ישיבת ממשלה מיוחדת היום בירושלים",
+      "תחזית מזג אוויר: גל חום בסוף השבוע"
+    ]);
+    setLoading(false);
   };
 
   if (loading || news.length === 0) {
@@ -233,34 +207,8 @@ export default function NewsTicker({ darkMode, setDarkMode, onMenuClick }) {
 }
 
 function TickerContent({ news, currencies }) {
-  const { data: articles = [] } = useQuery({
-    queryKey: ['breaking-news-shared'],
-    queryFn: async () => {
-      try {
-        return await base44.entities.NewsArticle.filter(
-          { is_breaking: true },
-          '-created_date',
-          12
-        );
-      } catch {
-        return [];
-      }
-    },
-    refetchInterval: false,
-    refetchOnWindowFocus: false,
-    staleTime: 10 * 60 * 1000,
-    gcTime: 15 * 60 * 1000,
-    initialData: []
-  });
-
-  const updates = articles.map(article => ({
-    title: article.title,
-    id: article.id,
-    time: new Date(article.created_date).toLocaleTimeString('he-IL', {
-      hour: '2-digit',
-      minute: '2-digit'
-    })
-  }));
+  const articles = [];
+  const updates = [];
 
   return (
     <motion.div
