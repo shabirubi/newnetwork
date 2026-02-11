@@ -40,13 +40,19 @@ export default function UploadVideoModal({ isOpen, onClose }) {
 
       // שמור ב-UserVideo
       console.log('💾 שומר ב-UserVideo...');
-      const user = await base44.auth.me();
+      let uploaderEmail = 'guest@hareshet.co.il';
+      try {
+        const user = await base44.auth.me();
+        if (user) uploaderEmail = user.email;
+      } catch (e) {
+        console.log('משתמש לא מחובר, משתמש באימייל אורח');
+      }
       await base44.entities.UserVideo.create({
         title: formData.title,
         video_url: videoUrl,
         thumbnail_url: videoUrl,
         description: formData.description || '',
-        uploader_email: user.email,
+        uploader_email: uploaderEmail,
         status: 'ready',
         category: formData.category,
         feed: formData.feed
