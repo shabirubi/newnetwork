@@ -53,11 +53,15 @@ Deno.serve(async (req) => {
     }
 
     const audioBuffer = await speechResponse.arrayBuffer();
-    const audioBlob = new Blob([audioBuffer], { type: 'audio/mpeg' });
     
-    // Upload audio to get URL
-    const audioUpload = await base44.integrations.Core.UploadFile({ file: audioBlob });
-    const audioUrl = audioUpload.file_url;
+    // Convert to base64 data URL
+    const uint8View = new Uint8Array(audioBuffer);
+    let audioBase64 = '';
+    for (let i = 0; i < uint8View.length; i++) {
+      audioBase64 += String.fromCharCode(uint8View[i]);
+    }
+    audioBase64 = btoa(audioBase64);
+    const audioUrl = `data:audio/mpeg;base64,${audioBase64}`;
 
     // 2. Use D-ID API to create talking avatar video
     const didResponse = await fetch('https://api.d-id.com/talks', {

@@ -43,11 +43,9 @@ ${article.subtitle ? article.subtitle + '\n\n' : ''}${article.content ? article.
       script: {
         type: 'text',
         input: script,
-        language: 'he',
         provider: {
-          type: 'elevenlabs',
-          voice_id: reporterGender === 'male' ? 'pNInz6obpgDQGcFmaJgB' : 'EXAVITQu4EsNXjluf7xi',
-          language: 'he'
+          type: 'microsoft',
+          voice_id: reporterGender === 'male' ? 'he-IL-AvriNeural' : 'he-IL-HilaNeural'
         }
       }
     };
