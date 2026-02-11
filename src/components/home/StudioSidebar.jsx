@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../../utils";
 import { motion } from "framer-motion";
-import { User, Users, Video, ArrowLeft } from "lucide-react";
+import { User, Users, Video, ArrowLeft, Upload } from "lucide-react";
 
 export default function StudioSidebar() {
   const studioOptions = [
@@ -41,6 +41,26 @@ export default function StudioSidebar() {
       <div className="bg-gradient-to-r from-[#E31E24]/20 to-red-900/20 px-4 py-3 border-b border-[#E31E24]/30">
         <h3 className="text-white font-bold text-sm">סטודיו שידור</h3>
         <p className="text-white/50 text-xs mt-1">בחר סוג אווטר</p>
+      </div>
+
+      {/* Upload Video Button */}
+      <div className="p-3 pb-0">
+        <motion.button
+          onClick={() => window.dispatchEvent(new CustomEvent('openUploadVideo'))}
+          className="w-full p-3 rounded-lg border-2 border-green-500/30 hover:bg-green-500/20 transition-all text-left group"
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+        >
+          <div className="flex items-start gap-3">
+            <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-green-500 to-green-700 flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform">
+              <Upload className="w-5 h-5 text-white" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-white font-semibold text-sm leading-tight">העלאת וידאו</p>
+              <p className="text-white/50 text-xs mt-1">שתף סרטון מהשטח</p>
+            </div>
+          </div>
+        </motion.button>
       </div>
 
       {/* Studio Options */}

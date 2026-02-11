@@ -45,6 +45,12 @@ export default function Home() {
   const [categoriesMenuOpen, setCategoriesMenuOpen] = React.useState(false);
   const [a11yOpen, setA11yOpen] = React.useState(false);
   const [uploadVideoModalOpen, setUploadVideoModalOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    const handleOpenUpload = () => setUploadVideoModalOpen(true);
+    window.addEventListener('openUploadVideo', handleOpenUpload);
+    return () => window.removeEventListener('openUploadVideo', handleOpenUpload);
+  }, []);
   const [reportersModalOpen, setReportersModalOpen] = React.useState(false);
   const [liveAvatarChatOpen, setLiveAvatarChatOpen] = React.useState(false);
   const [showLivePlayer, setShowLivePlayer] = React.useState(false);
