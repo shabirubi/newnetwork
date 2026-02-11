@@ -86,8 +86,12 @@ Deno.serve(async (req) => {
 
     if (!didResponse.ok) {
       const errorText = await didResponse.text();
-      console.error('D-ID API error:', errorText);
-      return Response.json({ error: 'Video creation failed' }, { status: 500 });
+      console.error('D-ID API error:', didResponse.status, errorText);
+      return Response.json({ 
+        error: 'D-ID API failed', 
+        details: errorText,
+        status: didResponse.status 
+      }, { status: 500 });
     }
 
     const didData = await didResponse.json();
