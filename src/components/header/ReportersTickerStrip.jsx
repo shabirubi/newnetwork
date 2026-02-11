@@ -104,7 +104,7 @@ export default function ReportersTickerStrip() {
           </button>
 
           <div ref={scrollContainerRef} className="overflow-x-auto overflow-y-hidden scrollbar-hide" onScroll={handleScroll} style={{ WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none' }}>
-            <div className="flex gap-2 px-10 py-3 min-h-fit" style={{ minWidth: 'max-content' }}>
+            <div className="flex gap-2 px-10 py-3 min-h-fit justify-center" style={{ minWidth: 'max-content' }}>
             {reporters.slice(0, 15).map((reporter, idx) => (
               <motion.div
                 key={`${reporter.id}-${idx}`}
