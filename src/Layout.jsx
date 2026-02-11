@@ -235,7 +235,7 @@ export default function Layout({ children, currentPageName }) {
           }}
         />
         <div className="max-w-7xl mx-auto px-4 flex items-center justify-between gap-3 relative z-10">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 flex-shrink-0">
             <motion.img 
               src={LOGO_URL} 
               alt="הרשת החדשה" 
@@ -262,21 +262,22 @@ export default function Layout({ children, currentPageName }) {
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
-            {/* Opening Date Display with Typewriter */}
-            <motion.div 
-              className="hidden lg:flex items-center px-6 py-2 bg-gradient-to-r from-[#0080FF] via-[#0099FF] to-[#0080FF] rounded-2xl border border-[#0080FF]"
-              animate={{
-                boxShadow: [
-                  '0 0 25px rgba(0, 128, 255, 0.6)',
-                  '0 0 50px rgba(0, 128, 255, 0.8)',
-                  '0 0 25px rgba(0, 128, 255, 0.6)'
-                ]
-              }}
-              transition={{ duration: 3, repeat: Infinity }}
-            >
-              <TypewriterDate />
-            </motion.div>
+          {/* Opening Date Display with Typewriter - Full Width */}
+          <motion.div 
+            className="hidden lg:flex flex-1 items-center justify-center px-6 py-2 bg-gradient-to-r from-[#0080FF] via-[#0099FF] to-[#0080FF] rounded-2xl border border-[#0080FF] mx-4"
+            animate={{
+              boxShadow: [
+                '0 0 25px rgba(0, 128, 255, 0.6)',
+                '0 0 50px rgba(0, 128, 255, 0.8)',
+                '0 0 25px rgba(0, 128, 255, 0.6)'
+              ]
+            }}
+            transition={{ duration: 3, repeat: Infinity }}
+          >
+            <TypewriterDate />
+          </motion.div>
+
+          <div className="flex items-center gap-3 flex-shrink-0">
 
             <button
               onClick={() => window.open(createPageUrl("AdminPanel"), "_blank")}
