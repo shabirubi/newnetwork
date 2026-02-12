@@ -38,7 +38,7 @@ export default function DIDLiveChat({ isOpen, onClose }) {
           animate={{ scale: 1, y: 0 }}
           exit={{ scale: 0.9, y: 20 }}
           onClick={(e) => e.stopPropagation()}
-          className="bg-gradient-to-br from-gray-900 to-black rounded-2xl overflow-hidden w-full max-w-6xl shadow-2xl border border-purple-500/50 h-[90vh] flex flex-col"
+          className="bg-gradient-to-br from-gray-900 to-black rounded-2xl overflow-hidden w-full max-w-6xl shadow-2xl border border-purple-500/50 h-[95vh] sm:h-[90vh] flex flex-col"
         >
           {/* Branded Header */}
           <div className="bg-black p-4 flex items-center justify-between shrink-0 border-b border-[#E31E24]/30"
@@ -76,19 +76,6 @@ export default function DIDLiveChat({ isOpen, onClose }) {
 
           {/* D-ID Agent Iframe */}
           <div className="flex-1 bg-black relative overflow-hidden">
-            {/* Left Frame */}
-            <div className="absolute top-0 bottom-0 left-0 w-12 bg-black z-30"
-              style={{
-                boxShadow: '4px 0 20px rgba(0, 0, 0, 0.8)'
-              }}
-            />
-
-            {/* Right Frame */}
-            <div className="absolute top-0 bottom-0 right-0 w-12 bg-black z-30"
-              style={{
-                boxShadow: '-4px 0 20px rgba(0, 0, 0, 0.8)'
-              }}
-            />
             {isLoading && (
               <div className="absolute inset-0 flex items-center justify-center bg-black z-10">
                 <div className="text-center">
@@ -106,11 +93,11 @@ export default function DIDLiveChat({ isOpen, onClose }) {
               tabIndex="-1"
               style={{ 
                 position: 'absolute',
-                top: '60%',
+                top: '50%',
                 left: '50%',
                 transform: 'translate(-50%, -50%)',
-                width: '30%',
-                height: '45%',
+                width: '100%',
+                height: '100%',
                 overflow: 'hidden',
                 pointerEvents: 'auto',
                 outline: 'none',
