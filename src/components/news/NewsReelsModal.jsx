@@ -1,19 +1,11 @@
-import React from "react";
-import { motion } from "framer-motion";
-import { X, Share2, Heart, MessageCircle } from "lucide-react";
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { X, Share2, Heart, MessageCircle, Loader2 } from "lucide-react";
 
 export default function NewsReelsModal({ reel, onClose }) {
   if (!reel) return null;
 
-  const videoSources = [
-    "https://commondatastorage.googleapis.com/gtv-videos-library/sample/ForBiggerBlazes.mp4",
-    "https://commondatastorage.googleapis.com/gtv-videos-library/sample/ForBiggerEscapes.mp4",
-    "https://commondatastorage.googleapis.com/gtv-videos-library/sample/ForBiggerFun.mp4",
-    "https://commondatastorage.googleapis.com/gtv-videos-library/sample/ForBiggerJoyrides.mp4",
-    "https://commondatastorage.googleapis.com/gtv-videos-library/sample/BigBuckBunny.mp4"
-  ];
-
-  const videoUrl = videoSources[reel.id % videoSources.length];
+  const videoUrl = reel.videoUrl;
 
   return (
     <motion.div
@@ -39,12 +31,21 @@ export default function NewsReelsModal({ reel, onClose }) {
         </button>
 
         {/* Video Player */}
-        <div className="relative bg-black aspect-video">
-          <video
-            src={videoUrl}
-            controls
-            className="w-full h-full"
-          />
+        <div className="relative bg-black aspect-video flex items-center justify-center">
+          {!videoUrl ? (
+            <div className="flex flex-col items-center gap-2">
+              <Loader2 className="w-8 h-8 text-[#E31E24] animate-spin" />
+              <p className="text-gray-400 text-sm">טוען סרטון...</p>
+            </div>
+          ) : (
+            <video
+              src={videoUrl}
+              controls
+              autoPlay
+              playsInline
+              className="w-full h-full object-contain"
+            />
+          )}
         </div>
 
         {/* Content */}
