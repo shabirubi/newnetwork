@@ -182,12 +182,12 @@ export default function Home() {
                 </div>
 
                 {/* Title */}
-                <h1 className="text-xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight drop-shadow-2xl">
+                <h1 className="text-lg sm:text-3xl lg:text-5xl font-bold text-white leading-tight drop-shadow-2xl break-words">
                   {featuredArticle.title}
                 </h1>
 
                 {/* Subtitle */}
-                <p className="text-sm sm:text-xl lg:text-2xl text-gray-100 drop-shadow-lg font-medium">
+                <p className="text-xs sm:text-lg lg:text-2xl text-gray-100 drop-shadow-lg font-medium break-words">
                   {featuredArticle.subtitle}
                 </p>
 
@@ -239,9 +239,9 @@ export default function Home() {
           onClick={() => setShowLivePlayer(true)}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
-          className="fixed bottom-24 sm:bottom-8 right-4 sm:right-8 z-40 bg-gradient-to-r from-[#0080FF] via-[#0066FF] to-[#4DA6FF] hover:from-[#4DA6FF] hover:to-[#0080FF] text-white p-4 rounded-full shadow-[0_0_30px_rgba(0,128,255,0.6)] border-2 border-[#0080FF]/50 flex items-center justify-center gap-2 font-bold transition-all"
+          className="fixed bottom-24 sm:bottom-8 left-4 sm:left-8 z-40 bg-gradient-to-r from-[#E31E24] via-[#B91C1C] to-[#E31E24] hover:from-[#B91C1C] hover:to-[#E31E24] text-white p-4 rounded-full shadow-[0_0_30px_rgba(227,30,36,0.6)] border-2 border-[#E31E24]/50 flex items-center justify-center gap-2 font-bold transition-all"
         >
-          <Radio className="w-6 h-6 drop-shadow-[0_0_5px_#0080FF]" />
+          <Radio className="w-6 h-6 drop-shadow-[0_0_5px_#E31E24]" />
         </motion.button>
       )}
 
@@ -261,14 +261,17 @@ export default function Home() {
           }}
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          className="w-full bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-500 hover:from-cyan-500 hover:to-blue-600 text-white py-2 sm:py-5 rounded-2xl shadow-[0_0_40px_rgba(59,130,246,0.6)] border-2 border-blue-400/50 flex items-center justify-center gap-2 sm:gap-3 font-bold text-sm sm:text-lg transition-all"
+          animate={{
+            backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"]
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+          className="w-full bg-gradient-to-r from-[#E31E24] via-[#0080FF] to-[#E31E24] hover:from-[#0080FF] hover:via-[#E31E24] hover:to-[#0080FF] text-white py-2 sm:py-5 rounded-2xl shadow-[0_0_40px_rgba(227,30,36,0.6)] border-2 border-[#E31E24]/50 flex items-center justify-center gap-2 sm:gap-3 font-bold text-sm sm:text-lg transition-all"
         >
-          <Cloud className="w-5 sm:w-7 h-5 sm:h-7 drop-shadow-[0_0_5px_#60A5FA]" />
-          <span>שיחה עם תחזיתן הרשת</span>
-          <span className="relative flex h-2 sm:h-3 w-2 sm:w-3">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-full w-full bg-white"></span>
-          </span>
+          <Cloud className="w-5 sm:w-7 h-5 sm:h-7 drop-shadow-[0_0_8px_currentColor]" />
         </motion.button>
       </section>
 
