@@ -44,13 +44,13 @@ export default function NewsCard({
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: index * 0.1 }}
-        className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-black/80 via-[#0080FF]/20 to-black/80 backdrop-blur-sm border-2 border-[#0080FF]/40"
+        className="group relative overflow-hidden rounded-lg sm:rounded-2xl bg-black border border-[#0080FF]/30 hover:border-[#0080FF]/60 transition-all duration-300"
         style={{
-          boxShadow: '0 0 30px rgba(0, 128, 255, 0.3), inset 0 0 30px rgba(0, 128, 255, 0.1)'
+          boxShadow: '0 0 20px rgba(0, 128, 255, 0.25)'
         }}
       >
-        <Link to={createPageUrl(`Article?id=${id}`)} className="block active:scale-[0.99] transition-transform">
-          <div className="relative aspect-[16/9] md:aspect-[21/9]">
+        <Link to={createPageUrl(`Article?id=${id}`)} className="block active:scale-[0.98] transition-transform">
+          <div className="relative aspect-[16/9] md:aspect-[21/9] bg-gray-900">
             {video_url ? (
               <>
                 <video
@@ -62,8 +62,8 @@ export default function NewsCard({
                   onMouseEnter={(e) => e.target.play()}
                   onMouseLeave={(e) => e.target.pause()}
                 />
-                <div className="absolute top-3 left-3 bg-[#0080FF] text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1">
-                  <Play size={12} fill="white" />
+                <div className="absolute top-2 sm:top-3 left-2 sm:left-3 bg-[#0080FF] text-white px-2 sm:px-3 py-1 rounded-full text-[10px] sm:text-xs font-bold flex items-center gap-1">
+                  <Play size={10} fill="white" />
                   וידאו
                 </div>
               </>
@@ -71,10 +71,13 @@ export default function NewsCard({
               <img 
                 src={image_url} 
                 alt={title}
+                loading="lazy"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
               />
             ) : (
-              <div className="w-full h-full bg-gradient-to-br from-gray-800 to-gray-900" />
+              <div className="w-full h-full bg-gradient-to-br from-[#0080FF]/20 to-black flex items-center justify-center">
+                <span className="text-[#0080FF]/40 text-5xl sm:text-6xl font-bold">📺</span>
+              </div>
             )}
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
             
@@ -147,19 +150,19 @@ export default function NewsCard({
     );
   }
 
-  // Default variant
+  // Default variant - native mobile dark card
   return (
     <motion.article
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1 }}
-      className="group bg-gradient-to-br from-black/80 via-[#0080FF]/20 to-black/80 backdrop-blur-sm rounded-2xl overflow-hidden border-2 border-[#0080FF]/40 hover:border-[#0080FF]/80 transition-all duration-300"
+      className="group bg-black rounded-xl sm:rounded-2xl overflow-hidden border border-[#0080FF]/20 hover:border-[#0080FF]/60 transition-all duration-300 active:scale-95 sm:active:scale-[0.98]"
       style={{
-        boxShadow: '0 0 20px rgba(0, 128, 255, 0.3), inset 0 0 20px rgba(0, 128, 255, 0.1)'
+        boxShadow: '0 0 15px rgba(0, 128, 255, 0.2)'
       }}
     >
-      <Link to={createPageUrl(`Article?id=${id}`)} className="block active:scale-[0.98] transition-transform">
-        <div className="relative aspect-video overflow-hidden">
+      <Link to={createPageUrl(`Article?id=${id}`)} className="block">
+        <div className="relative aspect-video overflow-hidden bg-gray-900">
           {video_url ? (
             <>
               <video
@@ -170,10 +173,11 @@ export default function NewsCard({
                 playsInline
                 autoPlay
                 preload="metadata"
+                onError={() => {}}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
-              <div className="absolute bottom-3 left-3 bg-[#0080FF] text-white px-2 py-1 rounded text-xs font-bold flex items-center gap-1">
-                <Play size={12} fill="white" />
+              <div className="absolute bottom-2 left-2 bg-[#0080FF] text-white px-2 py-0.5 rounded text-xs font-bold flex items-center gap-1">
+                <Play size={10} fill="white" />
                 וידאו
               </div>
             </>
@@ -182,47 +186,50 @@ export default function NewsCard({
               <img 
                 src={image_url} 
                 alt={title}
+                loading="lazy"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                }}
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
             </>
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-600 flex items-center justify-center">
-              <span className="text-gray-400 dark:text-gray-500 text-4xl font-bold">{categoryLabels[category]?.[0]}</span>
+            <div className="w-full h-full bg-gradient-to-br from-[#0080FF]/30 to-black flex items-center justify-center">
+              <span className="text-[#0080FF]/60 text-3xl sm:text-4xl font-bold">{categoryLabels[category]?.[0] || '📰'}</span>
             </div>
           )}
           
           {is_breaking && (
-            <div className="absolute top-3 right-3">
-              <Badge className="bg-[#0080FF] text-white flex items-center gap-1 animate-pulse">
-                <AlertTriangle size={12} />
-                חם
+            <div className="absolute top-2 right-2">
+              <Badge className="bg-[#E31E24] text-white text-[10px] sm:text-xs font-bold py-0.5 px-2 animate-pulse">
+                🔴 חם
               </Badge>
             </div>
           )}
         </div>
         
-        <div className="p-5">
-          <Badge className={`${categoryColors[category]} text-xs mb-3 rounded-full px-3 py-1`}>
+        <div className="p-3 sm:p-4">
+          <Badge className={`${categoryColors[category]} text-[10px] sm:text-xs mb-2 rounded-full px-2.5 py-1 inline-block`}>
             {categoryLabels[category]}
           </Badge>
           
-          <h3 className="font-bold text-base text-gray-900 dark:text-white group-hover:text-[#0080FF] dark:group-hover:text-[#0080FF] transition-colors line-clamp-2 mb-2 leading-snug">
+          <h3 className="font-bold text-sm sm:text-base text-white group-hover:text-[#0080FF] transition-colors line-clamp-2 mb-1.5 leading-snug">
             {title}
           </h3>
           
           {subtitle && (
-            <p className="text-gray-600 dark:text-gray-300 text-sm line-clamp-2 mb-3">
+            <p className="text-gray-400 text-[11px] sm:text-sm line-clamp-1 sm:line-clamp-2 mb-2">
               {subtitle}
             </p>
           )}
           
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-gray-500 dark:text-gray-400 text-xs">
-              <Clock size={12} />
+          <div className="flex items-center justify-between gap-2">
+            <span className="flex items-center gap-1 text-gray-500 text-[10px] sm:text-xs flex-1">
+              <Clock size={10} />
               {moment(created_date).fromNow()}
-            </div>
-            <div onClick={(e) => e.preventDefault()}>
+            </span>
+            <div onClick={(e) => e.preventDefault()} className="flex-shrink-0">
               <ShareButtons 
                 url={`${window.location.origin}${createPageUrl(`Article?id=${id}`)}`}
                 title={title}
