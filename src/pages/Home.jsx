@@ -89,7 +89,7 @@ export default function Home() {
     enabled: false
   });
 
-  const defaultStreamUrl = "https://www.youtube.com/embed/OeEDtjuqinU?autoplay=0&mute=1&rel=0";
+  const defaultStreamUrl = "";
 
   const queryClient = useQueryClient();
 
@@ -254,7 +254,7 @@ export default function Home() {
                     title={finalTitle}
                     isLive={!!activeLive?.is_active}
                     viewerCount={activeLive?.viewer_count || 3456}
-                    streamUrl={finalStreamUrl || "https://www.youtube.com/embed/OeEDtjuqinU?autoplay=1&mute=0&rel=0"}
+                    streamUrl={finalStreamUrl}
                     thumbnailUrl={finalThumbnail}
                   />
                 </motion.div>

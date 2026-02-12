@@ -375,26 +375,18 @@ export default function LivePlayer({
           </motion.div>
         )}
 
-        {/* Placeholder/Thumbnail - Show when there's a URL but not playing */}
-         {!currentVideoUrl || (displayThumbnail && !isPlaying && !showPromo) ? (
-           <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center z-10">
-             {thumbnailUrl ? (
-               <img 
-                 src={thumbnailUrl} 
-                 alt={title}
-                 className="w-full h-full object-cover"
-               />
-             ) : (
-               <div className="text-center">
-                 <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-[#00D9FF]/20 flex items-center justify-center">
-                   <Radio className="w-12 h-12 text-[#00D9FF]" />
-                 </div>
-                 <h3 className="text-white text-xl font-bold">{title}</h3>
-                 <p className="text-gray-400 mt-2">טוען שידור...</p>
-               </div>
-             )}
-           </div>
-         ) : null}
+        {/* Placeholder - Show when no video URL */}
+          {!currentVideoUrl && (
+            <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center z-10">
+              <div className="text-center">
+                <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-[#00D9FF]/20 flex items-center justify-center">
+                  <Radio className="w-12 h-12 text-[#00D9FF]" />
+                </div>
+                <h3 className="text-white text-xl font-bold">{title}</h3>
+                <p className="text-gray-400 mt-2">בהמתנה לסרטון...</p>
+              </div>
+            </div>
+          )}
 
         {/* Live Badge */}
         {isLive && (
