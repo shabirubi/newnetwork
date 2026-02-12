@@ -249,7 +249,7 @@ export default function Home() {
                     animate={{ scale: 1, y: 0 }}
                     exit={{ scale: 0.9, y: 20 }}
                     onClick={(e) => e.stopPropagation()}
-                    className="bg-black rounded-3xl overflow-hidden w-full max-w-sm shadow-2xl border border-[#E31E24]/30 h-[80vh] flex flex-col relative"
+                    className="bg-black rounded-3xl overflow-hidden w-[95vw] sm:max-w-sm shadow-2xl border border-[#E31E24]/30 h-[95vh] sm:h-[80vh] flex flex-col relative"
                   >
                     <button
                       onClick={() => setShowLivePlayer(false)}
