@@ -210,9 +210,31 @@ export default function Home() {
             </div>
           </div>
         </Link>
-      </section>
+        </section>
 
-          {/* Live Player Section - מוצג רק אם לחצו על הכפתור */}
+        {/* Weather Forecast Button */}
+        <section className="px-4 mb-4">
+          <motion.button
+            onClick={() => {
+              window.dispatchEvent(new CustomEvent('openWeatherChat'));
+            }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            animate={{
+              backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"]
+            }}
+            transition={{
+              duration: 3,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+            className="w-full bg-gradient-to-r from-[#E31E24] via-[#0080FF] to-[#E31E24] hover:from-[#0080FF] hover:via-[#E31E24] hover:to-[#0080FF] text-white py-2 sm:py-5 rounded-2xl shadow-[0_0_40px_rgba(227,30,36,0.6)] border-2 border-[#E31E24]/50 flex items-center justify-center gap-2 sm:gap-3 font-bold text-sm sm:text-lg transition-all"
+          >
+            <Cloud className="w-5 sm:w-7 h-5 sm:h-7 drop-shadow-[0_0_8px_currentColor]" />
+          </motion.button>
+        </section>
+
+            {/* Live Player Section - מוצג רק אם לחצו על הכפתור */}
           {showLivePlayer && (
         <section className="px-0 mb-0 -mx-4 sm:mx-0 sm:px-0 sm:mb-6">
           <div className="bg-black sm:bg-black/40 sm:backdrop-blur-sm sm:rounded-lg sm:p-4 relative">
@@ -246,34 +268,6 @@ export default function Home() {
       )}
 
 
-
-
-
-
-
-
-
-      {/* Weather Forecast Button */}
-      <section className="px-4 mb-8">
-        <motion.button
-          onClick={() => {
-            window.dispatchEvent(new CustomEvent('openWeatherChat'));
-          }}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          animate={{
-            backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"]
-          }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-          className="w-full bg-gradient-to-r from-[#E31E24] via-[#0080FF] to-[#E31E24] hover:from-[#0080FF] hover:via-[#E31E24] hover:to-[#0080FF] text-white py-2 sm:py-5 rounded-2xl shadow-[0_0_40px_rgba(227,30,36,0.6)] border-2 border-[#E31E24]/50 flex items-center justify-center gap-2 sm:gap-3 font-bold text-sm sm:text-lg transition-all"
-        >
-          <Cloud className="w-5 sm:w-7 h-5 sm:h-7 drop-shadow-[0_0_8px_currentColor]" />
-        </motion.button>
-      </section>
 
       {/* Weather Alerts Container */}
       <section className="px-4 sm:px-4 mb-8">
