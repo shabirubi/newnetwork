@@ -109,8 +109,8 @@ export default function DIDLiveChat({ isOpen, onClose }) {
                 top: '50%',
                 left: '50%',
                 transform: 'translate(-50%, -50%)',
-                width: '20%',
-                height: '25%',
+                width: '25%',
+                height: '35%',
                 overflow: 'hidden',
                 pointerEvents: 'auto'
               }}
