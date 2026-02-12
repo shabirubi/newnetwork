@@ -92,30 +92,6 @@ export default function NewsTicker({ darkMode, setDarkMode, onMenuClick }) {
           </button>
         </div>
 
-        {/* Broadcast Strip */}
-        <style>{`
-          @keyframes scrollWithPause {
-            0% { transform: translateX(0); }
-            45% { transform: translateX(-100%); }
-            50% { transform: translateX(-100%); }
-            55% { transform: translateX(-100%); }
-            100% { transform: translateX(-100%); }
-          }
-          .broadcast-scroll {
-            animation: scrollWithPause 12s infinite linear;
-          }
-        `}</style>
-        <div className="overflow-hidden flex-1 shrink-0">
-          <div className="broadcast-scroll flex whitespace-nowrap">
-            <span className="font-bold text-sm md:text-lg text-white">
-              מהדורת החדשות בשידור חי - כל יום בשעה 21:00 • עדכוני חדשות 24/7 • 
-            </span>
-            <span className="font-bold text-sm md:text-lg text-white">
-              מהדורת החדשות בשידור חי - כל יום בשעה 21:00 • עדכוני חדשות 24/7 • 
-            </span>
-          </div>
-        </div>
-
         <button 
           onClick={() => {
             window.location.href = createPageUrl("Category?cat=breaking");

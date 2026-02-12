@@ -231,7 +231,7 @@ export default function Layout({ children, currentPageName }) {
       </div>
 
       {/* Logo Header */}
-      <div className="bg-gradient-to-br from-[#003D7A]/95 via-[#0077DD]/85 via-[#00AAFF]/75 to-[#00DDFF]/65 border-b border-[#00FFFF]/60 py-2 shadow-lg shadow-[#00DDFF]/50 relative overflow-hidden">
+      <div className="bg-gradient-to-br from-[#00244D]/95 via-[#003D80]/85 via-[#0055BB]/75 to-[#0077DD]/65 border-b border-[#0055BB]/60 py-2 shadow-lg shadow-[#0055BB]/50 relative overflow-hidden">
         {/* Water Wave Animation */}
         <motion.div 
           className="absolute inset-0 opacity-25"
