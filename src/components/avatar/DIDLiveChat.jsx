@@ -63,7 +63,7 @@ export default function DIDLiveChat({ isOpen, onClose }) {
             <div className="text-right flex-1 px-4">
               <div className="text-white font-bold text-xl drop-shadow-lg">הרשת החדשה</div>
               <div className="text-[#E31E24] font-bold text-sm" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>
-                {isLoading ? 'טוען אווטר...' : 'צ\'אט חי עם אווטר AI'}
+                {isLoading ? 'טוען אווטר...' : 'שיחה חיה עם בינה מלאכותית'}
               </div>
             </div>
             <button
@@ -106,11 +106,11 @@ export default function DIDLiveChat({ isOpen, onClose }) {
               tabIndex="-1"
               style={{ 
                 position: 'absolute',
-                top: '50%',
+                top: '45%',
                 left: '50%',
                 transform: 'translate(-50%, -50%)',
-                width: '25%',
-                height: '35%',
+                width: '30%',
+                height: '45%',
                 overflow: 'hidden',
                 pointerEvents: 'auto',
                 outline: 'none',
@@ -130,7 +130,7 @@ export default function DIDLiveChat({ isOpen, onClose }) {
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E31E24] opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-3 w-3 bg-[#E31E24]"></span>
               </span>
-              <span className="text-white font-bold">שיחה חיה</span>
+              <span className="text-white font-bold">צ'אט AI בשידור חי</span>
             </div>
           </div>
         </motion.div>
