@@ -60,7 +60,7 @@ export default function NewsTicker({ darkMode, setDarkMode, onMenuClick }) {
   }
 
   return (
-    <div className="bg-gradient-to-r from-black via-[#0080FF]/30 to-black border-b-2 border-[#0080FF]/50 backdrop-blur-xl shadow-xl shadow-[#0080FF]/30 relative overflow-hidden z-[37] text-white w-full flex justify-center">
+    <div className="bg-gradient-to-r from-black via-[#001a40] to-black border-b border-[#0055BB]/40 backdrop-blur-xl shadow-xl shadow-[#0055BB]/30 relative overflow-hidden z-[37] text-white w-full flex justify-center">
       {/* Breaking News Strip */}
       <div className="flex items-center gap-1 sm:gap-3 px-4 py-3 w-full max-w-7xl">
         {/* Menu Button - Right Side */}
