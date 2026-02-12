@@ -382,17 +382,16 @@ export default function Home() {
       {/* Floating Live Chat Button */}
       <motion.button
         onClick={() => {
-          setSelectedReporterForChat({ name: 'כתבי הרשת', image: 'https://via.placeholder.com/150' });
-          setLiveChatOpen(true);
+          window.dispatchEvent(new CustomEvent('openDidChat'));
         }}
-        className="fixed bottom-24 left-6 z-[100] w-16 h-16 bg-gradient-to-br from-[#0080FF]/30 via-[#0066FF]/30 to-[#0080FF]/30 backdrop-blur-md rounded-full shadow-2xl shadow-[#0080FF]/30 flex items-center justify-center border-2 border-[#0080FF]/50"
+        className="fixed bottom-24 left-6 z-[100] w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-full shadow-2xl shadow-green-500/50 flex items-center justify-center border-2 border-green-400"
         initial={{ scale: 0 }}
         animate={{ 
           scale: [1, 1.1, 1],
           boxShadow: [
-            '0 0 20px rgba(0, 128, 255, 0.5)',
-            '0 0 40px rgba(0, 128, 255, 0.8)',
-            '0 0 20px rgba(0, 128, 255, 0.5)'
+            '0 0 20px rgba(34, 197, 94, 0.5)',
+            '0 0 40px rgba(34, 197, 94, 0.8)',
+            '0 0 20px rgba(34, 197, 94, 0.5)'
           ]
         }}
         transition={{ 
@@ -402,29 +401,24 @@ export default function Home() {
         whileHover={{ scale: 1.15 }}
         whileTap={{ scale: 0.95 }}
       >
-        <Video className="w-7 h-7 text-white drop-shadow-lg" />
-        <div className="absolute -top-1 -right-1 w-5 h-5 bg-green-500 rounded-full border-2 border-white flex items-center justify-center">
+        <MessageCircle className="w-7 h-7 text-white drop-shadow-lg" />
+        <div className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full border-2 border-white flex items-center justify-center">
           <span className="relative flex h-3 w-3">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
           </span>
         </div>
       </motion.button>
 
       {/* Live Chat Tooltip */}
-      <AnimatePresence>
-        {!liveChatOpen && (
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -20 }}
-            className="fixed bottom-24 left-24 z-[99] bg-gradient-to-r from-[#0080FF] to-[#0066FF] text-white px-4 py-2 rounded-lg shadow-xl text-sm font-bold whitespace-nowrap pointer-events-none"
-          >
-            דברו עם הכתבים בשידור חי! 🎙️
-            <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-8 border-r-[#0080FF]"></div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <motion.div
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        className="fixed bottom-24 left-24 z-[99] bg-green-600 text-white px-3 py-2 rounded-lg shadow-xl text-xs font-bold whitespace-nowrap pointer-events-none"
+      >
+        צ'אט AI חי 💬
+        <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 w-0 h-0 border-t-8 border-t-transparent border-b-8 border-b-transparent border-r-8 border-r-green-600"></div>
+      </motion.div>
 
       {/* Studio Sidebar */}
       <StudioSidebar />

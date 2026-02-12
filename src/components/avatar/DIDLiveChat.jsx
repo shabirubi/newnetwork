@@ -14,11 +14,22 @@ export default function DIDLiveChat({ isOpen, onClose }) {
   useEffect(() => {
     if (isOpen) {
       setIsLoading(true);
-      // Simulate loading time for iframe
       const timer = setTimeout(() => setIsLoading(false), 2000);
       return () => clearTimeout(timer);
     }
   }, [isOpen]);
+
+  useEffect(() => {
+    const handleOpen = () => {
+      onClose(); // Close if already open
+      setTimeout(() => {
+        const event = new CustomEvent('openDidChat');
+        window.dispatchEvent(event);
+      }, 100);
+    };
+    window.addEventListener('openDidChat', handleOpen);
+    return () => window.removeEventListener('openDidChat', handleOpen);
+  }, []);
 
   const agentUrl = "https://studio.d-id.com/agents/share?id=v2_agt_pW1vqMCQ&utm_source=copy&key=WjI5dloyeGxMVzloZFhSb01ud3hNRGt3TlRBd01qRTROall3TURjMU9ESTBPVFk2TVVsNFJ6Tk5kelJMWmtSWFZHVTNUREJmTjNkMw==";
 
