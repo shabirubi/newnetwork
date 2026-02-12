@@ -86,8 +86,9 @@ export default function NewsReels() {
                 {newsReels.slice(currentIndex, Math.min(currentIndex + 5, newsReels.length)).map((reel) => (
                   <motion.div
                     key={reel.id}
-                    className="relative rounded-xl overflow-hidden aspect-[9/16] group"
+                    className="relative rounded-xl overflow-hidden aspect-[9/16] group cursor-pointer"
                     whileHover={{ scale: 1.02 }}
+                    onClick={() => setSelectedReel(reel)}
                   >
 
                     {/* Video preview */}
@@ -141,7 +142,11 @@ export default function NewsReels() {
         </div>
       </div>
 
-
-    </section>
+      {/* Reels Modal */}
+      <NewsReelsModal 
+      reel={selectedReel} 
+      onClose={() => setSelectedReel(null)} 
+      />
+      </section>
   );
 }
