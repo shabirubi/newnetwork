@@ -103,6 +103,7 @@ export default function DIDLiveChat({ isOpen, onClose }) {
               allow="microphone; camera; autoplay"
               className="w-full h-full border-0"
               title="D-ID Agent Chat"
+              tabIndex="-1"
               style={{ 
                 position: 'absolute',
                 top: '50%',
@@ -110,7 +111,8 @@ export default function DIDLiveChat({ isOpen, onClose }) {
                 transform: 'translate(-50%, -50%)',
                 width: '30%',
                 height: '40%',
-                overflow: 'hidden'
+                overflow: 'hidden',
+                pointerEvents: 'auto'
               }}
             />
           </div>
