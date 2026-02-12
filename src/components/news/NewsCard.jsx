@@ -168,8 +168,8 @@ export default function NewsCard({
                 muted
                 loop
                 playsInline
-                onMouseEnter={(e) => e.target.play()}
-                onMouseLeave={(e) => e.target.pause()}
+                autoPlay
+                preload="metadata"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
               <div className="absolute bottom-3 left-3 bg-[#0080FF] text-white px-2 py-1 rounded text-xs font-bold flex items-center gap-1">
