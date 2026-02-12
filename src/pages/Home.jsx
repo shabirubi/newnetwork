@@ -163,7 +163,7 @@ export default function Home() {
           to={`${createPageUrl("Article")}?id=${featuredArticle.id}`}
           className="block group relative rounded-none sm:rounded-3xl overflow-hidden cursor-pointer"
         >
-          <div className="relative h-[550px] sm:h-[500px]">
+          <div className="relative h-[450px] sm:h-[500px]">
             {/* תמונה ברקע */}
             <img 
               src={featuredArticle.image_url} 
@@ -172,23 +172,23 @@ export default function Home() {
             />
 
             {/* Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/70 via-20% to-transparent" />
 
             {/* טקסט מעל התמונה */}
-            <div className="absolute inset-0 flex flex-col justify-end p-4 sm:p-10">
-              <div className="max-w-4xl space-y-3 sm:space-y-5 bg-black/30 backdrop-blur-md rounded-2xl p-4 sm:p-6 border border-white/10">
+            <div className="absolute inset-0 flex flex-col justify-end p-3 sm:p-10">
+              <div className="max-w-4xl space-y-2 sm:space-y-5 bg-black/40 backdrop-blur-md rounded-2xl p-3 sm:p-6 border border-white/10">
                 {/* Badge */}
                 <div className="inline-flex w-fit bg-gradient-to-r from-[#0080FF] to-[#0066FF] text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-full font-bold text-xs sm:text-sm shadow-[0_0_20px_rgba(0,128,255,0.6)] border-2 border-[#0080FF]/50">
                   📈 כלכלה ופיננסים
                 </div>
 
                 {/* Title */}
-                <h1 className="text-xl sm:text-3xl lg:text-5xl font-bold text-white leading-tight drop-shadow-2xl">
+                <h1 className="text-lg sm:text-3xl lg:text-5xl font-bold text-white leading-tight drop-shadow-2xl">
                   {featuredArticle.title}
                 </h1>
 
                 {/* Subtitle */}
-                <p className="text-sm sm:text-lg lg:text-xl text-gray-100 drop-shadow-lg line-clamp-2 sm:line-clamp-none">
+                <p className="text-xs sm:text-lg lg:text-xl text-gray-100 drop-shadow-lg line-clamp-2 sm:line-clamp-none">
                   {featuredArticle.subtitle}
                 </p>
 
@@ -198,18 +198,16 @@ export default function Home() {
                 </p>
 
                 {/* Meta Info */}
-                <div className="flex flex-wrap items-center gap-2 sm:gap-3">
-                  <span className="flex items-center gap-1.5 sm:gap-2 text-gray-200 text-xs sm:text-sm bg-black/40 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full backdrop-blur-sm">
-                    <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
+                <div className="flex flex-wrap items-center gap-1.5 sm:gap-3 text-[10px] sm:text-xs">
+                  <span className="flex items-center gap-1 bg-black/60 px-2 sm:px-4 py-1 sm:py-2 rounded-full backdrop-blur-sm text-gray-200">
+                    <Clock className="w-2.5 h-2.5 sm:w-4 sm:h-4" />
                     {new Date(featuredArticle.created_date).toLocaleDateString('he-IL', { 
                       month: 'short', 
-                      day: 'numeric',
-                      hour: '2-digit',
-                      minute: '2-digit'
+                      day: 'numeric'
                     })}
                   </span>
-                  <span className="text-gray-200 text-xs sm:text-sm bg-black/40 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full backdrop-blur-sm">
-                    📰 {featuredArticle.source}
+                  <span className="text-gray-200 bg-black/60 px-2 sm:px-4 py-1 sm:py-2 rounded-full backdrop-blur-sm">
+                    {featuredArticle.source}
                   </span>
                 </div>
               </div>
