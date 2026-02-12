@@ -628,14 +628,14 @@ export default function Layout({ children, currentPageName }) {
                 animate={{ x: 0 }}
                 exit={{ x: "100%" }}
                 transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                className="absolute right-0 top-0 bottom-0 w-64 bg-black/90 backdrop-blur-xl border-l border-[#E31E24]/30 shadow-2xl shadow-[#E31E24]/20 overflow-y-auto"
+                className="absolute right-0 top-0 bottom-0 w-64 bg-black/90 backdrop-blur-xl border-l border-[#0080FF]/30 shadow-2xl shadow-[#0080FF]/20 overflow-y-auto"
               >
-                <div className="sticky top-0 bg-gradient-to-br from-black via-[#E31E24]/20 to-black p-4 shadow-lg border-b border-[#E31E24]/30">
+                <div className="sticky top-0 bg-gradient-to-br from-black via-[#0080FF]/20 to-black p-4 shadow-lg border-b border-[#0080FF]/30">
                   <div className="flex items-center justify-between">
                     <h2 className="text-white font-bold">קטגוריות</h2>
                     <button
                       onClick={() => setCategoriesSidebarOpen(false)}
-                      className="p-2 rounded-full bg-[#E31E24]/20 hover:bg-[#E31E24]/40 text-white active:scale-95 transition-all"
+                      className="p-2 rounded-full bg-[#0080FF]/20 hover:bg-[#0080FF]/40 text-white active:scale-95 transition-all"
                     >
                       <X size={22} />
                     </button>
