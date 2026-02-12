@@ -58,7 +58,7 @@ export default function Home() {
   }, []);
   const [reportersModalOpen, setReportersModalOpen] = React.useState(false);
   const [liveAvatarChatOpen, setLiveAvatarChatOpen] = React.useState(false);
-  const [showLivePlayer, setShowLivePlayer] = React.useState(false);
+  const [showLivePlayer, setShowLivePlayer] = React.useState(true);
   const [liveChatOpen, setLiveChatOpen] = React.useState(false);
   const [selectedReporterForChat, setSelectedReporterForChat] = React.useState(null);
   const [weatherChatOpen, setWeatherChatOpen] = React.useState(false);
