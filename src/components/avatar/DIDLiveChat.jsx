@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Video, Mic, MicOff, VideoIcon, VideoOff, Loader2, MessageCircle, Radio, Send } from 'lucide-react';
+import { X, Send, Loader2 } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -114,7 +114,82 @@ export default function DIDLiveChat({ isOpen, onClose }) {
 
   if (!isOpen) return null;
 
-  return (
+  // Mobile drawer for native feel
+  const MobileDrawer = () => (
+    <AnimatePresence>
+      <motion.div
+        initial={{ y: '100%' }}
+        animate={{ y: 0 }}
+        exit={{ y: '100%' }}
+        transition={{ type: 'spring', damping: 30, stiffness: 300 }}
+        className="fixed inset-0 z-[9999] bg-black flex flex-col lg:hidden"
+      >
+        {/* Header */}
+        <div className="bg-black/80 backdrop-blur-sm p-3 flex items-center justify-between shrink-0 border-b border-[#E31E24]/30">
+          <div className="flex-1 text-right">
+            <div className="text-white font-bold text-base">הרשת החדשה</div>
+            <div className="text-[#E31E24] font-bold text-xs">צ'אט חי</div>
+          </div>
+          <button
+            onClick={onClose}
+            className="w-9 h-9 rounded-full bg-[#E31E24]/20 hover:bg-[#E31E24]/40 flex items-center justify-center transition-colors border border-[#E31E24]/30 ml-3"
+          >
+            <X className="w-5 h-5 text-white" />
+          </button>
+        </div>
+
+        {/* Video */}
+        <div className="flex-1 bg-black/90 relative overflow-hidden flex items-center justify-center">
+          {isLoading && (
+            <div className="absolute inset-0 flex items-center justify-center bg-black/90 z-10">
+              <div className="text-center">
+                <Loader2 className="w-10 h-10 text-[#E31E24] animate-spin mx-auto mb-2" />
+                <p className="text-white text-xs">טוען אווטר...</p>
+              </div>
+            </div>
+          )}
+          <video
+            ref={videoRef}
+            autoPlay
+            playsInline
+            className="w-full h-full object-contain"
+          />
+          {isConnected && !isLoading && (
+            <div className="absolute top-3 left-3 flex items-center gap-2 bg-green-500/30 backdrop-blur-sm px-2.5 py-1 rounded-full border border-green-500/30">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
+              </span>
+              <span className="text-green-300 font-bold text-[10px]">מחובר</span>
+            </div>
+          )}
+        </div>
+
+        {/* Input */}
+        <div className="bg-black/80 backdrop-blur-sm p-3 border-t border-[#E31E24]/30 flex items-center gap-2">
+          <Input
+            value={message}
+            onChange={(e) => setMessage(e.target.value)}
+            onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+            placeholder="שלח..."
+            disabled={!isConnected || isSpeaking}
+            className="flex-1 bg-gray-900/70 border-[#E31E24]/30 text-white placeholder:text-gray-500 text-sm h-9"
+          />
+          <Button
+            onClick={handleSendMessage}
+            disabled={!message.trim() || !isConnected || isSpeaking}
+            className="bg-[#E31E24] hover:bg-[#B91C1C] text-white h-9 px-3"
+            size="sm"
+          >
+            <Send className="w-4 h-4" />
+          </Button>
+        </div>
+      </motion.div>
+    </AnimatePresence>
+  );
+
+  // Desktop modal
+  const DesktopModal = () => (
     <AnimatePresence>
       <motion.div
         initial={{ opacity: 0 }}
@@ -210,4 +285,11 @@ export default function DIDLiveChat({ isOpen, onClose }) {
       </motion.div>
     </AnimatePresence>
   );
+
+  return isOpen ? (
+    <>
+      <MobileDrawer />
+      <DesktopModal />
+    </>
+  ) : null;
 }
