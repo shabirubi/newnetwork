@@ -101,7 +101,6 @@ export default function Home() {
     content: 'שוקי המניות התאוששו מהירידות שנרשמו לאחר הכרזת טראמפ על תכנית המכסים השאפתנית. עם זאת, ישנם איומים נוספים, כגון אי-ודאות פוליטית והתפתחויות כלכליות בלתי צפויות, שעלולות להשפיע על השוק.',
     category: 'finance',
     image_url: 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/8df32e9f1_generated_image.png',
-    source: 'אייס',
     created_date: '2026-02-09T23:50:14.552Z',
     created_by: 'service+0a06552f-b47f-487a-84bb-eb2bdeb5769c@no-reply.base44.com'
   };
@@ -172,42 +171,39 @@ export default function Home() {
             />
 
             {/* Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/70 via-20% to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
 
             {/* טקסט מעל התמונה */}
-            <div className="absolute inset-0 flex flex-col justify-between p-2 sm:p-10">
-              <div className="max-w-4xl space-y-1.5 sm:space-y-3 bg-black/50 backdrop-blur-md rounded-2xl p-2.5 sm:p-6 border border-white/10">
+            <div className="absolute inset-0 flex flex-col justify-end p-3 sm:p-10 space-y-4">
+              <div className="max-w-4xl space-y-3 sm:space-y-4">
                 {/* Badge */}
-                <div className="inline-flex w-fit bg-gradient-to-r from-[#E31E24] to-[#B91C1C] text-white px-2 py-1 sm:px-4 sm:py-2 rounded-full font-bold text-[10px] sm:text-sm shadow-[0_0_20px_rgba(227,30,36,0.6)] border-2 border-[#E31E24]/50">
+                <div className="inline-flex w-fit bg-gradient-to-r from-[#E31E24] to-[#B91C1C] text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-full font-bold text-xs sm:text-sm shadow-[0_0_20px_rgba(227,30,36,0.6)] border-2 border-[#E31E24]/50">
                   🔴 הרשת החדשה
                 </div>
 
                 {/* Title */}
-                <h1 className="text-base sm:text-3xl lg:text-5xl font-bold text-white leading-tight drop-shadow-2xl line-clamp-3 sm:line-clamp-none">
+                <h1 className="text-xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight drop-shadow-2xl">
                   {featuredArticle.title}
                 </h1>
 
                 {/* Subtitle */}
-                <p className="text-[11px] sm:text-lg lg:text-xl text-gray-200 drop-shadow-lg line-clamp-2 sm:line-clamp-2">
+                <p className="text-sm sm:text-xl lg:text-2xl text-gray-100 drop-shadow-lg font-medium">
                   {featuredArticle.subtitle}
                 </p>
 
                 {/* Content Preview - Hidden on small screens */}
-                <p className="hidden sm:block text-sm lg:text-base text-gray-200 leading-relaxed line-clamp-2 lg:line-clamp-3">
+                <p className="hidden sm:block text-base lg:text-lg text-gray-200 leading-relaxed line-clamp-2 lg:line-clamp-3">
                   {featuredArticle.content}
                 </p>
 
                 {/* Meta Info */}
-                <div className="flex flex-wrap items-center gap-1.5 sm:gap-3 text-[10px] sm:text-xs">
-                  <span className="flex items-center gap-1 bg-black/60 px-2 sm:px-4 py-1 sm:py-2 rounded-full backdrop-blur-sm text-gray-200">
-                    <Clock className="w-2.5 h-2.5 sm:w-4 sm:h-4" />
+                <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm pt-2">
+                  <span className="flex items-center gap-1.5 bg-black/60 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full backdrop-blur-sm text-gray-200">
+                    <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
                     {new Date(featuredArticle.created_date).toLocaleDateString('he-IL', { 
                       month: 'short', 
                       day: 'numeric'
                     })}
-                  </span>
-                  <span className="text-gray-200 bg-black/60 px-2 sm:px-4 py-1 sm:py-2 rounded-full backdrop-blur-sm">
-                    {featuredArticle.source}
                   </span>
                 </div>
               </div>
