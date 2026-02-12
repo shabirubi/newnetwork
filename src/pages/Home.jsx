@@ -155,56 +155,57 @@ export default function Home() {
       <section className="px-0 mb-8 -mx-4 sm:mx-0">
         <Link 
           to={`${createPageUrl("Article")}?id=${featuredArticle.id}`}
-          className="block group relative h-[500px] sm:h-[600px] lg:h-[700px] rounded-none sm:rounded-3xl overflow-hidden cursor-pointer"
+          className="block group relative rounded-none sm:rounded-3xl overflow-hidden cursor-pointer"
         >
-          {/* Background Image */}
-          <img 
-            src={featuredArticle.image_url} 
-            alt={featuredArticle.title}
-            className="w-full h-full object-cover"
-          />
+          <div className="flex flex-col lg:flex-row-reverse h-[500px] sm:h-[600px] lg:h-[500px]">
+            {/* תמונה בצד ימין */}
+            <div className="lg:w-1/2 h-full">
+              <img 
+                src={featuredArticle.image_url} 
+                alt={featuredArticle.title}
+                className="w-full h-full object-cover"
+              />
+            </div>
 
-          {/* Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent group-hover:via-black/80 transition-all duration-300" />
+            {/* טקסט בצד שמאל */}
+            <div className="lg:w-1/2 bg-gradient-to-br from-black via-gray-900 to-black p-6 sm:p-10 lg:p-16 flex flex-col justify-center">
+              <div className="space-y-6">
+                {/* Badge */}
+                <div className="inline-flex w-fit bg-gradient-to-r from-[#0080FF] to-[#0066FF] text-white px-5 py-2 rounded-full font-bold text-base shadow-[0_0_20px_rgba(0,128,255,0.6)] border-2 border-[#0080FF]/50">
+                  📈 כלכלה ופיננסים
+                </div>
 
-          {/* Content Overlay */}
-          <div className="absolute inset-0 flex flex-col justify-end p-6 sm:p-10 lg:p-16">
-            <div className="space-y-6 max-w-4xl">
-              {/* Badge */}
-              <div className="inline-flex w-fit bg-gradient-to-r from-[#0080FF] to-[#0066FF] text-white px-5 py-2 rounded-full font-bold text-base shadow-[0_0_20px_rgba(0,128,255,0.6)] border-2 border-[#0080FF]/50">
-                📈 כלכלה ופיננסים
-              </div>
+                {/* Title */}
+                <h1 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight drop-shadow-2xl">
+                  {featuredArticle.title}
+                </h1>
 
-              {/* Title */}
-              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight drop-shadow-2xl">
-                {featuredArticle.title}
-              </h1>
+                {/* Subtitle */}
+                <p className="text-lg sm:text-xl text-gray-100 drop-shadow-lg">
+                  {featuredArticle.subtitle}
+                </p>
 
-              {/* Subtitle */}
-              <p className="text-xl sm:text-2xl text-gray-100 drop-shadow-lg">
-                {featuredArticle.subtitle}
-              </p>
+                {/* Content Preview */}
+                <p className="text-base text-gray-300 leading-relaxed">
+                  {featuredArticle.content}
+                </p>
 
-              {/* Content Preview */}
-              <p className="text-base sm:text-lg text-gray-300 leading-relaxed max-w-3xl">
-                {featuredArticle.content}
-              </p>
-
-              {/* Meta Info */}
-              <div className="flex flex-wrap items-center gap-4 pt-4">
-                <span className="flex items-center gap-2 text-gray-200 text-sm bg-black/30 px-4 py-2 rounded-full backdrop-blur-sm">
-                  <Clock className="w-4 h-4" />
-                  {new Date(featuredArticle.created_date).toLocaleDateString('he-IL', { 
-                    year: 'numeric', 
-                    month: 'long', 
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                  })}
-                </span>
-                <span className="text-gray-200 text-sm bg-black/30 px-4 py-2 rounded-full backdrop-blur-sm">
-                  📰 {featuredArticle.source}
-                </span>
+                {/* Meta Info */}
+                <div className="flex flex-wrap items-center gap-4 pt-4">
+                  <span className="flex items-center gap-2 text-gray-200 text-sm bg-black/30 px-4 py-2 rounded-full backdrop-blur-sm">
+                    <Clock className="w-4 h-4" />
+                    {new Date(featuredArticle.created_date).toLocaleDateString('he-IL', { 
+                      year: 'numeric', 
+                      month: 'long', 
+                      day: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit'
+                    })}
+                  </span>
+                  <span className="text-gray-200 text-sm bg-black/30 px-4 py-2 rounded-full backdrop-blur-sm">
+                    📰 {featuredArticle.source}
+                  </span>
+                </div>
               </div>
             </div>
           </div>
