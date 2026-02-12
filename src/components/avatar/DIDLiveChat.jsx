@@ -106,7 +106,7 @@ export default function DIDLiveChat({ isOpen, onClose }) {
               tabIndex="-1"
               style={{ 
                 position: 'absolute',
-                top: '45%',
+                top: '60%',
                 left: '50%',
                 transform: 'translate(-50%, -50%)',
                 width: '30%',
