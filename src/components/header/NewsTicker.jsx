@@ -120,10 +120,30 @@ export default function NewsTicker({ darkMode, setDarkMode, onMenuClick }) {
           onClick={() => {
             window.location.href = createPageUrl("Category?cat=breaking");
           }}
-          className="ticker-wrapper overflow-hidden flex-1 cursor-pointer hover:opacity-90 transition-opacity min-w-0 relative z-10"
+          className="overflow-hidden flex-1 cursor-pointer hover:opacity-90 transition-opacity min-w-0 relative z-10"
         >
-          <TickerContent news={news} currencies={currencies} />
+          <div className="flex items-center whitespace-nowrap">
+            {news.map((item, index) => (
+              <span key={`news-${index}`} className="inline-flex items-center gap-4 px-4 font-bold text-sm md:text-base text-white animate-marquee">
+                <span className="text-[#E31E24]">•</span> {item}
+              </span>
+            ))}
+          </div>
         </button>
+        
+        <style>{`
+          @keyframes marquee {
+            0% {
+              transform: translateX(100%);
+            }
+            100% {
+              transform: translateX(-100%);
+            }
+          }
+          .animate-marquee {
+            animation: marquee 20s linear infinite;
+          }
+        `}</style>
 
         <div className="flex items-center gap-1 sm:gap-2 shrink-0 relative z-[60]">
 
