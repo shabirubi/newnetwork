@@ -233,19 +233,16 @@ export default function Home() {
         </section>
       )}
 
-      {/* כפתור הפעלת נגן הווידאו */}
+      {/* Floating Live Button */}
       {!showLivePlayer && (
-        <section className="px-4 sm:px-4 mt-4">
-          <motion.button
+        <motion.button
           onClick={() => setShowLivePlayer(true)}
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          className="w-full bg-gradient-to-r from-[#0080FF] via-[#0066FF] to-[#4DA6FF] hover:from-[#4DA6FF] hover:to-[#0080FF] text-white py-2 sm:py-4 rounded-xl shadow-[0_0_30px_rgba(0,128,255,0.6)] border-2 border-[#0080FF]/50 flex items-center justify-center gap-2 sm:gap-3 font-bold text-sm sm:text-lg transition-all"
-          >
-          <Radio className="w-5 sm:w-6 h-5 sm:h-6 drop-shadow-[0_0_5px_#0080FF]" />
-          הפעל שידור חי
-          </motion.button>
-        </section>
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          className="fixed bottom-24 sm:bottom-8 right-4 sm:right-8 z-40 bg-gradient-to-r from-[#0080FF] via-[#0066FF] to-[#4DA6FF] hover:from-[#4DA6FF] hover:to-[#0080FF] text-white p-4 rounded-full shadow-[0_0_30px_rgba(0,128,255,0.6)] border-2 border-[#0080FF]/50 flex items-center justify-center gap-2 font-bold transition-all"
+        >
+          <Radio className="w-6 h-6 drop-shadow-[0_0_5px_#0080FF]" />
+        </motion.button>
       )}
 
 
