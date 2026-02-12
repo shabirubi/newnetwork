@@ -158,12 +158,12 @@ export default function Home() {
     <div className="min-h-screen bg-black space-y-0 sm:space-y-6">
 
       {/* Featured Article Section - Full Screen */}
-      <section className="px-0 mb-8 -mx-4 sm:mx-0">
+      <section className="px-0 mb-4 -mx-4 sm:mx-0 mt-2">
         <Link 
           to={`${createPageUrl("Article")}?id=${featuredArticle.id}`}
           className="block group relative rounded-none sm:rounded-3xl overflow-hidden cursor-pointer"
         >
-          <div className="relative h-[450px] sm:h-[500px]">
+          <div className="relative h-[350px] sm:h-[500px]">
             {/* תמונה ברקע */}
             <img 
               src={featuredArticle.image_url} 
@@ -175,20 +175,20 @@ export default function Home() {
             <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/70 via-20% to-transparent" />
 
             {/* טקסט מעל התמונה */}
-            <div className="absolute inset-0 flex flex-col justify-end p-3 sm:p-10">
-              <div className="max-w-4xl space-y-2 sm:space-y-5 bg-black/40 backdrop-blur-md rounded-2xl p-3 sm:p-6 border border-white/10">
+            <div className="absolute inset-0 flex flex-col justify-between p-2 sm:p-10">
+              <div className="max-w-4xl space-y-1.5 sm:space-y-3 bg-black/50 backdrop-blur-md rounded-2xl p-2.5 sm:p-6 border border-white/10">
                 {/* Badge */}
-                <div className="inline-flex w-fit bg-gradient-to-r from-[#0080FF] to-[#0066FF] text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-full font-bold text-xs sm:text-sm shadow-[0_0_20px_rgba(0,128,255,0.6)] border-2 border-[#0080FF]/50">
-                  📈 כלכלה ופיננסים
+                <div className="inline-flex w-fit bg-gradient-to-r from-[#E31E24] to-[#B91C1C] text-white px-2 py-1 sm:px-4 sm:py-2 rounded-full font-bold text-[10px] sm:text-sm shadow-[0_0_20px_rgba(227,30,36,0.6)] border-2 border-[#E31E24]/50">
+                  🔴 הרשת החדשה
                 </div>
 
                 {/* Title */}
-                <h1 className="text-lg sm:text-3xl lg:text-5xl font-bold text-white leading-tight drop-shadow-2xl">
+                <h1 className="text-base sm:text-3xl lg:text-5xl font-bold text-white leading-tight drop-shadow-2xl line-clamp-3 sm:line-clamp-none">
                   {featuredArticle.title}
                 </h1>
 
                 {/* Subtitle */}
-                <p className="text-xs sm:text-lg lg:text-xl text-gray-100 drop-shadow-lg line-clamp-2 sm:line-clamp-none">
+                <p className="text-[11px] sm:text-lg lg:text-xl text-gray-200 drop-shadow-lg line-clamp-2 sm:line-clamp-2">
                   {featuredArticle.subtitle}
                 </p>
 
