@@ -30,7 +30,7 @@ import { Droplet, Mic, Users, Wand2, FileVideo } from "lucide-react";
 import ReporterLiveChat from "../components/reporter/ReporterLiveChat";
 import RealTimeAlertsContainer from "../components/home/RealTimeAlertsContainer";
 import ZakaMediaKitContainer from "../components/home/ZakaMediaKitContainer";
-import WeatherForecastAvatar from "../components/weather/WeatherForecastAvatar";
+import WeatherForecastModal from "../components/weather/WeatherForecastModal";
 
       // Lazy loaded components
 const NewsReels = React.lazy(() => import("../components/news/NewsReels"));
@@ -48,14 +48,20 @@ export default function Home() {
 
   React.useEffect(() => {
     const handleOpenUpload = () => setUploadVideoModalOpen(true);
+    const handleOpenWeatherChat = () => setWeatherChatOpen(true);
     window.addEventListener('openUploadVideo', handleOpenUpload);
-    return () => window.removeEventListener('openUploadVideo', handleOpenUpload);
+    window.addEventListener('openWeatherChatModal', handleOpenWeatherChat);
+    return () => {
+      window.removeEventListener('openUploadVideo', handleOpenUpload);
+      window.removeEventListener('openWeatherChatModal', handleOpenWeatherChat);
+    };
   }, []);
   const [reportersModalOpen, setReportersModalOpen] = React.useState(false);
   const [liveAvatarChatOpen, setLiveAvatarChatOpen] = React.useState(false);
   const [showLivePlayer, setShowLivePlayer] = React.useState(false);
   const [liveChatOpen, setLiveChatOpen] = React.useState(false);
   const [selectedReporterForChat, setSelectedReporterForChat] = React.useState(null);
+  const [weatherChatOpen, setWeatherChatOpen] = React.useState(false);
   const [page, setPage] = React.useState(1);
   const [hasMore, setHasMore] = React.useState(true);
   const [selectedChannel, setSelectedChannel] = React.useState(() => {
@@ -157,7 +163,7 @@ export default function Home() {
           to={`${createPageUrl("Article")}?id=${featuredArticle.id}`}
           className="block group relative rounded-none sm:rounded-3xl overflow-hidden cursor-pointer"
         >
-          <div className="relative h-[600px] sm:h-[500px]">
+          <div className="relative h-[550px] sm:h-[500px]">
             {/* תמונה ברקע */}
             <img 
               src={featuredArticle.image_url} 
@@ -166,35 +172,35 @@ export default function Home() {
             />
 
             {/* Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/95 via-black/60 to-transparent" />
 
             {/* טקסט מעל התמונה */}
-            <div className="absolute inset-0 flex flex-col justify-end p-6 sm:p-10">
-              <div className="max-w-4xl space-y-4 sm:space-y-6 bg-black/40 backdrop-blur-lg rounded-3xl p-6 sm:p-8 border border-white/10">
+            <div className="absolute inset-0 flex flex-col justify-end p-4 sm:p-10">
+              <div className="max-w-4xl space-y-3 sm:space-y-5 bg-black/30 backdrop-blur-md rounded-2xl p-4 sm:p-6 border border-white/10">
                 {/* Badge */}
-                <div className="inline-flex w-fit bg-gradient-to-r from-[#0080FF] to-[#0066FF] text-white px-4 py-2 rounded-full font-bold text-sm shadow-[0_0_20px_rgba(0,128,255,0.6)] border-2 border-[#0080FF]/50">
+                <div className="inline-flex w-fit bg-gradient-to-r from-[#0080FF] to-[#0066FF] text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-full font-bold text-xs sm:text-sm shadow-[0_0_20px_rgba(0,128,255,0.6)] border-2 border-[#0080FF]/50">
                   📈 כלכלה ופיננסים
                 </div>
 
                 {/* Title */}
-                <h1 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight drop-shadow-2xl">
+                <h1 className="text-xl sm:text-3xl lg:text-5xl font-bold text-white leading-tight drop-shadow-2xl">
                   {featuredArticle.title}
                 </h1>
 
                 {/* Subtitle */}
-                <p className="text-base sm:text-xl text-gray-100 drop-shadow-lg">
+                <p className="text-sm sm:text-lg lg:text-xl text-gray-100 drop-shadow-lg line-clamp-2 sm:line-clamp-none">
                   {featuredArticle.subtitle}
                 </p>
 
-                {/* Content Preview */}
-                <p className="text-sm sm:text-base text-gray-200 leading-relaxed line-clamp-3 sm:line-clamp-none">
+                {/* Content Preview - Hidden on small screens */}
+                <p className="hidden sm:block text-sm lg:text-base text-gray-200 leading-relaxed line-clamp-2 lg:line-clamp-3">
                   {featuredArticle.content}
                 </p>
 
                 {/* Meta Info */}
-                <div className="flex flex-wrap items-center gap-3 pt-2">
-                  <span className="flex items-center gap-2 text-gray-200 text-sm bg-black/50 px-4 py-2 rounded-full backdrop-blur-sm">
-                    <Clock className="w-4 h-4" />
+                <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+                  <span className="flex items-center gap-1.5 sm:gap-2 text-gray-200 text-xs sm:text-sm bg-black/40 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full backdrop-blur-sm">
+                    <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
                     {new Date(featuredArticle.created_date).toLocaleDateString('he-IL', { 
                       month: 'short', 
                       day: 'numeric',
@@ -202,7 +208,7 @@ export default function Home() {
                       minute: '2-digit'
                     })}
                   </span>
-                  <span className="text-gray-200 text-sm bg-black/50 px-4 py-2 rounded-full backdrop-blur-sm">
+                  <span className="text-gray-200 text-xs sm:text-sm bg-black/40 px-2.5 sm:px-4 py-1.5 sm:py-2 rounded-full backdrop-blur-sm">
                     📰 {featuredArticle.source}
                   </span>
                 </div>
@@ -256,11 +262,23 @@ export default function Home() {
 
 
 
-      {/* Weather Forecast Avatar Section */}
-      <section className="px-0 mb-8 flex justify-center">
-        <div style={{ width: '1100px', height: '520px' }}>
-          <WeatherForecastAvatar />
-        </div>
+      {/* Weather Forecast Button */}
+      <section className="px-4 mb-8">
+        <motion.button
+          onClick={() => {
+            window.dispatchEvent(new CustomEvent('openWeatherChat'));
+          }}
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className="w-full bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-500 hover:from-cyan-500 hover:to-blue-600 text-white py-5 rounded-2xl shadow-[0_0_40px_rgba(59,130,246,0.6)] border-2 border-blue-400/50 flex items-center justify-center gap-3 font-bold text-lg transition-all"
+        >
+          <Cloud className="w-7 h-7 drop-shadow-[0_0_5px_#60A5FA]" />
+          <span>שיחה עם תחזיתן הרשת</span>
+          <span className="relative flex h-3 w-3">
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
+          </span>
+        </motion.button>
       </section>
 
       {/* Weather Alerts Container */}
@@ -378,6 +396,12 @@ export default function Home() {
           setSelectedReporterForChat(null);
         }}
         reporter={selectedReporterForChat || { name: 'עדי', image: 'https://via.placeholder.com/150' }}
+      />
+
+      {/* Weather Forecast Modal */}
+      <WeatherForecastModal 
+        isOpen={weatherChatOpen}
+        onClose={() => setWeatherChatOpen(false)}
       />
 
       {/* Floating Live Chat Button */}

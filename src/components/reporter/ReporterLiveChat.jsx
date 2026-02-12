@@ -220,27 +220,27 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
               <div className="bg-gradient-to-r from-[#0080FF]/15 to-transparent p-4 border-b-2 border-[#0080FF]/20">
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
-                    <Users className="w-5 h-5 text-[#0080FF]" />
-                    <span className="text-white font-bold">צ'אט קבוצתי</span>
+                    <MessageCircle className="w-5 h-5 text-[#0080FF]" />
+                    <span className="text-white font-bold">צ'אט AI</span>
                   </div>
-                  <div className="flex items-center gap-1 text-xs bg-[#0080FF]/20 px-2 py-1 rounded-full">
+                  <div className="flex items-center gap-1 text-xs bg-green-500/20 px-2 py-1 rounded-full">
                     <span className="relative flex h-2 w-2">
                       <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
                       <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
                     </span>
-                    <span className="text-white font-bold">{onlineUsers} מחוברים</span>
+                    <span className="text-white font-bold">מחובר</span>
                   </div>
                 </div>
-                <p className="text-gray-400 text-xs">שתף מחשבות עם צופים אחרים</p>
+                <p className="text-gray-400 text-xs">שאל שאלות וקבל תשובות מהכתב</p>
               </div>
 
               {/* Messages Area */}
               <div className="flex-1 overflow-y-auto p-4 space-y-3">
                 {chatMessages.length === 0 ? (
                   <div className="text-center text-gray-500 mt-12">
-                    <Users className="w-12 h-12 mx-auto mb-3 opacity-30" />
-                    <p className="text-sm">היה הראשון להגיב</p>
-                    <p className="text-xs mt-2">שתף מחשבות והעלה קבצים</p>
+                    <MessageCircle className="w-12 h-12 mx-auto mb-3 opacity-30" />
+                    <p className="text-sm">שאל שאלה</p>
+                    <p className="text-xs mt-2">הכתב ישיב לך בכתב</p>
                   </div>
                 ) : (
                   chatMessages.map((msg, idx) => (
@@ -302,39 +302,6 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
                 
                 {/* Action Buttons Row */}
                 <div className="flex gap-2 mb-3">
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    onClick={() => fileInputRef.current?.click()}
-                    disabled={isUploading}
-                    className="bg-[#001030] border-[#0080FF]/20 hover:bg-[#0080FF]/15 text-white rounded-xl"
-                    title="העלה קבצים"
-                  >
-                    {isUploading ? (
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                    ) : (
-                      <Paperclip className="w-4 h-4" />
-                    )}
-                  </Button>
-                  
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="bg-[#001030] border-[#0080FF]/20 hover:bg-[#0080FF]/15 text-white rounded-xl"
-                    title="הקלטה קולית"
-                  >
-                    <Mic className="w-4 h-4" />
-                  </Button>
-                  
-                  <Button
-                    variant="outline"
-                    size="icon"
-                    className="bg-[#001030] border-[#0080FF]/20 hover:bg-[#0080FF]/15 text-white rounded-xl"
-                    title="אמוג'י"
-                  >
-                    😊
-                  </Button>
-                  
                   <Input
                     value={inputMessage}
                     onChange={(e) => setInputMessage(e.target.value)}
@@ -352,14 +319,7 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
                   </Button>
                 </div>
                 
-                {/* Status Messages */}
-                {uploadedFiles.length > 0 && (
-                  <div className="text-xs text-[#0080FF] text-center mb-2">
-                    {uploadedFiles.length} קבצים הועלו
-                  </div>
-                )}
-                
-                <p className="text-xs text-gray-500 text-center">שתף מחשבות עם {onlineUsers} צופים מחוברים</p>
+                <p className="text-xs text-gray-500 text-center">שאל שאלות וקבל תשובות מהכתב</p>
               </div>
             </div>
           </div>
