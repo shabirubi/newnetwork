@@ -648,13 +648,13 @@ export default function Layout({ children, currentPageName }) {
                       key={cat.id}
                       to={createPageUrl(cat.href)}
                       onClick={() => setCategoriesSidebarOpen(false)}
-                      className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#E31E24]/20 active:bg-[#E31E24]/40 transition-all border border-transparent hover:border-[#E31E24]/30"
+                      className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#0080FF]/20 active:bg-[#0080FF]/40 transition-all border border-transparent hover:border-[#0080FF]/30"
                     >
-                      <div className="w-10 h-10 rounded-xl bg-black/40 border border-[#E31E24]/20 flex items-center justify-center">
-                        <cat.icon size={20} className="text-[#E31E24]" />
+                      <div className="w-10 h-10 rounded-xl bg-black/40 border border-[#0080FF]/20 flex items-center justify-center">
+                        <cat.icon size={20} className="text-[#0080FF]" />
                       </div>
                       <span className="flex-1 font-medium">{cat.label}</span>
-                      <ChevronLeft size={18} className="text-[#E31E24]" />
+                      <ChevronLeft size={18} className="text-[#0080FF]" />
                     </Link>
                   ))}
                 </div>
