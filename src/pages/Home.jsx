@@ -241,30 +241,22 @@ export default function Home() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
-                  className="fixed inset-0 z-[9999] bg-black/50 backdrop-blur-sm lg:hidden flex items-center justify-center p-4"
+                  className="fixed inset-0 z-[9999] bg-black flex items-center justify-center"
                   onClick={() => setShowLivePlayer(false)}
                 >
-                  <motion.div
-                    initial={{ scale: 0.9, y: 20 }}
-                    animate={{ scale: 1, y: 0 }}
-                    exit={{ scale: 0.9, y: 20 }}
-                    onClick={(e) => e.stopPropagation()}
-                    className="bg-black rounded-3xl overflow-hidden w-[95vw] sm:max-w-sm shadow-2xl border border-[#E31E24]/30 h-[95vh] sm:h-[80vh] flex flex-col relative"
+                  <button
+                    onClick={() => setShowLivePlayer(false)}
+                    className="absolute top-4 right-4 z-50 w-10 h-10 rounded-full bg-[#00D9FF]/30 hover:bg-[#00D9FF]/50 flex items-center justify-center transition-colors border border-[#00D9FF]/50"
                   >
-                    <button
-                      onClick={() => setShowLivePlayer(false)}
-                      className="absolute top-4 right-4 z-50 w-10 h-10 rounded-full bg-black/60 hover:bg-black/80 flex items-center justify-center transition-colors"
-                    >
-                      <X className="w-5 h-5 text-white" />
-                    </button>
-                    <LivePlayer 
-                      title={finalTitle}
-                      isLive={!!activeLive?.is_active}
-                      viewerCount={activeLive?.viewer_count || 3456}
-                      streamUrl={finalStreamUrl}
-                      thumbnailUrl={finalThumbnail}
-                    />
-                  </motion.div>
+                    <X className="w-5 h-5 text-[#00D9FF]" />
+                  </button>
+                  <LivePlayer 
+                    title={finalTitle}
+                    isLive={!!activeLive?.is_active}
+                    viewerCount={activeLive?.viewer_count || 3456}
+                    streamUrl={finalStreamUrl || "https://www.youtube.com/embed/OeEDtjuqinU?autoplay=1&mute=0&rel=0"}
+                    thumbnailUrl={finalThumbnail}
+                  />
                 </motion.div>
               )}
             </AnimatePresence>

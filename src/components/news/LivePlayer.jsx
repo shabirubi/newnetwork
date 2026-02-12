@@ -218,15 +218,15 @@ export default function LivePlayer({
       ref={containerRef}
       initial={{ opacity: 0, scale: 0.98 }}
       animate={{ opacity: 1, scale: 1 }}
-      className="relative bg-gradient-to-br from-black via-[#0a0000] to-black sm:rounded-2xl overflow-hidden shadow-2xl group border-0 sm:border-2 border-[#E31E24]/30"
+      className="relative bg-gradient-to-br from-black via-[#0a0000] to-black rounded-2xl overflow-hidden shadow-2xl group border-2 border-[#00D9FF]/50"
       style={{
-        boxShadow: '0 0 40px rgba(227, 30, 36, 0.4), inset 0 0 30px rgba(227, 30, 36, 0.1)'
+        boxShadow: '0 0 40px rgba(0, 217, 255, 0.4), inset 0 0 30px rgba(0, 217, 255, 0.1)'
       }}
       onMouseEnter={() => setShowControls(true)}
       onMouseLeave={() => setShowControls(false)}
     >
       {/* Video Container */}
-      <div className="relative w-full h-[100vh] sm:h-auto sm:aspect-video overflow-hidden">
+      <div className="relative w-full h-screen overflow-hidden">
         {/* Video Player - Shows generated videos or uploaded content */}
               {currentVideoUrl && (
                 <video
@@ -376,7 +376,7 @@ export default function LivePlayer({
         )}
 
         {/* Placeholder/Thumbnail - Show when there's a URL but not playing */}
-         {displayThumbnail && !isPlaying && !showPromo && (
+         {!currentVideoUrl || (displayThumbnail && !isPlaying && !showPromo) ? (
            <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center z-10">
              {thumbnailUrl ? (
                <img 
@@ -386,15 +386,15 @@ export default function LivePlayer({
                />
              ) : (
                <div className="text-center">
-                 <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-[#E31E24]/20 flex items-center justify-center">
-                   <Radio className="w-12 h-12 text-[#E31E24]" />
+                 <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-[#00D9FF]/20 flex items-center justify-center">
+                   <Radio className="w-12 h-12 text-[#00D9FF]" />
                  </div>
                  <h3 className="text-white text-xl font-bold">{title}</h3>
-                 <p className="text-gray-400 mt-2">לחצו להפעלת השידור</p>
+                 <p className="text-gray-400 mt-2">טוען שידור...</p>
                </div>
              )}
            </div>
-         )}
+         ) : null}
 
         {/* Live Badge */}
         {isLive && (
@@ -409,9 +409,9 @@ export default function LivePlayer({
               ease: "easeInOut"
             }}
           >
-            <div className="flex items-center gap-1 sm:gap-2 bg-gradient-to-r from-[#E31E24] to-[#B91C1C] text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-bold shadow-lg border border-red-400/50"
+            <div className="flex items-center gap-1 sm:gap-2 bg-gradient-to-r from-[#00D9FF] to-[#0099CC] text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-bold shadow-lg border border-[#00D9FF]/50"
               style={{
-                boxShadow: '0 0 20px rgba(227, 30, 36, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.1)'
+                boxShadow: '0 0 20px rgba(0, 217, 255, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.1)'
               }}
             >
               <span className="relative flex h-2 w-2 sm:h-2.5 sm:w-2.5">
