@@ -231,7 +231,7 @@ export default function Layout({ children, currentPageName }) {
       </div>
 
       {/* Logo Header */}
-      <div className="bg-gradient-to-r from-black via-[#001a40] to-black border-b border-[#0055BB]/40 py-2 shadow-lg shadow-[#0055BB]/30 relative overflow-hidden">
+      <div className="bg-gradient-to-r from-black via-[#001a40] to-black border-b border-[#0080FF]/40 py-2 shadow-lg shadow-[#0080FF]/30 relative overflow-hidden">
         {/* Water Wave Animation */}
         <motion.div 
           className="absolute inset-0 opacity-25"
@@ -240,7 +240,7 @@ export default function Layout({ children, currentPageName }) {
           }}
           transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
           style={{
-            backgroundImage: "linear-gradient(90deg, #00D4FF 0%, #00FFFF 25%, #00D4FF 50%, #00FFFF 75%, #00D4FF 100%)",
+            backgroundImage: "linear-gradient(90deg, #0080FF 0%, #0099FF 25%, #0080FF 50%, #0099FF 75%, #0080FF 100%)",
             backgroundSize: "200% 100%",
           }}
         />
@@ -274,7 +274,7 @@ export default function Layout({ children, currentPageName }) {
 
           {/* Opening Date Display with Typewriter - Full Width */}
           <motion.div 
-            className="hidden lg:flex flex-1 items-center justify-center px-6 py-2 bg-gradient-to-r from-[#0080FF] via-[#0099FF] to-[#0080FF] rounded-2xl border border-[#0080FF] mx-4"
+            className="hidden lg:flex flex-1 items-center justify-center px-6 py-2 bg-gradient-to-r from-[#0080FF] via-[#0066FF] to-[#0080FF] rounded-2xl border border-[#0080FF] mx-4"
             animate={{
               boxShadow: [
                 '0 0 25px rgba(0, 128, 255, 0.6)',
