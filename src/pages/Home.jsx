@@ -213,7 +213,7 @@ export default function Home() {
         </section>
 
         {/* Weather Forecast Button */}
-        <section className="px-4 mb-4">
+        <section className="px-4 mb-8">
           <motion.button
             onClick={() => {
               window.dispatchEvent(new CustomEvent('openWeatherChat'));
@@ -234,26 +234,40 @@ export default function Home() {
           </motion.button>
         </section>
 
-            {/* Live Player Section - מוצג רק אם לחצו על הכפתור */}
-          {showLivePlayer && (
-        <section className="px-0 mb-0 -mx-4 sm:mx-0 sm:px-0 sm:mb-6">
-          <div className="bg-black sm:bg-black/40 sm:backdrop-blur-sm sm:rounded-lg sm:p-4 relative">
-            <button
-              onClick={() => setShowLivePlayer(false)}
-              className="absolute top-2 left-2 z-50 w-10 h-10 rounded-full bg-black/60 hover:bg-black/80 flex items-center justify-center transition-colors"
-            >
-              <X className="w-5 h-5 text-white" />
-            </button>
-            <LivePlayer 
-              title={finalTitle}
-              isLive={!!activeLive?.is_active}
-              viewerCount={activeLive?.viewer_count || 3456}
-              streamUrl={finalStreamUrl}
-              thumbnailUrl={finalThumbnail}
-            />
-          </div>
-        </section>
-      )}
+            {/* Live Player Modal */}
+            <AnimatePresence>
+              {showLivePlayer && (
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  className="fixed inset-0 z-[9999] bg-black/50 backdrop-blur-sm lg:hidden flex items-center justify-center p-4"
+                  onClick={() => setShowLivePlayer(false)}
+                >
+                  <motion.div
+                    initial={{ scale: 0.9, y: 20 }}
+                    animate={{ scale: 1, y: 0 }}
+                    exit={{ scale: 0.9, y: 20 }}
+                    onClick={(e) => e.stopPropagation()}
+                    className="bg-black rounded-3xl overflow-hidden w-full max-w-sm shadow-2xl border border-[#E31E24]/30 h-[80vh] flex flex-col relative"
+                  >
+                    <button
+                      onClick={() => setShowLivePlayer(false)}
+                      className="absolute top-4 right-4 z-50 w-10 h-10 rounded-full bg-black/60 hover:bg-black/80 flex items-center justify-center transition-colors"
+                    >
+                      <X className="w-5 h-5 text-white" />
+                    </button>
+                    <LivePlayer 
+                      title={finalTitle}
+                      isLive={!!activeLive?.is_active}
+                      viewerCount={activeLive?.viewer_count || 3456}
+                      streamUrl={finalStreamUrl}
+                      thumbnailUrl={finalThumbnail}
+                    />
+                  </motion.div>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
       {/* Floating Live Button */}
       {!showLivePlayer && (
