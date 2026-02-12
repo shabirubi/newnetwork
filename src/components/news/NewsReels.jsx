@@ -91,12 +91,21 @@ export default function NewsReels() {
                     onClick={() => setSelectedReel(reel)}
                   >
 
-                    {/* Video preview */}
+                    {/* Thumbnail Background */}
+                    <img 
+                      src={reel.thumbnail || 'https://images.unsplash.com/photo-1495563014258-12e12737d0d0?w=300&h=500&fit=crop'} 
+                      alt={reel.title}
+                      className="absolute inset-0 w-full h-full object-cover"
+                    />
+
+                    {/* Video preview - hidden initially */}
                     <video
                       src={reel.videoUrl}
-                      className="absolute inset-0 w-full h-full object-cover"
+                      className="absolute inset-0 w-full h-full object-cover hidden group-hover:block"
                       playsInline
                       muted
+                      onMouseEnter={(e) => e.target.play()}
+                      onMouseLeave={(e) => e.target.pause()}
                     />
 
                     {/* Watermark */}
