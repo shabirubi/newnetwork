@@ -27,42 +27,52 @@ import { base44 } from "@/api/base44Client";
 
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png";
 
-// Typewriter Date Component
+// Scrolling Breaking News Component
 function TypewriterDate() {
-  const text = "פתיחה רשמית: 7 למרץ 2026";
-  const [displayText, setDisplayText] = React.useState("");
+  const [news, setNews] = React.useState([]);
 
   React.useEffect(() => {
-    let index = 0;
-    const interval = setInterval(() => {
-      if (index < text.length) {
-        setDisplayText(text.slice(0, index + 1));
-        index++;
-      } else {
-        clearInterval(interval);
-        // הוספת אנימציה חוזרת
-        setTimeout(() => {
-          setDisplayText("");
-          index = 0;
-        }, 2000);
+    const fetchNews = async () => {
+      try {
+        const articles = await base44.entities.NewsArticle.filter({ is_breaking: true }, '-created_date', 10);
+        setNews(articles || []);
+      } catch (err) {
+        console.error('Failed to fetch breaking news:', err);
       }
-    }, 80);
-
+    };
+    fetchNews();
+    const interval = setInterval(fetchNews, 30000);
     return () => clearInterval(interval);
   }, []);
 
-  return (
-    <div className="flex items-center gap-2">
-      <div className="text-sm md:text-base font-bold text-white tracking-wide font-mono">
-        {displayText}
-        <motion.span
-          animate={{ opacity: [1, 0] }}
-          transition={{ duration: 0.6, repeat: Infinity }}
-          className="ml-1 text-white"
-        >
-          |
-        </motion.span>
+  if (news.length === 0) {
+    return (
+      <div className="text-sm md:text-base font-bold text-white">
+        פתיחה רשמית: 7 למרץ 2026
       </div>
+    );
+  }
+
+  return (
+    <div className="relative overflow-hidden w-full h-8 flex items-center">
+      <motion.div
+        className="flex items-center gap-8 whitespace-nowrap"
+        animate={{
+          x: [0, -2000]
+        }}
+        transition={{
+          duration: 30,
+          repeat: Infinity,
+          ease: "linear"
+        }}
+      >
+        {[...news, ...news].map((article, idx) => (
+          <div key={`${article.id}-${idx}`} className="flex items-center gap-2">
+            <span className="text-sm md:text-base font-bold text-white">🔴</span>
+            <span className="text-sm md:text-base font-bold text-white">{article.title}</span>
+          </div>
+        ))}
+      </motion.div>
     </div>
   );
 }
