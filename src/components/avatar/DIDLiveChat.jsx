@@ -112,7 +112,9 @@ export default function DIDLiveChat({ isOpen, onClose }) {
                 width: '25%',
                 height: '35%',
                 overflow: 'hidden',
-                pointerEvents: 'auto'
+                pointerEvents: 'auto',
+                outline: 'none',
+                border: 'none'
               }}
             />
           </div>
