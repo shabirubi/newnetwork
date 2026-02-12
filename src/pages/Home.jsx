@@ -157,43 +157,44 @@ export default function Home() {
           to={`${createPageUrl("Article")}?id=${featuredArticle.id}`}
           className="block group relative rounded-none sm:rounded-3xl overflow-hidden cursor-pointer"
         >
-          <div className="flex flex-col lg:flex-row-reverse">
-            {/* תמונה בצד ימין */}
-            <div className="lg:w-2/3 h-[250px] sm:h-[400px] lg:h-[500px]">
-              <img 
-                src={featuredArticle.image_url} 
-                alt={featuredArticle.title}
-                className="w-full h-full object-cover"
-              />
-            </div>
+          <div className="relative h-[600px] sm:h-[500px]">
+            {/* תמונה ברקע */}
+            <img 
+              src={featuredArticle.image_url} 
+              alt={featuredArticle.title}
+              className="absolute inset-0 w-full h-full object-cover"
+            />
 
-            {/* טקסט בצד שמאל */}
-            <div className="lg:w-1/3 bg-gradient-to-br from-black via-gray-900 to-black p-4 sm:p-6 lg:p-10 flex flex-col justify-center">
-              <div className="space-y-3 sm:space-y-4 lg:space-y-6">
+            {/* Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/60 to-transparent" />
+
+            {/* טקסט מעל התמונה */}
+            <div className="absolute inset-0 flex flex-col justify-end p-6 sm:p-10">
+              <div className="max-w-4xl space-y-4 sm:space-y-6 bg-black/40 backdrop-blur-lg rounded-3xl p-6 sm:p-8 border border-white/10">
                 {/* Badge */}
-                <div className="inline-flex w-fit bg-gradient-to-r from-[#0080FF] to-[#0066FF] text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-full font-bold text-xs sm:text-sm shadow-[0_0_20px_rgba(0,128,255,0.6)] border-2 border-[#0080FF]/50">
+                <div className="inline-flex w-fit bg-gradient-to-r from-[#0080FF] to-[#0066FF] text-white px-4 py-2 rounded-full font-bold text-sm shadow-[0_0_20px_rgba(0,128,255,0.6)] border-2 border-[#0080FF]/50">
                   📈 כלכלה ופיננסים
                 </div>
 
                 {/* Title */}
-                <h1 className="text-xl sm:text-3xl lg:text-4xl font-bold text-white leading-tight drop-shadow-2xl">
+                <h1 className="text-2xl sm:text-4xl lg:text-5xl font-bold text-white leading-tight drop-shadow-2xl">
                   {featuredArticle.title}
                 </h1>
 
                 {/* Subtitle */}
-                <p className="text-sm sm:text-base lg:text-lg text-gray-100 drop-shadow-lg line-clamp-3">
+                <p className="text-base sm:text-xl text-gray-100 drop-shadow-lg">
                   {featuredArticle.subtitle}
                 </p>
 
-                {/* Content Preview - Hidden on mobile */}
-                <p className="hidden sm:block text-sm lg:text-base text-gray-300 leading-relaxed line-clamp-4">
+                {/* Content Preview */}
+                <p className="text-sm sm:text-base text-gray-200 leading-relaxed line-clamp-3 sm:line-clamp-none">
                   {featuredArticle.content}
                 </p>
 
                 {/* Meta Info */}
-                <div className="flex flex-wrap items-center gap-2 sm:gap-3 pt-2">
-                  <span className="flex items-center gap-1 sm:gap-2 text-gray-200 text-xs sm:text-sm bg-black/30 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full backdrop-blur-sm">
-                    <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
+                <div className="flex flex-wrap items-center gap-3 pt-2">
+                  <span className="flex items-center gap-2 text-gray-200 text-sm bg-black/50 px-4 py-2 rounded-full backdrop-blur-sm">
+                    <Clock className="w-4 h-4" />
                     {new Date(featuredArticle.created_date).toLocaleDateString('he-IL', { 
                       month: 'short', 
                       day: 'numeric',
@@ -201,7 +202,7 @@ export default function Home() {
                       minute: '2-digit'
                     })}
                   </span>
-                  <span className="text-gray-200 text-xs sm:text-sm bg-black/30 px-2 sm:px-3 py-1 sm:py-1.5 rounded-full backdrop-blur-sm">
+                  <span className="text-gray-200 text-sm bg-black/50 px-4 py-2 rounded-full backdrop-blur-sm">
                     📰 {featuredArticle.source}
                   </span>
                 </div>
