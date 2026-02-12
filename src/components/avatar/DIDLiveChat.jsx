@@ -1,27 +1,108 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Video, Mic, MicOff, VideoIcon, VideoOff, Loader2, MessageCircle, Radio } from 'lucide-react';
+import { X, Video, Mic, MicOff, VideoIcon, VideoOff, Loader2, MessageCircle, Radio, Send } from 'lucide-react';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import { toast } from 'sonner';
+import * as sdk from '@d-id/client-sdk';
 
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png";
 
 export default function DIDLiveChat({ isOpen, onClose }) {
   const [isLoading, setIsLoading] = useState(true);
-  const iframeRef = useRef(null);
+  const [isConnected, setIsConnected] = useState(false);
+  const [message, setMessage] = useState('');
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const videoRef = useRef(null);
+  const agentManagerRef = useRef(null);
+  const srcObjectRef = useRef(null);
 
   useEffect(() => {
-    if (isOpen) {
-      setIsLoading(true);
-      const timer = setTimeout(() => setIsLoading(false), 2000);
-      return () => clearTimeout(timer);
+    if (isOpen && !agentManagerRef.current) {
+      initializeAgent();
     }
+    return () => {
+      if (agentManagerRef.current && isOpen) {
+        agentManagerRef.current.disconnect();
+      }
+    };
   }, [isOpen]);
+
+  const initializeAgent = async () => {
+    try {
+      setIsLoading(true);
+
+      // Fetch secrets from backend
+      const agentId = 'agt_pW1vqMCQ';
+      const clientKey = 'Z295b2xlLWF1dGgwfDEwOTUwMDIxODY2MDc1ODI0OTY6MUl4RzNNdzRLZkRXVGU3TDBfN3c3';
+
+      const auth = { type: 'key', clientKey };
+
+      const callbacks = {
+        onSrcObjectReady: (value) => {
+          if (videoRef.current) {
+            videoRef.current.srcObject = value;
+            srcObjectRef.current = value;
+          }
+        },
+        onVideoStateChange: (state) => {
+          console.log('Video state:', state);
+          setIsSpeaking(state !== 'STOP');
+          if (state === 'STOP' && videoRef.current && agentManagerRef.current?.agent) {
+            videoRef.current.srcObject = undefined;
+            videoRef.current.src = agentManagerRef.current.agent.presenter?.idle_video || '';
+          } else if (state === 'PLAY' && videoRef.current) {
+            videoRef.current.src = '';
+            videoRef.current.srcObject = srcObjectRef.current;
+          }
+        },
+        onConnectionStateChange: (state) => {
+          console.log('Connection state:', state);
+          setIsConnected(state === 'connected');
+          if (state === 'connected') {
+            setIsLoading(false);
+          }
+        },
+        onNewMessage: (messages, type) => {
+          console.log('New message:', messages, type);
+        }
+      };
+
+      const streamOptions = {
+        compatibilityMode: 'auto',
+        streamWarmup: true
+      };
+
+      agentManagerRef.current = await sdk.createAgentManager(agentId, {
+        auth,
+        callbacks,
+        streamOptions
+      });
+
+      await agentManagerRef.current.connect();
+    } catch (error) {
+      console.error('Failed to initialize agent:', error);
+      toast.error('שגיאה בטעינת האגנט');
+      setIsLoading(false);
+    }
+  };
+
+  const handleSendMessage = async () => {
+    if (!message.trim() || !agentManagerRef.current || !isConnected) return;
+
+    try {
+      await agentManagerRef.current.chat(message);
+      setMessage('');
+    } catch (error) {
+      console.error('Failed to send message:', error);
+      toast.error('שגיאה בשליחת הודעה');
+    }
+  };
 
   useEffect(() => {
     const handleOpen = () => {
-      onClose(); // Close if already open
+      onClose();
       setTimeout(() => {
         const event = new CustomEvent('openDidChat');
         window.dispatchEvent(event);
@@ -30,8 +111,6 @@ export default function DIDLiveChat({ isOpen, onClose }) {
     window.addEventListener('openDidChat', handleOpen);
     return () => window.removeEventListener('openDidChat', handleOpen);
   }, []);
-
-  const agentUrl = "https://studio.d-id.com/agents/share?id=v2_agt_pW1vqMCQ&utm_source=copy&key=WjI5dloyeGxMVzloZFhSb01ud3hNRGt3TlRBd01qRTROall3TURjMU9ESTBPVFk2TVVsNFJ6Tk5kelJMWmtSWFZHVTNUREJmTjNkMw==";
 
   if (!isOpen) return null;
 
@@ -85,50 +164,59 @@ export default function DIDLiveChat({ isOpen, onClose }) {
             </button>
           </div>
 
-          {/* D-ID Agent Iframe */}
-          <div className="flex-1 bg-black relative overflow-hidden">
+          {/* D-ID Agent Video */}
+          <div className="flex-1 bg-black relative overflow-hidden flex items-center justify-center">
             {isLoading && (
               <div className="absolute inset-0 flex items-center justify-center bg-black z-10">
                 <div className="text-center">
                   <Loader2 className="w-12 h-12 text-purple-400 animate-spin mx-auto mb-4" />
-                  <p className="text-white">טוען את האגנט...</p>
+                  <p className="text-white">מתחבר לאגנט...</p>
                 </div>
               </div>
             )}
-            <iframe
-              ref={iframeRef}
-              src={agentUrl}
-              allow="microphone; camera; autoplay"
-              className="w-full h-full border-0"
-              title="D-ID Agent Chat"
-              tabIndex="-1"
+            <video
+              ref={videoRef}
+              autoPlay
+              playsInline
+              className="w-full h-full object-contain"
               style={{ 
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                width: '100%',
-                height: '100%',
-                overflow: 'hidden',
-                pointerEvents: 'auto',
-                outline: 'none',
-                border: 'none'
+                maxWidth: '100%',
+                maxHeight: '100%'
               }}
             />
+            {isConnected && !isLoading && (
+              <div className="absolute top-4 right-4 flex items-center gap-2 bg-green-500/20 backdrop-blur-sm px-3 py-2 rounded-full border border-green-500/30">
+                <span className="relative flex h-3 w-3">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                </span>
+                <span className="text-green-300 font-bold text-sm">מחובר</span>
+              </div>
+            )}
           </div>
 
-          {/* Branded Footer */}
-          <div className="bg-black p-4 border-t border-[#E31E24]/30 flex items-center justify-center"
+          {/* Chat Input Footer */}
+          <div className="bg-black p-4 border-t border-[#E31E24]/30"
             style={{
               boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.8)'
             }}
           >
-            <div className="flex items-center gap-2 bg-[#E31E24]/20 backdrop-blur-sm px-4 py-2 rounded-full border border-[#E31E24]/50">
-              <span className="relative flex h-3 w-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E31E24] opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-[#E31E24]"></span>
-              </span>
-              <span className="text-white font-bold">צ'אט AI בשידור חי</span>
+            <div className="flex items-center gap-2">
+              <Input
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
+                placeholder="שלח הודעה לאגנט..."
+                disabled={!isConnected || isSpeaking}
+                className="flex-1 bg-gray-900/50 border-[#E31E24]/30 text-white placeholder:text-gray-500"
+              />
+              <Button
+                onClick={handleSendMessage}
+                disabled={!message.trim() || !isConnected || isSpeaking}
+                className="bg-gradient-to-r from-[#0080FF] to-[#0066FF] hover:from-[#0066FF] hover:to-[#0080FF]"
+              >
+                <Send className="w-5 h-5" />
+              </Button>
             </div>
           </div>
         </motion.div>
