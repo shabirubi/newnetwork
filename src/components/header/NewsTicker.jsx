@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "../../utils";
 import { base44 } from "@/api/base44Client";
 import { motion } from "framer-motion";
-import { Flame, Siren, MessageSquareWarning, Moon, Sun, TrendingUp, TrendingDown, DollarSign, Euro, Menu, Clock, Radio } from "lucide-react";
+import { Flame, Siren, MessageSquareWarning, Menu, Clock, Radio } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import ClockWidget from "./ClockWidget";
 import WeatherWidget from "./WeatherWidget";
@@ -32,13 +32,8 @@ export default function NewsTicker({ darkMode, setDarkMode, onMenuClick }) {
   }, []);
 
   const fetchCurrencyRates = async () => {
-    // Static currency data to save API credits
-    setCurrencies([
-      { code: "USD", name: "דולר", rate: 3.65, changePercent: 0.45 },
-      { code: "EUR", name: "יורו", rate: 3.98, changePercent: -0.23 },
-      { code: "GBP", name: "לירה", rate: 4.52, changePercent: 0.12 },
-      { code: "BTC", name: "ביטקוין", rate: 365000, changePercent: 2.15 }
-    ]);
+    // Currency ticker disabled
+    setCurrencies([]);
   };
 
   const loadBreakingNews = async () => {
@@ -131,38 +126,6 @@ export default function NewsTicker({ darkMode, setDarkMode, onMenuClick }) {
         </button>
 
         <div className="flex items-center gap-1 sm:gap-2 shrink-0 relative z-[60]">
-          {/* Currency Strip next to other buttons */}
-          {currencies.length > 0 && (
-            <div className="flex items-center gap-1 sm:gap-2 bg-black/60 backdrop-blur-sm rounded-lg px-2 sm:px-3 py-1.5 sm:py-2 border border-red-900/30">
-              {currencies.slice(0, 2).map((currency, idx) => (
-                <motion.div
-                  key={`sidebar-currency-${idx}`}
-                  className="flex items-center gap-1"
-                  animate={{
-                    scale: [1, 1.05, 1]
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: 'easeInOut',
-                    delay: idx * 0.3
-                  }}
-                >
-                  {currency.code === 'USD' && <DollarSign className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-[#E31E24]" />}
-                  {currency.code === 'EUR' && <Euro className="w-3 sm:w-3.5 h-3 sm:h-3.5 text-[#E31E24]" />}
-                  {currency.code === 'BTC' && <span className="text-[#E31E24] font-bold text-[10px] sm:text-xs">₿</span>}
-                  {currency.code === 'GBP' && <span className="text-[#E31E24] font-bold text-[10px] sm:text-xs">£</span>}
-                  <span className="text-white font-bold text-[10px] sm:text-xs hidden xs:inline">{currency.name}</span>
-                  <span className="text-red-400 font-bold text-[10px] sm:text-xs">
-                    ₪{currency.code === 'BTC' ? (currency.rate || 0).toFixed(0) : (currency.rate || 0).toFixed(2)}
-                  </span>
-                  <span className={`font-bold text-[9px] sm:text-[10px] ${(currency.changePercent || 0) >= 0 ? 'text-green-400' : 'text-red-400'}`}>
-                    {(currency.changePercent || 0) >= 0 ? '▲' : '▼'}{Math.abs(currency.changePercent || 0).toFixed(2)}%
-                  </span>
-                </motion.div>
-              ))}
-            </div>
-          )}
 
           <div className="hidden sm:block">
              <ClockWidget />
@@ -223,56 +186,7 @@ function TickerContent({ news, currencies }) {
           </span>
         );
       })}
-      {currencies.length > 0 && [...currencies, ...currencies].map((currency, index) => (
-        <motion.span 
-          key={`currency-${index}`} 
-          className="mx-6 sm:mx-10 inline-flex items-center gap-2 px-3 py-1.5 rounded-lg backdrop-blur-sm"
-          animate={{
-            background: [
-              'linear-gradient(to right, rgba(0, 0, 0, 0.6), rgba(227, 31, 36, 0.4))',
-              'linear-gradient(to right, rgba(227, 31, 36, 0.5), rgba(0, 0, 0, 0.7))',
-              'linear-gradient(to right, rgba(0, 0, 0, 0.6), rgba(227, 31, 36, 0.4))'
-            ],
-            boxShadow: [
-              '0 0 10px rgba(227, 31, 36, 0.3)',
-              '0 0 20px rgba(227, 31, 36, 0.5)',
-              '0 0 10px rgba(227, 31, 36, 0.3)'
-            ],
-            scale: [1, 1.03, 1]
-          }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            ease: 'easeInOut',
-            delay: index * 0.2
-          }}
-          style={{
-            border: '1px solid rgba(227, 31, 36, 0.4)'
-          }}
-        >
-          {currency.code === 'USD' && <DollarSign className="w-3 h-3 text-[#E31E24] animate-pulse" />}
-          {currency.code === 'EUR' && <Euro className="w-3 h-3 text-[#E31E24] animate-pulse" />}
-          {currency.code === 'BTC' && <span className="text-[#E31E24] font-bold text-xs animate-pulse">₿</span>}
-          {currency.code === 'GBP' && <span className="text-[#E31E24] font-bold text-xs animate-pulse">£</span>}
-          <span className="font-bold text-white text-xs">{currency.name}</span>
-          <span className="text-red-400 font-bold text-xs">
-            ₪{currency.code === 'BTC' ? (currency.rate || 0).toFixed(0) : (currency.rate || 0).toFixed(2)}
-          </span>
-          <motion.span 
-            className={`font-bold text-xs ${(currency.changePercent || 0) >= 0 ? 'text-green-400' : 'text-red-400'}`}
-            animate={{
-              scale: [1, 1.1, 1]
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: 'easeInOut'
-            }}
-          >
-            {(currency.changePercent || 0) >= 0 ? '▲' : '▼'}{Math.abs(currency.changePercent || 0).toFixed(2)}%
-          </motion.span>
-        </motion.span>
-      ))}
+
       {[...updates, ...updates].map((update, idx) => (
         <span 
           key={`update-${idx}`}
