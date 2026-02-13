@@ -102,9 +102,9 @@ export default function WeatherForecastModal({ isOpen, onClose }) {
           </div>
 
           {/* Main Content - Avatar + Chat */}
-          <div className="flex-1 flex flex-col md:flex-row overflow-hidden">
+          <div className="flex-1 flex overflow-hidden relative">
             {/* Avatar Section */}
-            <div className="hidden md:block md:w-1/2 relative bg-black">
+            <div className="w-full md:w-1/2 relative bg-black">
               {isLoading && (
                 <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-950 via-black to-gray-950 z-20">
                   <div className="text-center">
@@ -135,7 +135,7 @@ export default function WeatherForecastModal({ isOpen, onClose }) {
             </div>
 
             {/* Chat Panel */}
-            <div className="w-full md:w-1/2 bg-black md:border-l border-blue-500/30 flex flex-col backdrop-blur-xl">
+            <div className="hidden md:flex md:w-1/2 bg-black border-l border-blue-500/30 flex-col backdrop-blur-xl">
               {/* Chat Header */}
               <div className="p-4 border-b border-blue-500/30 bg-black/80">
                 <div className="flex items-center gap-2 mb-2">
