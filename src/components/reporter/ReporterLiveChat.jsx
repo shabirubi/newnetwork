@@ -234,7 +234,7 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
                     allow="microphone; camera; autoplay"
                     className="w-full h-full border-0 bg-black"
                     style={{
-                      transform: isMobile ? 'scale(1)' : 'scale(0.9) translateY(100px)',
+                      transform: isMobile ? 'scale(1)' : 'scale(0.85) translateY(50px)',
                       transformOrigin: 'center center'
                     }}
                     title={`${reporter.name} Live Chat`}
