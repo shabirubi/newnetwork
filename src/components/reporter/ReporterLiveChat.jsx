@@ -226,7 +226,7 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
               )}
 
               {/* D-ID Agent Iframe with Branded Frame */}
-              <div className="absolute inset-0 overflow-hidden flex items-center justify-center p-4" style={{ paddingBottom: isMobile ? '90px' : '16px' }}>
+              <div className="absolute inset-0 overflow-hidden flex items-center justify-center p-4" style={{ paddingBottom: isMobile ? '120px' : '16px' }}>
                 <div className={`relative ${isMobile ? 'w-full h-full' : 'w-[90%] h-[90%]'} rounded-2xl overflow-hidden shadow-2xl border border-gray-800/50`}>
                   <iframe
                     ref={iframeRef}
@@ -245,31 +245,133 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
 
             {/* Chat Panel - Desktop */}
             {!isMobile && (
-              <div className="w-80 sm:w-96 bg-gradient-to-b from-gray-950 to-black border-l border-gray-800/50 flex flex-col absolute left-0 top-0 bottom-0 shadow-2xl backdrop-blur-xl">
-...
-...
-            </div>
-            )}
+              <div className="w-80 sm:w-96 bg-gradient-to-b from-gray-950 to-black border-l border-gray-800/50 flex flex-col shadow-2xl backdrop-blur-xl">
+                {/* Chat Header */}
+                <div className="p-4 border-b border-gray-800/50 bg-gradient-to-r from-gray-900 via-gray-950 to-gray-900">
+                  <div className="flex items-center gap-2 mb-2">
+                    <MessageCircle className="w-5 h-5 text-blue-400" />
+                    <h3 className="text-white font-bold">צ'אט עם {reporter.name}</h3>
+                  </div>
+                  <div className="flex items-center gap-2 text-xs text-gray-400">
+                    <Users className="w-3.5 h-3.5" />
+                    <span>{onlineUsers} משתמשים מחוברים</span>
+                  </div>
+                </div>
 
-            {/* Chat Panel - Mobile (Bottom) */}
-            {isMobile && (
-              <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-gray-950 via-black to-transparent border-t border-gray-800/50 z-[99999999] pb-safe backdrop-blur-xl" style={{ paddingBottom: 'env(safe-area-inset-bottom, 12px)' }}>
-                <div className="p-4">
-                  <div className="flex gap-2">
+                {/* Messages */}
+                <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                  {chatMessages.length === 0 && (
+                    <div className="text-center text-gray-500 mt-8">
+                      <MessageCircle className="w-12 h-12 mx-auto mb-2 opacity-50" />
+                      <p className="text-sm">התחל שיחה עם {reporter.name}</p>
+                    </div>
+                  )}
+                  {chatMessages.map((msg, idx) => (
+                    <div
+                      key={idx}
+                      className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                    >
+                      <div
+                        className={`max-w-[80%] rounded-2xl px-4 py-2 ${
+                          msg.sender === 'user'
+                            ? 'bg-blue-600 text-white'
+                            : 'bg-gray-800 text-gray-200'
+                        }`}
+                      >
+                        <p className="text-sm whitespace-pre-wrap">{msg.text}</p>
+                        <p className="text-xs opacity-70 mt-1">
+                          {new Date(msg.timestamp).toLocaleTimeString('he-IL', {
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          })}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+                  <div ref={messagesEndRef} />
+                </div>
+
+                {/* Input */}
+                <div className="p-4 border-t border-gray-800/50 bg-gradient-to-r from-gray-950 via-gray-900 to-gray-950">
+                  <div className="flex gap-2 mb-2">
                     <Input
                       value={inputMessage}
                       onChange={(e) => setInputMessage(e.target.value)}
                       onKeyPress={handleKeyPress}
                       placeholder="שאל שאלה..."
-                      className="flex-1 bg-gray-900/95 border-2 border-gray-700 text-white placeholder:text-gray-500 focus:border-gray-600 rounded-xl text-base h-14 px-4 backdrop-blur-sm shadow-2xl"
+                      className="flex-1 bg-gray-900/80 border border-gray-700 text-white placeholder:text-gray-500 focus:border-gray-600 rounded-xl"
                     />
-
                     <Button
                       onClick={handleSendMessage}
                       disabled={!inputMessage.trim()}
-                      className="bg-gray-800/95 hover:bg-gray-700 text-white rounded-xl border-2 border-gray-700 h-14 w-14 p-0 disabled:opacity-50 backdrop-blur-sm shadow-2xl"
+                      className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl"
+                    >
+                      <Send className="w-4 h-4" />
+                    </Button>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="flex-1 bg-gray-800/80 border-gray-700 text-gray-300 hover:bg-gray-700 rounded-lg"
+                      onClick={() => toast.info('הודעות קוליות בקרוב...')}
+                    >
+                      <Mic className="w-4 h-4 mr-1" />
+                      הקלטה קולית
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="flex-1 bg-gray-800/80 border-gray-700 text-gray-300 hover:bg-gray-700 rounded-lg"
+                      onClick={() => toast.info('שיחת וידאו בקרוב...')}
+                    >
+                      <Video className="w-4 h-4 mr-1" />
+                      וידאו
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Chat Panel - Mobile (Bottom) */}
+            {isMobile && (
+              <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-gray-950 via-black to-transparent border-t-2 border-gray-800/50 z-[99999999] backdrop-blur-2xl" style={{ paddingBottom: 'env(safe-area-inset-bottom, 16px)' }}>
+                <div className="p-4 space-y-3">
+                  {/* Main Input Row */}
+                  <div className="flex gap-2">
+                    <Input
+                      value={inputMessage}
+                      onChange={(e) => setInputMessage(e.target.value)}
+                      onKeyPress={handleKeyPress}
+                      placeholder="שאל את רבי ברק..."
+                      className="flex-1 bg-gray-900/95 border-2 border-gray-700 text-white placeholder:text-gray-400 focus:border-blue-500 rounded-xl text-base h-14 px-4 backdrop-blur-sm shadow-2xl"
+                    />
+                    <Button
+                      onClick={handleSendMessage}
+                      disabled={!inputMessage.trim()}
+                      className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl h-14 w-14 p-0 disabled:opacity-50 shadow-2xl"
                     >
                       <Send className="w-5 h-5" />
+                    </Button>
+                  </div>
+
+                  {/* Action Buttons Row */}
+                  <div className="flex gap-2">
+                    <Button
+                      variant="outline"
+                      className="flex-1 bg-gray-900/80 border-2 border-gray-700 text-gray-300 hover:bg-gray-800 rounded-xl h-12 backdrop-blur-sm shadow-xl"
+                      onClick={() => toast.info('הודעות קוליות בקרוב...')}
+                    >
+                      <Mic className="w-5 h-5 mr-2" />
+                      הקלטה קולית
+                    </Button>
+                    <Button
+                      variant="outline"
+                      className="flex-1 bg-gray-900/80 border-2 border-gray-700 text-gray-300 hover:bg-gray-800 rounded-xl h-12 backdrop-blur-sm shadow-xl"
+                      onClick={() => toast.info('שיחת וידאו בקרוב...')}
+                    >
+                      <Video className="w-5 h-5 mr-2" />
+                      שיחת וידאו
                     </Button>
                   </div>
                 </div>
