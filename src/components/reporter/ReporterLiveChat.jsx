@@ -237,13 +237,19 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
               )}
 
               {/* D-ID Agent Iframe */}
-              <iframe
-                ref={iframeRef}
-                src={agentUrl}
-                allow="microphone; camera; autoplay"
-                className="w-full h-full border-0 bg-[#000510]"
-                title={`${reporter.name} Live Chat`}
-              />
+              <div className="relative w-full h-full overflow-hidden">
+                <iframe
+                  ref={iframeRef}
+                  src={agentUrl}
+                  allow="microphone; camera; autoplay"
+                  className="absolute w-full border-0 bg-[#000510]"
+                  style={{
+                    height: '200%',
+                    top: '-50%'
+                  }}
+                  title={`${reporter.name} Live Chat`}
+                />
+              </div>
             </div>
 
             {/* Chat Panel - Desktop Only */}
