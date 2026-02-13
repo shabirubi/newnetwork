@@ -210,31 +210,36 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
           {/* Main Content - Avatar + Chat */}
           <div className="flex-1 flex overflow-hidden">
             {/* Avatar Section */}
-            <div className="flex-1 relative">
+            <div className="flex-1 relative bg-gradient-to-br from-gray-950 to-black">
               {/* Loading State */}
               {isLoading && (
-                <div className="absolute inset-0 flex items-center justify-center bg-black z-20">
+                <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-950 via-black to-gray-950 z-20">
                   <div className="text-center">
-                    <Loader2 className="w-16 sm:w-20 h-16 sm:h-20 text-white animate-spin mx-auto mb-4 sm:mb-6" />
+                    <div className="relative">
+                      <div className="absolute inset-0 blur-2xl bg-white/10 rounded-full"></div>
+                      <Loader2 className="w-16 sm:w-20 h-16 sm:h-20 text-white animate-spin mx-auto mb-4 sm:mb-6 relative" />
+                    </div>
                     <p className="text-white text-lg sm:text-xl font-bold mb-2">מתחבר ל{reporter.name}...</p>
                     <p className="text-gray-400 text-sm">מכין שיחת וידאו חיה</p>
                   </div>
                 </div>
               )}
 
-              {/* D-ID Agent Iframe */}
-              <div className="absolute inset-0 overflow-hidden" style={{ paddingBottom: isMobile ? '60px' : '0' }}>
-                <iframe
-                  ref={iframeRef}
-                  src={agentUrl}
-                  allow="microphone; camera; autoplay"
-                  className="w-full h-full border-0 bg-black"
-                  style={{
-                    transform: isMobile ? 'scale(1)' : 'scale(1.5)',
-                    transformOrigin: 'top center'
-                  }}
-                  title={`${reporter.name} Live Chat`}
-                />
+              {/* D-ID Agent Iframe with Branded Frame */}
+              <div className="absolute inset-0 overflow-hidden flex items-center justify-center p-4" style={{ paddingBottom: isMobile ? '70px' : '16px' }}>
+                <div className={`relative ${isMobile ? 'w-full h-full' : 'w-[90%] h-[90%]'} rounded-2xl overflow-hidden shadow-2xl border border-gray-800/50`}>
+                  <iframe
+                    ref={iframeRef}
+                    src={agentUrl}
+                    allow="microphone; camera; autoplay"
+                    className="w-full h-full border-0 bg-black"
+                    style={{
+                      transform: isMobile ? 'scale(1)' : 'scale(1.4)',
+                      transformOrigin: 'center center'
+                    }}
+                    title={`${reporter.name} Live Chat`}
+                  />
+                </div>
               </div>
             </div>
 
