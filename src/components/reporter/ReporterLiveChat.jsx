@@ -251,52 +251,32 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
 
             {/* Chat Panel - Mobile (Bottom) */}
             {isMobile && (
-              <div className="flex-1 bg-black border-t-2 border-gray-700 flex flex-col">
-                {/* Messages Preview - Scrollable */}
-                <div className="flex-1 overflow-y-auto px-3 py-2 space-y-2">
-                  {chatMessages.length === 0 ? (
+              <div className="flex-1 bg-black border-t-2 border-black flex flex-col">
+                {/* Messages Preview - Hidden when chat active */}
+                {chatMessages.length === 0 && (
+                  <div className="flex-1 overflow-y-auto px-3 py-2">
                     <div className="text-center py-4">
                       <MessageCircle className="w-8 h-8 mx-auto mb-2 text-gray-600" />
                       <p className="text-gray-400 text-sm">שאל שאלה...</p>
                     </div>
-                  ) : (
-                    chatMessages.map((msg, idx) => (
-                      <motion.div
-                        key={idx}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-                      >
-                        <div
-                          className={`max-w-[80%] p-3 rounded-xl text-sm ${
-                            msg.sender === 'user'
-                              ? 'bg-gray-800 text-white border border-gray-700'
-                              : 'bg-gray-900 text-gray-100 border border-gray-700'
-                          }`}
-                        >
-                          <p className="leading-relaxed">{msg.text}</p>
-                        </div>
-                      </motion.div>
-                    ))
-                  )}
-                  <div ref={messagesEndRef} />
-                </div>
+                  </div>
+                )}
 
-                {/* Input Area */}
-                <div className="p-3 bg-black border-t-2 border-gray-700">
+                {/* Input Area - Always Visible */}
+                <div className="p-3 bg-black border-t-2 border-black">
                   <div className="flex gap-2">
                     <Input
                       value={inputMessage}
                       onChange={(e) => setInputMessage(e.target.value)}
                       onKeyPress={handleKeyPress}
                       placeholder="שאל שאלה..."
-                      className="flex-1 bg-gray-900 border border-gray-700 text-white placeholder:text-gray-500 focus:border-gray-600 rounded-xl text-base h-12 px-4"
+                      className="flex-1 bg-black border-2 border-black text-white placeholder:text-gray-500 focus:border-black rounded-xl text-base h-12 px-4"
                     />
 
                     <Button
                       onClick={handleSendMessage}
                       disabled={!inputMessage.trim()}
-                      className="bg-gray-800 hover:bg-gray-700 text-white rounded-xl border border-gray-700 h-12 w-12 p-0 disabled:opacity-50"
+                      className="bg-black hover:bg-black text-white rounded-xl border-2 border-black h-12 w-12 p-0 disabled:opacity-50"
                     >
                       <Send className="w-5 h-5" />
                     </Button>
