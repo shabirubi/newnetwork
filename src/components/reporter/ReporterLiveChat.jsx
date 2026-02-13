@@ -35,17 +35,45 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
     scrollToBottom();
   }, [chatMessages]);
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (!inputMessage.trim()) return;
     
+    const userMessage = inputMessage;
+    
     setChatMessages(prev => [...prev, {
-      text: inputMessage,
+      text: userMessage,
       timestamp: new Date(),
       sender: 'user',
       userName: 'אתה'
     }]);
     
     setInputMessage('');
+    
+    // קריאה לאגנט AI לקבל תשובה מהכתבת
+    try {
+      const response = await base44.functions.invoke('reporterAIChat', {
+        reporterId: reporter.id || reporter.name,
+        reporterName: reporter.name,
+        message: userMessage
+      });
+      
+      if (response.data?.response) {
+        setChatMessages(prev => [...prev, {
+          text: response.data.response,
+          timestamp: new Date(),
+          sender: 'reporter',
+          userName: reporter.name
+        }]);
+      }
+    } catch (error) {
+      console.error('Error getting reporter response:', error);
+      setChatMessages(prev => [...prev, {
+        text: 'מצטער, יש לי בעיה טכנית כרגע. נסה שוב בעוד רגע.',
+        timestamp: new Date(),
+        sender: 'reporter',
+        userName: reporter.name
+      }]);
+    }
   };
 
   const handleKeyPress = (e) => {
