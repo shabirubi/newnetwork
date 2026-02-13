@@ -104,7 +104,7 @@ export default function ReportersTickerStrip() {
           </button>
 
           <div ref={scrollContainerRef} className="overflow-x-auto overflow-y-hidden scrollbar-hide" onScroll={handleScroll} style={{ WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none' }}>
-            <div className="flex gap-2 px-10 py-3 min-h-fit justify-center" style={{ minWidth: 'max-content' }}>
+            <div className="flex gap-2 px-4 sm:px-10 py-3 min-h-fit" style={{ minWidth: 'max-content' }}>
             {reporters.slice(0, 15).map((reporter, idx) => (
               <motion.div
                 key={`${reporter.id}-${idx}`}
@@ -116,26 +116,26 @@ export default function ReportersTickerStrip() {
                 onMouseLeave={() => setHoveredReporter(null)}
                 onTouchStart={() => setHoveredReporter(reporter.id)}
                 onTouchEnd={() => setHoveredReporter(null)}
-                className="flex-shrink-0 flex flex-col items-center gap-1 p-2 bg-black/50 rounded-lg border border-[#0080FF]/40 hover:border-[#0080FF]/80 hover:bg-[#0080FF]/10 transition-all cursor-pointer group shadow-md"
+                className="flex-shrink-0 flex flex-col items-center gap-1 p-1.5 sm:p-2 bg-black/50 rounded-lg border border-[#0080FF]/40 hover:border-[#0080FF]/80 hover:bg-[#0080FF]/10 transition-all cursor-pointer group shadow-md"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
                 <img
                   src={reporter.image}
                   alt={reporter.name}
-                  className="w-16 h-16 sm:w-16 sm:h-16 rounded-lg object-cover border border-[#0080FF]/30 shadow-lg reporter-ticker-image-animate"
+                  className="w-14 h-14 sm:w-16 sm:h-16 rounded-lg object-cover border border-[#0080FF]/30 shadow-lg reporter-ticker-image-animate"
                   style={{ 
                     display: 'block', 
-                    minWidth: '64px', 
-                    minHeight: '64px',
+                    minWidth: '56px', 
+                    minHeight: '56px',
                     animationDelay: `${idx * 0.3}s`
                   }}
                   onError={(e) => {
                     e.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="80" height="80"%3E%3Crect fill="%23333" width="80" height="80"/%3E%3Ctext x="40" y="40" font-size="40" fill="white" text-anchor="middle" dy=".3em"%3E' + reporter.name.charAt(0) + '%3C/text%3E%3C/svg%3E';
                   }}
                 />
-                <div className="text-center w-16 sm:w-16">
-                  <div className="text-white font-bold text-[8px] sm:text-[8px] line-clamp-2 leading-tight">{reporter.name}</div>
+                <div className="text-center w-14 sm:w-16">
+                  <div className="text-white font-bold text-[9px] sm:text-[10px] line-clamp-2 leading-tight">{reporter.name}</div>
                 </div>
               </motion.div>
               ))}
