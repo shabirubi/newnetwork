@@ -367,7 +367,7 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
                     <Button
                       variant="outline"
                       className="flex-1 bg-gray-900/80 border-2 border-gray-700 text-gray-300 hover:bg-gray-800 rounded-xl h-12 backdrop-blur-sm shadow-xl"
-                      onClick={() => toast.info('הודעות קוליות בקרוב...')}
+                      disabled
                     >
                       <Mic className="w-5 h-5 mr-2" />
                       הקלטה קולית
@@ -375,7 +375,7 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
                     <Button
                       variant="outline"
                       className="flex-1 bg-gray-900/80 border-2 border-gray-700 text-gray-300 hover:bg-gray-800 rounded-xl h-12 backdrop-blur-sm shadow-xl"
-                      onClick={() => toast.info('שיחת וידאו בקרוב...')}
+                      disabled
                     >
                       <Video className="w-5 h-5 mr-2" />
                       שיחת וידאו
