@@ -101,41 +101,107 @@ export default function WeatherForecastModal({ isOpen, onClose }) {
             </button>
           </div>
 
-          {/* Content - Chat Only, Hide Avatar */}
-          <div className="flex-1 bg-black relative overflow-hidden">
-            {isLoading && (
-              <div className="absolute inset-0 flex items-center justify-center bg-black z-10">
-                <div className="text-center">
-                  <Loader2 className="w-12 h-12 text-blue-400 animate-spin mx-auto mb-4" />
-                  <p className="text-white">טוען תחזיתן...</p>
+          {/* Main Content - Avatar + Chat */}
+          <div className="flex-1 flex overflow-hidden">
+            {/* Avatar Section */}
+            <div className="w-1/2 relative bg-black">
+              {isLoading && (
+                <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-950 via-black to-gray-950 z-20">
+                  <div className="text-center">
+                    <Loader2 className="w-16 h-16 text-white animate-spin mx-auto mb-4" />
+                    <p className="text-white text-lg font-bold mb-2">מתחבר לתחזיתן...</p>
+                    <p className="text-gray-400 text-sm">מכין שיחה חיה</p>
+                  </div>
+                </div>
+              )}
+              <div style={{ overflow: 'hidden', position: 'relative', width: '100%', height: '100%' }}>
+                <iframe
+                  ref={iframeRef}
+                  src={weatherAgentUrl}
+                  allow="microphone; camera; autoplay"
+                  className="border-0 bg-black"
+                  title="Weather Forecast Chat"
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    position: 'absolute',
+                    top: '-10%',
+                    left: '0',
+                    transform: 'scale(1.2)',
+                    transformOrigin: 'top center',
+                    clipPath: 'inset(15% 0 35% 0)'
+                  }}
+                />
+              </div>
+            </div>
+
+            {/* Chat Panel */}
+            <div className="w-1/2 bg-black border-l border-blue-500/30 flex flex-col backdrop-blur-xl">
+              {/* Chat Header */}
+              <div className="p-4 border-b border-blue-500/30 bg-black/80">
+                <div className="flex items-center gap-2 mb-2">
+                  <Cloud className="w-5 h-5 text-blue-400" />
+                  <h3 className="text-white font-bold text-sm">שיחה עם תחזיתן</h3>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-gray-400">
+                  <Users className="w-3.5 h-3.5" />
+                  <span>{onlineUsers} משתמשים מחוברים</span>
                 </div>
               </div>
-            )}
-            <div style={{
-              width: '100%',
-              height: '100%',
-              overflow: 'hidden',
-              position: 'relative'
-            }}>
-              <iframe
-                ref={iframeRef}
-                src={weatherAgentUrl}
-                allow="microphone; camera; autoplay"
-                className="border-0 bg-black"
-                title="Weather Forecast Chat"
-                style={{ 
-                  position: 'absolute',
-                  top: '-10%',
-                  left: '0',
-                  width: '100%',
-                  height: '120%',
-                  overflow: 'hidden',
-                  pointerEvents: 'auto',
-                  outline: 'none',
-                  border: 'none',
-                  clipPath: 'inset(15% 0 35% 0)'
-                }}
-              />
+
+              {/* Messages */}
+              <div className="flex-1 overflow-y-auto p-4 space-y-4">
+                {chatMessages.length === 0 && (
+                  <div className="text-center text-gray-500 mt-8">
+                    <Cloud className="w-12 h-12 mx-auto mb-2 opacity-50" />
+                    <p className="text-sm">התחל שיחה עם תחזיתן</p>
+                  </div>
+                )}
+                {chatMessages.map((msg, idx) => (
+                  <div
+                    key={idx}
+                    className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                  >
+                    <div
+                      className={`max-w-[80%] rounded-2xl px-4 py-2 ${
+                        msg.sender === 'user'
+                          ? 'bg-blue-600 text-white'
+                          : 'bg-gray-800 text-gray-200'
+                      }`}
+                    >
+                      <p className="text-sm whitespace-pre-wrap">{msg.text}</p>
+                      <p className="text-xs opacity-70 mt-1">
+                        {new Date(msg.timestamp).toLocaleTimeString('he-IL', {
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        })}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+                <div ref={messagesEndRef} />
+              </div>
+
+              {/* Input */}
+              <div className="p-4 border-t border-blue-500/30 bg-black/80">
+                <div className="flex gap-2">
+                  <Input
+                    value={inputMessage}
+                    onChange={(e) => setInputMessage(e.target.value)}
+                    onKeyPress={handleKeyPress}
+                    placeholder="שאל על מזג האוויר..."
+                    className="flex-1 bg-blue-950/50 border border-blue-500/30 text-white placeholder:text-blue-300/50 focus:border-blue-500 rounded-xl"
+                  />
+                  <Button
+                    onClick={handleSendMessage}
+                    disabled={!inputMessage.trim()}
+                    className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl"
+                  >
+                    <Send className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
 
