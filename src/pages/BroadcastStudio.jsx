@@ -138,9 +138,7 @@ export default function BroadcastStudio() {
   // Express Mode (V3 Instant - Custom Full Body)
   const [trainingVideo, setTrainingVideo] = useState(null);
   const [customAvatarId, setCustomAvatarId] = useState(null);
-  const [videoFile, setVideoFile] = useState(null);
   const trainingVideoRef = useRef(null);
-  const videoUploadRef = useRef(null);
 
   const handleImageUpload = async (e) => {
     const file = e.target.files?.[0];
@@ -280,21 +278,6 @@ export default function BroadcastStudio() {
       toast.success("רקע הועלה ✓");
     } catch (error) {
       toast.error("שגיאה בהעלאת רקע");
-    }
-  };
-
-  const handleVideoFileUpload = async (e) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    try {
-      const response = await base44.integrations.Core.UploadFile({ file });
-      const fileUrl = response.file_url;
-      const cleanUrl = fileUrl.includes('?') ? fileUrl.split('?')[0] : fileUrl;
-      setVideoFile(cleanUrl);
-      toast.success("סרטון הועלה ✓");
-    } catch (error) {
-      toast.error("שגיאה בהעלאת סרטון");
     }
   };
 

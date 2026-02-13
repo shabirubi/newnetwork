@@ -159,8 +159,8 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
           animate={{ scale: 1, y: 0 }}
           exit={{ scale: 0.9, y: isMobile ? '100%' : 20 }}
           onClick={(e) => e.stopPropagation()}
-          className={`bg-black overflow-hidden flex flex-col shadow-2xl ${
-            isMobile ? 'w-full h-full rounded-none' : 'rounded-3xl border-2 border-blue-500/30'
+          className={`bg-gradient-to-br from-gray-950 via-black to-gray-950 overflow-hidden flex flex-col shadow-2xl ${
+            isMobile ? 'w-full h-full rounded-none' : 'rounded-3xl border-2 border-gray-800/50'
           }`}
           style={{
             width: isMobile ? '100%' : '1000px',
@@ -168,21 +168,37 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
             maxWidth: isMobile ? '100%' : '90vw',
             maxHeight: isMobile ? '100%' : '90vh',
             direction: 'rtl',
-            boxShadow: '0 25px 50px -12px rgba(0, 0, 255, 0.3)'
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8)'
           }}
         >
-          {/* D-ID Style Header */}
-          <div className="relative bg-gradient-to-r from-blue-500 via-blue-400 to-cyan-400 p-4 backdrop-blur-xl" style={{ direction: 'rtl' }}>
+          {/* Premium Branded Header */}
+          <div className="relative bg-gradient-to-r from-gray-900 via-gray-950 to-gray-900 p-4 border-b border-gray-800/50 backdrop-blur-xl" style={{ direction: 'rtl' }}>
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
             <div className="relative flex items-center justify-between gap-4 w-full" style={{ direction: 'rtl' }}>
-              <div className="flex items-center gap-2 flex-1">
-                <div className="text-white font-bold text-sm">הרשת החדשה</div>
-              </div>
-              <div className="text-center flex-1">
-                <div className="text-white font-bold text-base">{reporter.name}</div>
+              <motion.img 
+                src={LOGO_URL}
+                alt="הרשת החדשה"
+                className="h-10 sm:h-12 w-auto shrink-0 drop-shadow-lg"
+                animate={{ 
+                  filter: ['brightness(1)', 'brightness(1.2)', 'brightness(1)']
+                }}
+                transition={{ 
+                  duration: 3, 
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              />
+              <div className="text-center flex-1 px-2">
+                <div className="text-white font-bold text-base sm:text-lg mb-1">{reporter.name}</div>
+                <div className="flex items-center justify-center gap-2 text-xs">
+                  <Video className="w-3.5 h-3.5 text-red-500 animate-pulse" />
+                  <span className="text-gray-300 font-medium">שיחת וידאו חיה</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+                </div>
               </div>
               <button
                 onClick={onClose}
-                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-white/20 hover:bg-white/30 border border-white/30 flex items-center justify-center transition-all shrink-0 backdrop-blur-sm"
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-800/80 hover:bg-gray-700 border border-gray-700 flex items-center justify-center transition-all shrink-0 backdrop-blur-sm"
               >
                 <X className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
               </button>
@@ -207,37 +223,30 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
                 </div>
               )}
 
-              {/* D-ID Agent Iframe - Cropped Head & Shoulders */}
-                <div className="w-full h-full bg-black flex items-center justify-center" style={{ overflow: 'hidden', position: 'relative' }}>
-                  <iframe
-                    ref={iframeRef}
-                    src={agentUrl}
-                    allow="microphone; camera; autoplay"
-                    className="border-0 bg-black"
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                      position: 'absolute',
-                      top: '-10%',
-                      left: '0',
-                      transform: 'scale(1.2)',
-                      transformOrigin: 'top center',
-                      clipPath: 'inset(15% 0 35% 0)'
-                    }}
-                    title={`${reporter.name} Live Chat`}
-                  />
-                </div>
+              {/* D-ID Agent Iframe - Center */}
+              <div className="w-full h-full overflow-hidden flex items-center justify-center">
+                <iframe
+                  ref={iframeRef}
+                  src={agentUrl}
+                  allow="microphone; camera; autoplay"
+                  className="w-full h-full border-0 bg-black"
+                  style={{
+                    minHeight: '100%',
+                    minWidth: '100%'
+                  }}
+                  title={`${reporter.name} Live Chat`}
+                />
+              </div>
             </div>
 
             {/* Chat Panel - Desktop */}
             {!isMobile && (
-              <div className="w-1/2 bg-black border-l border-blue-500/30 flex flex-col backdrop-blur-xl">
+              <div className="w-1/2 bg-gradient-to-b from-gray-950 to-black border-l border-gray-800/50 flex flex-col shadow-2xl backdrop-blur-xl">
                 {/* Chat Header */}
-                <div className="p-4 border-b border-blue-500/30 bg-black/80">
+                <div className="p-4 border-b border-gray-800/50 bg-gradient-to-r from-gray-900 via-gray-950 to-gray-900">
                   <div className="flex items-center gap-2 mb-2">
                     <MessageCircle className="w-5 h-5 text-blue-400" />
-                    <h3 className="text-white font-bold text-sm">שיחה עם {reporter.name}</h3>
+                    <h3 className="text-white font-bold">השיעור היומי עם {reporter.name}</h3>
                   </div>
                   <div className="flex items-center gap-2 text-xs text-gray-400">
                     <Users className="w-3.5 h-3.5" />
@@ -279,14 +288,14 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
                 </div>
 
                 {/* Input */}
-                <div className="p-4 border-t border-blue-500/30 bg-black/80">
+                <div className="p-4 border-t border-gray-800/50 bg-gradient-to-r from-gray-950 via-gray-900 to-gray-950">
                   <div className="flex gap-2 mb-2">
                     <Input
                       value={inputMessage}
                       onChange={(e) => setInputMessage(e.target.value)}
                       onKeyPress={handleKeyPress}
                       placeholder="שאל שאלה..."
-                      className="flex-1 bg-blue-950/50 border border-blue-500/30 text-white placeholder:text-blue-300/50 focus:border-blue-500 rounded-xl"
+                      className="flex-1 bg-gray-900/80 border border-gray-700 text-white placeholder:text-gray-500 focus:border-gray-600 rounded-xl"
                     />
                     <Button
                       onClick={handleSendMessage}
@@ -300,8 +309,8 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="flex-1 bg-blue-950/50 border-blue-500/30 text-blue-300 hover:bg-blue-900/50 rounded-lg"
-                      disabled
+                      className="flex-1 bg-gray-800/80 border-gray-700 text-gray-300 hover:bg-gray-700 rounded-lg"
+                      onClick={() => toast.info('הודעות קוליות בקרוב...')}
                     >
                       <Mic className="w-4 h-4 mr-1" />
                       הקלטה קולית
@@ -309,8 +318,8 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="flex-1 bg-blue-950/50 border-blue-500/30 text-blue-300 hover:bg-blue-900/50 rounded-lg"
-                      disabled
+                      className="flex-1 bg-gray-800/80 border-gray-700 text-gray-300 hover:bg-gray-700 rounded-lg"
+                      onClick={() => toast.info('שיחת וידאו בקרוב...')}
                     >
                       <Video className="w-4 h-4 mr-1" />
                       וידאו
@@ -347,7 +356,7 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
                     <Button
                       variant="outline"
                       className="flex-1 bg-gray-900/80 border-2 border-gray-700 text-gray-300 hover:bg-gray-800 rounded-xl h-12 backdrop-blur-sm shadow-xl"
-                      disabled
+                      onClick={() => toast.info('הודעות קוליות בקרוב...')}
                     >
                       <Mic className="w-5 h-5 mr-2" />
                       הקלטה קולית
@@ -355,7 +364,7 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
                     <Button
                       variant="outline"
                       className="flex-1 bg-gray-900/80 border-2 border-gray-700 text-gray-300 hover:bg-gray-800 rounded-xl h-12 backdrop-blur-sm shadow-xl"
-                      disabled
+                      onClick={() => toast.info('שיחת וידאו בקרוב...')}
                     >
                       <Video className="w-5 h-5 mr-2" />
                       שיחת וידאו
@@ -368,11 +377,23 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
 
           {/* Premium Footer - Hidden on Mobile */}
           {!isMobile && (
-            <div className="bg-gradient-to-r from-blue-500 via-blue-400 to-cyan-400 p-3 backdrop-blur-xl">
+            <div className="bg-gradient-to-r from-gray-950 via-gray-900 to-gray-950 p-3 border-t border-gray-800/50 backdrop-blur-xl">
               <div className="flex items-center justify-center gap-3 text-sm">
-                <span className="text-white font-bold">צ'אט חי עם {reporter.name}</span>
-                <span className="text-white/80">•</span>
-                <span className="text-white/80 text-xs">Powered by D-ID</span>
+                <motion.img 
+                  src={LOGO_URL}
+                  alt="הרשת החדשה"
+                  className="h-6 w-auto drop-shadow-lg"
+                  animate={{ 
+                    opacity: [0.8, 1, 0.8]
+                  }}
+                  transition={{ 
+                    duration: 2, 
+                    repeat: Infinity 
+                  }}
+                />
+                <span className="text-white font-bold">הרשת החדשה</span>
+                <span className="text-gray-700">•</span>
+                <span className="text-gray-400 text-xs">Powered by Digital Dreams</span>
               </div>
             </div>
           )}

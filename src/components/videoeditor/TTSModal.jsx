@@ -44,8 +44,6 @@ export default function TTSModal({ onClose, onApply }) {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="he-IL-AvriNeural">עברית - אברי (זכר)</SelectItem>
-                <SelectItem value="he-IL-HilaNeural">עברית - הילה (נקבה)</SelectItem>
                 <SelectItem value="Rachel">רחל (אנגלית)</SelectItem>
                 <SelectItem value="Adam">אדם (אנגלית)</SelectItem>
                 <SelectItem value="Antoni">אנטוני (אנגלית)</SelectItem>

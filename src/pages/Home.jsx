@@ -106,20 +106,8 @@ export default function Home() {
     created_by: 'service+0a06552f-b47f-487a-84bb-eb2bdeb5769c@no-reply.base44.com'
   };
 
-  const { data: articles = [], isLoading } = useQuery({
-    queryKey: ['featured-articles-home'],
-    queryFn: async () => {
-      const recent = await base44.entities.NewsArticle.filter(
-        {},
-        '-created_date',
-        10
-      );
-      return recent || [];
-    },
-    initialData: [],
-    staleTime: 10000,
-    refetchInterval: 15000
-  });
+  const articles = [];
+  const isLoading = false;
 
 
 
@@ -154,10 +142,6 @@ export default function Home() {
 
   // No memos needed - using static data
 
-  // כתבה מודגשת - כתבה חדשה ביותר
-  const latestArticle = articles[0];
-  const featuredDisplay = latestArticle || featuredArticle;
-
   const activeLive = liveStream[0];
   const currentChannel = selectedChannel === 'all' ? null : channels.find(c => c.id === selectedChannel);
   const channelStreamUrl = currentChannel?.stream_url || defaultStreamUrl || "";
@@ -176,14 +160,14 @@ export default function Home() {
       {/* Featured Article Section - Full Screen */}
       <section className="px-0 mb-4 mt-2">
         <Link 
-          to={`${createPageUrl("Article")}?id=${featuredDisplay.id}`}
+          to={`${createPageUrl("Article")}?id=${featuredArticle.id}`}
           className="block group relative rounded-none sm:rounded-3xl overflow-hidden cursor-pointer"
         >
           <div className="relative h-[400px] sm:h-[500px]">
             {/* תמונה ברקע */}
             <img 
-              src={featuredDisplay.image_url} 
-              alt={featuredDisplay.title}
+              src={featuredArticle.image_url} 
+              alt={featuredArticle.title}
               className="absolute inset-0 w-full h-full object-cover"
             />
 
@@ -200,24 +184,24 @@ export default function Home() {
 
                 {/* Title */}
                 <h1 className="text-xl sm:text-3xl lg:text-5xl font-bold text-white leading-snug sm:leading-tight drop-shadow-2xl break-words">
-                  {featuredDisplay.title}
+                  {featuredArticle.title}
                 </h1>
 
                 {/* Subtitle */}
                 <p className="text-sm sm:text-lg lg:text-2xl text-gray-100 drop-shadow-lg font-medium break-words leading-snug">
-                  {featuredDisplay.subtitle}
+                  {featuredArticle.subtitle}
                 </p>
 
                 {/* Content Preview - Hidden on small screens */}
                 <p className="hidden sm:block text-base lg:text-lg text-gray-200 leading-relaxed line-clamp-2 lg:line-clamp-3 break-words">
-                  {featuredDisplay.content}
+                  {featuredArticle.content}
                 </p>
 
                 {/* Meta Info */}
                 <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm pt-1 sm:pt-2">
                   <span className="flex items-center gap-1.5 bg-black/60 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full backdrop-blur-sm text-gray-200">
                     <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
-                    {new Date(featuredDisplay.created_date).toLocaleDateString('he-IL', { 
+                    {new Date(featuredArticle.created_date).toLocaleDateString('he-IL', { 
                       month: 'short', 
                       day: 'numeric'
                     })}
