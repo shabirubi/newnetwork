@@ -321,7 +321,7 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
                       variant="outline"
                       size="sm"
                       className="flex-1 bg-gray-800/80 border-gray-700 text-gray-300 hover:bg-gray-700 rounded-lg"
-                      onClick={() => toast.info('הודעות קוליות בקרוב...')}
+                      disabled
                     >
                       <Mic className="w-4 h-4 mr-1" />
                       הקלטה קולית
@@ -330,7 +330,7 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
                       variant="outline"
                       size="sm"
                       className="flex-1 bg-gray-800/80 border-gray-700 text-gray-300 hover:bg-gray-700 rounded-lg"
-                      onClick={() => toast.info('שיחת וידאו בקרוב...')}
+                      disabled
                     >
                       <Video className="w-4 h-4 mr-1" />
                       וידאו
