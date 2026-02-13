@@ -143,13 +143,13 @@ export default function Home() {
 
   const activeLive = liveStream[0];
   const currentChannel = selectedChannel === 'all' ? null : channels.find(c => c.id === selectedChannel);
-  const channelStreamUrl = currentChannel?.stream_url || defaultStreamUrl;
-  
+  const channelStreamUrl = currentChannel?.stream_url || defaultStreamUrl || "";
+
   // שימוש בסרטונים שהועלו ל-live-player
   const livePlayerVideo = livePlayerVideos[0];
-  const finalStreamUrl = livePlayerVideo?.video_url || activeLive?.stream_url || channelStreamUrl;
+  const finalStreamUrl = livePlayerVideo?.video_url || activeLive?.stream_url || channelStreamUrl || "";
   const finalTitle = livePlayerVideo?.title || currentChannel?.name || activeLive?.title || "הרשת החדשה - שידור חי";
-  const finalThumbnail = livePlayerVideo?.thumbnail_url || activeLive?.thumbnail_url;
+  const finalThumbnail = livePlayerVideo?.thumbnail_url || activeLive?.thumbnail_url || "";
 
   // Don't block render on loading - show content as it loads
 
