@@ -161,15 +161,16 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
           animate={{ scale: 1, y: 0 }}
           exit={{ scale: 0.9, y: isMobile ? '100%' : 20 }}
           onClick={(e) => e.stopPropagation()}
-          className={`bg-black overflow-hidden flex flex-col ${
-            isMobile ? 'w-full h-full rounded-none' : 'rounded-2xl border border-gray-800'
+          className={`bg-gradient-to-br from-gray-950 via-black to-gray-950 overflow-hidden flex flex-col shadow-2xl ${
+            isMobile ? 'w-full h-full rounded-none' : 'rounded-3xl border-2 border-gray-800/50'
           }`}
           style={{
             width: isMobile ? '100%' : '1000px',
             height: isMobile ? '100%' : '550px',
             maxWidth: isMobile ? '100%' : '90vw',
             maxHeight: isMobile ? '100%' : '90vh',
-            direction: 'rtl'
+            direction: 'rtl',
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.8)'
           }}
         >
           {/* Premium Branded Header */}
