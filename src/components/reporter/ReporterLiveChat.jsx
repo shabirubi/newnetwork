@@ -252,7 +252,7 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
               </div>
             </div>
 
-            {/* Chat Panel - Desktop Only */}
+            {/* Chat Panel - Desktop */}
             {!isMobile && (
               <div className="w-80 sm:w-96 bg-gradient-to-b from-[#001030] via-[#000510] to-[#001030] border-r-4 border-[#0080FF]/20 flex flex-col">
               {/* Chat Header */}
@@ -300,8 +300,7 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
                           <p className="text-xs font-bold mb-1 opacity-80">{msg.userName}</p>
                         )}
                         <p className="text-sm leading-relaxed">{msg.text}</p>
-                        
-                        {/* Display uploaded files */}
+
                         {msg.files && msg.files.length > 0 && (
                           <div className="mt-2 space-y-1">
                             {msg.files.map((file, fileIdx) => (
@@ -317,7 +316,7 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
                             ))}
                           </div>
                         )}
-                        
+
                         <p className="text-xs opacity-60 mt-1">
                           {msg.timestamp.toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' })}
                         </p>
@@ -338,8 +337,7 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
                   onChange={handleFileUpload}
                   className="hidden"
                 />
-                
-                {/* Action Buttons Row */}
+
                 <div className="flex gap-2 mb-3">
                   <Input
                     value={inputMessage}
@@ -348,7 +346,7 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
                     placeholder="הקלד הודעה..."
                     className="flex-1 bg-[#001030] border-[#0080FF]/20 text-white placeholder:text-gray-500 focus:border-[#0080FF] rounded-xl"
                   />
-                  
+
                   <Button
                     onClick={handleSendMessage}
                     disabled={!inputMessage.trim()}
@@ -357,10 +355,58 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
                     <Send className="w-4 h-4" />
                   </Button>
                 </div>
-                
+
                 <p className="text-xs text-gray-500 text-center">שאל שאלות וקבל תשובות מהכתב</p>
               </div>
             </div>
+            )}
+
+            {/* Chat Panel - Mobile (Bottom) */}
+            {isMobile && (
+              <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-[#000510] via-[#001030] to-transparent border-t-2 border-[#0080FF]/30 pb-safe">
+                {/* Messages Preview - Scrollable */}
+                <div className="max-h-40 overflow-y-auto px-4 py-2 space-y-2">
+                  {chatMessages.slice(-3).map((msg, idx) => (
+                    <motion.div
+                      key={idx}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                    >
+                      <div
+                        className={`max-w-[80%] p-2 rounded-xl text-xs ${
+                          msg.sender === 'user'
+                            ? 'bg-gradient-to-br from-[#0080FF] to-[#0066FF] text-white'
+                            : 'bg-[#001540]/80 text-gray-100 border border-[#0080FF]/20'
+                        }`}
+                      >
+                        <p className="leading-relaxed">{msg.text}</p>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+
+                {/* Input Area */}
+                <div className="px-4 py-3 bg-[#000510]/90 backdrop-blur-sm">
+                  <div className="flex gap-2">
+                    <Input
+                      value={inputMessage}
+                      onChange={(e) => setInputMessage(e.target.value)}
+                      onKeyPress={handleKeyPress}
+                      placeholder="שאל את הכתבת..."
+                      className="flex-1 bg-[#001030] border-[#0080FF]/30 text-white placeholder:text-gray-500 focus:border-[#0080FF] rounded-xl text-sm h-10"
+                    />
+
+                    <Button
+                      onClick={handleSendMessage}
+                      disabled={!inputMessage.trim()}
+                      className="bg-gradient-to-r from-[#0080FF] to-[#0066FF] hover:from-[#0066FF] hover:to-[#0080FF] text-white rounded-xl shadow-lg shadow-[#0080FF]/30 h-10 w-10 p-0"
+                    >
+                      <Send className="w-4 h-4" />
+                    </Button>
+                  </div>
+                </div>
+              </div>
             )}
           </div>
 
