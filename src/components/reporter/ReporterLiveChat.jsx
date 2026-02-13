@@ -289,7 +289,7 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
 
                 {/* Input */}
                 <div className="p-4 border-t border-gray-800/50 bg-gradient-to-r from-gray-950 via-gray-900 to-gray-950">
-                  <div className="flex gap-2 mb-2">
+                  <div className="flex gap-2">
                     <Input
                       value={inputMessage}
                       onChange={(e) => setInputMessage(e.target.value)}
@@ -303,26 +303,6 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
                       className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl"
                     >
                       <Send className="w-4 h-4" />
-                    </Button>
-                  </div>
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="flex-1 bg-gray-800/80 border-gray-700 text-gray-300 hover:bg-gray-700 rounded-lg"
-                      onClick={() => toast.info('הודעות קוליות בקרוב...')}
-                    >
-                      <Mic className="w-4 h-4 mr-1" />
-                      הקלטה קולית
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      className="flex-1 bg-gray-800/80 border-gray-700 text-gray-300 hover:bg-gray-700 rounded-lg"
-                      onClick={() => toast.info('שיחת וידאו בקרוב...')}
-                    >
-                      <Video className="w-4 h-4 mr-1" />
-                      וידאו
                     </Button>
                   </div>
                 </div>
