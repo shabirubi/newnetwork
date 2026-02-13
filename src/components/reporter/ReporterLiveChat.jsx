@@ -212,9 +212,9 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
           </div>
 
           {/* Main Content - Avatar + Chat */}
-          <div className="flex-1 flex flex-col overflow-hidden">
+          <div className="flex-1 flex flex-col overflow-hidden" style={{ paddingBottom: isMobile ? '80px' : '0' }}>
             {/* Avatar Section */}
-            <div className={`relative ${isMobile ? 'h-[60vh]' : 'flex-1'}`}>
+            <div className={`relative ${isMobile ? 'flex-1' : 'flex-1'}`}>
               {/* Loading State */}
               {isLoading && (
                 <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[#000510] via-[#001030] to-[#000510] z-20">
