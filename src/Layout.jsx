@@ -272,14 +272,14 @@ export default function Layout({ children, currentPageName }) {
             </div>
           </div>
 
-          {/* Opening Date Display with Typewriter - Full Width */}
+          {/* Opening Date Display with Typewriter */}
           <motion.div 
-            className="hidden lg:flex flex-1 items-center justify-center px-6 py-2 bg-gradient-to-r from-[#0080FF] via-[#0066FF] to-[#0080FF] rounded-2xl border border-[#0080FF] mx-4"
+            className="hidden lg:flex items-center justify-center px-4 py-1.5 bg-gradient-to-r from-[#0080FF] via-[#0066FF] to-[#0080FF] rounded-xl border border-[#0080FF]/50 max-w-md"
             animate={{
               boxShadow: [
+                '0 0 15px rgba(0, 128, 255, 0.4)',
                 '0 0 25px rgba(0, 128, 255, 0.6)',
-                '0 0 50px rgba(0, 128, 255, 0.8)',
-                '0 0 25px rgba(0, 128, 255, 0.6)'
+                '0 0 15px rgba(0, 128, 255, 0.4)'
               ]
             }}
             transition={{ duration: 3, repeat: Infinity }}
