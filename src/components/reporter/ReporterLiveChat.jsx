@@ -116,26 +116,30 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
 
   const agentUrl = reporterAgents[reporter.name] || reporterAgents['עדי'];
 
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+
   return (
     <AnimatePresence>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-sm flex items-center justify-center p-4"
+        className="fixed inset-0 z-[9999] bg-black/95 backdrop-blur-sm flex items-center justify-center p-0 sm:p-4"
         onClick={onClose}
       >
         <motion.div
-          initial={{ scale: 0.9, y: 20 }}
+          initial={{ scale: 0.9, y: isMobile ? '100%' : 20 }}
           animate={{ scale: 1, y: 0 }}
-          exit={{ scale: 0.9, y: 20 }}
+          exit={{ scale: 0.9, y: isMobile ? '100%' : 20 }}
           onClick={(e) => e.stopPropagation()}
-          className="bg-gradient-to-br from-[#000510] via-[#001030] to-[#000510] rounded-3xl overflow-hidden shadow-2xl border-4 border-[#0080FF]/40 flex flex-col"
+          className={`bg-gradient-to-br from-[#000510] via-[#001030] to-[#000510] overflow-hidden shadow-2xl border-[#0080FF]/40 flex flex-col ${
+            isMobile ? 'w-full h-full rounded-none border-0' : 'rounded-3xl border-4'
+          }`}
           style={{
-            width: '1000px',
-            height: '550px',
-            maxWidth: '90vw',
-            maxHeight: '90vh',
+            width: isMobile ? '100%' : '1000px',
+            height: isMobile ? '100%' : '550px',
+            maxWidth: isMobile ? '100%' : '90vw',
+            maxHeight: isMobile ? '100%' : '90vh',
             boxShadow: '0 0 80px rgba(0, 128, 255, 0.4), inset 0 0 60px rgba(0, 128, 255, 0.05)',
             direction: 'rtl'
           }}
@@ -180,42 +184,46 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
 
           {/* Main Content - Avatar + Chat */}
           <div className="flex-1 flex overflow-hidden">
-            {/* Avatar Section - Focused & Branded */}
-            <div className="flex-1 relative">
-              {/* Avatar Label Top Left */}
-              <div className="absolute top-8 left-8 z-10 bg-gradient-to-r from-[#0080FF] to-[#0066FF] px-6 py-2 rounded-full border-2 border-white/20 shadow-xl">
-                <div className="flex items-center gap-2">
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
-                  </span>
-                  <span className="text-white font-bold text-sm">ON AIR</span>
-                </div>
-              </div>
-
-              {/* Loading State */}
-              {isLoading && (
-                <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[#000510] via-[#001030] to-[#000510] z-20">
-                  <div className="text-center">
-                    <Loader2 className="w-20 h-20 text-[#0080FF] animate-spin mx-auto mb-6" />
-                    <p className="text-white text-xl font-bold mb-2">מתחבר ל{reporter.name}...</p>
-                    <p className="text-[#0080FF] text-sm">מכין שיחת וידאו חיה</p>
+            {/* Avatar Section - Desktop Only */}
+            {!isMobile && (
+              <div className="flex-1 relative">
+                {/* Avatar Label Top Left */}
+                <div className="absolute top-8 left-8 z-10 bg-gradient-to-r from-[#0080FF] to-[#0066FF] px-6 py-2 rounded-full border-2 border-white/20 shadow-xl">
+                  <div className="flex items-center gap-2">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+                    </span>
+                    <span className="text-white font-bold text-sm">ON AIR</span>
                   </div>
                 </div>
-              )}
 
-              {/* D-ID Agent Iframe */}
-              <iframe
-                ref={iframeRef}
-                src={agentUrl}
-                allow="microphone; camera; autoplay"
-                className="w-full h-full border-0 bg-[#000510]"
-                title={`${reporter.name} Live Chat`}
-              />
-            </div>
+                {/* Loading State */}
+                {isLoading && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[#000510] via-[#001030] to-[#000510] z-20">
+                    <div className="text-center">
+                      <Loader2 className="w-20 h-20 text-[#0080FF] animate-spin mx-auto mb-6" />
+                      <p className="text-white text-xl font-bold mb-2">מתחבר ל{reporter.name}...</p>
+                      <p className="text-[#0080FF] text-sm">מכין שיחת וידאו חיה</p>
+                    </div>
+                  </div>
+                )}
 
-            {/* Chat Panel - Side */}
-            <div className="w-80 sm:w-96 bg-gradient-to-b from-[#001030] via-[#000510] to-[#001030] border-r-4 border-[#0080FF]/20 flex flex-col">
+                {/* D-ID Agent Iframe */}
+                <iframe
+                  ref={iframeRef}
+                  src={agentUrl}
+                  allow="microphone; camera; autoplay"
+                  className="w-full h-full border-0 bg-[#000510]"
+                  title={`${reporter.name} Live Chat`}
+                />
+              </div>
+            )}
+
+            {/* Chat Panel - Full Width on Mobile, Side on Desktop */}
+            <div className={`bg-gradient-to-b from-[#001030] via-[#000510] to-[#001030] flex flex-col ${
+              isMobile ? 'w-full' : 'w-80 sm:w-96 border-r-4 border-[#0080FF]/20'
+            }`}>
               {/* Chat Header */}
               <div className="bg-gradient-to-r from-[#0080FF]/15 to-transparent p-4 border-b-2 border-[#0080FF]/20">
                 <div className="flex items-center justify-between mb-2">
