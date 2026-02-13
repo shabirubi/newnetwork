@@ -92,11 +92,21 @@ export default function NewsReels() {
                   >
 
                     {/* Thumbnail Background */}
-                    <img 
-                      src={reel.thumbnail || 'https://images.unsplash.com/photo-1495563014258-12e12737d0d0?w=300&h=500&fit=crop'} 
-                      alt={reel.title}
-                      className="absolute inset-0 w-full h-full object-cover"
-                    />
+                    {reel.thumbnail ? (
+                      <img 
+                        src={reel.thumbnail} 
+                        alt={reel.title}
+                        className="absolute inset-0 w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-gray-900 to-black flex items-center justify-center">
+                        <img 
+                          src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png" 
+                          alt="הרשת החדשה" 
+                          className="w-24 h-24 opacity-50"
+                        />
+                      </div>
+                    )}
 
                     {/* Video preview - hidden initially */}
                     <video

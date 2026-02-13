@@ -1,18 +1,8 @@
 import React, { useState, useRef, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Play, Pause, Volume2, VolumeX, Maximize, 
-  Users, Radio, Settings, Download, Bookmark, 
-  MessageCircle, Eye, Share2, Newspaper, TrendingUp,
-  DollarSign, Trophy, Tv, Target, Moon, Sunrise
-} from "lucide-react";
+import { motion } from "framer-motion";
+import { Play, Pause, Volume2, VolumeX, Maximize, Radio } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
-import ShareButtons from "../shared/ShareButtons";
-import { base44 } from "@/api/base44Client";
-
-
-
 
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png";
 
@@ -21,134 +11,39 @@ export default function LivePlayer({
   viewerCount = 0,
   isLive = true,
   thumbnailUrl = null,
-  streamUrl
+  streamUrl = ""
 }) {
-  const [isPlaying, setIsPlaying] = useState(thumbnailUrl ? false : !!streamUrl);
-   const [showPromo, setShowPromo] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(80);
   const [showControls, setShowControls] = useState(true);
-  const [isBookmarked, setIsBookmarked] = useState(false);
-  const [viewerReactions, setViewerReactions] = useState(1234);
-  const [dynamicViewerCount, setDynamicViewerCount] = useState(viewerCount || 2847);
-  const [ads, setAds] = useState([]);
-  const [loadingAds, setLoadingAds] = useState(true);
-  const [currentSlogan, setCurrentSlogan] = useState(0);
-  const [displayedText, setDisplayedText] = useState("");
-  const [currentAdIndex, setCurrentAdIndex] = useState(0);
-  const [isWideAd, setIsWideAd] = useState(false);
   const [currentVideoUrl, setCurrentVideoUrl] = useState(streamUrl);
-   const [playerTitle, setPlayerTitle] = useState(title);
-   const [displayThumbnail, setDisplayThumbnail] = useState(!!thumbnailUrl);
-   const videoRef = useRef(null);
-   const containerRef = useRef(null);
-   const playerRef = useRef(null);
-   const currentVideoRef = useRef(null);
+  const [playerTitle, setPlayerTitle] = useState(title);
+  const [dynamicViewerCount, setDynamicViewerCount] = useState(viewerCount || 2847);
+  
+  const videoRef = useRef(null);
+  const containerRef = useRef(null);
 
-  const slogans = [
-    "שידור חי 24/7 - החדשות שלכם",
-    "כתבים בשטח - דיווח בזמן אמת",
-    "צוות הכתבים שלנו פועל ללא הפסקה",
-    "שעות של שידורים איכותיים",
-    "הכתבים המובילים בישראל",
-    "מייצרים תוכן. מייצרים חדשות",
-    "הערוץ היחיד שאתם צריכים"
-  ];
-
-  const bannerAds = [
-    { id: 1, image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c61500337_image.png", brand: "AWA Restaurant" },
-    { id: 2, image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/cb296f8d5_image.png", brand: "ANNY Boutique Events" },
-    { id: 3, image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/7ef43efd7_image.png", brand: "AWA Restaurant" },
-    { id: 4, image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/13fcdb80b_image.png", brand: "TADIRAN" },
-    { id: 5, image: "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/4829bca2e_image.png", brand: "H&M CAREERS" }
-  ];
-
-  const scheduleItems = [
-    { time: "06:00", title: "חדשות הבוקר עם רונית ויוסי", Icon: Sunrise },
-    { time: "08:00", title: "סקירת עיתונות עם דני", Icon: Newspaper },
-    { time: "10:00", title: "פוליטיקה היום עם שרון", Icon: Users },
-    { time: "12:00", title: "מהדורת הצהריים", Icon: Tv },
-    { time: "14:00", title: "כלכלה ושוק ההון", Icon: DollarSign },
-    { time: "16:00", title: "ספורט בשידור חי", Icon: Trophy },
-    { time: "18:00", title: "חדשות הערב המרכזיות", Icon: Radio },
-    { time: "20:00", title: "ניתוח מעמיק עם המומחים", Icon: Target },
-    { time: "22:00", title: "סיכום יומי והצצה למחר", Icon: Moon }
-  ];
-
-  const currentStreamUrl = streamUrl;
-
-  // Rotate ads and toggle wide view
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentAdIndex((prev) => (prev + 1) % bannerAds.length);
-      setIsWideAd((prev) => !prev);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
-
-  // Promo animation effect
-  useEffect(() => {
-    if (showPromo) {
-      const timer = setTimeout(() => {
-        setShowPromo(false);
-        setIsPlaying(true);
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
-  }, [showPromo]);
-
-  // Dynamic viewer count with realistic fluctuation
+  // Update viewer count dynamically
   useEffect(() => {
     const interval = setInterval(() => {
       setDynamicViewerCount(prev => {
         const change = Math.random() > 0.3 
-          ? Math.floor(Math.random() * 25) + 10  // Usually increase (10-35)
-          : Math.floor(Math.random() * 10) - 5;   // Sometimes decrease (-5 to +5)
-        return Math.max(1000, prev + change); // Never below 1000
+          ? Math.floor(Math.random() * 25) + 10
+          : Math.floor(Math.random() * 10) - 5;
+        return Math.max(1000, prev + change);
       });
-    }, 2500); // Update every 2.5 seconds
-
+    }, 2500);
     return () => clearInterval(interval);
   }, []);
 
-  // Typewriter animation for slogans
-  useEffect(() => {
-    const currentText = slogans[currentSlogan];
-    let charIndex = 0;
-    setDisplayedText("");
-
-    const typeInterval = setInterval(() => {
-      if (charIndex < currentText.length) {
-        setDisplayedText(currentText.substring(0, charIndex + 1));
-        charIndex++;
-      } else {
-        clearInterval(typeInterval);
-        setTimeout(() => {
-          setCurrentSlogan((prev) => (prev + 1) % slogans.length);
-        }, 3000);
-      }
-    }, 80);
-
-    return () => clearInterval(typeInterval);
-  }, [currentSlogan]);
-
-  // Update currentVideoUrl when streamUrl prop changes
-  useEffect(() => {
-    if (streamUrl && streamUrl !== currentVideoUrl) {
-      setCurrentVideoUrl(streamUrl);
-      setDisplayThumbnail(!!thumbnailUrl);
-    }
-  }, [streamUrl, thumbnailUrl]);
-
-  // Listen for playVideo and uploadArticleToPlayer events
+  // Listen for video events
   useEffect(() => {
     const handlePlayVideo = (event) => {
       const { url, title: videoTitle, autoPlay } = event.detail;
       setCurrentVideoUrl(url);
       setPlayerTitle(videoTitle || title);
       setIsPlaying(autoPlay || true);
-      setIsMuted(false);
-      setVolume(80);
     };
 
     const handleUploadArticle = (event) => {
@@ -156,8 +51,6 @@ export default function LivePlayer({
       setCurrentVideoUrl(videoUrl);
       setPlayerTitle(`${articleTitle} - ${reporterName}`);
       setIsPlaying(true);
-      setIsMuted(false);
-      setVolume(80);
     };
 
     window.addEventListener('playVideo', handlePlayVideo);
@@ -168,14 +61,27 @@ export default function LivePlayer({
     };
   }, [title]);
 
+  // Update video when streamUrl changes
+  useEffect(() => {
+    if (streamUrl && streamUrl !== currentVideoUrl) {
+      setCurrentVideoUrl(streamUrl);
+    }
+  }, [streamUrl]);
 
+  // Handle video volume and mute
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.volume = volume / 100;
+      videoRef.current.muted = isMuted;
+    }
+  }, [volume, isMuted]);
 
   const togglePlay = () => {
-    if (currentVideoRef.current) {
+    if (videoRef.current) {
       if (isPlaying) {
-        currentVideoRef.current.pause();
+        videoRef.current.pause();
       } else {
-        currentVideoRef.current.play();
+        videoRef.current.play();
       }
     }
     setIsPlaying(!isPlaying);
@@ -195,419 +101,114 @@ export default function LivePlayer({
     }
   };
 
-  // Simple video player - native HTML5
-  useEffect(() => {
-    if (videoRef.current && currentStreamUrl && isPlaying) {
-      videoRef.current.src = currentStreamUrl;
-      videoRef.current.play().catch(() => {});
-    }
-  }, [currentStreamUrl, isPlaying]);
-
-  // Handle video element volume and mute
-  useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.volume = volume / 100;
-      videoRef.current.muted = isMuted;
-    }
-  }, [volume, isMuted]);
-
-
-
   return (
     <motion.div
       ref={containerRef}
-      initial={{ opacity: 0, scale: 0.98 }}
-      animate={{ opacity: 1, scale: 1 }}
-      className="relative bg-gradient-to-br from-black via-[#0a0000] to-black rounded-2xl overflow-hidden shadow-2xl group border-2 border-[#00D9FF]/50"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      className="relative bg-black rounded-2xl overflow-hidden shadow-2xl border-2 border-[#0080FF]/50"
       style={{
-        boxShadow: '0 0 40px rgba(0, 217, 255, 0.4), inset 0 0 30px rgba(0, 217, 255, 0.1)'
+        boxShadow: '0 0 40px rgba(0, 128, 255, 0.4)'
       }}
       onMouseEnter={() => setShowControls(true)}
       onMouseLeave={() => setShowControls(false)}
     >
-      {/* Video Container */}
-      <div className="relative w-full h-screen overflow-hidden">
-        {/* Video Player - Shows generated videos or uploaded content */}
-              {currentVideoUrl && (
-                <video
-                  ref={currentVideoRef}
-                  src={currentVideoUrl}
-                  className="absolute inset-0 w-full h-full z-20 bg-black object-contain"
-                  controls
-                  playsInline
-                  preload="metadata"
-                  controlsList="nodownload"
-                  style={{ display: 'block' }}
-                />
-              )}
-
-        {/* Frame Border - Covering YouTube Elements */}
-        <div className="absolute inset-0 z-30 pointer-events-none">
-          {/* Top Frame */}
-           <div className="absolute top-0 left-0 right-0 h-16 sm:h-20 bg-black flex flex-col px-2 sm:px-6 py-1 sm:py-2"
-             style={{
-               boxShadow: '0 4px 20px rgba(0, 0, 0, 0.8)'
-             }}
-           >
-             {/* Logo and Title Row */}
-             <div className="flex items-center justify-between mb-0.5 sm:mb-1 gap-1 sm:gap-3">
-               <motion.img 
-                 src={LOGO_URL}
-                 alt="הרשת החדשה"
-                 className="h-12 sm:h-16 w-auto drop-shadow-2xl"
-                animate={{ 
-                  scale: [1, 1.05, 1],
-                  filter: ['brightness(1)', 'brightness(1.2)', 'brightness(1)']
-                }}
-                transition={{ 
-                  duration: 3, 
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-              />
-              <div className="text-right flex-1 overflow-hidden min-w-0">
-                <div className="text-white font-bold text-sm sm:text-xl drop-shadow-lg mb-0.5 leading-tight hidden sm:block">הרשת החדשה</div>
-                <div className="text-[#E31E24] font-bold text-xs sm:text-base tracking-wide break-words line-clamp-2" style={{ textShadow: '2px 2px 4px rgba(0,0,0,0.5)', letterSpacing: '0.5px' }}>
-                  {currentVideoUrl ? playerTitle : displayedText}
-                  <span className="animate-pulse ml-1">|</span>
-                </div>
-              </div>
-              {ads.length > 0 && (
-                <div className="bg-gradient-to-r from-yellow-600/80 via-yellow-500/80 to-yellow-600/80 backdrop-blur-sm overflow-hidden rounded-lg flex-1 max-w-[200px] sm:max-w-xs h-6 sm:h-8 border border-yellow-400/50 shadow-lg" style={{ boxShadow: '0 0 15px rgba(234, 179, 8, 0.5)' }}>
-                  <motion.div
-                    className="flex items-center h-full gap-1 sm:gap-3 px-2"
-                    animate={{ x: ["0%", "-100%"] }}
-                    transition={{ duration: 45, repeat: Infinity, ease: "linear" }}
-                  >
-                    {Array(6).fill(ads).flat().map((ad, idx) => (
-                      <div 
-                        key={`topAd-${idx}`}
-                        className="flex-shrink-0 relative group h-full flex items-center"
-                      >
-                        <motion.div
-                          whileHover={{ scale: 1.1 }}
-                          className="relative h-full px-1.5 rounded overflow-hidden flex items-center bg-white/20 backdrop-blur-sm"
-                        >
-                          <img 
-                            src={ad.image} 
-                            alt={ad.brand}
-                            className="h-full w-auto object-contain max-w-[120px]"
-                            loading="eager"
-                          />
-                          <motion.div
-                            className="absolute inset-0 bg-gradient-to-r from-white via-white to-transparent opacity-30"
-                            animate={{ x: ["-100%", "100%"] }}
-                            transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }}
-                            style={{ mixBlendMode: 'screen' }}
-                          />
-                        </motion.div>
-                      </div>
-                    ))}
-                  </motion.div>
-                </div>
-              )}
-            </div>
-
-
-          </div>
-
-          {/* Bottom Frame */}
-           <div className="absolute bottom-0 left-0 right-0 h-14 sm:h-16 bg-black flex items-center justify-center px-2 sm:px-6"
-             style={{
-               boxShadow: '0 -4px 20px rgba(0, 0, 0, 0.8)'
-             }}
-           >
-             <div className="flex items-center gap-2 sm:gap-4 w-full justify-center flex-wrap">
-               <div className="flex items-center gap-2 bg-[#E31E24]/20 backdrop-blur-sm px-3 sm:px-4 py-2 rounded-full border border-[#E31E24]/50">
-                 <span className="relative flex h-2.5 w-2.5 sm:h-3 sm:w-3">
-                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#E31E24] opacity-75"></span>
-                   <span className="relative inline-flex rounded-full h-2.5 w-2.5 sm:h-3 sm:w-3 bg-[#E31E24]"></span>
-                 </span>
-                 <span className="text-white font-bold text-sm sm:text-base">שידור חי</span>
-               </div>
-               <div className="text-white/80 font-bold text-xs sm:text-sm hidden sm:block">הערוץ היחיד שאתם צריכים</div>
-             </div>
-           </div>
-
-          {/* Left Frame */}
-          <div className="absolute top-16 sm:top-20 bottom-14 sm:bottom-16 left-0 w-8 sm:w-12 bg-black"
-            style={{
-              boxShadow: '4px 0 20px rgba(0, 0, 0, 0.8)'
-            }}
-          />
-
-          {/* Right Frame */}
-          <div className="absolute top-16 sm:top-20 bottom-14 sm:bottom-16 right-0 w-8 sm:w-12 bg-black"
-            style={{
-              boxShadow: '-4px 0 20px rgba(0, 0, 0, 0.8)'
-            }}
-          />
-
-        </div>
-
-        {/* Logo Promo Animation */}
-        {showPromo && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0 }}
-            className="absolute inset-0 bg-gradient-to-br from-gray-900 via-black to-gray-900 flex items-center justify-center z-50"
-          >
-            <motion.div
-              animate={{
-                scale: [1, 1.05, 1],
-                rotate: [0, 2, -2, 0],
-              }}
-              transition={{
-                duration: 2,
-                repeat: 1,
-                ease: "easeInOut"
-              }}
-              className="relative"
-            >
-              <div className="absolute inset-0 bg-[#E31E24] blur-3xl opacity-60 animate-pulse" />
-              <img 
-                src={LOGO_URL}
-                alt="הרשת החדשה"
-                className="relative h-32 sm:h-48 w-auto drop-shadow-2xl"
-              />
-            </motion.div>
-          </motion.div>
-        )}
-
-        {/* Placeholder - Show when no video URL */}
-          {!currentVideoUrl && (
-            <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center z-10">
-              <div className="text-center">
-                <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-[#00D9FF]/20 flex items-center justify-center">
-                  <Radio className="w-12 h-12 text-[#00D9FF]" />
-                </div>
-                <h3 className="text-white text-xl font-bold">{title}</h3>
-                <p className="text-gray-400 mt-2">בהמתנה לסרטון...</p>
-              </div>
-            </div>
-          )}
-
-        {/* Live Badge */}
-        {isLive && (
-          <motion.div 
-            className="absolute top-16 sm:top-20 right-2 sm:right-6 z-30"
-            animate={{
-              scale: [1, 1.05, 1],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          >
-            <div className="flex items-center gap-1 sm:gap-2 bg-gradient-to-r from-[#00D9FF] to-[#0099CC] text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-full text-xs sm:text-sm font-bold shadow-lg border border-[#00D9FF]/50"
-              style={{
-                boxShadow: '0 0 20px rgba(0, 217, 255, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.1)'
-              }}
-            >
-              <span className="relative flex h-2 w-2 sm:h-2.5 sm:w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 sm:h-2.5 sm:w-2.5 bg-white"></span>
-              </span>
-              <span className="font-extrabold tracking-wide">LIVE</span>
-            </div>
-          </motion.div>
-        )}
-
-
-
-
-
-        {/* Logo Watermark */}
-        {isPlaying && (
-          <div className="absolute top-2 sm:top-4 right-2 sm:right-4 z-10 opacity-20 sm:opacity-50 pointer-events-none hidden sm:block">
-            <img 
-              src={LOGO_URL}
-              alt="הרשת החדשה"
-              className="h-12 sm:h-20 lg:h-24 w-auto"
-            />
-          </div>
-        )}
-
-
-
-        {/* Native HTML5 Video Player */}
-        {isPlaying && !showPromo && currentStreamUrl && (
+      {/* Main Video Container */}
+      <div className="relative w-full h-screen">
+        {/* Video Player */}
+        {currentVideoUrl && (
           <video
             ref={videoRef}
-            className="absolute inset-0 w-full h-full bg-black object-contain"
+            src={currentVideoUrl}
+            className="absolute inset-0 w-full h-full object-contain bg-black"
+            controls
             playsInline
-            muted={isMuted}
-            autoPlay
+            preload="metadata"
+            poster={thumbnailUrl || ""}
           />
         )}
 
-      </div>
+        {/* No Video Placeholder */}
+        {!currentVideoUrl && (
+          <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
+            <div className="text-center">
+              <div className="w-24 h-24 mx-auto mb-4 rounded-full bg-[#0080FF]/20 flex items-center justify-center">
+                <Radio className="w-12 h-12 text-[#0080FF]" />
+              </div>
+              <h3 className="text-white text-xl font-bold">{playerTitle}</h3>
+              <p className="text-gray-400 mt-2">בהמתנה לסרטון...</p>
+            </div>
+          </div>
+        )}
 
-      {/* Ads Carousel - Top Left */}
-      <div className={`absolute top-16 sm:top-20 left-2 sm:left-6 z-30 h-14 sm:h-20 transition-all duration-500 ${isWideAd ? 'w-40 sm:w-80' : 'w-32 sm:w-56'}`}>
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={`${currentAdIndex}-${isWideAd}`}
-            initial={{ opacity: 0, x: -50, scale: 0.95 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: -50, scale: 0.95 }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-            className="relative rounded-xl overflow-hidden shadow-2xl h-full w-full"
-            style={{
-              border: '2px solid rgba(227, 30, 36, 0.6)',
-              boxShadow: '0 8px 32px rgba(227, 30, 36, 0.4), inset 0 1px 0 rgba(227, 30, 36, 0.3)',
-              background: 'linear-gradient(135deg, rgba(0, 0, 0, 0.8) 0%, rgba(227, 30, 36, 0.2) 100%)',
-              backdropFilter: 'blur(16px)'
-            }}
-          >
-            {/* Ad Image */}
-            <img 
-              src={bannerAds[currentAdIndex].image}
-              alt={bannerAds[currentAdIndex].brand}
-              className="w-full h-full object-cover"
-              onError={(e) => {
-                e.target.style.display = 'none';
+        {/* Branding Frame - Top */}
+        <div className="absolute top-0 left-0 right-0 h-16 sm:h-20 bg-gradient-to-b from-black via-black/90 to-transparent z-30 pointer-events-none">
+          <div className="flex items-center justify-between px-4 sm:px-6 h-full">
+            <motion.img 
+              src={LOGO_URL}
+              alt="הרשת החדשה"
+              className="h-10 sm:h-14 w-auto drop-shadow-2xl"
+              animate={{ 
+                scale: [1, 1.05, 1],
+                filter: ['brightness(1)', 'brightness(1.2)', 'brightness(1)']
+              }}
+              transition={{ 
+                duration: 3, 
+                repeat: Infinity,
+                ease: "easeInOut"
               }}
             />
-          </motion.div>
-        </AnimatePresence>
-      </div>
-
-      {/* Controls Bar */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: showControls || !isPlaying ? 1 : 0, y: 0 }}
-        className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/95 via-black/70 to-transparent p-3 sm:p-4 backdrop-blur-sm border-t border-[#E31E24]/20"
-      >
-        {/* Progress Bar (simulated for live) */}
-        <div className="w-full h-1 sm:h-1.5 bg-gray-800/80 rounded-full mb-3 sm:mb-4 overflow-hidden shadow-inner border border-gray-700/50">
-          <motion.div 
-            className="h-full bg-gradient-to-r from-[#E31E24] via-red-500 to-[#E31E24]"
-            animate={{ 
-              width: isPlaying ? "100%" : "0%",
-              backgroundPosition: ['0% 50%', '100% 50%', '0% 50%']
-            }}
-            transition={{ 
-              width: { duration: 0.3 },
-              backgroundPosition: { duration: 3, repeat: Infinity, ease: "linear" }
-            }}
-            style={{
-              backgroundSize: '200% 100%',
-              boxShadow: '0 0 15px rgba(227, 30, 36, 0.8)'
-            }}
-          />
-        </div>
-
-        <div className="flex items-center justify-between gap-1 sm:gap-0">
-          <div className="flex items-center gap-1 sm:gap-3">
-            {/* Play/Pause */}
-            <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={togglePlay}
-                className="text-white hover:bg-[#E31E24]/40 bg-black/40 backdrop-blur-sm h-9 w-9 sm:h-11 sm:w-11 rounded-xl border border-[#E31E24]/30 transition-all"
-              >
-                {isPlaying ? <Pause size={18} className="sm:w-6 sm:h-6" /> : <Play size={18} className="sm:w-6 sm:h-6" />}
-              </Button>
-            </motion.div>
-
-            {/* Volume */}
-            <div className="flex items-center gap-1 sm:gap-2">
-              <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  onClick={toggleMute}
-                  className="text-white hover:bg-[#E31E24]/40 bg-black/40 backdrop-blur-sm h-9 w-9 sm:h-11 sm:w-11 rounded-xl border border-[#E31E24]/30 transition-all"
-                >
-                  {isMuted || volume === 0 ? <VolumeX size={16} className="sm:w-5 sm:h-5" /> : <Volume2 size={16} className="sm:w-5 sm:h-5" />}
-                </Button>
-              </motion.div>
-              <div className="w-16 sm:w-24 hidden md:block">
-                <Slider
-                  value={[isMuted ? 0 : volume]}
-                  max={100}
-                  step={1}
-                  onValueChange={([val]) => {
-                    setVolume(val);
-                    setIsMuted(val === 0);
-                  }}
-                  className="cursor-pointer"
-                />
+            <div className="text-right">
+              <div className="text-white font-bold text-sm sm:text-xl drop-shadow-lg">הרשת החדשה</div>
+              <div className="text-[#0080FF] font-bold text-xs sm:text-base drop-shadow-lg">
+                {playerTitle}
               </div>
             </div>
-
-            {/* Time/Live indicator */}
-            <div className="hidden lg:flex items-center gap-2 px-3 py-1.5 bg-black/40 backdrop-blur-sm rounded-lg border border-[#E31E24]/30">
-              <span className="text-white text-xs sm:text-sm font-bold flex items-center gap-2">
-                {isLive && <span className="text-[#E31E24] animate-pulse">●</span>}
-                {isLive ? "שידור חי" : "00:00 / 00:00"}
-              </span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-1 sm:gap-2">
-            {/* Reactions */}
-            <motion.button
-              onClick={() => setViewerReactions(viewerReactions + 1)}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-black/40 backdrop-blur-sm hover:bg-[#E31E24]/40 rounded-lg text-white text-xs font-bold transition-all border border-[#E31E24]/30"
-            >
-              <MessageCircle size={16} />
-              <span>{viewerReactions}</span>
-            </motion.button>
-
-            {/* Bookmark */}
-            <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => setIsBookmarked(!isBookmarked)}
-                className={`text-white hover:bg-[#E31E24]/40 bg-black/40 backdrop-blur-sm h-9 w-9 sm:h-11 sm:w-11 rounded-xl border border-[#E31E24]/30 transition-all hidden sm:flex ${isBookmarked ? 'text-yellow-400' : ''}`}
-              >
-                <Bookmark size={16} className="sm:w-5 sm:h-5" fill={isBookmarked ? 'currentColor' : 'none'} />
-              </Button>
-            </motion.div>
-
-            {/* Share with menu */}
-            <div className="relative hidden sm:block">
-              <ShareButtons 
-                url={window.location.href}
-                title={title}
-                size="small"
-                showLabel={false}
-              />
-            </div>
-
-            {/* Settings */}
-            <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="text-white hover:bg-[#E31E24]/40 bg-black/40 backdrop-blur-sm h-9 w-9 sm:h-11 sm:w-11 rounded-xl border border-[#E31E24]/30 transition-all hidden md:flex"
-              >
-                <Settings size={16} className="sm:w-5 sm:h-5" />
-              </Button>
-            </motion.div>
-
-            {/* Fullscreen */}
-            <motion.div whileHover={{ scale: 1.1 }} whileTap={{ scale: 0.95 }}>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={toggleFullscreen}
-                className="text-white hover:bg-[#E31E24]/40 bg-black/40 backdrop-blur-sm h-9 w-9 sm:h-11 sm:w-11 rounded-xl border border-[#E31E24]/30 transition-all"
-              >
-                <Maximize size={16} className="sm:w-5 sm:h-5" />
-              </Button>
-            </motion.div>
           </div>
         </div>
-      </motion.div>
+
+        {/* Branding Frame - Bottom */}
+        <div className="absolute bottom-0 left-0 right-0 h-14 sm:h-16 bg-gradient-to-t from-black via-black/90 to-transparent z-30 pointer-events-none">
+          <div className="flex items-center justify-center h-full gap-4">
+            <div className="flex items-center gap-2 bg-[#0080FF]/20 backdrop-blur-sm px-4 py-2 rounded-full border border-[#0080FF]/50">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#0080FF] opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#0080FF]"></span>
+              </span>
+              <span className="text-white font-bold text-sm sm:text-base">LIVE</span>
+            </div>
+            <div className="text-white/80 font-bold text-xs sm:text-sm hidden sm:block">
+              {dynamicViewerCount.toLocaleString()} צופים
+            </div>
+          </div>
+        </div>
+
+        {/* Live Badge - Top Right */}
+        {isLive && (
+          <motion.div 
+            className="absolute top-20 sm:top-24 right-4 z-30"
+            animate={{ scale: [1, 1.05, 1] }}
+            transition={{ duration: 2, repeat: Infinity }}
+          >
+            <div className="flex items-center gap-2 bg-gradient-to-r from-[#0080FF] to-[#0066FF] text-white px-3 py-1.5 rounded-full text-xs sm:text-sm font-bold shadow-lg border border-[#0080FF]/50">
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+              </span>
+              <span>שידור חי</span>
+            </div>
+          </motion.div>
+        )}
+
+        {/* Watermark Logo */}
+        <div className="absolute top-24 right-4 opacity-30 pointer-events-none z-10 hidden sm:block">
+          <img 
+            src={LOGO_URL}
+            alt="הרשת החדשה"
+            className="h-16 sm:h-20 w-auto"
+          />
+        </div>
+      </div>
     </motion.div>
   );
 }

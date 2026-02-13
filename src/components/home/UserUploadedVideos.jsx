@@ -102,13 +102,22 @@ export default function UserUploadedVideos({ onUploadClick }) {
               {/* Video Card */}
               <div className="relative rounded-2xl overflow-hidden bg-gray-900 border border-gray-700 hover:border-red-600 transition-all duration-300">
                 {/* Thumbnail */}
-                <div className="relative h-0 pb-[56.25%] overflow-hidden bg-gray-900">
-                  <video
-                    src={video.video_url}
-                    className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                    muted
-                    playsInline
-                  ></video>
+                <div className="relative h-0 pb-[56.25%] overflow-hidden bg-gradient-to-br from-gray-900 to-black">
+                  {video.thumbnail_url ? (
+                    <img 
+                      src={video.thumbnail_url}
+                      alt={video.title}
+                      className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 w-full h-full flex items-center justify-center">
+                      <img 
+                        src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png" 
+                        alt="הרשת החדשה" 
+                        className="w-32 h-32 opacity-50"
+                      />
+                    </div>
+                  )}
                   {/* Overlay */}
                   <div className="absolute inset-0 bg-black/40 group-hover:bg-black/60 transition-all duration-300 flex items-center justify-center">
                     <motion.div

@@ -80,20 +80,27 @@ export default function AllVideosGallery() {
             }}
           >
             {/* Thumbnail */}
-            <div className="relative aspect-video overflow-hidden">
+            <div className="relative aspect-video overflow-hidden bg-gradient-to-br from-gray-900 to-black">
               {video.type === 'youtube' ? (
                 <img 
                   src={video.thumbnail}
                   alt={video.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
-              ) : (
-                <video
-                  src={video.url}
+              ) : video.thumbnail ? (
+                <img 
+                  src={video.thumbnail}
+                  alt={video.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                  muted
-                  playsInline
-                ></video>
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center">
+                  <img 
+                    src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png" 
+                    alt="הרשת החדשה" 
+                    className="w-32 h-32 opacity-50"
+                  />
+                </div>
               )}
               
               {/* Play Overlay */}
