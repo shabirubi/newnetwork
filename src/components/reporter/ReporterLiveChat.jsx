@@ -224,15 +224,7 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
               )}
 
               {/* D-ID Agent Iframe - Cropped Head & Shoulders */}
-              <div className="w-full h-full overflow-hidden flex items-start justify-center bg-black">
-                <div style={{
-                  width: '150%',
-                  height: '150%',
-                  overflow: 'hidden',
-                  display: 'flex',
-                  alignItems: 'flex-start',
-                  justifyContent: 'center'
-                }}>
+                <div className="w-full h-full bg-black flex items-center justify-center" style={{ overflow: 'hidden', position: 'relative' }}>
                   <iframe
                     ref={iframeRef}
                     src={agentUrl}
@@ -241,13 +233,17 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
                     style={{
                       width: '100%',
                       height: '100%',
-                      transform: 'scale(0.8) translateY(-15%)',
-                      transformOrigin: 'top center'
+                      objectFit: 'cover',
+                      position: 'absolute',
+                      top: '-10%',
+                      left: '0',
+                      transform: 'scale(1.2)',
+                      transformOrigin: 'top center',
+                      clipPath: 'inset(15% 0 35% 0)'
                     }}
                     title={`${reporter.name} Live Chat`}
                   />
                 </div>
-              </div>
             </div>
 
             {/* Chat Panel - Desktop */}
