@@ -71,9 +71,16 @@ ${personalContext}
 
 חשוב: תני תחושה שאת באמת אכפתית, עוזרת ומשתפת במידע החם ביותר!`;
 
-    // קריאה ל-LLM
+    // שליפת חדשות אחרונות לקונטקסט
+    const recentNews = await base44.asServiceRole.entities.NewsArticle.list('-created_date', 5);
+    const newsContext = recentNews.length > 0 
+      ? `\n\nחדשות אחרונות שכדאי שתדעי עליהן:\n${recentNews.map(n => `- ${n.title}`).join('\n')}`
+      : '';
+
+    // קריאה ל-LLM עם גישה לאינטרנט וחדשות אחרונות
     const response = await base44.integrations.Core.InvokeLLM({
-      prompt: `${systemPrompt}\n\nהמשתמש שואל: "${message}"\n\nענה כ-${reporterName}:`
+      prompt: `${systemPrompt}${newsContext}\n\nהמשתמש שואל: "${message}"\n\nענה כ-${reporterName} באופן חם, נעים ומועיל:`,
+      add_context_from_internet: true
     });
 
     return Response.json({ 
