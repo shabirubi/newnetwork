@@ -208,7 +208,7 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
           {/* Main Content - Avatar + Chat */}
           <div className="flex-1 flex overflow-hidden">
             {/* Avatar Section */}
-            <div className={`relative bg-black ${isMobile ? 'w-full' : 'flex-1'}`}>
+            <div className={`relative bg-black ${isMobile ? 'w-full' : 'w-1/2'}`}>
               {/* Loading State */}
               {isLoading && (
                 <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-950 via-black to-gray-950 z-20">
