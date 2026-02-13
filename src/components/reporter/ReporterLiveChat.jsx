@@ -210,7 +210,7 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
           {/* Main Content - Avatar + Chat */}
           <div className="flex-1 flex overflow-hidden">
             {/* Avatar Section */}
-            <div className="flex-1 relative bg-gradient-to-br from-gray-950 to-black">
+            <div className={`relative bg-gradient-to-br from-gray-950 to-black ${isMobile ? 'w-full' : 'flex-1'}`}>
               {/* Loading State */}
               {isLoading && (
                 <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-950 via-black to-gray-950 z-20">
@@ -243,9 +243,9 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
               </div>
             </div>
 
-            {/* Chat Panel - Desktop */}
+            {/* Chat Panel - Desktop - Hidden initially */}
             {!isMobile && (
-              <div className="w-80 sm:w-96 bg-gradient-to-b from-gray-950 to-black border-l border-gray-800/50 flex flex-col shadow-2xl backdrop-blur-xl">
+              <div className="w-0 overflow-hidden bg-gradient-to-b from-gray-950 to-black border-l border-gray-800/50 flex flex-col shadow-2xl backdrop-blur-xl transition-all duration-300 hover:w-96">
                 {/* Chat Header */}
                 <div className="p-4 border-b border-gray-800/50 bg-gradient-to-r from-gray-900 via-gray-950 to-gray-900">
                   <div className="flex items-center gap-2 mb-2">
