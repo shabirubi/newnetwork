@@ -211,20 +211,9 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
           </div>
 
           {/* Main Content - Avatar + Chat */}
-          <div className="flex-1 flex overflow-hidden" style={{ direction: 'ltr' }}>
+          <div className="flex-1 flex overflow-hidden">
             {/* Avatar Section */}
-            <div className={`relative ${isMobile ? 'flex-1' : 'flex-1'}`}>
-              {/* Avatar Label Top Left */}
-              <div className="absolute top-4 sm:top-8 left-4 sm:left-8 z-10 bg-gradient-to-r from-[#0080FF] to-[#0066FF] px-3 sm:px-6 py-1.5 sm:py-2 rounded-full border-2 border-white/20 shadow-xl">
-                <div className="flex items-center gap-2">
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
-                  </span>
-                  <span className="text-white font-bold text-xs sm:text-sm">ON AIR</span>
-                </div>
-              </div>
-
+            <div className="flex-1 relative">
               {/* Loading State */}
               {isLoading && (
                 <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[#000510] via-[#001030] to-[#000510] z-20">
@@ -237,15 +226,15 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
               )}
 
               {/* D-ID Agent Iframe */}
-              <div className="relative w-full h-full overflow-hidden">
+              <div className="absolute inset-0 overflow-hidden">
                 <iframe
                   ref={iframeRef}
                   src={agentUrl}
                   allow="microphone; camera; autoplay"
-                  className="absolute w-full border-0 bg-[#000510]"
+                  className="w-full h-full border-0 bg-[#000510]"
                   style={{
-                    height: '150%',
-                    top: '0'
+                    transform: 'scale(1.5)',
+                    transformOrigin: 'top center'
                   }}
                   title={`${reporter.name} Live Chat`}
                 />
