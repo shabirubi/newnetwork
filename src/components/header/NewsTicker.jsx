@@ -38,10 +38,11 @@ export default function NewsTicker({ darkMode, setDarkMode, onMenuClick }) {
 
   const loadBreakingNews = async () => {
     setNews([
-      "מעקב חי: התפתחויות בזירה הביטחונית",
-      "הבורסה בתל אביב עם מגמה חיובית",
-      "ישיבת ממשלה מיוחדת היום בירושלים",
-      "תחזית מזג אוויר: גל חום בסוף השבוע"
+      "🎬 פרמיירה: כל הסדרות והתכניות החדשות משודרות החל מ-7 למרץ 2026",
+      "📺 עונות חדשות של סדרות הפופולריות יותר ביותר מגיעות לערוץ",
+      "🔥 תכנים בלעדיים ומקוריים - אל תפספסו את ההשקה הגדולה",
+      "⭐ צפייה ישירה ללא הגבלה בכל הסדרות והתכניות שלנו",
+      "🎭 דרמה, קומדיה, אקשן ועוד - הכל במקום אחד החל מ-7 למרץ"
     ]);
     setLoading(false);
   };
@@ -94,14 +95,14 @@ export default function NewsTicker({ darkMode, setDarkMode, onMenuClick }) {
 
         <button 
           onClick={() => {
-            window.location.href = createPageUrl("Category?cat=breaking");
+            window.location.href = createPageUrl("VODContent");
           }}
           className="overflow-hidden flex-1 cursor-pointer hover:opacity-90 transition-opacity min-w-0 relative z-10"
         >
           <div className="flex items-center whitespace-nowrap">
             {news.map((item, index) => (
-              <span key={`news-${index}`} className="inline-flex items-center gap-4 px-4 font-bold text-sm md:text-base text-white animate-marquee">
-                <span className="text-[#E31E24]">•</span> {item}
+              <span key={`news-${index}`} className="inline-flex items-center gap-6 px-6 font-bold text-base md:text-lg text-white animate-marquee">
+                {item}
               </span>
             ))}
           </div>
@@ -117,7 +118,7 @@ export default function NewsTicker({ darkMode, setDarkMode, onMenuClick }) {
             }
           }
           .animate-marquee {
-            animation: marquee 20s linear infinite;
+            animation: marquee 12s linear infinite;
           }
         `}</style>
 
