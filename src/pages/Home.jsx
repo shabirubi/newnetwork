@@ -3,6 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { Radio, TrendingUp, Clock, ChevronLeft, Flame, Zap, Target, Shield, DollarSign, Landmark, Cpu, Trophy, Clapperboard, Globe, Heart, Tv, Newspaper, MessageCircle, Settings, X, Film, Video, Cloud } from "lucide-react";
+import { AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
 import { Button } from "@/components/ui/button";
@@ -70,6 +71,7 @@ export default function Home() {
     }
     return 'all';
   });
+  const [livePlayerModalOpen, setLivePlayerModalOpen] = React.useState(false);
 
 
   React.useEffect(() => {
@@ -155,17 +157,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-black space-y-0 sm:space-y-6">
-
-      {/* Live Player Section */}
-      <section className="px-0 sm:px-4 mb-8">
-        <LivePlayer 
-          title={finalTitle}
-          isLive={!!activeLive?.is_active}
-          viewerCount={activeLive?.viewer_count || 3456}
-          streamUrl={finalStreamUrl}
-          thumbnailUrl={finalThumbnail}
-        />
-      </section>
 
       {/* Featured Article Section - Full Screen */}
       <section className="px-0 mb-4 mt-2">
@@ -372,7 +363,63 @@ export default function Home() {
         onClose={() => setWeatherChatOpen(false)}
       />
 
+      {/* Live Player Modal */}
+      <AnimatePresence>
+        {livePlayerModalOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[9999] flex items-center justify-center p-0 sm:p-4"
+            onClick={() => setLivePlayerModalOpen(false)}
+          >
+            <div className="absolute inset-0 bg-black/90 backdrop-blur-sm" />
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="relative w-full h-full sm:h-auto sm:max-w-6xl sm:rounded-2xl overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button
+                onClick={() => setLivePlayerModalOpen(false)}
+                className="absolute top-4 left-4 z-[10000] bg-black/80 hover:bg-black text-white p-2 rounded-full transition-all"
+              >
+                <X className="w-6 h-6" />
+              </button>
+              <LivePlayer 
+                title={finalTitle}
+                isLive={!!activeLive?.is_active}
+                viewerCount={activeLive?.viewer_count || 3456}
+                streamUrl={finalStreamUrl}
+                thumbnailUrl={finalThumbnail}
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
+      {/* Floating Live Button */}
+      <motion.button
+        onClick={() => setLivePlayerModalOpen(true)}
+        className="fixed bottom-24 left-4 z-50 bg-gradient-to-r from-[#E31E24] to-[#B91C1C] hover:from-[#B91C1C] hover:to-[#E31E24] text-white p-4 rounded-full shadow-2xl shadow-[#E31E24]/50 border-2 border-[#E31E24]/50"
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+        animate={{
+          boxShadow: [
+            '0 0 20px rgba(227, 30, 36, 0.5)',
+            '0 0 40px rgba(227, 30, 36, 0.8)',
+            '0 0 20px rgba(227, 30, 36, 0.5)'
+          ]
+        }}
+        transition={{
+          duration: 2,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+      >
+        <Radio className="w-6 h-6" />
+      </motion.button>
 
       {/* Studio Sidebar */}
       <StudioSidebar />
