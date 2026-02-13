@@ -183,9 +183,9 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
           </div>
 
           {/* Main Content - Avatar + Chat */}
-          <div className={`flex-1 flex overflow-hidden ${isMobile ? 'flex-col' : 'flex-row'}`}>
-            {/* Avatar Section */}
-            <div className={`relative ${isMobile ? 'flex-1' : 'flex-1'}`}>
+          <div className="flex-1 flex overflow-hidden">
+            {/* Avatar Section - Full Screen on Mobile */}
+            <div className="flex-1 relative">
               {/* Avatar Label Top Left */}
               <div className="absolute top-4 sm:top-8 left-4 sm:left-8 z-10 bg-gradient-to-r from-[#0080FF] to-[#0066FF] px-3 sm:px-6 py-1.5 sm:py-2 rounded-full border-2 border-white/20 shadow-xl">
                 <div className="flex items-center gap-2">
@@ -218,10 +218,9 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
               />
             </div>
 
-            {/* Chat Panel - Below Avatar on Mobile, Side on Desktop */}
-            <div className={`bg-gradient-to-b from-[#001030] via-[#000510] to-[#001030] flex flex-col ${
-              isMobile ? 'h-64 border-t-4 border-[#0080FF]/20' : 'w-80 sm:w-96 border-r-4 border-[#0080FF]/20'
-            }`}>
+            {/* Chat Panel - Desktop Only */}
+            {!isMobile && (
+              <div className="w-80 sm:w-96 bg-gradient-to-b from-[#001030] via-[#000510] to-[#001030] border-r-4 border-[#0080FF]/20 flex flex-col">
               {/* Chat Header */}
               <div className="bg-gradient-to-r from-[#0080FF]/15 to-transparent p-4 border-b-2 border-[#0080FF]/20">
                 <div className="flex items-center justify-between mb-2">
@@ -327,6 +326,7 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
                 
                 <p className="text-xs text-gray-500 text-center">שאל שאלות וקבל תשובות מהכתב</p>
               </div>
+              )}
             </div>
           </div>
 
