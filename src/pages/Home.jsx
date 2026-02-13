@@ -197,6 +197,47 @@ export default function Home() {
         </motion.button>
       )}
 
+      {/* Live Player Modal */}
+      <AnimatePresence>
+        {showLivePlayer && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[9999] bg-black flex items-center justify-center"
+            onClick={() => setShowLivePlayer(false)}
+          >
+            <button
+              onClick={() => setShowLivePlayer(false)}
+              className="absolute top-4 right-4 z-50 w-10 h-10 rounded-full bg-[#00D9FF]/30 hover:bg-[#00D9FF]/50 flex items-center justify-center transition-colors border border-[#00D9FF]/50"
+            >
+              <X className="w-5 h-5 text-[#00D9FF]" />
+            </button>
+            <div className="w-full h-full flex items-center justify-center">
+              <LivePlayer 
+                title={finalTitle}
+                isLive={!!activeLive?.is_active}
+                viewerCount={activeLive?.viewer_count || 3456}
+                streamUrl={finalStreamUrl}
+                thumbnailUrl={finalThumbnail}
+              />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Floating Live Button */}
+      {!showLivePlayer && (
+        <motion.button
+          onClick={() => setShowLivePlayer(true)}
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          className="fixed bottom-24 sm:bottom-8 left-4 sm:left-8 z-40 bg-gradient-to-r from-[#E31E24] via-[#B91C1C] to-[#E31E24] hover:from-[#B91C1C] hover:to-[#E31E24] text-white p-4 rounded-full shadow-[0_0_30px_rgba(227,30,36,0.6)] border-2 border-[#E31E24]/50 flex items-center justify-center gap-2 font-bold transition-all"
+        >
+          <Radio className="w-6 h-6 drop-shadow-[0_0_5px_#E31E24]" />
+        </motion.button>
+      )}
+
       {/* Featured Article Section - Full Screen */}
       <section className="px-0 mb-4 -mx-4 sm:mx-0 mt-2">
         <Link 
