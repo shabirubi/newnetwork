@@ -226,7 +226,7 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
               )}
 
               {/* D-ID Agent Iframe with Branded Frame */}
-              <div className="absolute inset-0 overflow-hidden flex items-center justify-center p-4" style={{ paddingBottom: isMobile ? '70px' : '16px' }}>
+              <div className="absolute inset-0 overflow-hidden flex items-center justify-center p-4" style={{ paddingBottom: isMobile ? '90px' : '16px' }}>
                 <div className={`relative ${isMobile ? 'w-full h-full' : 'w-[90%] h-[90%]'} rounded-2xl overflow-hidden shadow-2xl border border-gray-800/50`}>
                   <iframe
                     ref={iframeRef}
@@ -253,21 +253,21 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
 
             {/* Chat Panel - Mobile (Bottom) */}
             {isMobile && (
-              <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-gray-950 via-black to-transparent border-t border-gray-800/50 z-[999999] pb-safe backdrop-blur-xl">
-                <div className="p-3">
+              <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-gray-950 via-black to-transparent border-t border-gray-800/50 z-[99999999] pb-safe backdrop-blur-xl" style={{ paddingBottom: 'env(safe-area-inset-bottom, 12px)' }}>
+                <div className="p-4">
                   <div className="flex gap-2">
                     <Input
                       value={inputMessage}
                       onChange={(e) => setInputMessage(e.target.value)}
                       onKeyPress={handleKeyPress}
                       placeholder="שאל שאלה..."
-                      className="flex-1 bg-gray-900/80 border border-gray-700 text-white placeholder:text-gray-500 focus:border-gray-600 rounded-xl text-sm h-12 px-4 backdrop-blur-sm shadow-lg"
+                      className="flex-1 bg-gray-900/95 border-2 border-gray-700 text-white placeholder:text-gray-500 focus:border-gray-600 rounded-xl text-base h-14 px-4 backdrop-blur-sm shadow-2xl"
                     />
 
                     <Button
                       onClick={handleSendMessage}
                       disabled={!inputMessage.trim()}
-                      className="bg-gray-800/80 hover:bg-gray-700 text-white rounded-xl border border-gray-700 h-12 w-12 p-0 disabled:opacity-50 backdrop-blur-sm shadow-lg"
+                      className="bg-gray-800/95 hover:bg-gray-700 text-white rounded-xl border-2 border-gray-700 h-14 w-14 p-0 disabled:opacity-50 backdrop-blur-sm shadow-2xl"
                     >
                       <Send className="w-5 h-5" />
                     </Button>
