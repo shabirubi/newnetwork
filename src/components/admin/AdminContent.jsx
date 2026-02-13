@@ -104,7 +104,7 @@ export default function AdminContent() {
 
   const tabs = [
     { id: 'videos', label: 'סרטונים', icon: Video, count: videos.length },
-    { id: 'articles', label: 'חדשות', icon: Newspaper, count: articles.length },
+    { id: 'articles', label: 'כתבות', icon: Newspaper, count: articles.length },
     { id: 'reporters', label: 'כתבים', icon: Users, count: reporters.length },
     { id: 'comments', label: 'תגובות', icon: MessageCircle, count: comments.length },
   ];
