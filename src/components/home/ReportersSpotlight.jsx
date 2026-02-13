@@ -33,15 +33,15 @@ export default function ReportersSpotlight() {
   };
 
   return (
-    <section className="px-4 sm:px-4 mt-8">
-      <div className="flex items-center justify-between mb-6">
+    <section className="px-0 sm:px-4 mt-8">
+      <div className="flex items-center justify-between mb-6 px-4 sm:px-0">
         <div className="flex items-center gap-2">
-          <Award className="w-6 h-6 text-[#E31E24]" />
-          <h2 className="text-2xl font-bold dark:text-white">כתבים מובילים</h2>
+          <Award className="w-5 h-5 sm:w-6 sm:h-6 text-[#E31E24]" />
+          <h2 className="text-xl sm:text-2xl font-bold dark:text-white">כתבים מובילים</h2>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6 px-4 sm:px-0">
         {/* Left - Featured Reporter */}
         {topReporters.length > 0 && (
           <motion.div
@@ -127,7 +127,7 @@ export default function ReportersSpotlight() {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -100 }}
                   transition={{ duration: 0.3 }}
-                  className="grid grid-cols-1 sm:grid-cols-2 gap-4"
+                  className="grid grid-cols-2 gap-3 sm:gap-4"
                 >
                   {otherReporters.slice(currentIndex, currentIndex + 2).map((reporter, idx) => (
                     <motion.div
@@ -136,26 +136,26 @@ export default function ReportersSpotlight() {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: idx * 0.1 }}
                       whileHover={{ y: -5 }}
-                      className="bg-gradient-to-br from-black/80 via-[#E31E24]/20 to-black/80 backdrop-blur-sm rounded-xl p-4 border-2 border-[#E31E24]/40 hover:border-[#E31E24]/80 transition-all cursor-pointer group"
+                      className="bg-gradient-to-br from-black/80 via-[#E31E24]/20 to-black/80 backdrop-blur-sm rounded-xl p-3 sm:p-4 border-2 border-[#E31E24]/40 hover:border-[#E31E24]/80 transition-all cursor-pointer group"
                       style={{
                         boxShadow: '0 0 15px rgba(227, 30, 36, 0.3), inset 0 0 15px rgba(227, 30, 36, 0.1)'
                       }}
                       onClick={() => setSelectedReporter(reporter)}
                     >
-                      <div className="flex items-start gap-3 mb-3">
+                      <div className="flex items-start gap-2 sm:gap-3 mb-2 sm:mb-3">
                         <img
                           src={reporter.image}
                           alt={reporter.name}
-                          className="w-14 h-14 rounded-lg object-cover flex-shrink-0 group-hover:ring-2 ring-[#E31E24] transition-all"
+                          className="w-12 h-12 sm:w-14 sm:h-14 rounded-lg object-cover flex-shrink-0 group-hover:ring-2 ring-[#E31E24] transition-all"
                         />
                         <div className="flex-1 min-w-0">
-                          <h4 className="text-white font-bold text-sm">{reporter.name}</h4>
-                          <p className="text-[#E31E24] text-xs font-bold">{reporter.role}</p>
+                          <h4 className="text-white font-bold text-xs sm:text-sm line-clamp-1">{reporter.name}</h4>
+                          <p className="text-[#E31E24] text-[10px] sm:text-xs font-bold line-clamp-1">{reporter.role}</p>
                         </div>
                       </div>
 
                       {/* Specialty */}
-                      <p className="text-gray-300 text-xs mb-3 line-clamp-2">
+                      <p className="text-gray-300 text-[10px] sm:text-xs mb-2 sm:mb-3 line-clamp-2">
                         {reporter.specialty}
                       </p>
 
@@ -164,7 +164,7 @@ export default function ReportersSpotlight() {
                         {reporter.categories?.slice(0, 2).map((cat) => (
                           <span
                             key={cat}
-                            className="text-xs bg-gray-700 text-gray-200 px-1.5 py-0.5 rounded"
+                            className="text-[9px] sm:text-xs bg-gray-700 text-gray-200 px-1.5 py-0.5 rounded"
                           >
                             {cat}
                           </span>
@@ -179,15 +179,15 @@ export default function ReportersSpotlight() {
             {/* Navigation Buttons */}
             <button
               onClick={prevSlide}
-              className="absolute -left-4 top-1/2 -translate-y-1/2 z-10 bg-[#E31E24] hover:bg-red-700 text-white p-2 rounded-full transition-all"
+              className="absolute -left-2 sm:-left-4 top-1/2 -translate-y-1/2 z-10 bg-[#E31E24] hover:bg-red-700 text-white p-1.5 sm:p-2 rounded-full transition-all"
             >
-              <ChevronLeft className="w-5 h-5" />
+              <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
             <button
               onClick={nextSlide}
-              className="absolute -right-4 top-1/2 -translate-y-1/2 z-10 bg-[#E31E24] hover:bg-red-700 text-white p-2 rounded-full transition-all"
+              className="absolute -right-2 sm:-right-4 top-1/2 -translate-y-1/2 z-10 bg-[#E31E24] hover:bg-red-700 text-white p-1.5 sm:p-2 rounded-full transition-all"
             >
-              <ChevronRight className="w-5 h-5" />
+              <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
 
             {/* Indicators */}
