@@ -211,9 +211,9 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
           </div>
 
           {/* Main Content - Avatar + Chat */}
-          <div className="flex-1 flex overflow-hidden">
-            {/* Avatar Section - Full Screen on Mobile */}
-            <div className="flex-1 relative">
+          <div className="flex-1 flex overflow-hidden" style={{ direction: 'ltr' }}>
+            {/* Avatar Section */}
+            <div className={`relative ${isMobile ? 'flex-1' : 'flex-1'}`}>
               {/* Avatar Label Top Left */}
               <div className="absolute top-4 sm:top-8 left-4 sm:left-8 z-10 bg-gradient-to-r from-[#0080FF] to-[#0066FF] px-3 sm:px-6 py-1.5 sm:py-2 rounded-full border-2 border-white/20 shadow-xl">
                 <div className="flex items-center gap-2">
