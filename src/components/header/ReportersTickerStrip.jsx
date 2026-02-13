@@ -79,8 +79,8 @@ export default function ReportersTickerStrip() {
   return (
     <>
       {reporters.length > 0 && (
-      <div className="relative bg-black/90 backdrop-blur-xl border-b-2 border-[#0080FF]/50 shadow-xl shadow-[#0080FF]/30 z-[35] flex justify-center">
-        <div ref={containerRef} className="w-full max-w-7xl relative">
+      <div className="relative bg-gradient-to-r from-black/80 via-black/70 to-black/80 backdrop-blur-xl border-b border-[#0080FF]/30 shadow-lg shadow-[#0080FF]/20 z-[35] flex justify-center">
+        <div ref={containerRef} className="w-full max-w-5xl relative">
           {/* Left Fade Gradient */}
           <div className="hidden lg:block absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-black/90 to-transparent z-20 pointer-events-none" />
           
