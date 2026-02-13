@@ -253,23 +253,23 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
 
             {/* Chat Panel - Mobile (Bottom) */}
             {isMobile && (
-              <div className="fixed bottom-0 left-0 right-0 bg-black border-t border-gray-800 z-[999999] pb-safe">
-                <div className="p-3 bg-black">
+              <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-gray-950 via-black to-transparent border-t border-gray-800/50 z-[999999] pb-safe backdrop-blur-xl">
+                <div className="p-3">
                   <div className="flex gap-2">
                     <Input
                       value={inputMessage}
                       onChange={(e) => setInputMessage(e.target.value)}
                       onKeyPress={handleKeyPress}
                       placeholder="שאל שאלה..."
-                      className="flex-1 bg-gray-900 border border-gray-800 text-white placeholder:text-gray-500 focus:border-gray-700 rounded-lg text-sm h-11 px-4"
+                      className="flex-1 bg-gray-900/80 border border-gray-700 text-white placeholder:text-gray-500 focus:border-gray-600 rounded-xl text-sm h-12 px-4 backdrop-blur-sm shadow-lg"
                     />
 
                     <Button
                       onClick={handleSendMessage}
                       disabled={!inputMessage.trim()}
-                      className="bg-gray-900 hover:bg-gray-800 text-white rounded-lg border border-gray-800 h-11 w-11 p-0 disabled:opacity-50"
+                      className="bg-gray-800/80 hover:bg-gray-700 text-white rounded-xl border border-gray-700 h-12 w-12 p-0 disabled:opacity-50 backdrop-blur-sm shadow-lg"
                     >
-                      <Send className="w-4 h-4" />
+                      <Send className="w-5 h-5" />
                     </Button>
                   </div>
                 </div>
