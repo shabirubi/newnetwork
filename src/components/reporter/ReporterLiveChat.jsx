@@ -279,15 +279,22 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
 
           {/* Premium Footer - Hidden on Mobile */}
           {!isMobile && (
-            <div className="bg-black p-3 border-t border-gray-800">
+            <div className="bg-gradient-to-r from-gray-950 via-gray-900 to-gray-950 p-3 border-t border-gray-800/50 backdrop-blur-xl">
               <div className="flex items-center justify-center gap-3 text-sm">
                 <motion.img 
                   src={LOGO_URL}
                   alt="הרשת החדשה"
-                  className="h-6 w-auto"
+                  className="h-6 w-auto drop-shadow-lg"
+                  animate={{ 
+                    opacity: [0.8, 1, 0.8]
+                  }}
+                  transition={{ 
+                    duration: 2, 
+                    repeat: Infinity 
+                  }}
                 />
                 <span className="text-white font-bold">הרשת החדשה</span>
-                <span className="text-gray-600">•</span>
+                <span className="text-gray-700">•</span>
                 <span className="text-gray-400 text-xs">Powered by Digital Dreams</span>
               </div>
             </div>
