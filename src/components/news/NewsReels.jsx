@@ -86,36 +86,31 @@ export default function NewsReels() {
                 {newsReels.slice(currentIndex, Math.min(currentIndex + 5, newsReels.length)).map((reel) => (
                   <motion.div
                     key={reel.id}
-                    className="relative rounded-xl overflow-hidden aspect-[9/16] group cursor-pointer"
+                    className="relative rounded-xl overflow-hidden aspect-[9/16] group cursor-pointer bg-black"
                     whileHover={{ scale: 1.02 }}
                     onClick={() => setSelectedReel(reel)}
                   >
 
-                    {/* Thumbnail Background */}
-                    {reel.thumbnail ? (
-                      <img 
-                        src={reel.thumbnail} 
-                        alt={reel.title}
-                        className="absolute inset-0 w-full h-full object-cover"
-                      />
-                    ) : (
-                      <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-gray-900 to-black flex items-center justify-center">
-                        <img 
-                          src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png" 
-                          alt="הרשת החדשה" 
-                          className="w-24 h-24 opacity-50"
-                        />
-                      </div>
-                    )}
+                    {/* Thumbnail - Always visible */}
+                    <img 
+                      src={reel.thumbnail || "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png"}
+                      alt={reel.title}
+                      className="absolute inset-0 w-full h-full object-cover"
+                      loading="eager"
+                    />
 
-                    {/* Video preview - hidden initially */}
+                    {/* Video preview on hover */}
                     <video
                       src={reel.videoUrl}
-                      className="absolute inset-0 w-full h-full object-cover hidden group-hover:block"
+                      className="absolute inset-0 w-full h-full object-cover opacity-0 group-hover:opacity-100 transition-opacity duration-300"
                       playsInline
                       muted
+                      preload="metadata"
                       onMouseEnter={(e) => e.target.play()}
-                      onMouseLeave={(e) => e.target.pause()}
+                      onMouseLeave={(e) => {
+                        e.target.pause();
+                        e.target.currentTime = 0;
+                      }}
                     />
 
                     {/* Watermark */}
