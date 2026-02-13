@@ -21,9 +21,7 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
 
   useEffect(() => {
     if (isOpen) {
-      setIsLoading(true);
-      const timer = setTimeout(() => setIsLoading(false), 2000);
-      return () => clearTimeout(timer);
+      setIsLoading(false);
     }
   }, [isOpen]);
 
