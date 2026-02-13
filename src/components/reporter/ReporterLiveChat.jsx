@@ -210,7 +210,7 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
           {/* Main Content - Avatar + Chat */}
           <div className="flex-1 flex overflow-hidden">
             {/* Avatar Section */}
-            <div className={`relative bg-gradient-to-br from-gray-950 to-black ${isMobile ? 'w-full' : 'flex-1'}`}>
+            <div className={`relative bg-gradient-to-br from-gray-950 to-black ${isMobile ? 'w-full' : 'w-1/2'}`}>
               {/* Loading State */}
               {isLoading && (
                 <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-gray-950 via-black to-gray-950 z-20">
@@ -227,14 +227,14 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
 
               {/* D-ID Agent Iframe with Branded Frame */}
               <div className="absolute inset-0 overflow-hidden flex items-center justify-center p-4" style={{ paddingBottom: isMobile ? '120px' : '16px' }}>
-                <div className={`relative ${isMobile ? 'w-full h-full' : 'w-[90%] h-[90%]'} rounded-2xl overflow-hidden shadow-2xl border border-gray-800/50`}>
+                <div className={`relative ${isMobile ? 'w-full h-full' : 'w-[95%] h-[95%]'} rounded-2xl overflow-hidden shadow-2xl border border-gray-800/50`}>
                   <iframe
                     ref={iframeRef}
                     src={agentUrl}
                     allow="microphone; camera; autoplay"
                     className="w-full h-full border-0 bg-black"
                     style={{
-                      transform: isMobile ? 'scale(1)' : 'scale(1.4)',
+                      transform: isMobile ? 'scale(1)' : 'scale(1)',
                       transformOrigin: 'center center'
                     }}
                     title={`${reporter.name} Live Chat`}
@@ -243,9 +243,9 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
               </div>
             </div>
 
-            {/* Chat Panel - Desktop - Hidden initially */}
+            {/* Chat Panel - Desktop */}
             {!isMobile && (
-              <div className="w-0 overflow-hidden bg-gradient-to-b from-gray-950 to-black border-l border-gray-800/50 flex flex-col shadow-2xl backdrop-blur-xl transition-all duration-300 hover:w-96">
+              <div className="w-1/2 bg-gradient-to-b from-gray-950 to-black border-l border-gray-800/50 flex flex-col shadow-2xl backdrop-blur-xl">
                 {/* Chat Header */}
                 <div className="p-4 border-b border-gray-800/50 bg-gradient-to-r from-gray-900 via-gray-950 to-gray-900">
                   <div className="flex items-center gap-2 mb-2">
