@@ -68,7 +68,7 @@ export default function WeatherForecastModal({ isOpen, onClose }) {
             </button>
           </div>
 
-          {/* Content */}
+          {/* Content - Chat Only, Hide Avatar */}
           <div className="flex-1 bg-black relative overflow-hidden">
             {isLoading && (
               <div className="absolute inset-0 flex items-center justify-center bg-black z-10">
@@ -78,25 +78,32 @@ export default function WeatherForecastModal({ isOpen, onClose }) {
                 </div>
               </div>
             )}
-            <iframe
-              ref={iframeRef}
-              src={weatherAgentUrl}
-              allow="microphone; camera; autoplay"
-              className="w-full h-full border-0"
-              title="Weather Forecast Chat"
-              style={{ 
-                position: 'absolute',
-                top: '50%',
-                left: '50%',
-                transform: 'translate(-50%, -50%)',
-                width: '100%',
-                height: '100%',
-                overflow: 'hidden',
-                pointerEvents: 'auto',
-                outline: 'none',
-                border: 'none'
-              }}
-            />
+            <div style={{
+              width: '100%',
+              height: '100%',
+              overflow: 'hidden',
+              position: 'relative'
+            }}>
+              <iframe
+                ref={iframeRef}
+                src={weatherAgentUrl}
+                allow="microphone; camera; autoplay"
+                className="border-0 bg-black"
+                title="Weather Forecast Chat"
+                style={{ 
+                  position: 'absolute',
+                  top: '-10%',
+                  left: '0',
+                  width: '100%',
+                  height: '120%',
+                  overflow: 'hidden',
+                  pointerEvents: 'auto',
+                  outline: 'none',
+                  border: 'none',
+                  clipPath: 'inset(15% 0 35% 0)'
+                }}
+              />
+            </div>
           </div>
 
           {/* D-ID Style Footer */}
