@@ -1,11 +1,17 @@
 import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Cloud, Loader2 } from "lucide-react";
+import { X, Cloud, Loader2, Send, MessageCircle, Users } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png";
 
 export default function WeatherForecastModal({ isOpen, onClose }) {
   const [isLoading, setIsLoading] = useState(true);
+  const [chatMessages, setChatMessages] = useState([]);
+  const [inputMessage, setInputMessage] = useState('');
+  const [onlineUsers, setOnlineUsers] = useState(2);
+  const messagesEndRef = useRef(null);
   const iframeRef = useRef(null);
 
   useEffect(() => {
@@ -16,17 +22,44 @@ export default function WeatherForecastModal({ isOpen, onClose }) {
     }
   }, [isOpen]);
 
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   useEffect(() => {
-    const handleOpen = () => {
-      if (!isOpen) {
-        // Open the modal
-        const event = new Event('openWeatherChatModal');
-        window.dispatchEvent(event);
-      }
-    };
-    window.addEventListener('openWeatherChat', handleOpen);
-    return () => window.removeEventListener('openWeatherChat', handleOpen);
-  }, [isOpen]);
+    scrollToBottom();
+  }, [chatMessages]);
+
+  const handleSendMessage = async () => {
+    if (!inputMessage.trim()) return;
+    
+    const userMessage = inputMessage;
+    
+    setChatMessages(prev => [...prev, {
+      text: userMessage,
+      timestamp: new Date(),
+      sender: 'user'
+    }]);
+    
+    setInputMessage('');
+    
+    // Simulate weather AI response
+    setTimeout(() => {
+      setChatMessages(prev => [...prev, {
+        text: 'התחזית לימים הקרובים מראה על מזג אוויר יציב עם טמפרטורות בטווח של 18-22 מעלות.',
+        timestamp: new Date(),
+        sender: 'weather',
+        userName: 'תחזיתן הרשת'
+      }]);
+    }, 1000);
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleSendMessage();
+    }
+  };
 
   const weatherAgentUrl = "https://studio.d-id.com/agents/share?id=v2_agt_cim3LvE9&utm_source=copy&key=WjI5dloyeGxMVzloZFhSb01ud3hNRGt3TlRBd01qRTROall3TURjMU9ESTBPVFk2TVVsNFJ6Tk5kelJMWmtSWFZHVTNUREJmTjNkMw==";
 
