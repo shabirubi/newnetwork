@@ -202,11 +202,11 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
             <div className="flex-1 relative">
               {/* Loading State */}
               {isLoading && (
-                <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[#000510] via-[#001030] to-[#000510] z-20">
+                <div className="absolute inset-0 flex items-center justify-center bg-black z-20">
                   <div className="text-center">
-                    <Loader2 className="w-16 sm:w-20 h-16 sm:h-20 text-[#0080FF] animate-spin mx-auto mb-4 sm:mb-6" />
+                    <Loader2 className="w-16 sm:w-20 h-16 sm:h-20 text-white animate-spin mx-auto mb-4 sm:mb-6" />
                     <p className="text-white text-lg sm:text-xl font-bold mb-2">מתחבר ל{reporter.name}...</p>
-                    <p className="text-[#0080FF] text-sm">מכין שיחת וידאו חיה</p>
+                    <p className="text-gray-400 text-sm">מכין שיחת וידאו חיה</p>
                   </div>
                 </div>
               )}
