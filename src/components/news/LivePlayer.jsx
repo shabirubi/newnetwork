@@ -13,11 +13,11 @@ export default function LivePlayer({
   thumbnailUrl = null,
   streamUrl = ""
 }) {
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(!!streamUrl);
   const [isMuted, setIsMuted] = useState(false);
   const [volume, setVolume] = useState(80);
   const [showControls, setShowControls] = useState(true);
-  const [currentVideoUrl, setCurrentVideoUrl] = useState(streamUrl);
+  const [currentVideoUrl, setCurrentVideoUrl] = useState(streamUrl || "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c48a88e22_video.mp4");
   const [playerTitle, setPlayerTitle] = useState(title);
   const [dynamicViewerCount, setDynamicViewerCount] = useState(viewerCount || 2847);
   
@@ -63,8 +63,9 @@ export default function LivePlayer({
 
   // Update video when streamUrl changes
   useEffect(() => {
-    if (streamUrl && streamUrl !== currentVideoUrl) {
+    if (streamUrl) {
       setCurrentVideoUrl(streamUrl);
+      setIsPlaying(true);
     }
   }, [streamUrl]);
 
