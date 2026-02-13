@@ -352,9 +352,9 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
 
             {/* Chat Panel - Mobile (Bottom) */}
             {isMobile && (
-              <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-black via-[#001030] to-[#001030]/95 border-t-4 border-[#0080FF]/50 z-[10000] backdrop-blur-lg shadow-2xl">
+              <div className="fixed bottom-20 left-0 right-0 bg-gradient-to-t from-black via-[#001030] to-[#001030]/95 border-t-4 border-[#0080FF]/50 z-[10000] backdrop-blur-lg shadow-2xl">
                 {/* Messages Preview - Scrollable */}
-                <div className="max-h-32 overflow-y-auto px-3 py-2 space-y-2">
+                <div className="max-h-40 overflow-y-auto px-3 py-2 space-y-2">
                   {chatMessages.length === 0 ? (
                     <div className="text-center py-2">
                       <p className="text-gray-400 text-xs">שאל שאלה...</p>
