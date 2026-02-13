@@ -157,7 +157,7 @@ export default function Home() {
     <div className="min-h-screen bg-black space-y-0 sm:space-y-6">
 
       {/* Live Player Section */}
-      <section className="px-4 mb-8">
+      <section className="px-0 sm:px-4 mb-8">
         <LivePlayer 
           title={finalTitle}
           isLive={!!activeLive?.is_active}
@@ -168,7 +168,7 @@ export default function Home() {
       </section>
 
       {/* Featured Article Section - Full Screen */}
-      <section className="px-0 mb-4 -mx-4 sm:mx-0 mt-2">
+      <section className="px-0 mb-4 mt-2">
         <Link 
           to={`${createPageUrl("Article")}?id=${featuredArticle.id}`}
           className="block group relative rounded-none sm:rounded-3xl overflow-hidden cursor-pointer"
@@ -224,7 +224,7 @@ export default function Home() {
         </section>
 
         {/* Weather Forecast Button */}
-        <section className="px-4 mb-8">
+        <section className="px-0 sm:px-4 mb-8">
           <motion.button
             onClick={() => {
               window.dispatchEvent(new CustomEvent('openWeatherChat'));
@@ -385,7 +385,7 @@ export default function Home() {
 
 
       {/* CTA Section */}
-      <section className="bg-[#E31E24]/90 backdrop-blur-sm rounded-2xl p-8 text-white text-center">
+      <section className="mx-4 bg-[#E31E24]/90 backdrop-blur-sm rounded-2xl p-8 text-white text-center">
         <h2 className="text-2xl md:text-3xl font-bold mb-4">
           הצטרפו למהפכה התקשורתית
         </h2>
