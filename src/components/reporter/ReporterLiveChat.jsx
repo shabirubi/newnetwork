@@ -326,8 +326,8 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
                 
                 <p className="text-xs text-gray-500 text-center">שאל שאלות וקבל תשובות מהכתב</p>
               </div>
-              )}
             </div>
+            )}
           </div>
 
           {/* Premium Footer */}
