@@ -352,7 +352,7 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
 
             {/* Chat Panel - Mobile (Bottom) */}
             {isMobile && (
-              <div className="fixed bottom-20 left-0 right-0 bg-gradient-to-t from-black via-[#001030] to-[#001030]/95 border-t-4 border-[#0080FF]/50 z-[10000] backdrop-blur-lg shadow-2xl">
+              <div className="fixed bottom-0 left-0 right-0 bg-black border-t-2 border-gray-800 z-[10000] shadow-2xl">
                 {/* Messages Preview - Scrollable */}
                 <div className="max-h-40 overflow-y-auto px-3 py-2 space-y-2">
                   {chatMessages.length === 0 ? (
@@ -370,8 +370,8 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
                         <div
                           className={`max-w-[80%] p-2 rounded-xl text-xs ${
                             msg.sender === 'user'
-                              ? 'bg-gradient-to-br from-[#0080FF] to-[#0066FF] text-white shadow-lg'
-                              : 'bg-[#001540] text-gray-100 border-2 border-[#0080FF]/40'
+                              ? 'bg-black text-white border-2 border-gray-700 shadow-lg'
+                              : 'bg-black text-gray-100 border-2 border-gray-700'
                           }`}
                         >
                           <p className="leading-relaxed">{msg.text}</p>
@@ -382,20 +382,20 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
                 </div>
 
                 {/* Input Area */}
-                <div className="px-3 py-3 bg-black/80 border-t border-[#0080FF]/30">
+                <div className="px-3 py-3 bg-black border-t border-gray-800">
                   <div className="flex gap-2">
                     <Input
                       value={inputMessage}
                       onChange={(e) => setInputMessage(e.target.value)}
                       onKeyPress={handleKeyPress}
                       placeholder="שאל את הכתבת..."
-                      className="flex-1 bg-[#001030] border-2 border-[#0080FF]/50 text-white placeholder:text-gray-400 focus:border-[#0080FF] rounded-xl text-sm h-12 px-4 shadow-lg"
+                      className="flex-1 bg-black border-2 border-gray-700 text-white placeholder:text-gray-400 focus:border-gray-600 rounded-xl text-sm h-12 px-4 shadow-lg"
                     />
 
                     <Button
                       onClick={handleSendMessage}
                       disabled={!inputMessage.trim()}
-                      className="bg-gradient-to-r from-[#0080FF] to-[#0066FF] hover:from-[#0066FF] hover:to-[#0080FF] text-white rounded-xl shadow-xl shadow-[#0080FF]/50 h-12 w-12 p-0 disabled:opacity-50"
+                      className="bg-black hover:bg-gray-900 text-white rounded-xl border-2 border-gray-700 shadow-xl h-12 w-12 p-0 disabled:opacity-50"
                     >
                       <Send className="w-5 h-5" />
                     </Button>
