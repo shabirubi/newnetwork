@@ -250,7 +250,7 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
                 <div className="p-4 border-b border-gray-800/50 bg-gradient-to-r from-gray-900 via-gray-950 to-gray-900">
                   <div className="flex items-center gap-2 mb-2">
                     <MessageCircle className="w-5 h-5 text-blue-400" />
-                    <h3 className="text-white font-bold">צ'אט עם {reporter.name}</h3>
+                    <h3 className="text-white font-bold">השיעור היומי עם {reporter.name}</h3>
                   </div>
                   <div className="flex items-center gap-2 text-xs text-gray-400">
                     <Users className="w-3.5 h-3.5" />
