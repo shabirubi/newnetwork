@@ -212,12 +212,12 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
               )}
 
               {/* D-ID Agent Iframe */}
-              <div className="absolute inset-0 overflow-hidden">
+              <div className="absolute inset-0 overflow-hidden" style={{ paddingBottom: isMobile ? '60px' : '0' }}>
                 <iframe
                   ref={iframeRef}
                   src={agentUrl}
                   allow="microphone; camera; autoplay"
-                  className="w-full h-full border-0 bg-[#000510]"
+                  className="w-full h-full border-0 bg-black"
                   style={{
                     transform: isMobile ? 'scale(1)' : 'scale(1.5)',
                     transformOrigin: 'top center'
