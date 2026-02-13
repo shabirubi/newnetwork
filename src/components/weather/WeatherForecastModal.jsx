@@ -46,34 +46,23 @@ export default function WeatherForecastModal({ isOpen, onClose }) {
           animate={{ scale: 1, y: 0 }}
           exit={{ scale: 0.9, y: 20 }}
           onClick={(e) => e.stopPropagation()}
-          className="bg-gradient-to-br from-blue-900 to-black rounded-2xl overflow-hidden w-full max-w-6xl shadow-2xl border border-blue-500/50 h-[95vh] sm:h-[90vh] flex flex-col"
+          className="bg-black rounded-3xl overflow-hidden w-full max-w-6xl shadow-2xl border-2 border-blue-500/30 h-[95vh] sm:h-[90vh] flex flex-col"
+          style={{
+            boxShadow: '0 25px 50px -12px rgba(0, 100, 255, 0.3)'
+          }}
         >
-          {/* Header */}
-          <div className="bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-500 p-4 flex items-center justify-between shrink-0 border-b border-blue-400/30">
-            <motion.img 
-              src={LOGO_URL}
-              alt="הרשת החדשה"
-              className="h-12 w-auto drop-shadow-2xl"
-              animate={{ 
-                scale: [1, 1.05, 1],
-                filter: ['brightness(1)', 'brightness(1.2)', 'brightness(1)']
-              }}
-              transition={{ 
-                duration: 3, 
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-            />
-            <div className="text-right flex-1 px-4">
+          {/* D-ID Style Header */}
+          <div className="bg-gradient-to-r from-blue-500 via-blue-400 to-cyan-400 p-4 flex items-center justify-between shrink-0">
+            <div className="text-white font-bold text-sm">הרשת החדשה</div>
+            <div className="text-center flex-1">
               <div className="flex items-center justify-center gap-2">
-                <Cloud className="w-6 h-6 text-white drop-shadow-lg" />
-                <div className="text-white font-bold text-xl drop-shadow-lg">תחזיתן הרשת</div>
+                <Cloud className="w-5 h-5 text-white" />
+                <div className="text-white font-bold">תחזיתן הרשת</div>
               </div>
-              <div className="text-white/90 text-sm">שיחה חיה עם בינה מלאכותית</div>
             </div>
             <button
               onClick={onClose}
-              className="w-10 h-10 rounded-full bg-red-500/30 hover:bg-red-500/50 flex items-center justify-center transition-colors border border-red-400/50"
+              className="w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 flex items-center justify-center transition-colors border border-white/30"
             >
               <X className="w-5 h-5 text-white" />
             </button>
@@ -110,14 +99,14 @@ export default function WeatherForecastModal({ isOpen, onClose }) {
             />
           </div>
 
-          {/* Footer */}
-          <div className="bg-gradient-to-r from-blue-600 via-blue-500 to-cyan-500 p-3 border-t border-blue-400/30 flex items-center justify-center">
+          {/* D-ID Style Footer */}
+          <div className="bg-gradient-to-r from-blue-500 via-blue-400 to-cyan-400 p-3 flex items-center justify-center">
             <div className="flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full border border-white/30">
               <span className="relative flex h-3 w-3">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-3 w-3 bg-white"></span>
               </span>
-              <span className="text-white font-bold">שיחה חיה</span>
+              <span className="text-white font-bold text-sm">תחזיה חיה</span>
             </div>
           </div>
         </motion.div>
