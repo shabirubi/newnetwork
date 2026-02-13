@@ -251,24 +251,23 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
 
             {/* Chat Panel - Mobile (Bottom) */}
             {isMobile && (
-              <div className="fixed bottom-16 left-0 right-0 bg-black border-t-2 border-black z-[999999]">
-                {/* Input Area - Always Visible */}
-                <div className="p-3 bg-black">
+              <div className="fixed bottom-16 left-0 right-0 bg-black border-t border-black z-[999999]">
+                <div className="p-2 bg-black">
                   <div className="flex gap-2">
                     <Input
                       value={inputMessage}
                       onChange={(e) => setInputMessage(e.target.value)}
                       onKeyPress={handleKeyPress}
                       placeholder="שאל שאלה..."
-                      className="flex-1 bg-black border-2 border-black text-white placeholder:text-gray-500 focus:border-black rounded-xl text-base h-12 px-4"
+                      className="flex-1 bg-black border border-black text-white placeholder:text-gray-500 focus:border-black rounded-lg text-sm h-10 px-3"
                     />
 
                     <Button
                       onClick={handleSendMessage}
                       disabled={!inputMessage.trim()}
-                      className="bg-black hover:bg-black text-white rounded-xl border-2 border-black h-12 w-12 p-0 disabled:opacity-50"
+                      className="bg-black hover:bg-black text-white rounded-lg border border-black h-10 w-10 p-0 disabled:opacity-50"
                     >
-                      <Send className="w-5 h-5" />
+                      <Send className="w-4 h-4" />
                     </Button>
                   </div>
                 </div>
