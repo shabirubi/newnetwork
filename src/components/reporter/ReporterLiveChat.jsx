@@ -212,9 +212,9 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
           </div>
 
           {/* Main Content - Avatar + Chat */}
-          <div className="flex-1 flex overflow-hidden">
+          <div className="flex-1 flex flex-col overflow-hidden">
             {/* Avatar Section */}
-            <div className="flex-1 relative">
+            <div className={`relative ${isMobile ? 'h-[60vh]' : 'flex-1'}`}>
               {/* Loading State */}
               {isLoading && (
                 <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[#000510] via-[#001030] to-[#000510] z-20">
@@ -244,124 +244,23 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
 
             {/* Chat Panel - Desktop */}
             {!isMobile && (
-              <div className="w-80 sm:w-96 bg-gradient-to-b from-[#001030] via-[#000510] to-[#001030] border-r-4 border-[#0080FF]/20 flex flex-col">
-              {/* Chat Header */}
-              <div className="bg-gradient-to-r from-[#0080FF]/15 to-transparent p-4 border-b-2 border-[#0080FF]/20">
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-2">
-                    <MessageCircle className="w-5 h-5 text-[#0080FF]" />
-                    <span className="text-white font-bold">צ'אט AI</span>
-                  </div>
-                  <div className="flex items-center gap-1 text-xs bg-green-500/20 px-2 py-1 rounded-full">
-                    <span className="relative flex h-2 w-2">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500"></span>
-                    </span>
-                    <span className="text-white font-bold">מחובר</span>
-                  </div>
-                </div>
-                <p className="text-gray-400 text-xs">שאל שאלות וקבל תשובות מהכתב</p>
-              </div>
-
-              {/* Messages Area */}
-              <div className="flex-1 overflow-y-auto p-4 space-y-3">
-                {chatMessages.length === 0 ? (
-                  <div className="text-center text-gray-500 mt-12">
-                    <MessageCircle className="w-12 h-12 mx-auto mb-3 opacity-30" />
-                    <p className="text-sm">שאל שאלה</p>
-                    <p className="text-xs mt-2">הכתב ישיב לך בכתב</p>
-                  </div>
-                ) : (
-                  chatMessages.map((msg, idx) => (
-                    <motion.div
-                      key={idx}
-                      initial={{ opacity: 0, x: msg.sender === 'user' ? 20 : -20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-                    >
-                      <div
-                        className={`max-w-[85%] p-3 rounded-2xl ${
-                          msg.sender === 'user'
-                            ? 'bg-gradient-to-br from-[#0080FF] to-[#0066FF] text-white shadow-lg shadow-[#0080FF]/30'
-                            : 'bg-[#001540]/80 text-gray-100 border border-[#0080FF]/20'
-                        }`}
-                      >
-                        {msg.userName && (
-                          <p className="text-xs font-bold mb-1 opacity-80">{msg.userName}</p>
-                        )}
-                        <p className="text-sm leading-relaxed">{msg.text}</p>
-
-                        {msg.files && msg.files.length > 0 && (
-                          <div className="mt-2 space-y-1">
-                            {msg.files.map((file, fileIdx) => (
-                              <div key={fileIdx} className="flex items-center gap-2 text-xs bg-black/20 rounded-lg p-2">
-                                {file.type.startsWith('image/') ? (
-                                  <ImageIcon className="w-4 h-4" />
-                                ) : (
-                                  <FileText className="w-4 h-4" />
-                                )}
-                                <span className="flex-1 truncate">{file.name}</span>
-                                <span className="text-xs opacity-60">{(file.size / 1024).toFixed(1)}KB</span>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-
-                        <p className="text-xs opacity-60 mt-1">
-                          {msg.timestamp.toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' })}
-                        </p>
-                      </div>
-                    </motion.div>
-                  ))
-                )}
-                <div ref={messagesEndRef} />
-              </div>
-
-              {/* Input Area */}
-              <div className="p-4 bg-gradient-to-t from-[#000510] to-transparent border-t-2 border-[#0080FF]/20">
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  multiple
-                  accept="image/*,video/*,.pdf,.doc,.docx,.txt"
-                  onChange={handleFileUpload}
-                  className="hidden"
-                />
-
-                <div className="flex gap-2 mb-3">
-                  <Input
-                    value={inputMessage}
-                    onChange={(e) => setInputMessage(e.target.value)}
-                    onKeyPress={handleKeyPress}
-                    placeholder="הקלד הודעה..."
-                    className="flex-1 bg-[#001030] border-[#0080FF]/20 text-white placeholder:text-gray-500 focus:border-[#0080FF] rounded-xl"
-                  />
-
-                  <Button
-                    onClick={handleSendMessage}
-                    disabled={!inputMessage.trim()}
-                    className="bg-gradient-to-r from-[#0080FF] to-[#0066FF] hover:from-[#0066FF] hover:to-[#0080FF] text-white rounded-xl shadow-lg shadow-[#0080FF]/30 px-4"
-                  >
-                    <Send className="w-4 h-4" />
-                  </Button>
-                </div>
-
-                <p className="text-xs text-gray-500 text-center">שאל שאלות וקבל תשובות מהכתב</p>
-              </div>
+              <div className="w-80 sm:w-96 bg-gradient-to-b from-[#001030] via-[#000510] to-[#001030] border-r-4 border-[#0080FF]/20 flex flex-col absolute left-0 top-0 bottom-0">
+...
             </div>
             )}
 
             {/* Chat Panel - Mobile (Bottom) */}
             {isMobile && (
-              <div className="fixed bottom-16 left-0 right-0 bg-black border-2 border-gray-700 z-[999999] shadow-2xl">
+              <div className="flex-1 bg-black border-t-2 border-gray-700 flex flex-col">
                 {/* Messages Preview - Scrollable */}
-                <div className="h-32 overflow-y-auto px-3 py-2 space-y-2">
+                <div className="flex-1 overflow-y-auto px-3 py-2 space-y-2">
                   {chatMessages.length === 0 ? (
-                    <div className="text-center py-2">
-                      <p className="text-gray-400 text-xs">שאל שאלה...</p>
+                    <div className="text-center py-4">
+                      <MessageCircle className="w-8 h-8 mx-auto mb-2 text-gray-600" />
+                      <p className="text-gray-400 text-sm">שאל שאלה...</p>
                     </div>
                   ) : (
-                    chatMessages.slice(-3).map((msg, idx) => (
+                    chatMessages.map((msg, idx) => (
                       <motion.div
                         key={idx}
                         initial={{ opacity: 0, y: 10 }}
@@ -369,10 +268,10 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
                         className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                       >
                         <div
-                          className={`max-w-[80%] p-2 rounded-xl text-xs ${
+                          className={`max-w-[80%] p-3 rounded-xl text-sm ${
                             msg.sender === 'user'
-                              ? 'bg-black text-white border-2 border-gray-700 shadow-lg'
-                              : 'bg-black text-gray-100 border-2 border-gray-700'
+                              ? 'bg-gray-800 text-white border border-gray-700'
+                              : 'bg-gray-900 text-gray-100 border border-gray-700'
                           }`}
                         >
                           <p className="leading-relaxed">{msg.text}</p>
@@ -380,23 +279,24 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
                       </motion.div>
                     ))
                   )}
+                  <div ref={messagesEndRef} />
                 </div>
 
                 {/* Input Area */}
-                <div className="px-3 py-3 bg-black border-t border-gray-800">
+                <div className="p-3 bg-black border-t-2 border-gray-700">
                   <div className="flex gap-2">
                     <Input
                       value={inputMessage}
                       onChange={(e) => setInputMessage(e.target.value)}
                       onKeyPress={handleKeyPress}
-                      placeholder="שאל את הכתבת..."
-                      className="flex-1 bg-black border-2 border-gray-700 text-white placeholder:text-gray-400 focus:border-gray-600 rounded-xl text-sm h-12 px-4 shadow-lg"
+                      placeholder="שאל שאלה..."
+                      className="flex-1 bg-gray-900 border border-gray-700 text-white placeholder:text-gray-500 focus:border-gray-600 rounded-xl text-base h-12 px-4"
                     />
 
                     <Button
                       onClick={handleSendMessage}
                       disabled={!inputMessage.trim()}
-                      className="bg-black hover:bg-gray-900 text-white rounded-xl border-2 border-gray-700 shadow-xl h-12 w-12 p-0 disabled:opacity-50"
+                      className="bg-gray-800 hover:bg-gray-700 text-white rounded-xl border border-gray-700 h-12 w-12 p-0 disabled:opacity-50"
                     >
                       <Send className="w-5 h-5" />
                     </Button>
