@@ -174,23 +174,33 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
           }}
         >
           {/* Premium Branded Header */}
-          <div className="relative bg-black p-3 border-b border-gray-800" style={{ direction: 'rtl' }}>
+          <div className="relative bg-gradient-to-r from-gray-900 via-gray-950 to-gray-900 p-4 border-b border-gray-800/50 backdrop-blur-xl" style={{ direction: 'rtl' }}>
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent"></div>
             <div className="relative flex items-center justify-between gap-4 w-full" style={{ direction: 'rtl' }}>
               <motion.img 
                 src={LOGO_URL}
                 alt="הרשת החדשה"
-                className="h-10 sm:h-12 w-auto shrink-0"
+                className="h-10 sm:h-12 w-auto shrink-0 drop-shadow-lg"
+                animate={{ 
+                  filter: ['brightness(1)', 'brightness(1.2)', 'brightness(1)']
+                }}
+                transition={{ 
+                  duration: 3, 
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
               />
               <div className="text-center flex-1 px-2">
-                <div className="text-white font-bold text-base sm:text-lg">{reporter.name}</div>
+                <div className="text-white font-bold text-base sm:text-lg mb-1">{reporter.name}</div>
                 <div className="flex items-center justify-center gap-2 text-xs">
-                  <Video className="w-3 h-3 text-red-500 animate-pulse" />
-                  <span className="text-gray-400">שיחת וידאו חיה</span>
+                  <Video className="w-3.5 h-3.5 text-red-500 animate-pulse" />
+                  <span className="text-gray-300 font-medium">שיחת וידאו חיה</span>
+                  <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
                 </div>
               </div>
               <button
                 onClick={onClose}
-                className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gray-900 hover:bg-gray-800 flex items-center justify-center transition-all shrink-0"
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-800/80 hover:bg-gray-700 border border-gray-700 flex items-center justify-center transition-all shrink-0 backdrop-blur-sm"
               >
                 <X className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
               </button>
