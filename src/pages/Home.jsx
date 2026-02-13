@@ -45,6 +45,7 @@ export default function Home() {
   const [categoriesMenuOpen, setCategoriesMenuOpen] = React.useState(false);
   const [a11yOpen, setA11yOpen] = React.useState(false);
   const [uploadVideoModalOpen, setUploadVideoModalOpen] = React.useState(false);
+  const [livePlayerOpen, setLivePlayerOpen] = React.useState(false);
 
   React.useEffect(() => {
     const handleOpenUpload = () => setUploadVideoModalOpen(true);
@@ -58,7 +59,6 @@ export default function Home() {
   }, []);
   const [reportersModalOpen, setReportersModalOpen] = React.useState(false);
   const [liveAvatarChatOpen, setLiveAvatarChatOpen] = React.useState(false);
-  const [showLivePlayer, setShowLivePlayer] = React.useState(false);
   const [liveChatOpen, setLiveChatOpen] = React.useState(false);
   const [selectedReporterForChat, setSelectedReporterForChat] = React.useState(null);
   const [weatherChatOpen, setWeatherChatOpen] = React.useState(false);
@@ -237,6 +237,17 @@ export default function Home() {
           <Radio className="w-6 h-6 drop-shadow-[0_0_5px_#E31E24]" />
         </motion.button>
       )}
+
+      {/* Live Player Section */}
+      <section className="px-4 mb-8">
+        <LivePlayer 
+          title={finalTitle}
+          isLive={!!activeLive?.is_active}
+          viewerCount={activeLive?.viewer_count || 3456}
+          streamUrl={finalStreamUrl}
+          thumbnailUrl={finalThumbnail}
+        />
+      </section>
 
       {/* Featured Article Section - Full Screen */}
       <section className="px-0 mb-4 -mx-4 sm:mx-0 mt-2">
