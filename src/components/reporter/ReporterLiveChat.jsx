@@ -251,19 +251,9 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
 
             {/* Chat Panel - Mobile (Bottom) */}
             {isMobile && (
-              <div className="flex-1 bg-black border-t-2 border-black flex flex-col">
-                {/* Messages Preview - Hidden when chat active */}
-                {chatMessages.length === 0 && (
-                  <div className="flex-1 overflow-y-auto px-3 py-2">
-                    <div className="text-center py-4">
-                      <MessageCircle className="w-8 h-8 mx-auto mb-2 text-gray-600" />
-                      <p className="text-gray-400 text-sm">שאל שאלה...</p>
-                    </div>
-                  </div>
-                )}
-
+              <div className="fixed bottom-16 left-0 right-0 bg-black border-t-2 border-black z-[999999]">
                 {/* Input Area - Always Visible */}
-                <div className="p-3 bg-black border-t-2 border-black">
+                <div className="p-3 bg-black">
                   <div className="flex gap-2">
                     <Input
                       value={inputMessage}
