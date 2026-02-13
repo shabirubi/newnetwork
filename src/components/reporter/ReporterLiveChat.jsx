@@ -161,15 +161,14 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
           animate={{ scale: 1, y: 0 }}
           exit={{ scale: 0.9, y: isMobile ? '100%' : 20 }}
           onClick={(e) => e.stopPropagation()}
-          className={`bg-gradient-to-br from-[#000510] via-[#001030] to-[#000510] overflow-hidden shadow-2xl border-[#0080FF]/40 flex flex-col ${
-            isMobile ? 'w-full h-full rounded-none border-0' : 'rounded-3xl border-4'
+          className={`bg-black overflow-hidden flex flex-col ${
+            isMobile ? 'w-full h-full rounded-none' : 'rounded-2xl border border-gray-800'
           }`}
           style={{
             width: isMobile ? '100%' : '1000px',
             height: isMobile ? '100%' : '550px',
             maxWidth: isMobile ? '100%' : '90vw',
             maxHeight: isMobile ? '100%' : '90vh',
-            boxShadow: '0 0 80px rgba(0, 128, 255, 0.4), inset 0 0 60px rgba(0, 128, 255, 0.05)',
             direction: 'rtl'
           }}
         >
