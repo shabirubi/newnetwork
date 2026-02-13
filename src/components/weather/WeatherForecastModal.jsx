@@ -123,14 +123,12 @@ export default function WeatherForecastModal({ isOpen, onClose }) {
                   title="Weather Forecast Chat"
                   style={{
                     width: '100%',
-                    height: '100%',
+                    height: '150%',
                     objectFit: 'cover',
                     position: 'absolute',
-                    top: '-10%',
+                    top: '-15%',
                     left: '0',
-                    transform: 'scale(1.2)',
-                    transformOrigin: 'top center',
-                    clipPath: 'inset(15% 0 35% 0)'
+                    clipPath: 'inset(20% 0 40% 0)'
                   }}
                 />
               </div>
