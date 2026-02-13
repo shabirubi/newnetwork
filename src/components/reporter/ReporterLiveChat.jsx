@@ -245,7 +245,7 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
 
             {/* Chat Panel - Desktop */}
             {!isMobile && (
-              <div className="w-80 sm:w-96 bg-black border-l border-gray-800 flex flex-col absolute left-0 top-0 bottom-0">
+              <div className="w-80 sm:w-96 bg-gradient-to-b from-gray-950 to-black border-l border-gray-800/50 flex flex-col absolute left-0 top-0 bottom-0 shadow-2xl backdrop-blur-xl">
 ...
 ...
             </div>
