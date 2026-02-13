@@ -225,9 +225,9 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
                 </div>
               )}
 
-              {/* D-ID Agent Iframe - Right Side */}
-              <div className="absolute inset-0 overflow-hidden flex items-center justify-end" style={{ paddingBottom: isMobile ? '120px' : '0px' }}>
-                <div className={`relative ${isMobile ? 'w-full h-full' : 'w-1/2 h-[100%]'} overflow-hidden`}>
+              {/* D-ID Agent Iframe - Center */}
+              <div className="absolute inset-0 overflow-hidden flex items-center justify-center" style={{ paddingBottom: isMobile ? '120px' : '0px' }}>
+                <div className={`relative ${isMobile ? 'w-full h-full' : 'w-2/3 h-[100%]'} overflow-hidden`}>
                   <iframe
                     ref={iframeRef}
                     src={agentUrl}
