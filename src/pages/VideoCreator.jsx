@@ -25,6 +25,8 @@ export default function VideoCreator() {
   const [duration, setDuration] = useState(0);
   const messagesEndRef = useRef(null);
   const videoRef = useRef(null);
+  const [playingAllScenes, setPlayingAllScenes] = useState(false);
+  const [currentPlayingScene, setCurrentPlayingScene] = useState(0);
   const [attachments, setAttachments] = useState([]);
   const [isRecording, setIsRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState(null);
@@ -334,6 +336,39 @@ export default function VideoCreator() {
     toast.success("כל הסצנות נוצרו!");
   };
 
+  const playAllScenes = () => {
+    const scenesWithVideo = scenes.filter(s => s.videoUrl);
+    if (scenesWithVideo.length === 0) {
+      toast.error("אין סצנות עם וידאו");
+      return;
+    }
+
+    setPlayingAllScenes(true);
+    setCurrentPlayingScene(0);
+    setCurrentScene(0);
+    
+    if (videoRef.current) {
+      videoRef.current.play();
+    }
+  };
+
+  const handleVideoEnded = () => {
+    if (playingAllScenes && currentPlayingScene < scenes.length - 1) {
+      const nextScene = currentPlayingScene + 1;
+      setCurrentPlayingScene(nextScene);
+      setCurrentScene(nextScene);
+      
+      setTimeout(() => {
+        if (videoRef.current) {
+          videoRef.current.play();
+        }
+      }, 100);
+    } else {
+      setPlayingAllScenes(false);
+      setIsPlaying(false);
+    }
+  };
+
   const handleCreateCustomAvatar = async (file) => {
     if (!file) return;
 
@@ -606,6 +641,7 @@ export default function VideoCreator() {
                   onLoadedMetadata={(e) => setDuration(e.target.duration)}
                   onPlay={() => setIsPlaying(true)}
                   onPause={() => setIsPlaying(false)}
+                  onEnded={handleVideoEnded}
                 />
               </div>
             ) : (
@@ -620,27 +656,29 @@ export default function VideoCreator() {
           </div>
 
           {/* Timeline Section */}
-          <div className="border-t border-gray-800 bg-black/40 backdrop-blur-xl p-4">
-            {/* Playback Controls */}
-            <div className="flex items-center gap-4 mb-4">
+          <div className="border-t border-gray-800 bg-gradient-to-b from-gray-950 to-black p-4">
+            {/* Main Playback Controls */}
+            <div className="flex items-center gap-3 mb-4 bg-gray-900/50 rounded-xl p-3 border border-gray-800">
               <div className="flex items-center gap-2">
                 <Button
                   size="sm"
-                  variant="outline"
+                  variant="ghost"
                   onClick={() => {
                     if (currentScene > 0) setCurrentScene(currentScene - 1);
                   }}
-                  disabled={currentScene === 0}
+                  disabled={currentScene === 0 || playingAllScenes}
+                  className="hover:bg-gray-800"
                 >
                   <SkipBack className="w-4 h-4" />
                 </Button>
                 <Button
                   size="sm"
-                  className="bg-[#E31E24]"
+                  className="bg-gradient-to-r from-[#E31E24] to-[#B91C1C] hover:from-[#B91C1C] hover:to-[#E31E24] w-10 h-10"
                   onClick={() => {
                     if (videoRef.current) {
                       if (isPlaying) {
                         videoRef.current.pause();
+                        setPlayingAllScenes(false);
                       } else {
                         videoRef.current.play();
                       }
@@ -648,44 +686,71 @@ export default function VideoCreator() {
                   }}
                   disabled={!scenes[currentScene]?.videoUrl}
                 >
-                  {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
+                  {isPlaying ? <Pause className="w-5 h-5" /> : <Play className="w-5 h-5" />}
                 </Button>
                 <Button
                   size="sm"
-                  variant="outline"
+                  variant="ghost"
                   onClick={() => {
                     if (currentScene < scenes.length - 1) setCurrentScene(currentScene + 1);
                   }}
-                  disabled={currentScene === scenes.length - 1}
+                  disabled={currentScene === scenes.length - 1 || playingAllScenes}
+                  className="hover:bg-gray-800"
                 >
                   <SkipForward className="w-4 h-4" />
                 </Button>
               </div>
 
+              <div className="h-8 w-px bg-gray-700" />
+
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={playAllScenes}
+                disabled={scenes.filter(s => s.videoUrl).length === 0 || playingAllScenes}
+                className="gap-2 bg-gradient-to-r from-purple-600/20 to-blue-600/20 border-purple-500/30 hover:from-purple-600/30 hover:to-blue-600/30"
+              >
+                <Play className="w-4 h-4" />
+                נגן הכל
+              </Button>
+
               <div className="flex-1">
-                <div className="flex items-center gap-2 text-xs text-gray-400">
-                  <span>{Math.floor(currentTime)}s</span>
-                  <div className="flex-1 h-1 bg-gray-700 rounded-full overflow-hidden">
+                <div className="flex items-center gap-3">
+                  <span className="text-xs text-gray-400 min-w-[40px]">{Math.floor(currentTime)}s</span>
+                  <div className="flex-1 h-2 bg-gray-800 rounded-full overflow-hidden relative">
                     <div 
-                      className="h-full bg-[#E31E24]"
+                      className="h-full bg-gradient-to-r from-[#E31E24] to-pink-500 transition-all"
                       style={{ width: `${(currentTime / duration) * 100}%` }}
                     />
                   </div>
-                  <span>{Math.floor(duration)}s</span>
+                  <span className="text-xs text-gray-400 min-w-[40px] text-left">{Math.floor(duration)}s</span>
                 </div>
               </div>
 
-              <div className="text-white text-sm font-medium">
-                {scenes.filter(s => s.videoUrl).length} / {scenes.length} סצנות
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-800/50 rounded-lg border border-gray-700">
+                <Video className="w-3.5 h-3.5 text-[#E31E24]" />
+                <span className="text-white text-sm font-medium">
+                  {scenes.filter(s => s.videoUrl).length}/{scenes.length}
+                </span>
               </div>
             </div>
 
             {/* Timeline Track */}
-            <div className="bg-gray-900 rounded-lg p-3">
-              <div className="flex items-center gap-2 mb-2">
-                <Video className="w-4 h-4 text-[#E31E24]" />
-                <span className="text-white text-sm font-bold">ציר זמן</span>
-                <span className="text-gray-400 text-xs">({getTotalDuration().toFixed(1)}s)</span>
+            <div className="bg-gradient-to-b from-gray-900 to-gray-950 rounded-xl p-4 border border-gray-800 shadow-lg">
+              <div className="flex items-center justify-between mb-3">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#E31E24] to-pink-600 flex items-center justify-center">
+                    <Video className="w-4 h-4 text-white" />
+                  </div>
+                  <div>
+                    <span className="text-white text-sm font-bold">ציר הזמן</span>
+                    <p className="text-gray-500 text-xs">גרור לסידור מחדש</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 px-3 py-1.5 bg-gray-800/50 rounded-lg">
+                  <span className="text-gray-400 text-xs">משך כולל:</span>
+                  <span className="text-white text-sm font-bold">{getTotalDuration().toFixed(1)}s</span>
+                </div>
               </div>
               
               <DragDropContext onDragEnd={handleDragEnd}>
@@ -694,7 +759,8 @@ export default function VideoCreator() {
                     <div
                       {...provided.droppableProps}
                       ref={provided.innerRef}
-                      className="flex gap-2 overflow-x-auto pb-2"
+                      className="flex gap-3 overflow-x-auto pb-2 px-1"
+                      style={{ scrollbarWidth: 'thin' }}
                     >
                       {scenes.map((scene, index) => (
                         <Draggable key={scene.id} draggableId={String(scene.id)} index={index}>
@@ -704,34 +770,46 @@ export default function VideoCreator() {
                               {...provided.draggableProps}
                               {...provided.dragHandleProps}
                               onClick={() => setCurrentScene(index)}
-                              className={`min-w-[120px] rounded-lg overflow-hidden cursor-pointer transition-all ${
+                              className={`min-w-[140px] rounded-xl overflow-hidden cursor-pointer transition-all border-2 ${
                                 currentScene === index
-                                  ? "ring-2 ring-[#E31E24] scale-105"
-                                  : "hover:scale-105"
-                              } ${snapshot.isDragging ? "opacity-50" : ""}`}
+                                  ? "border-[#E31E24] shadow-lg shadow-[#E31E24]/50 scale-105"
+                                  : "border-gray-700 hover:border-gray-600 hover:scale-[1.02]"
+                              } ${snapshot.isDragging ? "opacity-50 rotate-3" : ""}`}
                             >
-                              <div className="relative">
+                              <div className="relative group">
                                 {scene.videoUrl ? (
-                                  <video
-                                    src={scene.videoUrl}
-                                    className="w-full h-20 object-cover bg-black"
-                                  />
+                                  <>
+                                    <video
+                                      src={scene.videoUrl}
+                                      className="w-full h-24 object-cover bg-black"
+                                    />
+                                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all" />
+                                  </>
                                 ) : (
-                                  <div className="w-full h-20 bg-gray-800 flex items-center justify-center">
+                                  <div className="w-full h-24 bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center relative">
                                     <img
                                       src={scene.thumbnail}
                                       alt={scene.avatarName}
-                                      className="w-12 h-12 rounded-full object-cover opacity-50"
+                                      className="w-14 h-14 rounded-full object-cover opacity-40"
                                     />
+                                    <div className="absolute inset-0 flex items-center justify-center">
+                                      <Sparkles className="w-6 h-6 text-gray-600" />
+                                    </div>
                                   </div>
                                 )}
-                                <div className="absolute top-1 right-1 flex gap-1">
+                                
+                                <div className="absolute top-2 left-2 bg-black/80 backdrop-blur-sm rounded-full px-2 py-0.5 text-[10px] text-white font-bold">
+                                  #{index + 1}
+                                </div>
+
+                                <div className="absolute top-2 right-2 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
                                   <button
                                     onClick={(e) => {
                                       e.stopPropagation();
                                       duplicateScene(index);
                                     }}
-                                    className="p-1 bg-black/60 rounded hover:bg-black/80"
+                                    className="p-1.5 bg-gray-900/90 backdrop-blur-sm rounded-lg hover:bg-blue-600 transition-colors"
+                                    title="שכפל"
                                   >
                                     <Copy className="w-3 h-3 text-white" />
                                   </button>
@@ -741,18 +819,33 @@ export default function VideoCreator() {
                                         e.stopPropagation();
                                         deleteScene(index);
                                       }}
-                                      className="p-1 bg-black/60 rounded hover:bg-red-600"
+                                      className="p-1.5 bg-gray-900/90 backdrop-blur-sm rounded-lg hover:bg-red-600 transition-colors"
+                                      title="מחק"
                                     >
                                       <Trash2 className="w-3 h-3 text-white" />
                                     </button>
                                   )}
                                 </div>
+
+                                {playingAllScenes && currentPlayingScene === index && (
+                                  <div className="absolute inset-0 bg-[#E31E24]/20 border-2 border-[#E31E24] flex items-center justify-center">
+                                    <div className="w-8 h-8 rounded-full bg-[#E31E24] flex items-center justify-center animate-pulse">
+                                      <Play className="w-4 h-4 text-white" />
+                                    </div>
+                                  </div>
+                                )}
                               </div>
-                              <div className="bg-gray-800 px-2 py-1">
-                                <p className="text-white text-xs truncate">{scene.avatarName}</p>
-                                <p className="text-gray-400 text-[10px]">
-                                  {scene.duration ? `${scene.duration.toFixed(1)}s` : 'טרם נוצר'}
-                                </p>
+                              
+                              <div className="bg-gradient-to-b from-gray-800 to-gray-900 px-3 py-2">
+                                <p className="text-white text-xs font-medium truncate">{scene.avatarName}</p>
+                                <div className="flex items-center justify-between mt-1">
+                                  <p className="text-gray-400 text-[10px]">
+                                    {scene.duration ? `${scene.duration.toFixed(1)}s` : 'לא נוצר'}
+                                  </p>
+                                  {scene.videoUrl && (
+                                    <div className="w-1.5 h-1.5 rounded-full bg-green-500" />
+                                  )}
+                                </div>
                               </div>
                             </div>
                           )}
