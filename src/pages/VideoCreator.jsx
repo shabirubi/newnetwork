@@ -753,18 +753,29 @@ export default function VideoCreator() {
                 </div>
               </div>
               
-              <DragDropContext onDragEnd={handleDragEnd}>
-                <Droppable droppableId="timeline" direction="horizontal">
-                  {(provided) => (
-                    <div
-                      {...provided.droppableProps}
-                      ref={provided.innerRef}
-                      className="flex gap-3 overflow-x-auto overflow-y-visible pb-2 px-1 min-h-[160px]"
-                      style={{ 
-                        scrollbarWidth: 'thin',
-                        scrollbarColor: '#E31E24 #1f2937'
-                      }}
-                    >
+              <div className="relative">
+                <DragDropContext onDragEnd={handleDragEnd}>
+                  <Droppable droppableId="timeline" direction="horizontal">
+                    {(provided) => (
+                      <div
+                        {...provided.droppableProps}
+                        ref={provided.innerRef}
+                        className="flex gap-3 pb-2 px-1 min-h-[160px]"
+                        style={{ 
+                          overflowX: 'scroll',
+                          overflowY: 'visible',
+                          WebkitOverflowScrolling: 'touch',
+                          scrollbarWidth: 'thin',
+                          scrollbarColor: '#E31E24 #1f2937',
+                          cursor: 'grab'
+                        }}
+                        onMouseDown={(e) => {
+                          e.currentTarget.style.cursor = 'grabbing';
+                        }}
+                        onMouseUp={(e) => {
+                          e.currentTarget.style.cursor = 'grab';
+                        }}
+                      >
                       {scenes.map((scene, index) => (
                         <Draggable key={scene.id} draggableId={String(scene.id)} index={index}>
                           {(provided, snapshot) => (
@@ -855,10 +866,28 @@ export default function VideoCreator() {
                         </Draggable>
                       ))}
                       {provided.placeholder}
-                    </div>
-                  )}
-                </Droppable>
-              </DragDropContext>
+                      </div>
+                    )}
+                  </Droppable>
+                </DragDropContext>
+                
+                <style>{`
+                  .flex::-webkit-scrollbar {
+                    height: 8px;
+                  }
+                  .flex::-webkit-scrollbar-track {
+                    background: #1f2937;
+                    border-radius: 4px;
+                  }
+                  .flex::-webkit-scrollbar-thumb {
+                    background: #E31E24;
+                    border-radius: 4px;
+                  }
+                  .flex::-webkit-scrollbar-thumb:hover {
+                    background: #B91C1C;
+                  }
+                `}</style>
+              </div>
             </div>
           </div>
         </div>
