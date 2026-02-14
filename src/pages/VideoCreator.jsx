@@ -40,6 +40,10 @@ export default function VideoCreator() {
   const [customAvatars, setCustomAvatars] = useState([]);
   const [isCreatingAvatar, setIsCreatingAvatar] = useState(false);
   const customAvatarInputRef = useRef(null);
+  const [audioTrack, setAudioTrack] = useState(null);
+  const [audioVolume, setAudioVolume] = useState(0.5);
+  const audioInputRef = useRef(null);
+  const audioPlayerRef = useRef(null);
 
   // Fetch reporters
   const { data: reporters = [] } = useQuery({
@@ -404,6 +408,31 @@ export default function VideoCreator() {
       setIsCreatingAvatar(false);
       if (customAvatarInputRef.current) {
         customAvatarInputRef.current.value = '';
+      }
+    }
+  };
+
+  const handleAudioUpload = async (file) => {
+    if (!file) return;
+
+    toast.loading("מעלה קובץ אודיו...", { id: 'audio-upload' });
+
+    try {
+      const { data } = await base44.integrations.Core.UploadFile({ file });
+      
+      setAudioTrack({
+        url: data.file_url,
+        name: file.name,
+        duration: 0
+      });
+      
+      toast.success(`הקובץ "${file.name}" הועלה בהצלחה! 🎵`, { id: 'audio-upload' });
+    } catch (err) {
+      console.error('Audio upload error:', err);
+      toast.error('שגיאה בהעלאת קובץ אודיו', { id: 'audio-upload' });
+    } finally {
+      if (audioInputRef.current) {
+        audioInputRef.current.value = '';
       }
     }
   };
@@ -887,6 +916,108 @@ export default function VideoCreator() {
                     background: #B91C1C;
                   }
                 `}</style>
+              </div>
+
+              {/* Audio Track */}
+              <div className="mt-4 bg-gradient-to-b from-gray-900 to-gray-950 rounded-xl p-4 border border-gray-800 shadow-lg">
+                <div className="flex items-center justify-between mb-3">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center">
+                      <Volume2 className="w-4 h-4 text-white" />
+                    </div>
+                    <div>
+                      <span className="text-white text-sm font-bold">רצועת אודיו</span>
+                      <p className="text-gray-500 text-xs">מוזיקת רקע או קול</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <input
+                      ref={audioInputRef}
+                      type="file"
+                      accept="audio/*,.mp3,.wav,.m4a"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) handleAudioUpload(file);
+                      }}
+                      className="hidden"
+                    />
+                    <Button
+                      size="sm"
+                      variant="outline"
+                      onClick={() => audioInputRef.current?.click()}
+                      className="gap-1"
+                    >
+                      <Plus className="w-3 h-3" />
+                      העלה אודיו
+                    </Button>
+                  </div>
+                </div>
+
+                {audioTrack ? (
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-3 p-3 bg-gray-800/50 rounded-lg border border-gray-700">
+                      <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center flex-shrink-0">
+                        <Volume2 className="w-5 h-5 text-white" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-white text-sm font-medium truncate">{audioTrack.name}</p>
+                        <p className="text-gray-400 text-xs">מוזיקת רקע</p>
+                      </div>
+                      <button
+                        onClick={() => {
+                          setAudioTrack(null);
+                          if (audioPlayerRef.current) {
+                            audioPlayerRef.current.pause();
+                          }
+                        }}
+                        className="p-2 hover:bg-red-500/20 rounded-lg transition-colors"
+                      >
+                        <Trash2 className="w-4 h-4 text-red-400" />
+                      </button>
+                    </div>
+
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="text-gray-400 text-xs">עוצמת אודיו</span>
+                        <span className="text-white text-xs font-medium">{Math.round(audioVolume * 100)}%</span>
+                      </div>
+                      <input
+                        type="range"
+                        min="0"
+                        max="1"
+                        step="0.01"
+                        value={audioVolume}
+                        onChange={(e) => {
+                          const vol = parseFloat(e.target.value);
+                          setAudioVolume(vol);
+                          if (audioPlayerRef.current) {
+                            audioPlayerRef.current.volume = vol;
+                          }
+                        }}
+                        className="w-full h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer"
+                        style={{
+                          background: `linear-gradient(to right, #E31E24 0%, #E31E24 ${audioVolume * 100}%, #374151 ${audioVolume * 100}%, #374151 100%)`
+                        }}
+                      />
+                    </div>
+
+                    <audio
+                      ref={audioPlayerRef}
+                      src={audioTrack.url}
+                      className="w-full"
+                      controls
+                      onLoadedMetadata={(e) => {
+                        setAudioTrack({...audioTrack, duration: e.target.duration});
+                      }}
+                    />
+                  </div>
+                ) : (
+                  <div className="text-center py-8 border-2 border-dashed border-gray-700 rounded-lg">
+                    <Volume2 className="w-12 h-12 text-gray-600 mx-auto mb-2" />
+                    <p className="text-gray-400 text-sm">גרור קובץ אודיו לכאן או לחץ "העלה אודיו"</p>
+                    <p className="text-gray-500 text-xs mt-1">תומך ב-MP3, WAV, M4A</p>
+                  </div>
+                )}
               </div>
             </div>
           </div>
