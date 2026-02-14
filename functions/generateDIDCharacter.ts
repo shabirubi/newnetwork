@@ -9,13 +9,15 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { script, avatar_id } = await req.json();
+    const { script, avatar_id, voice_id } = await req.json();
 
     if (!script || !avatar_id) {
       return Response.json({ 
         error: 'Script and avatar_id are required' 
       }, { status: 400 });
     }
+
+    const voiceId = voice_id || 'he-IL-AvriNeural';
 
     const DID_API_KEY = Deno.env.get('DID_API_KEY');
     if (!DID_API_KEY) {
@@ -37,7 +39,7 @@ Deno.serve(async (req) => {
           input: script,
           provider: {
             type: 'microsoft',
-            voice_id: 'he-IL-AvriNeural'
+            voice_id: voiceId
           }
         },
         source_url: avatar_id,

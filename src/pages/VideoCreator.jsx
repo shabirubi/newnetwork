@@ -51,6 +51,14 @@ export default function VideoCreator() {
     queryFn: () => base44.entities.Reporter.list()
   });
 
+  // Available voices for Hebrew
+  const hebrewVoices = [
+    { id: 'he-IL-AvriNeural', name: 'אברי (גבר)', gender: 'male' },
+    { id: 'he-IL-HilaNeural', name: 'הילה (אישה)', gender: 'female' },
+    { id: 'iw-IL-AvriNeural', name: 'אברי 2 (גבר)', gender: 'male' },
+    { id: 'iw-IL-HilaNeural', name: 'הילה 2 (אישה)', gender: 'female' }
+  ];
+
   // Scene management - default to first reporter
   const [scenes, setScenes] = useState([
     {
@@ -59,7 +67,8 @@ export default function VideoCreator() {
       avatarName: reporters[0]?.name || "",
       script: "",
       videoUrl: null,
-      thumbnail: reporters[0]?.image || ""
+      thumbnail: reporters[0]?.image || "",
+      voice: 'he-IL-AvriNeural'
     }
   ]);
 
@@ -235,7 +244,8 @@ export default function VideoCreator() {
       avatarName: firstReporter?.name || "",
       script: "",
       videoUrl: null,
-      thumbnail: firstReporter?.image || ""
+      thumbnail: firstReporter?.image || "",
+      voice: 'he-IL-AvriNeural'
     }]);
     setCurrentScene(scenes.length);
   };
@@ -282,7 +292,8 @@ export default function VideoCreator() {
       
       const result = await base44.functions.invoke(functionName, {
         script: scene.script,
-        avatar_id: scene.avatar
+        avatar_id: scene.avatar,
+        voice_id: scene.voice || 'he-IL-AvriNeural'
       });
 
       if (result.data?.video_url) {
@@ -623,6 +634,21 @@ export default function VideoCreator() {
                   </div>
                 ))}
               </div>
+            </div>
+
+            <div>
+              <label className="text-white text-sm font-medium mb-2 block">בחר קול</label>
+              <select
+                value={scenes[currentScene]?.voice || 'he-IL-AvriNeural'}
+                onChange={(e) => updateScene(currentScene, "voice", e.target.value)}
+                className="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded-lg text-white text-sm"
+              >
+                {hebrewVoices.map((voice) => (
+                  <option key={voice.id} value={voice.id}>
+                    {voice.name}
+                  </option>
+                ))}
+              </select>
             </div>
 
             <div>
