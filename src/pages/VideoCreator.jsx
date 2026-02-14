@@ -284,11 +284,17 @@ export default function VideoCreator() {
     toast.loading("מייצר סרטון...", { id: 'gen-scene' });
     
     try {
+      console.log('🎬 Starting video generation for scene', index);
+      console.log('Scene data:', scene);
+      
       // Check if using custom avatar (D-ID) or reporter (HeyGen)
       const selectedAvatar = avatars.find(a => a.id === scene.avatar);
       const isCustomAvatar = selectedAvatar?.type === 'custom';
       
       const functionName = isCustomAvatar ? "generateDIDCharacter" : "generateHeyGenCharacter";
+      
+      console.log('Using function:', functionName);
+      console.log('Avatar type:', isCustomAvatar ? 'D-ID Custom' : 'HeyGen Reporter');
       
       const result = await base44.functions.invoke(functionName, {
         script: scene.script,
@@ -296,18 +302,24 @@ export default function VideoCreator() {
         voice_id: scene.voice || 'he-IL-AvriNeural'
       });
 
+      console.log('API Response:', result);
+
       if (result.data?.video_url) {
         const newScenes = [...scenes];
         newScenes[index].videoUrl = result.data.video_url;
         newScenes[index].duration = result.data.duration || 10;
         setScenes(newScenes);
         toast.success("הסרטון נוצר ונוסף לציר הזמן! 🎬", { id: 'gen-scene' });
+      } else if (result.data?.error) {
+        console.error('Generation error:', result.data.error);
+        toast.error(`שגיאה: ${result.data.error}`, { id: 'gen-scene' });
       } else {
-        toast.error("שגיאה ביצירת הסרטון", { id: 'gen-scene' });
+        console.error('Unexpected response format:', result);
+        toast.error("שגיאה ביצירת הסרטון - לא נתקבל קישור לסרטון", { id: 'gen-scene' });
       }
     } catch (err) {
-      console.error(err);
-      toast.error("שגיאה ביצירת הסרטון", { id: 'gen-scene' });
+      console.error('Generation failed:', err);
+      toast.error(`שגיאה: ${err.message || 'שגיאה לא ידועה'}`, { id: 'gen-scene' });
     } finally {
       setGenerating(false);
     }
