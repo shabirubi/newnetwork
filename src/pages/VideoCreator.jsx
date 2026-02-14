@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
-import { Send, Video, Loader2, Sparkles, Download, Plus, Trash2, MessageSquare, Home, Play, Pause, SkipBack, SkipForward, Scissors, Copy, Volume2, Paperclip, Mic, Camera, X } from "lucide-react";
+import { Send, Video, Loader2, Sparkles, Download, Plus, Trash2, MessageSquare, Home, Play, Pause, SkipBack, SkipForward, Scissors, Copy, Volume2, Paperclip, Mic, Camera, X, Shield } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
@@ -35,6 +35,9 @@ export default function VideoCreator() {
   const cameraVideoRef = useRef(null);
   const fileInputRef = useRef(null);
   const [didChatOpen, setDidChatOpen] = useState(false);
+  const [customAvatars, setCustomAvatars] = useState([]);
+  const [isCreatingAvatar, setIsCreatingAvatar] = useState(false);
+  const customAvatarInputRef = useRef(null);
 
   // Fetch reporters
   const { data: reporters = [] } = useQuery({
@@ -54,14 +57,23 @@ export default function VideoCreator() {
     }
   ]);
 
-  // Available avatars - only our reporters
-  const avatars = reporters.map(r => ({ 
-    id: r.id, 
-    name: r.name, 
-    image: r.image, 
-    gender: r.gender,
-    specialty: r.specialty
-  }));
+  // Available avatars - reporters + custom avatars
+  const avatars = [
+    ...reporters.map(r => ({ 
+      id: r.id, 
+      name: r.name, 
+      image: r.image, 
+      gender: r.gender,
+      specialty: r.specialty,
+      type: 'reporter'
+    })),
+    ...customAvatars.map(a => ({
+      id: a.avatar_id,
+      name: a.name,
+      image: a.avatar_url,
+      type: 'custom'
+    }))
+  ];
 
   useEffect(() => {
     const initConversation = async () => {
@@ -316,6 +328,45 @@ export default function VideoCreator() {
     toast.success("כל הסצנות נוצרו!");
   };
 
+  const handleCreateCustomAvatar = async (file) => {
+    if (!file) return;
+
+    setIsCreatingAvatar(true);
+    toast.loading("מעלה תמונה ויוצר אווטר מותאם אישית...", { id: 'custom-avatar' });
+
+    try {
+      // Upload image
+      const { data: uploadData } = await base44.integrations.Core.UploadFile({ file });
+      
+      // Create D-ID instant avatar
+      const result = await base44.functions.invoke('createDIDInstantAvatar', {
+        imageUrl: uploadData.file_url,
+        name: file.name.split('.')[0] || 'האווטר שלי'
+      });
+
+      if (result.data?.success) {
+        const newAvatar = {
+          avatar_id: result.data.avatar_id,
+          avatar_url: result.data.avatar_url,
+          name: result.data.name
+        };
+        
+        setCustomAvatars([...customAvatars, newAvatar]);
+        toast.success(`אווטר "${result.data.name}" נוצר בהצלחה! 🎭`, { id: 'custom-avatar' });
+      } else {
+        throw new Error(result.data?.error || 'שגיאה ביצירת אווטר');
+      }
+    } catch (err) {
+      console.error('Create avatar error:', err);
+      toast.error('שגיאה ביצירת אווטר מותאם אישית', { id: 'custom-avatar' });
+    } finally {
+      setIsCreatingAvatar(false);
+      if (customAvatarInputRef.current) {
+        customAvatarInputRef.current.value = '';
+      }
+    }
+  };
+
   return (
     <div className="h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex flex-col overflow-hidden" dir="rtl">
       {/* Header */}
@@ -443,13 +494,46 @@ export default function VideoCreator() {
           {/* Scene Editor */}
           <div className="flex-1 overflow-y-auto p-4 space-y-4">
             <div>
-              <label className="text-white text-sm font-medium mb-2 block">בחר אווטר</label>
+              <div className="flex items-center justify-between mb-2">
+                <label className="text-white text-sm font-medium">בחר אווטר</label>
+                <div>
+                  <input
+                    ref={customAvatarInputRef}
+                    type="file"
+                    accept="image/*"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) handleCreateCustomAvatar(file);
+                    }}
+                    className="hidden"
+                  />
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() => customAvatarInputRef.current?.click()}
+                    disabled={isCreatingAvatar}
+                    className="gap-1 text-xs"
+                  >
+                    {isCreatingAvatar ? (
+                      <>
+                        <Loader2 className="w-3 h-3 animate-spin" />
+                        יוצר...
+                      </>
+                    ) : (
+                      <>
+                        <Plus className="w-3 h-3" />
+                        העלה תמונה
+                      </>
+                    )}
+                  </Button>
+                </div>
+              </div>
               <div className="grid grid-cols-2 gap-2">
                 {avatars.map((avatar) => (
                   <div
                     key={avatar.id}
                     onClick={() => updateScene(currentScene, "avatar", avatar.id)}
-                    className={`cursor-pointer rounded-lg overflow-hidden border-2 transition-all ${
+                    className={`cursor-pointer rounded-lg overflow-hidden border-2 transition-all relative ${
                       scenes[currentScene]?.avatar === avatar.id
                         ? "border-[#E31E24]"
                         : "border-gray-700 hover:border-gray-600"
@@ -460,6 +544,11 @@ export default function VideoCreator() {
                       alt={avatar.name}
                       className="w-full aspect-square object-cover"
                     />
+                    {avatar.type === 'custom' && (
+                      <div className="absolute top-1 right-1 bg-purple-600 text-white text-[10px] px-1.5 py-0.5 rounded">
+                        מותאם
+                      </div>
+                    )}
                     <p className="text-white text-xs text-center py-1 bg-gray-900">{avatar.name}</p>
                   </div>
                 ))}
