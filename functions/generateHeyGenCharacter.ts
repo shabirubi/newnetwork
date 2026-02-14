@@ -15,9 +15,10 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Script is required' }, { status: 400 });
     }
 
-    // Default HeyGen avatar if not provided
-    const avatarId = avatar_id || 'Kristin_public_3_20240108';
-    const voiceId = voice_id || 'b5a94a36d2a6445b8a26eccf90a4aa00';
+    // Default HeyGen avatar and voice if not provided
+    // Using Hebrew-speaking avatar and matching voice
+    const avatarId = avatar_id || 'Angela_public_3_20240201'; 
+    const voiceId = voice_id || '1bd001e7e50f421d891986aad5158bc8'; // Julia Hebrew voice
 
     const apiKey = Deno.env.get('HEYGEN_API_KEY');
     
