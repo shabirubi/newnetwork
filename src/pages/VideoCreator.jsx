@@ -51,12 +51,16 @@ export default function VideoCreator() {
     queryFn: () => base44.entities.Reporter.list()
   });
 
-  // Available voices for Hebrew
-  const hebrewVoices = [
-    { id: 'he-IL-AvriNeural', name: 'אברי (גבר)', gender: 'male' },
-    { id: 'he-IL-HilaNeural', name: 'הילה (אישה)', gender: 'female' },
-    { id: 'iw-IL-AvriNeural', name: 'אברי 2 (גבר)', gender: 'male' },
-    { id: 'iw-IL-HilaNeural', name: 'הילה 2 (אישה)', gender: 'female' }
+  // Available voices - HeyGen voices for reporters, D-ID voices for custom avatars
+  const heygenVoices = [
+    { id: '1bd001e7e50f421d891986aad5158bc8', name: 'יוליה (אישה)', provider: 'heygen' },
+    { id: 'b5a94a36d2a6445b8a26eccf90a4aa00', name: 'דוד (גבר)', provider: 'heygen' },
+    { id: '2d5b0e6cf36f44d1b6e7d1d4f5c4e3f2', name: 'שרה (אישה)', provider: 'heygen' }
+  ];
+  
+  const didVoices = [
+    { id: 'he-IL-AvriNeural', name: 'אברי (גבר)', provider: 'did' },
+    { id: 'he-IL-HilaNeural', name: 'הילה (אישה)', provider: 'did' }
   ];
 
   // Scene management - default to first reporter
@@ -296,10 +300,12 @@ export default function VideoCreator() {
       console.log('Using function:', functionName);
       console.log('Avatar type:', isCustomAvatar ? 'D-ID Custom' : 'HeyGen Reporter');
       
+      const defaultVoice = isCustomAvatar ? 'he-IL-AvriNeural' : '1bd001e7e50f421d891986aad5158bc8';
+      
       const result = await base44.functions.invoke(functionName, {
         script: scene.script,
         avatar_id: scene.avatar,
-        voice_id: scene.voice || 'he-IL-AvriNeural'
+        voice_id: scene.voice || defaultVoice
       });
 
       console.log('API Response:', result);
@@ -651,15 +657,20 @@ export default function VideoCreator() {
             <div>
               <label className="text-white text-sm font-medium mb-2 block">בחר קול</label>
               <select
-                value={scenes[currentScene]?.voice || 'he-IL-AvriNeural'}
+                value={scenes[currentScene]?.voice || '1bd001e7e50f421d891986aad5158bc8'}
                 onChange={(e) => updateScene(currentScene, "voice", e.target.value)}
                 className="w-full px-3 py-2 bg-gray-900 border border-gray-700 rounded-lg text-white text-sm"
               >
-                {hebrewVoices.map((voice) => (
-                  <option key={voice.id} value={voice.id}>
-                    {voice.name}
-                  </option>
-                ))}
+                {(() => {
+                  const selectedAvatar = avatars.find(a => a.id === scenes[currentScene]?.avatar);
+                  const isCustom = selectedAvatar?.type === 'custom';
+                  const voiceList = isCustom ? didVoices : heygenVoices;
+                  return voiceList.map((voice) => (
+                    <option key={voice.id} value={voice.id}>
+                      {voice.name}
+                    </option>
+                  ));
+                })()}
               </select>
             </div>
 
