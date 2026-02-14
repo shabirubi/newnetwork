@@ -72,7 +72,7 @@ export default function VideoCreator() {
       script: "",
       videoUrl: null,
       thumbnail: reporters[0]?.image || "",
-      voice: 'he-IL-AvriNeural'
+      voice: '1bd001e7e50f421d891986aad5158bc8'
     }
   ]);
 
@@ -249,7 +249,7 @@ export default function VideoCreator() {
       script: "",
       videoUrl: null,
       thumbnail: firstReporter?.image || "",
-      voice: 'he-IL-AvriNeural'
+      voice: '1bd001e7e50f421d891986aad5158bc8'
     }]);
     setCurrentScene(scenes.length);
   };
