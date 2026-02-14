@@ -45,13 +45,18 @@ Deno.serve(async (req) => {
             type: 'text',
             input_text: script,
             voice_id: voiceId
+          },
+          background: {
+            type: 'color',
+            value: '#000000'
           }
         }],
+        test: true,
+        caption: false,
         dimension: {
           width: 1280,
           height: 720
-        },
-        aspect_ratio: '16:9'
+        }
       })
     });
 
@@ -78,11 +83,10 @@ Deno.serve(async (req) => {
     for (let i = 0; i < 90; i++) {
       await new Promise(r => setTimeout(r, 1000));
 
-      const statusRes = await fetch(`https://api.heygen.com/v2/video/${videoId}`, {
+      const statusRes = await fetch(`https://api.heygen.com/v1/video_status.get?video_id=${videoId}`, {
         method: 'GET',
         headers: {
-          'X-API-KEY': apiKey,
-          'Content-Type': 'application/json'
+          'X-Api-Key': apiKey
         }
       });
 
