@@ -4,115 +4,109 @@ Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
     const user = await base44.auth.me();
-    
+
     if (!user) {
       return Response.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const { image_url, text_script, voice_id = 'en-US-JennyNeural' } = await req.json();
-    
-    if (!image_url || !text_script) {
-      return Response.json({ error: 'image_url and text_script are required' }, { status: 400 });
+    const { script, avatar_id } = await req.json();
+
+    if (!script || !avatar_id) {
+      return Response.json({ 
+        error: 'Script and avatar_id are required' 
+      }, { status: 400 });
     }
 
-    const apiKey = Deno.env.get('DID_API_KEY');
-    
-    if (!apiKey) {
-      return Response.json({ error: 'DID API key not configured' }, { status: 500 });
+    const DID_API_KEY = Deno.env.get('DID_API_KEY');
+    if (!DID_API_KEY) {
+      return Response.json({ 
+        error: 'D-ID API key not configured' 
+      }, { status: 500 });
     }
 
-    console.log('Creating DID talking character...');
-
-    // Create talking video with DID API
-    const createResponse = await fetch('https://api.d-id.com/talks', {
+    // Create talking video with custom avatar
+    const response = await fetch('https://api.d-id.com/talks', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Basic ${apiKey}`
+        'Authorization': `Basic ${DID_API_KEY}`,
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        source_url: image_url,
         script: {
           type: 'text',
-          input: text_script,
+          input: script,
           provider: {
             type: 'microsoft',
-            voice_id: voice_id
+            voice_id: 'he-IL-AvriNeural'
           }
         },
+        source_url: avatar_id,
         config: {
-          stitch: true,
-          driver_expressions: {
-            expressions: [
-              { expression: 'happy', start_frame: 0, intensity: 0.5 },
-              { expression: 'serious', start_frame: 30, intensity: 0.8 }
-            ]
-          },
-          result_format: 'mp4'
+          fluent: true,
+          pad_audio: 0
         }
       })
     });
 
-    if (!createResponse.ok) {
-      const errorText = await createResponse.text();
-      console.error('DID API error:', errorText);
-      return Response.json({ error: 'DID API error: ' + errorText }, { status: createResponse.status });
+    if (!response.ok) {
+      const error = await response.text();
+      console.error('D-ID talks API error:', error);
+      return Response.json({ 
+        error: 'Failed to create video',
+        details: error 
+      }, { status: response.status });
     }
 
-    const createData = await createResponse.json();
-    console.log('DID create response:', createData);
-    
-    const talkId = createData.id;
+    const data = await response.json();
+    const talkId = data.id;
 
-    if (!talkId) {
-      console.error('No id in response:', createData);
-      return Response.json({ error: 'No talk ID returned from DID', details: createData }, { status: 500 });
-    }
-
-    // Poll for completion (max 2 minutes)
-    const maxAttempts = 24;
-    const pollInterval = 5000;
+    // Poll for video completion
+    let attempts = 0;
+    const maxAttempts = 60; // 5 minutes max
     
-    for (let i = 0; i < maxAttempts; i++) {
-      await new Promise(resolve => setTimeout(resolve, pollInterval));
+    while (attempts < maxAttempts) {
+      await new Promise(resolve => setTimeout(resolve, 5000)); // Wait 5 seconds
       
       const statusResponse = await fetch(`https://api.d-id.com/talks/${talkId}`, {
         headers: {
-          'Authorization': `Basic ${apiKey}`
+          'Authorization': `Basic ${DID_API_KEY}`
         }
       });
 
-      if (statusResponse.ok) {
-        const statusData = await statusResponse.json();
-        console.log(`Poll attempt ${i + 1}:`, statusData);
-        
-        if (statusData.status === 'done') {
-          const videoUrl = statusData.result_url;
-          if (videoUrl) {
-            return Response.json({
-              video_url: videoUrl,
-              thumbnail_url: image_url,
-              duration: statusData.duration || 5
-            });
-          }
-        }
-        
-        if (statusData.status === 'error') {
-          console.error('Generation failed:', statusData);
-          return Response.json({ error: 'Video generation failed', details: statusData }, { status: 500 });
-        }
-      } else {
-        console.error('Status check failed:', await statusResponse.text());
+      if (!statusResponse.ok) {
+        console.error('Failed to check video status');
+        attempts++;
+        continue;
       }
+
+      const statusData = await statusResponse.json();
+      
+      if (statusData.status === 'done') {
+        return Response.json({
+          success: true,
+          video_url: statusData.result_url,
+          duration: statusData.duration || 10
+        });
+      }
+      
+      if (statusData.status === 'error') {
+        return Response.json({ 
+          error: 'Video generation failed',
+          details: statusData.error 
+        }, { status: 500 });
+      }
+      
+      attempts++;
     }
 
     return Response.json({ 
-      still_processing: true,
-      talk_id: talkId,
-      message: 'התהליך לוקח זמן, נסה שוב בעוד דקה'
-    });
+      error: 'Video generation timeout' 
+    }, { status: 408 });
 
   } catch (error) {
-    return Response.json({ error: error.message }, { status: 500 });
+    console.error('Generate D-ID character error:', error);
+    return Response.json({ 
+      error: error.message || 'Internal server error' 
+    }, { status: 500 });
   }
 });

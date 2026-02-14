@@ -268,7 +268,13 @@ export default function VideoCreator() {
     toast.loading("מייצר סרטון...", { id: 'gen-scene' });
     
     try {
-      const result = await base44.functions.invoke("generateHeyGenCharacter", {
+      // Check if using custom avatar (D-ID) or reporter (HeyGen)
+      const selectedAvatar = avatars.find(a => a.id === scene.avatar);
+      const isCustomAvatar = selectedAvatar?.type === 'custom';
+      
+      const functionName = isCustomAvatar ? "generateDIDCharacter" : "generateHeyGenCharacter";
+      
+      const result = await base44.functions.invoke(functionName, {
         script: scene.script,
         avatar_id: scene.avatar
       });
