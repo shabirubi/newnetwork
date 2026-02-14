@@ -59,6 +59,7 @@ import Category from './pages/Category';
 import ChannelsManager from './pages/ChannelsManager';
 import DownloadReporterImages from './pages/DownloadReporterImages';
 import GenerateReporterImages from './pages/GenerateReporterImages';
+import HeyGenEditor from './pages/HeyGenEditor';
 import Home from './pages/Home';
 import Live from './pages/Live';
 import LumaStudio from './pages/LumaStudio';
@@ -84,7 +85,6 @@ import VODContent from './pages/VODContent';
 import VideoCreator from './pages/VideoCreator';
 import VideoEditor from './pages/VideoEditor';
 import WarRoom from './pages/WarRoom';
-import HeyGenEditor from './pages/HeyGenEditor';
 import __Layout from './Layout.jsx';
 
 
@@ -101,6 +101,7 @@ export const PAGES = {
     "ChannelsManager": ChannelsManager,
     "DownloadReporterImages": DownloadReporterImages,
     "GenerateReporterImages": GenerateReporterImages,
+    "HeyGenEditor": HeyGenEditor,
     "Home": Home,
     "Live": Live,
     "LumaStudio": LumaStudio,
@@ -126,7 +127,6 @@ export const PAGES = {
     "VideoCreator": VideoCreator,
     "VideoEditor": VideoEditor,
     "WarRoom": WarRoom,
-    "HeyGenEditor": HeyGenEditor,
 }
 
 export const pagesConfig = {

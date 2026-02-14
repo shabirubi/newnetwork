@@ -39,6 +39,7 @@ const TikTokNewsContainer = React.lazy(() => import("../components/home/TikTokNe
 const AllVideosGallery = React.lazy(() => import("../components/home/AllVideosGallery"));
 const KanArchiveContainer = React.lazy(() => import("../components/home/KanArchiveContainer"));
 const ReporterResponsesFeed = React.lazy(() => import("../components/home/ReporterResponsesFeed"));
+const TrendingVideosContainer = React.lazy(() => import("../components/home/TrendingVideosContainer"));
 
 export default function Home() {
   const [vodModalOpen, setVodModalOpen] = React.useState(false);
@@ -248,6 +249,13 @@ export default function Home() {
       <section className="px-0 sm:px-4 mb-8">
         <React.Suspense fallback={<Skeleton className="w-full h-64 bg-gray-800" />}>
           <RealTimeAlertsContainer />
+        </React.Suspense>
+      </section>
+
+      {/* Trending Videos - Popular Right Now */}
+      <section className="px-0 sm:px-4 mb-8">
+        <React.Suspense fallback={<Skeleton className="w-full h-96 bg-gray-800" />}>
+          <TrendingVideosContainer />
         </React.Suspense>
       </section>
 
