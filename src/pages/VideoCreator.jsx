@@ -736,7 +736,7 @@ export default function VideoCreator() {
             </div>
 
             {/* Timeline Track */}
-            <div className="bg-gradient-to-b from-gray-900 to-gray-950 rounded-xl p-4 border border-gray-800 shadow-lg">
+            <div className="bg-gradient-to-b from-gray-900 to-gray-950 rounded-xl p-4 border border-gray-800 shadow-lg overflow-hidden">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center gap-2">
                   <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#E31E24] to-pink-600 flex items-center justify-center">
@@ -759,8 +759,11 @@ export default function VideoCreator() {
                     <div
                       {...provided.droppableProps}
                       ref={provided.innerRef}
-                      className="flex gap-3 overflow-x-auto pb-2 px-1"
-                      style={{ scrollbarWidth: 'thin' }}
+                      className="flex gap-3 overflow-x-auto overflow-y-visible pb-2 px-1 min-h-[160px]"
+                      style={{ 
+                        scrollbarWidth: 'thin',
+                        scrollbarColor: '#E31E24 #1f2937'
+                      }}
                     >
                       {scenes.map((scene, index) => (
                         <Draggable key={scene.id} draggableId={String(scene.id)} index={index}>
