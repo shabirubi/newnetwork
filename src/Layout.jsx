@@ -205,37 +205,127 @@ export default function Layout({ children, currentPageName }) {
     return children;
   }
 
-  // אם האתר סגור - הצג מסך תחזוקה (למעט מנהלים)
+  // אם האתר סגור - הצג דף סגירה (למעט מנהלים)
   if (siteSettings?.is_closed && user?.role !== 'admin') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black flex items-center justify-center p-4" dir="rtl">
+      <div className="min-h-screen bg-gradient-to-br from-black via-[#001a40] to-black flex items-center justify-center p-4 relative overflow-hidden" dir="rtl">
+        {/* Animated Background */}
+        <div className="absolute inset-0">
+          <motion.div
+            className="absolute inset-0 opacity-20"
+            animate={{
+              backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"]
+            }}
+            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+            style={{
+              backgroundImage: "radial-gradient(circle, #0080FF 1px, transparent 1px)",
+              backgroundSize: "50px 50px"
+            }}
+          />
+        </div>
+
         <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{ opacity: 1, scale: 1 }}
-          className="max-w-2xl w-full"
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="max-w-4xl w-full relative z-10"
         >
-          <div className="bg-black/80 backdrop-blur-xl border-2 border-[#E31E24]/50 rounded-3xl p-8 sm:p-12 text-center shadow-2xl shadow-[#E31E24]/30">
-            <img 
-              src={LOGO_URL} 
-              alt="הרשת החדשה" 
-              className="h-24 w-auto mx-auto mb-6"
-            />
-            <h1 className="text-3xl sm:text-5xl font-bold text-white mb-4">
-              {siteSettings.closure_title || 'האתר בתחזוקה'}
-            </h1>
-            <p className="text-lg sm:text-xl text-gray-300 mb-6">
-              {siteSettings.closure_message || 'האתר נמצא כרגע בתחזוקה. נחזור בקרוב!'}
+          <div className="bg-black/90 backdrop-blur-2xl border-4 border-[#0080FF]/50 rounded-3xl p-8 sm:p-16 text-center shadow-[0_0_80px_rgba(0,128,255,0.4)]">
+            {/* Logo with Glow */}
+            <motion.div
+              animate={{
+                filter: [
+                  "drop-shadow(0 0 20px rgba(0,128,255,0.6))",
+                  "drop-shadow(0 0 40px rgba(0,128,255,0.9))",
+                  "drop-shadow(0 0 20px rgba(0,128,255,0.6))"
+                ]
+              }}
+              transition={{ duration: 2, repeat: Infinity }}
+              className="mb-8"
+            >
+              <img 
+                src={LOGO_URL} 
+                alt="הרשת החדשה" 
+                className="h-32 sm:h-40 w-auto mx-auto"
+              />
+            </motion.div>
+
+            {/* Title */}
+            <motion.h1 
+              className="text-4xl sm:text-6xl lg:text-7xl font-black text-white mb-6 leading-tight"
+              animate={{
+                textShadow: [
+                  "0 0 20px rgba(0,128,255,0.5)",
+                  "0 0 40px rgba(0,128,255,0.8)",
+                  "0 0 20px rgba(0,128,255,0.5)"
+                ]
+              }}
+              transition={{ duration: 2, repeat: Infinity }}
+            >
+              {siteSettings.closure_title || 'הרשת החדשה'}
+            </motion.h1>
+
+            {/* Message */}
+            <p className="text-2xl sm:text-3xl lg:text-4xl text-[#0080FF] font-bold mb-8 leading-relaxed">
+              {siteSettings.closure_message || 'רוקת עור וגידים'}
             </p>
+
+            {/* Estimated Reopen */}
             {siteSettings.estimated_reopen && (
-              <p className="text-md text-gray-400 mb-8">
-                זמן פתיחה משוער: {siteSettings.estimated_reopen}
-              </p>
+              <motion.div
+                animate={{ scale: [1, 1.05, 1] }}
+                transition={{ duration: 2, repeat: Infinity }}
+                className="inline-block"
+              >
+                <p className="text-xl sm:text-2xl text-white/80 mb-8 bg-[#0080FF]/20 px-8 py-4 rounded-2xl border-2 border-[#0080FF]/40">
+                  {siteSettings.estimated_reopen}
+                </p>
+              </motion.div>
             )}
-            <div className="flex items-center justify-center gap-2 text-[#E31E24]">
-              <Clock className="w-5 h-5 animate-pulse" />
-              <span className="text-sm font-medium">אנחנו עובדים על זה...</span>
+
+            {/* Working Indicator */}
+            <div className="flex items-center justify-center gap-3 mt-8">
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+              >
+                <div className="w-3 h-3 rounded-full bg-[#0080FF]" />
+              </motion.div>
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 2, repeat: Infinity, ease: "linear", delay: 0.2 }}
+              >
+                <div className="w-3 h-3 rounded-full bg-[#0080FF]" />
+              </motion.div>
+              <motion.div
+                animate={{ rotate: 360 }}
+                transition={{ duration: 2, repeat: Infinity, ease: "linear", delay: 0.4 }}
+              >
+                <div className="w-3 h-3 rounded-full bg-[#0080FF]" />
+              </motion.div>
             </div>
           </div>
+
+          {/* Floating Particles */}
+          {[...Array(20)].map((_, i) => (
+            <motion.div
+              key={i}
+              className="absolute w-2 h-2 rounded-full bg-[#0080FF]/30"
+              style={{
+                left: `${Math.random() * 100}%`,
+                top: `${Math.random() * 100}%`
+              }}
+              animate={{
+                y: [0, -30, 0],
+                opacity: [0.3, 0.7, 0.3]
+              }}
+              transition={{
+                duration: 3 + Math.random() * 2,
+                repeat: Infinity,
+                delay: Math.random() * 2
+              }}
+            />
+          ))}
         </motion.div>
       </div>
     );
