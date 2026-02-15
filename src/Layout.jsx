@@ -121,6 +121,22 @@ export default function Layout({ children, currentPageName }) {
   const [authLoading, setAuthLoading] = useState(true);
   const [didChatOpen, setDidChatOpen] = useState(false);
   const [menuSidebarOpen, setMenuSidebarOpen] = useState(false);
+  const [siteSettings, setSiteSettings] = useState(null);
+
+  // בדיקת מצב האתר
+  useEffect(() => {
+    const checkSiteStatus = async () => {
+      try {
+        const settings = await base44.entities.SiteSettings.list('-created_date', 1);
+        if (settings && settings[0]) {
+          setSiteSettings(settings[0]);
+        }
+      } catch (err) {
+        console.error('Failed to check site status:', err);
+      }
+    };
+    checkSiteStatus();
+  }, []);
 
   useEffect(() => {
       if (darkMode) {
@@ -187,6 +203,42 @@ export default function Layout({ children, currentPageName }) {
   // דפים ללא Layout
   if (currentPageName === 'VODContent' || currentPageName === 'ReporterStudio' || currentPageName === 'BroadcastStudio' || currentPageName === 'VideoEditor' || currentPageName === 'VideoCreator' || currentPageName === 'ToMovieeStudio' || currentPageName === 'AdminPanel') {
     return children;
+  }
+
+  // אם האתר סגור - הצג מסך תחזוקה (למעט מנהלים)
+  if (siteSettings?.is_closed && user?.role !== 'admin') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-black via-gray-900 to-black flex items-center justify-center p-4" dir="rtl">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="max-w-2xl w-full"
+        >
+          <div className="bg-black/80 backdrop-blur-xl border-2 border-[#E31E24]/50 rounded-3xl p-8 sm:p-12 text-center shadow-2xl shadow-[#E31E24]/30">
+            <img 
+              src={LOGO_URL} 
+              alt="הרשת החדשה" 
+              className="h-24 w-auto mx-auto mb-6"
+            />
+            <h1 className="text-3xl sm:text-5xl font-bold text-white mb-4">
+              {siteSettings.closure_title || 'האתר בתחזוקה'}
+            </h1>
+            <p className="text-lg sm:text-xl text-gray-300 mb-6">
+              {siteSettings.closure_message || 'האתר נמצא כרגע בתחזוקה. נחזור בקרוב!'}
+            </p>
+            {siteSettings.estimated_reopen && (
+              <p className="text-md text-gray-400 mb-8">
+                זמן פתיחה משוער: {siteSettings.estimated_reopen}
+              </p>
+            )}
+            <div className="flex items-center justify-center gap-2 text-[#E31E24]">
+              <Clock className="w-5 h-5 animate-pulse" />
+              <span className="text-sm font-medium">אנחנו עובדים על זה...</span>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    );
   }
 
   return (
