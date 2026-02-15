@@ -292,6 +292,14 @@ export default function Home() {
         />
       </section>
 
+      <section className="px-0 sm:px-4 mb-8">
+        <HorizontalNewsScroller
+          category="crime"
+          title="פלילים ומשטרה"
+          icon={Shield}
+        />
+      </section>
+
       {/* News Reels Section */}
       <section className="px-0 sm:px-4 mb-8">
         <React.Suspense fallback={<Skeleton className="w-full h-96 bg-gray-800" />}>
