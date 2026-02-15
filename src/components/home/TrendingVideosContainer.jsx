@@ -13,7 +13,7 @@ export default function TrendingVideosContainer() {
   const { data: videos = [], isLoading } = useQuery({
     queryKey: ['trending-videos'],
     queryFn: async () => {
-      const allVideos = await base44.entities.UserVideo.filter({ status: 'ready' }, '-created_date', 20);
+      const allVideos = await base44.entities.UserVideo.list('-created_date', 20);
       return allVideos || [];
     }
   });

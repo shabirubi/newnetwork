@@ -1,11 +1,14 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Share2, Heart, MessageCircle, Loader2 } from "lucide-react";
+import VideoShareModal from "../shared/VideoShareModal";
 
-export default function NewsReelsModal({ reel, onClose }) {
-  if (!reel) return null;
+export default function NewsReelsModal({ isOpen, onClose, initialReel, allReels = [] }) {
+  const [shareModalOpen, setShareModalOpen] = useState(false);
 
-  const videoUrl = reel.videoUrl;
+  if (!isOpen || !initialReel) return null;
+
+  const videoUrl = initialReel.url;
 
   return (
     <motion.div
@@ -51,8 +54,10 @@ export default function NewsReelsModal({ reel, onClose }) {
         {/* Content */}
         <div className="p-6 space-y-4">
           <div>
-            <h2 className="text-2xl font-bold text-white mb-2">{reel.title}</h2>
-            <p className="text-gray-300">{reel.subtitle}</p>
+            <h2 className="text-2xl font-bold text-white mb-2">{initialReel.title}</h2>
+            {initialReel.description && (
+              <p className="text-gray-300">{initialReel.description}</p>
+            )}
           </div>
 
           {/* Actions */}
@@ -63,12 +68,13 @@ export default function NewsReelsModal({ reel, onClose }) {
               className="flex items-center gap-2 text-gray-300 hover:text-[#E31E24] transition-colors"
             >
               <Heart className="w-5 h-5" />
-              <span className="text-sm font-bold">{reel.views}</span>
+              <span className="text-sm font-bold">{initialReel.likes || 0}</span>
             </motion.button>
 
             <motion.button
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.95 }}
+              onClick={() => setShareModalOpen(true)}
               className="flex items-center gap-2 text-gray-300 hover:text-[#E31E24] transition-colors"
             >
               <Share2 className="w-5 h-5" />
@@ -86,6 +92,13 @@ export default function NewsReelsModal({ reel, onClose }) {
           </div>
         </div>
       </motion.div>
+
+      <VideoShareModal
+        isOpen={shareModalOpen}
+        onClose={() => setShareModalOpen(false)}
+        videoUrl={videoUrl}
+        videoTitle={initialReel.title}
+      />
     </motion.div>
   );
 }
