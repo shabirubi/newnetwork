@@ -300,6 +300,54 @@ export default function Home() {
         />
       </section>
 
+      <section className="px-0 sm:px-4 mb-8">
+        <HorizontalNewsScroller
+          category="politics"
+          title="פוליטיקה"
+          icon={Landmark}
+        />
+      </section>
+
+      <section className="px-0 sm:px-4 mb-8">
+        <HorizontalNewsScroller
+          category="sports"
+          title="ספורט"
+          icon={Trophy}
+        />
+      </section>
+
+      <section className="px-0 sm:px-4 mb-8">
+        <HorizontalNewsScroller
+          category="entertainment"
+          title="בידור ותרבות"
+          icon={Clapperboard}
+        />
+      </section>
+
+      <section className="px-0 sm:px-4 mb-8">
+        <HorizontalNewsScroller
+          category="world"
+          title="חדשות עולם"
+          icon={Globe}
+        />
+      </section>
+
+      <section className="px-0 sm:px-4 mb-8">
+        <HorizontalNewsScroller
+          category="health"
+          title="בריאות"
+          icon={Heart}
+        />
+      </section>
+
+      <section className="px-0 sm:px-4 mb-8">
+        <HorizontalNewsScroller
+          category="israel"
+          title="חדשות ישראל"
+          icon={Newspaper}
+        />
+      </section>
+
       {/* News Reels Section */}
       <section className="px-0 sm:px-4 mb-8">
         <React.Suspense fallback={<Skeleton className="w-full h-96 bg-gray-800" />}>
