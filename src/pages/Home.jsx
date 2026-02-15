@@ -1,5 +1,12 @@
 import React from "react";
-import UnderConstruction from "./UnderConstruction";
+import { base44 } from "@/api/base44Client";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { motion, AnimatePresence } from "framer-motion";
+import { Radio, TrendingUp, Clock, ChevronLeft, Flame, Zap, Target, Shield, DollarSign, Landmark, Cpu, Trophy, Clapperboard, Globe, Heart, Tv, Newspaper, MessageCircle, Settings, X, Film, Video, Cloud } from "lucide-react";
+import { Link } from "react-router-dom";
+import { createPageUrl } from "../utils";
+import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 
 import LivePlayer from "../components/news/LivePlayer";
 import NewsCard from "../components/news/NewsCard";
@@ -35,7 +42,8 @@ const ReporterResponsesFeed = React.lazy(() => import("../components/home/Report
 const TrendingVideosContainer = React.lazy(() => import("../components/home/TrendingVideosContainer"));
 
 export default function Home() {
-  return <UnderConstruction />;
+  const [vodModalOpen, setVodModalOpen] = React.useState(false);
+  const [categoriesMenuOpen, setCategoriesMenuOpen] = React.useState(false);
   const [a11yOpen, setA11yOpen] = React.useState(false);
   const [uploadVideoModalOpen, setUploadVideoModalOpen] = React.useState(false);
   const [livePlayerOpen, setLivePlayerOpen] = React.useState(false);
