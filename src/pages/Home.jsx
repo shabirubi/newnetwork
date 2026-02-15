@@ -12,6 +12,7 @@ import LivePlayer from "../components/news/LivePlayer";
 import NewsCard from "../components/news/NewsCard";
 import UpdatesFeed from "../components/news/UpdatesFeed";
 import EntertainmentUpdatesFeed from "../components/news/EntertainmentUpdatesFeed";
+import HorizontalNewsScroller from "../components/news/HorizontalNewsScroller";
 import StudioSidebar from "../components/home/StudioSidebar";
 import WeatherAlertsContainer from "../components/weather/WeatherAlertsContainer";
 
@@ -264,6 +265,31 @@ export default function Home() {
         <React.Suspense fallback={<Skeleton className="w-full h-96 bg-gray-800" />}>
           <UpdatesFeed />
         </React.Suspense>
+      </section>
+
+      {/* Horizontal News Scrollers */}
+      <section className="px-0 sm:px-4 mb-8">
+        <HorizontalNewsScroller
+          category="security"
+          title="ביטחון ומדיניות"
+          icon={Shield}
+        />
+      </section>
+
+      <section className="px-0 sm:px-4 mb-8">
+        <HorizontalNewsScroller
+          category="economy"
+          title="כלכלה ועסקים"
+          icon={DollarSign}
+        />
+      </section>
+
+      <section className="px-0 sm:px-4 mb-8">
+        <HorizontalNewsScroller
+          category="technology"
+          title="טכנולוגיה"
+          icon={Cpu}
+        />
       </section>
 
       {/* News Reels Section */}
