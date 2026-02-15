@@ -54,8 +54,8 @@ export default function VideoCreator() {
   // Available voices - HeyGen voices for reporters, D-ID voices for custom avatars
   const heygenVoices = [
     { id: '1bd001e7e50f421d891986aad5158bc8', name: 'יוליה (אישה)', provider: 'heygen' },
-    { id: 'b5a94a36d2a6445b8a26eccf90a4aa00', name: 'דוד (גבר)', provider: 'heygen' },
-    { id: '2d5b0e6cf36f44d1b6e7d1d4f5c4e3f2', name: 'שרה (אישה)', provider: 'heygen' }
+    { id: 'af9a3780fa8e461a8197cd25970e52db', name: 'דוד (גבר)', provider: 'heygen' },
+    { id: '5c6f8f5b8e2f4a4e9e8f8f5b8e2f4a4e', name: 'שרה (אישה)', provider: 'heygen' }
   ];
   
   const didVoices = [

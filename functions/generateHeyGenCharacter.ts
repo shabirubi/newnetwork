@@ -17,7 +17,7 @@ Deno.serve(async (req) => {
 
     // Default HeyGen avatar and voice if not provided
     // Using Hebrew-speaking avatar and matching voice
-    const avatarId = avatar_id || 'Angela_public_3_20240201'; 
+    const avatarId = avatar_id || 'josh_lite3_20230714'; 
     const voiceId = voice_id || '1bd001e7e50f421d891986aad5158bc8'; // Julia Hebrew voice
 
     const apiKey = Deno.env.get('HEYGEN_API_KEY');
