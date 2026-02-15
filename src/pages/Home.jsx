@@ -2,7 +2,7 @@ import React from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
-import { Radio, TrendingUp, Clock, ChevronLeft, Flame, Zap, Target, Shield, DollarSign, Landmark, Cpu, Trophy, Clapperboard, Globe, Heart, Tv, Newspaper, MessageCircle, Settings, X, Film, Video, Cloud } from "lucide-react";
+import { Radio, TrendingUp, Clock, ChevronLeft, Flame, Zap, Target, Shield, DollarSign, Landmark, Cpu, Trophy, Clapperboard, Globe, Heart, Tv, Newspaper, MessageCircle, Settings, X, Film, Video, Cloud, BookOpen, Microscope, TreePine, Scale } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
 import { Button } from "@/components/ui/button";
@@ -345,6 +345,62 @@ export default function Home() {
           category="israel"
           title="חדשות ישראל"
           icon={Newspaper}
+        />
+      </section>
+
+      <section className="px-0 sm:px-4 mb-8">
+        <HorizontalNewsScroller
+          category="education"
+          title="חינוך"
+          icon={BookOpen}
+        />
+      </section>
+
+      <section className="px-0 sm:px-4 mb-8">
+        <HorizontalNewsScroller
+          category="culture"
+          title="תרבות"
+          icon={Clapperboard}
+        />
+      </section>
+
+      <section className="px-0 sm:px-4 mb-8">
+        <HorizontalNewsScroller
+          category="environment"
+          title="סביבה"
+          icon={TreePine}
+        />
+      </section>
+
+      <section className="px-0 sm:px-4 mb-8">
+        <HorizontalNewsScroller
+          category="science"
+          title="מדע"
+          icon={Microscope}
+        />
+      </section>
+
+      <section className="px-0 sm:px-4 mb-8">
+        <HorizontalNewsScroller
+          category="military"
+          title="צבא וביטחון"
+          icon={Shield}
+        />
+      </section>
+
+      <section className="px-0 sm:px-4 mb-8">
+        <HorizontalNewsScroller
+          category="law"
+          title="משפט ופלילים"
+          icon={Scale}
+        />
+      </section>
+
+      <section className="px-0 sm:px-4 mb-8">
+        <HorizontalNewsScroller
+          category="local"
+          title="חדשות מקומיות"
+          icon={Home}
         />
       </section>
 
