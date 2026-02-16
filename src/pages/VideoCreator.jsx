@@ -3,11 +3,12 @@ import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Send, Video, Loader2, Sparkles, Home, Shield, MessageSquare, ChevronRight, Plus, Play, Download, Wand2 } from "lucide-react";
+import { Send, Video, Loader2, Sparkles, Home, Shield, MessageSquare, ChevronRight, Plus, Play, Download, Wand2, History } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
+import DownloadHistory from "../components/home/DownloadHistory";
 
 export default function VideoCreator() {
   const [messages, setMessages] = useState([]);
@@ -20,6 +21,8 @@ export default function VideoCreator() {
   const [showChat, setShowChat] = useState(true);
   const [uploadingFile, setUploadingFile] = useState(false);
   const fileInputRef = useRef(null);
+  const [historyOpen, setHistoryOpen] = useState(false);
+  const [lastVideo, setLastVideo] = useState(null);
 
   // Fetch HeyGen avatars
   const { data: heygenAvatars = [] } = useQuery({
@@ -194,6 +197,15 @@ export default function VideoCreator() {
           </div>
         </div>
         <div className="flex items-center gap-2">
+          <Button
+            onClick={() => setHistoryOpen(true)}
+            variant="outline"
+            size="sm"
+            className="gap-2 bg-blue-600/20 hover:bg-blue-600/30 border-blue-500/50"
+          >
+            <History className="w-4 h-4" />
+            היסטוריה
+          </Button>
           <Link to={createPageUrl("Home")}>
             <Button variant="outline" size="sm" className="gap-2">
               <Home className="w-4 h-4" />
@@ -338,11 +350,28 @@ export default function VideoCreator() {
                                           <a 
                                             href={result.video_url} 
                                             download 
+                                            onClick={() => {
+                                              setLastVideo({
+                                                title: userMessage?.content?.substring(0, 30) || "סרטון",
+                                                videoUrl: result.video_url,
+                                                script: userMessage?.content
+                                              });
+                                            }}
                                             className="flex-1 bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center justify-center gap-1 transition-all"
                                           >
                                             <Download className="w-3 h-3" />
                                             הורד
                                           </a>
+                                          <button
+                                            onClick={() => {
+                                              setInput(userMessage?.content || "");
+                                              setMessages(prev => prev.slice(0, -1));
+                                            }}
+                                            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center justify-center gap-1 transition-all"
+                                          >
+                                            <Wand2 className="w-3 h-3" />
+                                            ערוך מחדש
+                                          </button>
                                         </div>
                                       </div>
                                     </motion.div>
@@ -464,6 +493,9 @@ export default function VideoCreator() {
           </div>
         </div>
       </div>
+
+      {/* Download History Modal */}
+      <DownloadHistory isOpen={historyOpen} onClose={() => setHistoryOpen(false)} />
     </div>
   );
 }
