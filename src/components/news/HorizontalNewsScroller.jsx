@@ -14,21 +14,13 @@ export default function HorizontalNewsScroller({ category, title, icon: Icon }) 
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
 
-  React.useEffect(() => {
-    const scrollContainer = scrollRef.current;
-    if (!scrollContainer) return;
-
-    handleScroll();
-
-    const handleWheel = (e) => {
-      e.preventDefault();
-      scrollContainer.scrollLeft += e.deltaY;
-      handleScroll();
-    };
-
-    scrollContainer.addEventListener('wheel', handleWheel, { passive: false });
-    return () => scrollContainer.removeEventListener('wheel', handleWheel);
-  }, [articles]);
+  const handleScroll = () => {
+    if (scrollRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+      setShowLeftArrow(scrollLeft > 10);
+      setShowRightArrow(scrollLeft < scrollWidth - clientWidth - 10);
+    }
+  };
 
   const handleMouseDown = (e) => {
     if (e.target.closest('a')) return;
@@ -78,13 +70,21 @@ export default function HorizontalNewsScroller({ category, title, icon: Icon }) 
     }
   };
 
-  const handleScroll = () => {
-    if (scrollRef.current) {
-      const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
-      setShowLeftArrow(scrollLeft > 10);
-      setShowRightArrow(scrollLeft < scrollWidth - clientWidth - 10);
-    }
-  };
+  React.useEffect(() => {
+    const scrollContainer = scrollRef.current;
+    if (!scrollContainer) return;
+
+    handleScroll();
+
+    const handleWheel = (e) => {
+      e.preventDefault();
+      scrollContainer.scrollLeft += e.deltaY;
+      handleScroll();
+    };
+
+    scrollContainer.addEventListener('wheel', handleWheel, { passive: false });
+    return () => scrollContainer.removeEventListener('wheel', handleWheel);
+  }, []);
 
   if (isLoading) {
     return (
