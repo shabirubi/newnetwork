@@ -22,19 +22,24 @@ export default function VideoCreator() {
   const [uploadingFile, setUploadingFile] = useState(false);
   const fileInputRef = useRef(null);
 
-  // Fetch reporters as avatars
-  const { data: reporters = [] } = useQuery({
-    queryKey: ['reporters'],
-    queryFn: () => base44.entities.Reporter.list()
+  // Fetch HeyGen avatars
+  const { data: heygenAvatars = [] } = useQuery({
+    queryKey: ['heygen-avatars'],
+    queryFn: async () => {
+      const result = await base44.functions.invoke('listHeyGenAvatars', {});
+      return result.data?.avatars || [];
+    },
+    staleTime: 5 * 60 * 1000 // Cache for 5 minutes
   });
 
-  // Available avatars with images
-  const avatars = reporters.map(r => ({
-    id: r.id,
-    name: r.name,
-    image: r.image,
-    gender: r.gender,
-    type: 'reporter'
+  // Available avatars - use HeyGen avatars directly
+  const avatars = heygenAvatars.map(a => ({
+    id: a.avatar_id,
+    name: a.avatar_name,
+    image: a.preview_image_url,
+    gender: a.gender,
+    type: 'heygen',
+    videoPreview: a.preview_video_url
   }));
 
   // Initialize conversation
@@ -195,14 +200,9 @@ export default function VideoCreator() {
     toast.loading(`מייצר סצנה ${sceneIndex + 1}...`, { id: `gen-${sceneIndex}` });
 
     try {
-      // Use the reporter's name as identifier for HeyGen
-      const avatarId = scene.avatar.name === 'עדי' ? 'josh_lite3_20230714' : 
-                       scene.avatar.name === 'יובל' ? 'angela-inblackskirt-20220820' :
-                       'josh_lite3_20230714'; // default
-
       const result = await base44.functions.invoke('generateHeyGenCharacter', {
         script: scene.script,
-        avatar_id: avatarId,
+        avatar_id: scene.avatar.id,
         voice_id: '1bd001e7e50f421d891986aad5158bc8'
       });
 
