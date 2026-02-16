@@ -18,6 +18,8 @@ export default function HorizontalNewsScroller({ category, title, icon: Icon }) 
     const scrollContainer = scrollRef.current;
     if (!scrollContainer) return;
 
+    handleScroll();
+
     const handleWheel = (e) => {
       e.preventDefault();
       scrollContainer.scrollLeft += e.deltaY;
@@ -26,12 +28,14 @@ export default function HorizontalNewsScroller({ category, title, icon: Icon }) 
 
     scrollContainer.addEventListener('wheel', handleWheel, { passive: false });
     return () => scrollContainer.removeEventListener('wheel', handleWheel);
-  }, []);
+  }, [articles]);
 
   const handleMouseDown = (e) => {
+    if (e.target.closest('a')) return;
     setIsDragging(true);
     setStartX(e.pageX - scrollRef.current.offsetLeft);
     setScrollLeft(scrollRef.current.scrollLeft);
+    scrollRef.current.style.scrollBehavior = 'auto';
   };
 
   const handleMouseMove = (e) => {
@@ -44,10 +48,16 @@ export default function HorizontalNewsScroller({ category, title, icon: Icon }) 
 
   const handleMouseUp = () => {
     setIsDragging(false);
+    if (scrollRef.current) {
+      scrollRef.current.style.scrollBehavior = 'smooth';
+    }
   };
 
   const handleMouseLeave = () => {
     setIsDragging(false);
+    if (scrollRef.current) {
+      scrollRef.current.style.scrollBehavior = 'smooth';
+    }
   };
 
   const { data: articles = [], isLoading } = useQuery({
@@ -64,6 +74,7 @@ export default function HorizontalNewsScroller({ category, title, icon: Icon }) 
       const scrollAmount = 400;
       const newPosition = scrollRef.current.scrollLeft + (direction === 'left' ? -scrollAmount : scrollAmount);
       scrollRef.current.scrollTo({ left: newPosition, behavior: 'smooth' });
+      setTimeout(() => handleScroll(), 100);
     }
   };
 
@@ -139,12 +150,13 @@ export default function HorizontalNewsScroller({ category, title, icon: Icon }) 
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseLeave}
-        className="flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth pb-2"
+        className="flex gap-4 overflow-x-scroll pb-2"
         style={{ 
-          scrollbarWidth: 'none', 
-          msOverflowStyle: 'none',
+          scrollbarWidth: 'thin',
+          scrollbarColor: 'rgba(255,255,255,0.3) transparent',
           cursor: isDragging ? 'grabbing' : 'grab',
-          userSelect: 'none'
+          userSelect: 'none',
+          scrollBehavior: 'smooth'
         }}
       >
         {articles.map((article, idx) => (
