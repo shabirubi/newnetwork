@@ -1,56 +1,40 @@
-import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
-
 Deno.serve(async (req) => {
   try {
-    const base44 = createClientFromRequest(req);
-    
     const apiKey = Deno.env.get('HEYGEN_API_KEY');
     
     if (!apiKey) {
-      return Response.json({ error: 'HeyGen API key not configured' }, { status: 500 });
+      return Response.json({ error: 'HEYGEN_API_KEY not configured' }, { status: 500 });
     }
 
-    console.log('Fetching available HeyGen avatars...');
+    console.log('Fetching HeyGen avatars...');
 
-    const response = await fetch('https://api.heygen.com/v2/avatars', {
+    const res = await fetch('https://api.heygen.com/v2/avatars', {
+      method: 'GET',
       headers: {
-        'X-API-KEY': apiKey
+        'X-Api-Key': apiKey,
+        'Content-Type': 'application/json'
       }
     });
 
-    let responseData;
-    const responseText = await response.text();
-    
-    try {
-      responseData = JSON.parse(responseText);
-    } catch (e) {
-      console.error('Failed to parse response:', responseText);
-      return Response.json({ error: 'Failed to parse HeyGen API response', details: responseText }, { status: 500 });
-    }
-
-    if (!response.ok) {
-      console.error('HeyGen API error:', responseData);
-      return Response.json({ error: 'HeyGen API error: ' + JSON.stringify(responseData) }, { status: response.status });
-    }
-
-    console.log('Available avatars:', responseData);
-
-    const avatars = responseData.data?.avatars || responseData.avatars || [];
-    
-    if (avatars.length === 0) {
+    if (!res.ok) {
+      const errorText = await res.text();
+      console.error('Error fetching avatars:', errorText);
       return Response.json({ 
-        error: 'No avatars available',
-        raw_response: responseData
-      }, { status: 400 });
+        error: 'Failed to fetch avatars',
+        details: errorText
+      }, { status: res.status });
     }
+
+    const data = await res.json();
+    console.log(`Found ${data?.data?.avatars?.length || 0} avatars`);
 
     return Response.json({
-      avatars: avatars,
-      total: avatars.length
+      avatars: data?.data?.avatars || [],
+      count: data?.data?.avatars?.length || 0
     });
 
   } catch (error) {
-    console.error('Error:', error);
+    console.error('ERROR:', error.message);
     return Response.json({ error: error.message }, { status: 500 });
   }
 });
