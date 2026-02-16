@@ -120,15 +120,15 @@ export default function VideoCreator() {
     if (!file) return;
 
     // Validate file type
-    const validTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'];
+    const validTypes = ['image/png', 'image/jpeg', 'image/jpg'];
     if (!validTypes.includes(file.type)) {
-      toast.error('נא להעלות תמונה בפורמט PNG, JPG או GIF');
+      toast.error('נא להעלות תמונה בפורמט PNG או JPG');
       return;
     }
 
-    // Validate file size (max 10MB)
-    if (file.size > 10 * 1024 * 1024) {
-      toast.error('התמונה גדולה מדי. מקסימום 10MB');
+    // Validate file size (max 5MB for HeyGen)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('התמונה גדולה מדי. מקסימום 5MB');
       return;
     }
 
@@ -137,6 +137,7 @@ export default function VideoCreator() {
 
     try {
       const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      console.log('Uploaded image:', file_url);
       
       const conversation = await base44.agents.getConversation(conversationId);
       
@@ -144,17 +145,18 @@ export default function VideoCreator() {
         `\n\nסצנות קיימות:\n${scenes.map((s, i) => `${i + 1}. ${s.script || 'ללא סקריפט'} (אווטר: ${s.avatar?.name || 'לא נבחר'})`).join('\n')}` : 
         '';
       
+      // Send to AI with image
       await base44.agents.addMessage(conversation, {
         role: "user",
-        content: (input.trim() || 'בנה לי סצנות לסרטון לפי התמונה הזו') + context,
+        content: (input.trim() || 'בנה לי סצנות לסרטון לפי התמונה הזו. השתמש בתמונה שצירפתי כאווטר לסרטון') + context,
         file_urls: [file_url]
       });
       
       setInput('');
-      toast.success('התמונה נשלחה!', { id: 'upload-file' });
+      toast.success('התמונה נשלחה בהצלחה!', { id: 'upload-file' });
     } catch (err) {
       console.error('Upload failed:', err);
-      toast.error('שגיאה בהעלאת התמונה', { id: 'upload-file' });
+      toast.error(`שגיאה: ${err.message}`, { id: 'upload-file' });
     } finally {
       setUploadingFile(false);
       if (fileInputRef.current) {
