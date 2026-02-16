@@ -102,10 +102,10 @@ export default function WeatherAlertsContainer() {
                 </div>
                 <p className="text-white/70 text-[10px] font-semibold mb-0.5">{metric.label}</p>
                 <p className="text-white font-bold text-sm">{metric.value}</p>
-              </motion.div>
+              </div>
             );
           })}
-        </motion.div>
+        </div>
 
         {/* Alerts Section */}
          {alerts.length > 0 && (
