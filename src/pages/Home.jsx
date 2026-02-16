@@ -2,7 +2,7 @@ import React from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
-import { Radio, TrendingUp, Clock, ChevronLeft, Flame, Zap, Target, Shield, DollarSign, Landmark, Cpu, Trophy, Clapperboard, Globe, Heart, Tv, Newspaper, MessageCircle, Settings, X, Film, Video, Cloud, BookOpen, Microscope, TreePine, Scale } from "lucide-react";
+import { Radio, TrendingUp, Clock, ChevronLeft, Flame, Zap, Target, Shield, DollarSign, Landmark, Cpu, Trophy, Clapperboard, Globe, Heart, Tv, Newspaper, MessageCircle, Settings, X, Film, Video, Cloud, BookOpen, Microscope, TreePine, Scale, Music, Stars, Home } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
 import { Button } from "@/components/ui/button";
@@ -401,6 +401,30 @@ export default function Home() {
           category="local"
           title="חדשות מקומיות"
           icon={Home}
+        />
+      </section>
+
+      <section className="px-0 sm:px-4 mb-8">
+        <HorizontalNewsScroller
+          category="music"
+          title="מוזיקה"
+          icon={Music}
+        />
+      </section>
+
+      <section className="px-0 sm:px-4 mb-8">
+        <HorizontalNewsScroller
+          category="horoscope"
+          title="הורוסקופ ואסטרולוגיה"
+          icon={Stars}
+        />
+      </section>
+
+      <section className="px-0 sm:px-4 mb-8">
+        <HorizontalNewsScroller
+          category="finance"
+          title="פיננסים והשקעות"
+          icon={TrendingUp}
         />
       </section>
 
