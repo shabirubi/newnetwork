@@ -2,7 +2,7 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
 
 Deno.serve(async (req) => {
   try {
-    const { script, avatar_id, voice_id, photo_url } = await req.json();
+    const { script, avatar_id, voice_id, talking_photo_id, background } = await req.json();
     
     if (!script || !script.trim()) {
       return Response.json({ error: 'Script is required' }, { status: 400 });
@@ -19,17 +19,17 @@ Deno.serve(async (req) => {
 
     console.log('Creating HeyGen video with:', { 
       hasAvatarId: !!avatar_id, 
-      hasPhotoUrl: !!photo_url,
+      hasTalkingPhotoId: !!talking_photo_id,
       scriptLength: script.length 
     });
 
     // Build character configuration
     let characterConfig;
-    if (photo_url) {
+    if (talking_photo_id) {
       // Talking photo mode - use uploaded image
       characterConfig = {
         type: 'talking_photo',
-        talking_photo_id: photo_url, // This should be the talking_photo_id from createPhotoAvatar
+        talking_photo_id: talking_photo_id,
         talking_style: 'stable'
       };
     } else if (avatar_id) {
@@ -40,7 +40,7 @@ Deno.serve(async (req) => {
         avatar_style: 'normal'
       };
     } else {
-      return Response.json({ error: 'Either avatar_id or photo_url is required' }, { status: 400 });
+      return Response.json({ error: 'Either avatar_id or talking_photo_id is required' }, { status: 400 });
     }
 
     // Create video
@@ -58,10 +58,11 @@ Deno.serve(async (req) => {
             input_text: script,
             voice_id: voiceId
           },
-          background: {
-            type: 'color',
-            value: '#000000'
-          }
+          background: background ? (
+            background === 'white' ? { type: 'color', value: '#FFFFFF' } :
+            background === 'transparent' ? { type: 'transparent' } :
+            { type: 'image', url: background }
+          ) : { type: 'color', value: '#000000' }
         }],
         test: false,
         caption: false,
