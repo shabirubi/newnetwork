@@ -68,6 +68,8 @@ export default function VideoCreator() {
     if (!conversationId) return;
 
     const unsubscribe = base44.agents.subscribeToConversation(conversationId, (data) => {
+      console.log('Conversation update:', data);
+      console.log('Messages:', data.messages);
       setMessages(data.messages || []);
       setLoading(false);
     });
@@ -269,7 +271,7 @@ export default function VideoCreator() {
                             animate={{ scale: 1, opacity: 1 }}
                             className="mt-3"
                           >
-                            {toolCall.status === 'running' && (
+                            {(toolCall.status === 'running' || toolCall.status === 'in_progress') && (
                               <div className="p-4 bg-black/40 backdrop-blur-xl rounded-xl border border-yellow-500/30">
                                 <div className="flex items-center gap-3 mb-3">
                                   <div className="relative w-8 h-8">
