@@ -8,8 +8,8 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Script is required' }, { status: 400 });
     }
 
-    // Default voice - Hebrew Julia voice
-    const voiceId = voice_id || '1bd001e7e50f421d891986aad5158bc8';
+    // Default voice - Hebrew news voice
+    const voiceId = voice_id || 'v6WKRTqObgmv7NHgVAFD';
 
     const apiKey = Deno.env.get('HEYGEN_API_KEY');
     

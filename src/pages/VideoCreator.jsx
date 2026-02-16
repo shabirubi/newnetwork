@@ -227,7 +227,7 @@ export default function VideoCreator() {
     try {
       const payload = {
         script: scene.script,
-        voice_id: '1bd001e7e50f421d891986aad5158bc8'
+        voice_id: 'v6WKRTqObgmv7NHgVAFD'
       };
 
       // Add avatar_id OR photo_url
