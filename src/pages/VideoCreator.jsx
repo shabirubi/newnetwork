@@ -260,10 +260,16 @@ export default function VideoCreator() {
                             <div key={i} className="relative group">
                               <img 
                                 src={url} 
-                                alt="תמונה מועלתה"
-                                className="w-full rounded-lg border-2 border-purple-500/50 shadow-xl"
+                                alt="תמונה שהועלתה"
+                                className="w-full rounded-lg border-2 border-purple-500/50 shadow-xl object-cover max-h-64"
+                                onError={(e) => {
+                                  console.error('Failed to load image:', url);
+                                  e.target.style.display = 'none';
+                                }}
                               />
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-lg opacity-0 group-hover:opacity-100 transition-opacity" />
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-lg opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center p-2">
+                                <span className="text-white text-xs">📸 תמונה לאווטר</span>
+                              </div>
                             </div>
                           ))}
                         </motion.div>
