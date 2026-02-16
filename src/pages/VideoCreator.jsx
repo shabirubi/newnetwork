@@ -87,18 +87,24 @@ export default function VideoCreator() {
     const scenePattern = /סצנה\s*(\d+)[:\s]*(.+?)(?=סצנה\s*\d+|$)/gis;
     const matches = [...content.matchAll(scenePattern)];
     
+    // Check if there's a photo URL in the last message
+    const lastMsg = messages[messages.length - 1];
+    const hasPhotoUrl = lastMsg?.file_urls && lastMsg.file_urls.length > 0;
+    const photoUrl = hasPhotoUrl ? lastMsg.file_urls[0] : null;
+    
     if (matches.length > 0) {
       const newScenes = matches.map((match, idx) => ({
         id: Date.now() + idx,
         script: match[2].trim(),
-        avatar: selectedAvatar || avatars[0],
+        avatar: photoUrl ? null : (selectedAvatar || avatars[0]),
+        photo_url: photoUrl,
         videoUrl: null,
         duration: 0
       }));
       
       if (newScenes.length > 0) {
         setScenes(newScenes);
-        toast.success(`${newScenes.length} סצנות נוצרו!`);
+        toast.success(`${newScenes.length} סצנות נוצרו!${photoUrl ? ' (עם התמונה שלך)' : ''}`);
       }
     }
   };
@@ -193,20 +199,28 @@ export default function VideoCreator() {
 
   const generateScene = async (sceneIndex) => {
     const scene = scenes[sceneIndex];
-    if (!scene.avatar) {
-      toast.error("נא לבחור אווטר לסצנה");
+    if (!scene.avatar && !scene.photo_url) {
+      toast.error("נא לבחור אווטר או לצרף תמונה לסצנה");
       return;
     }
 
     setGenerating(true);
-    toast.loading(`מייצר סצנה ${sceneIndex + 1}...`, { id: `gen-${sceneIndex}` });
+    toast.loading(`מייצר סצנה ${sceneIndex + 1}... זה יכול לקחת עד 2 דקות`, { id: `gen-${sceneIndex}` });
 
     try {
-      const result = await base44.functions.invoke('generateHeyGenCharacter', {
+      const payload = {
         script: scene.script,
-        avatar_id: scene.avatar.id,
         voice_id: '1bd001e7e50f421d891986aad5158bc8'
-      });
+      };
+
+      // Add avatar_id OR photo_url
+      if (scene.photo_url) {
+        payload.photo_url = scene.photo_url;
+      } else if (scene.avatar?.id) {
+        payload.avatar_id = scene.avatar.id;
+      }
+
+      const result = await base44.functions.invoke('generateHeyGenCharacter', payload);
 
       if (result.data?.video_url) {
         const newScenes = [...scenes];
@@ -217,12 +231,27 @@ export default function VideoCreator() {
         };
         setScenes(newScenes);
         toast.success(`סצנה ${sceneIndex + 1} נוצרה! 🎬`, { id: `gen-${sceneIndex}` });
+      } else if (result.data?.still_processing) {
+        toast.info(`הסצנה בעיבוד - בדוק בעוד דקה`, { id: `gen-${sceneIndex}` });
+      } else if (result.data?.error?.includes('trial_video_limit_exceeded')) {
+        toast.error('הגעת למגבלת הטריאל היומית של HeyGen (8 סרטונים). שדרג את החשבון או חכה למחר', { 
+          id: `gen-${sceneIndex}`,
+          duration: 7000 
+        });
       } else {
-        toast.error("שגיאה ביצירת הסצנה", { id: `gen-${sceneIndex}` });
+        toast.error(result.data?.error || "שגיאה ביצירת הסצנה", { id: `gen-${sceneIndex}` });
       }
     } catch (err) {
       console.error('Generation failed:', err);
-      toast.error(`שגיאה: ${err.message}`, { id: `gen-${sceneIndex}` });
+      const errorMsg = err.response?.data?.error || err.message;
+      if (errorMsg?.includes('trial_video_limit_exceeded')) {
+        toast.error('הגעת למגבלת הטריאל היומית של HeyGen (8 סרטונים). שדרג את החשבון או חכה למחר', { 
+          id: `gen-${sceneIndex}`,
+          duration: 7000 
+        });
+      } else {
+        toast.error(`שגיאה: ${errorMsg}`, { id: `gen-${sceneIndex}` });
+      }
     } finally {
       setGenerating(false);
     }
@@ -439,13 +468,19 @@ export default function VideoCreator() {
                           <video src={scene.videoUrl} className="w-full h-full object-cover" />
                         ) : (
                           <div className="text-center">
-                            {scene.avatar && (
+                            {scene.photo_url ? (
+                              <img
+                                src={scene.photo_url}
+                                alt="תמונה מותאמת"
+                                className="w-16 h-16 rounded-full mx-auto mb-2 opacity-40 object-cover"
+                              />
+                            ) : scene.avatar ? (
                               <img
                                 src={scene.avatar.image}
                                 alt={scene.avatar.name}
                                 className="w-16 h-16 rounded-full mx-auto mb-2 opacity-40"
                               />
-                            )}
+                            ) : null}
                             <p className="text-gray-500 text-xs">לא נוצר</p>
                           </div>
                         )}
