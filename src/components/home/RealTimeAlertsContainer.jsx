@@ -13,6 +13,7 @@ export default function RealTimeAlertsContainer() {
   const [generatingVideoId, setGeneratingVideoId] = useState(null);
   const [selectedVideoAlert, setSelectedVideoAlert] = useState(null);
   const [generatedVideoUrl, setGeneratedVideoUrl] = useState(null);
+  const [audioInstance, setAudioInstance] = useState(null);
 
   const { data: alerts = [], isLoading, refetch } = useQuery({
     queryKey: ['realtime-alerts-container'],
@@ -34,6 +35,13 @@ export default function RealTimeAlertsContainer() {
   });
 
   const handlePlayAudio = async (alert) => {
+    // Stop current audio if playing
+    if (audioInstance) {
+      audioInstance.pause();
+      audioInstance.currentTime = 0;
+      setAudioInstance(null);
+    }
+
     if (playingId === alert.id) {
       setPlayingId(null);
       return;
@@ -48,16 +56,28 @@ export default function RealTimeAlertsContainer() {
 
       if (data?.audio_url) {
         const audio = new Audio(data.audio_url);
-        audio.play();
+        setAudioInstance(audio);
+        
+        audio.onended = () => {
+          setPlayingId(null);
+          setAudioInstance(null);
+        };
+        
+        audio.onerror = () => {
+          toast.error('שגיאה בהפעלת הקול');
+          setPlayingId(null);
+          setAudioInstance(null);
+        };
+
+        await audio.play();
         setPlayingId(alert.id);
-        audio.onended = () => setPlayingId(null);
-        toast.success('קול בהפעלה');
+        toast.success('מפעיל הקראה קולית');
       } else {
-        toast.error('קובץ קול לא זמין');
+        toast.error('שגיאה ביצירת קול');
       }
     } catch (error) {
       console.error('Audio error:', error);
-      toast.error('שגיאה בהפעלת הקול: ' + error.message);
+      toast.error('שגיאה: ' + error.message);
     } finally {
       setLoadingId(null);
     }
