@@ -192,8 +192,8 @@ export default function VideoCreator() {
             <Video className="w-5 h-5 text-white" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-white">סטודיו ייצור סרטונים</h1>
-            <p className="text-gray-400 text-xs">צור סרטונים בעזרת בינה מלאכותית</p>
+            <h1 className="text-xl font-bold text-white">🎬 DIGITAL DREAMS</h1>
+            <p className="text-gray-400 text-xs">יוצר סרטונים AI מקצועי</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -467,9 +467,9 @@ export default function VideoCreator() {
           <div className="flex-1 bg-gradient-to-br from-black via-purple-900/10 to-black flex items-center justify-center p-6">
             <div className="text-center max-w-2xl">
               <Video className="w-24 h-24 text-purple-500 mx-auto mb-6 animate-pulse" />
-              <h2 className="text-3xl font-bold text-white mb-4">🎬 אולפן יצירת סרטונים AI</h2>
+              <h2 className="text-3xl font-bold text-white mb-4">✨ DIGITAL DREAMS</h2>
               <p className="text-gray-300 text-lg mb-6">
-                המערכת תייצר את הסרטונים שלך אוטומטית בצ'אט
+                יוצר סרטונים AI בעזרת בינה מלאכותית מתקדמת
               </p>
               <div className="bg-black/40 backdrop-blur-xl rounded-2xl p-6 border border-purple-500/30">
                 <h3 className="text-white font-bold mb-3">איך זה עובד?</h3>
