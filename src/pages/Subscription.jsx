@@ -9,7 +9,7 @@ const PLANS = [
   {
     name: "Basic",
     price: 49,
-    priceId: "price_1QhNdIBzxx2dxxxx",
+    priceId: "price_1T1aumPkbtN03exRU8XXeQeD",
     description: "התחל ליצור",
     features: [
       "5 סרטונים בחודש",
@@ -24,7 +24,7 @@ const PLANS = [
   {
     name: "Pro",
     price: 99,
-    priceId: "price_1QhNdIBzxx2dxxxx",
+    priceId: "price_1T1aumPkbtN03exR4x1y2SNw",
     description: "הבחירה האופטימלית",
     features: [
       "50 סרטונים בחודש",
@@ -41,7 +41,7 @@ const PLANS = [
   {
     name: "Premium",
     price: 199,
-    priceId: "price_1QhNdIBzxx2dxxxx",
+    priceId: "price_1T1aumPkbtN03exRByeJjOTk",
     description: "כוח מלא",
     features: [
       "סרטונים unlimited",
