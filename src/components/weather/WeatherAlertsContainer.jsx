@@ -13,16 +13,23 @@ export default function WeatherAlertsContainer() {
     queryFn: async () => {
       try {
         setLoading(true);
-        // Fetch from IMS RSS
-        const response = await fetch('https://ims.gov.il/he/RSS_ForecastAlerts');
-        const xml = await response.text();
+        // Use timeout to prevent hanging
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 5000);
         
-        // Parse XML (basic parsing)
+        const response = await fetch('https://ims.gov.il/he/RSS_ForecastAlerts', {
+          signal: controller.signal
+        });
+        clearTimeout(timeout);
+        
+        if (!response.ok) throw new Error('Failed to fetch');
+        
+        const xml = await response.text();
         const parser = new DOMParser();
         const xmlDoc = parser.parseFromString(xml, 'text/xml');
         const items = xmlDoc.querySelectorAll('item');
         
-        const parsedAlerts = Array.from(items).slice(0, 5).map(item => ({
+        const parsedAlerts = Array.from(items).slice(0, 3).map(item => ({
           title: item.querySelector('title')?.textContent || '',
           description: item.querySelector('description')?.textContent || '',
           pubDate: item.querySelector('pubDate')?.textContent || '',
@@ -33,13 +40,14 @@ export default function WeatherAlertsContainer() {
         setLoading(false);
         return parsedAlerts;
       } catch (error) {
-        console.log('שגיאה בטעינת נתוני מזג אוויר:', error);
+        setAlerts([]);
         setLoading(false);
         return null;
       }
     },
-    staleTime: 10 * 60 * 1000, // 10 minutes
-    refetchInterval: 30 * 60 * 1000, // 30 minutes
+    staleTime: 30 * 60 * 1000, // 30 minutes
+    refetchInterval: 60 * 60 * 1000, // 60 minutes - less frequent
+    retry: 1, // reduce retries
   });
 
   const mockWeatherMetrics = [
@@ -57,27 +65,16 @@ export default function WeatherAlertsContainer() {
       animate={{ opacity: 1, y: 0 }}
       className="bg-gradient-to-br from-[#000033]/90 via-[#0080FF]/80 to-[#0080FF]/70 rounded-2xl p-4 border border-[#0080FF]/80 shadow-lg shadow-[#0080FF]/60 overflow-hidden relative"
     >
-      {/* Animated Background */}
-      <motion.div
-      className="absolute inset-0 opacity-15"
-      animate={{
-        backgroundPosition: ["0% 0%", "100% 100%"]
-      }}
-      transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-      style={{
-        backgroundImage: "linear-gradient(135deg, #0080FF, #0080FF, #0080FF)",
-        backgroundSize: "200% 200%"
-      }}
+      {/* Static Background - no animation for performance */}
+      <div
+      className="absolute inset-0 opacity-10 bg-gradient-to-br from-[#0080FF] via-[#0080FF] to-transparent"
       />
 
       {/* Content */}
       <div className="relative z-10 space-y-4">
         
         {/* Header */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
+         <div
           className="flex items-center gap-2 mb-3"
         >
           <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#0080FF] to-[#0099FF] flex items-center justify-center shadow-md shadow-[#0080FF]/60">
@@ -87,24 +84,17 @@ export default function WeatherAlertsContainer() {
             <h2 className="text-lg font-bold text-white">השירות המטאורולוגי</h2>
             <p className="text-[#0080FF] font-semibold text-xs animate-pulse">הרשת החדשה</p>
           </div>
-        </motion.div>
+        </div>
 
         {/* Weather Metrics Grid */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
+        <div
           className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3"
         >
           {mockWeatherMetrics.map((metric, idx) => {
             const Icon = metric.icon;
             return (
-              <motion.div
+              <div
                 key={idx}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.3 + idx * 0.05 }}
-                whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(0, 128, 255, 0.6)" }}
                 className="bg-white/5 backdrop-blur-lg rounded-lg p-3 border border-[#0080FF]/40 hover:border-[#0080FF]/80 transition-all cursor-pointer group"
               >
                 <div className={`${metric.color} mb-1.5 group-hover:scale-110 transition-transform`}>
@@ -118,11 +108,8 @@ export default function WeatherAlertsContainer() {
         </motion.div>
 
         {/* Alerts Section */}
-        {alerts.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ delay: 0.4 }}
+         {alerts.length > 0 && (
+          <div
             className="space-y-3"
           >
             <div className="flex items-center gap-2 text-[#0080FF] font-bold text-sm">
@@ -151,31 +138,26 @@ export default function WeatherAlertsContainer() {
                 </motion.div>
               ))}
             </div>
-          </motion.div>
+          </div>
         )}
 
         {/* Loading State */}
         {loading && (
           <div className="flex items-center justify-center py-8">
-            <motion.div
-              animate={{ rotate: 360 }}
-              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-              className="w-6 h-6 border-2 border-[#0080FF]/30 border-t-[#0080FF] rounded-full"
+            <div
+              className="w-6 h-6 border-2 border-[#0080FF]/30 border-t-[#0080FF] rounded-full animate-spin"
             />
           </div>
         )}
 
         {/* Footer */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.5 }}
+        <div
           className="text-center pt-2 border-t border-[#0080FF]/30"
         >
           <p className="text-white/50 text-[10px]">
             עדכון: {new Date().toLocaleTimeString('he-IL')} • <a href="https://ims.gov.il" target="_blank" rel="noopener noreferrer" className="text-[#0080FF] hover:underline">IMS</a>
           </p>
-        </motion.div>
+        </div>
       </div>
     </motion.div>
   );
