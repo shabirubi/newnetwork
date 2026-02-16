@@ -15,9 +15,10 @@ export default function VideoCreator() {
   const [loading, setLoading] = useState(false);
   const [conversationId, setConversationId] = useState(null);
   const [selectedAvatar, setSelectedAvatar] = useState(null);
-  const [videoUrl, setVideoUrl] = useState(null);
+  const [scenes, setScenes] = useState([]);
   const [generating, setGenerating] = useState(false);
   const messagesEndRef = useRef(null);
+  const [showChat, setShowChat] = useState(true);
 
   // Fetch reporters as avatars
   const { data: reporters = [] } = useQuery({
@@ -63,10 +64,37 @@ export default function VideoCreator() {
     const unsubscribe = base44.agents.subscribeToConversation(conversationId, (data) => {
       setMessages(data.messages || []);
       setLoading(false);
+      
+      // Parse AI response to extract scenes
+      const lastMessage = data.messages?.[data.messages.length - 1];
+      if (lastMessage?.role === 'assistant' && lastMessage.content) {
+        tryParseScenes(lastMessage.content);
+      }
     });
 
     return unsubscribe;
   }, [conversationId]);
+
+  const tryParseScenes = (content) => {
+    // Try to extract scenes from AI response
+    const scenePattern = /סצנה\s*(\d+)[:\s]*(.+?)(?=סצנה\s*\d+|$)/gis;
+    const matches = [...content.matchAll(scenePattern)];
+    
+    if (matches.length > 0) {
+      const newScenes = matches.map((match, idx) => ({
+        id: Date.now() + idx,
+        script: match[2].trim(),
+        avatar: selectedAvatar || avatars[0],
+        videoUrl: null,
+        duration: 0
+      }));
+      
+      if (newScenes.length > 0) {
+        setScenes(newScenes);
+        toast.success(`${newScenes.length} סצנות נוצרו!`);
+      }
+    }
+  };
 
   // Auto scroll to bottom
   useEffect(() => {
@@ -89,9 +117,15 @@ export default function VideoCreator() {
 
     try {
       const conversation = await base44.agents.getConversation(conversationId);
+      
+      // Add context about current scenes
+      const context = scenes.length > 0 ? 
+        `\n\nסצנות קיימות:\n${scenes.map((s, i) => `${i + 1}. ${s.script || 'ללא סקריפט'} (אווטר: ${s.avatar?.name || 'לא נבחר'})`).join('\n')}` : 
+        '';
+      
       await base44.agents.addMessage(conversation, {
         role: "user",
-        content: userMessage
+        content: userMessage + context
       });
     } catch (err) {
       console.error(err);
@@ -100,47 +134,48 @@ export default function VideoCreator() {
     }
   };
 
-  const handleGenerate = async () => {
-    if (!input.trim()) {
-      toast.error("נא להזין תיאור לסרטון");
-      return;
-    }
-
-    if (!selectedAvatar) {
-      toast.error("נא לבחור אווטר");
+  const generateScene = async (sceneIndex) => {
+    const scene = scenes[sceneIndex];
+    if (!scene.avatar) {
+      toast.error("נא לבחור אווטר לסצנה");
       return;
     }
 
     setGenerating(true);
-    toast.loading("מייצר סרטון...", { id: 'gen-video' });
+    toast.loading(`מייצר סצנה ${sceneIndex + 1}...`, { id: `gen-${sceneIndex}` });
 
     try {
       const result = await base44.functions.invoke('generateHeyGenCharacter', {
-        script: input.trim(),
-        avatar_id: selectedAvatar.id,
+        script: scene.script,
+        avatar_id: scene.avatar.id,
         voice_id: '1bd001e7e50f421d891986aad5158bc8'
       });
 
       if (result.data?.video_url) {
-        setVideoUrl(result.data.video_url);
-        toast.success("הסרטון נוצר בהצלחה! 🎬", { id: 'gen-video' });
-        
-        // Send to main player
-        window.dispatchEvent(new CustomEvent('playVideo', {
-          detail: {
-            url: result.data.video_url,
-            title: `סרטון AI - ${selectedAvatar.name}`,
-            autoPlay: true
-          }
-        }));
+        const newScenes = [...scenes];
+        newScenes[sceneIndex] = {
+          ...scene,
+          videoUrl: result.data.video_url,
+          duration: result.data.duration || 10
+        };
+        setScenes(newScenes);
+        toast.success(`סצנה ${sceneIndex + 1} נוצרה! 🎬`, { id: `gen-${sceneIndex}` });
       } else {
-        toast.error("שגיאה ביצירת הסרטון", { id: 'gen-video' });
+        toast.error("שגיאה ביצירת הסצנה", { id: `gen-${sceneIndex}` });
       }
     } catch (err) {
       console.error('Generation failed:', err);
-      toast.error(`שגיאה: ${err.message}`, { id: 'gen-video' });
+      toast.error(`שגיאה: ${err.message}`, { id: `gen-${sceneIndex}` });
     } finally {
       setGenerating(false);
+    }
+  };
+
+  const generateAllScenes = async () => {
+    for (let i = 0; i < scenes.length; i++) {
+      if (scenes[i].script.trim()) {
+        await generateScene(i);
+      }
     }
   };
 
@@ -174,211 +209,188 @@ export default function VideoCreator() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex items-center justify-center p-8">
-        <div className="w-full max-w-5xl">
-          {!videoUrl ? (
-            /* Creation Interface - HeyGen Style */
+      <div className="flex-1 flex overflow-hidden">
+        {/* Left: Chat */}
+        <AnimatePresence>
+          {showChat && (
             <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="space-y-8"
+              initial={{ width: 0 }}
+              animate={{ width: 400 }}
+              exit={{ width: 0 }}
+              className="bg-black/30 border-l border-gray-800 flex flex-col"
             >
-              {/* Title */}
-              <div className="text-center">
-                <h2 className="text-4xl font-bold text-white mb-2">
-                  Turn your ideas into production-ready video
-                </h2>
-                <p className="text-gray-400">תאר את הרעיון שלך והבינה המלאכותית תבנה את הסרטון</p>
+              <div className="p-4 border-b border-gray-800">
+                <h3 className="text-white font-bold flex items-center gap-2">
+                  <MessageSquare className="w-5 h-5" />
+                  עוזר AI לבניית סצנות
+                </h3>
+                <p className="text-gray-400 text-xs mt-1">תאר את הסרטון והאג'נט יבנה את הסצנות</p>
               </div>
 
-              {/* Selected Avatar Display */}
-              {selectedAvatar && (
-                <motion.div
-                  initial={{ scale: 0.9 }}
-                  animate={{ scale: 1 }}
-                  className="flex items-center justify-center gap-3 p-4 bg-gradient-to-r from-purple-900/30 to-pink-900/30 rounded-2xl border border-purple-500/30"
-                >
-                  <img
-                    src={selectedAvatar.image}
-                    alt={selectedAvatar.name}
-                    className="w-16 h-16 rounded-full object-cover border-2 border-purple-500"
-                  />
-                  <div>
-                    <p className="text-white font-bold">{selectedAvatar.name}</p>
-                    <p className="text-purple-300 text-sm">האווטר הנבחר</p>
+              <div className="flex-1 overflow-y-auto p-4 space-y-3">
+                {messages.length === 0 && (
+                  <div className="text-center py-8">
+                    <Sparkles className="w-12 h-12 text-purple-500 mx-auto mb-3" />
+                    <p className="text-gray-400 text-sm">שלום! תאר את הסרטון ואני אבנה לך את הסצנות</p>
                   </div>
-                </motion.div>
-              )}
+                )}
 
-              {/* Input Area */}
-              <div className="bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl p-6 border border-gray-700 shadow-2xl">
-                <div className="flex items-start gap-4">
-                  <div className="w-12 h-12 rounded-full bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center flex-shrink-0">
-                    <Wand2 className="w-6 h-6 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <textarea
-                      value={input}
-                      onChange={(e) => setInput(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" && e.ctrlKey) {
-                          e.preventDefault();
-                          handleGenerate();
-                        }
-                      }}
-                      placeholder="תאר את הסרטון שלך... למשל: 'צור סרטון על חדשות הטכנולוגיה האחרונות'"
-                      className="w-full bg-transparent text-white placeholder-gray-500 focus:outline-none resize-none min-h-[120px] text-lg"
-                    />
-                    
-                    <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-700">
-                      <div className="flex items-center gap-2">
-                        <Plus className="w-4 h-4 text-gray-500" />
-                        <Sparkles className="w-4 h-4 text-gray-500" />
-                        <MessageSquare className="w-4 h-4 text-gray-500" />
-                      </div>
-                      
-                      <Button
-                        onClick={handleGenerate}
-                        disabled={generating || !input.trim() || !selectedAvatar}
-                        className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 gap-2 px-6"
-                      >
-                        {generating ? (
-                          <>
-                            <Loader2 className="w-5 h-5 animate-spin" />
-                            מייצר...
-                          </>
-                        ) : (
-                          <>
-                            <Sparkles className="w-5 h-5" />
-                            צור סרטון
-                          </>
-                        )}
-                      </Button>
+                {messages.map((msg, idx) => (
+                  <div
+                    key={idx}
+                    className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
+                  >
+                    <div
+                      className={`max-w-[85%] rounded-xl p-3 text-sm ${
+                        msg.role === "user"
+                          ? "bg-gray-800 text-white"
+                          : "bg-gradient-to-br from-purple-600 to-pink-600 text-white"
+                      }`}
+                    >
+                      {msg.content}
                     </div>
                   </div>
-                </div>
+                ))}
+
+                {loading && (
+                  <div className="flex justify-start">
+                    <div className="bg-gradient-to-br from-purple-600 to-pink-600 text-white rounded-xl p-3 flex items-center gap-2">
+                      <Loader2 className="w-4 h-4 animate-spin" />
+                      <span className="text-sm">בונה סצנות...</span>
+                    </div>
+                  </div>
+                )}
+
+                <div ref={messagesEndRef} />
               </div>
 
-              {/* Choose an Avatar Section */}
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-white text-xl font-bold">Choose an Avatar</h3>
-                  <Button variant="ghost" size="sm" className="text-purple-400 hover:text-purple-300">
-                    More Avatars <ChevronRight className="w-4 h-4 mr-1" />
+              <div className="p-3 border-t border-gray-800">
+                <div className="flex items-center gap-2">
+                  <textarea
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" && !e.shiftKey) {
+                        e.preventDefault();
+                        handleSend();
+                      }
+                    }}
+                    placeholder="למשל: צור לי סרטון על החדשות עם 3 סצנות"
+                    className="flex-1 px-3 py-2 rounded-md bg-gray-900 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none min-h-[80px]"
+                    rows={3}
+                  />
+                  <Button
+                    onClick={handleSend}
+                    disabled={!input.trim() || loading}
+                    size="sm"
+                    className="bg-gradient-to-br from-purple-600 to-pink-600 shrink-0 h-[80px]"
+                  >
+                    <Send className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Center: Timeline */}
+        <div className="flex-1 flex flex-col overflow-hidden">
+          {scenes.length === 0 ? (
+            /* Empty State */
+            <div className="flex-1 flex items-center justify-center p-8">
+              <div className="text-center">
+                <Video className="w-24 h-24 text-gray-600 mx-auto mb-4" />
+                <h2 className="text-2xl font-bold text-white mb-2">אין סצנות עדיין</h2>
+                <p className="text-gray-400 mb-4">השתמש בצ'אט מימין כדי ליצור סצנות</p>
+                <Button
+                  onClick={() => setShowChat(true)}
+                  className="bg-gradient-to-r from-purple-600 to-pink-600"
+                >
+                  <MessageSquare className="w-4 h-4 ml-2" />
+                  פתח צ'אט
+                </Button>
+              </div>
+            </div>
+          ) : (
+            /* Timeline with Scenes */
+            <>
+              {/* Preview Area */}
+              <div className="flex-1 bg-black/20 flex items-center justify-center p-6">
+                {scenes.find(s => s.videoUrl) ? (
+                  <video
+                    src={scenes.find(s => s.videoUrl)?.videoUrl}
+                    controls
+                    className="max-w-4xl w-full rounded-xl shadow-2xl"
+                  />
+                ) : (
+                  <div className="text-center">
+                    <Sparkles className="w-16 h-16 text-gray-600 mx-auto mb-4" />
+                    <p className="text-gray-400">הסרטונים יופיעו כאן לאחר היצירה</p>
+                  </div>
+                )}
+              </div>
+
+              {/* Timeline */}
+              <div className="bg-gradient-to-b from-gray-900 to-black border-t border-gray-800 p-4">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-white font-bold">ציר זמן ({scenes.length} סצנות)</h3>
+                  <Button
+                    onClick={generateAllScenes}
+                    disabled={generating}
+                    className="bg-gradient-to-r from-purple-600 to-pink-600"
+                  >
+                    {generating ? (
+                      <><Loader2 className="w-4 h-4 animate-spin ml-2" />מייצר...</>
+                    ) : (
+                      <><Play className="w-4 h-4 ml-2" />צור את כל הסצנות</>
+                    )}
                   </Button>
                 </div>
 
-                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                  {avatars.map((avatar) => (
-                    <motion.div
-                      key={avatar.id}
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      onClick={() => setSelectedAvatar(avatar)}
-                      className={`cursor-pointer rounded-xl overflow-hidden border-2 transition-all ${
-                        selectedAvatar?.id === avatar.id
-                          ? "border-purple-500 shadow-lg shadow-purple-500/50"
-                          : "border-gray-700 hover:border-gray-600"
-                      }`}
+                <div className="flex gap-4 overflow-x-auto pb-2">
+                  {scenes.map((scene, idx) => (
+                    <div
+                      key={scene.id}
+                      className="min-w-[200px] bg-gray-800 rounded-xl overflow-hidden border border-gray-700"
                     >
-                      <img
-                        src={avatar.image}
-                        alt={avatar.name}
-                        className="w-full aspect-square object-cover"
-                      />
-                      <div className="bg-gray-900 p-2 text-center">
-                        <p className="text-white text-xs font-medium truncate">{avatar.name}</p>
+                      <div className="relative h-32 bg-gray-900 flex items-center justify-center">
+                        {scene.videoUrl ? (
+                          <video src={scene.videoUrl} className="w-full h-full object-cover" />
+                        ) : (
+                          <div className="text-center">
+                            {scene.avatar && (
+                              <img
+                                src={scene.avatar.image}
+                                alt={scene.avatar.name}
+                                className="w-16 h-16 rounded-full mx-auto mb-2 opacity-40"
+                              />
+                            )}
+                            <p className="text-gray-500 text-xs">לא נוצר</p>
+                          </div>
+                        )}
+                        <div className="absolute top-2 left-2 bg-black/80 px-2 py-1 rounded text-white text-xs">
+                          #{idx + 1}
+                        </div>
                       </div>
-                    </motion.div>
+                      <div className="p-3">
+                        <p className="text-white text-sm line-clamp-2 mb-2">{scene.script}</p>
+                        {!scene.videoUrl && (
+                          <Button
+                            onClick={() => generateScene(idx)}
+                            disabled={generating}
+                            size="sm"
+                            className="w-full bg-purple-600"
+                          >
+                            <Sparkles className="w-3 h-3 ml-1" />
+                            צור
+                          </Button>
+                        )}
+                      </div>
+                    </div>
                   ))}
                 </div>
               </div>
-
-              {/* AI Chat Helper - Collapsible */}
-              {messages.length > 0 && (
-                <motion.div
-                  initial={{ opacity: 0, height: 0 }}
-                  animate={{ opacity: 1, height: "auto" }}
-                  className="bg-gray-900/50 rounded-2xl border border-gray-700 p-4 max-h-96 overflow-y-auto"
-                >
-                  <div className="flex items-center gap-2 mb-4">
-                    <MessageSquare className="w-5 h-5 text-purple-400" />
-                    <h4 className="text-white font-bold">עוזר AI</h4>
-                  </div>
-                  
-                  <div className="space-y-3">
-                    {messages.map((msg, idx) => (
-                      <div
-                        key={idx}
-                        className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
-                      >
-                        <div
-                          className={`max-w-[85%] rounded-xl p-3 text-sm ${
-                            msg.role === "user"
-                              ? "bg-gray-800 text-white"
-                              : "bg-gradient-to-br from-purple-600 to-pink-600 text-white"
-                          }`}
-                        >
-                          {msg.content}
-                        </div>
-                      </div>
-                    ))}
-                    
-                    {loading && (
-                      <div className="flex justify-start">
-                        <div className="bg-gradient-to-br from-purple-600 to-pink-600 text-white rounded-xl p-3 flex items-center gap-2">
-                          <Loader2 className="w-4 h-4 animate-spin" />
-                          <span className="text-sm">חושב...</span>
-                        </div>
-                      </div>
-                    )}
-                    
-                    <div ref={messagesEndRef} />
-                  </div>
-                </motion.div>
-              )}
-            </motion.div>
-          ) : (
-            /* Video Result */
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              className="space-y-6"
-            >
-              <div className="text-center">
-                <h2 className="text-3xl font-bold text-white mb-2">הסרטון שלך מוכן! 🎬</h2>
-                <p className="text-gray-400">הסרטון נוצר בהצלחה ונשלח לנגן הראשי</p>
-              </div>
-
-              <div className="bg-black rounded-2xl overflow-hidden shadow-2xl border border-purple-500/30">
-                <video
-                  src={videoUrl}
-                  controls
-                  autoPlay
-                  className="w-full aspect-video"
-                />
-              </div>
-
-              <div className="flex items-center justify-center gap-4">
-                <Button
-                  onClick={() => {
-                    setVideoUrl(null);
-                    setInput("");
-                  }}
-                  className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 gap-2"
-                >
-                  <Plus className="w-5 h-5" />
-                  צור סרטון חדש
-                </Button>
-                
-                <a href={videoUrl} download target="_blank" rel="noopener noreferrer">
-                  <Button variant="outline" className="gap-2">
-                    <Download className="w-5 h-5" />
-                    הורד
-                  </Button>
-                </a>
-              </div>
-            </motion.div>
+            </>
           )}
         </div>
       </div>

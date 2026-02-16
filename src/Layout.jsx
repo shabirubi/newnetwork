@@ -525,19 +525,17 @@ export default function Layout({ children, currentPageName }) {
                     <ChevronLeft size={18} className="text-[#E31E24]" />
                   </Link>
 
-                  <a
-                    href={createPageUrl("VideoCreator")}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                  <Link
+                    to={createPageUrl("VideoCreator")}
                     onClick={() => setMenuSidebarOpen(false)}
                     className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#E31E24]/20 active:bg-[#E31E24]/40 transition-all border border-transparent hover:border-[#E31E24]/30 animate-pulse"
                   >
                     <div className="w-10 h-10 rounded-xl bg-black/40 border border-purple-500/20 flex items-center justify-center">
                       <Sparkles size={20} className="text-purple-500" />
                     </div>
-                    <span className="flex-1 font-medium text-purple-300">יוצר AI</span>
+                    <span className="flex-1 font-medium text-purple-300">יוצר סרטונים AI</span>
                     <ChevronLeft size={18} className="text-purple-500" />
-                  </a>
+                  </Link>
 
                   {user?.role === 'admin' && (
                     <a
