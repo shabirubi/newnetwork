@@ -297,74 +297,43 @@ export default function VideoCreator() {
                             className="mt-3"
                           >
                             {(toolCall.status === 'running' || toolCall.status === 'in_progress') && (
-                              <motion.div 
-                                initial={{ scale: 0.95, opacity: 0 }}
-                                animate={{ scale: 1, opacity: 1 }}
-                                className="p-6 bg-gradient-to-br from-purple-900/40 to-black/60 backdrop-blur-xl rounded-2xl border-2 border-purple-500/40 shadow-2xl overflow-hidden"
-                              >
-                                {/* Video Player Loading State */}
-                                <div className="aspect-video bg-black/80 rounded-lg overflow-hidden flex flex-col items-center justify-center relative mb-4 border border-purple-500/30">
-                                  {/* Elegant Loading Animation */}
-                                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-purple-500/10 to-transparent animate-pulse" />
+                              <div className="p-4 bg-black/50 rounded-xl border border-gray-700 space-y-3">
+                                {/* Mobile Native Video Player Skeleton */}
+                                <div className="w-full aspect-video bg-gray-900 rounded-lg overflow-hidden flex items-center justify-center relative">
+                                  <div className="absolute inset-0 bg-gradient-to-br from-gray-800 to-black opacity-30" />
 
-                                  {/* Play Button Center */}
+                                  {/* Center Play Button */}
                                   <motion.div
-                                    animate={{ scale: [1, 1.1, 1] }}
+                                    animate={{ scale: [1, 1.08, 1] }}
                                     transition={{ duration: 2, repeat: Infinity }}
-                                    className="relative z-10"
+                                    className="relative z-10 flex items-center justify-center"
                                   >
-                                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center shadow-2xl">
-                                      <Play className="w-7 h-7 text-white ml-1" fill="white" />
+                                    <div className="w-14 h-14 rounded-full bg-white/20 backdrop-blur-sm border border-white/30 flex items-center justify-center">
+                                      <Play className="w-6 h-6 text-white ml-0.5" fill="white" />
                                     </div>
                                   </motion.div>
 
-                                  {/* Loading Bars */}
-                                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-end gap-1">
-                                    {[...Array(4)].map((_, i) => (
-                                      <motion.div
-                                        key={i}
-                                        className="w-1 bg-gradient-to-t from-purple-600 to-pink-600 rounded-full"
-                                        animate={{ height: ['8px', '24px', '8px'] }}
-                                        transition={{ 
-                                          duration: 0.8, 
-                                          repeat: Infinity,
-                                          delay: i * 0.1
-                                        }}
-                                      />
-                                    ))}
+                                  {/* Loading Indicator */}
+                                  <div className="absolute bottom-3 left-1/2 -translate-x-1/2">
+                                    <div className="flex gap-0.5">
+                                      {[0, 1, 2].map((i) => (
+                                        <motion.div
+                                          key={i}
+                                          className="w-1.5 h-1.5 bg-white rounded-full"
+                                          animate={{ opacity: [0.4, 1, 0.4] }}
+                                          transition={{ duration: 1.2, delay: i * 0.2, repeat: Infinity }}
+                                        />
+                                      ))}
+                                    </div>
                                   </div>
                                 </div>
 
-                                {/* Status Text */}
-                                <div className="text-center space-y-2">
-                                  <motion.h3 
-                                    animate={{ opacity: [0.7, 1, 0.7] }}
-                                    transition={{ duration: 2, repeat: Infinity }}
-                                    className="text-white font-bold text-lg"
-                                  >
-                                    ✨ יוצר סרטון מדהים
-                                  </motion.h3>
-                                  <p className="text-purple-300/80 text-sm">זה יכול לקחת עד 2 דקות • אנא המתן...</p>
+                                {/* Status */}
+                                <div className="text-center">
+                                  <p className="text-white font-semibold text-sm">מייצר סרטון...</p>
+                                  <p className="text-gray-400 text-xs mt-1">עד 2 דקות</p>
                                 </div>
-
-                                {/* Progress Bar */}
-                                <div className="mt-4 space-y-1">
-                                  <div className="w-full h-2 bg-black/60 rounded-full overflow-hidden border border-purple-500/30">
-                                    <motion.div 
-                                      className="h-full bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 rounded-full"
-                                      animate={{ 
-                                        x: ['-100%', '100%']
-                                      }}
-                                      transition={{ 
-                                        duration: 3, 
-                                        repeat: Infinity,
-                                        ease: "easeInOut"
-                                      }}
-                                    />
-                                  </div>
-                                  <p className="text-xs text-purple-300/60 text-center">עיבוד בעברה...</p>
-                                </div>
-                              </motion.div>
+                              </div>
                             )}
                             
                             {toolCall.status === 'completed' && toolCall.results && (() => {
@@ -372,58 +341,65 @@ export default function VideoCreator() {
                                 const result = typeof toolCall.results === 'string' ? JSON.parse(toolCall.results) : toolCall.results;
                                 console.log('Result:', result);
                                 if (result.video_url) {
+                                  // Save to history
+                                  const videoData = {
+                                    title: userMessage?.content?.substring(0, 30) || "סרטון",
+                                    videoUrl: result.video_url,
+                                    script: userMessage?.content
+                                  };
+
+                                  // Save to localStorage
+                                  setTimeout(() => {
+                                    const newDownload = {
+                                      id: Math.random(),
+                                      title: videoData.title,
+                                      videoUrl: videoData.videoUrl,
+                                      timestamp: new Date().toISOString(),
+                                      scriptPreview: videoData.script?.substring(0, 50) + "..."
+                                    };
+                                    const saved = localStorage.getItem('videoDownloadHistory') || '[]';
+                                    const downloads = JSON.parse(saved);
+                                    const updated = [newDownload, ...downloads].slice(0, 20);
+                                    localStorage.setItem('videoDownloadHistory', JSON.stringify(updated));
+                                  }, 100);
+
                                   return (
-                                    <motion.div 
-                                      initial={{ scale: 0.9, opacity: 0 }}
-                                      animate={{ scale: 1, opacity: 1 }}
-                                      className="p-4 bg-black/40 backdrop-blur-xl rounded-xl border-2 border-green-500/50 shadow-2xl"
-                                    >
-                                      <div className="flex items-center gap-2 mb-3">
-                                        <motion.div
-                                          initial={{ scale: 0 }}
-                                          animate={{ scale: 1 }}
-                                          className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center"
-                                        >
-                                          <Sparkles className="w-4 h-4 text-white" />
-                                        </motion.div>
-                                        <span className="text-green-300 font-bold">✨ הסרטון מוכן!</span>
-                                      </div>
-                                      <div className="relative group">
+                                    <div className="p-4 bg-black/50 rounded-xl border border-green-500/50 space-y-3">
+                                      {/* Video Container */}
+                                      <div className="relative w-full aspect-video bg-gray-900 rounded-lg overflow-hidden border border-gray-700">
                                         <video 
                                           src={result.video_url} 
                                           controls 
-                                          className="w-full rounded-lg shadow-2xl border border-green-500/30"
+                                          className="w-full h-full"
                                           playsInline
                                         />
-                                        <div className="mt-2 flex gap-2">
-                                          <a 
-                                            href={result.video_url} 
-                                            download 
-                                            onClick={() => {
-                                              setLastVideo({
-                                                title: userMessage?.content?.substring(0, 30) || "סרטון",
-                                                videoUrl: result.video_url,
-                                                script: userMessage?.content
-                                              });
-                                            }}
-                                            className="flex-1 bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center justify-center gap-1 transition-all"
-                                          >
-                                            <Download className="w-3 h-3" />
-                                            הורד
-                                          </a>
-                                          <button
-                                            onClick={() => {
-                                              setInput(userMessage?.content || "");
-                                              setMessages(prev => prev.slice(0, -1));
-                                            }}
-                                            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center justify-center gap-1 transition-all"
-                                          >
-                                            <Wand2 className="w-3 h-3" />
-                                            ערוך מחדש
-                                          </button>
-                                        </div>
                                       </div>
-                                    </motion.div>
+
+                                      {/* Action Buttons */}
+                                      <div className="flex gap-2">
+                                        <a 
+                                          href={result.video_url} 
+                                          download 
+                                          className="flex-1 bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center justify-center gap-1 transition-all"
+                                        >
+                                          <Download className="w-3 h-3" />
+                                          הורד
+                                        </a>
+                                        <button
+                                          onClick={() => {
+                                            setInput(userMessage?.content || "");
+                                            setMessages(prev => prev.slice(0, -1));
+                                          }}
+                                          className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center justify-center gap-1 transition-all"
+                                        >
+                                          <Wand2 className="w-3 h-3" />
+                                          שנה
+                                        </button>
+                                      </div>
+
+                                      {/* Success Message */}
+                                      <p className="text-center text-green-300 text-xs font-semibold">✅ נשמר בהיסטוריה</p>
+                                    </div>
                                   );
                                 }
                               } catch (e) {
