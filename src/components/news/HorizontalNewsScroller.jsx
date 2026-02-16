@@ -11,6 +11,21 @@ export default function HorizontalNewsScroller({ category, title, icon: Icon }) 
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(true);
 
+  React.useEffect(() => {
+    const scrollContainer = scrollRef.current;
+    if (!scrollContainer) return;
+
+    const handleWheel = (e) => {
+      if (e.deltaY !== 0) {
+        e.preventDefault();
+        scrollContainer.scrollLeft += e.deltaY;
+      }
+    };
+
+    scrollContainer.addEventListener('wheel', handleWheel, { passive: false });
+    return () => scrollContainer.removeEventListener('wheel', handleWheel);
+  }, []);
+
   const { data: articles = [], isLoading } = useQuery({
     queryKey: ['news-horizontal', category],
     queryFn: async () => {
