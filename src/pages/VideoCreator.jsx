@@ -19,6 +19,8 @@ export default function VideoCreator() {
   const [generating, setGenerating] = useState(false);
   const messagesEndRef = useRef(null);
   const [showChat, setShowChat] = useState(true);
+  const [uploadingFile, setUploadingFile] = useState(false);
+  const fileInputRef = useRef(null);
 
   // Fetch reporters as avatars
   const { data: reporters = [] } = useQuery({
@@ -107,6 +109,54 @@ export default function VideoCreator() {
       setSelectedAvatar(avatars[0]);
     }
   }, [reporters]);
+
+  const handleFileUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate file type
+    const validTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/gif'];
+    if (!validTypes.includes(file.type)) {
+      toast.error('נא להעלות תמונה בפורמט PNG, JPG או GIF');
+      return;
+    }
+
+    // Validate file size (max 10MB)
+    if (file.size > 10 * 1024 * 1024) {
+      toast.error('התמונה גדולה מדי. מקסימום 10MB');
+      return;
+    }
+
+    setUploadingFile(true);
+    toast.loading('מעלה תמונה...', { id: 'upload-file' });
+
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      
+      const conversation = await base44.agents.getConversation(conversationId);
+      
+      const context = scenes.length > 0 ? 
+        `\n\nסצנות קיימות:\n${scenes.map((s, i) => `${i + 1}. ${s.script || 'ללא סקריפט'} (אווטר: ${s.avatar?.name || 'לא נבחר'})`).join('\n')}` : 
+        '';
+      
+      await base44.agents.addMessage(conversation, {
+        role: "user",
+        content: (input.trim() || 'בנה לי סצנות לסרטון לפי התמונה הזו') + context,
+        file_urls: [file_url]
+      });
+      
+      setInput('');
+      toast.success('התמונה נשלחה!', { id: 'upload-file' });
+    } catch (err) {
+      console.error('Upload failed:', err);
+      toast.error('שגיאה בהעלאת התמונה', { id: 'upload-file' });
+    } finally {
+      setUploadingFile(false);
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    }
+  };
 
   const handleSend = async () => {
     if (!input.trim() || !conversationId || loading) return;
@@ -270,28 +320,52 @@ export default function VideoCreator() {
               </div>
 
               <div className="p-3 border-t border-gray-800">
-                <div className="flex items-center gap-2">
-                  <textarea
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    onKeyDown={(e) => {
-                      if (e.key === "Enter" && !e.shiftKey) {
-                        e.preventDefault();
-                        handleSend();
-                      }
-                    }}
-                    placeholder="למשל: צור לי סרטון על החדשות עם 3 סצנות"
-                    className="flex-1 px-3 py-2 rounded-md bg-gray-900 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none min-h-[80px]"
-                    rows={3}
-                  />
-                  <Button
-                    onClick={handleSend}
-                    disabled={!input.trim() || loading}
-                    size="sm"
-                    className="bg-gradient-to-br from-purple-600 to-pink-600 shrink-0 h-[80px]"
-                  >
-                    <Send className="w-4 h-4" />
-                  </Button>
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center gap-2">
+                    <textarea
+                      value={input}
+                      onChange={(e) => setInput(e.target.value)}
+                      onKeyDown={(e) => {
+                        if (e.key === "Enter" && !e.shiftKey) {
+                          e.preventDefault();
+                          handleSend();
+                        }
+                      }}
+                      placeholder="תאר את הסרטון או צרף תמונה..."
+                      className="flex-1 px-3 py-2 rounded-md bg-gray-900 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none min-h-[80px]"
+                      rows={3}
+                    />
+                    <div className="flex flex-col gap-2 shrink-0">
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/*"
+                        onChange={handleFileUpload}
+                        className="hidden"
+                      />
+                      <Button
+                        onClick={() => fileInputRef.current?.click()}
+                        disabled={uploadingFile || loading}
+                        size="sm"
+                        variant="outline"
+                        className="h-[38px] w-[38px] p-0"
+                      >
+                        {uploadingFile ? (
+                          <Loader2 className="w-4 h-4 animate-spin" />
+                        ) : (
+                          <Plus className="w-4 h-4" />
+                        )}
+                      </Button>
+                      <Button
+                        onClick={handleSend}
+                        disabled={!input.trim() || loading || uploadingFile}
+                        size="sm"
+                        className="bg-gradient-to-br from-purple-600 to-pink-600 h-[38px] w-[38px] p-0"
+                      >
+                        <Send className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </motion.div>
