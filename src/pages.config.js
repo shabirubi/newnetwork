@@ -78,7 +78,6 @@ import Terms from './pages/Terms';
 import TestApps from './pages/TestApps';
 import TestDID from './pages/TestDID';
 import ToMovieeStudio from './pages/ToMovieeStudio';
-import UnderConstruction from './pages/UnderConstruction';
 import UserProfile from './pages/UserProfile';
 import UserVideos from './pages/UserVideos';
 import VOD from './pages/VOD';
@@ -121,7 +120,6 @@ export const PAGES = {
     "TestApps": TestApps,
     "TestDID": TestDID,
     "ToMovieeStudio": ToMovieeStudio,
-    "UnderConstruction": UnderConstruction,
     "UserProfile": UserProfile,
     "UserVideos": UserVideos,
     "VOD": VOD,
