@@ -129,13 +129,9 @@ export default function VideoCreator() {
       // Step 3: Send to AI with the talking_photo_id
       const conversation = await base44.agents.getConversation(conversationId);
       
-      const context = scenes.length > 0 ? 
-        `\n\nסצנות קיימות:\n${scenes.map((s, i) => `${i + 1}. ${s.script || 'ללא סקריפט'} (אווטר: ${s.avatar?.name || 'לא נבחר'})`).join('\n')}` : 
-        '';
-      
       await base44.agents.addMessage(conversation, {
         role: "user",
-        content: (input.trim() || `בנה לי סצנות לסרטון עם האווטר מהתמונה הזו. talking_photo_id: ${photoResult.data.talking_photo_id}`) + context,
+        content: (input.trim() || `בנה לי סצנות לסרטון עם האווטר מהתמונה הזו. talking_photo_id: ${photoResult.data.talking_photo_id}`),
         file_urls: [file_url]
       });
       
@@ -162,14 +158,9 @@ export default function VideoCreator() {
     try {
       const conversation = await base44.agents.getConversation(conversationId);
       
-      // Add context about current scenes
-      const context = scenes.length > 0 ? 
-        `\n\nסצנות קיימות:\n${scenes.map((s, i) => `${i + 1}. ${s.script || 'ללא סקריפט'} (אווטר: ${s.avatar?.name || 'לא נבחר'})`).join('\n')}` : 
-        '';
-      
       await base44.agents.addMessage(conversation, {
         role: "user",
-        content: userMessage + context
+        content: userMessage
       });
     } catch (err) {
       console.error(err);
