@@ -228,8 +228,10 @@ export default function VideoCreator() {
                 )}
 
                 {messages.map((msg, idx) => (
-                  <div
+                  <motion.div
                     key={idx}
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
                     className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}
                   >
                     <div
@@ -240,55 +242,115 @@ export default function VideoCreator() {
                       }`}
                     >
                       {msg.file_urls && msg.file_urls.length > 0 && (
-                        <div className="mb-2 space-y-2">
+                        <motion.div 
+                          initial={{ scale: 0.9, opacity: 0 }}
+                          animate={{ scale: 1, opacity: 1 }}
+                          className="mb-3 space-y-2"
+                        >
                           {msg.file_urls.map((url, i) => (
-                            <img 
-                              key={i}
-                              src={url} 
-                              alt="תמונה מועלתה"
-                              className="w-full rounded-lg border border-purple-500/30"
-                            />
+                            <div key={i} className="relative group">
+                              <img 
+                                src={url} 
+                                alt="תמונה מועלתה"
+                                className="w-full rounded-lg border-2 border-purple-500/50 shadow-xl"
+                              />
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-lg opacity-0 group-hover:opacity-100 transition-opacity" />
+                            </div>
                           ))}
-                        </div>
+                        </motion.div>
                       )}
                       <div className="whitespace-pre-wrap">{msg.content}</div>
-                      {msg.tool_calls?.map((toolCall, i) => (
-                        <div key={i} className="mt-3 p-3 bg-black/30 rounded-lg">
-                          {toolCall.status === 'completed' && toolCall.results && (() => {
-                            try {
-                              const result = typeof toolCall.results === 'string' ? JSON.parse(toolCall.results) : toolCall.results;
-                              if (result.video_url) {
-                                return (
-                                  <div className="space-y-2">
-                                    <div className="text-xs text-green-300 flex items-center gap-2">
-                                      <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-                                      סרטון נוצר בהצלחה!
-                                    </div>
-                                    <video 
-                                      src={result.video_url} 
-                                      controls 
-                                      className="w-full rounded-lg shadow-xl"
-                                      autoPlay
-                                      playsInline
-                                    />
+                      {msg.tool_calls?.map((toolCall, i) => {
+                        console.log('Tool call:', toolCall);
+                        return (
+                          <motion.div 
+                            key={i} 
+                            initial={{ scale: 0.95, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            className="mt-3"
+                          >
+                            {toolCall.status === 'running' && (
+                              <div className="p-4 bg-black/40 backdrop-blur-xl rounded-xl border border-yellow-500/30">
+                                <div className="flex items-center gap-3 mb-3">
+                                  <div className="relative w-8 h-8">
+                                    <div className="absolute inset-0 border-4 border-yellow-500/20 rounded-full" />
+                                    <div className="absolute inset-0 border-4 border-yellow-500 border-t-transparent rounded-full animate-spin" />
                                   </div>
-                                );
+                                  <div>
+                                    <div className="text-yellow-300 font-bold">מייצר סרטון...</div>
+                                    <div className="text-yellow-200/70 text-xs">זה יכול לקחת עד 2 דקות</div>
+                                  </div>
+                                </div>
+                                <div className="w-full h-1 bg-black/40 rounded-full overflow-hidden">
+                                  <motion.div 
+                                    className="h-full bg-gradient-to-r from-yellow-500 to-orange-500"
+                                    animate={{ width: ['0%', '100%'] }}
+                                    transition={{ duration: 120, ease: "linear" }}
+                                  />
+                                </div>
+                              </div>
+                            )}
+                            
+                            {toolCall.status === 'completed' && toolCall.results && (() => {
+                              try {
+                                const result = typeof toolCall.results === 'string' ? JSON.parse(toolCall.results) : toolCall.results;
+                                console.log('Result:', result);
+                                if (result.video_url) {
+                                  return (
+                                    <motion.div 
+                                      initial={{ scale: 0.9, opacity: 0 }}
+                                      animate={{ scale: 1, opacity: 1 }}
+                                      className="p-4 bg-black/40 backdrop-blur-xl rounded-xl border-2 border-green-500/50 shadow-2xl"
+                                    >
+                                      <div className="flex items-center gap-2 mb-3">
+                                        <motion.div
+                                          initial={{ scale: 0 }}
+                                          animate={{ scale: 1 }}
+                                          className="w-6 h-6 bg-green-500 rounded-full flex items-center justify-center"
+                                        >
+                                          <Sparkles className="w-4 h-4 text-white" />
+                                        </motion.div>
+                                        <span className="text-green-300 font-bold">✨ הסרטון מוכן!</span>
+                                      </div>
+                                      <div className="relative group">
+                                        <video 
+                                          src={result.video_url} 
+                                          controls 
+                                          className="w-full rounded-lg shadow-2xl border border-green-500/30"
+                                          playsInline
+                                        />
+                                        <div className="mt-2 flex gap-2">
+                                          <a 
+                                            href={result.video_url} 
+                                            download 
+                                            className="flex-1 bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center justify-center gap-1 transition-all"
+                                          >
+                                            <Download className="w-3 h-3" />
+                                            הורד
+                                          </a>
+                                        </div>
+                                      </div>
+                                    </motion.div>
+                                  );
+                                }
+                              } catch (e) {
+                                console.error('Parse error:', e);
+                                return null;
                               }
-                            } catch (e) {
                               return null;
-                            }
-                            return null;
-                          })()}
-                          {toolCall.status === 'in_progress' && (
-                            <div className="text-xs text-yellow-300 flex items-center gap-2">
-                              <div className="w-4 h-4 border-2 border-yellow-300 border-t-transparent rounded-full animate-spin" />
-                              מייצר סרטון...
-                            </div>
-                          )}
-                        </div>
-                      ))}
+                            })()}
+
+                            {toolCall.status === 'failed' && (
+                              <div className="p-4 bg-red-500/20 backdrop-blur-xl rounded-xl border border-red-500/30">
+                                <div className="text-red-300 font-bold mb-1">❌ שגיאה ביצירת הסרטון</div>
+                                <div className="text-red-200/70 text-xs">נסה שוב או שנה את התסריט</div>
+                              </div>
+                            )}
+                          </motion.div>
+                        );
+                      })}
                     </div>
-                  </div>
+                  </motion.div>
                 ))}
 
                 {loading && (
