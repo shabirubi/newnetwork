@@ -239,6 +239,18 @@ export default function VideoCreator() {
                           : "bg-gradient-to-br from-purple-600 to-pink-600 text-white"
                       }`}
                     >
+                      {msg.file_urls && msg.file_urls.length > 0 && (
+                        <div className="mb-2 space-y-2">
+                          {msg.file_urls.map((url, i) => (
+                            <img 
+                              key={i}
+                              src={url} 
+                              alt="תמונה מועלתה"
+                              className="w-full rounded-lg border border-purple-500/30"
+                            />
+                          ))}
+                        </div>
+                      )}
                       <div className="whitespace-pre-wrap">{msg.content}</div>
                       {msg.tool_calls?.map((toolCall, i) => (
                         <div key={i} className="mt-3 p-3 bg-black/30 rounded-lg">
