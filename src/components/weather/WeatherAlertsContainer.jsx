@@ -118,11 +118,8 @@ export default function WeatherAlertsContainer() {
             </div>
             <div className="space-y-2 max-h-64 overflow-y-auto scrollbar-hide">
               {alerts.map((alert, idx) => (
-                <motion.div
+                <div
                   key={idx}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.4 + idx * 0.1 }}
                   className="bg-white/5 backdrop-blur-sm rounded-lg p-2 border border-[#0080FF]/40 hover:bg-white/10 transition-all"
                 >
                   <p className="text-white font-semibold text-xs mb-0.5">{alert.title}</p>
@@ -135,7 +132,7 @@ export default function WeatherAlertsContainer() {
                   >
                     קרא עוד →
                   </a>
-                </motion.div>
+                </div>
               ))}
             </div>
           </div>
