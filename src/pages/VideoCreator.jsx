@@ -109,35 +109,42 @@ export default function VideoCreator() {
     }
 
     setUploadingFile(true);
-    toast.loading('מעלה תמונה ומכין אווטר...', { id: 'upload-file' });
+    toast.loading('מעלה תמונה...', { id: 'upload-file' });
 
     try {
       // Step 1: Upload image
       const { file_url } = await base44.integrations.Core.UploadFile({ file });
       console.log('Uploaded image:', file_url);
-      
-      // Step 2: Create talking photo avatar from the image
-      toast.loading('יוצר talking photo avatar...', { id: 'upload-file' });
+
+      // Step 2: Show image immediately in chat
+      const userMessage = {
+        role: "user",
+        content: input.trim() || "בנה לי סצנות לסרטון עם האווטר מהתמונה הזו",
+        file_urls: [file_url]
+      };
+      setMessages(prev => [...prev, userMessage]);
+      setInput('');
+
+      // Step 3: Create talking photo avatar
+      toast.loading('יוצר אווטר...', { id: 'upload-file' });
       const photoResult = await base44.functions.invoke('createPhotoAvatar', { 
         photo_url: file_url 
       });
-      
+
       if (!photoResult.data?.talking_photo_id) {
         throw new Error('Failed to create talking photo avatar');
       }
-      
+
       console.log('Created talking photo:', photoResult.data);
-      
-      // Step 3: Send to AI with image
-      setInput('');
+
+      // Step 4: Send to AI
       const conversation = await base44.agents.getConversation(conversationId);
-      
       await base44.agents.addMessage(conversation, {
         role: "user",
-        content: input.trim() || `בנה לי סצנות לסרטון עם האווטר מהתמונה הזו. talking_photo_id: ${photoResult.data.talking_photo_id}`,
+        content: `${userMessage.content}. talking_photo_id: ${photoResult.data.talking_photo_id}`,
         file_urls: [file_url]
       });
-      
+
       toast.success('התמונה הועלתה! 🎬', { id: 'upload-file' });
     } catch (err) {
       console.error('Upload failed:', err);
