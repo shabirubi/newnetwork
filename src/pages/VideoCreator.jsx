@@ -353,7 +353,7 @@ export default function VideoCreator() {
           )}
         </AnimatePresence>
 
-        {/* Center: Timeline */}
+        {/* Center: Main Display */}
         <div className="flex-1 flex flex-col overflow-hidden">
           <div className="flex-1 bg-gradient-to-br from-black via-purple-900/10 to-black flex items-center justify-center p-6">
             <div className="text-center max-w-2xl">
@@ -382,19 +382,6 @@ export default function VideoCreator() {
               )}
             </div>
           </div>
-          ) : (
-            /* Main Chat Display */
-            <div className="flex-1 bg-gradient-to-br from-black via-purple-900/10 to-black flex items-center justify-center p-6">
-              <div className="text-center">
-                <Sparkles className="w-16 h-16 text-purple-500 mx-auto mb-4 animate-pulse" />
-                <p className="text-gray-300 text-lg">הסרטונים שלך יופיעו כאן בצ'אט</p>
-                <p className="text-gray-500 text-sm mt-2">פשוט תאר מה אתה רוצה והמערכת תייצר אוטומטית</p>
-              </div>
-            </div>
-
-
-            </>
-          )}
         </div>
       </div>
     </div>
