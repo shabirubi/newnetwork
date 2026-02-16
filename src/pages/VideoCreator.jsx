@@ -168,15 +168,54 @@ export default function VideoCreator() {
     setLoading(true);
 
     try {
-      const conversation = await base44.agents.getConversation(conversationId);
-      
-      await base44.agents.addMessage(conversation, {
+      // Add user message to chat
+      setMessages(prev => [...prev, {
         role: "user",
         content: userMessage
+      }]);
+
+      // Generate video directly
+      const result = await base44.functions.invoke('generateHeyGenCharacter', {
+        payload: {
+          script: userMessage,
+          avatar_id: "Abigail_expressive_2024112501",
+          voice_id: "v6WKRTqObgmv7NHgVAFD",
+          background: "white"
+        }
       });
+
+      console.log('Video generation result:', result);
+
+      // Add assistant message with video
+      if (result.data?.video_url) {
+        setMessages(prev => [...prev, {
+          role: "assistant",
+          content: "✅ סרטון מוכן!",
+          video_url: result.data.video_url
+        }]);
+
+        // Save to history
+        const newDownload = {
+          id: Math.random(),
+          title: userMessage.substring(0, 30) || "סרטון",
+          videoUrl: result.data.video_url,
+          timestamp: new Date().toISOString(),
+          scriptPreview: userMessage.substring(0, 50) + "..."
+        };
+        const saved = localStorage.getItem('videoDownloadHistory') || '[]';
+        const downloads = JSON.parse(saved);
+        const updated = [newDownload, ...downloads].slice(0, 20);
+        localStorage.setItem('videoDownloadHistory', JSON.stringify(updated));
+      } else {
+        setMessages(prev => [...prev, {
+          role: "assistant",
+          content: "⏳ הווידאו עדיין בעיבוד... נא לחכות"
+        }]);
+      }
     } catch (err) {
       console.error(err);
-      toast.error("שגיאה בשליחת הודעה");
+      toast.error(`שגיאה: ${err.message}`);
+    } finally {
       setLoading(false);
     }
   };
@@ -285,6 +324,24 @@ export default function VideoCreator() {
                             </div>
                           ))}
                         </motion.div>
+                      )}
+                      {msg.video_url && (
+                        <div className="relative w-full aspect-video bg-gray-900 rounded-lg overflow-hidden border border-gray-700 mb-3">
+                          <video 
+                            src={msg.video_url} 
+                            controls 
+                            className="w-full h-full"
+                            playsInline
+                          />
+                          <a 
+                            href={msg.video_url}
+                            download
+                            className="absolute top-2 right-2 bg-green-600 hover:bg-green-700 text-white px-2 py-1 rounded text-xs font-bold transition-all"
+                          >
+                            <Download className="w-3 h-3 inline mr-1" />
+                            הורד
+                          </a>
+                        </div>
                       )}
                       <div className="whitespace-pre-wrap">{msg.content}</div>
                       {msg.tool_calls?.map((toolCall, i) => {
