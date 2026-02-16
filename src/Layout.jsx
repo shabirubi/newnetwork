@@ -768,6 +768,18 @@ export default function Layout({ children, currentPageName }) {
                 <div className="p-4 space-y-1">
 
                 <Link
+                  to={createPageUrl("VideoCreator")}
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#E31E24]/20 active:bg-[#E31E24]/40 transition-all border border-transparent hover:border-[#E31E24]/30 animate-pulse"
+                >
+                  <div className="w-10 h-10 rounded-xl bg-black/40 border border-purple-500/20 flex items-center justify-center">
+                    <Sparkles size={20} className="text-purple-500" />
+                  </div>
+                  <span className="flex-1 font-medium text-purple-300">יוצר סרטונים AI</span>
+                  <ChevronLeft size={18} className="text-purple-500" />
+                </Link>
+
+                <Link
                   to={createPageUrl("Schedule")}
                   onClick={() => setMobileMenuOpen(false)}
                   className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#E31E24]/20 active:bg-[#E31E24]/40 transition-all border border-transparent hover:border-[#E31E24]/30"
@@ -818,7 +830,7 @@ export default function Layout({ children, currentPageName }) {
 
       {/* Mobile Bottom Navigation */}
       <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-gradient-to-br from-black/90 via-[#0080FF]/30 to-black/90 backdrop-blur-xl border-t-2 border-[#0080FF]/50 z-50 safe-area-inset-bottom shadow-lg shadow-[#0080FF]/30">
-        <div className="grid grid-cols-4 gap-1 px-2 py-3">
+        <div className="grid grid-cols-5 gap-1 px-2 py-3">
           <Link
             to={createPageUrl("Home")}
             onClick={(e) => {
@@ -827,32 +839,40 @@ export default function Layout({ children, currentPageName }) {
             }}
             className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-[#0080FF]/30 transition-colors touch-manipulation relative z-[110]"
             >
-            <Home size={28} className="text-gray-300 mb-1" strokeWidth={2.5} />
-            <span className="text-[11px] font-bold text-gray-300">בית</span>
+            <Home size={24} className="text-gray-300 mb-1" strokeWidth={2.5} />
+            <span className="text-[10px] font-bold text-gray-300">בית</span>
           </Link>
 
           <Link
             to={createPageUrl("Live")}
             className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-[#0080FF]/30 transition-colors touch-manipulation"
           >
-            <Radio size={28} className="text-[#0080FF] drop-shadow-[0_0_8px_#0080FF] mb-1" strokeWidth={2.5} />
-            <span className="text-[11px] font-bold text-[#0080FF] drop-shadow-[0_0_8px_#0080FF]">חי</span>
+            <Radio size={24} className="text-[#0080FF] drop-shadow-[0_0_8px_#0080FF] mb-1" strokeWidth={2.5} />
+            <span className="text-[10px] font-bold text-[#0080FF] drop-shadow-[0_0_8px_#0080FF]">חי</span>
+          </Link>
+
+          <Link
+            to={createPageUrl("VideoCreator")}
+            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-[#0080FF]/30 transition-colors touch-manipulation"
+          >
+            <Sparkles size={24} className="text-purple-400 drop-shadow-[0_0_8px_purple] mb-1 animate-pulse" strokeWidth={2.5} />
+            <span className="text-[10px] font-bold text-purple-400">AI</span>
           </Link>
 
           <Link
             to={createPageUrl("Category?cat=breaking")}
             className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-[#0080FF]/30 transition-colors touch-manipulation"
             >
-            <Flame size={28} className="text-gray-300 mb-1" strokeWidth={2.5} />
-            <span className="text-[11px] font-bold text-gray-300">חמות</span>
+            <Flame size={24} className="text-gray-300 mb-1" strokeWidth={2.5} />
+            <span className="text-[10px] font-bold text-gray-300">חמות</span>
             </Link>
 
           <button
             onClick={() => setMobileMenuOpen(true)}
             className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-[#E31E24]/20 transition-colors touch-manipulation"
           >
-            <Menu size={28} className="text-gray-300 mb-1" strokeWidth={2.5} />
-            <span className="text-[11px] font-bold text-gray-300">עוד</span>
+            <Menu size={24} className="text-gray-300 mb-1" strokeWidth={2.5} />
+            <span className="text-[10px] font-bold text-gray-300">עוד</span>
           </button>
         </div>
       </nav>
