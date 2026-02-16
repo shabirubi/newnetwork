@@ -297,25 +297,74 @@ export default function VideoCreator() {
                             className="mt-3"
                           >
                             {(toolCall.status === 'running' || toolCall.status === 'in_progress') && (
-                              <div className="p-4 bg-black/40 backdrop-blur-xl rounded-xl border border-yellow-500/30">
-                                <div className="flex items-center gap-3 mb-3">
-                                  <div className="relative w-8 h-8">
-                                    <div className="absolute inset-0 border-4 border-yellow-500/20 rounded-full" />
-                                    <div className="absolute inset-0 border-4 border-yellow-500 border-t-transparent rounded-full animate-spin" />
-                                  </div>
-                                  <div>
-                                    <div className="text-yellow-300 font-bold">מייצר סרטון...</div>
-                                    <div className="text-yellow-200/70 text-xs">זה יכול לקחת עד 2 דקות</div>
+                              <motion.div 
+                                initial={{ scale: 0.95, opacity: 0 }}
+                                animate={{ scale: 1, opacity: 1 }}
+                                className="p-6 bg-gradient-to-br from-purple-900/40 to-black/60 backdrop-blur-xl rounded-2xl border-2 border-purple-500/40 shadow-2xl overflow-hidden"
+                              >
+                                {/* Video Player Loading State */}
+                                <div className="aspect-video bg-black/80 rounded-lg overflow-hidden flex flex-col items-center justify-center relative mb-4 border border-purple-500/30">
+                                  {/* Elegant Loading Animation */}
+                                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-purple-500/10 to-transparent animate-pulse" />
+
+                                  {/* Play Button Center */}
+                                  <motion.div
+                                    animate={{ scale: [1, 1.1, 1] }}
+                                    transition={{ duration: 2, repeat: Infinity }}
+                                    className="relative z-10"
+                                  >
+                                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center shadow-2xl">
+                                      <Play className="w-7 h-7 text-white ml-1" fill="white" />
+                                    </div>
+                                  </motion.div>
+
+                                  {/* Loading Bars */}
+                                  <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-end gap-1">
+                                    {[...Array(4)].map((_, i) => (
+                                      <motion.div
+                                        key={i}
+                                        className="w-1 bg-gradient-to-t from-purple-600 to-pink-600 rounded-full"
+                                        animate={{ height: ['8px', '24px', '8px'] }}
+                                        transition={{ 
+                                          duration: 0.8, 
+                                          repeat: Infinity,
+                                          delay: i * 0.1
+                                        }}
+                                      />
+                                    ))}
                                   </div>
                                 </div>
-                                <div className="w-full h-1 bg-black/40 rounded-full overflow-hidden">
-                                  <motion.div 
-                                    className="h-full bg-gradient-to-r from-yellow-500 to-orange-500"
-                                    animate={{ width: ['0%', '100%'] }}
-                                    transition={{ duration: 120, ease: "linear" }}
-                                  />
+
+                                {/* Status Text */}
+                                <div className="text-center space-y-2">
+                                  <motion.h3 
+                                    animate={{ opacity: [0.7, 1, 0.7] }}
+                                    transition={{ duration: 2, repeat: Infinity }}
+                                    className="text-white font-bold text-lg"
+                                  >
+                                    ✨ יוצר סרטון מדהים
+                                  </motion.h3>
+                                  <p className="text-purple-300/80 text-sm">זה יכול לקחת עד 2 דקות • אנא המתן...</p>
                                 </div>
-                              </div>
+
+                                {/* Progress Bar */}
+                                <div className="mt-4 space-y-1">
+                                  <div className="w-full h-2 bg-black/60 rounded-full overflow-hidden border border-purple-500/30">
+                                    <motion.div 
+                                      className="h-full bg-gradient-to-r from-purple-600 via-pink-600 to-purple-600 rounded-full"
+                                      animate={{ 
+                                        x: ['-100%', '100%']
+                                      }}
+                                      transition={{ 
+                                        duration: 3, 
+                                        repeat: Infinity,
+                                        ease: "easeInOut"
+                                      }}
+                                    />
+                                  </div>
+                                  <p className="text-xs text-purple-300/60 text-center">עיבוד בעברה...</p>
+                                </div>
+                              </motion.div>
                             )}
                             
                             {toolCall.status === 'completed' && toolCall.results && (() => {
