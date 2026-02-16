@@ -145,9 +145,14 @@ export default function VideoCreator() {
     toast.loading(`מייצר סצנה ${sceneIndex + 1}...`, { id: `gen-${sceneIndex}` });
 
     try {
+      // Use the reporter's name as identifier for HeyGen
+      const avatarId = scene.avatar.name === 'עדי' ? 'josh_lite3_20230714' : 
+                       scene.avatar.name === 'יובל' ? 'angela-inblackskirt-20220820' :
+                       'josh_lite3_20230714'; // default
+
       const result = await base44.functions.invoke('generateHeyGenCharacter', {
         script: scene.script,
-        avatar_id: scene.avatar.id,
+        avatar_id: avatarId,
         voice_id: '1bd001e7e50f421d891986aad5158bc8'
       });
 
