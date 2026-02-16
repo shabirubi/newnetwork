@@ -15,8 +15,7 @@ export default function VideoCreator() {
   const [loading, setLoading] = useState(false);
   const [conversationId, setConversationId] = useState(null);
   const [selectedAvatar, setSelectedAvatar] = useState(null);
-  const [scenes, setScenes] = useState([]);
-  const [generating, setGenerating] = useState(false);
+
   const messagesEndRef = useRef(null);
   const [showChat, setShowChat] = useState(true);
   const [uploadingFile, setUploadingFile] = useState(false);
@@ -71,47 +70,12 @@ export default function VideoCreator() {
     const unsubscribe = base44.agents.subscribeToConversation(conversationId, (data) => {
       setMessages(data.messages || []);
       setLoading(false);
-      
-      // Parse AI response to extract scenes
-      const lastMessage = data.messages?.[data.messages.length - 1];
-      if (lastMessage?.role === 'assistant' && lastMessage.content) {
-        tryParseScenes(lastMessage.content);
-      }
     });
 
     return unsubscribe;
   }, [conversationId]);
 
-  const tryParseScenes = (content) => {
-    // Try to extract scenes from AI response
-    const scenePattern = /סצנה\s*(\d+)[:\s]*(.+?)(?=סצנה\s*\d+|$)/gis;
-    const matches = [...content.matchAll(scenePattern)];
-    
-    // Check if there's a talking_photo_id in the message
-    const talkingPhotoMatch = content.match(/talking_photo_id:\s*([a-zA-Z0-9_-]+)/);
-    const talkingPhotoId = talkingPhotoMatch ? talkingPhotoMatch[1] : null;
-    
-    // Check if there's a photo URL in the last message
-    const lastMsg = messages[messages.length - 1];
-    const hasPhotoUrl = lastMsg?.file_urls && lastMsg.file_urls.length > 0;
-    const photoUrl = hasPhotoUrl ? lastMsg.file_urls[0] : null;
-    
-    if (matches.length > 0) {
-      const newScenes = matches.map((match, idx) => ({
-        id: Date.now() + idx,
-        script: match[2].trim(),
-        avatar: (talkingPhotoId || photoUrl) ? null : (selectedAvatar || avatars[0]),
-        photo_url: talkingPhotoId || photoUrl,
-        videoUrl: null,
-        duration: 0
-      }));
-      
-      if (newScenes.length > 0) {
-        setScenes(newScenes);
-        toast.success(`${newScenes.length} סצנות נוצרו!${(talkingPhotoId || photoUrl) ? ' (עם התמונה שלך)' : ''}`);
-      }
-    }
-  };
+
 
   // Auto scroll to bottom
   useEffect(() => {
@@ -214,73 +178,7 @@ export default function VideoCreator() {
     }
   };
 
-  const generateScene = async (sceneIndex) => {
-    const scene = scenes[sceneIndex];
-    if (!scene.avatar && !scene.photo_url) {
-      toast.error("נא לבחור אווטר או לצרף תמונה לסצנה");
-      return;
-    }
 
-    setGenerating(true);
-    toast.loading(`מייצר סצנה ${sceneIndex + 1}... זה יכול לקחת עד 2 דקות`, { id: `gen-${sceneIndex}` });
-
-    try {
-      const payload = {
-        script: scene.script,
-        voice_id: 'v6WKRTqObgmv7NHgVAFD'
-      };
-
-      // Add avatar_id OR photo_url
-      if (scene.photo_url) {
-        payload.photo_url = scene.photo_url;
-      } else if (scene.avatar?.id) {
-        payload.avatar_id = scene.avatar.id;
-      }
-
-      const result = await base44.functions.invoke('generateHeyGenCharacter', payload);
-
-      if (result.data?.video_url) {
-        const newScenes = [...scenes];
-        newScenes[sceneIndex] = {
-          ...scene,
-          videoUrl: result.data.video_url,
-          duration: result.data.duration || 10
-        };
-        setScenes(newScenes);
-        toast.success(`סצנה ${sceneIndex + 1} נוצרה! 🎬`, { id: `gen-${sceneIndex}` });
-      } else if (result.data?.still_processing) {
-        toast.info(`הסצנה בעיבוד - בדוק בעוד דקה`, { id: `gen-${sceneIndex}` });
-      } else if (result.data?.error?.includes('trial_video_limit_exceeded')) {
-        toast.error('הגעת למגבלת הטריאל היומית של HeyGen (8 סרטונים). שדרג את החשבון או חכה למחר', { 
-          id: `gen-${sceneIndex}`,
-          duration: 7000 
-        });
-      } else {
-        toast.error(result.data?.error || "שגיאה ביצירת הסצנה", { id: `gen-${sceneIndex}` });
-      }
-    } catch (err) {
-      console.error('Generation failed:', err);
-      const errorMsg = err.response?.data?.error || err.message;
-      if (errorMsg?.includes('trial_video_limit_exceeded')) {
-        toast.error('הגעת למגבלת הטריאל היומית של HeyGen (8 סרטונים). שדרג את החשבון או חכה למחר', { 
-          id: `gen-${sceneIndex}`,
-          duration: 7000 
-        });
-      } else {
-        toast.error(`שגיאה: ${errorMsg}`, { id: `gen-${sceneIndex}` });
-      }
-    } finally {
-      setGenerating(false);
-    }
-  };
-
-  const generateAllScenes = async () => {
-    for (let i = 0; i < scenes.length; i++) {
-      if (scenes[i].script.trim()) {
-        await generateScene(i);
-      }
-    }
-  };
 
   return (
     <div className="h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex flex-col overflow-hidden" dir="rtl">
@@ -350,7 +248,42 @@ export default function VideoCreator() {
                           : "bg-gradient-to-br from-purple-600 to-pink-600 text-white"
                       }`}
                     >
-                      {msg.content}
+                      <div className="whitespace-pre-wrap">{msg.content}</div>
+                      {msg.tool_calls?.map((toolCall, i) => (
+                        <div key={i} className="mt-3 p-3 bg-black/30 rounded-lg">
+                          {toolCall.status === 'completed' && toolCall.results && (() => {
+                            try {
+                              const result = typeof toolCall.results === 'string' ? JSON.parse(toolCall.results) : toolCall.results;
+                              if (result.video_url) {
+                                return (
+                                  <div className="space-y-2">
+                                    <div className="text-xs text-green-300 flex items-center gap-2">
+                                      <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+                                      סרטון נוצר בהצלחה!
+                                    </div>
+                                    <video 
+                                      src={result.video_url} 
+                                      controls 
+                                      className="w-full rounded-lg shadow-xl"
+                                      autoPlay
+                                      playsInline
+                                    />
+                                  </div>
+                                );
+                              }
+                            } catch (e) {
+                              return null;
+                            }
+                            return null;
+                          })()}
+                          {toolCall.status === 'in_progress' && (
+                            <div className="text-xs text-yellow-300 flex items-center gap-2">
+                              <div className="w-4 h-4 border-2 border-yellow-300 border-t-transparent rounded-full animate-spin" />
+                              מייצר סרטון...
+                            </div>
+                          )}
+                        </div>
+                      ))}
                     </div>
                   </div>
                 ))}
@@ -422,107 +355,44 @@ export default function VideoCreator() {
 
         {/* Center: Timeline */}
         <div className="flex-1 flex flex-col overflow-hidden">
-          {scenes.length === 0 ? (
-            /* Empty State */
-            <div className="flex-1 flex items-center justify-center p-8">
-              <div className="text-center">
-                <Video className="w-24 h-24 text-gray-600 mx-auto mb-4" />
-                <h2 className="text-2xl font-bold text-white mb-2">אין סצנות עדיין</h2>
-                <p className="text-gray-400 mb-4">השתמש בצ'אט מימין כדי ליצור סצנות</p>
+          <div className="flex-1 bg-gradient-to-br from-black via-purple-900/10 to-black flex items-center justify-center p-6">
+            <div className="text-center max-w-2xl">
+              <Video className="w-24 h-24 text-purple-500 mx-auto mb-6 animate-pulse" />
+              <h2 className="text-3xl font-bold text-white mb-4">🎬 אולפן יצירת סרטונים AI</h2>
+              <p className="text-gray-300 text-lg mb-6">
+                המערכת תייצר את הסרטונים שלך אוטומטית בצ'אט
+              </p>
+              <div className="bg-black/40 backdrop-blur-xl rounded-2xl p-6 border border-purple-500/30">
+                <h3 className="text-white font-bold mb-3">איך זה עובד?</h3>
+                <div className="text-right space-y-2 text-gray-300">
+                  <p>✨ תאר את הסרטון שאתה רוצה</p>
+                  <p>🤖 המערכת תבנה תסריט מקצועי</p>
+                  <p>🎬 הסרטונים ייווצרו אוטומטית בצ'אט</p>
+                  <p>📥 צפה והורד ישירות</p>
+                </div>
+              </div>
+              {!showChat && (
                 <Button
                   onClick={() => setShowChat(true)}
-                  className="bg-gradient-to-r from-purple-600 to-pink-600"
+                  className="mt-6 bg-gradient-to-r from-purple-600 to-pink-600 px-8 py-6 text-lg"
                 >
-                  <MessageSquare className="w-4 h-4 ml-2" />
-                  פתח צ'אט
+                  <MessageSquare className="w-5 h-5 ml-2" />
+                  התחל ליצור
                 </Button>
+              )}
+            </div>
+          </div>
+          ) : (
+            /* Main Chat Display */
+            <div className="flex-1 bg-gradient-to-br from-black via-purple-900/10 to-black flex items-center justify-center p-6">
+              <div className="text-center">
+                <Sparkles className="w-16 h-16 text-purple-500 mx-auto mb-4 animate-pulse" />
+                <p className="text-gray-300 text-lg">הסרטונים שלך יופיעו כאן בצ'אט</p>
+                <p className="text-gray-500 text-sm mt-2">פשוט תאר מה אתה רוצה והמערכת תייצר אוטומטית</p>
               </div>
             </div>
-          ) : (
-            /* Timeline with Scenes */
-            <>
-              {/* Preview Area */}
-              <div className="flex-1 bg-black/20 flex items-center justify-center p-6">
-                {scenes.find(s => s.videoUrl) ? (
-                  <video
-                    src={scenes.find(s => s.videoUrl)?.videoUrl}
-                    controls
-                    className="max-w-4xl w-full rounded-xl shadow-2xl"
-                  />
-                ) : (
-                  <div className="text-center">
-                    <Sparkles className="w-16 h-16 text-gray-600 mx-auto mb-4" />
-                    <p className="text-gray-400">הסרטונים יופיעו כאן לאחר היצירה</p>
-                  </div>
-                )}
-              </div>
 
-              {/* Timeline */}
-              <div className="bg-gradient-to-b from-gray-900 to-black border-t border-gray-800 p-4">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-white font-bold">ציר זמן ({scenes.length} סצנות)</h3>
-                  <Button
-                    onClick={generateAllScenes}
-                    disabled={generating}
-                    className="bg-gradient-to-r from-purple-600 to-pink-600"
-                  >
-                    {generating ? (
-                      <><Loader2 className="w-4 h-4 animate-spin ml-2" />מייצר...</>
-                    ) : (
-                      <><Play className="w-4 h-4 ml-2" />צור את כל הסצנות</>
-                    )}
-                  </Button>
-                </div>
 
-                <div className="flex gap-4 overflow-x-auto pb-2">
-                  {scenes.map((scene, idx) => (
-                    <div
-                      key={scene.id}
-                      className="min-w-[200px] bg-gray-800 rounded-xl overflow-hidden border border-gray-700"
-                    >
-                      <div className="relative h-32 bg-gray-900 flex items-center justify-center">
-                        {scene.videoUrl ? (
-                          <video src={scene.videoUrl} className="w-full h-full object-cover" />
-                        ) : (
-                          <div className="text-center">
-                            {scene.photo_url ? (
-                              <img
-                                src={scene.photo_url}
-                                alt="תמונה מותאמת"
-                                className="w-16 h-16 rounded-full mx-auto mb-2 opacity-40 object-cover"
-                              />
-                            ) : scene.avatar ? (
-                              <img
-                                src={scene.avatar.image}
-                                alt={scene.avatar.name}
-                                className="w-16 h-16 rounded-full mx-auto mb-2 opacity-40"
-                              />
-                            ) : null}
-                            <p className="text-gray-500 text-xs">לא נוצר</p>
-                          </div>
-                        )}
-                        <div className="absolute top-2 left-2 bg-black/80 px-2 py-1 rounded text-white text-xs">
-                          #{idx + 1}
-                        </div>
-                      </div>
-                      <div className="p-3">
-                        <p className="text-white text-sm line-clamp-2 mb-2">{scene.script}</p>
-                        {!scene.videoUrl && (
-                          <Button
-                            onClick={() => generateScene(idx)}
-                            disabled={generating}
-                            size="sm"
-                            className="w-full bg-purple-600"
-                          >
-                            <Sparkles className="w-3 h-3 ml-1" />
-                            צור
-                          </Button>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
             </>
           )}
         </div>
