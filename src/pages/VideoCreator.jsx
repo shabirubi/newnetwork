@@ -108,12 +108,12 @@ export default function VideoCreator() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Select first avatar when reporters load
+  // Select first avatar when avatars load
   useEffect(() => {
     if (avatars.length > 0 && !selectedAvatar) {
       setSelectedAvatar(avatars[0]);
     }
-  }, [reporters]);
+  }, [heygenAvatars]);
 
   const handleFileUpload = async (e) => {
     const file = e.target.files?.[0];
