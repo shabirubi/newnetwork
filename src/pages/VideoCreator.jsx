@@ -98,57 +98,87 @@ export default function VideoCreator() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    // Validate file type
-    const validTypes = ['image/png', 'image/jpeg', 'image/jpg'];
-    if (!validTypes.includes(file.type)) {
-      toast.error('נא להעלות תמונה בפורמט PNG או JPG');
+    // Validate file type - support both images and videos
+    const imageTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'];
+    const videoTypes = ['video/mp4', 'video/quicktime', 'video/webm'];
+    const allValidTypes = [...imageTypes, ...videoTypes];
+    
+    if (!allValidTypes.includes(file.type)) {
+      toast.error('פורמטים נתמכים: PNG, JPG, MP4, או MOV (עד 100MB)');
       return;
     }
 
-    // Validate file size (max 5MB for HeyGen)
-    if (file.size > 5 * 1024 * 1024) {
-      toast.error('התמונה גדולה מדי. מקסימום 5MB');
+    // Validate file size (max 100MB for videos)
+    if (file.size > 100 * 1024 * 1024) {
+      toast.error('הקובץ גדול מדי. מקסימום 100MB');
       return;
     }
 
     setUploadingFile(true);
-    toast.loading('מעלה תמונה...', { id: 'upload-file' });
+    toast.loading('מעלה קובץ...', { id: 'upload-file' });
 
     try {
-      // Step 1: Upload image
+      // Upload file
       const { file_url } = await base44.integrations.Core.UploadFile({ file });
-      console.log('Uploaded image:', file_url);
+      console.log('Uploaded file:', file_url);
 
-      // Step 2: Show image immediately in chat
+      // Show file in chat
+      const isVideo = videoTypes.includes(file.type);
       const userMessage = {
         role: "user",
-        content: input.trim() || "בנה לי סצנות לסרטון עם האווטר מהתמונה הזו",
+        content: isVideo 
+          ? `צפה בסרטון וצור לי תסריט ותיאור בהתאם:\n${input.trim() || 'צור תסריט לסרטון הזה'}` 
+          : `צור לי סרטון עם האווטר מהתמונה: ${input.trim() || 'בנה לי סצנות יצירתיות'}`,
         file_urls: [file_url]
       };
       setMessages(prev => [...prev, userMessage]);
       setInput('');
 
-      // Step 3: Create talking photo avatar
-      toast.loading('יוצר אווטר...', { id: 'upload-file' });
-      const photoResult = await base44.functions.invoke('createPhotoAvatar', { 
-        photo_url: file_url 
-      });
+      // For images: create talking photo avatar
+      if (imageTypes.includes(file.type)) {
+        toast.loading('יוצר אווטר מהתמונה...', { id: 'upload-file' });
+        const photoResult = await base44.functions.invoke('createPhotoAvatar', { 
+          photo_url: file_url 
+        });
 
-      if (!photoResult.data?.talking_photo_id) {
-        throw new Error('Failed to create talking photo avatar');
+        if (photoResult.data?.talking_photo_id) {
+          console.log('Created talking photo:', photoResult.data);
+          // Generate video directly with photo
+          const result = await base44.functions.invoke('generateHeyGenCharacter', {
+            payload: {
+              script: userMessage.content.split(':')[1]?.trim() || "זה אווטר יוצר מתמונה שלך",
+              talking_photo_id: photoResult.data.talking_photo_id,
+              voice_id: "v6WKRTqObgmv7NHgVAFD",
+              background: "transparent"
+            }
+          });
+
+          if (result.data?.video_url) {
+            setMessages(prev => [...prev, {
+              role: "assistant",
+              content: "✅ סרטון מוכן!",
+              video_url: result.data.video_url
+            }]);
+            toast.success('סרטון נוצר! 🎬', { id: 'upload-file' });
+          }
+        }
+      } else {
+        // For videos: analyze and create script
+        toast.loading('מנתח סרטון וכותב תסריט...', { id: 'upload-file' });
+        const scriptResult = await base44.functions.invoke('analyzeVideoAndCreateScript', {
+          video_url: file_url,
+          user_request: input.trim() || 'צור תסריט מקצועי לסרטון זה'
+        });
+
+        if (scriptResult.data?.script) {
+          setMessages(prev => [...prev, {
+            role: "assistant",
+            content: `📝 תסריט חדש:\n${scriptResult.data.script}`
+          }]);
+          toast.success('תסריט נוצר! ✍️', { id: 'upload-file' });
+        }
       }
 
-      console.log('Created talking photo:', photoResult.data);
-
-      // Step 4: Send to AI
-      const conversation = await base44.agents.getConversation(conversationId);
-      await base44.agents.addMessage(conversation, {
-        role: "user",
-        content: `${userMessage.content}. talking_photo_id: ${photoResult.data.talking_photo_id}`,
-        file_urls: [file_url]
-      });
-
-      toast.success('התמונה הועלתה! 🎬', { id: 'upload-file' });
     } catch (err) {
       console.error('Upload failed:', err);
       toast.error(`שגיאה: ${err.message}`, { id: 'upload-file' });
@@ -509,12 +539,12 @@ export default function VideoCreator() {
                     />
                     <div className="flex flex-col gap-2 shrink-0">
                       <input
-                        ref={fileInputRef}
-                        type="file"
-                        accept="image/*"
-                        onChange={handleFileUpload}
-                        className="hidden"
-                      />
+                            ref={fileInputRef}
+                            type="file"
+                            accept="image/*,video/*"
+                            onChange={handleFileUpload}
+                            className="hidden"
+                          />
                       <Button
                         onClick={() => fileInputRef.current?.click()}
                         disabled={uploadingFile || loading}
