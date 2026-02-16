@@ -10,21 +10,45 @@ export default function HorizontalNewsScroller({ category, title, icon: Icon }) 
   const scrollRef = useRef(null);
   const [showLeftArrow, setShowLeftArrow] = useState(false);
   const [showRightArrow, setShowRightArrow] = useState(true);
+  const [isDragging, setIsDragging] = useState(false);
+  const [startX, setStartX] = useState(0);
+  const [scrollLeft, setScrollLeft] = useState(0);
 
   React.useEffect(() => {
     const scrollContainer = scrollRef.current;
     if (!scrollContainer) return;
 
     const handleWheel = (e) => {
-      if (e.deltaY !== 0) {
-        e.preventDefault();
-        scrollContainer.scrollLeft += e.deltaY;
-      }
+      e.preventDefault();
+      scrollContainer.scrollLeft += e.deltaY;
+      handleScroll();
     };
 
     scrollContainer.addEventListener('wheel', handleWheel, { passive: false });
     return () => scrollContainer.removeEventListener('wheel', handleWheel);
   }, []);
+
+  const handleMouseDown = (e) => {
+    setIsDragging(true);
+    setStartX(e.pageX - scrollRef.current.offsetLeft);
+    setScrollLeft(scrollRef.current.scrollLeft);
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging) return;
+    e.preventDefault();
+    const x = e.pageX - scrollRef.current.offsetLeft;
+    const walk = (x - startX) * 2;
+    scrollRef.current.scrollLeft = scrollLeft - walk;
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false);
+  };
+
+  const handleMouseLeave = () => {
+    setIsDragging(false);
+  };
 
   const { data: articles = [], isLoading } = useQuery({
     queryKey: ['news-horizontal', category],
@@ -111,8 +135,17 @@ export default function HorizontalNewsScroller({ category, title, icon: Icon }) 
       <div
         ref={scrollRef}
         onScroll={handleScroll}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={handleMouseLeave}
         className="flex gap-4 overflow-x-auto scrollbar-hide scroll-smooth pb-2"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        style={{ 
+          scrollbarWidth: 'none', 
+          msOverflowStyle: 'none',
+          cursor: isDragging ? 'grabbing' : 'grab',
+          userSelect: 'none'
+        }}
       >
         {articles.map((article, idx) => (
           <motion.div
