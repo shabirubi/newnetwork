@@ -128,16 +128,20 @@ export default function VideoCreator() {
       
       console.log('Created talking photo:', photoResult.data);
       
-      // Step 3: Send to AI with the talking_photo_id
-      const conversation = await base44.agents.getConversation(conversationId);
-      
-      await base44.agents.addMessage(conversation, {
+      // Step 3: Add user message with image immediately to UI
+      const userMessage = {
         role: "user",
-        content: (input.trim() || `בנה לי סצנות לסרטון עם האווטר מהתמונה הזו. talking_photo_id: ${photoResult.data.talking_photo_id}`),
+        content: input.trim() || `בנה לי סצנות לסרטון עם האווטר מהתמונה הזו. talking_photo_id: ${photoResult.data.talking_photo_id}`,
         file_urls: [file_url]
-      });
+      };
       
+      setMessages(prev => [...prev, userMessage]);
       setInput('');
+      
+      // Step 4: Send to AI
+      const conversation = await base44.agents.getConversation(conversationId);
+      await base44.agents.addMessage(conversation, userMessage);
+      
       toast.success('האווטר שלך מוכן! 🎬', { id: 'upload-file' });
     } catch (err) {
       console.error('Upload failed:', err);
