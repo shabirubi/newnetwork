@@ -26,11 +26,11 @@ Deno.serve(async (req) => {
     // Build character configuration
     let characterConfig;
     if (photo_url) {
-      // Photo avatar mode - use uploaded image
+      // Talking photo mode - use uploaded image
       characterConfig = {
-        type: 'photo_avatar',
-        photo_url: photo_url,
-        avatar_style: 'normal'
+        type: 'talking_photo',
+        talking_photo_id: photo_url, // This should be the talking_photo_id from createPhotoAvatar
+        talking_style: 'stable'
       };
     } else if (avatar_id) {
       // Regular avatar mode
