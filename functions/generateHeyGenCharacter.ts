@@ -2,16 +2,14 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
 
 Deno.serve(async (req) => {
   try {
-    const { script, avatar_id, voice_id } = await req.json();
+    const { script, avatar_id, voice_id, photo_url } = await req.json();
     
     if (!script || !script.trim()) {
       return Response.json({ error: 'Script is required' }, { status: 400 });
     }
 
-    // Default HeyGen avatar and voice if not provided
-    // Using Hebrew-speaking avatar and matching voice
-    const avatarId = avatar_id || 'josh_lite3_20230714'; 
-    const voiceId = voice_id || '1bd001e7e50f421d891986aad5158bc8'; // Julia Hebrew voice
+    // Default voice - Hebrew Julia voice
+    const voiceId = voice_id || '1bd001e7e50f421d891986aad5158bc8';
 
     const apiKey = Deno.env.get('HEYGEN_API_KEY');
     
@@ -19,7 +17,31 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'HEYGEN_API_KEY not configured' }, { status: 500 });
     }
 
-    console.log('Creating HeyGen video...');
+    console.log('Creating HeyGen video with:', { 
+      hasAvatarId: !!avatar_id, 
+      hasPhotoUrl: !!photo_url,
+      scriptLength: script.length 
+    });
+
+    // Build character configuration
+    let characterConfig;
+    if (photo_url) {
+      // Photo avatar mode - use uploaded image
+      characterConfig = {
+        type: 'photo_avatar',
+        photo_url: photo_url,
+        avatar_style: 'normal'
+      };
+    } else if (avatar_id) {
+      // Regular avatar mode
+      characterConfig = {
+        type: 'avatar',
+        avatar_id: avatar_id,
+        avatar_style: 'normal'
+      };
+    } else {
+      return Response.json({ error: 'Either avatar_id or photo_url is required' }, { status: 400 });
+    }
 
     // Create video
     const createRes = await fetch('https://api.heygen.com/v2/video/generate', {
@@ -30,11 +52,7 @@ Deno.serve(async (req) => {
       },
       body: JSON.stringify({
         video_inputs: [{
-          character: {
-            type: 'avatar',
-            avatar_id: avatarId,
-            avatar_style: 'normal'
-          },
+          character: characterConfig,
           voice: {
             type: 'text',
             input_text: script,
@@ -45,7 +63,7 @@ Deno.serve(async (req) => {
             value: '#000000'
           }
         }],
-        test: true,
+        test: false,
         caption: false,
         dimension: {
           width: 1280,
