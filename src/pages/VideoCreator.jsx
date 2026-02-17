@@ -108,6 +108,51 @@ export default function VideoCreator() {
     }
   };
 
+  const pollVideoStatus = async (videoId) => {
+    let attempts = 0;
+    const maxAttempts = 60;
+    
+    while (attempts < maxAttempts) {
+      await new Promise(resolve => setTimeout(resolve, 3000));
+      
+      try {
+        const { data } = await base44.functions.invoke('checkHeyGenVideoStatus', { video_id: videoId });
+        
+        console.log('Status:', data.status);
+        
+        if (data.status === 'completed' && data.video_url) {
+          setCurrentVideo(data.video_url);
+          const title = input.substring(0, 50) || "סרטון AI";
+          const newVideo = {
+            id: Date.now(),
+            title,
+            videoUrl: data.video_url,
+            timestamp: new Date().toISOString()
+          };
+          const updated = [newVideo, ...generatedVideos].slice(0, 20);
+          setGeneratedVideos(updated);
+          localStorage.setItem('videoDownloadHistory', JSON.stringify(updated));
+          setLoading(false);
+          toast.success('✅ הסרטון מוכן!', { id: 'creating' });
+          return;
+        }
+        
+        if (data.status === 'failed') {
+          setLoading(false);
+          toast.error('נכשל ליצור סרטון', { id: 'creating' });
+          return;
+        }
+        
+        attempts++;
+      } catch (err) {
+        attempts++;
+      }
+    }
+    
+    setLoading(false);
+    toast.error('הזמן תם - נסה שוב', { id: 'creating' });
+  };
+
   const handleSend = async () => {
     if (!input.trim() || loading) return;
 
@@ -116,24 +161,19 @@ export default function VideoCreator() {
     setLoading(true);
     setCurrentVideo(null);
     
-    toast.loading('יוצר סרטון קולנועי...', { id: 'creating' });
+    toast.loading('יוצר סרטון...', { id: 'creating' });
 
     try {
-      let conv;
-      if (!conversationId) {
-        conv = await base44.agents.createConversation({
-          agent_name: "video_creator",
-          metadata: { name: "סרטון" }
-        });
-        setConversationId(conv.id);
-      } else {
-        conv = await base44.agents.getConversation(conversationId);
-      }
-
-      await base44.agents.addMessage(conv, {
-        role: "user",
-        content: userMessage
+      const { data } = await base44.functions.invoke('createFullProductionVideo', {
+        description: userMessage
       });
+      
+      if (data.video_id) {
+        console.log('Video ID:', data.video_id);
+        pollVideoStatus(data.video_id);
+      } else {
+        throw new Error('No video ID returned');
+      }
       
     } catch (err) {
       console.error(err);

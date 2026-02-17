@@ -106,56 +106,13 @@ Return only the script text.`;
 
     console.log('✅ Video generation started:', videoId);
 
-    // 4. Poll for completion
-    let attempts = 0;
-    const maxAttempts = 90; // 3 minutes
-    
-    while (attempts < maxAttempts) {
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      const statusResponse = await fetch(`https://api.heygen.com/v1/video_status.get?video_id=${videoId}`, {
-        headers: {
-          'X-Api-Key': HEYGEN_API_KEY
-        }
-      });
-
-      if (!statusResponse.ok) {
-        attempts++;
-        continue;
-      }
-
-      const statusData = await statusResponse.json();
-      const status = statusData.data?.status;
-      
-      console.log(`📊 Status (${attempts}/${maxAttempts}):`, status);
-
-      if (status === 'completed') {
-        const videoUrl = statusData.data?.video_url;
-        console.log('🎉 Video ready!', videoUrl);
-        
-        return Response.json({
-          success: true,
-          video_url: videoUrl,
-          background_url: backgroundUrl,
-          script: script,
-          video_id: videoId,
-          duration: statusData.data?.duration || 10
-        });
-      }
-
-      if (status === 'failed') {
-        return Response.json({ 
-          error: 'HeyGen video generation failed: ' + (statusData.data?.error || 'Unknown error')
-        }, { status: 500 });
-      }
-
-      attempts++;
-    }
-
-    return Response.json({ 
-      error: 'Timeout - video still processing',
-      video_id: videoId 
-    }, { status: 408 });
+    // Return immediately with video_id for client-side polling
+    return Response.json({
+      success: true,
+      video_id: videoId,
+      status: 'processing',
+      message: 'Video generation started successfully'
+    });
 
   } catch (error) {
     console.error('🔴 Error:', error);
