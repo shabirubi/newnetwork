@@ -796,12 +796,29 @@ export default function VideoCreator() {
 
                     <Button
                       onClick={async () => {
+                        if (videoClips.length < 2) {
+                          toast.error('צריך לפחות 2 קליפים');
+                          return;
+                        }
                         setMergingVideos(true);
-                        toast.loading('Exporting video...', { id: 'merge' });
+                        toast.loading('מחבר סרטונים...', { id: 'merge' });
                         try {
-                          toast.error('Export feature in development', { id: 'merge' });
+                          const result = await base44.functions.invoke('mergeVideos', {
+                            video_urls: videoClips.map(c => c.url)
+                          });
+
+                          if (result.data?.video_url) {
+                            toast.success('הסרטון מוכן!', { id: 'merge' });
+                            const a = document.createElement('a');
+                            a.href = result.data.video_url;
+                            a.download = `merged-${Date.now()}.mp4`;
+                            a.click();
+                          } else {
+                            toast.error('שגיאה בחיבור', { id: 'merge' });
+                          }
                         } catch (err) {
-                          toast.error('Error', { id: 'merge' });
+                          console.error(err);
+                          toast.error(err.message || 'שגיאה', { id: 'merge' });
                         } finally {
                           setMergingVideos(false);
                         }
@@ -812,7 +829,7 @@ export default function VideoCreator() {
                       {mergingVideos ? (
                         <>
                           <Loader2 className="w-4 h-4 ml-2 animate-spin" />
-                          Exporting...
+                          מחבר...
                         </>
                       ) : (
                         <>
