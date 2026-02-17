@@ -458,26 +458,28 @@ export default function VideoCreator() {
                                 const result = typeof toolCall.results === 'string' ? JSON.parse(toolCall.results) : toolCall.results;
                                 console.log('Result:', result);
                                 if (result.video_url) {
-                                  // Save to history
-                                  const videoData = {
-                                    title: userMessage?.content?.substring(0, 30) || "סרטון",
-                                    videoUrl: result.video_url,
-                                    script: userMessage?.content
-                                  };
+                                  // Find the user message that triggered this
+                                  const userMsg = messages.find(m => m.role === 'user' && m.tool_calls === undefined);
+                                  const scriptContent = userMsg?.content || msg.content || "סרטון AI";
 
                                   // Save to localStorage
                                   setTimeout(() => {
-                                    const newDownload = {
-                                      id: Math.random(),
-                                      title: videoData.title,
-                                      videoUrl: videoData.videoUrl,
-                                      timestamp: new Date().toISOString(),
-                                      scriptPreview: videoData.script?.substring(0, 50) + "..."
-                                    };
-                                    const saved = localStorage.getItem('videoDownloadHistory') || '[]';
-                                    const downloads = JSON.parse(saved);
-                                    const updated = [newDownload, ...downloads].slice(0, 20);
-                                    localStorage.setItem('videoDownloadHistory', JSON.stringify(updated));
+                                    try {
+                                      const newDownload = {
+                                        id: Math.random(),
+                                        title: scriptContent.substring(0, 30),
+                                        videoUrl: result.video_url,
+                                        timestamp: new Date().toISOString(),
+                                        scriptPreview: scriptContent.substring(0, 50) + "..."
+                                      };
+                                      const saved = localStorage.getItem('videoDownloadHistory') || '[]';
+                                      const downloads = JSON.parse(saved);
+                                      const updated = [newDownload, ...downloads].slice(0, 20);
+                                      localStorage.setItem('videoDownloadHistory', JSON.stringify(updated));
+                                      console.log('✅ Saved to history:', newDownload.title);
+                                    } catch (saveErr) {
+                                      console.error('Failed to save history:', saveErr);
+                                    }
                                   }, 100);
 
                                   return (
@@ -504,8 +506,7 @@ export default function VideoCreator() {
                                         </a>
                                         <button
                                           onClick={() => {
-                                            setInput(userMessage?.content || "");
-                                            setMessages(prev => prev.slice(0, -1));
+                                            setInput(scriptContent);
                                           }}
                                           className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-3 py-2 rounded-lg text-xs font-bold flex items-center justify-center gap-1 transition-all"
                                         >
@@ -515,7 +516,7 @@ export default function VideoCreator() {
                                       </div>
 
                                       {/* Success Message */}
-                                      <p className="text-center text-green-300 text-xs font-semibold">Saved to history</p>
+                                      <p className="text-center text-green-300 text-xs font-semibold">✓ Saved to history</p>
                                     </div>
                                   );
                                 }
