@@ -142,76 +142,52 @@ export default function VideoCreator() {
     const imageTypes = ['image/png', 'image/jpeg', 'image/jpg', 'image/webp'];
     const videoTypes = ['video/mp4', 'video/quicktime', 'video/webm'];
     const allValidTypes = [...imageTypes, ...videoTypes];
-    
+
     if (!allValidTypes.includes(file.type)) {
-      toast.error('פורמטים נתמכים: PNG, JPG, MP4, או MOV (עד 100MB)');
+      toast.error('PNG, JPG, MP4, MOV (עד 100MB)');
       return;
     }
 
-    // Validate file size (max 100MB for videos)
     if (file.size > 100 * 1024 * 1024) {
-      toast.error('הקובץ גדול מדי. מקסימום 100MB');
+      toast.error('מקסימום 100MB');
       return;
     }
 
     setUploadingFile(true);
-    toast.loading('מעלה קובץ...', { id: 'upload-file' });
+    toast.loading('מעלה...', { id: 'upload' });
 
     try {
-      // Upload file
       const { file_url } = await base44.integrations.Core.UploadFile({ file });
-      console.log('Uploaded file:', file_url);
-
-      // Show file in chat
       const isVideo = videoTypes.includes(file.type);
-      const userMessage = {
-        role: "user",
-        content: isVideo 
-          ? `צפה בסרטון וצור לי תסריט ותיאור בהתאם:\n${input.trim() || 'צור תסריט לסרטון הזה'}` 
-          : `צור לי סרטון עם האווטר מהתמונה: ${input.trim() || 'בנה לי סצנות יצירתיות'}`,
-        file_urls: [file_url]
-      };
-      setMessages(prev => [...prev, userMessage]);
-      setInput('');
 
-      // For images: create talking photo avatar
-      if (imageTypes.includes(file.type)) {
-        toast.loading('יוצר אווטר מהתמונה...', { id: 'upload-file' });
-        const photoResult = await base44.functions.invoke('createPhotoAvatar', { 
-          photo_url: file_url 
+      // Create or get conversation
+      let conv = conversationId ? await base44.agents.getConversation(conversationId) : null;
+      if (!conv) {
+        conv = await base44.agents.createConversation({
+          agent_name: "video_creator",
+          metadata: { name: "יצירת סרטון" }
         });
-
-        if (photoResult.data?.talking_photo_id) {
-          console.log('Created talking photo:', photoResult.data);
-          // Generate video directly with photo
-          const result = await base44.functions.invoke('generateHeyGenCharacter', {
-            script: userMessage.content.split(':')[1]?.trim() || "זה אווטר יוצר מתמונה שלך",
-            talking_photo_id: photoResult.data.talking_photo_id,
-            voice_id: "v6WKRTqObgmv7NHgVAFD",
-            background: "transparent"
-          });
-
-          if (result.data?.video_url) {
-            setMessages(prev => [...prev, {
-              role: "assistant",
-              content: "Video ready",
-              video_url: result.data.video_url
-            }]);
-            toast.success('Video created', { id: 'upload-file' });
-          }
-        }
-      } else {
-        // For videos: just show it in chat
-        setMessages(prev => [...prev, {
-          role: "assistant",
-          content: "Video uploaded. Describe what you want to create"
-        }]);
-        toast.success('Video uploaded', { id: 'upload-file' });
+        setConversationId(conv.id);
+        base44.agents.subscribeToConversation(conv.id, (data) => {
+          setMessages(data.messages);
+        });
       }
 
+      // Send to agent with file
+      await base44.agents.addMessage(conv, {
+        role: "user",
+        content: isVideo ? 
+          `I uploaded a video. Analyze it and create an improved version with HeyGen. ${input.trim() || 'Make it professional and engaging'}` :
+          `I uploaded an image. Create a talking avatar video from it. ${input.trim() || 'Make it speak professionally'}`,
+        file_urls: [file_url]
+      });
+
+      setInput('');
+      toast.success('מעבד...', { id: 'upload' });
+
     } catch (err) {
-      console.error('Upload failed:', err);
-      toast.error(`שגיאה: ${err.message}`, { id: 'upload-file' });
+      console.error(err);
+      toast.error(err.message, { id: 'upload' });
     } finally {
       setUploadingFile(false);
       if (fileInputRef.current) {
