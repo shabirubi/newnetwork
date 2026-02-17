@@ -160,6 +160,13 @@ export default function VideoCreator() {
     if (!input.trim() || loading) return;
 
     const userMessage = input.trim();
+    
+    // Validate minimum length
+    if (userMessage.length < 10) {
+      toast.error('נא לכתוב תסריט ארוך יותר (לפחות 10 תווים)');
+      return;
+    }
+
     setInput("");
     setLoading(true);
 
@@ -200,14 +207,20 @@ export default function VideoCreator() {
         const downloads = JSON.parse(saved);
         const updated = [newDownload, ...downloads].slice(0, 20);
         localStorage.setItem('videoDownloadHistory', JSON.stringify(updated));
-      } else {
+      } else if (result.data?.still_processing) {
         setMessages(prev => [...prev, {
           role: "assistant",
-          content: "⏳ הווידאו עדיין בעיבוד... נא לחכות"
+          content: "⏳ הווידאו לוקח יותר זמן... בדוק בהיסטוריה בעוד דקה"
         }]);
+      } else {
+        throw new Error(result.data?.error || 'שגיאה לא ידועה');
       }
     } catch (err) {
       console.error(err);
+      setMessages(prev => [...prev, {
+        role: "assistant",
+        content: `❌ שגיאה: ${err.message}`
+      }]);
       toast.error(`שגיאה: ${err.message}`);
     } finally {
       setLoading(false);
@@ -497,7 +510,7 @@ export default function VideoCreator() {
                           handleSend();
                         }
                       }}
-                      placeholder="תאר את הסרטון או צרף תמונה..."
+                      placeholder="כתוב תסריט (לפחות 10 תווים) או צרף תמונה..."
                       className="flex-1 px-3 py-2 rounded-md bg-gray-900 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none min-h-[80px]"
                       rows={3}
                     />
