@@ -216,7 +216,7 @@ export default function Home() {
         </section>
 
         {/* Weather Forecast Button */}
-        <section className="px-4 mb-8">
+        <section className="px-4 mb-8 max-w-full">
           <motion.button
             onClick={() => {
               window.dispatchEvent(new CustomEvent('openWeatherChat'));
@@ -231,9 +231,9 @@ export default function Home() {
               repeat: Infinity,
               ease: "easeInOut"
             }}
-            className="w-full bg-gradient-to-r from-[#E31E24] via-[#0080FF] to-[#E31E24] hover:from-[#0080FF] hover:via-[#E31E24] hover:to-[#0080FF] text-white py-2 sm:py-5 rounded-2xl shadow-[0_0_40px_rgba(227,30,36,0.6)] border-2 border-[#E31E24]/50 flex items-center justify-center gap-2 sm:gap-3 font-bold text-sm sm:text-lg transition-all"
+            className="w-full max-w-full bg-gradient-to-r from-[#E31E24] via-[#0080FF] to-[#E31E24] hover:from-[#0080FF] hover:via-[#E31E24] hover:to-[#0080FF] text-white py-3 sm:py-5 rounded-2xl shadow-[0_0_40px_rgba(227,30,36,0.6)] border-2 border-[#E31E24]/50 flex items-center justify-center gap-2 sm:gap-3 font-bold text-sm sm:text-lg transition-all"
           >
-            <Cloud className="w-5 sm:w-7 h-5 sm:h-7 drop-shadow-[0_0_8px_currentColor]" />
+            <Cloud className="w-6 sm:w-7 h-6 sm:h-7 drop-shadow-[0_0_8px_currentColor]" />
           </motion.button>
         </section>
 
@@ -242,19 +242,19 @@ export default function Home() {
 
 
       {/* Weather Alerts Container */}
-      <section className="px-4 mb-8">
+      <section className="px-4 mb-8 max-w-full overflow-hidden">
         <WeatherAlertsContainer />
       </section>
 
       {/* Real Time Alerts */}
-      <section className="px-4 mb-8">
+      <section className="px-4 mb-8 max-w-full overflow-hidden">
         <React.Suspense fallback={<Skeleton className="w-full h-64 bg-gray-800" />}>
           <RealTimeAlertsContainer />
         </React.Suspense>
       </section>
 
       {/* Trending Videos - Popular Right Now */}
-      <section className="px-4 mb-8">
+      <section className="px-4 mb-8 max-w-full overflow-hidden">
         <React.Suspense fallback={<Skeleton className="w-full h-96 bg-gray-800" />}>
           <TrendingVideosContainer />
         </React.Suspense>
