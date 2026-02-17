@@ -143,50 +143,45 @@ export default function VideoCreator() {
   };
 
   return (
-    <div className="h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex overflow-hidden" dir="rtl">
-      {/* Header */}
-      <div className="absolute top-0 left-0 right-0 bg-black/80 backdrop-blur-xl border-b border-gray-800 px-4 py-3 flex items-center justify-between z-10">
-        <div className="flex items-center gap-3">
-          <Video className="w-6 h-6 text-purple-500" />
+    <div className="h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex flex-col overflow-hidden" dir="rtl">
+      {/* Header - Mobile Optimized */}
+      <div className="bg-black/80 backdrop-blur-xl border-b border-gray-800 px-3 sm:px-4 py-3 flex items-center justify-between z-10 flex-shrink-0">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <Video className="w-5 h-5 sm:w-6 sm:h-6 text-purple-500" />
           <div>
-            <h1 className="text-lg font-bold text-white">יוצר סרטונים AI</h1>
-            <p className="text-gray-500 text-xs">תאר והמערכת יוצרת</p>
+            <h1 className="text-sm sm:text-lg font-bold text-white">יוצר סרטונים AI</h1>
+            <p className="text-gray-500 text-[10px] sm:text-xs hidden sm:block">תאר והמערכת יוצרת</p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1 sm:gap-2">
           <Button
             onClick={() => setHistoryOpen(true)}
             variant="outline"
             size="sm"
-            className="gap-2"
+            className="gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3"
           >
-            <History className="w-4 h-4" />
-            היסטוריה ({generatedVideos.length})
+            <History className="w-3 h-3 sm:w-4 sm:h-4" />
+            <span className="hidden sm:inline">היסטוריה</span>
+            <span className="sm:hidden">({generatedVideos.length})</span>
           </Button>
           <Link to={createPageUrl("Home")}>
-            <Button variant="outline" size="sm" className="gap-2">
-              <Home className="w-4 h-4" />
-              חזרה
+            <Button variant="outline" size="sm" className="gap-1 px-2 sm:px-3">
+              <Home className="w-3 h-3 sm:w-4 sm:h-4" />
+              <span className="hidden sm:inline">חזרה</span>
             </Button>
           </Link>
-          <a href={createPageUrl("AdminPanel")} target="_blank">
-            <Button variant="outline" size="sm" className="gap-2 bg-purple-600/20 border-purple-500/50">
-              <Shield className="w-4 h-4" />
-              Admin
-            </Button>
-          </a>
         </div>
       </div>
 
-      {/* Main */}
-      <div className="flex-1 flex pt-16">
+      {/* Main - Mobile Optimized */}
+      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
         {/* Center - Video Display */}
-        <div className="flex-1 flex flex-col items-center justify-center p-8">
+        <div className="flex-1 flex flex-col items-center justify-center p-3 sm:p-6 lg:p-8 overflow-y-auto">
           {!loading && !currentVideo && (
-            <div className="text-center max-w-2xl">
-              <Video className="w-24 h-24 text-gray-600 mx-auto mb-6" />
-              <h2 className="text-3xl font-bold text-white mb-4">תאר והמערכת יוצרת</h2>
-              <p className="text-gray-400 text-lg">כתוב מה אתה רוצה בתיבת הטקסט למטה והסרטון ייווצר תוך דקה</p>
+            <div className="text-center max-w-2xl px-4">
+              <Video className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 text-gray-600 mx-auto mb-4 sm:mb-6" />
+              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-3 sm:mb-4">תאר והמערכת יוצרת</h2>
+              <p className="text-gray-400 text-sm sm:text-base lg:text-lg">כתוב מה אתה רוצה בתיבת הטקסט למטה והסרטון ייווצר תוך דקה</p>
             </div>
           )}
 
@@ -303,29 +298,30 @@ export default function VideoCreator() {
             <motion.div 
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="w-full max-w-4xl"
+              className="w-full max-w-4xl px-2 sm:px-0"
             >
-              <div className="bg-gradient-to-br from-green-900/20 to-emerald-900/20 rounded-2xl border-2 border-green-500/30 overflow-hidden">
+              <div className="bg-gradient-to-br from-green-900/20 to-emerald-900/20 rounded-xl sm:rounded-2xl border-2 border-green-500/30 overflow-hidden">
                 <video 
                   src={currentVideo} 
                   controls 
                   autoPlay
+                  playsInline
                   className="w-full aspect-video bg-black"
                 />
-                <div className="p-6 bg-black/40 backdrop-blur-sm">
-                  <div className="flex gap-3">
+                <div className="p-3 sm:p-4 lg:p-6 bg-black/40 backdrop-blur-sm">
+                  <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
                     <a 
                       href={currentVideo} 
                       download 
-                      className="flex-1 bg-green-600 hover:bg-green-700 text-white px-6 py-4 rounded-xl font-bold text-lg flex items-center justify-center gap-3 transition-all"
+                      className="flex-1 bg-green-600 hover:bg-green-700 text-white px-4 sm:px-6 py-3 sm:py-4 rounded-lg sm:rounded-xl font-bold text-sm sm:text-base lg:text-lg flex items-center justify-center gap-2 sm:gap-3 transition-all"
                     >
-                      <Download className="w-6 h-6" />
+                      <Download className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
                       הורד סרטון
                     </a>
                     <Button
                       onClick={() => setCurrentVideo(null)}
                       variant="outline"
-                      className="px-6 py-4 text-lg"
+                      className="px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base lg:text-lg"
                     >
                       צור חדש
                     </Button>
@@ -336,8 +332,8 @@ export default function VideoCreator() {
           )}
         </div>
 
-        {/* Right Sidebar - Timeline */}
-        <div className="w-80 bg-black/50 border-r border-gray-800 flex flex-col">
+        {/* Right Sidebar - Timeline - Hidden on Mobile */}
+        <div className="hidden lg:flex lg:w-80 bg-black/50 border-r border-gray-800 flex-col">
           <div className="p-4 border-b border-gray-800">
             <h3 className="text-white font-bold">ציר הזמן</h3>
             <p className="text-gray-500 text-xs">כל הסרטונים שנוצרו</p>
@@ -378,9 +374,9 @@ export default function VideoCreator() {
         </div>
       </div>
 
-      {/* Bottom Input */}
-      <div className="absolute bottom-0 left-0 right-0 p-6 bg-black/80 backdrop-blur-xl border-t border-gray-800">
-        <div className="max-w-4xl mx-auto flex gap-3">
+      {/* Bottom Input - Mobile Optimized */}
+      <div className="flex-shrink-0 p-3 sm:p-4 lg:p-6 bg-black/90 backdrop-blur-xl border-t border-gray-800 safe-area-inset-bottom">
+        <div className="max-w-4xl mx-auto flex gap-2 sm:gap-3">
           <input
             ref={fileInputRef}
             type="file"
@@ -392,9 +388,10 @@ export default function VideoCreator() {
             onClick={() => fileInputRef.current?.click()}
             disabled={uploadingFile || loading}
             variant="outline"
-            className="bg-gray-900 border-gray-700"
+            size="sm"
+            className="bg-gray-900 border-gray-700 px-2 sm:px-3"
           >
-            {uploadingFile ? <Loader2 className="w-5 h-5 animate-spin" /> : <Plus className="w-5 h-5" />}
+            {uploadingFile ? <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" /> : <Plus className="w-4 h-4 sm:w-5 sm:h-5" />}
           </Button>
           <textarea
             value={input}
@@ -405,17 +402,18 @@ export default function VideoCreator() {
                 handleSend();
               }
             }}
-            placeholder="תאר סרטון קולנועי עם הפקה... (לדוגמה: 'חדשות על טכנולוגיה בסטודיו מודרני')"
-            className="flex-1 px-6 py-4 rounded-xl bg-gray-900 border-2 border-gray-700 text-white text-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
-            rows={2}
+            placeholder="תאר סרטון... (לדוגמה: 'חדשות טכנולוגיה')"
+            className="flex-1 px-3 sm:px-4 lg:px-6 py-2 sm:py-3 lg:py-4 rounded-lg sm:rounded-xl bg-gray-900 border-2 border-gray-700 text-white text-sm sm:text-base lg:text-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
+            rows={1}
             disabled={loading}
           />
           <Button
             onClick={handleSend}
             disabled={!input.trim() || loading}
-            className="bg-gradient-to-br from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-10 text-lg font-bold"
+            size="sm"
+            className="bg-gradient-to-br from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-3 sm:px-6 lg:px-10 text-sm sm:text-base lg:text-lg font-bold"
           >
-            {loading ? <Loader2 className="w-6 h-6 animate-spin" /> : <Send className="w-6 h-6" />}
+            {loading ? <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 animate-spin" /> : <Send className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />}
           </Button>
         </div>
       </div>
