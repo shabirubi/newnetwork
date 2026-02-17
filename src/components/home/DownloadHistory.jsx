@@ -90,43 +90,58 @@ export default function DownloadHistory({ isOpen, onClose }) {
               <div className="space-y-2">
                 {downloads.map((download) => (
                   <motion.div
-                    key={download.id}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    className="p-4 bg-black/40 rounded-lg border border-gray-700 hover:border-purple-500/50 transition-all group"
+                   key={download.id}
+                   initial={{ opacity: 0, x: -20 }}
+                   animate={{ opacity: 1, x: 0 }}
+                   className="bg-black/40 rounded-lg border border-gray-700 hover:border-purple-500/50 transition-all group overflow-hidden"
                   >
-                    <div className="flex items-start justify-between">
-                      <div className="flex-1">
-                        <h3 className="text-white font-bold text-sm">{download.title}</h3>
-                        <p className="text-gray-400 text-xs mt-1">{download.scriptPreview}</p>
-                        <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
-                          <span className="flex items-center gap-1">
-                            <Calendar className="w-3 h-3" />
-                            {new Date(download.timestamp).toLocaleDateString('he-IL')}
-                          </span>
-                          <span className="flex items-center gap-1">
-                            <Clock className="w-3 h-3" />
-                            {new Date(download.timestamp).toLocaleTimeString('he-IL')}
-                          </span>
-                        </div>
-                      </div>
-                      <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <button
-                          onClick={() => redownload(download.videoUrl)}
-                          className="p-2 bg-green-600/20 hover:bg-green-600/40 text-green-400 rounded-lg transition-all"
-                          title="הורד שוב"
-                        >
-                          <RotateCcw className="w-4 h-4" />
-                        </button>
-                        <button
-                          onClick={() => deleteDownload(download.id)}
-                          className="p-2 bg-red-600/20 hover:bg-red-600/40 text-red-400 rounded-lg transition-all"
-                          title="מחק"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </div>
+                   {/* Video Preview */}
+                   {download.videoUrl && (
+                     <div className="relative w-full aspect-video bg-gray-900">
+                       <video 
+                         src={download.videoUrl} 
+                         controls 
+                         className="w-full h-full"
+                         playsInline
+                       />
+                     </div>
+                   )}
+
+                   {/* Info Section */}
+                   <div className="p-4">
+                     <div className="flex items-start justify-between">
+                       <div className="flex-1">
+                         <h3 className="text-white font-bold text-sm">{download.title}</h3>
+                         <p className="text-gray-400 text-xs mt-1">{download.scriptPreview}</p>
+                         <div className="flex items-center gap-4 mt-2 text-xs text-gray-500">
+                           <span className="flex items-center gap-1">
+                             <Calendar className="w-3 h-3" />
+                             {new Date(download.timestamp).toLocaleDateString('he-IL')}
+                           </span>
+                           <span className="flex items-center gap-1">
+                             <Clock className="w-3 h-3" />
+                             {new Date(download.timestamp).toLocaleTimeString('he-IL')}
+                           </span>
+                         </div>
+                       </div>
+                       <div className="flex gap-2">
+                         <button
+                           onClick={() => redownload(download.videoUrl)}
+                           className="p-2 bg-green-600/20 hover:bg-green-600/40 text-green-400 rounded-lg transition-all"
+                           title="הורד שוב"
+                         >
+                           <Download className="w-4 h-4" />
+                         </button>
+                         <button
+                           onClick={() => deleteDownload(download.id)}
+                           className="p-2 bg-red-600/20 hover:bg-red-600/40 text-red-400 rounded-lg transition-all"
+                           title="מחק"
+                         >
+                           <Trash2 className="w-4 h-4" />
+                         </button>
+                       </div>
+                     </div>
+                   </div>
                   </motion.div>
                 ))}
               </div>
