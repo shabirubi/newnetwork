@@ -69,34 +69,34 @@ export default function TrendingVideosContainer() {
 
   return (
     <>
-      <div className="bg-gradient-to-br from-black/90 via-gray-900/80 to-black/90 rounded-2xl p-6 backdrop-blur-sm border border-white/10 shadow-2xl">
-        <div className="flex items-center justify-between mb-6">
+      <div className="bg-gradient-to-br from-black/90 via-gray-900/80 to-black/90 rounded-2xl p-3 sm:p-6 backdrop-blur-sm border border-white/10 shadow-2xl mx-0">
+        <div className="flex items-center justify-between mb-4 sm:mb-6">
           <div>
-            <h2 className="text-3xl font-bold text-white mb-1">הפופולריים כרגע</h2>
-            <p className="text-gray-400 text-sm">הסרטונים הכי חמים ברשת</p>
+            <h2 className="text-lg sm:text-3xl font-bold text-white mb-0.5 sm:mb-1">הפופולריים כרגע</h2>
+            <p className="text-gray-400 text-xs sm:text-sm">הסרטונים הכי חמים ברשת</p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1 sm:gap-2">
             <button
               onClick={handlePrev}
               disabled={!canScrollLeft}
-              className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
+              className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all ${
                 canScrollLeft
                   ? 'bg-white/10 hover:bg-white/20 text-white'
                   : 'bg-gray-800/30 text-gray-600 cursor-not-allowed'
               }`}
             >
-              <ChevronRight className="w-5 h-5" />
+              <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
             <button
               onClick={handleNext}
               disabled={!canScrollRight}
-              className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
+              className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all ${
                 canScrollRight
                   ? 'bg-white/10 hover:bg-white/20 text-white'
                   : 'bg-gray-800/30 text-gray-600 cursor-not-allowed'
               }`}
             >
-              <ChevronLeft className="w-5 h-5" />
+              <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
           </div>
         </div>
@@ -109,7 +109,7 @@ export default function TrendingVideosContainer() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -100 }}
               transition={{ duration: 0.3 }}
-              className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4"
+              className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-4"
             >
               {videos.slice(currentIndex, currentIndex + visibleVideos).map((video, idx) => (
                 <motion.div
@@ -118,12 +118,12 @@ export default function TrendingVideosContainer() {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: idx * 0.05 }}
                   onClick={() => handleVideoClick(video)}
-                  className="group relative aspect-[2/3] rounded-xl overflow-hidden cursor-pointer border-2 border-transparent hover:border-[#E31E24] transition-all"
+                  className="group relative aspect-[2/3] rounded-lg sm:rounded-xl overflow-hidden cursor-pointer border border-transparent hover:border-[#E31E24] transition-all"
                 >
                   {/* Number Badge */}
-                  <div className="absolute top-2 right-2 z-10">
-                    <div className="w-12 h-12 rounded-lg bg-black/80 backdrop-blur-sm flex items-center justify-center border-2 border-white/20">
-                      <span className="text-2xl font-black text-white">
+                  <div className="absolute top-1.5 sm:top-2 right-1.5 sm:right-2 z-10">
+                    <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-md sm:rounded-lg bg-black/80 backdrop-blur-sm flex items-center justify-center border border-white/20 sm:border-2">
+                      <span className="text-base sm:text-2xl font-black text-white">
                         {currentIndex + idx + 1}
                       </span>
                     </div>
@@ -155,17 +155,17 @@ export default function TrendingVideosContainer() {
                   </div>
 
                   {/* Info */}
-                  <div className="absolute bottom-0 left-0 right-0 p-4 transform translate-y-full group-hover:translate-y-0 transition-transform">
-                    <h3 className="text-white font-bold text-sm mb-2 line-clamp-2">
+                  <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-4 transform translate-y-full group-hover:translate-y-0 transition-transform">
+                    <h3 className="text-white font-bold text-xs sm:text-sm mb-1 sm:mb-2 line-clamp-2">
                       {video.title}
                     </h3>
-                    <div className="flex items-center gap-3 text-xs text-gray-300">
-                      <div className="flex items-center gap-1">
-                        <Eye className="w-3 h-3" />
+                    <div className="flex items-center gap-2 sm:gap-3 text-[10px] sm:text-xs text-gray-300">
+                      <div className="flex items-center gap-0.5 sm:gap-1">
+                        <Eye className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
                         <span>{video.views || 0}</span>
                       </div>
-                      <div className="flex items-center gap-1">
-                        <Heart className="w-3 h-3" />
+                      <div className="flex items-center gap-0.5 sm:gap-1">
+                        <Heart className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
                         <span>{video.likes || 0}</span>
                       </div>
                     </div>

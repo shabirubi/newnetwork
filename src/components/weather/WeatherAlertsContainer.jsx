@@ -63,7 +63,7 @@ export default function WeatherAlertsContainer() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-black/90 rounded-2xl p-3 sm:p-4 border border-gray-800 shadow-lg overflow-hidden relative"
+      className="bg-black/90 rounded-2xl p-3 sm:p-4 border border-gray-800 shadow-lg overflow-hidden relative mx-0"
     >
       {/* Content */}
       <div className="relative z-10 space-y-3 sm:space-y-4">
