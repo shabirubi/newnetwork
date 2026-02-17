@@ -241,10 +241,7 @@ export default function Home() {
 
 
 
-      {/* Weather Alerts Container */}
-      <section className="px-4 mb-8 max-w-full overflow-hidden">
-        <WeatherAlertsContainer />
-      </section>
+
 
       {/* Real Time Alerts */}
       <section className="px-4 mb-8 max-w-full overflow-hidden">
