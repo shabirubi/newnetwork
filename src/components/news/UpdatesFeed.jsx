@@ -31,15 +31,15 @@ export default function UpdatesFeed() {
   return (
     <div className="sticky top-6 bg-black">
       {/* Header */}
-      <div className="p-4 pb-3">
-        <h2 className="font-bold text-lg text-white flex items-center gap-2">
+      <div className="p-3 sm:p-4 pb-2 sm:pb-3">
+        <h2 className="font-bold text-base sm:text-lg text-white flex items-center gap-2">
           <Flame className="w-5 h-5 text-[#0080FF]" />
           עדכונים חמים
         </h2>
       </div>
 
       {/* Feed - Scrollable with animations */}
-      <div className="max-h-[600px] overflow-hidden">
+      <div className="max-h-[400px] sm:max-h-[600px] overflow-hidden">
         <motion.div
           animate={{ y: [0, -1200] }}
           transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
@@ -55,11 +55,11 @@ export default function UpdatesFeed() {
             >
             <Link 
               to={createPageUrl(`Article?id=${article.id}`)}
-              className="block p-3"
+              className="block p-2 sm:p-3"
             >
               {/* Image if available */}
               {article.image_url && (
-                <div className="w-full h-24 rounded-lg overflow-hidden mb-2.5 relative">
+                <div className="w-full h-16 sm:h-24 rounded-lg overflow-hidden mb-2 sm:mb-2.5 relative">
                   <img 
                     src={article.image_url}
                     alt={article.title}
@@ -87,15 +87,15 @@ export default function UpdatesFeed() {
 
               {/* Content */}
               <div>
-                <p className="text-xs text-white font-bold line-clamp-2 leading-snug mb-1.5 group-hover:text-[#0080FF] transition-colors">
+                <p className="text-[12px] sm:text-xs text-white font-bold line-clamp-2 leading-snug mb-1 sm:mb-1.5 group-hover:text-[#0080FF] transition-colors">
                   {article.title}
                 </p>
                 {article.subtitle && (
-                  <p className="text-[10px] text-gray-400 line-clamp-1 mb-2">
+                  <p className="text-[10px] sm:text-[10px] text-gray-400 line-clamp-1 mb-1 sm:mb-2">
                     {article.subtitle}
                   </p>
                 )}
-                <div className="flex items-center gap-2 text-[10px] text-gray-400">
+                <div className="flex items-center gap-2 text-[9px] sm:text-[10px] text-gray-400">
                   <Clock size={10} />
                   <span className="font-medium">
                     {new Date(article.created_date).toLocaleTimeString('he-IL', {
@@ -120,7 +120,7 @@ export default function UpdatesFeed() {
                 className="block p-3"
               >
                 {article.image_url && (
-                  <div className="w-full h-24 rounded-lg overflow-hidden mb-2.5 relative">
+                   <div className="w-full h-16 sm:h-24 rounded-lg overflow-hidden mb-2 sm:mb-2.5 relative">
                     <img 
                       src={article.image_url}
                       alt={article.title}
@@ -144,15 +144,15 @@ export default function UpdatesFeed() {
                   </div>
                 )}
                 <div>
-                  <p className="text-xs text-white font-bold line-clamp-2 leading-snug mb-1.5 group-hover:text-[#0080FF] transition-colors">
-                    {article.title}
-                  </p>
-                  {article.subtitle && (
-                    <p className="text-[10px] text-gray-400 line-clamp-1 mb-2">
-                      {article.subtitle}
-                    </p>
-                  )}
-                  <div className="flex items-center gap-2 text-[10px] text-gray-400">
+                   <p className="text-[12px] sm:text-xs text-white font-bold line-clamp-2 leading-snug mb-1 sm:mb-1.5 group-hover:text-[#0080FF] transition-colors">
+                     {article.title}
+                   </p>
+                   {article.subtitle && (
+                     <p className="text-[10px] text-gray-400 line-clamp-1 mb-1 sm:mb-2">
+                       {article.subtitle}
+                     </p>
+                   )}
+                   <div className="flex items-center gap-2 text-[9px] sm:text-[10px] text-gray-400">
                     <Clock size={10} />
                     <span className="font-medium">
                       {new Date(article.created_date).toLocaleTimeString('he-IL', {
@@ -172,9 +172,9 @@ export default function UpdatesFeed() {
       {/* Footer */}
       <Link 
         to={createPageUrl("Category?cat=breaking")}
-        className="block p-3 text-center hover:text-[#0080FF] transition-colors border-t border-gray-800 mt-2"
+        className="block p-2 sm:p-3 text-center hover:text-[#0080FF] transition-colors border-t border-gray-800 mt-2"
       >
-        <span className="text-gray-300 font-bold text-sm">לכל החדשות החמות →</span>
+        <span className="text-gray-300 font-bold text-xs sm:text-sm">לכל החדשות החמות →</span>
       </Link>
     </div>
   );
