@@ -268,14 +268,14 @@ export default function VideoCreator() {
   return (
     <div className="h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex flex-col overflow-hidden" dir="rtl">
       {/* Header */}
-      <div className="bg-black/50 backdrop-blur-xl border-b border-purple-500/30 px-6 py-3 flex items-center justify-between">
+      <div className="bg-black border-b border-gray-800 px-6 py-3 flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center">
-            <Video className="w-5 h-5 text-white" />
+          <div className="w-10 h-10 rounded bg-gray-900 flex items-center justify-center border border-gray-800">
+            <Video className="w-5 h-5 text-gray-400" />
           </div>
           <div>
-            <h1 className="text-xl font-bold text-white">🎬 DIGITAL DREAMS</h1>
-            <p className="text-gray-400 text-xs">יוצר סרטונים AI מקצועי</p>
+            <h1 className="text-xl font-bold text-white">Video Studio</h1>
+            <p className="text-gray-500 text-xs">Professional Video Editor</p>
           </div>
         </div>
         <div className="flex items-center gap-2">
@@ -284,29 +284,29 @@ export default function VideoCreator() {
               onClick={() => setEditorView('welcome')}
               variant={editorView === 'welcome' ? 'default' : 'outline'}
               size="sm"
-              className="gap-2"
+              className={`gap-2 ${editorView === 'welcome' ? 'bg-white text-black' : 'bg-gray-900 text-gray-400 border-gray-800 hover:bg-gray-800'}`}
             >
-              <Sparkles className="w-4 h-4" />
-              בית
+              <Home className="w-4 h-4" />
+              Home
             </Button>
             <Button
               onClick={() => setEditorView('library')}
-              variant={editorView === 'library' ? 'default' : 'outline'}
+              variant="outline"
               size="sm"
-              className="gap-2 bg-purple-600/20 hover:bg-purple-600/30 border-purple-500/50"
+              className={`gap-2 ${editorView === 'library' ? 'bg-white text-black' : 'bg-gray-900 text-gray-400 border-gray-800 hover:bg-gray-800'}`}
             >
               <Video className="w-4 h-4" />
-              מאגר ({siteVideos.length})
+              Library ({siteVideos.length})
             </Button>
             {videoClips.length > 0 && (
               <Button
                 onClick={() => setEditorView('timeline')}
-                variant={editorView === 'timeline' ? 'default' : 'outline'}
+                variant="outline"
                 size="sm"
-                className="gap-2 bg-green-600/20 hover:bg-green-600/30 border-green-500/50 animate-pulse"
+                className={`gap-2 ${editorView === 'timeline' ? 'bg-white text-black' : 'bg-gray-900 text-gray-400 border-gray-800 hover:bg-gray-800'}`}
               >
                 <Play className="w-4 h-4" />
-                עורך ({videoClips.length})
+                Timeline ({videoClips.length})
               </Button>
             )}
           </div>
@@ -315,10 +315,10 @@ export default function VideoCreator() {
               onClick={() => setHistoryOpen(true)}
               variant="outline"
               size="sm"
-              className="gap-2 bg-blue-600/20 hover:bg-blue-600/30 border-blue-500/50"
+              className="gap-2 bg-gray-900 text-gray-400 border-gray-800 hover:bg-gray-800"
             >
               <History className="w-4 h-4" />
-              היסטוריה
+              History
             </Button>
             <input
               ref={multiFileInputRef}
@@ -332,10 +332,10 @@ export default function VideoCreator() {
               onClick={() => multiFileInputRef.current?.click()}
               variant="outline"
               size="sm"
-              className="gap-2 bg-green-600/20 hover:bg-green-600/30 border-green-500/50"
+              className="gap-2 bg-gray-900 text-gray-400 border-gray-800 hover:bg-gray-800"
             >
               <Plus className="w-4 h-4" />
-              העלה
+              Upload
             </Button>
           </div>
           <Link to={createPageUrl("Home")}>
@@ -641,60 +641,62 @@ export default function VideoCreator() {
         <div className="flex-1 flex flex-col overflow-hidden">
           {/* Welcome View */}
           {editorView === 'welcome' && (
-            <div className="flex-1 bg-gradient-to-br from-black via-purple-900/10 to-black flex items-center justify-center p-6">
+            <div className="flex-1 bg-black flex items-center justify-center p-6">
               <div className="text-center max-w-2xl">
-                <Video className="w-24 h-24 text-purple-500 mx-auto mb-6 animate-pulse" />
-                <h2 className="text-3xl font-bold text-white mb-4">✨ DIGITAL DREAMS</h2>
-                <p className="text-gray-300 text-lg mb-6">
-                  עורך וידאו מקצועי עם מאגר ענק של {siteVideos.length} סרטונים
+                <div className="w-20 h-20 bg-gray-900 border border-gray-800 rounded-lg mx-auto mb-6 flex items-center justify-center">
+                  <Video className="w-10 h-10 text-gray-400" />
+                </div>
+                <h2 className="text-3xl font-bold text-white mb-4">Video Studio</h2>
+                <p className="text-gray-500 text-lg mb-8">
+                  Professional video editor with {siteVideos.length} clips library
                 </p>
-                <div className="grid grid-cols-2 gap-4 mb-6">
+                <div className="grid grid-cols-2 gap-4">
                   <button
                     onClick={() => setEditorView('library')}
-                    className="bg-gradient-to-br from-purple-600 to-pink-600 rounded-2xl p-6 border border-purple-500/30 hover:scale-105 transition-transform"
+                    className="bg-gray-900 border border-gray-800 rounded-lg p-8 hover:bg-gray-800 transition-colors text-left"
                   >
-                    <Video className="w-12 h-12 text-white mx-auto mb-3" />
-                    <h3 className="text-white font-bold mb-2">מאגר הסרטונים</h3>
-                    <p className="text-purple-100 text-sm">{siteVideos.length} סרטונים זמינים</p>
+                    <Video className="w-8 h-8 text-gray-400 mb-4" />
+                    <h3 className="text-white font-bold mb-2">Video Library</h3>
+                    <p className="text-gray-500 text-sm">{siteVideos.length} clips available</p>
                   </button>
                   <button
                     onClick={() => {
                       setShowChat(true);
                       setEditorView('library');
                     }}
-                    className="bg-gradient-to-br from-blue-600 to-purple-600 rounded-2xl p-6 border border-blue-500/30 hover:scale-105 transition-transform"
+                    className="bg-gray-900 border border-gray-800 rounded-lg p-8 hover:bg-gray-800 transition-colors text-left"
                   >
-                    <Sparkles className="w-12 h-12 text-white mx-auto mb-3" />
+                    <Sparkles className="w-8 h-8 text-gray-400 mb-4" />
                     <h3 className="text-white font-bold mb-2">AI Creator</h3>
-                    <p className="text-blue-100 text-sm">צור סרטונים עם AI</p>
+                    <p className="text-gray-500 text-sm">Generate videos with AI</p>
                   </button>
                 </div>
               </div>
             </div>
           )}
 
-          {/* Library View - מאגר הסרטונים */}
+          {/* Library View */}
           {editorView === 'library' && (
-            <div className="flex-1 bg-gradient-to-br from-black via-purple-900/10 to-black flex flex-col overflow-hidden">
+            <div className="flex-1 bg-black flex flex-col overflow-hidden">
               {/* Search & Filters */}
               <div className="p-4 border-b border-gray-800">
                 <div className="max-w-7xl mx-auto space-y-4">
                   <input
                     type="text"
-                    placeholder="חפש סרטון..."
+                    placeholder="Search..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full px-4 py-3 bg-black/40 border border-gray-700 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-purple-500"
+                    className="w-full px-4 py-3 bg-gray-950 border border-gray-800 rounded text-white placeholder-gray-600 focus:outline-none focus:border-gray-700"
                   />
                   <div className="flex gap-2 overflow-x-auto pb-2">
                     {categories.map(cat => (
                       <button
                         key={cat.id}
                         onClick={() => setSelectedCategory(cat.id)}
-                        className={`px-4 py-2 rounded-lg font-bold text-sm whitespace-nowrap transition-all ${
+                        className={`px-4 py-2 rounded font-medium text-sm whitespace-nowrap transition-all ${
                           selectedCategory === cat.id
-                            ? 'bg-purple-600 text-white'
-                            : 'bg-black/40 text-gray-300 hover:bg-gray-800'
+                            ? 'bg-white text-black'
+                            : 'bg-gray-900 text-gray-400 border border-gray-800 hover:bg-gray-800'
                         }`}
                       >
                         {cat.label} ({cat.count})
@@ -709,16 +711,16 @@ export default function VideoCreator() {
                 <div className="max-w-7xl mx-auto">
                   {loadingVideos ? (
                     <div className="text-center py-12">
-                      <Loader2 className="w-12 h-12 text-purple-500 mx-auto mb-3 animate-spin" />
-                      <p className="text-gray-400">טוען מאגר סרטונים...</p>
+                      <Loader2 className="w-12 h-12 text-gray-600 mx-auto mb-3 animate-spin" />
+                      <p className="text-gray-500">Loading library...</p>
                     </div>
                   ) : filteredVideos.length === 0 ? (
                     <div className="text-center py-12">
-                      <Video className="w-12 h-12 text-gray-600 mx-auto mb-3" />
-                      <p className="text-gray-400">לא נמצאו סרטונים</p>
+                      <Video className="w-12 h-12 text-gray-700 mx-auto mb-3" />
+                      <p className="text-gray-500">No videos found</p>
                     </div>
                   ) : (
-                    <div className="grid grid-cols-4 gap-4">
+                    <div className="grid grid-cols-4 gap-3">
                       {filteredVideos.map((video) => {
                         const isInEditor = videoClips.find(c => c.url === video.video_url);
                         return (
@@ -726,7 +728,7 @@ export default function VideoCreator() {
                             key={video.id}
                             initial={{ opacity: 0, scale: 0.9 }}
                             animate={{ opacity: 1, scale: 1 }}
-                            className="bg-black/40 rounded-lg border border-gray-700 hover:border-purple-500/50 transition-all overflow-hidden group cursor-pointer"
+                            className="bg-gray-950 rounded border border-gray-800 hover:border-gray-700 transition-all overflow-hidden group cursor-pointer"
                             onClick={() => {
                               if (!isInEditor) {
                                 setVideoClips(prev => [...prev, {
@@ -735,32 +737,32 @@ export default function VideoCreator() {
                                   name: video.title,
                                   duration: video.duration || 0
                                 }]);
-                                toast.success(`${video.title} נוסף! 🎬`);
+                                toast.success(`Added to timeline`);
                                 setEditorView('timeline');
                               }
                             }}
                           >
-                            <div className="relative aspect-video bg-gray-900">
+                            <div className="relative aspect-video bg-black">
                               <video 
                                 src={video.video_url} 
                                 className="w-full h-full object-cover"
                               />
-                              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                                <div className="bg-purple-600 text-white px-4 py-2 rounded-lg font-bold">
-                                  {isInEditor ? '✓ בעורך' : '+ הוסף'}
+                              <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <div className="bg-white text-black px-3 py-1.5 rounded text-sm font-medium">
+                                  {isInEditor ? 'Added' : 'Add to timeline'}
                                 </div>
                               </div>
                               {isInEditor && (
-                                <div className="absolute top-2 left-2 bg-green-600 text-white px-2 py-1 rounded text-xs font-bold">
-                                  ✓ נוסף
+                                <div className="absolute top-2 right-2 w-6 h-6 bg-white rounded-full flex items-center justify-center">
+                                  <span className="text-black text-xs">✓</span>
                                 </div>
                               )}
                             </div>
-                            <div className="p-3">
-                              <h3 className="text-white font-bold text-sm truncate">{video.title}</h3>
-                              <div className="flex items-center gap-2 mt-1 text-xs text-gray-400">
-                                <span>{video.views || 0} צפיות</span>
-                                {video.duration && <span>• {video.duration}s</span>}
+                            <div className="p-2.5">
+                              <h3 className="text-white text-sm truncate font-medium">{video.title}</h3>
+                              <div className="flex items-center gap-2 mt-1 text-xs text-gray-500">
+                                <span>{video.views || 0} views</span>
+                                {video.duration && <span>{video.duration}s</span>}
                               </div>
                             </div>
                           </motion.div>
@@ -799,22 +801,19 @@ export default function VideoCreator() {
                 
                 {/* Side Panel */}
                 <div className="w-80 bg-gray-950 border-l border-gray-800 p-4 overflow-y-auto">
-                  <h3 className="text-white font-bold mb-4 flex items-center gap-2">
-                    <Wand2 className="w-5 h-5" />
-                    כלי עריכה
-                  </h3>
+                  <h3 className="text-white font-medium mb-4 text-sm">Export Settings</h3>
                   
                   <div className="space-y-3">
-                    <div className="bg-black/40 rounded-lg p-4 border border-gray-800">
-                      <h4 className="text-white font-bold text-sm mb-2">פרטי פרויקט</h4>
-                      <div className="space-y-2 text-xs text-gray-400">
+                    <div className="bg-black rounded p-4 border border-gray-800">
+                      <h4 className="text-white font-medium text-sm mb-3">Project Info</h4>
+                      <div className="space-y-2 text-xs text-gray-500">
                         <div className="flex justify-between">
-                          <span>קליפים:</span>
-                          <span className="text-white font-bold">{videoClips.length}</span>
+                          <span>Clips</span>
+                          <span className="text-white font-medium">{videoClips.length}</span>
                         </div>
                         <div className="flex justify-between">
-                          <span>משך כולל:</span>
-                          <span className="text-white font-bold">~{videoClips.length * 10}s</span>
+                          <span>Duration</span>
+                          <span className="text-white font-medium">~{videoClips.length * 10}s</span>
                         </div>
                       </div>
                     </div>
@@ -822,27 +821,27 @@ export default function VideoCreator() {
                     <Button
                       onClick={async () => {
                         setMergingVideos(true);
-                        toast.loading('מאחד סרטונים...', { id: 'merge' });
+                        toast.loading('Exporting video...', { id: 'merge' });
                         try {
-                          toast.error('פיצ\'ר איחוד בפיתוח', { id: 'merge' });
+                          toast.error('Export feature in development', { id: 'merge' });
                         } catch (err) {
-                          toast.error('שגיאה', { id: 'merge' });
+                          toast.error('Error', { id: 'merge' });
                         } finally {
                           setMergingVideos(false);
                         }
                       }}
                       disabled={mergingVideos || videoClips.length < 2}
-                      className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                      className="w-full bg-white text-black hover:bg-gray-200"
                     >
                       {mergingVideos ? (
                         <>
                           <Loader2 className="w-4 h-4 ml-2 animate-spin" />
-                          מאחד...
+                          Exporting...
                         </>
                       ) : (
                         <>
-                          <Wand2 className="w-4 h-4 ml-2" />
-                          ייצא סרטון
+                          <Download className="w-4 h-4 ml-2" />
+                          Export Video
                         </>
                       )}
                     </Button>
@@ -850,10 +849,10 @@ export default function VideoCreator() {
                     <Button
                       onClick={() => setEditorView('library')}
                       variant="outline"
-                      className="w-full border-gray-700"
+                      className="w-full bg-gray-900 border-gray-800 text-gray-400 hover:bg-gray-800"
                     >
                       <Plus className="w-4 h-4 ml-2" />
-                      הוסף קליפים
+                      Add Clips
                     </Button>
 
                     <Button
@@ -862,10 +861,10 @@ export default function VideoCreator() {
                         setEditorView('library');
                       }}
                       variant="outline"
-                      className="w-full border-red-500/30 text-red-400 hover:bg-red-500/10"
+                      className="w-full bg-gray-900 border-gray-800 text-gray-400 hover:bg-gray-800"
                     >
                       <Trash2 className="w-4 h-4 ml-2" />
-                      נקה הכל
+                      Clear All
                     </Button>
                   </div>
                 </div>
@@ -874,14 +873,14 @@ export default function VideoCreator() {
               {/* Timeline Area */}
               <div className="flex-1 bg-gray-950 flex flex-col">
                 <div className="p-3 border-b border-gray-800 flex items-center justify-between">
-                  <h3 className="text-white font-bold flex items-center gap-2">
-                    <Play className="w-5 h-5" />
-                    טיימליין
+                  <h3 className="text-white font-medium text-sm flex items-center gap-2">
+                    <Play className="w-4 h-4" />
+                    Timeline
                   </h3>
-                  <div className="flex items-center gap-2 text-xs text-gray-400">
+                  <div className="flex items-center gap-2 text-xs text-gray-500">
                     <span>0:00</span>
                     <div className="w-32 h-1 bg-gray-800 rounded-full overflow-hidden">
-                      <div className="h-full w-1/3 bg-purple-600"></div>
+                      <div className="h-full w-1/3 bg-white"></div>
                     </div>
                     <span>{videoClips.length * 10}s</span>
                   </div>
@@ -895,41 +894,39 @@ export default function VideoCreator() {
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         className="relative group"
-                        style={{ width: '200px' }}
+                        style={{ width: '180px' }}
                       >
-                        <div className="bg-gray-900 rounded-lg border-2 border-gray-800 hover:border-purple-500 transition-all overflow-hidden cursor-pointer">
+                        <div className="bg-gray-900 rounded border border-gray-800 hover:border-gray-700 transition-all overflow-hidden cursor-pointer">
                           <div className="relative aspect-video bg-black">
                             <video 
                               src={clip.url} 
                               className="w-full h-full object-cover"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent">
-                              <div className="absolute bottom-2 right-2 text-white text-xs font-bold">
-                                #{index + 1}
-                              </div>
+                            <div className="absolute bottom-1 right-1 bg-black/80 px-1.5 py-0.5 rounded text-xs text-white font-medium">
+                              {index + 1}
                             </div>
                           </div>
-                          <div className="p-2 bg-gray-900/50">
-                            <p className="text-white text-xs truncate font-medium">{clip.name}</p>
-                            <p className="text-gray-400 text-[10px]">~10s</p>
+                          <div className="p-2 bg-gray-900">
+                            <p className="text-white text-xs truncate">{clip.name}</p>
+                            <p className="text-gray-600 text-[10px]">~10s</p>
                           </div>
                         </div>
                         <button
                           onClick={() => setVideoClips(prev => prev.filter(c => c.id !== clip.id))}
-                          className="absolute -top-2 -left-2 w-6 h-6 bg-red-600 hover:bg-red-700 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
+                          className="absolute -top-1.5 -left-1.5 w-5 h-5 bg-white hover:bg-gray-200 text-black rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
                         >
-                          <X className="w-4 h-4" />
+                          <X className="w-3 h-3" />
                         </button>
                       </motion.div>
                     ))}
                     
                     <button
                       onClick={() => setEditorView('library')}
-                      className="w-48 h-full min-h-[120px] border-2 border-dashed border-gray-700 hover:border-purple-500 rounded-lg flex items-center justify-center text-gray-500 hover:text-purple-400 transition-all"
+                      className="w-44 h-full min-h-[110px] border-2 border-dashed border-gray-800 hover:border-gray-700 rounded flex items-center justify-center text-gray-600 hover:text-gray-400 transition-all"
                     >
                       <div className="text-center">
-                        <Plus className="w-8 h-8 mx-auto mb-2" />
-                        <span className="text-sm font-bold">הוסף קליפ</span>
+                        <Plus className="w-6 h-6 mx-auto mb-1" />
+                        <span className="text-xs">Add clip</span>
                       </div>
                     </button>
                   </div>
