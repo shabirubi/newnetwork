@@ -160,10 +160,10 @@ export default function Home() {
     <div className="min-h-screen bg-black space-y-0 sm:space-y-6">
 
       {/* Featured Article Section - Full Screen */}
-      <section className="px-0 mb-4 mt-2">
+      <section className="px-4 mb-4 mt-2">
         <Link 
           to={`${createPageUrl("Article")}?id=${featuredArticle.id}`}
-          className="block group relative rounded-none sm:rounded-3xl overflow-hidden cursor-pointer"
+          className="block group relative rounded-2xl overflow-hidden cursor-pointer"
         >
           <div className="relative h-[400px] sm:h-[500px]">
             {/* תמונה ברקע */}
@@ -261,14 +261,14 @@ export default function Home() {
       </section>
 
       {/* Breaking News Updates Feed */}
-      <section className="px-0 sm:px-4 mb-8">
+      <section className="px-4 mb-8 max-w-full overflow-hidden">
         <React.Suspense fallback={<Skeleton className="w-full h-96 bg-gray-800" />}>
           <UpdatesFeed />
         </React.Suspense>
       </section>
 
       {/* Horizontal News Scrollers */}
-      <section className="px-0 sm:px-4 mb-8">
+      <section className="px-4 mb-8 max-w-full overflow-hidden">
         <HorizontalNewsScroller
           category="security"
           title="ביטחון ומדיניות"
@@ -276,7 +276,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="px-0 sm:px-4 mb-8">
+      <section className="px-4 mb-8 max-w-full overflow-hidden">
         <HorizontalNewsScroller
           category="economy"
           title="כלכלה ועסקים"
@@ -284,7 +284,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="px-0 sm:px-4 mb-8">
+      <section className="px-4 mb-8 max-w-full overflow-hidden">
         <HorizontalNewsScroller
           category="technology"
           title="טכנולוגיה"
@@ -292,7 +292,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="px-0 sm:px-4 mb-8">
+      <section className="px-4 mb-8 max-w-full overflow-hidden">
         <HorizontalNewsScroller
           category="crime"
           title="פלילים ומשטרה"
@@ -300,7 +300,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="px-0 sm:px-4 mb-8">
+      <section className="px-4 mb-8 max-w-full overflow-hidden">
         <HorizontalNewsScroller
           category="politics"
           title="פוליטיקה"
@@ -308,7 +308,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="px-0 sm:px-4 mb-8">
+      <section className="px-4 mb-8 max-w-full overflow-hidden">
         <HorizontalNewsScroller
           category="sports"
           title="ספורט"
@@ -316,7 +316,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="px-0 sm:px-4 mb-8">
+      <section className="px-4 mb-8 max-w-full overflow-hidden">
         <HorizontalNewsScroller
           category="entertainment"
           title="בידור ותרבות"
@@ -324,7 +324,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="px-0 sm:px-4 mb-8">
+      <section className="px-4 mb-8 max-w-full overflow-hidden">
         <HorizontalNewsScroller
           category="world"
           title="חדשות עולם"
@@ -332,7 +332,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="px-0 sm:px-4 mb-8">
+      <section className="px-4 mb-8 max-w-full overflow-hidden">
         <HorizontalNewsScroller
           category="health"
           title="בריאות"
@@ -340,7 +340,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="px-0 sm:px-4 mb-8">
+      <section className="px-4 mb-8 max-w-full overflow-hidden">
         <HorizontalNewsScroller
           category="israel"
           title="חדשות ישראל"
@@ -348,7 +348,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="px-0 sm:px-4 mb-8">
+      <section className="px-4 mb-8 max-w-full overflow-hidden">
         <HorizontalNewsScroller
           category="education"
           title="חינוך"
@@ -356,7 +356,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="px-0 sm:px-4 mb-8">
+      <section className="px-4 mb-8 max-w-full overflow-hidden">
         <HorizontalNewsScroller
           category="culture"
           title="תרבות"
@@ -364,7 +364,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="px-0 sm:px-4 mb-8">
+      <section className="px-4 mb-8 max-w-full overflow-hidden">
         <HorizontalNewsScroller
           category="environment"
           title="סביבה"
@@ -372,7 +372,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="px-0 sm:px-4 mb-8">
+      <section className="px-4 mb-8 max-w-full overflow-hidden">
         <HorizontalNewsScroller
           category="science"
           title="מדע"
@@ -380,7 +380,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="px-0 sm:px-4 mb-8">
+      <section className="px-4 mb-8 max-w-full overflow-hidden">
         <HorizontalNewsScroller
           category="military"
           title="צבא וביטחון"
@@ -388,7 +388,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="px-0 sm:px-4 mb-8">
+      <section className="px-4 mb-8 max-w-full overflow-hidden">
         <HorizontalNewsScroller
           category="law"
           title="משפט ופלילים"
@@ -396,7 +396,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="px-0 sm:px-4 mb-8">
+      <section className="px-4 mb-8 max-w-full overflow-hidden">
         <HorizontalNewsScroller
           category="local"
           title="חדשות מקומיות"
@@ -404,7 +404,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="px-0 sm:px-4 mb-8">
+      <section className="px-4 mb-8 max-w-full overflow-hidden">
         <HorizontalNewsScroller
           category="music"
           title="מוזיקה"
@@ -412,7 +412,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="px-0 sm:px-4 mb-8">
+      <section className="px-4 mb-8 max-w-full overflow-hidden">
         <HorizontalNewsScroller
           category="horoscope"
           title="הורוסקופ ואסטרולוגיה"
@@ -420,7 +420,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="px-0 sm:px-4 mb-8">
+      <section className="px-4 mb-8 max-w-full overflow-hidden">
         <HorizontalNewsScroller
           category="finance"
           title="פיננסים והשקעות"
@@ -429,64 +429,64 @@ export default function Home() {
       </section>
 
       {/* News Reels Section */}
-      <section className="px-0 sm:px-4 mb-8">
+      <section className="px-4 mb-8 max-w-full overflow-hidden">
         <React.Suspense fallback={<Skeleton className="w-full h-96 bg-gray-800" />}>
           <NewsReels />
         </React.Suspense>
       </section>
 
       {/* Trending Topics */}
-      <section className="px-0 sm:px-4 mb-8">
+      <section className="px-4 mb-8 max-w-full overflow-hidden">
         <React.Suspense fallback={<Skeleton className="w-full h-64 bg-gray-800" />}>
           <TrendingTopicsContainer />
         </React.Suspense>
       </section>
 
       {/* TikTok News Feed */}
-      <section className="px-0 sm:px-4 mb-8">
+      <section className="px-4 mb-8 max-w-full overflow-hidden">
         <React.Suspense fallback={<Skeleton className="w-full h-96 bg-gray-800" />}>
           <TikTokNewsContainer />
         </React.Suspense>
       </section>
 
       {/* All Videos Gallery */}
-      <section className="px-0 sm:px-4 mb-8">
+      <section className="px-4 mb-8 max-w-full overflow-hidden">
         <React.Suspense fallback={<Skeleton className="w-full h-96 bg-gray-800" />}>
           <AllVideosGallery />
         </React.Suspense>
       </section>
 
       {/* Kan Archive */}
-      <section className="px-0 sm:px-4 mb-8">
+      <section className="px-4 mb-8 max-w-full overflow-hidden">
         <React.Suspense fallback={<Skeleton className="w-full h-64 bg-gray-800" />}>
           <KanArchiveContainer />
         </React.Suspense>
       </section>
 
       {/* Reporter Responses Feed */}
-      <section className="px-0 sm:px-4 mb-8">
+      <section className="px-4 mb-8 max-w-full overflow-hidden">
         <React.Suspense fallback={<Skeleton className="w-full h-96 bg-gray-800" />}>
           <ReporterResponsesFeed />
         </React.Suspense>
       </section>
 
       {/* Reporters Spotlight */}
-      <section className="px-0 sm:px-4 mb-8">
+      <section className="px-4 mb-8 max-w-full overflow-hidden">
         <ReportersSpotlight />
       </section>
 
       {/* User Uploaded Videos */}
-      <section className="px-0 sm:px-4 mb-8">
+      <section className="px-4 mb-8 max-w-full overflow-hidden">
         <UserUploadedVideos />
       </section>
 
       {/* Entertainment Updates */}
-      <section className="px-0 sm:px-4 mb-8">
+      <section className="px-4 mb-8 max-w-full overflow-hidden">
         <EntertainmentUpdatesFeed />
       </section>
 
       {/* Zaka Media Kit */}
-      <section className="px-0 sm:px-4 mb-8">
+      <section className="px-4 mb-8 max-w-full overflow-hidden">
         <React.Suspense fallback={<Skeleton className="w-full h-96 bg-gray-800" />}>
           <ZakaMediaKitContainer />
         </React.Suspense>
