@@ -192,33 +192,33 @@ export default function RealTimeAlertsContainer() {
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex items-center gap-1 pt-1.5 sm:pt-2 border-t border-[#0080FF]/20">
+                  <div className="flex items-center gap-2 pt-2 sm:pt-3 border-t border-[#0080FF]/20">
                     <button
                       onClick={() => handlePlayAudio(alert)}
                       disabled={loadingId === alert.id}
-                      className="flex-1 flex items-center justify-center gap-1 px-2 py-1.5 sm:py-2 bg-blue-600/80 hover:bg-blue-600 disabled:bg-gray-600 text-white rounded text-[9px] sm:text-xs font-semibold"
+                      className="flex-1 flex items-center justify-center gap-2 px-3 py-2 sm:py-2.5 bg-blue-600/80 hover:bg-blue-600 disabled:bg-gray-600 text-white rounded-lg font-semibold transition-colors text-xs sm:text-sm"
                     >
                       {loadingId === alert.id ? (
-                        <Loader2 className="w-3 h-3 animate-spin" />
+                        <Loader2 className="w-4 h-4 animate-spin" />
                       ) : playingId === alert.id ? (
-                        <Pause className="w-3 h-3" />
+                        <Pause className="w-4 h-4" />
                       ) : (
-                        <Play className="w-3 h-3" />
+                        <Play className="w-4 h-4" />
                       )}
-                      <span className="hidden sm:inline">{loadingId === alert.id ? 'טוען...' : playingId === alert.id ? 'עצור' : 'הפעל'}</span>
+                      <span>{loadingId === alert.id ? 'טוען...' : playingId === alert.id ? 'עצור' : 'הפעל'}</span>
                     </button>
 
                     <button
                       onClick={() => handleGenerateVideo(alert)}
                       disabled={generatingVideoId === alert.id}
-                      className="flex-1 flex items-center justify-center gap-1 px-2 py-1.5 sm:py-2 bg-[#0080FF]/80 hover:bg-[#0080FF] disabled:bg-gray-600 text-white rounded text-[9px] sm:text-xs font-semibold"
+                      className="flex-1 flex items-center justify-center gap-2 px-3 py-2 sm:py-2.5 bg-[#0080FF]/80 hover:bg-[#0080FF] disabled:bg-gray-600 text-white rounded-lg font-semibold transition-colors text-xs sm:text-sm"
                     >
                       {generatingVideoId === alert.id ? (
-                        <Loader2 className="w-3 h-3 animate-spin" />
+                        <Loader2 className="w-4 h-4 animate-spin" />
                       ) : (
-                        <Film className="w-3 h-3" />
+                        <Film className="w-4 h-4" />
                       )}
-                      <span className="hidden sm:inline">{generatingVideoId === alert.id ? 'יוצר...' : 'וידאו'}</span>
+                      <span>{generatingVideoId === alert.id ? 'יוצר...' : 'וידאו'}</span>
                     </button>
                   </div>
                 </div>
