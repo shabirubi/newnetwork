@@ -83,20 +83,20 @@ export default function WeatherAlertsContainer() {
 
         {/* Weather Metrics Grid */}
         <div
-          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3"
+          className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-6 gap-1.5 sm:gap-3"
         >
           {mockWeatherMetrics.map((metric, idx) => {
             const Icon = metric.icon;
             return (
               <div
                 key={idx}
-                className="bg-gray-900 rounded-lg p-2 sm:p-3 border border-gray-800 hover:border-gray-700 transition-all cursor-pointer group"
+                className="bg-gray-900 rounded-lg p-1.5 sm:p-3 border border-gray-800 hover:border-gray-700 transition-all cursor-pointer group"
               >
-                <div className={`${metric.color} mb-1 sm:mb-1.5 group-hover:scale-110 transition-transform`}>
-                  <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
+                <div className={`${metric.color} mb-0.5 sm:mb-1.5 group-hover:scale-110 transition-transform flex justify-center`}>
+                  <Icon className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
                 </div>
-                <p className="text-gray-400 text-[9px] sm:text-[10px] font-semibold mb-0.5">{metric.label}</p>
-                <p className="text-white font-bold text-xs sm:text-sm">{metric.value}</p>
+                <p className="text-gray-400 text-[8px] sm:text-[10px] font-semibold mb-0.5 text-center truncate">{metric.label}</p>
+                <p className="text-white font-bold text-[10px] sm:text-sm text-center">{metric.value}</p>
               </div>
             );
           })}
