@@ -47,7 +47,7 @@ export default function TikTokNewsContainer() {
         </a>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="flex overflow-x-auto sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 snap-x snap-mandatory scrollbar-hide">
         {tiktokVideos.map((video, idx) => (
           <motion.div
             key={video.id}
@@ -56,7 +56,7 @@ export default function TikTokNewsContainer() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: idx * 0.1 }}
             whileHover={{ scale: 1.05 }}
-            className="group relative rounded-2xl overflow-hidden aspect-[9/16] bg-gradient-to-br from-black/80 via-[#0080FF]/30 to-black/80 backdrop-blur-sm cursor-pointer border-2 border-[#0080FF]/40 hover:border-[#0080FF]/80 transition-all"
+            className="group relative rounded-2xl overflow-hidden aspect-[9/16] bg-gradient-to-br from-black/80 via-[#0080FF]/30 to-black/80 backdrop-blur-sm cursor-pointer border-2 border-[#0080FF]/40 hover:border-[#0080FF]/80 transition-all flex-shrink-0 w-28 sm:w-auto snap-center"
             style={{
               boxShadow: '0 0 20px rgba(0, 128, 255, 0.3), inset 0 0 20px rgba(0, 128, 255, 0.1)'
             }}

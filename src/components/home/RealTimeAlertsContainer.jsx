@@ -150,7 +150,7 @@ export default function RealTimeAlertsContainer() {
 
       {/* Alerts Grid */}
       {alerts.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 w-full place-items-center sm:place-items-start max-w-sm sm:max-w-none mx-auto sm:mx-0">
+        <div className="space-y-3 sm:space-y-4 w-full sm:grid sm:grid-cols-2 lg:grid-cols-3 sm:gap-4">
           <AnimatePresence>
             {alerts.map((alert, index) => (
               <motion.div
