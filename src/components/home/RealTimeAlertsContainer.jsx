@@ -120,36 +120,37 @@ export default function RealTimeAlertsContainer() {
   }
 
   return (
-    <section className="space-y-4">
+    <section className="space-y-3 sm:space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-full bg-[#0080FF]/20 flex items-center justify-center border-2 border-[#0080FF] animate-pulse">
-            <Radio className="w-5 h-5 text-[#0080FF]" />
+        <div className="flex items-center gap-2 sm:gap-3">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#0080FF]/20 flex items-center justify-center border-2 border-[#0080FF] animate-pulse">
+            <Radio className="w-4 h-4 sm:w-5 sm:h-5 text-[#0080FF]" />
           </div>
-          <h2 className="text-2xl font-bold text-white">דיווחים בזמן אמת</h2>
+          <h2 className="text-lg sm:text-2xl font-bold text-white">דיווחים בזמן אמת</h2>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 sm:gap-2">
           <button
             onClick={() => refetch()}
-            className="p-2 rounded-lg bg-[#0080FF]/20 hover:bg-[#0080FF]/40 text-[#0080FF] transition-colors"
+            className="p-1.5 sm:p-2 rounded-lg bg-[#0080FF]/20 hover:bg-[#0080FF]/40 text-[#0080FF] transition-colors"
             title="רענן"
           >
-            <RefreshCw className="w-5 h-5" />
+            <RefreshCw className="w-4 h-4 sm:w-5 sm:h-5" />
           </button>
           <Link
             to={createPageUrl("WarRoom")}
-            className="flex items-center gap-2 px-4 py-2 bg-[#0080FF] hover:bg-[#0066FF] text-white rounded-lg font-semibold transition-colors text-sm"
+            className="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-1.5 sm:py-2 bg-[#0080FF] hover:bg-[#0066FF] text-white rounded-lg font-semibold transition-colors text-xs sm:text-sm"
           >
-            חדר מלחמה
-            <ChevronRight className="w-4 h-4" />
+            <span className="hidden sm:inline">חדר מלחמה</span>
+            <span className="sm:hidden">חדר</span>
+            <ChevronRight className="w-3 h-3 sm:w-4 sm:h-4" />
           </Link>
         </div>
       </div>
 
       {/* Alerts Grid */}
       {alerts.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
           <AnimatePresence>
             {alerts.map((alert, index) => (
               <motion.div
@@ -158,66 +159,66 @@ export default function RealTimeAlertsContainer() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ delay: index * 0.1 }}
-                className="group relative bg-gradient-to-br from-[#0080FF]/20 to-black/60 border border-[#0080FF]/30 rounded-xl p-4 hover:border-[#0080FF]/60 transition-all hover:shadow-[0_0_20px_rgba(0,128,255,0.3)]"
+                className="group relative bg-gradient-to-br from-[#0080FF]/20 to-black/60 border border-[#0080FF]/30 rounded-xl p-3 sm:p-4 hover:border-[#0080FF]/60 transition-all hover:shadow-[0_0_20px_rgba(0,128,255,0.3)]"
               >
                 {/* Badge */}
                 {alert.is_breaking && (
-                  <div className="absolute top-3 right-3">
+                  <div className="absolute top-2 sm:top-3 right-2 sm:right-3">
                     <motion.span
                       animate={{ scale: [1, 1.1, 1] }}
                       transition={{ duration: 2, repeat: Infinity }}
-                      className="inline-block px-2 py-1 bg-[#0080FF] text-white text-xs font-bold rounded-full"
+                      className="inline-block px-1.5 sm:px-2 py-0.5 sm:py-1 bg-[#0080FF] text-white text-[10px] sm:text-xs font-bold rounded-full"
                     >
-                      חדשות חם
+                      חם
                     </motion.span>
                   </div>
                 )}
 
                 {/* Content */}
-                <div className="space-y-3">
-                  <h3 className="font-bold text-white pr-16 leading-tight line-clamp-2">
+                <div className="space-y-2 sm:space-y-3">
+                  <h3 className="font-bold text-white pr-10 sm:pr-16 leading-tight line-clamp-2 text-sm sm:text-base">
                     {alert.title}
                   </h3>
 
-                  <p className="text-gray-300 text-sm line-clamp-2">
+                  <p className="text-gray-300 text-xs sm:text-sm line-clamp-2">
                     {alert.subtitle || alert.content}
                   </p>
 
                   {/* Time */}
-                  <div className="flex items-center gap-2 text-xs text-gray-400">
-                    <span>{alert.source}</span>
+                  <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs text-gray-400">
+                    <span className="truncate max-w-[100px]">{alert.source}</span>
                     <span>•</span>
                     <span>{new Date(alert.created_date).toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' })}</span>
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex items-center gap-2 pt-2 border-t border-[#0080FF]/20">
+                  <div className="flex items-center gap-1.5 sm:gap-2 pt-2 border-t border-[#0080FF]/20">
                     <button
                       onClick={() => handlePlayAudio(alert)}
                       disabled={loadingId === alert.id}
-                      className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-600/80 hover:bg-blue-600 disabled:bg-gray-600 text-white rounded-lg transition-colors text-xs font-semibold"
+                      className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 bg-blue-600/80 hover:bg-blue-600 disabled:bg-gray-600 text-white rounded-lg transition-colors text-[10px] sm:text-xs font-semibold"
                     >
                       {loadingId === alert.id ? (
-                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        <Loader2 className="w-3 h-3 sm:w-3.5 sm:h-3.5 animate-spin" />
                       ) : playingId === alert.id ? (
-                        <Pause className="w-3.5 h-3.5" />
+                        <Pause className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                       ) : (
-                        <Play className="w-3.5 h-3.5" />
+                        <Play className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                       )}
-                      {loadingId === alert.id ? 'טוען...' : playingId === alert.id ? 'עצור' : 'הפעל'}
+                      <span className="hidden sm:inline">{loadingId === alert.id ? 'טוען...' : playingId === alert.id ? 'עצור' : 'הפעל'}</span>
                     </button>
 
                     <button
                       onClick={() => handleGenerateVideo(alert)}
                       disabled={generatingVideoId === alert.id}
-                      className="flex items-center gap-1.5 px-3 py-1.5 bg-[#0080FF]/80 hover:bg-[#0080FF] disabled:bg-gray-600 text-white rounded-lg transition-colors text-xs font-semibold"
+                      className="flex items-center gap-1 sm:gap-1.5 px-2 sm:px-3 py-1 sm:py-1.5 bg-[#0080FF]/80 hover:bg-[#0080FF] disabled:bg-gray-600 text-white rounded-lg transition-colors text-[10px] sm:text-xs font-semibold"
                     >
                       {generatingVideoId === alert.id ? (
-                        <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                        <Loader2 className="w-3 h-3 sm:w-3.5 sm:h-3.5 animate-spin" />
                       ) : (
-                        <Film className="w-3.5 h-3.5" />
+                        <Film className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                       )}
-                      {generatingVideoId === alert.id ? 'יוצר...' : 'וידאו'}
+                      <span className="hidden sm:inline">{generatingVideoId === alert.id ? 'יוצר...' : 'וידאו'}</span>
                     </button>
                   </div>
                 </div>
