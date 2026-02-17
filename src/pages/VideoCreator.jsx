@@ -201,31 +201,43 @@ export default function VideoCreator() {
     const userMessage = input.trim();
     setInput("");
     setLoading(true);
+    
+    console.log('🚀 Sending message:', userMessage);
+    toast.loading('מתחיל ליצור...', { id: 'send' });
 
     try {
       let conv;
       if (!conversationId) {
+        console.log('📝 Creating new conversation...');
         conv = await base44.agents.createConversation({
           agent_name: "video_creator",
           metadata: { name: "Video" }
         });
         setConversationId(conv.id);
+        console.log('✅ Conversation created:', conv.id);
 
         base44.agents.subscribeToConversation(conv.id, (data) => {
+          console.log('📨 Received update:', data.messages.length, 'messages');
           setMessages(data.messages);
           setLoading(false);
+          toast.dismiss('send');
         });
       } else {
+        console.log('📝 Using existing conversation:', conversationId);
         conv = await base44.agents.getConversation(conversationId);
       }
 
+      console.log('💬 Adding message to conversation...');
       await base44.agents.addMessage(conv, {
         role: "user",
         content: userMessage
       });
+      console.log('✅ Message added successfully');
+      toast.success('האג\'נט מעבד...', { id: 'send' });
+      
     } catch (err) {
-      console.error(err);
-      toast.error(err.message);
+      console.error('❌ Error:', err);
+      toast.error(err.message || 'שגיאה בשליחה', { id: 'send' });
       setLoading(false);
     }
   };
@@ -541,12 +553,19 @@ export default function VideoCreator() {
                 ))}
 
                 {loading && (
-                  <div className="flex justify-start">
-                    <div className="bg-gradient-to-br from-purple-600 to-pink-600 text-white rounded-xl p-3 flex items-center gap-2">
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                      <span className="text-sm">בונה סצנות...</span>
+                  <motion.div 
+                    initial={{ opacity: 0, scale: 0.95 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="flex justify-start"
+                  >
+                    <div className="bg-gradient-to-br from-purple-600 to-pink-600 text-white rounded-xl p-4 flex items-center gap-3 shadow-lg">
+                      <Loader2 className="w-5 h-5 animate-spin" />
+                      <div>
+                        <p className="text-sm font-bold">יוצר סרטון AI...</p>
+                        <p className="text-xs text-purple-200">עד 2 דקות</p>
+                      </div>
                     </div>
-                  </div>
+                  </motion.div>
                 )}
 
                 <div ref={messagesEndRef} />
