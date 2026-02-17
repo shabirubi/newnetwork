@@ -123,7 +123,7 @@ export default function VideoCreator() {
         });
       }
       setVideoClips(prev => [...prev, ...uploadedClips]);
-      toast.success(`${files.length} סרטונים הועלו! 🎬`, { id: 'upload-clips' });
+      toast.success(`${files.length} videos uploaded`, { id: 'upload-clips' });
     } catch (err) {
       toast.error('שגיאה בהעלאת סרטונים', { id: 'upload-clips' });
     } finally {
@@ -194,19 +194,19 @@ export default function VideoCreator() {
           if (result.data?.video_url) {
             setMessages(prev => [...prev, {
               role: "assistant",
-              content: "✅ סרטון מוכן!",
+              content: "Video ready",
               video_url: result.data.video_url
             }]);
-            toast.success('סרטון נוצר! 🎬', { id: 'upload-file' });
+            toast.success('Video created', { id: 'upload-file' });
           }
         }
       } else {
         // For videos: just show it in chat
         setMessages(prev => [...prev, {
           role: "assistant",
-          content: "✅ וידאו הועלה! עכשיו תאר מה אתה רוצה ליצור והאג'נט יבנה סרטון מקצועי עם אפקטים"
+          content: "Video uploaded. Describe what you want to create"
         }]);
-        toast.success('וידאו הועלה! 🎬', { id: 'upload-file' });
+        toast.success('Video uploaded', { id: 'upload-file' });
       }
 
     } catch (err) {
@@ -375,8 +375,8 @@ export default function VideoCreator() {
               <div className="flex-1 overflow-y-auto p-4 space-y-3">
                 {messages.length === 0 && (
                   <div className="text-center py-8">
-                    <Sparkles className="w-12 h-12 text-purple-500 mx-auto mb-3" />
-                    <p className="text-gray-400 text-sm">שלום! תאר את הסרטון ואני אבנה לך את הסצנות</p>
+                    <Sparkles className="w-12 h-12 text-gray-500 mx-auto mb-3" />
+                    <p className="text-gray-400 text-sm">Describe your video and AI will build it</p>
                   </div>
                 )}
 
@@ -412,7 +412,7 @@ export default function VideoCreator() {
                                 }}
                               />
                               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent rounded-lg opacity-0 group-hover:opacity-100 transition-opacity flex items-end justify-center p-2">
-                                <span className="text-white text-xs">📸 תמונה לאווטר</span>
+                                <span className="text-white text-xs">Image uploaded</span>
                               </div>
                             </div>
                           ))}
@@ -548,7 +548,7 @@ export default function VideoCreator() {
                                       </div>
 
                                       {/* Success Message */}
-                                      <p className="text-center text-green-300 text-xs font-semibold">✅ נשמר בהיסטוריה</p>
+                                      <p className="text-center text-green-300 text-xs font-semibold">Saved to history</p>
                                     </div>
                                   );
                                 }
@@ -561,7 +561,7 @@ export default function VideoCreator() {
 
                             {toolCall.status === 'failed' && (
                               <div className="p-4 bg-red-500/20 backdrop-blur-xl rounded-xl border border-red-500/30">
-                                <div className="text-red-300 font-bold mb-1">❌ שגיאה ביצירת הסרטון</div>
+                                <div className="text-red-300 font-bold mb-1">Error creating video</div>
                                 <div className="text-red-200/70 text-xs">נסה שוב או שנה את התסריט</div>
                               </div>
                             )}
