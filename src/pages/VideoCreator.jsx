@@ -149,8 +149,8 @@ export default function VideoCreator() {
         <div className="flex items-center gap-2 sm:gap-3">
           <Video className="w-5 h-5 sm:w-6 sm:h-6 text-purple-500" />
           <div>
-            <h1 className="text-sm sm:text-lg font-bold text-white">יוצר סרטונים AI</h1>
-            <p className="text-gray-500 text-[10px] sm:text-xs hidden sm:block">תאר והמערכת יוצרת</p>
+            <h1 className="text-sm sm:text-lg font-bold text-white">Digital Dreams</h1>
+            <p className="text-gray-500 text-[10px] sm:text-xs hidden sm:block">יוצר סרטונים AI</p>
           </div>
         </div>
         <div className="flex items-center gap-1 sm:gap-2">
@@ -187,108 +187,72 @@ export default function VideoCreator() {
 
           {loading && (
             <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="text-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="w-full max-w-2xl px-4"
             >
-              <div className="w-full max-w-4xl">
-                {/* Professional Loading Container */}
-                <div className="relative aspect-video bg-gradient-to-br from-black via-purple-950/40 to-black rounded-3xl border-2 border-purple-500/50 overflow-hidden shadow-2xl">
-                  {/* Animated Grid Background */}
-                  <div className="absolute inset-0 opacity-20">
-                    <div className="absolute inset-0" style={{
-                      backgroundImage: 'linear-gradient(rgba(168, 85, 247, 0.4) 1px, transparent 1px), linear-gradient(90deg, rgba(168, 85, 247, 0.4) 1px, transparent 1px)',
-                      backgroundSize: '50px 50px'
-                    }} />
-                  </div>
-
-                  {/* Scanning Line Effect */}
-                  <motion.div
-                    className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-purple-500 to-transparent"
-                    animate={{ y: [0, 1080, 0] }}
-                    transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
-                  />
-
-                  {/* Center Content */}
-                  <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
-                    {/* Spinning Circle */}
-                    <motion.div
-                      className="relative w-32 h-32 mb-8"
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
-                    >
-                      <div className="absolute inset-0 rounded-full border-4 border-purple-500/30" />
-                      <div className="absolute inset-0 rounded-full border-4 border-transparent border-t-purple-500 border-r-purple-500" />
-                      <div className="absolute inset-4 rounded-full bg-gradient-to-br from-purple-600/50 to-pink-600/50 flex items-center justify-center">
-                        <Video className="w-12 h-12 text-white" />
-                      </div>
-                    </motion.div>
-
-                    {/* Status Text */}
-                    <div className="text-center px-6">
-                      <motion.h3
-                        className="text-3xl font-bold text-white mb-3"
-                        animate={{ opacity: [1, 0.7, 1] }}
-                        transition={{ duration: 1.5, repeat: Infinity }}
-                      >
-                        🎬 מייצר סרטון מקצועי...
-                      </motion.h3>
-                      <p className="text-purple-200 text-lg mb-6">HeyGen AI מעבד את הבקשה שלך</p>
-
-                      {/* Progress Steps */}
-                      <div className="flex items-center justify-center gap-4 mb-4">
-                        <motion.div
-                          className="flex items-center gap-2"
-                          animate={{ opacity: [0.5, 1, 0.5] }}
-                          transition={{ duration: 2, repeat: Infinity, delay: 0 }}
-                        >
-                          <div className="w-2 h-2 rounded-full bg-green-500" />
-                          <span className="text-sm text-gray-400">סקריפט</span>
-                        </motion.div>
-                        <div className="w-8 h-0.5 bg-purple-500/30" />
-                        <motion.div
-                          className="flex items-center gap-2"
-                          animate={{ opacity: [0.5, 1, 0.5] }}
-                          transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
-                        >
-                          <div className="w-2 h-2 rounded-full bg-yellow-500" />
-                          <span className="text-sm text-gray-400">רקע</span>
-                        </motion.div>
-                        <div className="w-8 h-0.5 bg-purple-500/30" />
-                        <motion.div
-                          className="flex items-center gap-2"
-                          animate={{ opacity: [0.5, 1, 0.5] }}
-                          transition={{ duration: 2, repeat: Infinity, delay: 1 }}
-                        >
-                          <div className="w-2 h-2 rounded-full bg-blue-500 animate-pulse" />
-                          <span className="text-sm text-white font-bold">מגישה</span>
-                        </motion.div>
-                      </div>
-
-                      {/* Time Estimate */}
-                      <div className="inline-flex items-center gap-2 px-4 py-2 bg-black/40 rounded-full border border-purple-500/30">
-                        <Loader2 className="w-4 h-4 animate-spin text-purple-400" />
-                        <span className="text-sm text-purple-200">זמן משוער: 1-2 דקות</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Corner Decorations */}
-                  <div className="absolute top-4 left-4 w-12 h-12 border-t-2 border-l-2 border-purple-500/50 rounded-tl-lg" />
-                  <div className="absolute top-4 right-4 w-12 h-12 border-t-2 border-r-2 border-purple-500/50 rounded-tr-lg" />
-                  <div className="absolute bottom-4 left-4 w-12 h-12 border-b-2 border-l-2 border-purple-500/50 rounded-bl-lg" />
-                  <div className="absolute bottom-4 right-4 w-12 h-12 border-b-2 border-r-2 border-purple-500/50 rounded-br-lg" />
+              {/* Simple Black Container */}
+              <div className="bg-black rounded-2xl p-8 sm:p-12 border border-gray-800">
+                {/* Logo/Brand */}
+                <div className="text-center mb-8">
+                  <h3 className="text-2xl sm:text-3xl font-bold text-white mb-2">Digital Dreams</h3>
+                  <p className="text-gray-400 text-sm">מייצר את הסרטון שלך...</p>
                 </div>
 
-                {/* Additional Info Below */}
-                <motion.div
-                  className="mt-6 text-center"
-                  animate={{ opacity: [0.6, 1, 0.6] }}
-                  transition={{ duration: 2, repeat: Infinity }}
+                {/* Thin Progress Bar */}
+                <div className="relative h-1 bg-gray-800 rounded-full overflow-hidden mb-6">
+                  <motion.div
+                    className="absolute inset-y-0 left-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"
+                    initial={{ width: "0%" }}
+                    animate={{ width: "100%" }}
+                    transition={{ duration: 90, ease: "linear" }}
+                  />
+                </div>
+
+                {/* Progress Percentage */}
+                <motion.div 
+                  className="text-center"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
                 >
-                  <p className="text-gray-400 text-sm">
-                    💡 הסרטון יכלול מגישה מקצועית, רקע סטודיו וסקריפט בעברית
-                  </p>
+                  <motion.p
+                    className="text-4xl sm:text-5xl font-bold text-white mb-4"
+                    initial={{ scale: 0.9 }}
+                    animate={{ scale: 1 }}
+                    transition={{ duration: 0.5, repeat: Infinity, repeatType: "reverse" }}
+                  >
+                    <motion.span
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                    >
+                      {Math.floor(Math.random() * 30 + 45)}%
+                    </motion.span>
+                  </motion.p>
+
+                  {/* Status Steps */}
+                  <div className="flex items-center justify-center gap-2 text-xs sm:text-sm text-gray-400">
+                    <motion.span
+                      animate={{ opacity: [0.4, 1, 0.4] }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                    >
+                      הפקה
+                    </motion.span>
+                    <span>•</span>
+                    <motion.span
+                      animate={{ opacity: [0.4, 1, 0.4] }}
+                      transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
+                    >
+                      עיבוד
+                    </motion.span>
+                    <span>•</span>
+                    <motion.span
+                      animate={{ opacity: [0.4, 1, 0.4] }}
+                      transition={{ duration: 2, repeat: Infinity, delay: 1 }}
+                    >
+                      גימור
+                    </motion.span>
+                  </div>
                 </motion.div>
               </div>
             </motion.div>
