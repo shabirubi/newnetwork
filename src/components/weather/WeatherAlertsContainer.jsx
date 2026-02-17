@@ -36,36 +36,36 @@ export default function WeatherAlertsContainer() {
 
         <div className="relative z-10">
           {/* Header */}
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-[#0080FF]/30 border-2 border-[#0080FF] flex items-center justify-center">
-                <Cloud className="w-6 h-6 text-[#0080FF]" />
+          <div className="flex items-center justify-between mb-3 sm:mb-6">
+            <div className="flex items-center gap-2 sm:gap-3">
+              <div className="w-10 h-10 sm:w-12 sm:h-12 rounded-full bg-[#0080FF]/30 border-2 border-[#0080FF] flex items-center justify-center flex-shrink-0">
+                <Cloud className="w-5 h-5 sm:w-6 sm:h-6 text-[#0080FF]" />
               </div>
-              <div>
-                <h3 className="text-white font-bold text-lg">תנאי מזג האוויר</h3>
-                <p className="text-gray-300 text-sm">עדכון כל שעה</p>
+              <div className="min-w-0">
+                <h3 className="text-white font-bold text-base sm:text-lg">מזג האוויר</h3>
+                <p className="text-gray-300 text-xs sm:text-sm">עדכון כל שעה</p>
               </div>
             </div>
           </div>
 
           {/* Main Temperature Section */}
-          <div className="bg-gradient-to-r from-black/40 to-black/20 rounded-2xl p-4 sm:p-6 mb-6 border border-[#0080FF]/20">
+          <div className="bg-gradient-to-r from-black/40 to-black/20 rounded-xl sm:rounded-2xl p-3 sm:p-6 mb-4 sm:mb-6 border border-[#0080FF]/20">
             <div className="flex items-center justify-between mb-4">
               <div>
-                <div className="text-5xl sm:text-6xl font-bold text-white mb-2">
+                <div className="text-4xl sm:text-6xl font-bold text-white mb-1 sm:mb-2">
                   {mockWeatherData.temp}°C
                 </div>
-                <p className="text-gray-300 text-base sm:text-lg">{mockWeatherData.condition}</p>
+                <p className="text-gray-300 text-xs sm:text-lg">{mockWeatherData.condition}</p>
               </div>
               <div className="text-right">
-                <p className="text-gray-400 text-sm mb-2">הרגשה כמו</p>
-                <p className="text-3xl font-bold text-[#0080FF]">{mockWeatherData.feelsLike}°</p>
+                <p className="text-gray-400 text-[10px] sm:text-sm mb-1 sm:mb-2">הרגשה כמו</p>
+                <p className="text-2xl sm:text-3xl font-bold text-[#0080FF]">{mockWeatherData.feelsLike}°</p>
               </div>
             </div>
           </div>
 
           {/* Weather Metrics Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6">
+          <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-4 sm:mb-6">
             {[
               { icon: Droplets, label: 'לחות', value: `${mockWeatherData.humidity}%`, color: 'from-blue-500 to-blue-600' },
               { icon: Wind, label: 'רוח', value: `${mockWeatherData.windSpeed} קמ"ש`, color: 'from-cyan-500 to-cyan-600' },
@@ -81,7 +81,7 @@ export default function WeatherAlertsContainer() {
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: idx * 0.05 }}
-                  className={`bg-gradient-to-br ${metric.color} rounded-xl p-3 sm:p-4 border border-white/10 hover:border-white/30 transition-all group cursor-pointer`}
+                  className={`bg-gradient-to-br ${metric.color} rounded-lg sm:rounded-xl p-2 sm:p-4 border border-white/10 hover:border-white/30 transition-all group cursor-pointer`}
                 >
                   <Icon className="w-5 h-5 text-white mb-2 group-hover:scale-110 transition-transform" />
                   <p className="text-white/70 text-[10px] sm:text-xs font-semibold mb-1">{metric.label}</p>
@@ -92,8 +92,8 @@ export default function WeatherAlertsContainer() {
           </div>
 
           {/* Alerts Section */}
-          {mockAlerts.length > 0 && (
-            <div className="bg-black/40 rounded-2xl p-3 sm:p-4 border border-amber-500/20">
+           {mockAlerts.length > 0 && (
+             <div className="bg-black/40 rounded-lg sm:rounded-2xl p-2 sm:p-4 border border-amber-500/20">
               <div className="flex items-center gap-2 mb-3">
                 <AlertTriangle className="w-5 h-5 text-amber-500 animate-pulse" />
                 <h4 className="text-white font-bold text-sm sm:text-base">אזהרות</h4>
