@@ -160,10 +160,10 @@ export default function Home() {
     <div className="min-h-screen bg-black space-y-0 sm:space-y-6">
 
       {/* Featured Article Section - Full Screen */}
-      <section className="px-4 mb-4 mt-2">
+      <section className="px-4 mb-4 mt-2 max-w-full overflow-hidden">
         <Link 
           to={`${createPageUrl("Article")}?id=${featuredArticle.id}`}
-          className="block group relative rounded-2xl overflow-hidden cursor-pointer"
+          className="block group relative rounded-2xl overflow-hidden cursor-pointer w-full"
         >
           <div className="relative h-[280px] sm:h-[500px]">
             {/* תמונה ברקע */}
