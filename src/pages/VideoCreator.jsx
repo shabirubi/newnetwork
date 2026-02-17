@@ -137,20 +137,12 @@ export default function VideoCreator() {
           }
         }
       } else {
-        // For videos: analyze and create script
-        toast.loading('מנתח סרטון וכותב תסריט...', { id: 'upload-file' });
-        const scriptResult = await base44.functions.invoke('analyzeVideoAndCreateScript', {
-          video_url: file_url,
-          user_request: input.trim() || 'צור תסריט מקצועי לסרטון זה'
-        });
-
-        if (scriptResult.data?.script) {
-          setMessages(prev => [...prev, {
-            role: "assistant",
-            content: `📝 תסריט חדש:\n${scriptResult.data.script}`
-          }]);
-          toast.success('תסריט נוצר! ✍️', { id: 'upload-file' });
-        }
+        // For videos: just show it in chat
+        setMessages(prev => [...prev, {
+          role: "assistant",
+          content: "✅ וידאו הועלה! עכשיו תאר מה אתה רוצה ליצור והאג'נט יבנה סרטון מקצועי עם אפקטים"
+        }]);
+        toast.success('וידאו הועלה! 🎬', { id: 'upload-file' });
       }
 
     } catch (err) {
