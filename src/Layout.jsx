@@ -21,7 +21,7 @@ import KanArchiveModal from "./components/home/KanArchiveModal";
 import TalkingAvatar from "./components/avatar/TalkingAvatar";
 import DIDLiveChat from "./components/avatar/DIDLiveChat";
 import AdminLoginModal from "./components/admin/AdminLoginModal";
-import CookieConsent from "./components/cookies/CookieConsent";
+
 import AccessibilityFloatingButton from "./components/accessibility/AccessibilityFloatingButton";
 import { base44 } from "@/api/base44Client";
 
@@ -408,8 +408,7 @@ export default function Layout({ children, currentPageName }) {
       {/* D-ID Live Chat */}
       <DIDLiveChat isOpen={didChatOpen} onClose={() => setDidChatOpen(false)} />
 
-      {/* Cookie Consent */}
-      <CookieConsent />
+
 
       {/* Accessibility Floating Button */}
       <AccessibilityFloatingButton />
