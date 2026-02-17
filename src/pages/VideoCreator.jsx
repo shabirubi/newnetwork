@@ -84,7 +84,6 @@ export default function VideoCreator() {
 
     const unsubscribe = base44.agents.subscribeToConversation(conversationId, (data) => {
       setMessages(data.messages);
-      setLoading(false);
     });
 
     return () => unsubscribe();
@@ -204,37 +203,29 @@ export default function VideoCreator() {
     setLoading(true);
 
     try {
-      // Create conversation if doesn't exist
+      let conv;
       if (!conversationId) {
-        const conv = await base44.agents.createConversation({
+        conv = await base44.agents.createConversation({
           agent_name: "video_creator",
-          metadata: { name: "יצירת סרטון" }
+          metadata: { name: "Video" }
         });
         setConversationId(conv.id);
-        setMessages([]);
 
-        // Subscribe to updates
         base44.agents.subscribeToConversation(conv.id, (data) => {
           setMessages(data.messages);
-        });
-
-        // Send first message
-        await base44.agents.addMessage(conv, {
-          role: "user",
-          content: userMessage
+          setLoading(false);
         });
       } else {
-        // Add to existing conversation
-        const conv = await base44.agents.getConversation(conversationId);
-        await base44.agents.addMessage(conv, {
-          role: "user",
-          content: userMessage
-        });
+        conv = await base44.agents.getConversation(conversationId);
       }
+
+      await base44.agents.addMessage(conv, {
+        role: "user",
+        content: userMessage
+      });
     } catch (err) {
       console.error(err);
-      toast.error(`שגיאה: ${err.message}`);
-    } finally {
+      toast.error(err.message);
       setLoading(false);
     }
   };
