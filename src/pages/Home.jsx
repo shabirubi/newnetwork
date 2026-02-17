@@ -231,9 +231,9 @@ export default function Home() {
               repeat: Infinity,
               ease: "easeInOut"
             }}
-            className="w-full bg-gradient-to-r from-[#E31E24] via-[#0080FF] to-[#E31E24] hover:from-[#0080FF] hover:via-[#E31E24] hover:to-[#0080FF] text-white py-3 sm:py-5 rounded-2xl shadow-[0_0_40px_rgba(227,30,36,0.6)] border-2 border-[#E31E24]/50 flex items-center justify-center gap-2 sm:gap-3 font-bold text-sm sm:text-lg transition-all"
+            className="w-full bg-gradient-to-r from-[#E31E24] via-[#0080FF] to-[#E31E24] hover:from-[#0080FF] hover:via-[#E31E24] hover:to-[#0080FF] text-white py-2 sm:py-5 rounded-xl sm:rounded-2xl shadow-[0_0_40px_rgba(227,30,36,0.6)] border-2 border-[#E31E24]/50 flex items-center justify-center gap-2 sm:gap-3 font-bold text-xs sm:text-lg transition-all"
           >
-            <Cloud className="w-6 sm:w-7 h-6 sm:h-7 drop-shadow-[0_0_8px_currentColor]" />
+            <Cloud className="w-4 sm:w-7 h-4 sm:h-7 drop-shadow-[0_0_8px_currentColor]" />
           </motion.button>
         </section>
 
