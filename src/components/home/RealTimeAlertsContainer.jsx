@@ -150,7 +150,7 @@ export default function RealTimeAlertsContainer() {
 
       {/* Alerts Grid */}
       {alerts.length > 0 ? (
-        <div className="space-y-3 sm:space-y-4 w-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 w-full">
           <AnimatePresence>
             {alerts.map((alert, index) => (
               <motion.div
@@ -159,15 +159,15 @@ export default function RealTimeAlertsContainer() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ delay: index * 0.1 }}
-                className="group relative bg-gradient-to-br from-[#0080FF]/20 to-black/60 border border-[#0080FF]/30 rounded-xl p-3 sm:p-4 hover:border-[#0080FF]/60 transition-all hover:shadow-[0_0_20px_rgba(0,128,255,0.3)] w-full"
+                className="group relative bg-gradient-to-br from-[#0080FF]/20 to-black/60 border border-[#0080FF]/30 rounded-lg sm:rounded-xl p-2 sm:p-3 hover:border-[#0080FF]/60 transition-all hover:shadow-[0_0_20px_rgba(0,128,255,0.3)]"
               >
                 {/* Badge */}
                 {alert.is_breaking && (
-                  <div className="absolute top-2 sm:top-3 right-2 sm:right-3">
+                  <div className="absolute top-1.5 sm:top-2 right-1.5 sm:right-2">
                     <motion.span
                       animate={{ scale: [1, 1.1, 1] }}
                       transition={{ duration: 2, repeat: Infinity }}
-                      className="inline-block px-1.5 sm:px-2 py-0.5 sm:py-1 bg-[#0080FF] text-white text-[10px] sm:text-xs font-bold rounded-full"
+                      className="inline-block px-1 sm:px-1.5 py-0.5 bg-[#0080FF] text-white text-[9px] sm:text-xs font-bold rounded-full"
                     >
                       חם
                     </motion.span>
@@ -175,50 +175,50 @@ export default function RealTimeAlertsContainer() {
                 )}
 
                 {/* Content */}
-                <div className="space-y-2 sm:space-y-3">
-                  <h3 className="font-bold text-white pr-10 sm:pr-16 leading-tight line-clamp-2 text-sm sm:text-base">
+                <div className="space-y-1 sm:space-y-2">
+                  <h3 className="font-bold text-white pr-8 sm:pr-10 leading-tight line-clamp-2 text-xs sm:text-sm">
                     {alert.title}
                   </h3>
 
-                  <p className="text-gray-300 text-xs sm:text-sm line-clamp-2">
+                  <p className="text-gray-300 text-[10px] sm:text-xs line-clamp-2">
                     {alert.subtitle || alert.content}
                   </p>
 
                   {/* Time */}
-                  <div className="flex items-center gap-1.5 sm:gap-2 text-[10px] sm:text-xs text-gray-400">
-                    <span className="truncate max-w-[100px]">{alert.source}</span>
+                  <div className="flex items-center gap-1 text-[9px] sm:text-xs text-gray-400">
+                    <span className="truncate max-w-[60px] sm:max-w-[100px]">{alert.source}</span>
                     <span>•</span>
                     <span>{new Date(alert.created_date).toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' })}</span>
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex items-center gap-2 pt-2 border-t border-[#0080FF]/20">
+                  <div className="flex items-center gap-1 pt-1.5 sm:pt-2 border-t border-[#0080FF]/20">
                     <button
                       onClick={() => handlePlayAudio(alert)}
                       disabled={loadingId === alert.id}
-                      className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 bg-blue-600/80 hover:bg-blue-600 disabled:bg-gray-600 text-white rounded-lg transition-colors text-xs font-semibold"
+                      className="flex-1 flex items-center justify-center gap-1 px-2 py-1.5 sm:py-2 bg-blue-600/80 hover:bg-blue-600 disabled:bg-gray-600 text-white rounded text-[9px] sm:text-xs font-semibold"
                     >
                       {loadingId === alert.id ? (
-                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <Loader2 className="w-3 h-3 animate-spin" />
                       ) : playingId === alert.id ? (
-                        <Pause className="w-4 h-4" />
+                        <Pause className="w-3 h-3" />
                       ) : (
-                        <Play className="w-4 h-4" />
+                        <Play className="w-3 h-3" />
                       )}
-                      <span>{loadingId === alert.id ? 'טוען...' : playingId === alert.id ? 'עצור' : 'הפעל'}</span>
+                      <span className="hidden sm:inline">{loadingId === alert.id ? 'טוען...' : playingId === alert.id ? 'עצור' : 'הפעל'}</span>
                     </button>
 
                     <button
                       onClick={() => handleGenerateVideo(alert)}
                       disabled={generatingVideoId === alert.id}
-                      className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2.5 bg-[#0080FF]/80 hover:bg-[#0080FF] disabled:bg-gray-600 text-white rounded-lg transition-colors text-xs font-semibold"
+                      className="flex-1 flex items-center justify-center gap-1 px-2 py-1.5 sm:py-2 bg-[#0080FF]/80 hover:bg-[#0080FF] disabled:bg-gray-600 text-white rounded text-[9px] sm:text-xs font-semibold"
                     >
                       {generatingVideoId === alert.id ? (
-                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <Loader2 className="w-3 h-3 animate-spin" />
                       ) : (
-                        <Film className="w-4 h-4" />
+                        <Film className="w-3 h-3" />
                       )}
-                      <span>{generatingVideoId === alert.id ? 'יוצר...' : 'וידאו'}</span>
+                      <span className="hidden sm:inline">{generatingVideoId === alert.id ? 'יוצר...' : 'וידאו'}</span>
                     </button>
                   </div>
                 </div>
