@@ -44,41 +44,9 @@ export default function VideoCreator() {
     videoPreview: a.preview_video_url
   }));
 
-  // Initialize conversation
-  useEffect(() => {
-    const initConversation = async () => {
-      try {
-        const conv = await base44.agents.createConversation({
-          agent_name: "video_creator",
-          metadata: { name: "צור סרטון חדש" }
-        });
-        setConversationId(conv.id);
-      } catch (err) {
-        console.error(err);
-        toast.error("שגיאה ביצירת שיחה");
-      }
-    };
-    initConversation();
+  // No longer needed - direct video generation
 
-    // Select first avatar by default
-    if (avatars.length > 0) {
-      setSelectedAvatar(avatars[0]);
-    }
-  }, []);
-
-  // Subscribe to conversation updates
-  useEffect(() => {
-    if (!conversationId) return;
-
-    const unsubscribe = base44.agents.subscribeToConversation(conversationId, (data) => {
-      console.log('Conversation update:', data);
-      console.log('Messages:', data.messages);
-      setMessages(data.messages || []);
-      setLoading(false);
-    });
-
-    return unsubscribe;
-  }, [conversationId]);
+  // No longer needed - direct video generation
 
 
 
@@ -191,7 +159,7 @@ export default function VideoCreator() {
   };
 
   const handleSend = async () => {
-    if (!input.trim() || !conversationId || loading) return;
+    if (!input.trim() || loading) return;
 
     const userMessage = input.trim();
     setInput("");
