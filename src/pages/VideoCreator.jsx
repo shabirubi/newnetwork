@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
-import { Send, Video, Loader2, Home, Shield, Download, History, X, Play } from "lucide-react";
+import { Send, Video, Loader2, Home, Shield, Download, History, X, Play, Plus } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
@@ -13,6 +13,11 @@ export default function VideoCreator() {
   const [generatedVideos, setGeneratedVideos] = useState([]);
   const [historyOpen, setHistoryOpen] = useState(false);
   const [currentVideo, setCurrentVideo] = useState(null);
+  const [conversationId, setConversationId] = useState(null);
+  const [messages, setMessages] = useState([]);
+  const fileInputRef = useRef(null);
+  const [uploadingFile, setUploadingFile] = useState(false);
+  const messagesEndRef = useRef(null);
 
   // Load history
   useEffect(() => {
@@ -24,6 +29,85 @@ export default function VideoCreator() {
     }
   }, []);
 
+  // Subscribe to conversation
+  useEffect(() => {
+    if (!conversationId) return;
+    const unsubscribe = base44.agents.subscribeToConversation(conversationId, (data) => {
+      setMessages(data.messages);
+      const lastMsg = data.messages[data.messages.length - 1];
+      if (lastMsg?.tool_calls) {
+        lastMsg.tool_calls.forEach(tc => {
+          if (tc.status === 'completed' && tc.results) {
+            try {
+              const result = typeof tc.results === 'string' ? JSON.parse(tc.results) : tc.results;
+              if (result.video_url) {
+                setCurrentVideo(result.video_url);
+                const userMsg = data.messages.find(m => m.role === 'user');
+                const title = userMsg?.content?.substring(0, 50) || "סרטון AI";
+                const newVideo = {
+                  id: Date.now(),
+                  title,
+                  videoUrl: result.video_url,
+                  timestamp: new Date().toISOString()
+                };
+                const updated = [newVideo, ...generatedVideos].slice(0, 20);
+                setGeneratedVideos(updated);
+                localStorage.setItem('videoDownloadHistory', JSON.stringify(updated));
+                setLoading(false);
+                toast.success('✅ הסרטון מוכן!', { id: 'creating' });
+              }
+            } catch (e) {}
+          }
+        });
+      }
+    });
+    return () => unsubscribe();
+  }, [conversationId]);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  const handleFileUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      toast.error('רק תמונות מותרות');
+      return;
+    }
+
+    setUploadingFile(true);
+    toast.loading('מעלה...', { id: 'upload' });
+
+    try {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+
+      let conv = conversationId ? await base44.agents.getConversation(conversationId) : null;
+      if (!conv) {
+        conv = await base44.agents.createConversation({
+          agent_name: "video_creator",
+          metadata: { name: "סרטון" }
+        });
+        setConversationId(conv.id);
+      }
+
+      await base44.agents.addMessage(conv, {
+        role: "user",
+        content: input.trim() || "צור סרטון מהתמונה הזו",
+        file_urls: [file_url]
+      });
+
+      setInput('');
+      toast.success('מעבד...', { id: 'upload' });
+    } catch (err) {
+      toast.error(err.message, { id: 'upload' });
+    } finally {
+      setUploadingFile(false);
+      if (fileInputRef.current) fileInputRef.current.value = '';
+    }
+  };
+
   const handleSend = async () => {
     if (!input.trim() || loading) return;
 
@@ -32,41 +116,28 @@ export default function VideoCreator() {
     setLoading(true);
     setCurrentVideo(null);
     
-    toast.loading('יוצר סרטון...', { id: 'creating' });
+    toast.loading('יוצר סרטון קולנועי...', { id: 'creating' });
 
     try {
-      // Call directly without agent
-      const result = await base44.functions.invoke('generateHeyGenCharacter', {
-        script: userMessage,
-        avatar_id: "Abigail_expressive_2024112501",
-        voice_id: "v6WKRTqObgmv7NHgVAFD",
-        background: "white"
-      });
-
-      if (result.data?.video_url) {
-        const videoUrl = result.data.video_url;
-        setCurrentVideo(videoUrl);
-        
-        // Save to history
-        const newVideo = {
-          id: Date.now(),
-          title: userMessage.substring(0, 50),
-          videoUrl: videoUrl,
-          timestamp: new Date().toISOString()
-        };
-        
-        const updated = [newVideo, ...generatedVideos].slice(0, 20);
-        setGeneratedVideos(updated);
-        localStorage.setItem('videoDownloadHistory', JSON.stringify(updated));
-        
-        toast.success('✅ הסרטון מוכן!', { id: 'creating' });
+      let conv;
+      if (!conversationId) {
+        conv = await base44.agents.createConversation({
+          agent_name: "video_creator",
+          metadata: { name: "סרטון" }
+        });
+        setConversationId(conv.id);
       } else {
-        toast.error('לא התקבל URL', { id: 'creating' });
+        conv = await base44.agents.getConversation(conversationId);
       }
+
+      await base44.agents.addMessage(conv, {
+        role: "user",
+        content: userMessage
+      });
+      
     } catch (err) {
       console.error(err);
       toast.error('שגיאה: ' + err.message, { id: 'creating' });
-    } finally {
       setLoading(false);
     }
   };
@@ -224,6 +295,21 @@ export default function VideoCreator() {
       {/* Bottom Input */}
       <div className="absolute bottom-0 left-0 right-0 p-6 bg-black/80 backdrop-blur-xl border-t border-gray-800">
         <div className="max-w-4xl mx-auto flex gap-3">
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            onChange={handleFileUpload}
+            className="hidden"
+          />
+          <Button
+            onClick={() => fileInputRef.current?.click()}
+            disabled={uploadingFile || loading}
+            variant="outline"
+            className="bg-gray-900 border-gray-700"
+          >
+            {uploadingFile ? <Loader2 className="w-5 h-5 animate-spin" /> : <Plus className="w-5 h-5" />}
+          </Button>
           <textarea
             value={input}
             onChange={(e) => setInput(e.target.value)}
@@ -233,7 +319,7 @@ export default function VideoCreator() {
                 handleSend();
               }
             }}
-            placeholder="תאר את הסרטון שאתה רוצה... (לדוגמה: 'צור סרטון קצר על הרשת החדשה')"
+            placeholder="תאר סרטון קולנועי עם הפקה... (לדוגמה: 'חדשות על טכנולוגיה בסטודיו מודרני')"
             className="flex-1 px-6 py-4 rounded-xl bg-gray-900 border-2 border-gray-700 text-white text-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
             rows={2}
             disabled={loading}
