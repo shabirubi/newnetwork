@@ -44,9 +44,17 @@ export default function VideoCreator() {
     videoPreview: a.preview_video_url
   }));
 
-  // No longer needed - direct video generation
+  // Subscribe to conversation updates
+  useEffect(() => {
+    if (!conversationId) return;
 
-  // No longer needed - direct video generation
+    const unsubscribe = base44.agents.subscribeToConversation(conversationId, (data) => {
+      setMessages(data.messages);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
+  }, [conversationId]);
 
 
 
@@ -160,67 +168,39 @@ export default function VideoCreator() {
     if (!input.trim() || loading) return;
 
     const userMessage = input.trim();
-    
-    // Validate minimum length
-    if (userMessage.length < 10) {
-      toast.error('נא לכתוב תסריט ארוך יותר (לפחות 10 תווים)');
-      return;
-    }
-
     setInput("");
     setLoading(true);
 
     try {
-      // Add user message to chat
-      setMessages(prev => [...prev, {
-        role: "user",
-        content: userMessage
-      }]);
+      // Create conversation if doesn't exist
+      if (!conversationId) {
+        const conv = await base44.agents.createConversation({
+          agent_name: "video_creator",
+          metadata: { name: "יצירת סרטון" }
+        });
+        setConversationId(conv.id);
+        setMessages([]);
 
-      // Generate video directly
-      const result = await base44.functions.invoke('generateHeyGenCharacter', {
-        script: userMessage,
-        avatar_id: "Abigail_expressive_2024112501",
-        voice_id: "v6WKRTqObgmv7NHgVAFD",
-        background: "white"
-      });
+        // Subscribe to updates
+        base44.agents.subscribeToConversation(conv.id, (data) => {
+          setMessages(data.messages);
+        });
 
-      console.log('Video generation result:', result);
-
-      // Add assistant message with video
-      if (result.data?.video_url) {
-        setMessages(prev => [...prev, {
-          role: "assistant",
-          content: "✅ סרטון מוכן!",
-          video_url: result.data.video_url
-        }]);
-
-        // Save to history
-        const newDownload = {
-          id: Math.random(),
-          title: userMessage.substring(0, 30) || "סרטון",
-          videoUrl: result.data.video_url,
-          timestamp: new Date().toISOString(),
-          scriptPreview: userMessage.substring(0, 50) + "..."
-        };
-        const saved = localStorage.getItem('videoDownloadHistory') || '[]';
-        const downloads = JSON.parse(saved);
-        const updated = [newDownload, ...downloads].slice(0, 20);
-        localStorage.setItem('videoDownloadHistory', JSON.stringify(updated));
-      } else if (result.data?.still_processing) {
-        setMessages(prev => [...prev, {
-          role: "assistant",
-          content: "⏳ הווידאו לוקח יותר זמן... בדוק בהיסטוריה בעוד דקה"
-        }]);
+        // Send first message
+        await base44.agents.addMessage(conv, {
+          role: "user",
+          content: userMessage
+        });
       } else {
-        throw new Error(result.data?.error || 'שגיאה לא ידועה');
+        // Add to existing conversation
+        const conv = await base44.agents.getConversation(conversationId);
+        await base44.agents.addMessage(conv, {
+          role: "user",
+          content: userMessage
+        });
       }
     } catch (err) {
       console.error(err);
-      setMessages(prev => [...prev, {
-        role: "assistant",
-        content: `❌ שגיאה: ${err.message}`
-      }]);
       toast.error(`שגיאה: ${err.message}`);
     } finally {
       setLoading(false);
@@ -510,7 +490,7 @@ export default function VideoCreator() {
                           handleSend();
                         }
                       }}
-                      placeholder="כתוב תסריט (לפחות 10 תווים) או צרף תמונה..."
+                      placeholder="תאר את הסרטון שאתה רוצה (הכל אוטומטי)..."
                       className="flex-1 px-3 py-2 rounded-md bg-gray-900 border border-gray-700 text-white focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none min-h-[80px]"
                       rows={3}
                     />
