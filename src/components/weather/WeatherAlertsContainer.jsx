@@ -63,45 +63,40 @@ export default function WeatherAlertsContainer() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="bg-gradient-to-br from-[#000033]/90 via-[#0080FF]/80 to-[#0080FF]/70 rounded-2xl p-4 border border-[#0080FF]/80 shadow-lg shadow-[#0080FF]/60 overflow-hidden relative"
+      className="bg-black/90 rounded-2xl p-3 sm:p-4 border border-gray-800 shadow-lg overflow-hidden relative"
     >
-      {/* Static Background - no animation for performance */}
-      <div
-      className="absolute inset-0 opacity-10 bg-gradient-to-br from-[#0080FF] via-[#0080FF] to-transparent"
-      />
-
       {/* Content */}
-      <div className="relative z-10 space-y-4">
+      <div className="relative z-10 space-y-3 sm:space-y-4">
         
         {/* Header */}
          <div
-          className="flex items-center gap-2 mb-3"
+          className="flex items-center gap-2 mb-2 sm:mb-3"
         >
-          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#0080FF] to-[#0099FF] flex items-center justify-center shadow-md shadow-[#0080FF]/60">
-            <Cloud className="w-5 h-5 text-white" />
+          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gray-900 flex items-center justify-center border border-gray-700">
+            <Cloud className="w-4 h-4 sm:w-5 sm:h-5 text-gray-300" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-white">השירות המטאורולוגי</h2>
-            <p className="text-[#0080FF] font-semibold text-xs animate-pulse">הרשת החדשה</p>
+            <h2 className="text-base sm:text-lg font-bold text-white">השירות המטאורולוגי</h2>
+            <p className="text-gray-400 font-semibold text-[10px] sm:text-xs">הרשת החדשה</p>
           </div>
         </div>
 
         {/* Weather Metrics Grid */}
         <div
-          className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3"
+          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3"
         >
           {mockWeatherMetrics.map((metric, idx) => {
             const Icon = metric.icon;
             return (
               <div
                 key={idx}
-                className="bg-white/5 backdrop-blur-lg rounded-lg p-3 border border-[#0080FF]/40 hover:border-[#0080FF]/80 transition-all cursor-pointer group"
+                className="bg-gray-900 rounded-lg p-2 sm:p-3 border border-gray-800 hover:border-gray-700 transition-all cursor-pointer group"
               >
-                <div className={`${metric.color} mb-1.5 group-hover:scale-110 transition-transform`}>
-                  <Icon className="w-5 h-5" />
+                <div className={`${metric.color} mb-1 sm:mb-1.5 group-hover:scale-110 transition-transform`}>
+                  <Icon className="w-4 h-4 sm:w-5 sm:h-5" />
                 </div>
-                <p className="text-white/70 text-[10px] font-semibold mb-0.5">{metric.label}</p>
-                <p className="text-white font-bold text-sm">{metric.value}</p>
+                <p className="text-gray-400 text-[9px] sm:text-[10px] font-semibold mb-0.5">{metric.label}</p>
+                <p className="text-white font-bold text-xs sm:text-sm">{metric.value}</p>
               </div>
             );
           })}
@@ -110,25 +105,25 @@ export default function WeatherAlertsContainer() {
         {/* Alerts Section */}
          {alerts.length > 0 && (
           <div
-            className="space-y-3"
+            className="space-y-2 sm:space-y-3"
           >
-            <div className="flex items-center gap-2 text-[#0080FF] font-bold text-sm">
-              <AlertTriangle className="w-4 h-4 animate-pulse" />
+            <div className="flex items-center gap-2 text-gray-300 font-bold text-xs sm:text-sm">
+              <AlertTriangle className="w-3 h-3 sm:w-4 sm:h-4 animate-pulse" />
               <span>התראות ועדכונים</span>
             </div>
-            <div className="space-y-2 max-h-64 overflow-y-auto scrollbar-hide">
+            <div className="space-y-2 max-h-48 sm:max-h-64 overflow-y-auto scrollbar-hide">
               {alerts.map((alert, idx) => (
                 <div
                   key={idx}
-                  className="bg-white/5 backdrop-blur-sm rounded-lg p-2 border border-[#0080FF]/40 hover:bg-white/10 transition-all"
+                  className="bg-gray-900 rounded-lg p-2 border border-gray-800 hover:bg-gray-800 transition-all"
                 >
-                  <p className="text-white font-semibold text-xs mb-0.5">{alert.title}</p>
-                  <p className="text-white/70 text-[10px] line-clamp-2">{alert.description}</p>
+                  <p className="text-white font-semibold text-[10px] sm:text-xs mb-0.5">{alert.title}</p>
+                  <p className="text-gray-400 text-[9px] sm:text-[10px] line-clamp-2">{alert.description}</p>
                   <a 
                     href={alert.link} 
                     target="_blank" 
                     rel="noopener noreferrer"
-                    className="text-[#0080FF] text-[10px] hover:underline mt-1 inline-block"
+                    className="text-gray-300 text-[9px] sm:text-[10px] hover:underline mt-1 inline-block"
                   >
                     קרא עוד →
                   </a>
@@ -140,19 +135,19 @@ export default function WeatherAlertsContainer() {
 
         {/* Loading State */}
         {loading && (
-          <div className="flex items-center justify-center py-8">
+          <div className="flex items-center justify-center py-6 sm:py-8">
             <div
-              className="w-6 h-6 border-2 border-[#0080FF]/30 border-t-[#0080FF] rounded-full animate-spin"
+              className="w-5 h-5 sm:w-6 sm:h-6 border-2 border-gray-700 border-t-gray-300 rounded-full animate-spin"
             />
           </div>
         )}
 
         {/* Footer */}
         <div
-          className="text-center pt-2 border-t border-[#0080FF]/30"
+          className="text-center pt-2 border-t border-gray-800"
         >
-          <p className="text-white/50 text-[10px]">
-            עדכון: {new Date().toLocaleTimeString('he-IL')} • <a href="https://ims.gov.il" target="_blank" rel="noopener noreferrer" className="text-[#0080FF] hover:underline">IMS</a>
+          <p className="text-gray-500 text-[9px] sm:text-[10px]">
+            עדכון: {new Date().toLocaleTimeString('he-IL')} • <a href="https://ims.gov.il" target="_blank" rel="noopener noreferrer" className="text-gray-400 hover:underline">IMS</a>
           </p>
         </div>
       </div>
