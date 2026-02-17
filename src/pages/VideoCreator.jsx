@@ -113,12 +113,10 @@ export default function VideoCreator() {
           console.log('Created talking photo:', photoResult.data);
           // Generate video directly with photo
           const result = await base44.functions.invoke('generateHeyGenCharacter', {
-            payload: {
-              script: userMessage.content.split(':')[1]?.trim() || "זה אווטר יוצר מתמונה שלך",
-              talking_photo_id: photoResult.data.talking_photo_id,
-              voice_id: "v6WKRTqObgmv7NHgVAFD",
-              background: "transparent"
-            }
+            script: userMessage.content.split(':')[1]?.trim() || "זה אווטר יוצר מתמונה שלך",
+            talking_photo_id: photoResult.data.talking_photo_id,
+            voice_id: "v6WKRTqObgmv7NHgVAFD",
+            background: "transparent"
           });
 
           if (result.data?.video_url) {
@@ -174,12 +172,10 @@ export default function VideoCreator() {
 
       // Generate video directly
       const result = await base44.functions.invoke('generateHeyGenCharacter', {
-        payload: {
-          script: userMessage,
-          avatar_id: "Abigail_expressive_2024112501",
-          voice_id: "v6WKRTqObgmv7NHgVAFD",
-          background: "white"
-        }
+        script: userMessage,
+        avatar_id: "Abigail_expressive_2024112501",
+        voice_id: "v6WKRTqObgmv7NHgVAFD",
+        background: "white"
       });
 
       console.log('Video generation result:', result);

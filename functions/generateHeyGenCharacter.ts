@@ -2,7 +2,11 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
 
 Deno.serve(async (req) => {
   try {
-    const { script, avatar_id, voice_id, talking_photo_id, background } = await req.json();
+    const body = await req.json();
+    const { payload } = body;
+    
+    // Support both direct params and nested payload
+    const { script, avatar_id, voice_id, talking_photo_id, background } = payload || body;
     
     if (!script || !script.trim()) {
       return Response.json({ error: 'Script is required' }, { status: 400 });
