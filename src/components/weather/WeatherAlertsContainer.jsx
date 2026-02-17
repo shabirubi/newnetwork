@@ -83,14 +83,14 @@ export default function WeatherAlertsContainer() {
 
         {/* Weather Metrics Grid */}
         <div
-          className="grid grid-cols-3 sm:grid-cols-3 lg:grid-cols-6 gap-1.5 sm:gap-3"
+          className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 sm:gap-3"
         >
           {mockWeatherMetrics.map((metric, idx) => {
             const Icon = metric.icon;
             return (
               <div
                 key={idx}
-                className="bg-gray-900 rounded-lg p-1.5 sm:p-3 border border-gray-800 hover:border-gray-700 transition-all cursor-pointer group"
+                className="bg-gray-900 rounded-lg p-2 sm:p-3 border border-gray-800 hover:border-gray-700 transition-all cursor-pointer group w-full"
               >
                 <div className={`${metric.color} mb-0.5 sm:mb-1.5 group-hover:scale-110 transition-transform flex justify-center`}>
                   <Icon className="w-3.5 h-3.5 sm:w-5 sm:h-5" />
