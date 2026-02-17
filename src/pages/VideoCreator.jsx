@@ -3,7 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Send, Video, Loader2, Sparkles, Home, Shield, MessageSquare, ChevronRight, Plus, Play, Download, Wand2, History } from "lucide-react";
+import { Send, Video, Loader2, Sparkles, Home, Shield, MessageSquare, ChevronRight, Plus, Play, Download, Wand2, History, Trash2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
@@ -23,6 +23,9 @@ export default function VideoCreator() {
   const fileInputRef = useRef(null);
   const [historyOpen, setHistoryOpen] = useState(false);
   const [lastVideo, setLastVideo] = useState(null);
+  const [videoClips, setVideoClips] = useState([]);
+  const [mergingVideos, setMergingVideos] = useState(false);
+  const multiFileInputRef = useRef(null);
 
   // Fetch HeyGen avatars
   const { data: heygenAvatars = [] } = useQuery({
@@ -69,6 +72,36 @@ export default function VideoCreator() {
       setSelectedAvatar(avatars[0]);
     }
   }, [heygenAvatars]);
+
+  const handleMultiVideoUpload = async (e) => {
+    const files = Array.from(e.target.files || []);
+    if (files.length === 0) return;
+
+    setUploadingFile(true);
+    toast.loading('מעלה סרטונים...', { id: 'upload-clips' });
+
+    try {
+      const uploadedClips = [];
+      for (const file of files) {
+        const { file_url } = await base44.integrations.Core.UploadFile({ file });
+        uploadedClips.push({
+          id: Math.random(),
+          url: file_url,
+          name: file.name,
+          duration: 0
+        });
+      }
+      setVideoClips(prev => [...prev, ...uploadedClips]);
+      toast.success(`${files.length} סרטונים הועלו! 🎬`, { id: 'upload-clips' });
+    } catch (err) {
+      toast.error('שגיאה בהעלאת סרטונים', { id: 'upload-clips' });
+    } finally {
+      setUploadingFile(false);
+      if (multiFileInputRef.current) {
+        multiFileInputRef.current.value = '';
+      }
+    }
+  };
 
   const handleFileUpload = async (e) => {
     const file = e.target.files?.[0];
@@ -223,6 +256,23 @@ export default function VideoCreator() {
           >
             <History className="w-4 h-4" />
             היסטוריה
+          </Button>
+          <input
+            ref={multiFileInputRef}
+            type="file"
+            multiple
+            accept="video/*"
+            onChange={handleMultiVideoUpload}
+            className="hidden"
+          />
+          <Button
+            onClick={() => multiFileInputRef.current?.click()}
+            variant="outline"
+            size="sm"
+            className="gap-2 bg-green-600/20 hover:bg-green-600/30 border-green-500/50"
+          >
+            <Plus className="w-4 h-4" />
+            הוסף קליפים ({videoClips.length})
           </Button>
           <Link to={createPageUrl("Home")}>
             <Button variant="outline" size="sm" className="gap-2">
@@ -525,33 +575,119 @@ export default function VideoCreator() {
 
         {/* Center: Main Display */}
         <div className="flex-1 flex flex-col overflow-hidden">
-          <div className="flex-1 bg-gradient-to-br from-black via-purple-900/10 to-black flex items-center justify-center p-6">
-            <div className="text-center max-w-2xl">
-              <Video className="w-24 h-24 text-purple-500 mx-auto mb-6 animate-pulse" />
-              <h2 className="text-3xl font-bold text-white mb-4">✨ DIGITAL DREAMS</h2>
-              <p className="text-gray-300 text-lg mb-6">
-                יוצר סרטונים AI בעזרת בינה מלאכותית מתקדמת
-              </p>
-              <div className="bg-black/40 backdrop-blur-xl rounded-2xl p-6 border border-purple-500/30">
-                <h3 className="text-white font-bold mb-3">איך זה עובד?</h3>
-                <div className="text-right space-y-2 text-gray-300">
-                  <p>✨ תאר את הסרטון שאתה רוצה</p>
-                  <p>🤖 המערכת תבנה תסריט מקצועי</p>
-                  <p>🎬 הסרטונים ייווצרו אוטומטית בצ'אט</p>
-                  <p>📥 צפה והורד ישירות</p>
+          {videoClips.length === 0 ? (
+            <div className="flex-1 bg-gradient-to-br from-black via-purple-900/10 to-black flex items-center justify-center p-6">
+              <div className="text-center max-w-2xl">
+                <Video className="w-24 h-24 text-purple-500 mx-auto mb-6 animate-pulse" />
+                <h2 className="text-3xl font-bold text-white mb-4">✨ DIGITAL DREAMS</h2>
+                <p className="text-gray-300 text-lg mb-6">
+                  יוצר סרטונים AI בעזרת בינה מלאכותית מתקדמת
+                </p>
+                <div className="bg-black/40 backdrop-blur-xl rounded-2xl p-6 border border-purple-500/30">
+                  <h3 className="text-white font-bold mb-3">איך זה עובד?</h3>
+                  <div className="text-right space-y-2 text-gray-300">
+                    <p>✨ תאר את הסרטון שאתה רוצה</p>
+                    <p>🤖 המערכת תבנה תסריט מקצועי</p>
+                    <p>🎬 הסרטונים ייווצרו אוטומטית בצ'אט</p>
+                    <p>📥 צפה והורד ישירות</p>
+                    <p className="text-purple-400 font-bold mt-4">🎞️ או הוסף מספר קליפים לאיחוד</p>
+                  </div>
+                </div>
+                {!showChat && (
+                  <Button
+                    onClick={() => setShowChat(true)}
+                    className="mt-6 bg-gradient-to-r from-purple-600 to-pink-600 px-8 py-6 text-lg"
+                  >
+                    <MessageSquare className="w-5 h-5 ml-2" />
+                    התחל ליצור
+                  </Button>
+                )}
+              </div>
+            </div>
+          ) : (
+            <div className="flex-1 bg-gradient-to-br from-black via-purple-900/10 to-black p-6 overflow-y-auto">
+              <div className="max-w-4xl mx-auto">
+                <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
+                  <Video className="w-6 h-6" />
+                  עורך הסרטונים - {videoClips.length} קליפים
+                </h2>
+
+                {/* Video Clips Grid */}
+                <div className="grid grid-cols-2 gap-4 mb-6">
+                  {videoClips.map((clip, index) => (
+                    <motion.div
+                      key={clip.id}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="bg-black/40 rounded-lg border border-purple-500/30 p-3"
+                    >
+                      <div className="relative aspect-video bg-gray-900 rounded-lg overflow-hidden mb-2">
+                        <video 
+                          src={clip.url} 
+                          className="w-full h-full object-cover"
+                          controls
+                        />
+                        <div className="absolute top-2 right-2 bg-purple-600 text-white px-2 py-1 rounded text-xs font-bold">
+                          #{index + 1}
+                        </div>
+                      </div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-white text-sm truncate">{clip.name}</span>
+                        <button
+                          onClick={() => setVideoClips(prev => prev.filter(c => c.id !== clip.id))}
+                          className="p-1 bg-red-600/20 hover:bg-red-600/40 text-red-400 rounded transition-all"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+
+                {/* Merge Button */}
+                <div className="bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl p-6 text-center">
+                  <h3 className="text-white font-bold text-xl mb-2">מוכן לאחד?</h3>
+                  <p className="text-purple-100 text-sm mb-4">
+                    איחוד {videoClips.length} קליפים לסרטון אחד מקצועי
+                  </p>
+                  <Button
+                    onClick={async () => {
+                      setMergingVideos(true);
+                      toast.loading('מאחד סרטונים... ייקח כ-2 דקות', { id: 'merge' });
+                      try {
+                        // TODO: Implement video merging function
+                        toast.error('פיצ\'ר איחוד סרטונים בפיתוח', { id: 'merge' });
+                      } catch (err) {
+                        toast.error('שגיאה באיחוד', { id: 'merge' });
+                      } finally {
+                        setMergingVideos(false);
+                      }
+                    }}
+                    disabled={mergingVideos || videoClips.length < 2}
+                    className="bg-white text-purple-600 hover:bg-gray-100 px-8 py-4 text-lg font-bold"
+                  >
+                    {mergingVideos ? (
+                      <>
+                        <Loader2 className="w-5 h-5 ml-2 animate-spin" />
+                        מאחד...
+                      </>
+                    ) : (
+                      <>
+                        <Wand2 className="w-5 h-5 ml-2" />
+                        אחד לסרטון אחד
+                      </>
+                    )}
+                  </Button>
+                  <button
+                    onClick={() => setVideoClips([])}
+                    className="mt-3 text-purple-200 text-sm hover:text-white transition-colors"
+                  >
+                    נקה הכל
+                  </button>
                 </div>
               </div>
-              {!showChat && (
-                <Button
-                  onClick={() => setShowChat(true)}
-                  className="mt-6 bg-gradient-to-r from-purple-600 to-pink-600 px-8 py-6 text-lg"
-                >
-                  <MessageSquare className="w-5 h-5 ml-2" />
-                  התחל ליצור
-                </Button>
-              )}
             </div>
-          </div>
+          )}
         </div>
       </div>
 
