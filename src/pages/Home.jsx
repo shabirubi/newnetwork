@@ -216,7 +216,7 @@ export default function Home() {
         </section>
 
         {/* Weather Forecast Button */}
-        <section className="px-0 sm:px-4 mb-8">
+        <section className="px-4 mb-8">
           <motion.button
             onClick={() => {
               window.dispatchEvent(new CustomEvent('openWeatherChat'));
@@ -242,19 +242,19 @@ export default function Home() {
 
 
       {/* Weather Alerts Container */}
-      <section className="px-4 sm:px-4 mb-8">
+      <section className="px-4 mb-8">
         <WeatherAlertsContainer />
       </section>
 
       {/* Real Time Alerts */}
-      <section className="px-0 sm:px-4 mb-8">
+      <section className="px-4 mb-8">
         <React.Suspense fallback={<Skeleton className="w-full h-64 bg-gray-800" />}>
           <RealTimeAlertsContainer />
         </React.Suspense>
       </section>
 
       {/* Trending Videos - Popular Right Now */}
-      <section className="px-0 sm:px-4 mb-8">
+      <section className="px-4 mb-8">
         <React.Suspense fallback={<Skeleton className="w-full h-96 bg-gray-800" />}>
           <TrendingVideosContainer />
         </React.Suspense>
