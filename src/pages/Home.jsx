@@ -165,7 +165,7 @@ export default function Home() {
           to={`${createPageUrl("Article")}?id=${featuredArticle.id}`}
           className="block group relative rounded-2xl overflow-hidden cursor-pointer"
         >
-          <div className="relative h-[400px] sm:h-[500px]">
+          <div className="relative h-[280px] sm:h-[500px]">
             {/* תמונה ברקע */}
             <img 
               src={featuredArticle.image_url} 
@@ -177,20 +177,20 @@ export default function Home() {
             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
 
             {/* טקסט מעל התמונה */}
-            <div className="absolute inset-0 flex flex-col justify-end p-4 sm:p-10 space-y-2 sm:space-y-4">
-              <div className="max-w-4xl space-y-2 sm:space-y-4">
+            <div className="absolute inset-0 flex flex-col justify-end p-3 sm:p-10 space-y-1.5 sm:space-y-4">
+              <div className="max-w-4xl space-y-1.5 sm:space-y-4">
                 {/* Badge */}
                 <div className="inline-flex w-fit bg-gradient-to-r from-[#E31E24] to-[#B91C1C] text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-full font-bold text-xs sm:text-sm shadow-[0_0_20px_rgba(227,30,36,0.6)] border-2 border-[#E31E24]/50">
                   🔴 הרשת החדשה
                 </div>
 
                 {/* Title */}
-                <h1 className="text-xl sm:text-3xl lg:text-5xl font-bold text-white leading-snug sm:leading-tight drop-shadow-2xl break-words">
+                <h1 className="text-base sm:text-3xl lg:text-5xl font-bold text-white leading-snug sm:leading-tight drop-shadow-2xl break-words line-clamp-2">
                   {featuredArticle.title}
                 </h1>
 
                 {/* Subtitle */}
-                <p className="text-sm sm:text-lg lg:text-2xl text-gray-100 drop-shadow-lg font-medium break-words leading-snug">
+                <p className="text-xs sm:text-lg lg:text-2xl text-gray-100 drop-shadow-lg font-medium break-words leading-snug line-clamp-2">
                   {featuredArticle.subtitle}
                 </p>
 
