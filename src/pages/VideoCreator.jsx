@@ -773,89 +773,166 @@ export default function VideoCreator() {
             </div>
           )}
 
-          {/* Timeline Editor View */}
+          {/* Timeline Editor View - Professional */}
           {editorView === 'timeline' && videoClips.length > 0 && (
-            <div className="flex-1 bg-gradient-to-br from-black via-purple-900/10 to-black p-6 overflow-y-auto">
-              <div className="max-w-6xl mx-auto">
-                <h2 className="text-2xl font-bold text-white mb-4 flex items-center gap-2">
-                  <Play className="w-6 h-6" />
-                  עורך טיימליין - {videoClips.length} קליפים
-                </h2>
-
-                {/* Video Clips Grid */}
-                <div className="grid grid-cols-3 gap-4 mb-6">
-                  {videoClips.map((clip, index) => (
-                    <motion.div
-                      key={clip.id}
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      className="bg-black/40 rounded-lg border border-purple-500/30 p-3"
-                    >
-                      <div className="relative aspect-video bg-gray-900 rounded-lg overflow-hidden mb-2">
-                        <video 
-                          src={clip.url} 
-                          className="w-full h-full object-cover"
-                          controls
-                        />
-                        <div className="absolute top-2 right-2 bg-purple-600 text-white px-2 py-1 rounded text-xs font-bold">
-                          #{index + 1}
+            <div className="flex-1 bg-black flex flex-col overflow-hidden">
+              {/* Preview Monitor */}
+              <div className="h-[45%] bg-gradient-to-br from-gray-950 to-black border-b border-gray-800 flex">
+                <div className="flex-1 flex items-center justify-center p-6">
+                  <div className="w-full max-w-4xl aspect-video bg-black rounded-lg border border-gray-800 overflow-hidden relative">
+                    {videoClips.length > 0 ? (
+                      <video 
+                        src={videoClips[0].url} 
+                        controls
+                        className="w-full h-full"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-gray-600">
+                        <Video className="w-16 h-16" />
+                      </div>
+                    )}
+                    <div className="absolute top-3 right-3 bg-black/80 backdrop-blur-sm px-3 py-1 rounded-lg text-white text-sm font-bold">
+                      תצוגה מקדימה
+                    </div>
+                  </div>
+                </div>
+                
+                {/* Side Panel */}
+                <div className="w-80 bg-gray-950 border-l border-gray-800 p-4 overflow-y-auto">
+                  <h3 className="text-white font-bold mb-4 flex items-center gap-2">
+                    <Wand2 className="w-5 h-5" />
+                    כלי עריכה
+                  </h3>
+                  
+                  <div className="space-y-3">
+                    <div className="bg-black/40 rounded-lg p-4 border border-gray-800">
+                      <h4 className="text-white font-bold text-sm mb-2">פרטי פרויקט</h4>
+                      <div className="space-y-2 text-xs text-gray-400">
+                        <div className="flex justify-between">
+                          <span>קליפים:</span>
+                          <span className="text-white font-bold">{videoClips.length}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>משך כולל:</span>
+                          <span className="text-white font-bold">~{videoClips.length * 10}s</span>
                         </div>
                       </div>
-                      <div className="flex items-center justify-between">
-                        <span className="text-white text-sm truncate">{clip.name}</span>
-                        <button
-                          onClick={() => setVideoClips(prev => prev.filter(c => c.id !== clip.id))}
-                          className="p-1 bg-red-600/20 hover:bg-red-600/40 text-red-400 rounded transition-all"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    </motion.div>
-                  ))}
+                    </div>
+
+                    <Button
+                      onClick={async () => {
+                        setMergingVideos(true);
+                        toast.loading('מאחד סרטונים...', { id: 'merge' });
+                        try {
+                          toast.error('פיצ\'ר איחוד בפיתוח', { id: 'merge' });
+                        } catch (err) {
+                          toast.error('שגיאה', { id: 'merge' });
+                        } finally {
+                          setMergingVideos(false);
+                        }
+                      }}
+                      disabled={mergingVideos || videoClips.length < 2}
+                      className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+                    >
+                      {mergingVideos ? (
+                        <>
+                          <Loader2 className="w-4 h-4 ml-2 animate-spin" />
+                          מאחד...
+                        </>
+                      ) : (
+                        <>
+                          <Wand2 className="w-4 h-4 ml-2" />
+                          ייצא סרטון
+                        </>
+                      )}
+                    </Button>
+
+                    <Button
+                      onClick={() => setEditorView('library')}
+                      variant="outline"
+                      className="w-full border-gray-700"
+                    >
+                      <Plus className="w-4 h-4 ml-2" />
+                      הוסף קליפים
+                    </Button>
+
+                    <Button
+                      onClick={() => {
+                        setVideoClips([]);
+                        setEditorView('library');
+                      }}
+                      variant="outline"
+                      className="w-full border-red-500/30 text-red-400 hover:bg-red-500/10"
+                    >
+                      <Trash2 className="w-4 h-4 ml-2" />
+                      נקה הכל
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Timeline Area */}
+              <div className="flex-1 bg-gray-950 flex flex-col">
+                <div className="p-3 border-b border-gray-800 flex items-center justify-between">
+                  <h3 className="text-white font-bold flex items-center gap-2">
+                    <Play className="w-5 h-5" />
+                    טיימליין
+                  </h3>
+                  <div className="flex items-center gap-2 text-xs text-gray-400">
+                    <span>0:00</span>
+                    <div className="w-32 h-1 bg-gray-800 rounded-full overflow-hidden">
+                      <div className="h-full w-1/3 bg-purple-600"></div>
+                    </div>
+                    <span>{videoClips.length * 10}s</span>
+                  </div>
                 </div>
 
-                {/* Merge Button */}
-                <div className="bg-gradient-to-r from-purple-600 to-pink-600 rounded-xl p-6 text-center">
-                  <h3 className="text-white font-bold text-xl mb-2">מוכן לאחד?</h3>
-                  <p className="text-purple-100 text-sm mb-4">
-                    איחוד {videoClips.length} קליפים לסרטון אחד מקצועי
-                  </p>
-                  <Button
-                    onClick={async () => {
-                      setMergingVideos(true);
-                      toast.loading('מאחד סרטונים... ייקח כ-2 דקות', { id: 'merge' });
-                      try {
-                        toast.error('פיצ\'ר איחוד בפיתוח', { id: 'merge' });
-                      } catch (err) {
-                        toast.error('שגיאה באיחוד', { id: 'merge' });
-                      } finally {
-                        setMergingVideos(false);
-                      }
-                    }}
-                    disabled={mergingVideos || videoClips.length < 2}
-                    className="bg-white text-purple-600 hover:bg-gray-100 px-8 py-4 text-lg font-bold"
-                  >
-                    {mergingVideos ? (
-                      <>
-                        <Loader2 className="w-5 h-5 ml-2 animate-spin" />
-                        מאחד...
-                      </>
-                    ) : (
-                      <>
-                        <Wand2 className="w-5 h-5 ml-2" />
-                        אחד לסרטון אחד
-                      </>
-                    )}
-                  </Button>
-                  <button
-                    onClick={() => {
-                      setVideoClips([]);
-                      setEditorView('library');
-                    }}
-                    className="mt-3 text-purple-200 text-sm hover:text-white transition-colors"
-                  >
-                    נקה והחזר למאגר
-                  </button>
+                <div className="flex-1 overflow-x-auto p-4">
+                  <div className="flex gap-2 min-w-max">
+                    {videoClips.map((clip, index) => (
+                      <motion.div
+                        key={clip.id}
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        className="relative group"
+                        style={{ width: '200px' }}
+                      >
+                        <div className="bg-gray-900 rounded-lg border-2 border-gray-800 hover:border-purple-500 transition-all overflow-hidden cursor-pointer">
+                          <div className="relative aspect-video bg-black">
+                            <video 
+                              src={clip.url} 
+                              className="w-full h-full object-cover"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent">
+                              <div className="absolute bottom-2 right-2 text-white text-xs font-bold">
+                                #{index + 1}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="p-2 bg-gray-900/50">
+                            <p className="text-white text-xs truncate font-medium">{clip.name}</p>
+                            <p className="text-gray-400 text-[10px]">~10s</p>
+                          </div>
+                        </div>
+                        <button
+                          onClick={() => setVideoClips(prev => prev.filter(c => c.id !== clip.id))}
+                          className="absolute -top-2 -left-2 w-6 h-6 bg-red-600 hover:bg-red-700 text-white rounded-full flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
+                        >
+                          <X className="w-4 h-4" />
+                        </button>
+                      </motion.div>
+                    ))}
+                    
+                    <button
+                      onClick={() => setEditorView('library')}
+                      className="w-48 h-full min-h-[120px] border-2 border-dashed border-gray-700 hover:border-purple-500 rounded-lg flex items-center justify-center text-gray-500 hover:text-purple-400 transition-all"
+                    >
+                      <div className="text-center">
+                        <Plus className="w-8 h-8 mx-auto mb-2" />
+                        <span className="text-sm font-bold">הוסף קליפ</span>
+                      </div>
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
