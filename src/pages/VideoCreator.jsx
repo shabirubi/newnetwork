@@ -3,7 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Send, Video, Loader2, Sparkles, Home, Shield, MessageSquare, ChevronRight, Plus, Play, Download, Wand2, History, Trash2 } from "lucide-react";
+import { Send, Video, Loader2, Sparkles, Home, Shield, MessageSquare, ChevronRight, Plus, Play, Download, Wand2, History, Trash2, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
@@ -26,6 +26,7 @@ export default function VideoCreator() {
   const [videoClips, setVideoClips] = useState([]);
   const [mergingVideos, setMergingVideos] = useState(false);
   const multiFileInputRef = useRef(null);
+  const [showLibrary, setShowLibrary] = useState(false);
 
   // Fetch HeyGen avatars
   const { data: heygenAvatars = [] } = useQuery({
@@ -46,6 +47,16 @@ export default function VideoCreator() {
     type: 'heygen',
     videoPreview: a.preview_video_url
   }));
+
+  // Fetch site videos
+  const { data: siteVideos = [] } = useQuery({
+    queryKey: ['user-videos'],
+    queryFn: async () => {
+      const videos = await base44.entities.UserVideo.list('-created_date', 50);
+      return videos || [];
+    },
+    staleTime: 30000
+  });
 
   // Subscribe to conversation updates
   useEffect(() => {
@@ -272,7 +283,16 @@ export default function VideoCreator() {
             className="gap-2 bg-green-600/20 hover:bg-green-600/30 border-green-500/50"
           >
             <Plus className="w-4 h-4" />
-            הוסף קליפים ({videoClips.length})
+            העלה קליפים ({videoClips.length})
+          </Button>
+          <Button
+            onClick={() => setShowLibrary(true)}
+            variant="outline"
+            size="sm"
+            className="gap-2 bg-purple-600/20 hover:bg-purple-600/30 border-purple-500/50"
+          >
+            <Video className="w-4 h-4" />
+            ספריית הסרטונים ({siteVideos.length})
           </Button>
           <Link to={createPageUrl("Home")}>
             <Button variant="outline" size="sm" className="gap-2">
@@ -693,6 +713,107 @@ export default function VideoCreator() {
 
       {/* Download History Modal */}
       <DownloadHistory isOpen={historyOpen} onClose={() => setHistoryOpen(false)} />
+
+      {/* Video Library Modal */}
+      <AnimatePresence>
+        {showLibrary && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+            onClick={() => setShowLibrary(false)}
+          >
+            <div className="absolute inset-0 bg-black/90 backdrop-blur-sm" />
+            
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative w-full max-w-6xl bg-gradient-to-br from-gray-900 via-black to-gray-900 rounded-2xl border border-purple-500/30 p-6 max-h-[85vh] overflow-hidden flex flex-col"
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center">
+                    <Video className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <h2 className="text-xl font-bold text-white">ספריית הסרטונים</h2>
+                    <p className="text-gray-400 text-sm">{siteVideos.length} סרטונים זמינים</p>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowLibrary(false)}
+                  className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
+                >
+                  <X className="w-5 h-5 text-gray-400" />
+                </button>
+              </div>
+
+              {/* Videos Grid */}
+              <div className="flex-1 overflow-y-auto">
+                {siteVideos.length === 0 ? (
+                  <div className="text-center py-12">
+                    <Video className="w-12 h-12 text-gray-600 mx-auto mb-3" />
+                    <p className="text-gray-400">אין סרטונים זמינים</p>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-3 gap-4">
+                    {siteVideos.map((video) => (
+                      <motion.div
+                        key={video.id}
+                        initial={{ opacity: 0, scale: 0.9 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        className="bg-black/40 rounded-lg border border-gray-700 hover:border-purple-500/50 transition-all overflow-hidden group cursor-pointer"
+                        onClick={() => {
+                          const exists = videoClips.find(c => c.url === video.video_url);
+                          if (!exists) {
+                            setVideoClips(prev => [...prev, {
+                              id: Math.random(),
+                              url: video.video_url,
+                              name: video.title,
+                              duration: video.duration || 0
+                            }]);
+                            toast.success(`${video.title} נוסף לעורך! 🎬`);
+                          } else {
+                            toast.error('הסרטון כבר בעורך');
+                          }
+                        }}
+                      >
+                        <div className="relative aspect-video bg-gray-900">
+                          <video 
+                            src={video.video_url} 
+                            className="w-full h-full object-cover"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <div className="bg-purple-600 text-white px-4 py-2 rounded-lg font-bold">
+                              הוסף לעורך
+                            </div>
+                          </div>
+                          {videoClips.find(c => c.url === video.video_url) && (
+                            <div className="absolute top-2 left-2 bg-green-600 text-white px-2 py-1 rounded text-xs font-bold flex items-center gap-1">
+                              ✓ בעורך
+                            </div>
+                          )}
+                        </div>
+                        <div className="p-3">
+                          <h3 className="text-white font-bold text-sm truncate">{video.title}</h3>
+                          <div className="flex items-center gap-2 mt-1 text-xs text-gray-400">
+                            <span>{video.views || 0} צפיות</span>
+                            {video.duration && <span>• {video.duration}s</span>}
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
