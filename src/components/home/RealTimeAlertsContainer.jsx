@@ -120,7 +120,8 @@ export default function RealTimeAlertsContainer() {
   }
 
   return (
-    <section className="space-y-3 sm:space-y-4 w-full max-w-6xl mx-auto overflow-hidden">
+    <section className="flex justify-center w-full px-4 sm:px-0">
+      <div className="w-full max-w-6xl space-y-3 sm:space-y-4 overflow-hidden">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 sm:gap-3">
