@@ -485,7 +485,7 @@ export default function VideoCreator() {
       </div>
 
       {/* Bottom Input - Fixed Position */}
-      <div className="fixed bottom-20 left-0 right-0 p-3 sm:p-4 bg-gradient-to-t from-black via-gray-900/95 to-transparent backdrop-blur-2xl border-t border-purple-500/30 z-50">
+      <div className="fixed bottom-4 left-0 right-0 p-3 sm:p-4 bg-gradient-to-t from-black via-gray-900/95 to-transparent backdrop-blur-2xl border-t border-purple-500/30 z-50">
         <div className="max-w-4xl mx-auto">
           <div className="bg-gradient-to-br from-gray-800/80 to-gray-900/80 rounded-2xl sm:rounded-3xl p-2 sm:p-3 border border-purple-500/20 shadow-[0_0_30px_rgba(168,85,247,0.15)]">
             <div className="flex gap-2 sm:gap-3">
