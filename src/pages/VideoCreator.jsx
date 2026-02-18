@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
+import TypewriterText from "../components/videoeditor/TypewriterText";
 
 export default function VideoCreator() {
   const [input, setInput] = useState("");
@@ -291,7 +292,7 @@ export default function VideoCreator() {
           )}
 
           {messages.length > 0 && !currentVideo && (
-            <div className="w-full max-w-3xl space-y-4 px-4 overflow-y-auto max-h-[60vh]">
+            <div className="w-full max-w-3xl space-y-4 px-4 overflow-y-auto max-h-[50vh] pb-32">
               {messages.map((msg, idx) => (
                 <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                   <div className={`max-w-[80%] rounded-2xl px-4 py-3 ${
@@ -299,7 +300,13 @@ export default function VideoCreator() {
                       ? 'bg-purple-600 text-white' 
                       : 'bg-gray-800 text-gray-100'
                   }`}>
-                    <p className="text-sm sm:text-base whitespace-pre-wrap">{msg.content}</p>
+                    {msg.role === 'assistant' ? (
+                      <p className="text-sm sm:text-base whitespace-pre-wrap">
+                        <TypewriterText text={msg.content} speed={20} />
+                      </p>
+                    ) : (
+                      <p className="text-sm sm:text-base whitespace-pre-wrap">{msg.content}</p>
+                    )}
                     {msg.tool_calls?.map((tc, i) => (
                       <div key={i} className="mt-2 text-xs opacity-70">
                         {tc.status === 'running' && '⏳ מייצר סרטון...'}
