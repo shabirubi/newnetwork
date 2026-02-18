@@ -459,46 +459,52 @@ export default function VideoCreator() {
       </div>
 
       {/* Bottom Input - Fixed Position */}
-      <div className="fixed bottom-20 left-0 right-0 p-4 bg-black/95 backdrop-blur-xl border-t border-gray-800 z-50">
-        <div className="max-w-4xl mx-auto flex gap-2 sm:gap-3">
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            onChange={handleFileUpload}
-            className="hidden"
-          />
-          <Button
-            onClick={() => fileInputRef.current?.click()}
-            disabled={uploadingFile || loading}
-            variant="outline"
-            size="sm"
-            className="bg-gray-900 border-gray-700 px-2 sm:px-3"
-          >
-            {uploadingFile ? <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin" /> : <Plus className="w-4 h-4 sm:w-5 sm:h-5" />}
-          </Button>
-          <textarea
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" && !e.shiftKey) {
-                e.preventDefault();
-                handleSend();
-              }
-            }}
-            placeholder="תאר סרטון... (לדוגמה: 'חדשות טכנולוגיה')"
-            className="flex-1 px-3 sm:px-4 lg:px-6 py-2 sm:py-3 lg:py-4 rounded-lg sm:rounded-xl bg-gray-900 border-2 border-gray-700 text-white text-sm sm:text-base lg:text-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent resize-none"
-            rows={1}
-            disabled={loading}
-          />
-          <Button
-            onClick={handleSend}
-            disabled={!input.trim() || loading}
-            size="sm"
-            className="bg-gradient-to-br from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-3 sm:px-6 lg:px-10 text-sm sm:text-base lg:text-lg font-bold"
-          >
-            {loading ? <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6 animate-spin" /> : <Send className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />}
-          </Button>
+      <div className="fixed bottom-20 left-0 right-0 p-3 sm:p-4 bg-gradient-to-t from-black via-gray-900/95 to-transparent backdrop-blur-2xl border-t border-purple-500/30 z-50">
+        <div className="max-w-4xl mx-auto">
+          <div className="bg-gradient-to-br from-gray-800/80 to-gray-900/80 rounded-2xl sm:rounded-3xl p-2 sm:p-3 border border-purple-500/20 shadow-[0_0_30px_rgba(168,85,247,0.15)]">
+            <div className="flex gap-2 sm:gap-3">
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleFileUpload}
+                className="hidden"
+              />
+              <Button
+                onClick={() => fileInputRef.current?.click()}
+                disabled={uploadingFile || loading}
+                variant="ghost"
+                size="sm"
+                className="bg-gray-700/50 hover:bg-gray-700 border border-gray-600/50 rounded-xl px-3 sm:px-4"
+              >
+                {uploadingFile ? <Loader2 className="w-5 h-5 animate-spin text-purple-400" /> : <Plus className="w-5 h-5 text-purple-400" />}
+              </Button>
+              <div className="flex-1 relative">
+                <textarea
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault();
+                      handleSend();
+                    }
+                  }}
+                  placeholder="תאר את הסרטון שאתה רוצה... 🎬"
+                  className="w-full px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-2xl bg-gray-900/60 border border-gray-700/50 text-white placeholder:text-gray-500 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 resize-none transition-all"
+                  rows={1}
+                  disabled={loading}
+                />
+              </div>
+              <Button
+                onClick={handleSend}
+                disabled={!input.trim() || loading}
+                size="sm"
+                className="bg-gradient-to-br from-purple-600 via-purple-500 to-pink-600 hover:from-purple-700 hover:via-purple-600 hover:to-pink-700 px-4 sm:px-8 rounded-xl sm:rounded-2xl text-sm sm:text-base font-bold shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:shadow-[0_0_30px_rgba(168,85,247,0.6)] transition-all"
+              >
+                {loading ? <Loader2 className="w-5 h-5 sm:w-6 sm:h-6 animate-spin" /> : <Send className="w-5 h-5 sm:w-6 sm:h-6" />}
+              </Button>
+            </div>
+          </div>
         </div>
       </div>
 
