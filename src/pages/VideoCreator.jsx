@@ -223,10 +223,11 @@ export default function VideoCreator() {
     if (!input.trim() || loading) return;
 
     const userMessage = input.trim();
+    setInput(""); // Clear input immediately
     setLoading(true);
     setCurrentVideo(null);
 
-    toast.loading('מתחיל ייצור סרטון...', { id: 'creating' });
+    toast.loading('🤖 מנתח את הבקשה ומתכנן סרטון...', { id: 'creating' });
 
     try {
       const { data } = await base44.functions.invoke('createFullProductionVideo', {
@@ -237,8 +238,7 @@ export default function VideoCreator() {
 
       if (data.video_id) {
         console.log('🎬 Video ID:', data.video_id);
-        toast.loading('יוצר סרטון עם HeyGen... ממתין לתוצאה', { id: 'creating' });
-        setInput(""); // Clear input only after successful API call
+        toast.loading('🎬 מייצר סרטון מקצועי עם AI... זה לוקח כ-2-5 דקות', { id: 'creating' });
         pollVideoStatus(data.video_id, userMessage);
       } else {
         throw new Error('No video ID returned: ' + JSON.stringify(data));
@@ -248,6 +248,7 @@ export default function VideoCreator() {
       console.error('❌ Error:', err);
       toast.error('שגיאה: ' + err.message, { id: 'creating' });
       setLoading(false);
+      setInput(userMessage); // Restore input on error
     }
   };
 
@@ -480,18 +481,18 @@ export default function VideoCreator() {
                 {uploadingFile ? <Loader2 className="w-5 h-5 animate-spin text-purple-400" /> : <Plus className="w-5 h-5 text-purple-400" />}
               </Button>
               <div className="flex-1 relative">
-                <textarea
+                <input
+                  type="text"
                   value={input}
                   onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter" && !e.shiftKey) {
+                    if (e.key === "Enter") {
                       e.preventDefault();
                       handleSend();
                     }
                   }}
                   placeholder="תאר את הסרטון שאתה רוצה... 🎬"
-                  className="w-full px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-2xl bg-gray-900/60 border border-gray-700/50 text-white placeholder:text-gray-500 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 resize-none transition-all"
-                  rows={1}
+                  className="w-full px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-2xl bg-gray-900/60 border border-gray-700/50 text-white placeholder:text-gray-500 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all"
                   disabled={loading}
                 />
               </div>

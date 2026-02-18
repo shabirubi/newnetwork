@@ -16,29 +16,93 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'HeyGen API key not configured' }, { status: 500 });
     }
 
-    console.log('🎬 Creating professional video with HeyGen Agent...');
-    console.log('📝 Description:', description);
+    console.log('🎬 Creating professional video with HeyGen...');
+    console.log('📝 User Request:', description);
 
-    // Use HeyGen Video Agent API - one-shot prompt approach
-    const videoAgentPayload = {
-      prompt: description,
+    // 1. Detect language
+    const detectLanguagePrompt = `Detect the language of this text and return ONLY the language name in English (Hebrew/English/Arabic/Spanish/etc): ${description}`;
+    const languageResult = await base44.integrations.Core.InvokeLLM({
+      prompt: detectLanguagePrompt
+    });
+    const detectedLanguage = languageResult?.trim() || 'Hebrew';
+    console.log('🌍 Detected language:', detectedLanguage);
+
+    // 2. Generate professional script
+    const scriptPrompt = `Create a professional broadcast-quality script (200-300 words) about: ${description}
+
+Requirements:
+- Write in ${detectedLanguage} language ONLY
+- Professional news/broadcast tone
+- Strong opening hook
+- Rich content with details
+- Natural speaking rhythm
+- Clear conclusion
+- Make it engaging
+
+Return only the script text in ${detectedLanguage}.`;
+
+    const scriptResult = await base44.integrations.Core.InvokeLLM({
+      prompt: scriptPrompt,
+      add_context_from_internet: true
+    });
+
+    const script = scriptResult?.trim() || description;
+    console.log('✅ Script generated:', script.substring(0, 100) + '...');
+
+    // 3. Generate professional background
+    let backgroundUrl = imageUrl;
+    if (!backgroundUrl) {
+      const bgResult = await base44.integrations.Core.GenerateImage({
+        prompt: 'Professional news studio background, modern TV broadcast set, blue and white colors, clean minimalist design, professional lighting, 16:9 aspect ratio, photorealistic'
+      });
+      backgroundUrl = bgResult.url;
+      console.log('✅ Background created');
+    }
+
+    // 4. Select voice based on language
+    let voiceId = 'v6WKRTqObgmv7NHgVAFD'; // Hebrew
+    if (detectedLanguage.toLowerCase().includes('english')) {
+      voiceId = 'EXAVITQu4vr4xnSDxMaL';
+    } else if (detectedLanguage.toLowerCase().includes('arabic')) {
+      voiceId = 'AZnzlk1XvdvUeBnXmlld';
+    }
+    console.log('🎤 Voice ID:', voiceId);
+
+    // 5. Create HeyGen video
+    const videoPayload = {
+      video_inputs: [{
+        character: {
+          type: 'avatar',
+          avatar_id: 'Abigail_expressive_2024112501',
+          avatar_style: 'normal'
+        },
+        voice: {
+          type: 'text',
+          input_text: script,
+          voice_id: voiceId
+        },
+        background: {
+          type: 'image',
+          url: backgroundUrl
+        }
+      }],
       dimension: {
         width: 1920,
         height: 1080
       },
-      aspect_ratio: '16:9'
+      aspect_ratio: '16:9',
+      test: false
     };
 
-    console.log('🤖 Calling HeyGen Video Agent API...');
-    console.log('📦 Payload:', JSON.stringify(videoAgentPayload, null, 2));
+    console.log('🎤 Calling HeyGen API with script...');
 
-    const heygenResponse = await fetch('https://api.heygen.com/v1/video_agent.generate', {
+    const heygenResponse = await fetch('https://api.heygen.com/v2/video/generate', {
       method: 'POST',
       headers: {
         'X-Api-Key': HEYGEN_API_KEY,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(videoAgentPayload)
+      body: JSON.stringify(videoPayload)
     });
 
     const responseText = await heygenResponse.text();
