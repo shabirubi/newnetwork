@@ -110,7 +110,11 @@ export default function VideoCreator() {
 
   const pollVideoStatus = async (videoId, originalMessage) => {
     let attempts = 0;
-    const maxAttempts = 100; // 5 minutes
+    const maxAttempts = 160; // 8 minutes (160 * 3 seconds)
+
+    // Save video_id to localStorage for recovery
+    localStorage.setItem('pendingVideoId', videoId);
+    localStorage.setItem('pendingVideoTitle', originalMessage);
 
     while (attempts < maxAttempts) {
       await new Promise(resolve => setTimeout(resolve, 3000));
@@ -118,7 +122,7 @@ export default function VideoCreator() {
       try {
         const { data } = await base44.functions.invoke('checkHeyGenVideoStatus', { video_id: videoId });
 
-        console.log('✅ Status:', data.status, 'Attempt:', attempts + 1);
+        console.log('✅ Status:', data.status, 'Attempt:', attempts + 1, 'URL:', data.video_url);
 
         if (data.status === 'completed' && data.video_url) {
           const title = originalMessage.substring(0, 50) || "סרטון AI";
@@ -129,30 +133,31 @@ export default function VideoCreator() {
             timestamp: new Date().toISOString()
           };
           
-          // Update state immediately
+          console.log('🎬 VIDEO READY! Saving now...', newVideo);
+          
+          // Clear pending video
+          localStorage.removeItem('pendingVideoId');
+          localStorage.removeItem('pendingVideoTitle');
+          
+          // Save to history FIRST
+          const existingHistory = JSON.parse(localStorage.getItem('videoDownloadHistory') || '[]');
+          const updatedHistory = [newVideo, ...existingHistory].slice(0, 20);
+          localStorage.setItem('videoDownloadHistory', JSON.stringify(updatedHistory));
+          console.log('💾 Saved to localStorage:', updatedHistory);
+          
+          // Then update state
+          setGeneratedVideos(updatedHistory);
           setCurrentVideo(data.video_url);
           setLoading(false);
           
-          // Force update of generatedVideos with new array reference
-          setGeneratedVideos(prevVideos => {
-            const updated = [newVideo, ...prevVideos].slice(0, 20);
-            // Save to localStorage
-            try {
-              localStorage.setItem('videoDownloadHistory', JSON.stringify(updated));
-              console.log('✅ Saved to localStorage:', updated.length, 'videos');
-            } catch (e) {
-              console.error('localStorage error:', e);
-            }
-            return updated;
-          });
-          
           toast.success('✅ הסרטון מוכן והתווסף להיסטוריה!', { id: 'creating' });
-          console.log('✅ Video saved:', { title, url: data.video_url });
           return;
         }
 
         if (data.status === 'failed' || data.error) {
           console.error('❌ Video failed:', data.error);
+          localStorage.removeItem('pendingVideoId');
+          localStorage.removeItem('pendingVideoTitle');
           setLoading(false);
           toast.error('נכשל: ' + (data.error || 'שגיאה לא ידועה'), { id: 'creating' });
           return;
@@ -170,7 +175,7 @@ export default function VideoCreator() {
     }
 
     setLoading(false);
-    toast.error('הזמן תם - אבל הסרטון עדיין מתעבד ב-HeyGen', { id: 'creating' });
+    toast.error('הזמן תם - אבל הסרטון עדיין מתעבד ב-HeyGen. video_id: ' + videoId, { id: 'creating' });
   };
 
   const handleSend = async () => {
