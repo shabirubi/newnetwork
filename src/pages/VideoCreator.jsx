@@ -182,7 +182,7 @@ export default function VideoCreator() {
         console.log('🎬 Video ID:', data.video_id);
         toast.loading('יוצר סרטון עם HeyGen... ממתין לתוצאה', { id: 'creating' });
         setInput(""); // Clear input only after successful API call
-        pollVideoStatus(data.video_id);
+        pollVideoStatus(data.video_id, userMessage);
       } else {
         throw new Error('No video ID returned: ' + JSON.stringify(data));
       }
