@@ -311,27 +311,25 @@ export default function ReporterLiveChat({ isOpen, onClose, reporter }) {
 
             {/* Chat Panel - Mobile (Bottom) */}
             {isMobile && (
-              <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-gray-950 via-black to-transparent border-t-2 border-gray-800/50 z-[99999999] backdrop-blur-2xl" style={{ paddingBottom: 'env(safe-area-inset-bottom, 16px)' }}>
-                <div className="p-4 space-y-3">
+              <div className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-gray-950 via-black to-transparent border-t-2 border-gray-800/50 z-[99999999] backdrop-blur-2xl" style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 20px)' }}>
+                <div className="p-3 pb-2">
                   {/* Main Input Row */}
                   <div className="flex gap-2">
                     <Input
                       value={inputMessage}
                       onChange={(e) => setInputMessage(e.target.value)}
                       onKeyPress={handleKeyPress}
-                      placeholder="שאל את רבי ברק..."
-                      className="flex-1 bg-gray-900/95 border-2 border-gray-700 text-white placeholder:text-gray-400 focus:border-blue-500 rounded-xl text-base h-14 px-4 backdrop-blur-sm shadow-2xl"
+                      placeholder="שאל שאלה..."
+                      className="flex-1 bg-gray-900/95 border-2 border-gray-700 text-white placeholder:text-gray-400 focus:border-blue-500 rounded-xl text-base h-12 px-4 backdrop-blur-sm shadow-2xl"
                     />
                     <Button
                       onClick={handleSendMessage}
                       disabled={!inputMessage.trim()}
-                      className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl h-14 w-14 p-0 disabled:opacity-50 shadow-2xl"
+                      className="bg-blue-600 hover:bg-blue-700 text-white rounded-xl h-12 w-12 p-0 disabled:opacity-50 shadow-2xl"
                     >
                       <Send className="w-5 h-5" />
                     </Button>
                   </div>
-
-
                 </div>
               </div>
             )}
