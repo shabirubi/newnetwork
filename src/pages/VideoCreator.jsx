@@ -108,7 +108,7 @@ export default function VideoCreator() {
     }
   };
 
-  const pollVideoStatus = async (videoId) => {
+  const pollVideoStatus = async (videoId, originalMessage) => {
     let attempts = 0;
     const maxAttempts = 100; // 5 minutes
 
@@ -121,20 +121,22 @@ export default function VideoCreator() {
         console.log('✅ Status:', data.status, 'Attempt:', attempts + 1);
 
         if (data.status === 'completed' && data.video_url) {
-          setCurrentVideo(data.video_url);
-          const userMessage = input.trim();
-          const title = userMessage.substring(0, 50) || "סרטון AI";
+          const title = originalMessage.substring(0, 50) || "סרטון AI";
           const newVideo = {
             id: Date.now(),
             title,
             videoUrl: data.video_url,
             timestamp: new Date().toISOString()
           };
-          const updated = [newVideo, ...generatedVideos].slice(0, 20);
-          setGeneratedVideos(updated);
-          localStorage.setItem('videoDownloadHistory', JSON.stringify(updated));
+          setGeneratedVideos(prev => {
+            const updated = [newVideo, ...prev].slice(0, 20);
+            localStorage.setItem('videoDownloadHistory', JSON.stringify(updated));
+            return updated;
+          });
+          setCurrentVideo(data.video_url);
           setLoading(false);
           toast.success('✅ הסרטון מוכן!', { id: 'creating' });
+          console.log('✅ Video saved to history:', newVideo);
           return;
         }
 
