@@ -151,6 +151,27 @@ export default function VideoEditor() {
     if (storedEmail) {
       setUserEmail(storedEmail);
     }
+
+    // Listen for videos from VideoCreator
+    const handleAddVideoFromCreator = (e) => {
+      const { videoUrl } = e.detail;
+      if (videoUrl) {
+        setClips(prev => [...prev, {
+          id: Date.now(),
+          url: videoUrl,
+          duration: 10,
+          name: 'סרטון AI',
+          thumbnail: videoUrl,
+          filters: { brightness: 100, contrast: 100, saturation: 100 },
+          volume: 100,
+          type: 'video'
+        }]);
+        toast.success('סרטון נוסף מיוצר AI!');
+      }
+    };
+    
+    window.addEventListener('addVideoToEditor', handleAddVideoFromCreator);
+    return () => window.removeEventListener('addVideoToEditor', handleAddVideoFromCreator);
   }, []);
 
   // Calculate total duration

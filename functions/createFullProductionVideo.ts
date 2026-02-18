@@ -62,7 +62,17 @@ Return only the script text in ${detectedLanguage}.`;
       console.log('✅ Background created:', backgroundUrl);
     }
 
-    // 3. Create HeyGen video with professional avatar
+    // 3. Select voice based on language
+    let voiceId = 'v6WKRTqObgmv7NHgVAFD'; // Default Hebrew
+    if (detectedLanguage.toLowerCase().includes('english')) {
+      voiceId = 'EXAVITQu4vr4xnSDxMaL';
+    } else if (detectedLanguage.toLowerCase().includes('arabic')) {
+      voiceId = 'AZnzlk1XvdvUeBnXmlld';
+    }
+    
+    console.log('🎤 Using voice:', voiceId, 'for language:', detectedLanguage);
+
+    // 4. Create HeyGen video - CORRECT API FORMAT
     const videoPayload = {
       video_inputs: [{
         character: {
@@ -73,11 +83,7 @@ Return only the script text in ${detectedLanguage}.`;
         voice: {
           type: 'text',
           input_text: script,
-          voice_id: detectedLanguage.toLowerCase().includes('hebrew') ? 'v6WKRTqObgmv7NHgVAFD' : 
-                    detectedLanguage.toLowerCase().includes('english') ? 'EXAVITQu4vr4xnSDxMaL' :
-                    detectedLanguage.toLowerCase().includes('arabic') ? 'AZnzlk1XvdvUeBnXmlld' :
-                    'v6WKRTqObgmv7NHgVAFD',
-          speed: 1.0
+          voice_id: voiceId
         },
         background: {
           type: 'image',
@@ -91,6 +97,9 @@ Return only the script text in ${detectedLanguage}.`;
       aspect_ratio: '16:9',
       test: false
     };
+    
+    console.log('📝 Final Script being sent:', script);
+    console.log('🎙️ Voice ID:', voiceId);
 
     console.log('🎤 Calling HeyGen API...');
     console.log('📦 Payload:', JSON.stringify(videoPayload, null, 2));
