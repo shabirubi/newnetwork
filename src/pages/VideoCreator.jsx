@@ -357,6 +357,17 @@ export default function VideoCreator() {
                     >
                       צור חדש
                     </Button>
+                    <Button
+                      onClick={() => {
+                        window.dispatchEvent(new CustomEvent('addVideoToEditor', { 
+                          detail: { videoUrl: currentVideo } 
+                        }));
+                        toast.success('הסרטון נוסף לעורך הראשי');
+                      }}
+                      className="px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base lg:text-lg bg-purple-600 hover:bg-purple-700"
+                    >
+                      הוסף לעורך
+                    </Button>
                   </div>
                 </div>
               </div>
