@@ -282,11 +282,34 @@ export default function VideoCreator() {
       <div className="flex-1 flex flex-col lg:flex-row overflow-hidden pb-24">
         {/* Center - Video Display */}
         <div className="flex-1 flex flex-col items-center justify-center p-3 sm:p-6 lg:p-8 overflow-y-auto">
-          {!loading && !currentVideo && (
+          {messages.length === 0 && !currentVideo && (
             <div className="text-center max-w-2xl px-4">
               <Video className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 text-gray-600 mx-auto mb-4 sm:mb-6" />
-              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-3 sm:mb-4">תאר והמערכת יוצרת</h2>
-              <p className="text-gray-400 text-sm sm:text-base lg:text-lg">כתוב מה אתה רוצה בתיבת הטקסט למטה והסרטון ייווצר תוך דקה</p>
+              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-white mb-3 sm:mb-4">Digital Dreams - יוצר סרטונים מקצועיים</h2>
+              <p className="text-gray-400 text-sm sm:text-base lg:text-lg">ספר לי מה אתה רוצה ואני אעזור לך ליצור סרטון מקצועי</p>
+            </div>
+          )}
+
+          {messages.length > 0 && !currentVideo && (
+            <div className="w-full max-w-3xl space-y-4 px-4 overflow-y-auto max-h-[60vh]">
+              {messages.map((msg, idx) => (
+                <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                  <div className={`max-w-[80%] rounded-2xl px-4 py-3 ${
+                    msg.role === 'user' 
+                      ? 'bg-purple-600 text-white' 
+                      : 'bg-gray-800 text-gray-100'
+                  }`}>
+                    <p className="text-sm sm:text-base whitespace-pre-wrap">{msg.content}</p>
+                    {msg.tool_calls?.map((tc, i) => (
+                      <div key={i} className="mt-2 text-xs opacity-70">
+                        {tc.status === 'running' && '⏳ מייצר סרטון...'}
+                        {tc.status === 'completed' && tc.results && '✅ הסרטון מוכן!'}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+              <div ref={messagesEndRef} />
             </div>
           )}
 
