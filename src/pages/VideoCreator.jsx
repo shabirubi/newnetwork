@@ -220,35 +220,30 @@ export default function VideoCreator() {
   };
 
   const handleSend = async () => {
-    if (!input.trim() || loading) return;
+    if (!input.trim()) return;
 
     const userMessage = input.trim();
-    setInput(""); // Clear input immediately
-    setLoading(true);
-    setCurrentVideo(null);
-
-    toast.loading('🤖 מנתח את הבקשה ומתכנן סרטון...', { id: 'creating' });
+    setInput("");
 
     try {
-      const { data } = await base44.functions.invoke('createFullProductionVideo', {
-        description: userMessage
-      });
-
-      console.log('✅ Response:', data);
-
-      if (data.video_id) {
-        console.log('🎬 Video ID:', data.video_id);
-        toast.loading('🎬 מייצר סרטון מקצועי עם AI... זה לוקח כ-2-5 דקות', { id: 'creating' });
-        pollVideoStatus(data.video_id, userMessage);
-      } else {
-        throw new Error('No video ID returned: ' + JSON.stringify(data));
+      let conv = conversationId ? await base44.agents.getConversation(conversationId) : null;
+      if (!conv) {
+        conv = await base44.agents.createConversation({
+          agent_name: "video_creator",
+          metadata: { name: "יצירת סרטון" }
+        });
+        setConversationId(conv.id);
       }
+
+      await base44.agents.addMessage(conv, {
+        role: "user",
+        content: userMessage
+      });
 
     } catch (err) {
       console.error('❌ Error:', err);
-      toast.error('שגיאה: ' + err.message, { id: 'creating' });
-      setLoading(false);
-      setInput(userMessage); // Restore input on error
+      toast.error('שגיאה: ' + err.message);
+      setInput(userMessage);
     }
   };
 
@@ -492,7 +487,7 @@ export default function VideoCreator() {
                     }
                   }}
                   placeholder="תאר את הסרטון שאתה רוצה... 🎬"
-                  className="w-full px-4 sm:px-6 py-3 sm:py-4 rounded-xl sm:rounded-2xl bg-gray-900/60 border border-gray-700/50 text-white placeholder:text-gray-500 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all"
+                  className="w-full px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-gray-900/60 border border-gray-700/50 text-white placeholder:text-gray-500 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all"
                   disabled={loading}
                 />
               </div>
