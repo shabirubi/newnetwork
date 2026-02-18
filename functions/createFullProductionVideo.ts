@@ -19,17 +19,29 @@ Deno.serve(async (req) => {
     console.log('🎬 Creating professional video with HeyGen...');
     console.log('📝 Description:', description);
 
-    // 1. Generate professional script
-    const scriptPrompt = `Create a professional Hebrew news script (150-250 words) about: ${description}
+    // 1. Detect language and generate professional script
+    const detectLanguagePrompt = `Detect the language of this text and return ONLY the language name in English (Hebrew/English/Arabic/Spanish/etc): ${description}`;
+    
+    const languageResult = await base44.integrations.Core.InvokeLLM({
+      prompt: detectLanguagePrompt
+    });
+    
+    const detectedLanguage = languageResult?.trim() || 'Hebrew';
+    console.log('🌍 Detected language:', detectedLanguage);
+
+    // Generate professional script in detected language
+    const scriptPrompt = `Create a professional broadcast-quality script (200-300 words) about: ${description}
 
 Requirements:
+- Write in ${detectedLanguage} language ONLY
 - Professional broadcast tone
-- Clear opening and closing
-- Engaging and informative
+- Strong opening hook
+- Rich, engaging content with details
 - Natural speaking rhythm
-- Hebrew language only
+- Clear conclusion
+- Make it informative and captivating
 
-Return only the script text.`;
+Return only the script text in ${detectedLanguage}.`;
 
     const scriptResult = await base44.integrations.Core.InvokeLLM({
       prompt: scriptPrompt,
@@ -37,7 +49,8 @@ Return only the script text.`;
     });
 
     const script = scriptResult?.trim() || description;
-    console.log('✅ Script generated');
+    console.log('✅ Script generated (', script.length, 'chars)');
+    console.log('📝 Script preview:', script.substring(0, 100) + '...');
 
     // 2. Generate professional background if needed
     let backgroundUrl = imageUrl;
@@ -60,7 +73,10 @@ Return only the script text.`;
         voice: {
           type: 'text',
           input_text: script,
-          voice_id: 'v6WKRTqObgmv7NHgVAFD',
+          voice_id: detectedLanguage.toLowerCase().includes('hebrew') ? 'v6WKRTqObgmv7NHgVAFD' : 
+                    detectedLanguage.toLowerCase().includes('english') ? 'EXAVITQu4vr4xnSDxMaL' :
+                    detectedLanguage.toLowerCase().includes('arabic') ? 'AZnzlk1XvdvUeBnXmlld' :
+                    'v6WKRTqObgmv7NHgVAFD',
           speed: 1.0
         },
         background: {
