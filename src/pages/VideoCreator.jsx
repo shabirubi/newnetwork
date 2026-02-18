@@ -19,14 +19,39 @@ export default function VideoCreator() {
   const [uploadingFile, setUploadingFile] = useState(false);
   const messagesEndRef = useRef(null);
 
-  // Load history
+  // Load history from Database + localStorage
   useEffect(() => {
-    const saved = localStorage.getItem('videoDownloadHistory');
-    if (saved) {
+    const loadHistory = async () => {
       try {
-        setGeneratedVideos(JSON.parse(saved));
-      } catch (e) {}
-    }
+        const user = await base44.auth.me();
+        if (user?.email) {
+          const dbVideos = await base44.entities.UserVideo.filter(
+            { uploader_email: user.email, feed: 'user-videos' },
+            '-created_date',
+            20
+          );
+          const mapped = dbVideos.map(v => ({
+            id: v.id,
+            title: v.title,
+            videoUrl: v.video_url,
+            timestamp: v.created_date
+          }));
+          setGeneratedVideos(mapped);
+          console.log('✅ Loaded from Database:', mapped.length);
+          return;
+        }
+      } catch (e) {
+        console.log('No DB videos, loading from localStorage');
+      }
+      
+      const saved = localStorage.getItem('videoDownloadHistory');
+      if (saved) {
+        try {
+          setGeneratedVideos(JSON.parse(saved));
+        } catch (e) {}
+      }
+    };
+    loadHistory();
   }, []);
 
   // Subscribe to conversation
@@ -139,7 +164,23 @@ export default function VideoCreator() {
           localStorage.removeItem('pendingVideoId');
           localStorage.removeItem('pendingVideoTitle');
           
-          // Save to history FIRST
+          // Save to Database
+          try {
+            await base44.entities.UserVideo.create({
+              title: title,
+              video_url: data.video_url,
+              thumbnail_url: '',
+              status: 'ready',
+              uploader_email: (await base44.auth.me())?.email || 'guest',
+              category: 'breaking',
+              feed: 'user-videos'
+            });
+            console.log('✅ Saved to Database');
+          } catch (e) {
+            console.log('Note: Could not save to DB (maybe not logged in)');
+          }
+          
+          // Save to localStorage backup
           const existingHistory = JSON.parse(localStorage.getItem('videoDownloadHistory') || '[]');
           const updatedHistory = [newVideo, ...existingHistory].slice(0, 20);
           localStorage.setItem('videoDownloadHistory', JSON.stringify(updatedHistory));
