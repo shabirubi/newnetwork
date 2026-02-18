@@ -77,6 +77,7 @@ Return only the script text.`;
     };
 
     console.log('🎤 Calling HeyGen API...');
+    console.log('📦 Payload:', JSON.stringify(videoPayload, null, 2));
 
     const heygenResponse = await fetch('https://api.heygen.com/v2/video/generate', {
       method: 'POST',
@@ -87,16 +88,18 @@ Return only the script text.`;
       body: JSON.stringify(videoPayload)
     });
 
+    const responseText = await heygenResponse.text();
+    console.log('📥 HeyGen Response:', heygenResponse.status, responseText);
+
     if (!heygenResponse.ok) {
-      const errorText = await heygenResponse.text();
-      console.error('❌ HeyGen error:', heygenResponse.status, errorText);
+      console.error('❌ HeyGen error:', heygenResponse.status, responseText);
       return Response.json({ 
-        error: `HeyGen API error: ${errorText}`,
+        error: `HeyGen API error: ${responseText}`,
         status: heygenResponse.status
       }, { status: 500 });
     }
 
-    const heygenData = await heygenResponse.json();
+    const heygenData = JSON.parse(responseText);
     const videoId = heygenData.data?.video_id;
     
     if (!videoId) {

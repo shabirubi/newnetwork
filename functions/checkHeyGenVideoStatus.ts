@@ -15,21 +15,25 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'HeyGen API key not configured' }, { status: 500 });
     }
 
+    console.log('🔍 Checking video status for:', video_id);
+
     const statusResponse = await fetch(`https://api.heygen.com/v1/video_status.get?video_id=${video_id}`, {
       headers: {
         'X-Api-Key': HEYGEN_API_KEY
       }
     });
 
+    const responseText = await statusResponse.text();
+    console.log('📥 Status Response:', statusResponse.status, responseText);
+
     if (!statusResponse.ok) {
-      const errorText = await statusResponse.text();
       return Response.json({ 
-        error: `HeyGen status check failed: ${errorText}`,
+        error: `HeyGen status check failed: ${responseText}`,
         status: statusResponse.status
       }, { status: 500 });
     }
 
-    const statusData = await statusResponse.json();
+    const statusData = JSON.parse(responseText);
     const status = statusData.data?.status;
     const videoUrl = statusData.data?.video_url;
     const error = statusData.data?.error;
