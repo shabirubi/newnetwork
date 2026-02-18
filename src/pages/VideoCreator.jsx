@@ -379,7 +379,7 @@ export default function VideoCreator() {
       </div>
 
       {/* Bottom Input - Fixed Position */}
-      <div className="fixed bottom-0 left-0 right-0 p-4 bg-black/95 backdrop-blur-xl border-t border-gray-800 z-50">
+      <div className="fixed bottom-20 left-0 right-0 p-4 bg-black/95 backdrop-blur-xl border-t border-gray-800 z-50">
         <div className="max-w-4xl mx-auto flex gap-2 sm:gap-3">
           <input
             ref={fileInputRef}
