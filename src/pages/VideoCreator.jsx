@@ -214,7 +214,7 @@ export default function VideoCreator() {
       </div>
 
       {/* Main - Mobile Optimized */}
-      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden">
+      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden pb-24">
         {/* Center - Video Display */}
         <div className="flex-1 flex flex-col items-center justify-center p-3 sm:p-6 lg:p-8 overflow-y-auto">
           {!loading && !currentVideo && (
@@ -378,8 +378,8 @@ export default function VideoCreator() {
         </div>
       </div>
 
-      {/* Bottom Input - Mobile Optimized */}
-      <div className="flex-shrink-0 p-3 sm:p-4 lg:p-6 bg-black/90 backdrop-blur-xl border-t border-gray-800" style={{ paddingBottom: 'max(12px, env(safe-area-inset-bottom))' }}>
+      {/* Bottom Input - Fixed Position */}
+      <div className="fixed bottom-0 left-0 right-0 p-4 bg-black/95 backdrop-blur-xl border-t border-gray-800 z-50">
         <div className="max-w-4xl mx-auto flex gap-2 sm:gap-3">
           <input
             ref={fileInputRef}
