@@ -125,14 +125,52 @@ Return only the script text in ${detectedLanguage}.`;
     }
 
     console.log('✅ Video generation started:', videoId);
+    console.log('⏳ Waiting for video to complete...');
 
-    // Return immediately with video_id for client-side polling
-    return Response.json({
-      success: true,
-      video_id: videoId,
-      status: 'processing',
-      message: 'Video generation started successfully'
-    });
+    // Poll for video status
+    let attempts = 0;
+    const maxAttempts = 120; // 6 minutes (120 * 3 seconds)
+    
+    while (attempts < maxAttempts) {
+      await new Promise(resolve => setTimeout(resolve, 3000)); // Wait 3 seconds
+      
+      const statusResponse = await fetch(`https://api.heygen.com/v1/video_status.get?video_id=${videoId}`, {
+        headers: {
+          'X-Api-Key': HEYGEN_API_KEY
+        }
+      });
+      
+      const statusData = await statusResponse.json();
+      console.log(`📊 Status check ${attempts + 1}:`, statusData.data?.status);
+      
+      if (statusData.data?.status === 'completed') {
+        const videoUrl = statusData.data?.video_url;
+        console.log('✅ Video completed!', videoUrl);
+        
+        return Response.json({
+          success: true,
+          video_url: videoUrl,
+          video_id: videoId,
+          status: 'completed'
+        });
+      }
+      
+      if (statusData.data?.status === 'failed') {
+        console.error('❌ Video generation failed:', statusData.data?.error);
+        return Response.json({ 
+          error: 'Video generation failed: ' + (statusData.data?.error || 'Unknown error')
+        }, { status: 500 });
+      }
+      
+      attempts++;
+    }
+    
+    // Timeout
+    console.log('⏱️ Polling timeout reached');
+    return Response.json({ 
+      error: 'Video generation timeout - still processing',
+      video_id: videoId 
+    }, { status: 500 });
 
   } catch (error) {
     console.error('🔴 Error:', error);
