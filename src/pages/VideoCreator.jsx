@@ -308,9 +308,29 @@ export default function VideoCreator() {
                       <p className="text-sm sm:text-base whitespace-pre-wrap">{msg.content}</p>
                     )}
                     {msg.tool_calls?.map((tc, i) => (
-                      <div key={i} className="mt-2 text-xs opacity-70">
-                        {tc.status === 'running' && '⏳ מייצר סרטון...'}
-                        {tc.status === 'completed' && tc.results && '✅ הסרטון מוכן!'}
+                      <div key={i} className="mt-3">
+                        {tc.status === 'running' && (
+                          <div className="bg-gradient-to-r from-purple-900/40 to-pink-900/40 border border-purple-500/50 rounded-xl p-4">
+                            <div className="flex items-center gap-3 mb-2">
+                              <Loader2 className="w-5 h-5 text-purple-400 animate-spin" />
+                              <span className="text-purple-300 font-bold">מייצר סרטון...</span>
+                            </div>
+                            <div className="relative h-1.5 bg-gray-800 rounded-full overflow-hidden">
+                              <motion.div
+                                className="absolute inset-y-0 left-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"
+                                initial={{ width: "0%" }}
+                                animate={{ width: "100%" }}
+                                transition={{ duration: 180, ease: "linear" }}
+                              />
+                            </div>
+                            <p className="text-xs text-gray-400 mt-2">זה לוקח כ-2-5 דקות...</p>
+                          </div>
+                        )}
+                        {tc.status === 'completed' && tc.results && (
+                          <div className="bg-green-900/30 border border-green-500/50 rounded-xl p-3 text-green-300 text-sm">
+                            ✅ הסרטון מוכן!
+                          </div>
+                        )}
                       </div>
                     ))}
                   </div>
