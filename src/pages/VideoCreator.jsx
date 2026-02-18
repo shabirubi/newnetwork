@@ -128,15 +128,26 @@ export default function VideoCreator() {
             videoUrl: data.video_url,
             timestamp: new Date().toISOString()
           };
-          setGeneratedVideos(prev => {
-            const updated = [newVideo, ...prev].slice(0, 20);
-            localStorage.setItem('videoDownloadHistory', JSON.stringify(updated));
-            return updated;
-          });
+          
+          // Update state immediately
           setCurrentVideo(data.video_url);
           setLoading(false);
-          toast.success('✅ הסרטון מוכן!', { id: 'creating' });
-          console.log('✅ Video saved to history:', newVideo);
+          
+          // Force update of generatedVideos with new array reference
+          setGeneratedVideos(prevVideos => {
+            const updated = [newVideo, ...prevVideos].slice(0, 20);
+            // Save to localStorage
+            try {
+              localStorage.setItem('videoDownloadHistory', JSON.stringify(updated));
+              console.log('✅ Saved to localStorage:', updated.length, 'videos');
+            } catch (e) {
+              console.error('localStorage error:', e);
+            }
+            return updated;
+          });
+          
+          toast.success('✅ הסרטון מוכן והתווסף להיסטוריה!', { id: 'creating' });
+          console.log('✅ Video saved:', { title, url: data.video_url });
           return;
         }
 
