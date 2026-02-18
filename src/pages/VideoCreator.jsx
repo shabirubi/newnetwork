@@ -110,19 +110,20 @@ export default function VideoCreator() {
 
   const pollVideoStatus = async (videoId) => {
     let attempts = 0;
-    const maxAttempts = 60;
-    
+    const maxAttempts = 100; // 5 minutes
+
     while (attempts < maxAttempts) {
       await new Promise(resolve => setTimeout(resolve, 3000));
-      
+
       try {
         const { data } = await base44.functions.invoke('checkHeyGenVideoStatus', { video_id: videoId });
-        
-        console.log('Status:', data.status);
-        
+
+        console.log('✅ Status:', data.status, 'Attempt:', attempts + 1);
+
         if (data.status === 'completed' && data.video_url) {
           setCurrentVideo(data.video_url);
-          const title = input.substring(0, 50) || "סרטון AI";
+          const userMessage = input.trim();
+          const title = userMessage.substring(0, 50) || "סרטון AI";
           const newVideo = {
             id: Date.now(),
             title,
@@ -136,47 +137,56 @@ export default function VideoCreator() {
           toast.success('✅ הסרטון מוכן!', { id: 'creating' });
           return;
         }
-        
-        if (data.status === 'failed') {
+
+        if (data.status === 'failed' || data.error) {
+          console.error('❌ Video failed:', data.error);
           setLoading(false);
-          toast.error('נכשל ליצור סרטון', { id: 'creating' });
+          toast.error('נכשל: ' + (data.error || 'שגיאה לא ידועה'), { id: 'creating' });
           return;
         }
-        
+
+        // Update toast with progress
+        const progress = Math.floor((attempts / maxAttempts) * 100);
+        toast.loading(`יוצר סרטון... ${progress}%`, { id: 'creating' });
+
         attempts++;
       } catch (err) {
+        console.error('Polling error:', err);
         attempts++;
       }
     }
-    
+
     setLoading(false);
-    toast.error('הזמן תם - נסה שוב', { id: 'creating' });
+    toast.error('הזמן תם - אבל הסרטון עדיין מתעבד ב-HeyGen', { id: 'creating' });
   };
 
   const handleSend = async () => {
     if (!input.trim() || loading) return;
 
     const userMessage = input.trim();
-    setInput("");
     setLoading(true);
     setCurrentVideo(null);
-    
-    toast.loading('יוצר סרטון...', { id: 'creating' });
+
+    toast.loading('מתחיל ייצור סרטון...', { id: 'creating' });
 
     try {
       const { data } = await base44.functions.invoke('createFullProductionVideo', {
         description: userMessage
       });
-      
+
+      console.log('✅ Response:', data);
+
       if (data.video_id) {
-        console.log('Video ID:', data.video_id);
+        console.log('🎬 Video ID:', data.video_id);
+        toast.loading('יוצר סרטון עם HeyGen... ממתין לתוצאה', { id: 'creating' });
+        setInput(""); // Clear input only after successful API call
         pollVideoStatus(data.video_id);
       } else {
-        throw new Error('No video ID returned');
+        throw new Error('No video ID returned: ' + JSON.stringify(data));
       }
-      
+
     } catch (err) {
-      console.error(err);
+      console.error('❌ Error:', err);
       toast.error('שגיאה: ' + err.message, { id: 'creating' });
       setLoading(false);
     }
