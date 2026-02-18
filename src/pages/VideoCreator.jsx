@@ -379,7 +379,7 @@ export default function VideoCreator() {
       </div>
 
       {/* Bottom Input - Mobile Optimized */}
-      <div className="flex-shrink-0 p-3 sm:p-4 lg:p-6 bg-black/90 backdrop-blur-xl border-t border-gray-800 safe-area-inset-bottom">
+      <div className="flex-shrink-0 p-3 sm:p-4 lg:p-6 bg-black/90 backdrop-blur-xl border-t border-gray-800" style={{ paddingBottom: 'max(12px, env(safe-area-inset-bottom))' }}>
         <div className="max-w-4xl mx-auto flex gap-2 sm:gap-3">
           <input
             ref={fileInputRef}
