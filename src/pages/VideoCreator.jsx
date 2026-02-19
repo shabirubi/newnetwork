@@ -214,11 +214,11 @@ export default function VideoCreator() {
           }
           
           const existing = JSON.parse(localStorage.getItem('videoDownloadHistory') || '[]');
-          const updated = [newVideo, ...existing].slice(0, 20);
+          const updated = [newVideo, ...existing].slice(0, 100);
           localStorage.setItem('videoDownloadHistory', JSON.stringify(updated));
           console.log('💾 Saved to localStorage, total videos:', updated.length);
           
-          setGeneratedVideos(prev => [newVideo, ...prev].slice(0, 20));
+          setGeneratedVideos(prev => [newVideo, ...prev]);
           setCurrentVideo(data.video_url);
           setLoading(false);
           
