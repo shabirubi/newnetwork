@@ -58,6 +58,7 @@ export default function VideoCreator() {
         if (response?.data?.videos && Array.isArray(response.data.videos)) {
           const heygenVideos = response.data.videos
             .filter(v => v.status === 'completed' && v.video_url)
+            .slice(0, 10000)
             .map(v => ({
               id: v.id,
               title: v.title || `Video ${v.id.substring(0, 8)}`,
@@ -69,7 +70,8 @@ export default function VideoCreator() {
           
           allVideos.push(...heygenVideos);
           console.log('✅ HeyGen:', heygenVideos.length, 'videos loaded');
-          console.log('📋 Sample HeyGen video:', heygenVideos[0]);
+          console.log('📋 First HeyGen video:', heygenVideos[0]);
+          console.log('📋 Last HeyGen video:', heygenVideos[heygenVideos.length - 1]);
         } else {
           console.warn('⚠️ HeyGen: No videos in response');
         }
