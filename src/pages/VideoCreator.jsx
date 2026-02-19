@@ -112,29 +112,28 @@ export default function VideoCreator() {
         console.error('❌ localStorage ERROR:', e);
       }
       
-      // 4. Deduplicate and sort
-      const uniqueVideos = Array.from(
-        new Map(allVideos.map(v => [v.videoUrl, v])).values()
-      ).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-      
-      console.log('🎯 === FINAL RESULT === 🎯');
-      console.log('Total unique videos:', uniqueVideos.length);
-      console.log('First 5 videos:', uniqueVideos.slice(0, 5).map(v => ({ title: v.title, source: v.source })));
-      
-      // ONLY update if we have videos
-      if (uniqueVideos.length > 0) {
-        // Save to localStorage
-        localStorage.setItem('videoDownloadHistory', JSON.stringify(uniqueVideos));
-        console.log('💾 Saved to localStorage:', uniqueVideos.length, 'videos');
+      // 4. Merge with existing state instead of replacing
+      setGeneratedVideos(prev => {
+        console.log('🔄 Current state:', prev.length, 'videos');
+        console.log('🆕 Loaded from sources:', allVideos.length, 'videos');
         
-        // Update state
-        setGeneratedVideos(prev => {
-          console.log('🔄 Updating state from', prev.length, 'to', uniqueVideos.length);
-          return uniqueVideos;
-        });
-      } else {
-        console.warn('⚠️ NO NEW VIDEOS - KEEPING EXISTING:', generatedVideos.length);
-      }
+        // Combine existing + new
+        const combined = [...prev, ...allVideos];
+        
+        // Deduplicate and sort
+        const uniqueVideos = Array.from(
+          new Map(combined.map(v => [v.videoUrl, v])).values()
+        ).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        
+        console.log('🎯 Final result:', uniqueVideos.length, 'unique videos');
+        
+        // Save to localStorage
+        if (uniqueVideos.length > 0) {
+          localStorage.setItem('videoDownloadHistory', JSON.stringify(uniqueVideos));
+        }
+        
+        return uniqueVideos;
+      });
     };
     
     loadHistory();
