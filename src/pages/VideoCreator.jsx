@@ -368,6 +368,15 @@ export default function VideoCreator() {
               <span className="sm:hidden">({generatedVideos.length})</span>
             </Button>
           </Link>
+          <Button
+            onClick={() => setHistoryOpen(true)}
+            variant="outline"
+            size="sm"
+            className="gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-3"
+          >
+            <History className="w-3 h-3 sm:w-4 sm:h-4" />
+            <span className="hidden sm:inline">מודל</span>
+          </Button>
           <Link to={createPageUrl("Home")}>
             <Button variant="outline" size="sm" className="gap-1 px-2 sm:px-3">
               <Home className="w-3 h-3 sm:w-4 sm:h-4" />
