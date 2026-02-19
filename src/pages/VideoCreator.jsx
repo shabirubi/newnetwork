@@ -266,7 +266,7 @@ export default function VideoCreator() {
           
           try {
             const user = await base44.auth.me();
-            await base44.entities.UserVideo.create({
+            const dbVideo = await base44.entities.UserVideo.create({
               title: title,
               video_url: data.video_url,
               thumbnail_url: '',
@@ -275,9 +275,10 @@ export default function VideoCreator() {
               category: 'breaking',
               feed: 'user-videos'
             });
-            console.log('💾 Saved to Database');
+            console.log('✅ PERMANENTLY SAVED TO DATABASE - ID:', dbVideo.id);
           } catch (e) {
-            console.log('⚠️ DB save skipped:', e.message);
+            console.error('❌ CRITICAL - DB SAVE FAILED:', e.message);
+            toast.error('⚠️ שימו לב: הסרטון עלול להעלם. שמור אותו כעת!');
           }
           
           const existing = JSON.parse(localStorage.getItem('videoDownloadHistory') || '[]');
