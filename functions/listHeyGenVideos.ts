@@ -8,104 +8,55 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'HeyGen API key not configured' }, { status: 500 });
     }
 
-    console.log('📋 Fetching ALL videos & templates from HeyGen...');
-    console.log('🔑 API Key:', HEYGEN_API_KEY.substring(0, 10) + '...');
+    console.log('📋 Fetching ALL videos from HeyGen using v1 API...');
 
     let allVideos = [];
+    let page = 0;
+    const maxPages = 100;
 
-    // Method 1: Get regular videos with pagination
-    console.log('\n🎥 METHOD 1: Fetching regular videos...');
-    let paginationToken = null;
-    let iteration = 0;
-    const maxIterations = 50;
+    // Use v1/video.list with pagination
+    while (page < maxPages) {
+      console.log(`\n📥 Page ${page}: GET /v1/video.list`);
 
-    while (iteration < maxIterations) {
-      iteration++;
-      
-      const url = paginationToken 
-        ? `https://api.heygen.com/v2/video/list?limit=100&pagination_token=${paginationToken}`
-        : `https://api.heygen.com/v2/video/list?limit=100`;
-      
-      console.log(`📥 Video Iteration ${iteration}: GET ${url}`);
-
-      const response = await fetch(url, {
-        method: 'GET',
-        headers: {
-          'X-Api-Key': HEYGEN_API_KEY,
-          'Content-Type': 'application/json'
+      const response = await fetch(
+        `https://api.heygen.com/v1/video.list?page=${page}&limit=100`,
+        {
+          method: 'GET',
+          headers: {
+            'X-Api-Key': HEYGEN_API_KEY,
+            'Content-Type': 'application/json'
+          }
         }
-      });
+      );
 
       if (!response.ok) {
-        console.error(`❌ Videos request failed: ${response.status}`);
+        console.error(`❌ Page ${page} failed: ${response.status}`);
         break;
       }
 
       const data = await response.json();
       const videos = data.data?.videos || [];
-      console.log(`📦 Found ${videos.length} regular videos`);
       
-      if (videos.length > 0) {
-        allVideos.push(...videos.map(v => ({ ...v, source: 'regular' })));
-        console.log(`✅ Total videos: ${allVideos.length}`);
-      } else {
+      console.log(`📦 Page ${page}: Found ${videos.length} videos`);
+      
+      if (videos.length === 0) {
+        console.log('🛑 No more videos, stopping pagination');
         break;
       }
 
-      paginationToken = data.data?.pagination_token;
-      if (!paginationToken) break;
-    }
-
-    // Method 2: Get template-based videos
-    console.log('\n📐 METHOD 2: Fetching template videos...');
-    try {
-      const templatesResponse = await fetch('https://api.heygen.com/v2/templates', {
-        method: 'GET',
-        headers: {
-          'X-Api-Key': HEYGEN_API_KEY,
-          'Content-Type': 'application/json'
-        }
-      });
-
-      if (templatesResponse.ok) {
-        const templatesData = await templatesResponse.json();
-        console.log('📄 Templates response:', JSON.stringify(templatesData).substring(0, 500));
-        
-        const templates = templatesData.data?.templates || templatesData.data || [];
-        console.log(`📐 Found ${templates.length} templates`);
-        
-        // For each template, try to get generated videos
-        for (const template of templates.slice(0, 10)) {
-          try {
-            const templateVideosResponse = await fetch(
-              `https://api.heygen.com/v2/video/list?template_id=${template.template_id}`,
-              {
-                method: 'GET',
-                headers: {
-                  'X-Api-Key': HEYGEN_API_KEY,
-                  'Content-Type': 'application/json'
-                }
-              }
-            );
-            
-            if (templateVideosResponse.ok) {
-              const templateVideosData = await templateVideosResponse.json();
-              const templateVideos = templateVideosData.data?.videos || [];
-              if (templateVideos.length > 0) {
-                allVideos.push(...templateVideos.map(v => ({ ...v, source: 'template', template_id: template.template_id })));
-                console.log(`✅ Added ${templateVideos.length} videos from template ${template.template_id}`);
-              }
-            }
-          } catch (e) {
-            console.log(`⚠️ Failed to fetch videos for template ${template.template_id}`);
-          }
-        }
+      allVideos.push(...videos);
+      console.log(`✅ Total so far: ${allVideos.length} videos`);
+      
+      // If we got less than 100, we're at the last page
+      if (videos.length < 100) {
+        console.log('✅ Last page reached');
+        break;
       }
-    } catch (e) {
-      console.error('❌ Templates fetch failed:', e.message);
+
+      page++;
     }
 
-    console.log(`\n🎬 FINAL COUNT: ${allVideos.length} total videos\n`);
+    console.log(`\n🎬 FINAL: ${allVideos.length} total videos\n`);
 
     // Map videos to our format
     const mappedVideos = allVideos.map(v => {
