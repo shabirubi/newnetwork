@@ -148,9 +148,8 @@ export default function VideoCreator() {
 
   const pollVideoStatus = async (videoId, originalMessage) => {
     let attempts = 0;
-    const maxAttempts = 160; // 8 minutes (160 * 3 seconds)
+    const maxAttempts = 160;
 
-    // Save video_id to localStorage for recovery
     localStorage.setItem('pendingVideoId', videoId);
     localStorage.setItem('pendingVideoTitle', originalMessage);
 
@@ -160,9 +159,11 @@ export default function VideoCreator() {
       try {
         const { data } = await base44.functions.invoke('checkHeyGenVideoStatus', { video_id: videoId });
 
-        console.log('✅ Status:', data.status, 'Attempt:', attempts + 1, 'URL:', data.video_url);
+        console.log('📊 Poll #' + (attempts + 1) + ':', data.status, data.video_url ? '✅ URL exists' : '⏳ No URL yet');
 
         if (data.status === 'completed' && data.video_url) {
+          console.log('🎉 VIDEO READY! URL:', data.video_url);
+          
           const title = originalMessage.substring(0, 50) || "סרטון AI";
           const newVideo = {
             id: Date.now(),
@@ -171,65 +172,60 @@ export default function VideoCreator() {
             timestamp: new Date().toISOString()
           };
           
-          console.log('🎬 VIDEO READY! Saving now...', newVideo);
-          
-          // Clear pending video
           localStorage.removeItem('pendingVideoId');
           localStorage.removeItem('pendingVideoTitle');
           
-          // Save to Database
           try {
+            const user = await base44.auth.me();
             await base44.entities.UserVideo.create({
               title: title,
               video_url: data.video_url,
               thumbnail_url: '',
               status: 'ready',
-              uploader_email: (await base44.auth.me())?.email || 'guest',
+              uploader_email: user?.email || 'guest',
               category: 'breaking',
               feed: 'user-videos'
             });
-            console.log('✅ Saved to Database');
+            console.log('💾 Saved to Database');
           } catch (e) {
-            console.log('Note: Could not save to DB (maybe not logged in)');
+            console.log('⚠️ DB save skipped:', e.message);
           }
           
-          // Save to localStorage backup
-          const existingHistory = JSON.parse(localStorage.getItem('videoDownloadHistory') || '[]');
-          const updatedHistory = [newVideo, ...existingHistory].slice(0, 20);
-          localStorage.setItem('videoDownloadHistory', JSON.stringify(updatedHistory));
-          console.log('💾 Saved to localStorage:', updatedHistory);
+          const existing = JSON.parse(localStorage.getItem('videoDownloadHistory') || '[]');
+          const updated = [newVideo, ...existing].slice(0, 20);
+          localStorage.setItem('videoDownloadHistory', JSON.stringify(updated));
+          console.log('💾 Saved to localStorage, total videos:', updated.length);
           
-          // Then update state
-          setGeneratedVideos(updatedHistory);
+          setGeneratedVideos(prev => [newVideo, ...prev].slice(0, 20));
           setCurrentVideo(data.video_url);
           setLoading(false);
           
           toast.success('✅ הסרטון מוכן והתווסף להיסטוריה!', { id: 'creating' });
+          console.log('✅ All done!');
           return;
         }
 
         if (data.status === 'failed' || data.error) {
-          console.error('❌ Video failed:', data.error);
+          console.error('❌ Failed:', data.error);
           localStorage.removeItem('pendingVideoId');
           localStorage.removeItem('pendingVideoTitle');
           setLoading(false);
-          toast.error('נכשל: ' + (data.error || 'שגיאה לא ידועה'), { id: 'creating' });
+          toast.error('נכשל: ' + (data.error || 'שגיאה'), { id: 'creating' });
           return;
         }
 
-        // Update toast with progress
         const progress = Math.floor((attempts / maxAttempts) * 100);
         toast.loading(`יוצר סרטון... ${progress}%`, { id: 'creating' });
 
         attempts++;
       } catch (err) {
-        console.error('Polling error:', err);
+        console.error('❌ Polling error:', err);
         attempts++;
       }
     }
 
     setLoading(false);
-    toast.error('הזמן תם - אבל הסרטון עדיין מתעבד ב-HeyGen. video_id: ' + videoId, { id: 'creating' });
+    toast.error('הזמן תם - video_id: ' + videoId, { id: 'creating' });
   };
 
   const handleSend = async () => {
