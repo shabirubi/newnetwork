@@ -20,84 +20,37 @@ export default function VideoCreator() {
   const [uploadingFile, setUploadingFile] = useState(false);
   const messagesEndRef = useRef(null);
 
-  // Load history from Database + localStorage + HeyGen (merged)
+  // Load history from HeyGen
   useEffect(() => {
     const loadHistory = async () => {
-      const allVideos = [];
-      
-      // 1. Try to load from Database
       try {
-        const user = await base44.auth.me();
-        if (user?.email) {
-          const dbVideos = await base44.entities.UserVideo.filter(
-            { uploader_email: user.email, feed: 'user-videos' },
-            '-created_date',
-            50
-          );
-          const mapped = dbVideos.map(v => ({
-            id: v.id,
-            title: v.title,
-            videoUrl: v.video_url,
-            timestamp: v.created_date,
-            source: 'db'
-          }));
-          allVideos.push(...mapped);
-          console.log('📦 Loaded from Database:', mapped.length);
-        }
-      } catch (e) {
-        console.log('⚠️ DB load skipped');
-      }
-      
-      // 2. Load from localStorage
-      const saved = localStorage.getItem('videoDownloadHistory');
-      if (saved) {
-        try {
-          const localVideos = JSON.parse(saved).map(v => ({ ...v, source: 'local' }));
-          allVideos.push(...localVideos);
-          console.log('📦 Loaded from localStorage:', localVideos.length);
-        } catch (e) {}
-      }
-      
-      // 3. Load from HeyGen
-      try {
-        console.log('🔄 Fetching from HeyGen...');
-        const { data } = await base44.functions.invoke('listHeyGenVideos', {});
-        console.log('📦 HeyGen response:', data?.total, 'total videos');
+        console.log('🚀 LOADING HEYGEN VIDEOS...');
+        const response = await base44.functions.invoke('listHeyGenVideos', {});
+        console.log('📦 RESPONSE:', response);
         
-        if (data?.videos) {
-          console.log('🔍 First 3 videos:', data.videos.slice(0, 3));
-          
-          const heygenVideos = data.videos
-            .filter(v => {
-              const valid = v.status === 'completed' && v.video_url;
-              if (!valid) {
-                console.log(`❌ Skipped: ${v.id} - status:${v.status}, has_url:${!!v.video_url}`);
-              }
-              return valid;
-            })
-            .map(v => ({
-              id: v.id,
-              title: v.title || `Video ${v.id.substring(0, 8)}`,
-              videoUrl: v.video_url,
-              timestamp: v.created_at ? new Date(v.created_at * 1000).toISOString() : new Date().toISOString(),
-              source: 'heygen',
-              thumbnail: v.thumbnail_url
-            }));
-          
-          console.log('✅ Valid HeyGen videos:', heygenVideos.length);
-          allVideos.push(...heygenVideos);
+        if (!response?.data?.videos) {
+          console.error('❌ NO DATA');
+          return;
         }
-      } catch (e) {
-        console.error('❌ HeyGen load failed:', e.message);
+        
+        const videos = response.data.videos
+          .filter(v => v.status === 'completed' && v.video_url)
+          .map(v => ({
+            id: v.id,
+            title: v.title || `Video ${v.id.substring(0, 8)}`,
+            videoUrl: v.video_url,
+            timestamp: v.created_at ? new Date(v.created_at * 1000).toISOString() : new Date().toISOString(),
+            source: 'heygen',
+            thumbnail: v.thumbnail_url
+          }))
+          .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+          .slice(0, 100);
+        
+        console.log('✅ SETTING', videos.length, 'VIDEOS');
+        setGeneratedVideos(videos);
+      } catch (error) {
+        console.error('❌ ERROR:', error);
       }
-      
-      // 4. Remove duplicates by videoUrl, sort by timestamp
-      const uniqueVideos = Array.from(
-        new Map(allVideos.map(v => [v.videoUrl, v])).values()
-      ).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)).slice(0, 50);
-      
-      console.log('✅ Total unique videos loaded:', uniqueVideos.length);
-      setGeneratedVideos(uniqueVideos);
     };
     loadHistory();
   }, []);
