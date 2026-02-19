@@ -136,6 +136,8 @@ export default function VideoCreator() {
         
         return uniqueVideos;
       });
+      
+      setLoadingHistory(false);
     };
     
     loadHistory();
