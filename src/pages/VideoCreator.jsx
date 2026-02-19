@@ -11,6 +11,7 @@ import TypewriterText from "../components/videoeditor/TypewriterText";
 export default function VideoCreator() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [loadingHistory, setLoadingHistory] = useState(true);
   const [generatedVideos, setGeneratedVideos] = useState(() => {
     // Load from localStorage on init
     try {
