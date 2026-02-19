@@ -20,56 +20,19 @@ export default function VideoCreator() {
   const [uploadingFile, setUploadingFile] = useState(false);
   const messagesEndRef = useRef(null);
 
-  // Load history from localStorage + Database + HeyGen
+  // Load history from HeyGen + Database + localStorage
   useEffect(() => {
     const loadHistory = async () => {
-      console.log('🔄 LOADING VIDEO HISTORY...');
+      console.log('🚀 === LOADING VIDEO HISTORY === 🚀');
       const allVideos = [];
       
-      // 1. Load from localStorage (new videos)
+      // 1. Load from HeyGen FIRST (main source)
       try {
-        const saved = localStorage.getItem('videoDownloadHistory');
-        if (saved) {
-          const localVideos = JSON.parse(saved);
-          allVideos.push(...localVideos);
-          console.log('📦 localStorage:', localVideos.length, 'videos');
-        } else {
-          console.log('📦 localStorage: EMPTY');
-        }
-      } catch (e) {
-        console.error('❌ localStorage error:', e);
-      }
-      
-      // 2. Load from Database (UserVideo entity)
-      try {
-        console.log('🔄 Fetching from Database...');
-        const dbVideos = await base44.entities.UserVideo.filter({ feed: 'user-videos' }, '-created_date', 100);
-        if (dbVideos && dbVideos.length > 0) {
-          const mapped = dbVideos
-            .filter(v => v.video_url)
-            .map(v => ({
-              id: v.id,
-              title: v.title || 'סרטון',
-              videoUrl: v.video_url,
-              timestamp: v.created_date,
-              source: 'database',
-              thumbnail: v.thumbnail_url
-            }));
-          allVideos.push(...mapped);
-          console.log('📦 Database:', mapped.length, 'videos');
-        } else {
-          console.log('📦 Database: EMPTY');
-        }
-      } catch (e) {
-        console.error('❌ Database error:', e);
-      }
-      
-      // 3. Load from HeyGen
-      try {
-        console.log('🔄 Fetching HeyGen...');
+        console.log('🔄 Step 1: Fetching HeyGen API...');
         const response = await base44.functions.invoke('listHeyGenVideos', {});
+        console.log('📡 HeyGen Response:', response);
         
-        if (response?.data?.videos) {
+        if (response?.data?.videos && Array.isArray(response.data.videos)) {
           const heygenVideos = response.data.videos
             .filter(v => v.status === 'completed' && v.video_url)
             .map(v => ({
@@ -82,28 +45,71 @@ export default function VideoCreator() {
             }));
           
           allVideos.push(...heygenVideos);
-          console.log('📦 HeyGen:', heygenVideos.length, 'videos');
+          console.log('✅ HeyGen:', heygenVideos.length, 'videos loaded');
+          console.log('📋 Sample HeyGen video:', heygenVideos[0]);
         } else {
-          console.log('📦 HeyGen: EMPTY');
+          console.warn('⚠️ HeyGen: No videos in response');
         }
       } catch (e) {
-        console.error('❌ HeyGen error:', e);
+        console.error('❌ HeyGen ERROR:', e);
       }
       
-      // 4. Merge and deduplicate by videoUrl
+      // 2. Load from Database
+      try {
+        console.log('🔄 Step 2: Fetching Database...');
+        const dbVideos = await base44.entities.UserVideo.filter({ feed: 'user-videos' }, '-created_date', 100);
+        console.log('📡 Database Response:', dbVideos?.length || 0);
+        
+        if (dbVideos && dbVideos.length > 0) {
+          const mapped = dbVideos
+            .filter(v => v.video_url)
+            .map(v => ({
+              id: v.id,
+              title: v.title || 'סרטון',
+              videoUrl: v.video_url,
+              timestamp: v.created_date,
+              source: 'database',
+              thumbnail: v.thumbnail_url
+            }));
+          allVideos.push(...mapped);
+          console.log('✅ Database:', mapped.length, 'videos loaded');
+        }
+      } catch (e) {
+        console.error('❌ Database ERROR:', e);
+      }
+      
+      // 3. Load from localStorage (backup)
+      try {
+        console.log('🔄 Step 3: Checking localStorage...');
+        const saved = localStorage.getItem('videoDownloadHistory');
+        if (saved) {
+          const localVideos = JSON.parse(saved);
+          allVideos.push(...localVideos);
+          console.log('✅ localStorage:', localVideos.length, 'videos loaded');
+        }
+      } catch (e) {
+        console.error('❌ localStorage ERROR:', e);
+      }
+      
+      // 4. Deduplicate and sort
       const uniqueVideos = Array.from(
         new Map(allVideos.map(v => [v.videoUrl, v])).values()
       ).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
       
-      console.log('✅ TOTAL:', uniqueVideos.length, 'unique videos');
-      console.log('📋 SOURCES:', {
-        localStorage: allVideos.filter(v => v.source !== 'heygen' && v.source !== 'database').length,
-        database: allVideos.filter(v => v.source === 'database').length,
-        heygen: allVideos.filter(v => v.source === 'heygen').length
-      });
+      console.log('🎯 === FINAL RESULT === 🎯');
+      console.log('Total unique videos:', uniqueVideos.length);
+      console.log('First 5 videos:', uniqueVideos.slice(0, 5).map(v => ({ title: v.title, source: v.source })));
+      
+      // Save to localStorage for persistence
+      if (uniqueVideos.length > 0) {
+        localStorage.setItem('videoDownloadHistory', JSON.stringify(uniqueVideos));
+        console.log('💾 Saved to localStorage');
+      }
       
       setGeneratedVideos(uniqueVideos);
+      console.log('✅ State updated with', uniqueVideos.length, 'videos');
     };
+    
     loadHistory();
   }, []);
 
