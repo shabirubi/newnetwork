@@ -113,17 +113,19 @@ export default function VideoCreator() {
       console.log('Total unique videos:', uniqueVideos.length);
       console.log('First 5 videos:', uniqueVideos.slice(0, 5).map(v => ({ title: v.title, source: v.source })));
       
-      // Save to localStorage for persistence
+      // ONLY update if we have videos
       if (uniqueVideos.length > 0) {
+        // Save to localStorage
         localStorage.setItem('videoDownloadHistory', JSON.stringify(uniqueVideos));
-        console.log('💾 Saved to localStorage');
-      }
-      
-      if (uniqueVideos.length > 0) {
-        setGeneratedVideos(uniqueVideos);
-        console.log('✅ State updated with', uniqueVideos.length, 'videos');
+        console.log('💾 Saved to localStorage:', uniqueVideos.length, 'videos');
+        
+        // Update state
+        setGeneratedVideos(prev => {
+          console.log('🔄 Updating state from', prev.length, 'to', uniqueVideos.length);
+          return uniqueVideos;
+        });
       } else {
-        console.warn('⚠️ NO VIDEOS FOUND - keeping existing state');
+        console.warn('⚠️ NO NEW VIDEOS - KEEPING EXISTING:', generatedVideos.length);
       }
     };
     
