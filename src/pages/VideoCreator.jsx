@@ -242,6 +242,7 @@ export default function VideoCreator() {
   const pollVideoStatus = async (videoId, originalMessage) => {
     let attempts = 0;
     const maxAttempts = 160;
+    const totalSeconds = maxAttempts * 3;
 
     localStorage.setItem('pendingVideoId', videoId);
     localStorage.setItem('pendingVideoTitle', originalMessage);
@@ -308,7 +309,19 @@ export default function VideoCreator() {
         }
 
         const progress = Math.floor((attempts / maxAttempts) * 100);
-        toast.loading(`יוצר סרטון... ${progress}%`, { id: 'creating' });
+        const elapsedSeconds = attempts * 3;
+        const remainingSeconds = Math.max(0, totalSeconds - elapsedSeconds);
+        const remainingMinutes = Math.ceil(remainingSeconds / 60);
+
+        let stage = 'ערכת נתונים';
+        if (progress > 70) stage = '🎬 גימור הסרטון';
+        else if (progress > 35) stage = '⚙️ עיבוד וידאו';
+        else stage = '🎨 ערכת נתונים';
+
+        toast.loading(
+          `יוצר סרטון... ${progress}%\n${stage}\n⏱️ זמן משוער: ${remainingMinutes} דקות`,
+          { id: 'creating' }
+        );
 
         attempts++;
       } catch (err) {
