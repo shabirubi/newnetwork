@@ -58,46 +58,43 @@ Deno.serve(async (req) => {
 
     console.log(`\n🎬 FINAL: ${allVideos.length} total videos\n`);
 
-    // Fetch full details for each video to get video_url
-    console.log('\n🔄 Fetching video details for URLs...');
+    // Fetch details in parallel batches of 20
+    console.log('\n🔄 Fetching video details in parallel...');
     const detailedVideos = [];
+    const batchSize = 20;
 
-    for (let i = 0; i < allVideos.length; i++) {
-      const video = allVideos[i];
+    for (let i = 0; i < allVideos.length; i += batchSize) {
+      const batch = allVideos.slice(i, i + batchSize);
       
-      try {
-        const detailResponse = await fetch(
-          `https://api.heygen.com/v1/video_status.get?video_id=${video.video_id}`,
-          {
-            method: 'GET',
-            headers: {
-              'X-Api-Key': HEYGEN_API_KEY
+      const promises = batch.map(async (video) => {
+        try {
+          const detailResponse = await fetch(
+            `https://api.heygen.com/v1/video_status.get?video_id=${video.video_id}`,
+            {
+              method: 'GET',
+              headers: { 'X-Api-Key': HEYGEN_API_KEY }
             }
-          }
-        );
+          );
 
-        if (detailResponse.ok) {
-          const detailData = await detailResponse.json();
-          const detail = detailData.data;
-          
-          detailedVideos.push({
-            id: video.video_id,
-            title: video.video_title || `Video ${video.video_id.substring(0, 8)}`,
-            status: detail?.status || video.status,
-            video_url: detail?.video_url,
-            thumbnail_url: detail?.thumbnail_url,
-            created_at: video.created_at,
-            duration: detail?.duration
-          });
-
-          if ((i + 1) % 10 === 0) {
-            console.log(`✅ Processed ${i + 1}/${allVideos.length} videos`);
+          if (detailResponse.ok) {
+            const detailData = await detailResponse.json();
+            const detail = detailData.data;
+            
+            return {
+              id: video.video_id,
+              title: video.video_title || `Video ${video.video_id.substring(0, 8)}`,
+              status: detail?.status || video.status,
+              video_url: detail?.video_url,
+              thumbnail_url: detail?.thumbnail_url,
+              created_at: video.created_at,
+              duration: detail?.duration
+            };
           }
+        } catch (e) {
+          console.error(`⚠️ Failed: ${video.video_id}`);
         }
-      } catch (e) {
-        console.error(`⚠️ Failed to get details for ${video.video_id}`);
-        // Add without URL
-        detailedVideos.push({
+        
+        return {
           id: video.video_id,
           title: video.video_title || `Video ${video.video_id.substring(0, 8)}`,
           status: video.status,
@@ -105,11 +102,16 @@ Deno.serve(async (req) => {
           thumbnail_url: null,
           created_at: video.created_at,
           duration: null
-        });
-      }
+        };
+      });
+
+      const batchResults = await Promise.all(promises);
+      detailedVideos.push(...batchResults);
+      
+      console.log(`✅ Batch ${Math.floor(i / batchSize) + 1}: ${detailedVideos.length}/${allVideos.length}`);
     }
 
-    console.log(`\n✅ Completed: ${detailedVideos.length} videos with details\n`);
+    console.log(`\n✅ DONE: ${detailedVideos.length} videos\n`);
 
     return Response.json({
       total: detailedVideos.length,
