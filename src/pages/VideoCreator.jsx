@@ -25,6 +25,14 @@ export default function VideoCreator() {
     }
     return [];
   });
+
+  // Save to localStorage whenever generatedVideos changes
+  useEffect(() => {
+    if (generatedVideos.length > 0) {
+      localStorage.setItem('videoDownloadHistory', JSON.stringify(generatedVideos));
+      console.log('💾 Auto-saved to localStorage:', generatedVideos.length, 'videos');
+    }
+  }, [generatedVideos]);
   const [historyOpen, setHistoryOpen] = useState(false);
   const [currentVideo, setCurrentVideo] = useState(null);
   const [conversationId, setConversationId] = useState(null);
