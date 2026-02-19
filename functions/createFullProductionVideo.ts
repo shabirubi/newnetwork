@@ -68,26 +68,43 @@ Return only the script text in ${detectedLanguage}.`;
     }
     console.log('🎤 Voice ID:', voiceId);
 
-    // 5. Create HeyGen video using Agent API with Quality Mode
-    const agentPayload = {
-      agent_id: "4ffe8d3b-6c54-429f-9ed2-4c668c4e84b3",
-      quality_mode: true,
-      variables: {
-        user_prompt: `${description}\n\nFull Script:\n${script}`,
-        background_image_url: backgroundUrl,
-        language: detectedLanguage
-      }
+    // 5. Create HeyGen video with premium settings
+    const videoPayload = {
+      video_inputs: [{
+        character: {
+          type: 'avatar',
+          avatar_id: 'Abigail_expressive_2024112501',
+          avatar_style: 'normal'
+        },
+        voice: {
+          type: 'text',
+          input_text: script,
+          voice_id: voiceId
+        },
+        background: {
+          type: 'image',
+          url: backgroundUrl
+        }
+      }],
+      dimension: {
+        width: 1920,
+        height: 1080
+      },
+      aspect_ratio: '16:9',
+      test: false,
+      title: description.substring(0, 100)
     };
 
-    console.log('🎬 Calling HeyGen Agent API (Quality Mode)...');
+    console.log('🎬 Calling HeyGen V2 API...');
+    console.log('📋 Payload:', JSON.stringify(videoPayload, null, 2));
 
-    const heygenResponse = await fetch('https://api.heygen.com/v1/video_agent.generate', {
+    const heygenResponse = await fetch('https://api.heygen.com/v2/video/generate', {
       method: 'POST',
       headers: {
         'X-Api-Key': HEYGEN_API_KEY,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(agentPayload)
+      body: JSON.stringify(videoPayload)
     });
 
     const responseText = await heygenResponse.text();
