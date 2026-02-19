@@ -26,9 +26,10 @@ export default function VideoCreator() {
     return [];
   });
 
-  // Save to localStorage whenever generatedVideos changes
+  // Save to localStorage whenever generatedVideos changes (ALWAYS save, even if empty but not on first load)
   useEffect(() => {
-    if (generatedVideos.length > 0) {
+    // Don't save on mount - wait for data to load first
+    if (generatedVideos.length > 0 || localStorage.getItem('videoDownloadHistory')) {
       localStorage.setItem('videoDownloadHistory', JSON.stringify(generatedVideos));
       console.log('💾 Auto-saved to localStorage:', generatedVideos.length, 'videos');
     }
