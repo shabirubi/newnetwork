@@ -8,15 +8,15 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'HeyGen API key not configured' }, { status: 500 });
     }
 
-    console.log('📋 Fetching ALL videos from HeyGen using v1 API...');
+    console.log('📋 Fetching recent completed videos from HeyGen...');
 
     let allVideos = [];
     let page = 0;
-    const maxPages = 10; // Only fetch first 10 pages (1000 videos max)
+    const maxPages = 3; // Only fetch first 3 pages (300 videos max)
 
     // Use v1/video.list with pagination
     while (page < maxPages) {
-      console.log(`\n📥 Page ${page}: GET /v1/video.list`);
+      console.log(`📥 Page ${page}: Fetching 100 videos...`);
 
       const response = await fetch(
         `https://api.heygen.com/v1/video.list?page=${page}&limit=100`,
@@ -37,89 +37,45 @@ Deno.serve(async (req) => {
       const data = await response.json();
       const videos = data.data?.videos || [];
       
-      console.log(`📦 Page ${page}: Found ${videos.length} videos`);
-      
       if (videos.length === 0) {
-        console.log('🛑 No more videos, stopping pagination');
         break;
       }
 
       allVideos.push(...videos);
-      console.log(`✅ Total so far: ${allVideos.length} videos`);
       
-      // If we got less than 100, we're at the last page
       if (videos.length < 100) {
-        console.log('✅ Last page reached');
         break;
       }
 
       page++;
     }
 
-    console.log(`\n🎬 FINAL: ${allVideos.length} total videos\n`);
+    console.log(`📦 Found ${allVideos.length} total videos from list API`);
 
-    // Fetch details in parallel batches of 20
-    console.log('\n🔄 Fetching video details in parallel...');
-    const detailedVideos = [];
-    const batchSize = 20;
+    // Filter to only completed videos with URLs
+    const completedVideos = allVideos.filter(v => v.status === 'completed' && v.video_url);
+    console.log(`✅ ${completedVideos.length} are completed with URLs`);
 
-    for (let i = 0; i < allVideos.length; i += batchSize) {
-      const batch = allVideos.slice(i, i + batchSize);
-      
-      const promises = batch.map(async (video) => {
-        try {
-          const detailResponse = await fetch(
-            `https://api.heygen.com/v1/video_status.get?video_id=${video.video_id}`,
-            {
-              method: 'GET',
-              headers: { 'X-Api-Key': HEYGEN_API_KEY }
-            }
-          );
+    // Return completed videos directly without fetching details
+    const result = completedVideos.map(v => ({
+      id: v.video_id,
+      title: v.video_title || `Video ${v.video_id.substring(0, 8)}`,
+      status: v.status,
+      video_url: v.video_url,
+      thumbnail_url: v.thumbnail_url,
+      created_at: v.created_at,
+      duration: v.duration
+    }));
 
-          if (detailResponse.ok) {
-            const detailData = await detailResponse.json();
-            const detail = detailData.data;
-            
-            return {
-              id: video.video_id,
-              title: video.video_title || `Video ${video.video_id.substring(0, 8)}`,
-              status: detail?.status || video.status,
-              video_url: detail?.video_url,
-              thumbnail_url: detail?.thumbnail_url,
-              created_at: video.created_at,
-              duration: detail?.duration
-            };
-          }
-        } catch (e) {
-          console.error(`⚠️ Failed: ${video.video_id}`);
-        }
-        
-        return {
-          id: video.video_id,
-          title: video.video_title || `Video ${video.video_id.substring(0, 8)}`,
-          status: video.status,
-          video_url: null,
-          thumbnail_url: null,
-          created_at: video.created_at,
-          duration: null
-        };
-      });
-
-      const batchResults = await Promise.all(promises);
-      detailedVideos.push(...batchResults);
-      
-      console.log(`✅ Batch ${Math.floor(i / batchSize) + 1}: ${detailedVideos.length}/${allVideos.length}`);
-    }
-
-    console.log(`\n✅ DONE: ${detailedVideos.length} videos\n`);
+    console.log(`\n✅ Returning ${result.length} videos`);
 
     return Response.json({
-      total: detailedVideos.length,
-      videos: detailedVideos
+      total: result.length,
+      videos: result
     });
 
   } catch (error) {
-    console.error('🔴 Fatal Error:', error);
-    return Response.json({ error: error.message, stack: error.stack }, { status: 500 });
+    console.error('🔴 Error:', error);
+    return Response.json({ error: error.message }, { status: 500 });
   }
 });
