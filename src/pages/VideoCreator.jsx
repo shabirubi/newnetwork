@@ -309,25 +309,25 @@ export default function VideoCreator() {
                     )}
                     {msg.tool_calls?.map((tc, i) => (
                       <div key={i} className="mt-3">
-                        {tc.status === 'running' && (
-                          <div className="bg-black border border-gray-700 rounded-lg p-4">
-                            <div className="flex items-center gap-3 mb-3">
-                              <Loader2 className="w-5 h-5 text-gray-300 animate-spin" />
-                              <span className="text-gray-200 font-semibold">מייצר סרטון...</span>
+                        {(tc.status === 'running' || tc.status === 'in_progress') && (
+                          <div className="bg-black border-2 border-gray-700 rounded-xl p-6">
+                            <div className="flex items-center gap-3 mb-4">
+                              <Loader2 className="w-6 h-6 text-gray-300 animate-spin" />
+                              <span className="text-gray-100 font-bold text-lg">מייצר סרטון...</span>
                             </div>
-                            <div className="relative h-2 bg-gray-800 rounded-full overflow-hidden">
+                            <div className="relative h-3 bg-gray-800 rounded-full overflow-hidden mb-3">
                               <motion.div
-                                className="absolute inset-y-0 left-0 bg-gradient-to-r from-gray-400 to-gray-500 rounded-full"
+                                className="absolute inset-y-0 left-0 bg-gradient-to-r from-gray-400 via-gray-300 to-gray-500 rounded-full"
                                 initial={{ width: "0%" }}
                                 animate={{ width: "100%" }}
                                 transition={{ duration: 180, ease: "linear" }}
                               />
                             </div>
-                            <p className="text-xs text-gray-400 mt-2">זמן משוער: 2-5 דקות</p>
+                            <p className="text-sm text-gray-400 text-center">זמן משוער: 3-5 דקות</p>
                           </div>
                         )}
                         {tc.status === 'completed' && tc.results && (
-                          <div className="bg-black border border-green-600 rounded-lg p-3 text-green-400 text-sm font-semibold">
+                          <div className="bg-black border-2 border-green-600 rounded-lg p-4 text-green-400 text-base font-bold">
                             ✅ הסרטון מוכן!
                           </div>
                         )}
