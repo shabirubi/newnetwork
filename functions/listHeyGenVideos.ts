@@ -58,24 +58,62 @@ Deno.serve(async (req) => {
 
     console.log(`\n🎬 FINAL: ${allVideos.length} total videos\n`);
 
-    // Map videos to our format
-    const mappedVideos = allVideos.map(v => {
-      console.log(`📹 Video: ${v.video_id} | Status: ${v.status} | URL: ${v.video_url ? '✓' : '✗'}`);
+    // Fetch full details for each video to get video_url
+    console.log('\n🔄 Fetching video details for URLs...');
+    const detailedVideos = [];
+
+    for (let i = 0; i < allVideos.length; i++) {
+      const video = allVideos[i];
       
-      return {
-        id: v.video_id,
-        title: v.video_title || v.title || `Video ${v.video_id?.substring(0, 8)}`,
-        status: v.status,
-        video_url: v.video_url || v.url,
-        thumbnail_url: v.thumbnail_url || v.thumbnail,
-        created_at: v.created_at,
-        duration: v.duration
-      };
-    });
+      try {
+        const detailResponse = await fetch(
+          `https://api.heygen.com/v1/video_status.get?video_id=${video.video_id}`,
+          {
+            method: 'GET',
+            headers: {
+              'X-Api-Key': HEYGEN_API_KEY
+            }
+          }
+        );
+
+        if (detailResponse.ok) {
+          const detailData = await detailResponse.json();
+          const detail = detailData.data;
+          
+          detailedVideos.push({
+            id: video.video_id,
+            title: video.video_title || `Video ${video.video_id.substring(0, 8)}`,
+            status: detail?.status || video.status,
+            video_url: detail?.video_url,
+            thumbnail_url: detail?.thumbnail_url,
+            created_at: video.created_at,
+            duration: detail?.duration
+          });
+
+          if ((i + 1) % 10 === 0) {
+            console.log(`✅ Processed ${i + 1}/${allVideos.length} videos`);
+          }
+        }
+      } catch (e) {
+        console.error(`⚠️ Failed to get details for ${video.video_id}`);
+        // Add without URL
+        detailedVideos.push({
+          id: video.video_id,
+          title: video.video_title || `Video ${video.video_id.substring(0, 8)}`,
+          status: video.status,
+          video_url: null,
+          thumbnail_url: null,
+          created_at: video.created_at,
+          duration: null
+        });
+      }
+    }
+
+    console.log(`\n✅ Completed: ${detailedVideos.length} videos with details\n`);
 
     return Response.json({
-      total: mappedVideos.length,
-      videos: mappedVideos
+      total: detailedVideos.length,
+      videos: detailedVideos
     });
 
   } catch (error) {
