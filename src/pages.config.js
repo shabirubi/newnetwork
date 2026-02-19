@@ -83,9 +83,10 @@ import UserProfile from './pages/UserProfile';
 import UserVideos from './pages/UserVideos';
 import VOD from './pages/VOD';
 import VODContent from './pages/VODContent';
-import VideoCreator from './pages/VideoCreator';
 import VideoEditor from './pages/VideoEditor';
 import WarRoom from './pages/WarRoom';
+import VideoCreator from './pages/VideoCreator';
+import HeyGenHistory from './pages/HeyGenHistory';
 import __Layout from './Layout.jsx';
 
 
@@ -126,9 +127,10 @@ export const PAGES = {
     "UserVideos": UserVideos,
     "VOD": VOD,
     "VODContent": VODContent,
-    "VideoCreator": VideoCreator,
     "VideoEditor": VideoEditor,
     "WarRoom": WarRoom,
+    "VideoCreator": VideoCreator,
+    "HeyGenHistory": HeyGenHistory,
 }
 
 export const pagesConfig = {
