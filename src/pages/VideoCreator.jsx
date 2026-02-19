@@ -44,42 +44,10 @@ export default function VideoCreator() {
   // Load history from HeyGen + Database + localStorage
   useEffect(() => {
     const loadHistory = async () => {
-      console.log('🚀 === LOADING VIDEO HISTORY === 🚀');
-      const allVideos = [];
-      
-      // 1. Load from HeyGen FIRST (main source)
+      console.log('🚀 === LOADING VIDEO HISTORY FROM DATABASE === 🚀');
       try {
-        console.log('🔄 Step 1: Fetching HeyGen API...');
-        const response = await base44.functions.invoke('listHeyGenVideos', {});
-        console.log('📡 HeyGen Response:', response);
-        
-        if (response?.data?.videos && Array.isArray(response.data.videos)) {
-          const heygenVideos = response.data.videos
-            .filter(v => v.status === 'completed' && v.video_url)
-            .map(v => ({
-              id: v.id,
-              title: v.title || `Video ${v.id.substring(0, 8)}`,
-              videoUrl: v.video_url,
-              timestamp: v.created_at ? new Date(v.created_at * 1000).toISOString() : new Date().toISOString(),
-              source: 'heygen',
-              thumbnail: v.thumbnail_url
-            }));
-          
-          allVideos.push(...heygenVideos);
-          console.log('✅ HeyGen:', heygenVideos.length, 'videos loaded');
-          console.log('📋 Sample HeyGen video:', heygenVideos[0]);
-        } else {
-          console.warn('⚠️ HeyGen: No videos in response');
-        }
-      } catch (e) {
-        console.error('❌ HeyGen ERROR:', e);
-      }
-      
-      // 2. Load from Database
-      try {
-        console.log('🔄 Step 2: Fetching Database...');
-        const dbVideos = await base44.entities.UserVideo.filter({ feed: 'user-videos' }, '-created_date', 100);
-        console.log('📡 Database Response:', dbVideos?.length || 0);
+        const dbVideos = await base44.entities.UserVideo.filter({ feed: 'user-videos' }, '-created_date', 500);
+        console.log('✅ LOADED FROM DATABASE:', dbVideos?.length || 0, 'videos');
         
         if (dbVideos && dbVideos.length > 0) {
           const mapped = dbVideos
@@ -88,52 +56,26 @@ export default function VideoCreator() {
               id: v.id,
               title: v.title || 'סרטון',
               videoUrl: v.video_url,
-              timestamp: v.created_date,
-              source: 'database',
-              thumbnail: v.thumbnail_url
-            }));
-          allVideos.push(...mapped);
-          console.log('✅ Database:', mapped.length, 'videos loaded');
+              timestamp: v.created_date
+            }))
+            .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+          
+          console.log('✅ PERMANENT STORAGE:', mapped.length, 'videos ready');
+          setGeneratedVideos(mapped);
+          localStorage.setItem('videoDownloadHistory', JSON.stringify(mapped));
+        } else {
+          setGeneratedVideos([]);
         }
       } catch (e) {
-        console.error('❌ Database ERROR:', e);
+        console.error('❌ DATABASE ERROR:', e);
+        try {
+          const saved = localStorage.getItem('videoDownloadHistory');
+          if (saved) {
+            setGeneratedVideos(JSON.parse(saved));
+            console.log('⚠️ Using localStorage backup');
+          }
+        } catch {}
       }
-      
-      // 3. Load from localStorage (backup)
-      try {
-        console.log('🔄 Step 3: Checking localStorage...');
-        const saved = localStorage.getItem('videoDownloadHistory');
-        if (saved) {
-          const localVideos = JSON.parse(saved);
-          allVideos.push(...localVideos);
-          console.log('✅ localStorage:', localVideos.length, 'videos loaded');
-        }
-      } catch (e) {
-        console.error('❌ localStorage ERROR:', e);
-      }
-      
-      // 4. Merge with existing state instead of replacing
-      setGeneratedVideos(prev => {
-        console.log('🔄 Current state:', prev.length, 'videos');
-        console.log('🆕 Loaded from sources:', allVideos.length, 'videos');
-        
-        // Combine existing + new
-        const combined = [...prev, ...allVideos];
-        
-        // Deduplicate and sort
-        const uniqueVideos = Array.from(
-          new Map(combined.map(v => [v.videoUrl, v])).values()
-        ).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-        
-        console.log('🎯 Final result:', uniqueVideos.length, 'unique videos');
-        
-        // Save to localStorage
-        if (uniqueVideos.length > 0) {
-          localStorage.setItem('videoDownloadHistory', JSON.stringify(uniqueVideos));
-        }
-        
-        return uniqueVideos;
-      });
     };
     
     loadHistory();
