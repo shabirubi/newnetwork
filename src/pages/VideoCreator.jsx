@@ -658,22 +658,43 @@ export default function VideoCreator() {
                   <div className="grid grid-cols-3 gap-4">
                     {generatedVideos.map((video) => (
                       <div key={video.id} className="bg-black rounded-xl overflow-hidden border border-gray-800 hover:border-purple-500/50 transition-all">
-                        <video 
-                          src={video.videoUrl} 
-                          controls 
-                          className="w-full aspect-video bg-black"
-                        />
-                        <div className="p-3">
-                          <p className="text-white font-medium text-sm mb-2">{video.title}</p>
-                          <p className="text-gray-500 text-xs mb-3">{new Date(video.timestamp).toLocaleString('he-IL')}</p>
-                          <a
-                            href={video.videoUrl}
-                            download
-                            className="w-full bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-lg text-sm font-bold flex items-center justify-center gap-2 transition-all"
-                          >
-                            <Download className="w-4 h-4" />
-                            הורד
-                          </a>
+                        <div className="relative">
+                          <video 
+                            src={video.videoUrl} 
+                            controls 
+                            className="w-full aspect-video bg-black"
+                          />
+                          {video.source === 'heygen' && (
+                            <div className="absolute top-2 right-2 bg-green-600 px-2 py-1 rounded text-white text-xs font-bold">
+                              HeyGen ✓
+                            </div>
+                          )}
+                        </div>
+                        <div className="p-3 space-y-2">
+                          <p className="text-white font-medium text-sm">{video.title}</p>
+                          <p className="text-gray-500 text-xs">{new Date(video.timestamp).toLocaleString('he-IL')}</p>
+                          <div className="flex gap-2">
+                            <a
+                              href={video.videoUrl}
+                              download
+                              className="flex-1 bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded-lg text-sm font-bold flex items-center justify-center gap-2 transition-all"
+                            >
+                              <Download className="w-4 h-4" />
+                              הורד
+                            </a>
+                            <button
+                              onClick={() => {
+                                window.dispatchEvent(new CustomEvent('addVideoToEditor', { 
+                                  detail: { videoUrl: video.videoUrl } 
+                                }));
+                                toast.success('הסרטון נוסף לעורך!');
+                                setHistoryOpen(false);
+                              }}
+                              className="flex-1 bg-purple-600 hover:bg-purple-700 text-white px-3 py-2 rounded-lg text-sm font-bold transition-all"
+                            >
+                              לעורך
+                            </button>
+                          </div>
                         </div>
                       </div>
                     ))}
