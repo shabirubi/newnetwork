@@ -20,7 +20,7 @@ export default function VideoCreator() {
   const [uploadingFile, setUploadingFile] = useState(false);
   const messagesEndRef = useRef(null);
 
-  // Load history from Database + localStorage (merged)
+  // Load history from Database + localStorage + HeyGen (merged)
   useEffect(() => {
     const loadHistory = async () => {
       const allVideos = [];
@@ -38,7 +38,8 @@ export default function VideoCreator() {
             id: v.id,
             title: v.title,
             videoUrl: v.video_url,
-            timestamp: v.created_date
+            timestamp: v.created_date,
+            source: 'db'
           }));
           allVideos.push(...mapped);
           console.log('📦 Loaded from Database:', mapped.length);
@@ -51,16 +52,37 @@ export default function VideoCreator() {
       const saved = localStorage.getItem('videoDownloadHistory');
       if (saved) {
         try {
-          const localVideos = JSON.parse(saved);
+          const localVideos = JSON.parse(saved).map(v => ({ ...v, source: 'local' }));
           allVideos.push(...localVideos);
           console.log('📦 Loaded from localStorage:', localVideos.length);
         } catch (e) {}
       }
       
-      // 3. Remove duplicates by videoUrl
+      // 3. Load from HeyGen
+      try {
+        const { data } = await base44.functions.invoke('listHeyGenVideos', {});
+        if (data?.videos) {
+          const heygenVideos = data.videos
+            .filter(v => v.status === 'completed' && v.video_url)
+            .map(v => ({
+              id: v.id,
+              title: v.title || `Video ${v.id.substring(0, 8)}`,
+              videoUrl: v.video_url,
+              timestamp: v.created_at || new Date().toISOString(),
+              source: 'heygen',
+              thumbnail: v.thumbnail_url
+            }));
+          allVideos.push(...heygenVideos);
+          console.log('📦 Loaded from HeyGen:', heygenVideos.length);
+        }
+      } catch (e) {
+        console.log('⚠️ HeyGen load failed:', e.message);
+      }
+      
+      // 4. Remove duplicates by videoUrl, sort by timestamp
       const uniqueVideos = Array.from(
         new Map(allVideos.map(v => [v.videoUrl, v])).values()
-      ).slice(0, 50);
+      ).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp)).slice(0, 50);
       
       console.log('✅ Total unique videos loaded:', uniqueVideos.length);
       setGeneratedVideos(uniqueVideos);
