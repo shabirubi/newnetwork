@@ -8,47 +8,92 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'HeyGen API key not configured' }, { status: 500 });
     }
 
-    console.log('📋 Fetching ALL videos from HeyGen (including completed ones)...');
+    console.log('📋 Fetching ALL videos from HeyGen API...');
 
-    // Get all videos with pagination
+    // Try multiple API endpoints to get ALL videos
     let allVideos = [];
-    let page = 0;
-    let hasMore = true;
+    
+    // Method 1: Get video list with pagination
+    try {
+      console.log('📥 Method 1: Trying v1/video.list...');
+      for (let page = 0; page < 20; page++) {
+        const response = await fetch(`https://api.heygen.com/v1/video.list?page=${page}&limit=100`, {
+          method: 'GET',
+          headers: {
+            'X-Api-Key': HEYGEN_API_KEY,
+            'Content-Type': 'application/json'
+          }
+        });
 
-    while (hasMore && page < 10) {
-      const response = await fetch(`https://api.heygen.com/v1/video.list?page=${page}&limit=100`, {
+        if (response.ok) {
+          const data = await response.json();
+          console.log(`📦 v1/video.list Page ${page} Response:`, JSON.stringify(data));
+          
+          const videos = data.data?.videos || [];
+          if (videos.length > 0) {
+            allVideos.push(...videos);
+            console.log(`✅ Page ${page}: Added ${videos.length} videos, total: ${allVideos.length}`);
+          } else {
+            console.log(`🛑 Page ${page}: No more videos, stopping pagination`);
+            break;
+          }
+        } else {
+          console.log(`⚠️ v1/video.list failed with status ${response.status}`);
+          break;
+        }
+      }
+    } catch (e) {
+      console.error('❌ Method 1 failed:', e.message);
+    }
+
+    // Method 2: Try v2/video/list
+    try {
+      console.log('📥 Method 2: Trying v2/video/list...');
+      const response2 = await fetch('https://api.heygen.com/v2/video/list', {
+        method: 'GET',
         headers: {
-          'X-Api-Key': HEYGEN_API_KEY
+          'X-Api-Key': HEYGEN_API_KEY,
+          'Content-Type': 'application/json'
         }
       });
 
-      const responseText = await response.text();
-      console.log(`📥 Page ${page} Response:`, response.status);
-
-      if (!response.ok) {
-        console.error('❌ Failed to fetch videos:', responseText);
-        break;
+      if (response2.ok) {
+        const data2 = await response2.json();
+        console.log('📦 v2/video/list Response:', JSON.stringify(data2));
+        const videos2 = data2.data?.videos || [];
+        
+        // Merge without duplicates
+        for (const video of videos2) {
+          if (!allVideos.find(v => v.video_id === video.video_id)) {
+            allVideos.push(video);
+          }
+        }
+        console.log(`✅ v2/video/list: Total after merge: ${allVideos.length}`);
       }
-
-      const data = JSON.parse(responseText);
-      const videos = data.data?.videos || [];
-      
-      console.log(`📦 Page ${page}: Found ${videos.length} videos`);
-      
-      if (videos.length > 0) {
-        allVideos.push(...videos);
-        page++;
-      } else {
-        hasMore = false;
-      }
-
-      // Also check if there's a next page indicator
-      if (!data.data?.has_more) {
-        hasMore = false;
-      }
+    } catch (e) {
+      console.error('❌ Method 2 failed:', e.message);
     }
 
-    console.log(`✅ TOTAL: ${allVideos.length} videos found across all pages`);
+    // Method 3: Try listing templates/projects
+    try {
+      console.log('📥 Method 3: Trying v1/template.list...');
+      const response3 = await fetch('https://api.heygen.com/v1/template.list', {
+        method: 'GET',
+        headers: {
+          'X-Api-Key': HEYGEN_API_KEY,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      if (response3.ok) {
+        const data3 = await response3.json();
+        console.log('📦 v1/template.list Response:', JSON.stringify(data3));
+      }
+    } catch (e) {
+      console.error('❌ Method 3 failed:', e.message);
+    }
+
+    console.log(`✅ FINAL TOTAL: ${allVideos.length} videos found`);
 
     // Map and return all videos
     const mappedVideos = allVideos.map(v => ({
@@ -58,10 +103,11 @@ Deno.serve(async (req) => {
       video_url: v.video_url,
       thumbnail_url: v.thumbnail_url,
       created_at: v.created_at,
-      duration: v.duration
+      duration: v.duration,
+      raw: v // Include raw data for debugging
     }));
 
-    console.log('🎬 Mapped videos:', mappedVideos.length);
+    console.log('🎬 Returning mapped videos:', mappedVideos.length);
 
     return Response.json({
       total: mappedVideos.length,
@@ -69,7 +115,7 @@ Deno.serve(async (req) => {
     });
 
   } catch (error) {
-    console.error('🔴 Error:', error);
+    console.error('🔴 Fatal Error:', error);
     return Response.json({ error: error.message }, { status: 500 });
   }
 });
