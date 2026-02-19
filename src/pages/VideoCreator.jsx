@@ -11,7 +11,20 @@ import TypewriterText from "../components/videoeditor/TypewriterText";
 export default function VideoCreator() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [generatedVideos, setGeneratedVideos] = useState([]);
+  const [generatedVideos, setGeneratedVideos] = useState(() => {
+    // Load from localStorage on init
+    try {
+      const saved = localStorage.getItem('videoDownloadHistory');
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        console.log('🔥 INIT STATE:', parsed.length, 'videos from localStorage');
+        return parsed;
+      }
+    } catch (e) {
+      console.error('Init error:', e);
+    }
+    return [];
+  });
   const [historyOpen, setHistoryOpen] = useState(false);
   const [currentVideo, setCurrentVideo] = useState(null);
   const [conversationId, setConversationId] = useState(null);
@@ -106,8 +119,12 @@ export default function VideoCreator() {
         console.log('💾 Saved to localStorage');
       }
       
-      setGeneratedVideos(uniqueVideos);
-      console.log('✅ State updated with', uniqueVideos.length, 'videos');
+      if (uniqueVideos.length > 0) {
+        setGeneratedVideos(uniqueVideos);
+        console.log('✅ State updated with', uniqueVideos.length, 'videos');
+      } else {
+        console.warn('⚠️ NO VIDEOS FOUND - keeping existing state');
+      }
     };
     
     loadHistory();
