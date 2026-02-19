@@ -20,37 +20,54 @@ export default function VideoCreator() {
   const [uploadingFile, setUploadingFile] = useState(false);
   const messagesEndRef = useRef(null);
 
-  // Load history from HeyGen
+  // Load history from localStorage + HeyGen
   useEffect(() => {
     const loadHistory = async () => {
+      const allVideos = [];
+      
+      // 1. Load from localStorage (new videos)
       try {
-        console.log('🚀 LOADING HEYGEN VIDEOS...');
-        const response = await base44.functions.invoke('listHeyGenVideos', {});
-        console.log('📦 RESPONSE:', response);
-        
-        if (!response?.data?.videos) {
-          console.error('❌ NO DATA');
-          return;
+        const saved = localStorage.getItem('videoDownloadHistory');
+        if (saved) {
+          const localVideos = JSON.parse(saved);
+          allVideos.push(...localVideos);
+          console.log('📦 localStorage:', localVideos.length, 'videos');
         }
-        
-        const videos = response.data.videos
-          .filter(v => v.status === 'completed' && v.video_url)
-          .map(v => ({
-            id: v.id,
-            title: v.title || `Video ${v.id.substring(0, 8)}`,
-            videoUrl: v.video_url,
-            timestamp: v.created_at ? new Date(v.created_at * 1000).toISOString() : new Date().toISOString(),
-            source: 'heygen',
-            thumbnail: v.thumbnail_url
-          }))
-          .sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
-          .slice(0, 100);
-        
-        console.log('✅ SETTING', videos.length, 'VIDEOS');
-        setGeneratedVideos(videos);
-      } catch (error) {
-        console.error('❌ ERROR:', error);
+      } catch (e) {
+        console.error('❌ localStorage error:', e);
       }
+      
+      // 2. Load from HeyGen
+      try {
+        console.log('🔄 Fetching HeyGen...');
+        const response = await base44.functions.invoke('listHeyGenVideos', {});
+        
+        if (response?.data?.videos) {
+          const heygenVideos = response.data.videos
+            .filter(v => v.status === 'completed' && v.video_url)
+            .map(v => ({
+              id: v.id,
+              title: v.title || `Video ${v.id.substring(0, 8)}`,
+              videoUrl: v.video_url,
+              timestamp: v.created_at ? new Date(v.created_at * 1000).toISOString() : new Date().toISOString(),
+              source: 'heygen',
+              thumbnail: v.thumbnail_url
+            }));
+          
+          allVideos.push(...heygenVideos);
+          console.log('📦 HeyGen:', heygenVideos.length, 'videos');
+        }
+      } catch (e) {
+        console.error('❌ HeyGen error:', e);
+      }
+      
+      // 3. Merge and deduplicate by videoUrl
+      const uniqueVideos = Array.from(
+        new Map(allVideos.map(v => [v.videoUrl, v])).values()
+      ).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      
+      console.log('✅ TOTAL:', uniqueVideos.length, 'unique videos');
+      setGeneratedVideos(uniqueVideos);
     };
     loadHistory();
   }, []);
