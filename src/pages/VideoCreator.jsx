@@ -381,7 +381,7 @@ export default function VideoCreator() {
             </div>
           )}
 
-          {messages.length > 0 && !currentVideo && (
+          {messages.length > 0 && !currentVideo && !loading && (
             <div className="w-full max-w-3xl space-y-4 px-4 overflow-y-auto max-h-[50vh] pb-32">
               {messages.map((msg, idx) => (
                 <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
