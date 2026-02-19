@@ -8,7 +8,8 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'HeyGen API key not configured' }, { status: 500 });
     }
 
-    console.log('📋 Fetching ALL videos from HeyGen using pagination...');
+    console.log('📋 Fetching ALL videos from HeyGen...');
+    console.log('🔑 API Key:', HEYGEN_API_KEY.substring(0, 10) + '...');
 
     let allVideos = [];
     let paginationToken = null;
@@ -23,7 +24,7 @@ Deno.serve(async (req) => {
         ? `https://api.heygen.com/v2/video/list?limit=100&pagination_token=${paginationToken}`
         : `https://api.heygen.com/v2/video/list?limit=100`;
       
-      console.log(`📥 Iteration ${iteration}: Fetching from ${url}`);
+      console.log(`\n📥 Iteration ${iteration}: GET ${url}`);
 
       const response = await fetch(url, {
         method: 'GET',
@@ -33,22 +34,30 @@ Deno.serve(async (req) => {
         }
       });
 
+      const responseText = await response.text();
+      console.log(`📊 Status: ${response.status}`);
+      console.log(`📄 Full Response: ${responseText}`);
+
       if (!response.ok) {
-        const errorText = await response.text();
-        console.error(`❌ Request failed: ${response.status} - ${errorText}`);
+        console.error(`❌ Request failed: ${response.status} - ${responseText}`);
         break;
       }
 
-      const data = await response.json();
-      console.log(`📦 Iteration ${iteration} Response:`, JSON.stringify(data).substring(0, 500));
+      const data = JSON.parse(responseText);
       
       const videos = data.data?.videos || [];
+      console.log(`📦 Found ${videos.length} videos in this batch`);
+      
+      // Log each video
+      videos.forEach((v, idx) => {
+        console.log(`  ${idx + 1}. ID: ${v.video_id} | Title: ${v.video_title || v.title || 'No title'} | Status: ${v.status} | URL: ${v.video_url ? 'YES' : 'NO'}`);
+      });
       
       if (videos.length > 0) {
         allVideos.push(...videos);
-        console.log(`✅ Iteration ${iteration}: Added ${videos.length} videos, TOTAL: ${allVideos.length}`);
+        console.log(`✅ TOTAL SO FAR: ${allVideos.length} videos`);
       } else {
-        console.log(`🛑 Iteration ${iteration}: No videos returned, stopping`);
+        console.log(`🛑 No more videos, stopping`);
         break;
       }
 
@@ -56,14 +65,14 @@ Deno.serve(async (req) => {
       paginationToken = data.data?.pagination_token;
       
       if (!paginationToken) {
-        console.log('✅ No more pagination token, all videos fetched');
+        console.log('✅ No pagination token - reached end');
         break;
       }
       
-      console.log(`🔄 Next pagination token: ${paginationToken.substring(0, 50)}...`);
+      console.log(`🔄 Next token: ${paginationToken}`);
     }
 
-    console.log(`\n✅ FINAL RESULT: ${allVideos.length} total videos fetched\n`);
+    console.log(`\n🎬 FINAL COUNT: ${allVideos.length} videos\n`);
 
     // Map videos to our format
     const mappedVideos = allVideos.map(v => {
