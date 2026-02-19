@@ -126,38 +126,11 @@ Return only the script text in ${detectedLanguage}.`;
 
     console.log('✅ Video generation started:', videoId);
 
-    // Poll for video status with longer timeout
-    let attempts = 0;
-    const maxAttempts = 100; // 5 minutes
-    
-    while (attempts < maxAttempts) {
-      await new Promise(resolve => setTimeout(resolve, 3000));
-      
-      const statusResponse = await fetch(`https://api.heygen.com/v1/video_status.get?video_id=${videoId}`, {
-        headers: {
-          'X-Api-Key': HEYGEN_API_KEY
-        }
-      });
-      
-      const statusData = await statusResponse.json();
-      console.log(`📊 Attempt ${attempts + 1}:`, statusData.data?.status);
-      
-      if (statusData.data?.status === 'completed') {
-        console.log('✅ Video ready!', statusData.data?.video_url);
-        return Response.json({
-          video_url: statusData.data.video_url,
-          video_id: videoId
-        });
-      }
-      
-      if (statusData.data?.status === 'failed') {
-        return Response.json({ error: 'Video generation failed' }, { status: 500 });
-      }
-      
-      attempts++;
-    }
-    
-    return Response.json({ error: 'Timeout' }, { status: 500 });
+    // Return video_id immediately - client will poll
+    return Response.json({
+      video_id: videoId,
+      status: 'processing'
+    });
 
   } catch (error) {
     console.error('🔴 Error:', error);
