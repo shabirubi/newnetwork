@@ -599,11 +599,9 @@ export default function VideoCreator() {
                   <div className="absolute top-1.5 left-1.5 bg-purple-600 px-1.5 py-0.5 rounded text-white text-xs font-bold">
                     #{idx + 1}
                   </div>
-                  {video.source === 'heygen' && (
-                    <div className="absolute top-1.5 right-1.5 bg-green-600 px-1.5 py-0.5 rounded text-white text-xs font-bold">
-                      HeyGen
-                    </div>
-                  )}
+                  <div className="absolute top-1.5 right-1.5 bg-gradient-to-r from-purple-600 to-pink-600 px-1.5 py-0.5 rounded text-white text-xs font-bold">
+                    Digital Dreams
+                  </div>
                 </div>
                 <div className="p-2 space-y-1">
                   <p className="text-white text-xs font-medium truncate">{video.title}</p>
