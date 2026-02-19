@@ -340,20 +340,6 @@ export default function VideoCreator() {
 
   return (
     <div className="h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex flex-col overflow-hidden" dir="rtl">
-      {/* DEBUG PANEL */}
-      <div className="fixed top-20 left-4 z-[9999] bg-black/90 border border-red-500 p-3 rounded-lg text-xs text-white max-w-xs">
-        <div className="font-bold text-red-400 mb-2">🔍 DEBUG</div>
-        <div className="space-y-1">
-          <div>סה"כ: <span className="text-green-400 font-bold">{generatedVideos.length}</span></div>
-          <div>localStorage: <span className="text-blue-400">{localStorage.getItem('videoDownloadHistory') ? JSON.parse(localStorage.getItem('videoDownloadHistory')).length : 0}</span></div>
-          <div className="text-[10px] text-gray-400 mt-2">
-            {generatedVideos.slice(0, 3).map((v, i) => (
-              <div key={i}>#{i+1}: {v.title.substring(0, 20)}...</div>
-            ))}
-          </div>
-        </div>
-      </div>
-
       {/* Header - Mobile Optimized */}
       <div className="bg-black/80 backdrop-blur-xl border-b border-gray-800 px-3 sm:px-4 py-3 flex items-center justify-between z-10 flex-shrink-0">
         <div className="flex items-center gap-2 sm:gap-3">
