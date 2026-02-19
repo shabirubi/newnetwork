@@ -60,23 +60,35 @@ export default function VideoCreator() {
       
       // 3. Load from HeyGen
       try {
+        console.log('🔄 Fetching from HeyGen...');
         const { data } = await base44.functions.invoke('listHeyGenVideos', {});
+        console.log('📦 HeyGen response:', data?.total, 'total videos');
+        
         if (data?.videos) {
+          console.log('🔍 First 3 videos:', data.videos.slice(0, 3));
+          
           const heygenVideos = data.videos
-            .filter(v => v.status === 'completed' && v.video_url)
+            .filter(v => {
+              const valid = v.status === 'completed' && v.video_url;
+              if (!valid) {
+                console.log(`❌ Skipped: ${v.id} - status:${v.status}, has_url:${!!v.video_url}`);
+              }
+              return valid;
+            })
             .map(v => ({
               id: v.id,
               title: v.title || `Video ${v.id.substring(0, 8)}`,
               videoUrl: v.video_url,
-              timestamp: v.created_at || new Date().toISOString(),
+              timestamp: v.created_at ? new Date(v.created_at * 1000).toISOString() : new Date().toISOString(),
               source: 'heygen',
               thumbnail: v.thumbnail_url
             }));
+          
+          console.log('✅ Valid HeyGen videos:', heygenVideos.length);
           allVideos.push(...heygenVideos);
-          console.log('📦 Loaded from HeyGen:', heygenVideos.length);
         }
       } catch (e) {
-        console.log('⚠️ HeyGen load failed:', e.message);
+        console.error('❌ HeyGen load failed:', e.message);
       }
       
       // 4. Remove duplicates by videoUrl, sort by timestamp
