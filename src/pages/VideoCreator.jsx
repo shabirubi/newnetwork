@@ -584,7 +584,7 @@ export default function VideoCreator() {
               </div>
             )}
 
-            {generatedVideos.map((video, idx) => (
+            {!loadingHistory && generatedVideos.map((video, idx) => (
               <motion.div
                 key={video.id}
                 initial={{ opacity: 0, x: 20 }}
