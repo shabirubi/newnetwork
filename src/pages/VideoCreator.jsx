@@ -76,21 +76,25 @@ export default function VideoCreator() {
       const lastMsg = data.messages[data.messages.length - 1];
       if (lastMsg?.tool_calls) {
         lastMsg.tool_calls.forEach(tc => {
+          console.log('🔧 Tool call:', tc.name, 'Status:', tc.status);
+          
           if (tc.status === 'completed' && tc.results) {
             try {
               const result = typeof tc.results === 'string' ? JSON.parse(tc.results) : tc.results;
+              console.log('📦 Tool result:', result);
               
               // If we got video_id, start polling
               if (result.video_id && !result.video_url) {
                 console.log('🎬 Got video_id:', result.video_id, 'Starting polling...');
                 setLoading(true);
+                toast.loading('מתחיל ליצור סרטון...', { id: 'creating' });
                 const userMsg = data.messages.find(m => m.role === 'user');
                 pollVideoStatus(result.video_id, userMsg?.content || 'סרטון AI');
               }
               
               // If we got video_url directly
               if (result.video_url) {
-                setCurrentVideo(result.video_url);
+                console.log('✅ Got video_url directly:', result.video_url);
                 const userMsg = data.messages.find(m => m.role === 'user');
                 const title = userMsg?.content?.substring(0, 50) || "סרטון AI";
                 const newVideo = {
@@ -102,11 +106,12 @@ export default function VideoCreator() {
                 const updated = [newVideo, ...generatedVideos].slice(0, 20);
                 setGeneratedVideos(updated);
                 localStorage.setItem('videoDownloadHistory', JSON.stringify(updated));
+                setCurrentVideo(result.video_url);
                 setLoading(false);
                 toast.success('✅ הסרטון מוכן!', { id: 'creating' });
               }
             } catch (e) {
-              console.error('Error parsing result:', e);
+              console.error('❌ Error parsing result:', e);
             }
           }
         });
