@@ -35,15 +35,47 @@ Deno.serve(async (req) => {
 
     const statusData = JSON.parse(responseText);
     const status = statusData.data?.status;
-    const videoUrl = statusData.data?.video_url;
+    let videoUrl = statusData.data?.video_url;
     const error = statusData.data?.error;
+
+    console.log('📊 Status:', status, 'URL:', videoUrl ? '✅' : '⏳');
+
+    // אם הסרטון מוכן ויש URL - נעלה אותו לאחסון שלנו
+    if (status === 'completed' && videoUrl) {
+      try {
+        console.log('📥 Downloading video from HeyGen:', videoUrl);
+        
+        // הורדה מ-HeyGen
+        const videoResponse = await fetch(videoUrl);
+        if (!videoResponse.ok) {
+          console.error('❌ Failed to download video');
+        } else {
+          const videoBlob = await videoResponse.blob();
+          const sizeInMB = (videoBlob.size / 1024 / 1024).toFixed(2);
+          console.log('📦 Video size:', sizeInMB, 'MB');
+
+          // העלאה לאחסון שלנו
+          const fileName = `heygen_${video_id}_${Date.now()}.mp4`;
+          const file = new File([videoBlob], fileName, { type: 'video/mp4' });
+          
+          console.log('⬆️ Uploading to our storage...');
+          const { file_url } = await base44.asServiceRole.integrations.Core.UploadFile({ file });
+          
+          console.log('✅ Uploaded successfully to our storage:', file_url);
+          videoUrl = file_url; // החזר את ה-URL שלנו במקום של HeyGen
+        }
+      } catch (uploadError) {
+        console.error('⚠️ Upload failed, using HeyGen URL:', uploadError.message);
+        // אם ההעלאה נכשלה - נשתמש ב-URL המקורי
+      }
+    }
 
     return Response.json({
       video_id,
       status,
       video_url: videoUrl,
       error,
-      data: statusData.data
+      stored_locally: videoUrl && !videoUrl.includes('heygen.com')
     });
 
   } catch (error) {
