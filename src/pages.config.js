@@ -85,6 +85,7 @@ import VODContent from './pages/VODContent';
 import VideoCreator from './pages/VideoCreator';
 import VideoEditor from './pages/VideoEditor';
 import WarRoom from './pages/WarRoom';
+import HeyGenGallery from './pages/HeyGenGallery';
 import __Layout from './Layout.jsx';
 
 
@@ -127,6 +128,7 @@ export const PAGES = {
     "VideoCreator": VideoCreator,
     "VideoEditor": VideoEditor,
     "WarRoom": WarRoom,
+    "HeyGenGallery": HeyGenGallery,
 }
 
 export const pagesConfig = {
