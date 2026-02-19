@@ -66,6 +66,16 @@ export default function VideoCreator() {
           if (tc.status === 'completed' && tc.results) {
             try {
               const result = typeof tc.results === 'string' ? JSON.parse(tc.results) : tc.results;
+              
+              // If we got video_id, start polling
+              if (result.video_id && !result.video_url) {
+                console.log('🎬 Got video_id:', result.video_id, 'Starting polling...');
+                setLoading(true);
+                const userMsg = data.messages.find(m => m.role === 'user');
+                pollVideoStatus(result.video_id, userMsg?.content || 'סרטון AI');
+              }
+              
+              // If we got video_url directly
               if (result.video_url) {
                 setCurrentVideo(result.video_url);
                 const userMsg = data.messages.find(m => m.role === 'user');
@@ -82,13 +92,15 @@ export default function VideoCreator() {
                 setLoading(false);
                 toast.success('✅ הסרטון מוכן!', { id: 'creating' });
               }
-            } catch (e) {}
+            } catch (e) {
+              console.error('Error parsing result:', e);
+            }
           }
         });
       }
     });
     return () => unsubscribe();
-  }, [conversationId]);
+  }, [conversationId, generatedVideos]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
