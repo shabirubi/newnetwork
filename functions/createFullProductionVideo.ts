@@ -125,14 +125,13 @@ Return only the script text in ${detectedLanguage}.`;
     }
 
     console.log('✅ Video generation started:', videoId);
-    console.log('⏳ Waiting for video to complete...');
 
-    // Poll for video status
+    // Poll for video status with longer timeout
     let attempts = 0;
-    const maxAttempts = 120; // 6 minutes (120 * 3 seconds)
+    const maxAttempts = 100; // 5 minutes
     
     while (attempts < maxAttempts) {
-      await new Promise(resolve => setTimeout(resolve, 3000)); // Wait 3 seconds
+      await new Promise(resolve => setTimeout(resolve, 3000));
       
       const statusResponse = await fetch(`https://api.heygen.com/v1/video_status.get?video_id=${videoId}`, {
         headers: {
@@ -141,36 +140,24 @@ Return only the script text in ${detectedLanguage}.`;
       });
       
       const statusData = await statusResponse.json();
-      console.log(`📊 Status check ${attempts + 1}:`, statusData.data?.status);
+      console.log(`📊 Attempt ${attempts + 1}:`, statusData.data?.status);
       
       if (statusData.data?.status === 'completed') {
-        const videoUrl = statusData.data?.video_url;
-        console.log('✅ Video completed!', videoUrl);
-        
+        console.log('✅ Video ready!', statusData.data?.video_url);
         return Response.json({
-          success: true,
-          video_url: videoUrl,
-          video_id: videoId,
-          status: 'completed'
+          video_url: statusData.data.video_url,
+          video_id: videoId
         });
       }
       
       if (statusData.data?.status === 'failed') {
-        console.error('❌ Video generation failed:', statusData.data?.error);
-        return Response.json({ 
-          error: 'Video generation failed: ' + (statusData.data?.error || 'Unknown error')
-        }, { status: 500 });
+        return Response.json({ error: 'Video generation failed' }, { status: 500 });
       }
       
       attempts++;
     }
     
-    // Timeout
-    console.log('⏱️ Polling timeout reached');
-    return Response.json({ 
-      error: 'Video generation timeout - still processing',
-      video_id: videoId 
-    }, { status: 500 });
+    return Response.json({ error: 'Timeout' }, { status: 500 });
 
   } catch (error) {
     console.error('🔴 Error:', error);
