@@ -580,16 +580,18 @@ export default function VideoCreator() {
 
         {/* Right Sidebar - Timeline - Hidden on Mobile */}
         <div className="hidden lg:flex lg:w-80 bg-black/50 border-r border-gray-800 flex-col">
-          <div className="p-4 border-b border-gray-800">
+          <div className="p-4 border-b border-gray-800 sticky top-0 z-10">
             <h3 className="text-white font-bold">ציר הזמן</h3>
-            <p className="text-gray-500 text-xs">כל הסרטונים שנוצרו</p>
+            <p className="text-gray-500 text-xs">
+              {loadingHistory ? 'טוען היסטוריה...' : `${generatedVideos.length} סרטונים`}
+            </p>
           </div>
           
           <div className="flex-1 overflow-y-auto p-3 space-y-2">
             {loadingHistory && (
               <div className="flex flex-col items-center justify-center py-12">
                 <Loader2 className="w-6 h-6 text-purple-500 animate-spin mb-2" />
-                <p className="text-gray-500 text-xs">טוען היסטוריה...</p>
+                <p className="text-gray-500 text-xs">טוען {generatedVideos.length} סרטונים...</p>
               </div>
             )}
             {!loadingHistory && generatedVideos.length === 0 && (
