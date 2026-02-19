@@ -587,6 +587,29 @@ export default function Home() {
         <Radio className="w-6 h-6" />
       </motion.button>
 
+      {/* Floating Digital Dreams Button */}
+      <Link to={createPageUrl("VideoCreator")}>
+        <motion.button
+          className="fixed bottom-40 left-4 z-50 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white p-4 rounded-full shadow-2xl shadow-purple-500/50 border-2 border-purple-500/50"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          animate={{
+            boxShadow: [
+              '0 0 20px rgba(168, 85, 247, 0.5)',
+              '0 0 40px rgba(168, 85, 247, 0.8)',
+              '0 0 20px rgba(168, 85, 247, 0.5)'
+            ]
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        >
+          <Video className="w-6 h-6" />
+        </motion.button>
+      </Link>
+
       {/* Studio Sidebar */}
       <StudioSidebar />
 
