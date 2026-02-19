@@ -530,10 +530,12 @@ export default function VideoCreator() {
                 key={video.id}
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
-                onClick={() => setCurrentVideo(video.videoUrl)}
-                className="bg-gray-900 rounded-lg overflow-hidden border border-gray-800 hover:border-purple-500/50 transition-all cursor-pointer"
+                className="bg-gray-900 rounded-lg overflow-hidden border border-gray-800 hover:border-purple-500/50 transition-all"
               >
-                <div className="relative aspect-video bg-black">
+                <div 
+                  className="relative aspect-video bg-black cursor-pointer"
+                  onClick={() => setCurrentVideo(video.videoUrl)}
+                >
                   <video 
                     src={video.videoUrl} 
                     className="w-full h-full object-cover"
@@ -541,10 +543,27 @@ export default function VideoCreator() {
                   <div className="absolute top-1.5 left-1.5 bg-purple-600 px-1.5 py-0.5 rounded text-white text-xs font-bold">
                     #{idx + 1}
                   </div>
+                  {video.source === 'heygen' && (
+                    <div className="absolute top-1.5 right-1.5 bg-green-600 px-1.5 py-0.5 rounded text-white text-xs font-bold">
+                      HeyGen
+                    </div>
+                  )}
                 </div>
-                <div className="p-2">
+                <div className="p-2 space-y-1">
                   <p className="text-white text-xs font-medium truncate">{video.title}</p>
-                  <p className="text-gray-500 text-[10px] mt-0.5">{new Date(video.timestamp).toLocaleDateString('he-IL')}</p>
+                  <p className="text-gray-500 text-[10px]">{new Date(video.timestamp).toLocaleDateString('he-IL')}</p>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      window.dispatchEvent(new CustomEvent('addVideoToEditor', { 
+                        detail: { videoUrl: video.videoUrl } 
+                      }));
+                      toast.success('הסרטון נוסף לעורך!');
+                    }}
+                    className="w-full bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded text-[10px] font-bold transition-all"
+                  >
+                    הוסף לעורך
+                  </button>
                 </div>
               </motion.div>
             ))}
