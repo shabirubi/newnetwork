@@ -20,16 +20,19 @@ export default function VideoCreator() {
   const [uploadingFile, setUploadingFile] = useState(false);
   const messagesEndRef = useRef(null);
 
-  // Load history from Database + localStorage
+  // Load history from Database + localStorage (merged)
   useEffect(() => {
     const loadHistory = async () => {
+      const allVideos = [];
+      
+      // 1. Try to load from Database
       try {
         const user = await base44.auth.me();
         if (user?.email) {
           const dbVideos = await base44.entities.UserVideo.filter(
             { uploader_email: user.email, feed: 'user-videos' },
             '-created_date',
-            20
+            50
           );
           const mapped = dbVideos.map(v => ({
             id: v.id,
@@ -37,20 +40,30 @@ export default function VideoCreator() {
             videoUrl: v.video_url,
             timestamp: v.created_date
           }));
-          setGeneratedVideos(mapped);
-          console.log('✅ Loaded from Database:', mapped.length);
-          return;
+          allVideos.push(...mapped);
+          console.log('📦 Loaded from Database:', mapped.length);
         }
       } catch (e) {
-        console.log('No DB videos, loading from localStorage');
+        console.log('⚠️ DB load skipped');
       }
       
+      // 2. Load from localStorage
       const saved = localStorage.getItem('videoDownloadHistory');
       if (saved) {
         try {
-          setGeneratedVideos(JSON.parse(saved));
+          const localVideos = JSON.parse(saved);
+          allVideos.push(...localVideos);
+          console.log('📦 Loaded from localStorage:', localVideos.length);
         } catch (e) {}
       }
+      
+      // 3. Remove duplicates by videoUrl
+      const uniqueVideos = Array.from(
+        new Map(allVideos.map(v => [v.videoUrl, v])).values()
+      ).slice(0, 50);
+      
+      console.log('✅ Total unique videos loaded:', uniqueVideos.length);
+      setGeneratedVideos(uniqueVideos);
     };
     loadHistory();
   }, []);
