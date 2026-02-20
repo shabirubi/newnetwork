@@ -42,29 +42,29 @@ export default function VideoCreator() {
         if (response?.data?.videos && Array.isArray(response.data.videos)) {
           console.log('✅✅✅ Found', response.data.videos.length, 'videos from HeyGen API!');
           
-          const heygenVideos = response.data.videos.map(v => ({
+          const digitalDreamsVideos = response.data.videos.map(v => ({
             id: v.id,
             title: v.title || `Video ${v.id.substring(0, 8)}`,
             videoUrl: v.video_url,
             timestamp: v.created_at ? new Date(v.created_at * 1000).toISOString() : new Date().toISOString(),
-            source: 'heygen',
+            source: 'digital-dreams',
             thumbnail: v.thumbnail_url,
             duration: v.duration
           }));
           
-          allVideos.push(...heygenVideos);
-          console.log('✅ HeyGen:', heygenVideos.length, 'videos added to list');
-          console.log('📋 First HeyGen video:', heygenVideos[0]);
-          console.log('📋 Last HeyGen video:', heygenVideos[heygenVideos.length - 1]);
+          allVideos.push(...digitalDreamsVideos);
+          console.log('✅ Digital Dreams:', digitalDreamsVideos.length, 'videos added to list');
+          console.log('📋 First Digital Dreams video:', digitalDreamsVideos[0]);
+          console.log('📋 Last Digital Dreams video:', digitalDreamsVideos[digitalDreamsVideos.length - 1]);
           
-          toast.success(`✅ נטענו ${heygenVideos.length} סרטונים מ-HeyGen!`, { id: 'loading-heygen', duration: 5000 });
+          toast.success(`✅ נטענו ${digitalDreamsVideos.length} סרטונים!`, { id: 'loading-heygen', duration: 5000 });
         } else {
-          console.warn('⚠️ HeyGen: No videos in response');
-          toast.error('לא נמצאו סרטונים ב-HeyGen', { id: 'loading-heygen' });
+          console.warn('⚠️ Digital Dreams: No videos in response');
+          toast.error('לא נמצאו סרטונים', { id: 'loading-heygen' });
         }
       } catch (e) {
-        console.error('❌ HeyGen ERROR:', e);
-        toast.error('שגיאה בטעינת HeyGen: ' + e.message, { id: 'loading-heygen' });
+        console.error('❌ Digital Dreams ERROR:', e);
+        toast.error('שגיאה בטעינת סרטונים: ' + e.message, { id: 'loading-heygen' });
       }
       
       // 2. Load from Database
