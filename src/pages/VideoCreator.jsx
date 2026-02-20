@@ -28,19 +28,19 @@ export default function VideoCreator() {
       setLoadingHistory(true);
       const allVideos = [];
       
-      // 1. Load from HeyGen FIRST (main source)
+      // 1. Load from Digital Dreams FIRST (main source)
       try {
-        console.log('🔄 Step 1: Fetching ALL HeyGen videos...');
-        toast.loading('טוען את כל הסרטונים מ-HeyGen...', { id: 'loading-heygen' });
+        console.log('🔄 Step 1: Fetching ALL Digital Dreams videos...');
+        toast.loading('טוען את כל הסרטונים שלך...', { id: 'loading-heygen' });
         
         const response = await base44.functions.invoke('listHeyGenVideos', {});
-        console.log('📡 HeyGen Full Response:', response);
+        console.log('📡 Digital Dreams Full Response:', response);
         console.log('📡 Response Data:', response?.data);
         console.log('📡 Total videos:', response?.data?.total);
         console.log('📡 Videos Array length:', response?.data?.videos?.length);
         
         if (response?.data?.videos && Array.isArray(response.data.videos)) {
-          console.log('✅✅✅ Found', response.data.videos.length, 'videos from HeyGen API!');
+          console.log('✅✅✅ Found', response.data.videos.length, 'videos from Digital Dreams!');
           
           const digitalDreamsVideos = response.data.videos.map(v => ({
             id: v.id,
