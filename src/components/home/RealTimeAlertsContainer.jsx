@@ -200,11 +200,11 @@ export default function RealTimeAlertsContainer() {
                       className="flex-1 flex items-center justify-center gap-2 px-4 py-3 sm:py-3.5 bg-blue-600/80 hover:bg-blue-600 disabled:bg-gray-600 text-white rounded-lg font-semibold transition-colors text-sm sm:text-base"
                     >
                       {loadingId === alert.id ? (
-                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <Loader2 className="w-5 h-5 animate-spin" />
                       ) : playingId === alert.id ? (
-                        <Pause className="w-4 h-4" />
+                        <Pause className="w-5 h-5" />
                       ) : (
-                        <Play className="w-4 h-4" />
+                        <Play className="w-5 h-5" />
                       )}
                       <span>{loadingId === alert.id ? 'טוען...' : playingId === alert.id ? 'עצור' : 'הפעל'}</span>
                     </button>
