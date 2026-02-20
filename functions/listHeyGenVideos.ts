@@ -52,23 +52,54 @@ Deno.serve(async (req) => {
 
     console.log(`📦 Found ${allVideos.length} total videos from list API`);
 
-    // Log sample video to see structure
-    if (allVideos.length > 0) {
-      console.log('📋 Sample video structure:', JSON.stringify(allVideos[0], null, 2));
+    // Get only completed videos
+    const completedVideos = allVideos.filter(v => v.status === 'completed');
+    console.log(`✅ ${completedVideos.length} completed videos`);
+
+    // Fetch video URLs for completed videos in batches
+    const result = [];
+    const batchSize = 50;
+    
+    for (let i = 0; i < Math.min(completedVideos.length, 200); i += batchSize) {
+      const batch = completedVideos.slice(i, i + batchSize);
+      console.log(`🔄 Fetching URLs for videos ${i}-${i + batch.length}...`);
+      
+      const batchPromises = batch.map(async (v) => {
+        try {
+          const detailResponse = await fetch(
+            `https://api.heygen.com/v1/video_status.get?video_id=${v.video_id}`,
+            {
+              method: 'GET',
+              headers: {
+                'X-Api-Key': HEYGEN_API_KEY,
+                'Content-Type': 'application/json'
+              }
+            }
+          );
+          
+          if (detailResponse.ok) {
+            const detailData = await detailResponse.json();
+            return {
+              id: v.video_id,
+              title: v.video_title || `Video ${v.video_id.substring(0, 8)}`,
+              status: v.status,
+              video_url: detailData.data?.video_url,
+              thumbnail_url: detailData.data?.thumbnail_url,
+              created_at: v.created_at,
+              duration: detailData.data?.duration
+            };
+          }
+        } catch (e) {
+          console.error(`Failed to get URL for ${v.video_id}:`, e.message);
+        }
+        return null;
+      });
+      
+      const batchResults = await Promise.all(batchPromises);
+      result.push(...batchResults.filter(v => v && v.video_url));
     }
 
-    // Return ALL videos without filtering - let frontend handle it
-    const result = allVideos.map(v => ({
-      id: v.video_id,
-      title: v.video_title || v.title || `Video ${v.video_id?.substring(0, 8) || 'Unknown'}`,
-      status: v.status,
-      video_url: v.video_url || v.video,
-      thumbnail_url: v.thumbnail_url || v.thumbnail,
-      created_at: v.created_at,
-      duration: v.duration
-    }));
-
-    console.log(`\n✅ Returning ${result.length} videos (all statuses)`);
+    console.log(`\n✅ Returning ${result.length} videos with URLs`);
 
     return Response.json({
       total: result.length,
