@@ -215,9 +215,9 @@ export default function RealTimeAlertsContainer() {
                       className="flex-1 flex items-center justify-center gap-2 px-4 py-3 sm:py-3.5 bg-[#0080FF]/80 hover:bg-[#0080FF] disabled:bg-gray-600 text-white rounded-lg font-semibold transition-colors text-sm sm:text-base"
                     >
                       {generatingVideoId === alert.id ? (
-                        <Loader2 className="w-4 h-4 animate-spin" />
+                        <Loader2 className="w-5 h-5 animate-spin" />
                       ) : (
-                        <Film className="w-4 h-4" />
+                        <Film className="w-5 h-5" />
                       )}
                       <span>{generatingVideoId === alert.id ? 'יוצר...' : 'וידאו'}</span>
                     </button>
