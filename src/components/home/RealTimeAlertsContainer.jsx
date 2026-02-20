@@ -151,7 +151,7 @@ export default function RealTimeAlertsContainer() {
 
       {/* Alerts Grid */}
       {alerts.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 sm:gap-3 w-full">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2 sm:gap-3 w-full">
           <AnimatePresence>
             {alerts.map((alert, index) => (
               <motion.div
@@ -160,7 +160,7 @@ export default function RealTimeAlertsContainer() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ delay: index * 0.1 }}
-                className="group relative bg-gradient-to-br from-[#0080FF]/20 to-black/60 border border-[#0080FF]/30 rounded-lg sm:rounded-xl p-2 sm:p-3 hover:border-[#0080FF]/60 transition-all hover:shadow-[0_0_20px_rgba(0,128,255,0.3)]"
+                className="group relative bg-gradient-to-br from-[#0080FF]/20 to-black/60 border border-[#0080FF]/30 rounded-lg p-2 sm:p-3 hover:border-[#0080FF]/60 transition-all hover:shadow-[0_0_20px_rgba(0,128,255,0.3)]"
               >
                 {/* Badge */}
                 {alert.is_breaking && (
