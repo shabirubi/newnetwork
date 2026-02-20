@@ -12,29 +12,7 @@ export default function VideoCreator() {
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [loadingHistory, setLoadingHistory] = useState(true);
-  const [generatedVideos, setGeneratedVideos] = useState(() => {
-    // Load from localStorage on init
-    try {
-      const saved = localStorage.getItem('videoDownloadHistory');
-      if (saved) {
-        const parsed = JSON.parse(saved);
-        console.log('🔥 INIT STATE:', parsed.length, 'videos from localStorage');
-        return parsed;
-      }
-    } catch (e) {
-      console.error('Init error:', e);
-    }
-    return [];
-  });
-
-  // Save to localStorage whenever generatedVideos changes (ALWAYS save, even if empty but not on first load)
-  useEffect(() => {
-    // Don't save on mount - wait for data to load first
-    if (generatedVideos.length > 0 || localStorage.getItem('videoDownloadHistory')) {
-      localStorage.setItem('videoDownloadHistory', JSON.stringify(generatedVideos));
-      console.log('💾 Auto-saved to localStorage:', generatedVideos.length, 'videos');
-    }
-  }, [generatedVideos]);
+  const [generatedVideos, setGeneratedVideos] = useState([]);
   const [historyOpen, setHistoryOpen] = useState(false);
   const [currentVideo, setCurrentVideo] = useState(null);
   const [conversationId, setConversationId] = useState(null);
