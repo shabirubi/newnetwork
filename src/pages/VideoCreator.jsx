@@ -526,6 +526,18 @@ export default function VideoCreator() {
                       ? 'bg-purple-600 text-white' 
                       : 'bg-gray-800 text-gray-100'
                   }`}>
+                    {msg.file_urls && msg.file_urls.length > 0 && (
+                      <div className="mb-2 space-y-2">
+                        {msg.file_urls.map((url, i) => (
+                          <img 
+                            key={i}
+                            src={url} 
+                            alt="Uploaded" 
+                            className="max-w-full rounded-lg border-2 border-white/20"
+                          />
+                        ))}
+                      </div>
+                    )}
                     {msg.role === 'assistant' ? (
                       <p className="text-sm sm:text-base whitespace-pre-wrap">
                         <TypewriterText text={msg.content} speed={20} />
