@@ -33,7 +33,7 @@ import ReporterLiveChat from "../components/reporter/ReporterLiveChat";
 import ZakaMediaKitContainer from "../components/home/ZakaMediaKitContainer";
 import WeatherForecastModal from "../components/weather/WeatherForecastModal";
 
-      // Lazy loaded components
+// Lazy loaded components
 const NewsReels = React.lazy(() => import("../components/news/NewsReels"));
 const TrendingTopicsContainer = React.lazy(() => import("../components/home/TrendingTopicsContainer"));
 const TikTokNewsContainer = React.lazy(() => import("../components/home/TikTokNewsContainer"));
