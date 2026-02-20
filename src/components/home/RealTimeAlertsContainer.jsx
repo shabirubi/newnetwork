@@ -120,13 +120,13 @@ export default function RealTimeAlertsContainer() {
   }
 
   return (
-    <section className="flex justify-center w-full px-4 sm:px-4">
-      <div className="w-full max-w-3xl space-y-3 sm:space-y-4 overflow-hidden">
+    <section className="flex justify-center w-full px-4">
+      <div className="w-full max-w-3xl space-y-3 sm:space-y-4">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2 sm:gap-3">
-          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#0080FF]/20 flex items-center justify-center border-2 border-[#0080FF] animate-pulse">
-            <Radio className="w-4 h-4 sm:w-5 sm:h-5 text-[#0080FF]" />
+          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-black/80 flex items-center justify-center border-2 border-white/20">
+            <Radio className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
           </div>
           <h2 className="text-lg sm:text-2xl font-bold text-white">דיווחים בזמן אמת</h2>
         </div>
@@ -160,7 +160,7 @@ export default function RealTimeAlertsContainer() {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ delay: index * 0.1 }}
-                className="group relative bg-gradient-to-br from-[#0080FF]/20 to-black/60 border border-[#0080FF]/30 rounded-xl p-5 sm:p-6 hover:border-[#0080FF]/60 transition-all hover:shadow-[0_0_20px_rgba(0,128,255,0.3)]"
+                className="group relative bg-black/90 border border-white/10 rounded-xl p-5 sm:p-6 hover:border-white/20 transition-all"
               >
                 {/* Badge */}
                 {alert.is_breaking && (
