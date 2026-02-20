@@ -12,7 +12,7 @@ import LivePlayer from "../components/news/LivePlayer";
 import NewsCard from "../components/news/NewsCard";
 import UpdatesFeed from "../components/news/UpdatesFeed";
 import EntertainmentUpdatesFeed from "../components/news/EntertainmentUpdatesFeed";
-import HorizontalNewsScroller from "../components/news/HorizontalNewsScroller";
+import VerticalNewsScroller from "../components/news/VerticalNewsScroller";
 import StudioSidebar from "../components/home/StudioSidebar";
 import WeatherAlertsContainer from "../components/weather/WeatherAlertsContainer";
 
