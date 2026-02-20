@@ -748,7 +748,7 @@ export default function VideoCreator() {
                             #{idx + 1}
                           </div>
                           <div className="absolute top-2 right-2 bg-gradient-to-r from-purple-600 to-pink-600 px-2 py-1 rounded text-white text-xs font-bold">
-                            {video.source === 'heygen' ? 'HeyGen' : 'Digital Dreams'}
+                            Digital Dreams
                           </div>
                         </div>
                         <div className="p-3 space-y-2">
