@@ -161,6 +161,13 @@ export default function Home() {
 
       {/* Breaking News - Hot Updates */}
       <section className="w-full mb-4 sm:mb-8">
+        {/* Header Card */}
+        <div className="px-4 mb-4">
+          <div className="bg-black/60 backdrop-blur-md rounded-2xl p-4 sm:p-6 border border-gray-800/50">
+            <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2">🔥 חדשות חמות</h2>
+            <p className="text-gray-300 text-sm sm:text-base">הידיעות החמות והמתעדכנות ביותר</p>
+          </div>
+        </div>
         <React.Suspense fallback={<Skeleton className="w-full h-96 bg-gray-800 mx-4" />}>
           <UpdatesFeed />
         </React.Suspense>
