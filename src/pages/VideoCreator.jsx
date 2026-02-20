@@ -292,8 +292,10 @@ export default function VideoCreator() {
   const handleVoiceRecording = async () => {
     if (isRecording) {
       // Stop recording
-      if (mediaRecorderRef.current) {
+      if (mediaRecorderRef.current && mediaRecorderRef.current.state === 'recording') {
         mediaRecorderRef.current.stop();
+        setIsRecording(false);
+        toast.success('הקלטה הופסקה, מעלה...', { id: 'voice-stop' });
       }
     } else {
       // Start recording
@@ -310,6 +312,7 @@ export default function VideoCreator() {
         };
 
         mediaRecorder.onstop = async () => {
+          setIsRecording(false);
           const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
           const audioFile = new File([audioBlob], 'voice.webm', { type: 'audio/webm' });
           
@@ -336,14 +339,14 @@ export default function VideoCreator() {
             toast.success('מעבד הקלטה...', { id: 'voice' });
           } catch (err) {
             toast.error('שגיאה בהעלאת הקלטה: ' + err.message, { id: 'voice' });
+          } finally {
+            stream.getTracks().forEach(track => track.stop());
           }
-          
-          stream.getTracks().forEach(track => track.stop());
         };
 
         mediaRecorder.start();
         setIsRecording(true);
-        toast.success('מקליט...', { duration: 1000 });
+        toast.success('🎤 מקליט... לחץ שוב לעצירה', { duration: 2000 });
       } catch (err) {
         toast.error('לא ניתן לגשת למיקרופון');
         console.error(err);
