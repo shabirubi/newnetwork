@@ -650,7 +650,7 @@ export default function VideoCreator() {
               <input
                 ref={fileInputRef}
                 type="file"
-                accept="image/*"
+                accept="image/*,application/pdf"
                 onChange={handleFileUpload}
                 className="hidden"
               />
