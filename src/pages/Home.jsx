@@ -79,12 +79,8 @@ export default function Home() {
       setSelectedChannel(e.detail);
     };
     window.addEventListener('channelChange', handleChannelChange);
-    
-    // Refresh news on mount
-    queryClient.invalidateQueries({ queryKey: ['news-by-category'] });
-    
     return () => window.removeEventListener('channelChange', handleChannelChange);
-  }, [queryClient]);
+  }, []);
 
   const { data: channels = [] } = useQuery({
     queryKey: ['channels'],
