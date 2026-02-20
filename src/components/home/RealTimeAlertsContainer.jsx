@@ -176,18 +176,18 @@ export default function RealTimeAlertsContainer() {
                 )}
 
                 {/* Content */}
-                <div className="space-y-1 sm:space-y-2">
-                  <h3 className="font-bold text-white pr-8 sm:pr-10 leading-tight line-clamp-2 text-xs sm:text-sm">
+                <div className="space-y-2 sm:space-y-3">
+                  <h3 className="font-bold text-white pr-8 sm:pr-10 leading-tight line-clamp-2 text-base sm:text-lg">
                     {alert.title}
                   </h3>
 
-                  <p className="text-gray-300 text-[10px] sm:text-xs line-clamp-2">
+                  <p className="text-gray-300 text-sm sm:text-base line-clamp-2">
                     {alert.subtitle || alert.content}
                   </p>
 
                   {/* Time */}
-                  <div className="flex items-center gap-1 text-[9px] sm:text-xs text-gray-400">
-                    <span className="truncate max-w-[60px] sm:max-w-[100px]">{alert.source}</span>
+                  <div className="flex items-center gap-1.5 text-xs sm:text-sm text-gray-400">
+                    <span className="truncate max-w-[80px] sm:max-w-[120px]">{alert.source}</span>
                     <span>•</span>
                     <span>{new Date(alert.created_date).toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' })}</span>
                   </div>
