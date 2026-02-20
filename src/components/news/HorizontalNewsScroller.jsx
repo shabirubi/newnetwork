@@ -150,10 +150,10 @@ export default function HorizontalNewsScroller({ category, title, icon: Icon }) 
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseLeave}
-        className="flex gap-4 overflow-x-scroll pb-2"
+        className="flex gap-4 overflow-x-auto scrollbar-hide"
         style={{ 
-          scrollbarWidth: 'thin',
-          scrollbarColor: 'rgba(255,255,255,0.3) transparent',
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none',
           cursor: isDragging ? 'grabbing' : 'grab',
           userSelect: 'none',
           scrollBehavior: 'smooth'
