@@ -721,12 +721,21 @@ export default function VideoCreator() {
               />
               <Button
                 onClick={() => fileInputRef.current?.click()}
-                disabled={uploadingFile || loading}
+                disabled={uploadingFile || loading || isRecording}
                 variant="ghost"
                 size="sm"
                 className="bg-gray-700/50 hover:bg-gray-700 border border-gray-600/50 rounded-xl px-3 sm:px-4"
               >
                 {uploadingFile ? <Loader2 className="w-5 h-5 animate-spin text-purple-400" /> : <Plus className="w-5 h-5 text-purple-400" />}
+              </Button>
+              <Button
+                onClick={handleVoiceRecording}
+                disabled={uploadingFile || loading}
+                variant="ghost"
+                size="sm"
+                className={`${isRecording ? 'bg-red-600/50 hover:bg-red-600/70 animate-pulse' : 'bg-gray-700/50 hover:bg-gray-700'} border border-gray-600/50 rounded-xl px-3 sm:px-4`}
+              >
+                {isRecording ? <Square className="w-5 h-5 text-white" /> : <Mic className="w-5 h-5 text-purple-400" />}
               </Button>
               <div className="flex-1 relative">
                 <input
