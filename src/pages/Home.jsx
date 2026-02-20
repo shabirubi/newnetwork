@@ -396,10 +396,7 @@ export default function Home() {
         </React.Suspense>
       </section>
 
-      {/* Reporters Spotlight */}
-      <section className="px-4 mb-8 max-w-full overflow-hidden">
-        <ReportersSpotlight />
-      </section>
+
 
       {/* User Uploaded Videos */}
       <section className="px-4 mb-8 max-w-full overflow-hidden">
