@@ -116,30 +116,35 @@ export default function VideoCreator() {
         console.error('❌ localStorage ERROR:', e);
       }
       
-      // 4. Merge with existing state instead of replacing
-      setGeneratedVideos(prev => {
-        console.log('🔄 Current state:', prev.length, 'videos');
-        console.log('🆕 Loaded from sources:', allVideos.length, 'videos');
-        
-        // Combine existing + new
-        const combined = [...prev, ...allVideos];
-        
-        // Deduplicate and sort
-        const uniqueVideos = Array.from(
-          new Map(combined.map(v => [v.videoUrl, v])).values()
-        ).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
-        
-        console.log('🎯 Final result:', uniqueVideos.length, 'unique videos');
-        
-        // Save to localStorage
-        if (uniqueVideos.length > 0) {
-          localStorage.setItem('videoDownloadHistory', JSON.stringify(uniqueVideos));
-        }
-        
-        return uniqueVideos;
-      });
+      // 4. Process and set videos
+      console.log('🔄 Processing', allVideos.length, 'videos...');
       
+      if (allVideos.length === 0) {
+        console.warn('⚠️ No videos found from any source');
+        setLoadingHistory(false);
+        return;
+      }
+      
+      // Deduplicate by videoUrl
+      const uniqueVideos = Array.from(
+        new Map(allVideos.map(v => [v.videoUrl, v])).values()
+      ).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+      
+      console.log('🎯 Setting', uniqueVideos.length, 'unique videos');
+      
+      // Save to localStorage
+      try {
+        localStorage.setItem('videoDownloadHistory', JSON.stringify(uniqueVideos));
+        console.log('💾 Saved to localStorage');
+      } catch (e) {
+        console.error('❌ localStorage save error:', e);
+      }
+      
+      // Update state
+      setGeneratedVideos(uniqueVideos);
       setLoadingHistory(false);
+      
+      console.log('✅ History loaded successfully!');
     };
     
     loadHistory();
