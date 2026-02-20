@@ -118,7 +118,7 @@ export default function TrendingVideosContainer() {
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: idx * 0.05 }}
                   onClick={() => handleVideoClick(video)}
-                  className="group relative aspect-[2/3] rounded-lg sm:rounded-xl overflow-hidden cursor-pointer border border-transparent hover:border-[#E31E24] transition-all"
+                  className="group relative aspect-[9/16] rounded-lg sm:rounded-xl overflow-hidden cursor-pointer border border-transparent hover:border-[#E31E24] transition-all"
                 >
                   {/* Number Badge */}
                   <div className="absolute top-1.5 sm:top-2 right-1.5 sm:right-2 z-10">
