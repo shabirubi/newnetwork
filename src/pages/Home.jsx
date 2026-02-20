@@ -260,7 +260,7 @@ export default function Home() {
       </section>
 
       {/* Horizontal News Scrollers */}
-      <section className="w-full mb-4 sm:mb-8">
+      <section className="w-full px-4 mb-4 sm:mb-8">
         <HorizontalNewsScroller
           category="security"
           title="ביטחון ומדיניות"
@@ -268,7 +268,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="px-4 mb-8 max-w-full overflow-hidden">
+      <section className="w-full px-4 mb-4 sm:mb-8">
         <HorizontalNewsScroller
           category="economy"
           title="כלכלה ועסקים"
@@ -276,7 +276,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="px-4 mb-8 max-w-full overflow-hidden">
+      <section className="w-full px-4 mb-4 sm:mb-8">
         <HorizontalNewsScroller
           category="technology"
           title="טכנולוגיה"
@@ -284,7 +284,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="px-4 mb-8 max-w-full overflow-hidden">
+      <section className="w-full px-4 mb-4 sm:mb-8">
         <HorizontalNewsScroller
           category="crime"
           title="פלילים ומשטרה"
@@ -292,7 +292,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="px-4 mb-8 max-w-full overflow-hidden">
+      <section className="w-full px-4 mb-4 sm:mb-8">
         <HorizontalNewsScroller
           category="politics"
           title="פוליטיקה"
@@ -300,7 +300,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="px-4 mb-8 max-w-full overflow-hidden">
+      <section className="w-full px-4 mb-4 sm:mb-8">
         <HorizontalNewsScroller
           category="sports"
           title="ספורט"
@@ -308,7 +308,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="px-4 mb-8 max-w-full overflow-hidden">
+      <section className="w-full px-4 mb-4 sm:mb-8">
         <HorizontalNewsScroller
           category="entertainment"
           title="בידור ותרבות"
@@ -316,7 +316,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="px-4 mb-8 max-w-full overflow-hidden">
+      <section className="w-full px-4 mb-4 sm:mb-8">
         <HorizontalNewsScroller
           category="world"
           title="חדשות עולם"
@@ -324,7 +324,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="px-4 mb-8 max-w-full overflow-hidden">
+      <section className="w-full px-4 mb-4 sm:mb-8">
         <HorizontalNewsScroller
           category="health"
           title="בריאות"
@@ -332,7 +332,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="px-4 mb-8 max-w-full overflow-hidden">
+      <section className="w-full px-4 mb-4 sm:mb-8">
         <HorizontalNewsScroller
           category="israel"
           title="חדשות ישראל"
@@ -340,7 +340,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="px-4 mb-8 max-w-full overflow-hidden">
+      <section className="w-full px-4 mb-4 sm:mb-8">
         <HorizontalNewsScroller
           category="education"
           title="חינוך"
@@ -348,7 +348,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="px-4 mb-8 max-w-full overflow-hidden">
+      <section className="w-full px-4 mb-4 sm:mb-8">
         <HorizontalNewsScroller
           category="culture"
           title="תרבות"
@@ -356,7 +356,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="px-4 mb-8 max-w-full overflow-hidden">
+      <section className="w-full px-4 mb-4 sm:mb-8">
         <HorizontalNewsScroller
           category="environment"
           title="סביבה"
@@ -364,7 +364,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="px-4 mb-8 max-w-full overflow-hidden">
+      <section className="w-full px-4 mb-4 sm:mb-8">
         <HorizontalNewsScroller
           category="science"
           title="מדע"
@@ -372,7 +372,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="px-4 mb-8 max-w-full overflow-hidden">
+      <section className="w-full px-4 mb-4 sm:mb-8">
         <HorizontalNewsScroller
           category="military"
           title="צבא וביטחון"
@@ -380,7 +380,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="px-4 mb-8 max-w-full overflow-hidden">
+      <section className="w-full px-4 mb-4 sm:mb-8">
         <HorizontalNewsScroller
           category="law"
           title="משפט ופלילים"
@@ -388,7 +388,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="px-4 mb-8 max-w-full overflow-hidden">
+      <section className="w-full px-4 mb-4 sm:mb-8">
         <HorizontalNewsScroller
           category="local"
           title="חדשות מקומיות"
@@ -396,7 +396,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="px-4 mb-8 max-w-full overflow-hidden">
+      <section className="w-full px-4 mb-4 sm:mb-8">
         <HorizontalNewsScroller
           category="music"
           title="מוזיקה"
@@ -404,7 +404,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="px-4 mb-8 max-w-full overflow-hidden">
+      <section className="w-full px-4 mb-4 sm:mb-8">
         <HorizontalNewsScroller
           category="horoscope"
           title="הורוסקופ ואסטרולוגיה"
@@ -412,7 +412,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="px-4 mb-8 max-w-full overflow-hidden">
+      <section className="w-full px-4 mb-4 sm:mb-8">
         <HorizontalNewsScroller
           category="finance"
           title="פיננסים והשקעות"
