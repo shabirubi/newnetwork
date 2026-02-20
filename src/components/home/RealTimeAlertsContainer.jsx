@@ -193,11 +193,11 @@ export default function RealTimeAlertsContainer() {
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex items-center gap-2 sm:gap-3 pt-3 sm:pt-4 border-t border-[#0080FF]/20">
+                  <div className="flex items-center gap-2 sm:gap-3 pt-3 sm:pt-4 border-t border-white/10">
                     <button
                       onClick={() => handlePlayAudio(alert)}
                       disabled={loadingId === alert.id}
-                      className="flex-1 flex items-center justify-center gap-2 px-4 py-3 sm:py-3.5 bg-blue-600/80 hover:bg-blue-600 disabled:bg-gray-600 text-white rounded-lg font-semibold transition-colors text-sm sm:text-base"
+                      className="flex-1 flex items-center justify-center gap-2 px-4 py-3 sm:py-3.5 bg-black/60 hover:bg-black/80 disabled:bg-gray-800 text-white rounded-lg font-semibold transition-colors text-sm sm:text-base border border-white/10"
                     >
                       {loadingId === alert.id ? (
                         <Loader2 className="w-5 h-5 animate-spin" />
