@@ -16,15 +16,18 @@ export default function VerticalNewsScroller({ category, title, icon: Icon }) {
     queryFn: async () => {
       try {
         const allArticles = await base44.entities.NewsArticle.list('-created_date', 100);
-        return allArticles.filter(a => a.category === category);
+        console.log(`📰 Loaded ${allArticles.length} articles, filtering for ${category}`);
+        const filtered = allArticles.filter(a => a.category === category);
+        console.log(`✅ Found ${filtered.length} articles in ${category}`);
+        return filtered;
       } catch (err) {
         console.error(`Error fetching articles for ${category}:`, err);
         return [];
       }
     },
     initialData: [],
-    staleTime: 8 * 60 * 60 * 1000, // 8 hours
-    refetchInterval: 8 * 60 * 60 * 1000 // Refetch every 8 hours
+    staleTime: 1 * 60 * 1000, // 1 minute
+    gcTime: 5 * 60 * 1000 // 5 minutes
   });
 
   const checkScroll = () => {
