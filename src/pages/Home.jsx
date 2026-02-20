@@ -245,13 +245,6 @@ export default function Home() {
 
 
 
-      {/* Trending Videos - Popular Right Now */}
-      <section className="w-full mb-4 sm:mb-8">
-        <React.Suspense fallback={<Skeleton className="w-full h-96 bg-gray-800 mx-4" />}>
-          <TrendingVideosContainer />
-        </React.Suspense>
-      </section>
-
       {/* Breaking News Updates Feed */}
       <section className="w-full mb-4 sm:mb-8">
         <React.Suspense fallback={<Skeleton className="w-full h-96 bg-gray-800 mx-4" />}>
