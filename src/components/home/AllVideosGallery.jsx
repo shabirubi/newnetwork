@@ -62,7 +62,7 @@ export default function AllVideosGallery() {
       </div>
 
       {/* Videos Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
+      <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2 sm:gap-3 lg:gap-6">
         {isLoading && Array.from({ length: 8 }).map((_, idx) => (
           <VideoSkeleton key={`skeleton-${idx}`} />
         ))}
@@ -86,21 +86,21 @@ export default function AllVideosGallery() {
                   src={video.thumbnail}
                   alt={video.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  onError={(e) => e.target.src = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png"}
                 />
               ) : video.thumbnail ? (
                 <img 
                   src={video.thumbnail}
                   alt={video.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  onError={(e) => e.target.src = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png"}
                 />
               ) : (
-                <div className="w-full h-full flex items-center justify-center">
-                  <img 
-                    src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png" 
-                    alt="הרשת החדשה" 
-                    className="w-32 h-32 opacity-50"
-                  />
-                </div>
+                <img 
+                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png" 
+                  alt="הרשת החדשה" 
+                  className="w-full h-full object-cover opacity-70"
+                />
               )}
               
               {/* Play Overlay */}
