@@ -586,14 +586,15 @@ export default function VideoCreator() {
           <div className="flex-1 overflow-y-auto p-3 space-y-2">
             {loadingHistory && (
               <div className="flex flex-col items-center justify-center py-12">
-                <Loader2 className="w-6 h-6 text-purple-500 animate-spin mb-2" />
-                <p className="text-gray-500 text-xs">טוען {generatedVideos.length} סרטונים...</p>
+                <Loader2 className="w-8 h-8 text-purple-500 animate-spin mb-3" />
+                <p className="text-white text-sm font-bold">טוען מ-HeyGen...</p>
+                <p className="text-gray-500 text-xs mt-1">{generatedVideos.length} נטענו עד כה</p>
               </div>
             )}
             {!loadingHistory && generatedVideos.length === 0 && (
               <div className="text-center py-12">
-                <Video className="w-10 h-10 text-gray-700 mx-auto mb-2" />
-                <p className="text-gray-600 text-xs">עדיין לא נוצרו</p>
+                <Video className="w-12 h-12 text-gray-700 mx-auto mb-3" />
+                <p className="text-gray-400 text-sm font-bold">לא נמצאו סרטונים ב-HeyGen</p>
               </div>
             )}
 
