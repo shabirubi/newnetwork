@@ -674,6 +674,7 @@ export default function VideoCreator() {
                       handleSend();
                     }
                   }}
+                  enterKeyHint="send"
                   placeholder="תאר את הסרטון שאתה רוצה... 🎬"
                   className="w-full px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-gray-900/60 border border-gray-700/50 text-white placeholder:text-gray-500 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all"
                   disabled={loading}
