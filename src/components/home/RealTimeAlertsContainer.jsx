@@ -213,16 +213,16 @@ export default function RealTimeAlertsContainer() {
                       </button>
                     </div>
                   </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </div>
-      ) : (
-        <div className="text-center py-12 bg-black/40 rounded-xl border border-[#0080FF]/20">
-          <AlertTriangle className="w-12 h-12 text-gray-500 mx-auto mb-3" />
-          <p className="text-gray-400">אין דיווחים בזמן אמת כרגע</p>
-        </div>
-      )}
+                </motion.div>
+              ))}
+            </AnimatePresence>
+          </div>
+        ) : (
+          <div className="text-center py-12 bg-black/40 rounded-xl border border-[#0080FF]/20">
+            <AlertTriangle className="w-12 h-12 text-gray-500 mx-auto mb-3" />
+            <p className="text-gray-400">אין דיווחים בזמן אמת כרגע</p>
+          </div>
+        )}
 
       {/* Video Modal */}
       <AnimatePresence>
