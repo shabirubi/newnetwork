@@ -105,34 +105,37 @@ export default function VideoCreator() {
       }
       
       // 4. Process and set videos
-      console.log('🔄 Processing', allVideos.length, 'videos...');
+      console.log('🔄 Processing', allVideos.length, 'total videos from all sources...');
       
       if (allVideos.length === 0) {
         console.warn('⚠️ No videos found from any source');
         setLoadingHistory(false);
+        toast.error('לא נמצאו סרטונים');
         return;
       }
       
-      // Deduplicate by videoUrl
+      // Deduplicate by videoUrl - keep most recent
       const uniqueVideos = Array.from(
         new Map(allVideos.map(v => [v.videoUrl, v])).values()
       ).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
       
-      console.log('🎯 Setting', uniqueVideos.length, 'unique videos');
+      console.log('🎯🎯🎯 Setting', uniqueVideos.length, 'unique videos to state!');
+      console.log('📦 Full video list:', uniqueVideos.map(v => v.title));
       
       // Save to localStorage
       try {
         localStorage.setItem('videoDownloadHistory', JSON.stringify(uniqueVideos));
-        console.log('💾 Saved to localStorage');
+        console.log('💾 Saved', uniqueVideos.length, 'videos to localStorage');
       } catch (e) {
         console.error('❌ localStorage save error:', e);
       }
       
-      // Update state
+      // Update state - THIS WILL TRIGGER RE-RENDER
       setGeneratedVideos(uniqueVideos);
       setLoadingHistory(false);
       
-      console.log('✅ History loaded successfully!');
+      console.log('✅✅✅ History loaded successfully!', uniqueVideos.length, 'videos ready!');
+      toast.success(`✅ סה"כ ${uniqueVideos.length} סרטונים בהיסטוריה`, { duration: 5000 });
     };
     
     loadHistory();
