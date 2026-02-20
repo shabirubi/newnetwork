@@ -726,7 +726,7 @@ export default function VideoCreator() {
                 {loadingHistory ? (
                   <div className="flex flex-col items-center justify-center py-16">
                     <Loader2 className="w-12 h-12 text-purple-500 animate-spin mb-4" />
-                    <p className="text-gray-400 text-lg">טוען את כל הסרטונים מ-HeyGen...</p>
+                    <p className="text-gray-400 text-lg">טוען את כל הסרטונים שלך...</p>
                   </div>
                 ) : generatedVideos.length === 0 ? (
                   <div className="text-center py-16">
