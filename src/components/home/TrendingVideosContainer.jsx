@@ -56,7 +56,7 @@ export default function TrendingVideosContainer() {
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
           {[...Array(6)].map((_, i) => (
-            <div key={i} className="aspect-[2/3] bg-gray-800/50 rounded-xl animate-pulse" />
+            <div key={i} className="aspect-[9/16] bg-gray-800/50 rounded-xl animate-pulse" />
           ))}
         </div>
       </div>
