@@ -30,34 +30,34 @@ export default function VideoCreator() {
       
       // 1. Load from HeyGen FIRST (main source)
       try {
-        console.log('🔄 Step 1: Fetching HeyGen API...');
-        toast.loading('טוען סרטונים מ-HeyGen...', { id: 'loading-heygen' });
+        console.log('🔄 Step 1: Fetching ALL HeyGen videos...');
+        toast.loading('טוען את כל הסרטונים מ-HeyGen...', { id: 'loading-heygen' });
         
         const response = await base44.functions.invoke('listHeyGenVideos', {});
         console.log('📡 HeyGen Full Response:', response);
         console.log('📡 Response Data:', response?.data);
-        console.log('📡 Videos Array:', response?.data?.videos);
+        console.log('📡 Total videos:', response?.data?.total);
+        console.log('📡 Videos Array length:', response?.data?.videos?.length);
         
         if (response?.data?.videos && Array.isArray(response.data.videos)) {
-          console.log('✅ Found', response.data.videos.length, 'videos in response');
+          console.log('✅✅✅ Found', response.data.videos.length, 'videos from HeyGen API!');
           
-          const heygenVideos = response.data.videos
-            .filter(v => v.status === 'completed' && v.video_url)
-            .map(v => ({
-              id: v.id,
-              title: v.title || `Video ${v.id.substring(0, 8)}`,
-              videoUrl: v.video_url,
-              timestamp: v.created_at ? new Date(v.created_at * 1000).toISOString() : new Date().toISOString(),
-              source: 'heygen',
-              thumbnail: v.thumbnail_url
-            }));
+          const heygenVideos = response.data.videos.map(v => ({
+            id: v.id,
+            title: v.title || `Video ${v.id.substring(0, 8)}`,
+            videoUrl: v.video_url,
+            timestamp: v.created_at ? new Date(v.created_at * 1000).toISOString() : new Date().toISOString(),
+            source: 'heygen',
+            thumbnail: v.thumbnail_url,
+            duration: v.duration
+          }));
           
           allVideos.push(...heygenVideos);
-          console.log('✅ HeyGen:', heygenVideos.length, 'videos loaded');
+          console.log('✅ HeyGen:', heygenVideos.length, 'videos added to list');
           console.log('📋 First HeyGen video:', heygenVideos[0]);
           console.log('📋 Last HeyGen video:', heygenVideos[heygenVideos.length - 1]);
           
-          toast.success(`✅ נטענו ${heygenVideos.length} סרטונים מ-HeyGen`, { id: 'loading-heygen' });
+          toast.success(`✅ נטענו ${heygenVideos.length} סרטונים מ-HeyGen!`, { id: 'loading-heygen', duration: 5000 });
         } else {
           console.warn('⚠️ HeyGen: No videos in response');
           toast.error('לא נמצאו סרטונים ב-HeyGen', { id: 'loading-heygen' });
