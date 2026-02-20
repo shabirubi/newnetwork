@@ -193,7 +193,7 @@ export default function RealTimeAlertsContainer() {
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex items-center gap-2 pt-2 sm:pt-3 border-t border-[#0080FF]/20">
+                  <div className="flex items-center gap-2 sm:gap-3 pt-3 sm:pt-4 border-t border-[#0080FF]/20">
                     <button
                       onClick={() => handlePlayAudio(alert)}
                       disabled={loadingId === alert.id}
