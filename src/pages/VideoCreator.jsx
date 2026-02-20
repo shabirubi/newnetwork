@@ -200,6 +200,55 @@ export default function VideoCreator() {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
+  // Handle paste images
+  useEffect(() => {
+    const handlePaste = async (e) => {
+      const items = e.clipboardData?.items;
+      if (!items) return;
+
+      for (let i = 0; i < items.length; i++) {
+        if (items[i].type.startsWith('image/')) {
+          e.preventDefault();
+          const file = items[i].getAsFile();
+          if (!file) continue;
+
+          setUploadingFile(true);
+          toast.loading('מעלה תמונה...', { id: 'paste' });
+
+          try {
+            const { file_url } = await base44.integrations.Core.UploadFile({ file });
+
+            let conv = conversationId ? await base44.agents.getConversation(conversationId) : null;
+            if (!conv) {
+              conv = await base44.agents.createConversation({
+                agent_name: "video_creator",
+                metadata: { name: "סרטון" }
+              });
+              setConversationId(conv.id);
+            }
+
+            await base44.agents.addMessage(conv, {
+              role: "user",
+              content: input.trim() || "צור סרטון מהתמונה שהדבקתי",
+              file_urls: [file_url]
+            });
+
+            setInput('');
+            toast.success('תמונה הועלתה!', { id: 'paste' });
+          } catch (err) {
+            toast.error('שגיאה בהעלאת תמונה', { id: 'paste' });
+          } finally {
+            setUploadingFile(false);
+          }
+          break;
+        }
+      }
+    };
+
+    window.addEventListener('paste', handlePaste);
+    return () => window.removeEventListener('paste', handlePaste);
+  }, [conversationId, input]);
+
   const handleFileUpload = async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
