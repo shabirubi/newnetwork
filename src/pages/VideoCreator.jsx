@@ -517,7 +517,7 @@ export default function VideoCreator() {
             </div>
           )}
 
-          {loading && (
+          {loading && !currentVideo && (
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
