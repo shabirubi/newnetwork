@@ -60,7 +60,7 @@ Deno.serve(async (req) => {
     const result = [];
     const batchSize = 50;
     
-    for (let i = 0; i < Math.min(completedVideos.length, 200); i += batchSize) {
+    for (let i = 0; i < Math.min(completedVideos.length, 1000); i += batchSize) {
       const batch = completedVideos.slice(i, i + batchSize);
       console.log(`🔄 Fetching URLs for videos ${i}-${i + batch.length}...`);
       
