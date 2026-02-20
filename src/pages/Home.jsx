@@ -95,20 +95,20 @@ export default function Home() {
 
   const queryClient = useQueryClient();
 
-  // הכתבה האחרונה שהועלתה
-  const featuredArticle = {
-    id: '698a72b65aab44eb627fd899',
-    title: 'שוקי המניות מחקו את הירידות, אך ישנם איומים מחזיתות אחרות',
-    subtitle: 'ההתפתחויות האחרונות יוצרות סביבה נוחה יותר לנכסי סיכון, אך ישנם איומים נוספים',
-    content: 'שוקי המניות התאוששו מהירידות שנרשמו לאחר הכרזת טראמפ על תכנית המכסים השאפתנית. עם זאת, ישנם איומים נוספים, כגון אי-ודאות פוליטית והתפתחויות כלכליות בלתי צפויות, שעלולות להשפיע על השוק.',
-    category: 'finance',
-    image_url: 'https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/8df32e9f1_generated_image.png',
-    created_date: '2026-02-09T23:50:14.552Z',
-    created_by: 'service+0a06552f-b47f-487a-84bb-eb2bdeb5769c@no-reply.base44.com'
-  };
+  const { data: articles = [], isLoading } = useQuery({
+    queryKey: ['featured-articles'],
+    queryFn: async () => {
+      try {
+        return await base44.entities.NewsArticle.filter({ is_featured: true }, '-created_date', 10);
+      } catch {
+        return [];
+      }
+    },
+    initialData: [],
+    staleTime: 5 * 60 * 1000
+  });
 
-  const articles = [];
-  const isLoading = false;
+  const featuredArticle = articles[0];
 
 
 
