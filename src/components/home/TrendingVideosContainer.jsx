@@ -101,29 +101,29 @@ export default function TrendingVideosContainer() {
           </div>
         </div>
 
-        <div className="relative overflow-hidden">
+        <div className="relative">
           <AnimatePresence mode="wait">
             <motion.div
               key={currentIndex}
-              initial={{ opacity: 0, x: 100 }}
+              initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -100 }}
+              exit={{ opacity: 0, x: -50 }}
               transition={{ duration: 0.3 }}
-              className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-3 sm:gap-4"
-              >
+              className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2 sm:gap-3"
+            >
               {videos.slice(currentIndex, currentIndex + visibleVideos).map((video, idx) => (
                 <motion.div
                   key={video.id}
-                  initial={{ opacity: 0, scale: 0.9 }}
+                  initial={{ opacity: 0, scale: 0.95 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: idx * 0.05 }}
                   onClick={() => handleVideoClick(video)}
-                  className="group relative aspect-[9/16] rounded-xl overflow-hidden cursor-pointer border border-transparent hover:border-[#E31E24] transition-all"
+                  className="group relative aspect-[9/16] rounded-lg overflow-hidden cursor-pointer border border-white/10 hover:border-[#E31E24] transition-all bg-black"
                 >
                   {/* Number Badge */}
-                  <div className="absolute top-1.5 sm:top-2 right-1.5 sm:right-2 z-10">
-                    <div className="w-8 h-8 sm:w-12 sm:h-12 rounded-md sm:rounded-lg bg-black/80 backdrop-blur-sm flex items-center justify-center border border-white/20 sm:border-2">
-                      <span className="text-base sm:text-2xl font-black text-white">
+                  <div className="absolute top-1.5 right-1.5 z-10">
+                    <div className="w-7 h-7 sm:w-10 sm:h-10 rounded-lg bg-black/90 backdrop-blur-sm flex items-center justify-center border border-white/20">
+                      <span className="text-sm sm:text-xl font-black text-white">
                         {currentIndex + idx + 1}
                       </span>
                     </div>
@@ -149,14 +149,14 @@ export default function TrendingVideosContainer() {
 
                   {/* Play Button */}
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                    <div className="w-16 h-16 rounded-full bg-[#E31E24] flex items-center justify-center transform scale-0 group-hover:scale-100 transition-transform">
-                      <Play className="w-8 h-8 text-white" fill="white" />
+                    <div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-[#E31E24] flex items-center justify-center transform scale-0 group-hover:scale-100 transition-transform">
+                      <Play className="w-6 h-6 sm:w-8 sm:h-8 text-white" fill="white" />
                     </div>
                   </div>
 
                   {/* Info */}
-                  <div className="absolute bottom-0 left-0 right-0 p-2 sm:p-4 transform translate-y-full group-hover:translate-y-0 transition-transform">
-                    <h3 className="text-white font-bold text-xs sm:text-sm mb-1 sm:mb-2 line-clamp-2">
+                  <div className="absolute bottom-0 left-0 right-0 p-2 transform translate-y-full group-hover:translate-y-0 transition-transform">
+                    <h3 className="text-white font-bold text-[10px] sm:text-xs mb-1 line-clamp-2">
                       {video.title}
                     </h3>
                     <div className="flex items-center gap-2 sm:gap-3 text-[10px] sm:text-xs text-gray-300">
