@@ -240,6 +240,68 @@ export default function VideoCreator() {
     }
   };
 
+  const handleVoiceRecording = async () => {
+    if (isRecording) {
+      // Stop recording
+      if (mediaRecorderRef.current) {
+        mediaRecorderRef.current.stop();
+      }
+    } else {
+      // Start recording
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const mediaRecorder = new MediaRecorder(stream);
+        mediaRecorderRef.current = mediaRecorder;
+        audioChunksRef.current = [];
+
+        mediaRecorder.ondataavailable = (e) => {
+          if (e.data.size > 0) {
+            audioChunksRef.current.push(e.data);
+          }
+        };
+
+        mediaRecorder.onstop = async () => {
+          const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
+          const audioFile = new File([audioBlob], 'voice.webm', { type: 'audio/webm' });
+          
+          toast.loading('מעלה הקלטה...', { id: 'voice' });
+          
+          try {
+            const { file_url } = await base44.integrations.Core.UploadFile({ file: audioFile });
+            
+            let conv = conversationId ? await base44.agents.getConversation(conversationId) : null;
+            if (!conv) {
+              conv = await base44.agents.createConversation({
+                agent_name: "video_creator",
+                metadata: { name: "סרטון קולי" }
+              });
+              setConversationId(conv.id);
+            }
+
+            await base44.agents.addMessage(conv, {
+              role: "user",
+              content: "צור סרטון מההקלטה הקולית שלי",
+              file_urls: [file_url]
+            });
+
+            toast.success('מעבד הקלטה...', { id: 'voice' });
+          } catch (err) {
+            toast.error('שגיאה בהעלאת הקלטה: ' + err.message, { id: 'voice' });
+          }
+          
+          stream.getTracks().forEach(track => track.stop());
+        };
+
+        mediaRecorder.start();
+        setIsRecording(true);
+        toast.success('מקליט...', { duration: 1000 });
+      } catch (err) {
+        toast.error('לא ניתן לגשת למיקרופון');
+        console.error(err);
+      }
+    }
+  };
+
   const pollVideoStatus = async (videoId, originalMessage) => {
     let attempts = 0;
     const maxAttempts = 160;
