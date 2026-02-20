@@ -52,22 +52,23 @@ Deno.serve(async (req) => {
 
     console.log(`📦 Found ${allVideos.length} total videos from list API`);
 
-    // Filter to only completed videos with URLs
-    const completedVideos = allVideos.filter(v => v.status === 'completed' && v.video_url);
-    console.log(`✅ ${completedVideos.length} are completed with URLs`);
+    // Log sample video to see structure
+    if (allVideos.length > 0) {
+      console.log('📋 Sample video structure:', JSON.stringify(allVideos[0], null, 2));
+    }
 
-    // Return completed videos directly without fetching details
-    const result = completedVideos.map(v => ({
+    // Return ALL videos without filtering - let frontend handle it
+    const result = allVideos.map(v => ({
       id: v.video_id,
-      title: v.video_title || `Video ${v.video_id.substring(0, 8)}`,
+      title: v.video_title || v.title || `Video ${v.video_id?.substring(0, 8) || 'Unknown'}`,
       status: v.status,
-      video_url: v.video_url,
-      thumbnail_url: v.thumbnail_url,
+      video_url: v.video_url || v.video,
+      thumbnail_url: v.thumbnail_url || v.thumbnail,
       created_at: v.created_at,
       duration: v.duration
     }));
 
-    console.log(`\n✅ Returning ${result.length} videos`);
+    console.log(`\n✅ Returning ${result.length} videos (all statuses)`);
 
     return Response.json({
       total: result.length,
