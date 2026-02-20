@@ -15,12 +15,10 @@ export default function VerticalNewsScroller({ category, title, icon: Icon }) {
     queryKey: ['news-by-category', category],
     queryFn: async () => {
       try {
-        return await base44.entities.NewsArticle.filter(
-          { category },
-          '-created_date',
-          20
-        );
-      } catch {
+        const allArticles = await base44.entities.NewsArticle.list('-created_date', 100);
+        return allArticles.filter(a => a.category === category);
+      } catch (err) {
+        console.error(`Error fetching articles for ${category}:`, err);
         return [];
       }
     },
