@@ -391,6 +391,14 @@ export default function Home() {
 
       <section className="w-full px-4 mb-4 sm:mb-8">
         <HorizontalNewsScroller
+          category="documentary"
+          title="סדרות תיעודיות"
+          icon={Film}
+        />
+      </section>
+
+      <section className="w-full px-4 mb-4 sm:mb-8">
+        <HorizontalNewsScroller
           category="music"
           title="מוזיקה"
           icon={Music}
@@ -441,12 +449,7 @@ export default function Home() {
         </React.Suspense>
       </section>
 
-      {/* Kan Archive */}
-      <section className="px-4 mb-8 max-w-full overflow-hidden">
-        <React.Suspense fallback={<Skeleton className="w-full h-64 bg-gray-800" />}>
-          <KanArchiveContainer />
-        </React.Suspense>
-      </section>
+
 
       {/* Reporter Responses Feed */}
       <section className="px-4 mb-8 max-w-full overflow-hidden">
