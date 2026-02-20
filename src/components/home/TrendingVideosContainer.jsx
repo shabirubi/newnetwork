@@ -68,35 +68,38 @@ export default function TrendingVideosContainer() {
   }
 
   return (
-    <>
-      <div className="w-full bg-gradient-to-br from-black/90 via-gray-900/80 to-black/90 rounded-2xl p-3 sm:p-6 backdrop-blur-sm border border-white/10 shadow-2xl overflow-hidden">
-        <div className="flex items-center justify-between mb-4 sm:mb-6">
-          <div>
-            <h2 className="text-xl sm:text-3xl font-bold text-white mb-0.5 sm:mb-1">הפופולריים כרגע</h2>
-            <p className="text-gray-400 text-xs sm:text-sm">הסרטונים הכי חמים ברשת</p>
+    <div className="w-full">
+      <div className="max-w-6xl mx-auto px-3 sm:px-4">
+        <div className="flex items-center justify-between mb-3 sm:mb-4">
+          <div className="flex items-center gap-2">
+            <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-[#E31E24] to-[#B91C1C] flex items-center justify-center shadow-lg shadow-[#E31E24]/50">
+              <Play className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+            </div>
+            <h2 className="text-base sm:text-2xl font-bold text-white">פופולריים כרגע</h2>
           </div>
-          <div className="flex items-center gap-1 sm:gap-2">
+
+          <div className="flex items-center gap-2">
             <button
               onClick={handlePrev}
               disabled={!canScrollLeft}
-              className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all ${
+              className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${
                 canScrollLeft
-                  ? 'bg-white/10 hover:bg-white/20 text-white'
+                  ? 'bg-black/60 hover:bg-black/80 text-white border border-white/10'
                   : 'bg-gray-800/30 text-gray-600 cursor-not-allowed'
               }`}
             >
-              <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5" />
+              <ChevronRight className="w-4 h-4" />
             </button>
             <button
               onClick={handleNext}
               disabled={!canScrollRight}
-              className={`w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all ${
+              className={`w-8 h-8 rounded-full flex items-center justify-center transition-all ${
                 canScrollRight
-                  ? 'bg-white/10 hover:bg-white/20 text-white'
+                  ? 'bg-black/60 hover:bg-black/80 text-white border border-white/10'
                   : 'bg-gray-800/30 text-gray-600 cursor-not-allowed'
               }`}
             >
-              <ChevronLeft className="w-4 h-4 sm:w-5 sm:h-5" />
+              <ChevronLeft className="w-4 h-4" />
             </button>
           </div>
         </div>
