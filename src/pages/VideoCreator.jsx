@@ -577,7 +577,7 @@ export default function VideoCreator() {
         {/* Right Sidebar - Timeline - Hidden on Mobile */}
         <div className="hidden lg:flex lg:w-80 bg-black/50 border-r border-gray-800 flex-col">
           <div className="p-4 border-b border-gray-800 sticky top-0 z-10 bg-black/90 backdrop-blur-xl">
-            <h3 className="text-white font-bold text-lg">🎬 HeyGen Videos</h3>
+            <h3 className="text-white font-bold text-lg">🎬 Digital Dreams</h3>
             <p className="text-purple-400 text-sm font-bold">
               {loadingHistory ? '⏳ טוען...' : `✅ ${generatedVideos.length} סרטונים זמינים`}
             </p>
