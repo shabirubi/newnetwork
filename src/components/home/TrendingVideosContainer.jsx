@@ -69,10 +69,10 @@ export default function TrendingVideosContainer() {
 
   return (
     <>
-      <div className="bg-gradient-to-br from-black/90 via-gray-900/80 to-black/90 rounded-2xl p-3 sm:p-6 backdrop-blur-sm border border-white/10 shadow-2xl w-full max-w-full overflow-hidden">
+      <div className="w-full bg-gradient-to-br from-black/90 via-gray-900/80 to-black/90 rounded-2xl p-3 sm:p-6 backdrop-blur-sm border border-white/10 shadow-2xl overflow-hidden">
         <div className="flex items-center justify-between mb-4 sm:mb-6">
           <div>
-            <h2 className="text-lg sm:text-3xl font-bold text-white mb-0.5 sm:mb-1">הפופולריים כרגע</h2>
+            <h2 className="text-xl sm:text-3xl font-bold text-white mb-0.5 sm:mb-1">הפופולריים כרגע</h2>
             <p className="text-gray-400 text-xs sm:text-sm">הסרטונים הכי חמים ברשת</p>
           </div>
           <div className="flex items-center gap-1 sm:gap-2">

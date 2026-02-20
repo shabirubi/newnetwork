@@ -50,19 +50,19 @@ export default function AllVideosGallery() {
   })).sort((a, b) => b.created_date - a.created_date);
 
   return (
-    <section className="px-4 sm:px-4 mt-12 mb-12">
-      <div className="flex items-center justify-between mb-6">
+    <section className="w-full px-4 py-6 sm:py-12">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0 mb-4 sm:mb-6">
         <div className="flex items-center gap-2">
-          <Film className="w-6 h-6 text-[#0080FF]" />
-          <h2 className="text-3xl font-bold text-white">גלריית וידאו מלאה</h2>
+          <Film className="w-5 h-5 sm:w-6 sm:h-6 text-[#0080FF]" />
+          <h2 className="text-xl sm:text-3xl font-bold text-white">גלריית וידאו מלאה</h2>
         </div>
-        <div className="text-gray-400 text-sm">
+        <div className="text-gray-400 text-xs sm:text-sm">
           {allVideos.length} סרטונים זמינים
         </div>
       </div>
 
       {/* Videos Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-6">
         {isLoading && Array.from({ length: 8 }).map((_, idx) => (
           <VideoSkeleton key={`skeleton-${idx}`} />
         ))}

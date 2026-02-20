@@ -87,13 +87,13 @@ export default function ReporterResponsesFeed() {
 
   return (
     <>
-      <div className="bg-gradient-to-br from-black via-red-900/20 to-black rounded-2xl p-4 sm:p-8 border border-[#E31E24]/30">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="w-10 h-10 rounded-full bg-[#E31E24]/20 flex items-center justify-center">
-            <MessageCircle className="w-5 h-5 text-[#E31E24]" />
+      <div className="w-full bg-gradient-to-br from-black via-red-900/20 to-black rounded-2xl p-4 sm:p-8 border border-[#E31E24]/30">
+        <div className="flex items-center gap-2 sm:gap-3 mb-4 sm:mb-6">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#E31E24]/20 flex items-center justify-center">
+            <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 text-[#E31E24]" />
           </div>
           <div>
-            <h2 className="text-xl sm:text-2xl font-bold text-white">תשובות הכתבים</h2>
+            <h2 className="text-lg sm:text-2xl font-bold text-white">תשובות הכתבים</h2>
             <p className="text-white/60 text-xs sm:text-sm">תשובות מקצועיות מהכתבים</p>
           </div>
         </div>

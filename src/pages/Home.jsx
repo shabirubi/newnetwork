@@ -174,34 +174,34 @@ export default function Home() {
             />
 
             {/* Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/70 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent" />
 
             {/* טקסט מעל התמונה */}
-            <div className="absolute inset-0 flex flex-col justify-end p-3 sm:p-10 space-y-1.5 sm:space-y-4">
-              <div className="max-w-4xl space-y-1.5 sm:space-y-4">
+            <div className="absolute inset-0 flex flex-col justify-end p-3 sm:p-6 lg:p-10 space-y-2 sm:space-y-3">
+              <div className="w-full space-y-2 sm:space-y-3">
                 {/* Badge */}
-                <div className="inline-flex w-fit bg-gradient-to-r from-[#E31E24] to-[#B91C1C] text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-full font-bold text-xs sm:text-sm shadow-[0_0_20px_rgba(227,30,36,0.6)] border-2 border-[#E31E24]/50">
+                <div className="inline-flex w-fit bg-gradient-to-r from-[#E31E24] to-[#B91C1C] text-white px-2 py-1 sm:px-4 sm:py-2 rounded-full font-bold text-[10px] sm:text-sm shadow-[0_0_20px_rgba(227,30,36,0.6)] border border-[#E31E24]/50">
                   🔴 הרשת החדשה
                 </div>
 
                 {/* Title */}
-                <h1 className="text-base sm:text-3xl lg:text-5xl font-bold text-white leading-snug sm:leading-tight drop-shadow-2xl break-words line-clamp-2">
+                <h1 className="text-lg sm:text-2xl lg:text-4xl font-bold text-white leading-tight drop-shadow-2xl break-words line-clamp-2">
                   {featuredArticle.title}
                 </h1>
 
                 {/* Subtitle */}
-                <p className="text-xs sm:text-lg lg:text-2xl text-gray-100 drop-shadow-lg font-medium break-words leading-snug line-clamp-2">
+                <p className="text-sm sm:text-base lg:text-xl text-gray-100 drop-shadow-lg font-medium break-words leading-snug line-clamp-2">
                   {featuredArticle.subtitle}
                 </p>
 
                 {/* Content Preview - Hidden on small screens */}
-                <p className="hidden sm:block text-base lg:text-lg text-gray-200 leading-relaxed line-clamp-2 lg:line-clamp-3 break-words">
+                <p className="hidden sm:block text-sm lg:text-base text-gray-200 leading-relaxed line-clamp-2 break-words">
                   {featuredArticle.content}
                 </p>
 
                 {/* Meta Info */}
-                <div className="flex items-center gap-2 sm:gap-3 text-xs sm:text-sm pt-1 sm:pt-2">
-                  <span className="flex items-center gap-1.5 bg-black/60 px-3 py-1.5 sm:px-4 sm:py-2 rounded-full backdrop-blur-sm text-gray-200">
+                <div className="flex items-center gap-2 text-xs sm:text-sm pt-1">
+                  <span className="flex items-center gap-1 bg-black/60 px-2 py-1 sm:px-4 sm:py-2 rounded-full backdrop-blur-sm text-gray-200">
                     <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
                     {new Date(featuredArticle.created_date).toLocaleDateString('he-IL', { 
                       month: 'short', 
@@ -216,7 +216,7 @@ export default function Home() {
         </section>
 
         {/* Weather Forecast Button */}
-        <section className="px-4 mb-6 sm:mb-8 max-w-full overflow-hidden flex justify-center">
+        <section className="w-full px-4 mb-4 sm:mb-8 flex justify-center">
           <motion.button
             onClick={() => {
               window.dispatchEvent(new CustomEvent('openWeatherChat'));
@@ -231,9 +231,9 @@ export default function Home() {
               repeat: Infinity,
               ease: "easeInOut"
             }}
-            className="w-[160px] sm:w-[200px] bg-gradient-to-r from-[#E31E24] via-[#0080FF] to-[#E31E24] hover:from-[#0080FF] hover:via-[#E31E24] hover:to-[#0080FF] text-white py-2 sm:py-5 rounded-lg sm:rounded-2xl shadow-[0_0_40px_rgba(227,30,36,0.6)] border-2 border-[#E31E24]/50 flex items-center justify-center gap-1.5 sm:gap-3 font-bold text-xs sm:text-lg transition-all"
+            className="w-[140px] sm:w-[200px] bg-gradient-to-r from-[#E31E24] via-[#0080FF] to-[#E31E24] hover:from-[#0080FF] hover:via-[#E31E24] hover:to-[#0080FF] text-white py-3 sm:py-5 rounded-lg sm:rounded-2xl shadow-[0_0_40px_rgba(227,30,36,0.6)] border border-[#E31E24]/50 flex items-center justify-center gap-2 sm:gap-3 font-bold text-xs sm:text-lg transition-all"
           >
-            <Cloud className="w-4 sm:w-7 h-4 sm:h-7 drop-shadow-[0_0_8px_currentColor]" />
+            <Cloud className="w-5 sm:w-7 h-5 sm:h-7 drop-shadow-[0_0_8px_currentColor]" />
           </motion.button>
         </section>
 
