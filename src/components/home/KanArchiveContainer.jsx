@@ -28,20 +28,20 @@ export default function KanArchiveContainer() {
   const [selectedEpisode, setSelectedEpisode] = useState(null);
 
   return (
-    <section className="px-4 py-12">
-      <div className="max-w-7xl mx-auto">
+    <section className="w-full py-6 sm:py-12">
+      <div className="w-full px-4">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mb-8"
+          className="mb-4 sm:mb-8"
         >
-          <div className="flex items-center gap-3 mb-3">
-            <Flame className="w-8 h-8 text-[#E31E24]" />
-            <h2 className="text-4xl font-bold text-white">עמוד האש</h2>
+          <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
+            <Flame className="w-6 h-6 sm:w-8 sm:h-8 text-[#E31E24]" />
+            <h2 className="text-2xl sm:text-4xl font-bold text-white">עמוד האש</h2>
           </div>
-          <p className="text-gray-400 text-lg">
+          <p className="text-gray-400 text-sm sm:text-lg">
             סדרה תיעודית על ציוני הדרך החשובים ביותר של עם היהודי והקמת המדינה | כאן
           </p>
           <div className="mt-2 flex flex-wrap gap-2">
@@ -58,7 +58,7 @@ export default function KanArchiveContainer() {
         </motion.div>
 
         {/* Episodes Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
           {episodes.map((episode, idx) => (
             <motion.div
               key={episode.id}
