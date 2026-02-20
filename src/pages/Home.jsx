@@ -244,28 +244,28 @@ export default function Home() {
 
 
       {/* Real Time Alerts */}
-      <section className="px-4 mb-8 max-w-full overflow-hidden">
-        <React.Suspense fallback={<Skeleton className="w-full h-64 bg-gray-800" />}>
+      <section className="w-full mb-4 sm:mb-8">
+        <React.Suspense fallback={<Skeleton className="w-full h-64 bg-gray-800 mx-4" />}>
           <RealTimeAlertsContainer />
         </React.Suspense>
       </section>
 
       {/* Trending Videos - Popular Right Now */}
-      <section className="px-4 mb-8 max-w-full overflow-hidden">
-        <React.Suspense fallback={<Skeleton className="w-full h-96 bg-gray-800" />}>
+      <section className="w-full mb-4 sm:mb-8">
+        <React.Suspense fallback={<Skeleton className="w-full h-96 bg-gray-800 mx-4" />}>
           <TrendingVideosContainer />
         </React.Suspense>
       </section>
 
       {/* Breaking News Updates Feed */}
-      <section className="px-4 mb-8 max-w-full overflow-hidden">
-        <React.Suspense fallback={<Skeleton className="w-full h-96 bg-gray-800" />}>
+      <section className="w-full mb-4 sm:mb-8">
+        <React.Suspense fallback={<Skeleton className="w-full h-96 bg-gray-800 mx-4" />}>
           <UpdatesFeed />
         </React.Suspense>
       </section>
 
       {/* Horizontal News Scrollers */}
-      <section className="px-4 mb-8 max-w-full overflow-hidden">
+      <section className="w-full mb-4 sm:mb-8">
         <HorizontalNewsScroller
           category="security"
           title="ביטחון ומדיניות"
