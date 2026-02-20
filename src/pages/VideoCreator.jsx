@@ -709,7 +709,10 @@ export default function VideoCreator() {
               onClick={(e) => e.stopPropagation()}
             >
               <div className="p-6 border-b border-gray-800 flex items-center justify-between">
-                <h2 className="text-2xl font-bold text-white">היסטוריית סרטונים</h2>
+                <div>
+                  <h2 className="text-2xl font-bold text-white">היסטוריית סרטונים</h2>
+                  <p className="text-sm text-gray-400 mt-1">סה"כ {generatedVideos.length} סרטונים</p>
+                </div>
                 <button
                   onClick={() => setHistoryOpen(false)}
                   className="p-2 hover:bg-gray-800 rounded-lg transition-colors"
@@ -719,14 +722,19 @@ export default function VideoCreator() {
               </div>
               
               <div className="p-6 overflow-y-auto max-h-[calc(85vh-100px)]">
-                {generatedVideos.length === 0 ? (
+                {loadingHistory ? (
+                  <div className="flex flex-col items-center justify-center py-16">
+                    <Loader2 className="w-12 h-12 text-purple-500 animate-spin mb-4" />
+                    <p className="text-gray-400 text-lg">טוען את כל הסרטונים מ-HeyGen...</p>
+                  </div>
+                ) : generatedVideos.length === 0 ? (
                   <div className="text-center py-16">
                     <Video className="w-20 h-20 text-gray-700 mx-auto mb-4" />
-                    <p className="text-gray-500 text-lg">עדיין לא נוצרו סרטונים</p>
+                    <p className="text-gray-500 text-lg">לא נמצאו סרטונים</p>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-3 gap-4">
-                    {generatedVideos.map((video) => (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {generatedVideos.map((video, idx) => (
                       <div key={video.id} className="bg-black rounded-xl overflow-hidden border border-gray-800 hover:border-purple-500/50 transition-all">
                         <div className="relative">
                           <video 
