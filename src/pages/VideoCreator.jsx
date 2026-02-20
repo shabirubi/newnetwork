@@ -792,15 +792,13 @@ export default function VideoCreator() {
               >
                 {uploadingFile ? <Loader2 className="w-5 h-5 animate-spin text-purple-400" /> : <Plus className="w-5 h-5 text-purple-400" />}
               </Button>
-              <Button
+              <button
                 onClick={handleVoiceRecording}
                 disabled={uploadingFile || loading}
-                variant="ghost"
-                size="sm"
-                className={`${isRecording ? 'bg-red-600/50 hover:bg-red-600/70 animate-pulse' : 'bg-gray-700/50 hover:bg-gray-700'} border border-gray-600/50 rounded-xl px-3 sm:px-4`}
+                className={`${isRecording ? 'bg-red-600/50 hover:bg-red-600/70 animate-pulse' : 'bg-gray-700/50 hover:bg-gray-700'} border border-gray-600/50 rounded-xl px-3 sm:px-4 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center`}
               >
                 {isRecording ? <Square className="w-5 h-5 text-white" /> : <Mic className="w-5 h-5 text-purple-400" />}
-              </Button>
+              </button>
               <div className="flex-1 relative">
                 <input
                   type="text"
