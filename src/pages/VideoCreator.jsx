@@ -47,18 +47,24 @@ export default function VideoCreator() {
   useEffect(() => {
     const loadHistory = async () => {
       console.log('🚀 === LOADING VIDEO HISTORY === 🚀');
+      setLoadingHistory(true);
       const allVideos = [];
       
       // 1. Load from HeyGen FIRST (main source)
       try {
         console.log('🔄 Step 1: Fetching HeyGen API...');
+        toast.loading('טוען סרטונים מ-HeyGen...', { id: 'loading-heygen' });
+        
         const response = await base44.functions.invoke('listHeyGenVideos', {});
-        console.log('📡 HeyGen Response:', response);
+        console.log('📡 HeyGen Full Response:', response);
+        console.log('📡 Response Data:', response?.data);
+        console.log('📡 Videos Array:', response?.data?.videos);
         
         if (response?.data?.videos && Array.isArray(response.data.videos)) {
+          console.log('✅ Found', response.data.videos.length, 'videos in response');
+          
           const heygenVideos = response.data.videos
             .filter(v => v.status === 'completed' && v.video_url)
-            .slice(0, 10000)
             .map(v => ({
               id: v.id,
               title: v.title || `Video ${v.id.substring(0, 8)}`,
@@ -72,11 +78,15 @@ export default function VideoCreator() {
           console.log('✅ HeyGen:', heygenVideos.length, 'videos loaded');
           console.log('📋 First HeyGen video:', heygenVideos[0]);
           console.log('📋 Last HeyGen video:', heygenVideos[heygenVideos.length - 1]);
+          
+          toast.success(`✅ נטענו ${heygenVideos.length} סרטונים מ-HeyGen`, { id: 'loading-heygen' });
         } else {
           console.warn('⚠️ HeyGen: No videos in response');
+          toast.error('לא נמצאו סרטונים ב-HeyGen', { id: 'loading-heygen' });
         }
       } catch (e) {
         console.error('❌ HeyGen ERROR:', e);
+        toast.error('שגיאה בטעינת HeyGen: ' + e.message, { id: 'loading-heygen' });
       }
       
       // 2. Load from Database
