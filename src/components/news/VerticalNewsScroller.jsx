@@ -23,8 +23,8 @@ export default function VerticalNewsScroller({ category, title, icon: Icon }) {
       }
     },
     initialData: [],
-    staleTime: 5 * 60 * 1000,
-    gcTime: 10 * 60 * 1000
+    staleTime: 8 * 60 * 60 * 1000, // 8 hours
+    refetchInterval: 8 * 60 * 60 * 1000 // Refetch every 8 hours
   });
 
   const checkScroll = () => {
