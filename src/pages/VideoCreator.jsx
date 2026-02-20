@@ -735,19 +735,23 @@ export default function VideoCreator() {
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {generatedVideos.map((video, idx) => (
-                      <div key={video.id} className="bg-black rounded-xl overflow-hidden border border-gray-800 hover:border-purple-500/50 transition-all">
+                      <div key={video.id || idx} className="bg-black rounded-xl overflow-hidden border border-gray-800 hover:border-purple-500/50 transition-all">
                         <div className="relative">
                           <video 
                             src={video.videoUrl} 
                             controls 
                             className="w-full aspect-video bg-black"
+                            preload="metadata"
                           />
+                          <div className="absolute top-2 left-2 bg-purple-600 px-2 py-1 rounded text-white text-xs font-bold">
+                            #{idx + 1}
+                          </div>
                           <div className="absolute top-2 right-2 bg-gradient-to-r from-purple-600 to-pink-600 px-2 py-1 rounded text-white text-xs font-bold">
-                            Digital Dreams
+                            {video.source === 'heygen' ? 'HeyGen' : 'Digital Dreams'}
                           </div>
                         </div>
                         <div className="p-3 space-y-2">
-                          <p className="text-white font-medium text-sm">{video.title}</p>
+                          <p className="text-white font-medium text-sm line-clamp-2">{video.title}</p>
                           <p className="text-gray-500 text-xs">{new Date(video.timestamp).toLocaleString('he-IL')}</p>
                           <div className="flex gap-2">
                             <a
