@@ -20,6 +20,9 @@ export default function VideoCreator() {
   const fileInputRef = useRef(null);
   const [uploadingFile, setUploadingFile] = useState(false);
   const messagesEndRef = useRef(null);
+  const [isRecording, setIsRecording] = useState(false);
+  const mediaRecorderRef = useRef(null);
+  const audioChunksRef = useRef([]);
 
   // Load history from HeyGen + Database + localStorage
   useEffect(() => {
