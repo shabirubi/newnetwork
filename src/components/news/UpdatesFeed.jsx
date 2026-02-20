@@ -54,7 +54,7 @@ export default function UpdatesFeed() {
             className="border-b border-gray-800 hover:bg-gray-900/50 transition-all group"
             >
             <Link 
-              to={createPageUrl(`Article?id=${article.id}`)}
+              to={createPageUrl("Article") + `?id=${article.id}`}
               className="block p-2 sm:p-3"
             >
               {/* Image if available */}
@@ -116,7 +116,7 @@ export default function UpdatesFeed() {
               className="border-b border-gray-800 hover:bg-gray-900/50 transition-all group"
             >
               <Link 
-                to={createPageUrl(`Article?id=${article.id}`)}
+                to={createPageUrl("Article") + `?id=${article.id}`}
                 className="block p-3"
               >
                 {article.image_url && (
