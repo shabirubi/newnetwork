@@ -94,7 +94,7 @@ export default function VerticalNewsScroller({ category, title, icon: Icon }) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.05 }}
             >
-              <Link to={createPageUrl("Article") + `?id=${article.id}`}>
+              <Link to={`/article/${article.id}`}>
                 <div className="group relative bg-gradient-to-br from-gray-800/50 to-gray-900/50 border border-gray-700/50 rounded-xl overflow-hidden hover:border-[#0080FF]/50 transition-all cursor-pointer h-32 sm:h-40">
                   {/* Image Background */}
                   {article.image_url && (
