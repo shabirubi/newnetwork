@@ -2,7 +2,7 @@ import React from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
-import { Radio, TrendingUp, Clock, ChevronLeft, Flame, Zap, Target, Shield, DollarSign, Landmark, Cpu, Trophy, Clapperboard, Globe, Heart, Tv, Newspaper, MessageCircle, Settings, X, Film, Video, Cloud, BookOpen, Microscope, TreePine, Scale, Music, Stars, Home as HomeIcon, AlertTriangle } from "lucide-react";
+import { Radio, TrendingUp, Clock, ChevronLeft, Flame, Zap, Target, Shield, DollarSign, Landmark, Cpu, Trophy, Clapperboard, Globe, Heart, Tv, Newspaper, MessageCircle, Settings, X, Film, Video, Cloud, BookOpen, Microscope, TreePine, Scale, Music, Stars, Home as HomeIcon, AlertTriangle, Droplet, Mic, Users, Wand2, FileVideo } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
 import { Button } from "@/components/ui/button";
@@ -27,7 +27,6 @@ import AccessibilityPanel from "../components/accessibility/AccessibilityPanel";
 import UploadVideoModal from "../components/home/UploadVideoModal";
 import UserUploadedVideos from "../components/home/UserUploadedVideos";
 import ReportersSpotlight from "../components/home/ReportersSpotlight";
-import { Droplet, Mic, Users, Wand2, FileVideo } from "lucide-react";
 import ReporterLiveChat from "../components/reporter/ReporterLiveChat";
 
 import ZakaMediaKitContainer from "../components/home/ZakaMediaKitContainer";
