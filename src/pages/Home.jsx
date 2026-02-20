@@ -159,61 +159,12 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-black space-y-0 sm:space-y-6">
 
-      {/* Featured Article Section - Full Screen */}
-      <section className="w-full px-4 mb-4 mt-2">
-        <Link 
-          to={`${createPageUrl("Article")}?id=${featuredArticle.id}`}
-          className="block group relative rounded-xl sm:rounded-2xl overflow-hidden cursor-pointer w-full"
-        >
-          <div className="relative h-[280px] sm:h-[500px]">
-            {/* תמונה ברקע */}
-            <img 
-              src={featuredArticle.image_url} 
-              alt={featuredArticle.title}
-              className="absolute inset-0 w-full h-full object-cover"
-            />
-
-            {/* Gradient Overlay */}
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-black/80 to-transparent" />
-
-            {/* טקסט מעל התמונה */}
-            <div className="absolute inset-0 flex flex-col justify-end p-3 sm:p-6 lg:p-10 space-y-2 sm:space-y-3">
-              <div className="w-full space-y-2 sm:space-y-3">
-                {/* Badge */}
-                <div className="inline-flex w-fit bg-gradient-to-r from-[#E31E24] to-[#B91C1C] text-white px-2 py-1 sm:px-4 sm:py-2 rounded-full font-bold text-[10px] sm:text-sm shadow-[0_0_20px_rgba(227,30,36,0.6)] border border-[#E31E24]/50">
-                  🔴 הרשת החדשה
-                </div>
-
-                {/* Title */}
-                <h1 className="text-lg sm:text-2xl lg:text-4xl font-bold text-white leading-tight drop-shadow-2xl break-words line-clamp-2">
-                  {featuredArticle.title}
-                </h1>
-
-                {/* Subtitle */}
-                <p className="text-sm sm:text-base lg:text-xl text-gray-100 drop-shadow-lg font-medium break-words leading-snug line-clamp-2">
-                  {featuredArticle.subtitle}
-                </p>
-
-                {/* Content Preview - Hidden on small screens */}
-                <p className="hidden sm:block text-sm lg:text-base text-gray-200 leading-relaxed line-clamp-2 break-words">
-                  {featuredArticle.content}
-                </p>
-
-                {/* Meta Info */}
-                <div className="flex items-center gap-2 text-xs sm:text-sm pt-1">
-                  <span className="flex items-center gap-1 bg-black/60 px-2 py-1 sm:px-4 sm:py-2 rounded-full backdrop-blur-sm text-gray-200">
-                    <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
-                    {new Date(featuredArticle.created_date).toLocaleDateString('he-IL', { 
-                      month: 'short', 
-                      day: 'numeric'
-                    })}
-                  </span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </Link>
-        </section>
+      {/* Breaking News - Hot Updates */}
+      <section className="w-full mb-4 sm:mb-8">
+        <React.Suspense fallback={<Skeleton className="w-full h-96 bg-gray-800 mx-4" />}>
+          <UpdatesFeed />
+        </React.Suspense>
+      </section>
 
         {/* Weather Forecast Button */}
         <section className="w-full px-4 mb-4 sm:mb-8 flex justify-center">
@@ -245,12 +196,7 @@ export default function Home() {
 
 
 
-      {/* Breaking News Updates Feed */}
-      <section className="w-full mb-4 sm:mb-8">
-        <React.Suspense fallback={<Skeleton className="w-full h-96 bg-gray-800 mx-4" />}>
-          <UpdatesFeed />
-        </React.Suspense>
-      </section>
+
 
       {/* Horizontal News Scrollers */}
       <section className="w-full px-4 mb-4 sm:mb-8">
