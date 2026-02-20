@@ -3,12 +3,14 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Share2, Heart, MessageCircle, Loader2 } from "lucide-react";
 import VideoShareModal from "../shared/VideoShareModal";
 
-export default function NewsReelsModal({ isOpen, onClose, initialReel, allReels = [] }) {
+export default function NewsReelsModal({ isOpen, onClose, initialReel, reel, allReels = [] }) {
   const [shareModalOpen, setShareModalOpen] = useState(false);
 
-  if (!isOpen || !initialReel) return null;
+  const currentReel = initialReel || reel;
+  if (!isOpen && !currentReel) return null;
+  if (!currentReel) return null;
 
-  const videoUrl = initialReel.url;
+  const videoUrl = currentReel.url || currentReel.videoUrl;
 
   return (
     <motion.div
@@ -47,6 +49,10 @@ export default function NewsReelsModal({ isOpen, onClose, initialReel, allReels 
               autoPlay
               playsInline
               className="w-full h-full object-contain"
+              onError={(e) => {
+                console.error('Video load error:', e);
+                e.target.style.display = 'none';
+              }}
             />
           )}
         </div>
@@ -54,9 +60,9 @@ export default function NewsReelsModal({ isOpen, onClose, initialReel, allReels 
         {/* Content */}
         <div className="p-6 space-y-4">
           <div>
-            <h2 className="text-2xl font-bold text-white mb-2">{initialReel.title}</h2>
-            {initialReel.description && (
-              <p className="text-gray-300">{initialReel.description}</p>
+            <h2 className="text-2xl font-bold text-white mb-2">{currentReel.title}</h2>
+            {currentReel.description && (
+              <p className="text-gray-300">{currentReel.description}</p>
             )}
           </div>
 
@@ -68,7 +74,7 @@ export default function NewsReelsModal({ isOpen, onClose, initialReel, allReels 
               className="flex items-center gap-2 text-gray-300 hover:text-[#E31E24] transition-colors"
             >
               <Heart className="w-5 h-5" />
-              <span className="text-sm font-bold">{initialReel.likes || 0}</span>
+              <span className="text-sm font-bold">{currentReel.likes || 0}</span>
             </motion.button>
 
             <motion.button
@@ -97,7 +103,7 @@ export default function NewsReelsModal({ isOpen, onClose, initialReel, allReels 
         isOpen={shareModalOpen}
         onClose={() => setShareModalOpen(false)}
         videoUrl={videoUrl}
-        videoTitle={initialReel.title}
+        videoTitle={currentReel.title}
       />
     </motion.div>
   );
