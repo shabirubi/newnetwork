@@ -160,27 +160,7 @@ export default function Home() {
 
 
 
-        {/* Weather Forecast Button */}
-        <section className="w-full px-4 mb-4 sm:mb-8 flex justify-center">
-          <motion.button
-            onClick={() => {
-              window.dispatchEvent(new CustomEvent('openWeatherChat'));
-            }}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-            animate={{
-              backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"]
-            }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-            className="w-[140px] sm:w-[200px] bg-gradient-to-r from-[#E31E24] via-[#0080FF] to-[#E31E24] hover:from-[#0080FF] hover:via-[#E31E24] hover:to-[#0080FF] text-white py-3 sm:py-5 rounded-lg sm:rounded-2xl shadow-[0_0_40px_rgba(227,30,36,0.6)] border border-[#E31E24]/50 flex items-center justify-center gap-2 sm:gap-3 font-bold text-xs sm:text-lg transition-all"
-          >
-            <Cloud className="w-5 sm:w-7 h-5 sm:h-7 drop-shadow-[0_0_8px_currentColor]" />
-          </motion.button>
-        </section>
+
 
 
 
