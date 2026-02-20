@@ -201,8 +201,8 @@ export default function VideoCreator() {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (!file.type.startsWith('image/')) {
-      toast.error('רק תמונות מותרות');
+    if (!file.type.startsWith('image/') && file.type !== 'application/pdf') {
+      toast.error('רק תמונות וקבצי PDF מותרים');
       return;
     }
 
