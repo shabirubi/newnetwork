@@ -212,7 +212,7 @@ export default function RealTimeAlertsContainer() {
                     <button
                       onClick={() => handleGenerateVideo(alert)}
                       disabled={generatingVideoId === alert.id}
-                      className="flex-1 flex items-center justify-center gap-2 px-3 py-2 sm:py-2.5 bg-[#0080FF]/80 hover:bg-[#0080FF] disabled:bg-gray-600 text-white rounded-lg font-semibold transition-colors text-xs sm:text-sm"
+                      className="flex-1 flex items-center justify-center gap-2 px-4 py-3 sm:py-3.5 bg-[#0080FF]/80 hover:bg-[#0080FF] disabled:bg-gray-600 text-white rounded-lg font-semibold transition-colors text-sm sm:text-base"
                     >
                       {generatingVideoId === alert.id ? (
                         <Loader2 className="w-4 h-4 animate-spin" />
