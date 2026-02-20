@@ -19,8 +19,8 @@ Deno.serve(async (req) => {
 
     for (const news of newsData) {
       try {
-        // Generate image for each article
-        const imagePrompt = `Professional news article image for: ${news.title}. Style: modern, professional, relevant to ${news.category}. High quality, 16:9 aspect ratio.`;
+        // Generate image for each article - only English text
+        const imagePrompt = `Professional news article image about ${news.category}. Style: modern, professional, clean. No text or Hebrew characters. High quality, 16:9 aspect ratio. Relevant to news and current events.`;
         
         const imageResponse = await base44.integrations.Core.GenerateImage({
           prompt: imagePrompt
