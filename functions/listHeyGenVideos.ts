@@ -12,7 +12,7 @@ Deno.serve(async (req) => {
 
     let allVideos = [];
     let page = 0;
-    const maxPages = 3; // Only fetch first 3 pages (300 videos max)
+    const maxPages = 100; // Fetch up to 100 pages (10,000 videos max)
 
     // Use v1/video.list with pagination
     while (page < maxPages) {
