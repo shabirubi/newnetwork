@@ -578,7 +578,7 @@ export default function VideoCreator() {
             </div>
           )}
 
-          {loading && !currentVideo && (
+          {(loading || messages.some(msg => msg.tool_calls?.some(tc => tc.status === 'running' || tc.status === 'in_progress'))) && !currentVideo && (
             <motion.div 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
