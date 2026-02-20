@@ -26,7 +26,7 @@ Deno.serve(async (req) => {
           prompt: imagePrompt
         });
 
-        const imageUrl = imageResponse?.url || `https://images.unsplash.com/photo-1495972066513-4d71bcdd2085?w=400&h=300&fit=crop`;
+        const imageUrl = imageResponse?.url;
 
         // Create article with generated image
         await base44.asServiceRole.entities.NewsArticle.create({
