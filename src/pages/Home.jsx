@@ -371,12 +371,7 @@ export default function Home() {
 
 
 
-      {/* Trending Topics */}
-      <section className="px-4 mb-8 max-w-full overflow-hidden">
-        <React.Suspense fallback={<Skeleton className="w-full h-64 bg-gray-800" />}>
-          <TrendingTopicsContainer />
-        </React.Suspense>
-      </section>
+
 
       {/* TikTok News Feed */}
       <section className="px-4 mb-8 max-w-full overflow-hidden">
