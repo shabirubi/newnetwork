@@ -181,15 +181,15 @@ export default function TrendingVideosContainer() {
 
         {/* Progress Dots */}
         {videos.length > visibleVideos && (
-          <div className="flex items-center justify-center gap-2 mt-6">
+          <div className="flex items-center justify-center gap-1.5 mt-3 sm:mt-4">
             {[...Array(Math.ceil((videos.length - visibleVideos + 1)))].map((_, i) => (
               <button
                 key={i}
                 onClick={() => setCurrentIndex(i)}
-                className={`h-2 rounded-full transition-all ${
+                className={`h-1.5 rounded-full transition-all ${
                   currentIndex === i
-                    ? 'w-8 bg-[#E31E24]'
-                    : 'w-2 bg-gray-600 hover:bg-gray-500'
+                    ? 'w-6 bg-[#E31E24]'
+                    : 'w-1.5 bg-gray-600 hover:bg-gray-500'
                 }`}
               />
             ))}
@@ -212,6 +212,6 @@ export default function TrendingVideosContainer() {
           likes: v.likes || 0
         }))}
       />
-    </>
+    </div>
   );
 }
