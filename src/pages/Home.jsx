@@ -369,12 +369,7 @@ export default function Home() {
         />
       </section>
 
-      {/* News Reels Section */}
-      <section className="px-4 mb-8 max-w-full overflow-hidden">
-        <React.Suspense fallback={<Skeleton className="w-full h-96 bg-gray-800" />}>
-          <NewsReels />
-        </React.Suspense>
-      </section>
+
 
       {/* Trending Topics */}
       <section className="px-4 mb-8 max-w-full overflow-hidden">
