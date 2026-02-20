@@ -222,6 +222,14 @@ export default function Home() {
         <HorizontalNewsScroller
           category="crime"
           title="פלילים ומשטרה"
+          icon={AlertTriangle}
+        />
+      </section>
+
+      <section className="w-full px-4 mb-4 sm:mb-8">
+        <HorizontalNewsScroller
+          category="crime"
+          title="חדשות פלילים"
           icon={Shield}
         />
       </section>
