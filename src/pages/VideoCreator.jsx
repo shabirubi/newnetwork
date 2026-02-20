@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
-import { Send, Video, Loader2, Home, Shield, Download, History, X, Play, Plus } from "lucide-react";
+import { Send, Video, Loader2, Home, Shield, Download, History, X, Play, Plus, Mic, Square } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
 import { Link } from "react-router-dom";
