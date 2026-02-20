@@ -279,6 +279,5 @@ export default function RealTimeAlertsContainer() {
         )}
       </AnimatePresence>
     </div>
-    </section>
   );
 }
