@@ -278,6 +278,7 @@ export default function RealTimeAlertsContainer() {
           </motion.div>
         )}
       </AnimatePresence>
+      </div>
     </div>
   );
 }
