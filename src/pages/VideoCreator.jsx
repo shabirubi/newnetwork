@@ -604,6 +604,28 @@ export default function VideoCreator() {
 
       {/* Main - Mobile Optimized */}
       <div className="flex-1 flex flex-col lg:flex-row overflow-hidden pb-40 sm:pb-24">
+        {/* Chat Panel - Left Side */}
+        <div className="hidden lg:flex lg:w-80 bg-black/40 border-l border-gray-800 flex-col">
+          <div className="p-4 border-b border-gray-800 sticky top-0 z-10 bg-black/90 backdrop-blur-xl">
+            <h3 className="text-white font-bold">💬 השיחה</h3>
+            <p className="text-purple-400 text-xs mt-1">{messages.length} הודעות</p>
+          </div>
+          <div className="flex-1 overflow-y-auto p-3 space-y-2">
+            {messages.length === 0 ? (
+              <p className="text-gray-500 text-xs text-center py-4">שלח הודעה כדי להתחיל</p>
+            ) : (
+              messages.map((msg, idx) => (
+                <div key={idx} className={`rounded-lg p-3 text-xs ${msg.role === 'user' ? 'bg-purple-600/30 border border-purple-500/30 text-purple-100' : 'bg-gray-800/50 border border-gray-700 text-gray-300'}`}>
+                  <p className="font-bold mb-1">{msg.role === 'user' ? '👤 אתה' : '🤖 Digital Dreams'}</p>
+                  <p className="whitespace-pre-wrap break-words">{msg.content?.substring(0, 150)}{msg.content?.length > 150 ? '...' : ''}</p>
+                  {msg.timestamp && <p className="text-[10px] mt-1 opacity-60">{new Date(msg.timestamp).toLocaleTimeString('he-IL')}</p>}
+                </div>
+              ))
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+        </div>
+
         {/* Center - Video Display */}
         <div className="flex-1 flex flex-col items-center justify-center p-3 sm:p-6 lg:p-8 overflow-y-auto pb-6">
           {messages.length === 0 && !currentVideo && (
