@@ -454,6 +454,8 @@ export default function VideoCreator() {
 
     const userMessage = input.trim();
     setInput("");
+    setLoading(true);
+    toast.loading('מתחיל ליצור סרטון...', { id: 'creating' });
 
     try {
       let conv = conversationId ? await base44.agents.getConversation(conversationId) : null;
@@ -474,6 +476,7 @@ export default function VideoCreator() {
       console.error('❌ Error:', err);
       toast.error('שגיאה: ' + err.message);
       setInput(userMessage);
+      setLoading(false);
     }
   };
 
