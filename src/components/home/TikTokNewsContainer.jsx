@@ -47,7 +47,7 @@ export default function TikTokNewsContainer() {
         </a>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2 sm:gap-3 lg:gap-4">
         {tiktokVideos.map((video, idx) => (
           <motion.div
             key={video.id}
@@ -64,20 +64,20 @@ export default function TikTokNewsContainer() {
             {/* Video Preview */}
             {video.thumbnail ? (
               <div className="relative w-full h-full">
-                <video
-                  src={video.url}
-                  className="w-full h-full object-cover pointer-events-none"
-                  muted
-                  playsInline
-                  poster={video.thumbnail}
-                ></video>
+                <img
+                  src={video.thumbnail}
+                  alt={video.title}
+                  className="w-full h-full object-cover"
+                  onError={(e) => e.target.src = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png"}
+                />
               </div>
             ) : (
               <div className="relative w-full h-full bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
-                <div className="text-center">
-                  <Play className="w-16 h-16 text-white/40 mx-auto mb-2" />
-                  <p className="text-white/60 text-sm">וידאו</p>
-                </div>
+                <img 
+                  src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png" 
+                  alt="הרשת החדשה" 
+                  className="w-full h-full object-cover opacity-70"
+                />
               </div>
             )}
             {/* Watermark */}
