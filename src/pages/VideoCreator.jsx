@@ -614,16 +614,21 @@ export default function VideoCreator() {
             <h3 className="text-white font-bold">💬 השיחה</h3>
             <p className="text-purple-400 text-xs mt-1">{messages.length} הודעות</p>
           </div>
-          <div className="flex-1 overflow-y-auto p-3 space-y-2">
+          <div className="flex-1 overflow-y-auto p-3 space-y-2 bg-black/20">
             {messages.length === 0 ? (
               <p className="text-gray-500 text-xs text-center py-4">שלח הודעה כדי להתחיל</p>
             ) : (
               messages.map((msg, idx) => (
-                <div key={idx} className={`rounded-lg p-3 text-xs ${msg.role === 'user' ? 'bg-purple-600/30 border border-purple-500/30 text-purple-100' : 'bg-gray-800/50 border border-gray-700 text-gray-300'}`}>
+                <motion.div 
+                  key={`${idx}-${msg.timestamp}`}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className={`rounded-lg p-3 text-xs ${msg.role === 'user' ? 'bg-purple-600/30 border border-purple-500/30 text-purple-100' : 'bg-gray-800/50 border border-gray-700 text-gray-300'}`}
+                >
                   <p className="font-bold mb-1">{msg.role === 'user' ? '👤 אתה' : '🤖 Digital Dreams'}</p>
                   <p className="whitespace-pre-wrap break-words">{msg.content?.substring(0, 150)}{msg.content?.length > 150 ? '...' : ''}</p>
                   {msg.timestamp && <p className="text-[10px] mt-1 opacity-60">{new Date(msg.timestamp).toLocaleTimeString('he-IL')}</p>}
-                </div>
+                </motion.div>
               ))
             )}
             <div ref={messagesEndRef} />
