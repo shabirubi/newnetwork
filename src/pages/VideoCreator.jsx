@@ -488,26 +488,32 @@ export default function VideoCreator() {
     const userMessage = input.trim();
     setInput("");
     setLoading(true);
-    toast.loading('מתחיל ליצור סרטון...', { id: 'creating' });
+    toast.loading('שולח בקשה...', { id: 'creating' });
 
     try {
       let conv = conversationId ? await base44.agents.getConversation(conversationId) : null;
       if (!conv) {
+        console.log('🆕 Creating new conversation...');
         conv = await base44.agents.createConversation({
           agent_name: "video_creator",
           metadata: { name: "יצירת סרטון" }
         });
+        console.log('✅ Conversation created:', conv.id);
         setConversationId(conv.id);
+      } else {
+        console.log('📝 Using existing conversation:', conv.id);
       }
 
+      console.log('📤 Sending message:', userMessage);
       await base44.agents.addMessage(conv, {
         role: "user",
         content: userMessage
       });
+      console.log('✅ Message sent successfully');
 
     } catch (err) {
-      console.error('❌ Error:', err);
-      toast.error('שגיאה: ' + err.message);
+      console.error('❌ Error in handleSend:', err);
+      toast.error('שגיאה: ' + err.message, { id: 'creating' });
       setInput(userMessage);
       setLoading(false);
     }
