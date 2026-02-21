@@ -521,7 +521,20 @@ export default function VideoCreator() {
       {/* Header - Mobile Optimized */}
       <div className="bg-black/80 backdrop-blur-xl border-b border-gray-800 px-3 sm:px-4 py-3 flex items-center justify-between z-10 flex-shrink-0">
         <div className="flex items-center gap-2 sm:gap-3">
-          <Video className="w-5 h-5 sm:w-6 sm:h-6 text-purple-500" />
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="w-5 h-5 sm:w-6 sm:h-6">
+            <defs>
+              <linearGradient id="headerRainbow" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#FF0080" />
+                <stop offset="33%" stopColor="#FFFF00" />
+                <stop offset="66%" stopColor="#00FF00" />
+                <stop offset="100%" stopColor="#0080FF" />
+              </linearGradient>
+            </defs>
+            <path
+              d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+              fill="url(#headerRainbow)"
+            />
+          </svg>
           <div>
             <h1 className="text-sm sm:text-lg font-bold text-white">Digital Dreams</h1>
             <p className="text-gray-500 text-[10px] sm:text-xs hidden sm:block">יוצר סרטונים AI</p>
@@ -624,122 +637,45 @@ export default function VideoCreator() {
             <motion.div 
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="w-full max-w-4xl px-2 sm:px-0"
+              className="w-full max-w-4xl px-2 sm:px-0 flex items-center justify-center"
             >
-              {/* נגן מעומעם עם לוגו לב צבעוני */}
-              <div className="bg-gradient-to-b from-gray-900 to-black rounded-lg overflow-hidden shadow-2xl border border-gray-800">
-                {/* Video Player Area - Dimmed */}
-                <div className="relative bg-black aspect-video flex items-center justify-center">
-                  {/* Background Pattern */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-gray-900/50 via-black to-gray-900/50"></div>
-
-                  {/* Animated Rainbow Heart Logo */}
-                  <motion.div
-                    className="relative z-10"
+              {/* לב פועם */}
+              <motion.div
+                animate={{
+                  scale: [1, 1.2, 1],
+                }}
+                transition={{
+                  duration: 1.5,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              >
+                <svg width="200" height="200" viewBox="0 0 24 24" fill="none">
+                  <defs>
+                    <linearGradient id="rainbowGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#FF0080" />
+                      <stop offset="20%" stopColor="#FF0000" />
+                      <stop offset="40%" stopColor="#FF8000" />
+                      <stop offset="60%" stopColor="#FFFF00" />
+                      <stop offset="80%" stopColor="#00FF00" />
+                      <stop offset="100%" stopColor="#0080FF" />
+                    </linearGradient>
+                  </defs>
+                  <motion.path
+                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                    fill="url(#rainbowGradient)"
+                    stroke="url(#rainbowGradient)"
+                    strokeWidth="1"
                     animate={{
-                      scale: [1, 1.1, 1],
+                      opacity: [0.6, 1, 0.6],
                     }}
                     transition={{
-                      duration: 2,
+                      duration: 1.5,
                       repeat: Infinity,
-                      ease: "easeInOut"
                     }}
-                  >
-                    <svg width="120" height="120" viewBox="0 0 24 24" fill="none">
-                      <defs>
-                        <linearGradient id="rainbowGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                          <stop offset="0%" stopColor="#FF0080" />
-                          <stop offset="20%" stopColor="#FF0000" />
-                          <stop offset="40%" stopColor="#FF8000" />
-                          <stop offset="60%" stopColor="#FFFF00" />
-                          <stop offset="80%" stopColor="#00FF00" />
-                          <stop offset="100%" stopColor="#0080FF" />
-                        </linearGradient>
-                      </defs>
-                      <motion.path
-                        d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
-                        fill="url(#rainbowGradient)"
-                        stroke="url(#rainbowGradient)"
-                        strokeWidth="1"
-                        animate={{
-                          opacity: [0.6, 1, 0.6],
-                        }}
-                        transition={{
-                          duration: 1.5,
-                          repeat: Infinity,
-                        }}
-                      />
-                    </svg>
-                  </motion.div>
-
-                  {/* Loading Overlay */}
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-                    <div className="text-center">
-                      <motion.div
-                        className="text-white text-xl sm:text-2xl font-bold mb-3"
-                        animate={{ opacity: [0.5, 1, 0.5] }}
-                        transition={{ duration: 2, repeat: Infinity }}
-                      >
-                        Digital Dreams
-                      </motion.div>
-                      <motion.div
-                        className="text-gray-400 text-sm"
-                        animate={{ opacity: [0.3, 0.7, 0.3] }}
-                        transition={{ duration: 1.5, repeat: Infinity }}
-                      >
-                        מייצר את הסרטון שלך...
-                      </motion.div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Controls Bar */}
-                <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-t border-gray-700">
-                  <div className="p-4 sm:p-5">
-                    <div className="flex items-center gap-3 mb-4">
-                      {/* Rainbow Heart Icon */}
-                      <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                          <defs>
-                            <linearGradient id="smallRainbow" x1="0%" y1="0%" x2="100%" y2="100%">
-                              <stop offset="0%" stopColor="#FF0080" />
-                              <stop offset="33%" stopColor="#FFFF00" />
-                              <stop offset="66%" stopColor="#00FF00" />
-                              <stop offset="100%" stopColor="#0080FF" />
-                            </linearGradient>
-                          </defs>
-                          <path
-                            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
-                            fill="url(#smallRainbow)"
-                          />
-                        </svg>
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="text-white font-bold text-sm sm:text-base">Digital Dreams Production</h3>
-                        <p className="text-gray-400 text-xs">מעבד את הסרטון...</p>
-                      </div>
-                      <div className="flex items-center gap-1 px-3 py-1 bg-yellow-500/20 rounded-full border border-yellow-500/30">
-                        <motion.div 
-                          className="w-2 h-2 rounded-full bg-yellow-500"
-                          animate={{ opacity: [1, 0.3, 1] }}
-                          transition={{ duration: 1.5, repeat: Infinity }}
-                        />
-                        <span className="text-yellow-400 text-xs font-bold">מעבד</span>
-                      </div>
-                    </div>
-
-                    {/* Progress Bar */}
-                    <div className="relative h-1 bg-gray-800 rounded-full overflow-hidden mb-4">
-                      <motion.div
-                        className="absolute inset-y-0 left-0 bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 rounded-full"
-                        initial={{ width: "0%" }}
-                        animate={{ width: "100%" }}
-                        transition={{ duration: 180, ease: "linear" }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
+                  />
+                </svg>
+              </motion.div>
             </motion.div>
           )}
 
