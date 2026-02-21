@@ -3,6 +3,15 @@ css
 @tailwind components;
 @tailwind utilities;
 
+/* Western Union Yellow Theme */
+:root {
+  --primary: #FFDD00;
+  --primary-dark: #E6C200;
+  --primary-light: #FFED33;
+  --accent: #FFDD00;
+  --accent-dark: #CCB000;
+}
+
 /* Prevent zoom on all inputs and buttons */
 input, textarea, select, button {
   touch-action: manipulation;
