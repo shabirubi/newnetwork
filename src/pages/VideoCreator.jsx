@@ -23,6 +23,7 @@ export default function VideoCreator() {
   const [isRecording, setIsRecording] = useState(false);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
+  const [loadingProgress, setLoadingProgress] = useState(0);
 
   // טעינת השיחה השמורה
   useEffect(() => {
@@ -392,6 +393,7 @@ export default function VideoCreator() {
 
     localStorage.setItem('pendingVideoId', videoId);
     localStorage.setItem('pendingVideoTitle', originalMessage);
+    setLoadingProgress(0);
 
     while (attempts < maxAttempts) {
       await new Promise(resolve => setTimeout(resolve, 3000));
@@ -400,6 +402,9 @@ export default function VideoCreator() {
         const { data } = await base44.functions.invoke('checkHeyGenVideoStatus', { video_id: videoId });
 
         console.log('📊 Poll #' + (attempts + 1) + ':', data.status, data.video_url ? '✅ URL exists' : '⏳ No URL yet');
+
+        const progress = Math.floor((attempts / maxAttempts) * 100);
+        setLoadingProgress(progress);
 
         if (data.status === 'completed' && data.video_url) {
           console.log('🎉 VIDEO READY! URL:', data.video_url);
@@ -456,7 +461,6 @@ export default function VideoCreator() {
           return;
         }
 
-        const progress = Math.floor((attempts / maxAttempts) * 100);
         const elapsedSeconds = attempts * 3;
         const remainingSeconds = Math.max(0, totalSeconds - elapsedSeconds);
         const remainingMinutes = Math.ceil(remainingSeconds / 60);
@@ -637,45 +641,113 @@ export default function VideoCreator() {
             <motion.div 
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="w-full max-w-4xl px-2 sm:px-0 flex items-center justify-center"
+              className="w-full max-w-4xl px-2 sm:px-0 flex flex-col items-center justify-center gap-8"
             >
-              {/* לב פועם */}
-              <motion.div
-                animate={{
-                  scale: [1, 1.2, 1],
-                }}
-                transition={{
-                  duration: 1.5,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-              >
-                <svg width="200" height="200" viewBox="0 0 24 24" fill="none">
-                  <defs>
-                    <linearGradient id="rainbowGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#FF0080" />
-                      <stop offset="20%" stopColor="#FF0000" />
-                      <stop offset="40%" stopColor="#FF8000" />
-                      <stop offset="60%" stopColor="#FFFF00" />
-                      <stop offset="80%" stopColor="#00FF00" />
-                      <stop offset="100%" stopColor="#0080FF" />
-                    </linearGradient>
-                  </defs>
-                  <motion.path
-                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
-                    fill="url(#rainbowGradient)"
-                    stroke="url(#rainbowGradient)"
-                    strokeWidth="1"
-                    animate={{
-                      opacity: [0.6, 1, 0.6],
-                    }}
-                    transition={{
-                      duration: 1.5,
-                      repeat: Infinity,
+              {/* לב פועם עם צבעים מתפתחים */}
+              <div className="relative">
+                <motion.div
+                  animate={{
+                    scale: [1, 1.15, 1],
+                    rotate: [0, 5, -5, 0],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                >
+                  <svg width="240" height="240" viewBox="0 0 24 24" fill="none">
+                    <defs>
+                      <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor={`rgba(255, 0, 128, ${0.3 + (loadingProgress / 100) * 0.7})`} />
+                        <stop offset="20%" stopColor={`rgba(255, 0, 0, ${0.3 + (loadingProgress / 100) * 0.7})`} />
+                        <stop offset="40%" stopColor={`rgba(255, 128, 0, ${0.3 + (loadingProgress / 100) * 0.7})`} />
+                        <stop offset="60%" stopColor={`rgba(255, 255, 0, ${0.3 + (loadingProgress / 100) * 0.7})`} />
+                        <stop offset="80%" stopColor={`rgba(0, 255, 0, ${0.3 + (loadingProgress / 100) * 0.7})`} />
+                        <stop offset="100%" stopColor={`rgba(0, 128, 255, ${0.3 + (loadingProgress / 100) * 0.7})`} />
+                      </linearGradient>
+                      <filter id="glow">
+                        <feGaussianBlur stdDeviation={3 + (loadingProgress / 100) * 7} result="coloredBlur"/>
+                        <feMerge>
+                          <feMergeNode in="coloredBlur"/>
+                          <feMergeNode in="SourceGraphic"/>
+                        </feMerge>
+                      </filter>
+                    </defs>
+                    <motion.path
+                      d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                      fill="url(#progressGradient)"
+                      stroke="url(#progressGradient)"
+                      strokeWidth="1.5"
+                      filter="url(#glow)"
+                      animate={{
+                        opacity: [0.4 + (loadingProgress / 100) * 0.3, 1, 0.4 + (loadingProgress / 100) * 0.3],
+                      }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                      }}
+                    />
+                  </svg>
+                </motion.div>
+
+                {/* Progress Ring */}
+                <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 240 240">
+                  <circle
+                    cx="120"
+                    cy="120"
+                    r="110"
+                    fill="none"
+                    stroke="rgba(255,255,255,0.1)"
+                    strokeWidth="4"
+                  />
+                  <motion.circle
+                    cx="120"
+                    cy="120"
+                    r="110"
+                    fill="none"
+                    stroke="url(#progressGradient)"
+                    strokeWidth="4"
+                    strokeLinecap="round"
+                    initial={{ pathLength: 0 }}
+                    animate={{ pathLength: loadingProgress / 100 }}
+                    transition={{ duration: 0.5 }}
+                    style={{
+                      strokeDasharray: 691.15,
+                      strokeDashoffset: 691.15 * (1 - loadingProgress / 100),
                     }}
                   />
                 </svg>
-              </motion.div>
+
+                {/* Progress Percentage */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <motion.div
+                    className="text-center"
+                    animate={{ scale: [1, 1.05, 1] }}
+                    transition={{ duration: 2, repeat: Infinity }}
+                  >
+                    <div className="text-5xl font-black text-white drop-shadow-2xl">
+                      {loadingProgress}%
+                    </div>
+                  </motion.div>
+                </div>
+              </div>
+
+              {/* Status Text */}
+              <div className="text-center space-y-3">
+                <motion.h3 
+                  className="text-2xl sm:text-3xl font-bold text-white drop-shadow-lg"
+                  animate={{ opacity: [0.7, 1, 0.7] }}
+                  transition={{ duration: 2, repeat: Infinity }}
+                >
+                  {loadingProgress < 35 ? '🎨 יצירת תוכן ויזואלי' : loadingProgress < 70 ? '⚙️ עיבוד וידאו מתקדם' : '🎬 גימור הסרטון'}
+                </motion.h3>
+                <p className="text-gray-400 text-sm sm:text-base">Digital Dreams מייצר עבורך סרטון מקצועי</p>
+                <div className="flex items-center justify-center gap-2 text-gray-500 text-xs">
+                  <div className="w-2 h-2 rounded-full bg-purple-500 animate-pulse"></div>
+                  <span>זמן משוער: {Math.ceil((100 - loadingProgress) / 20)} דקות</span>
+                </div>
+              </div>
             </motion.div>
           )}
 
