@@ -618,15 +618,13 @@ export default function VideoCreator() {
 
           {(loading || messages.some(msg => msg.tool_calls?.some(tc => (tc.status === 'running' || tc.status === 'in_progress') && tc.name === 'createFullProductionVideo'))) && !currentVideo && (
                             <motion.div 
-                              initial={{ opacity: 0, scale: 0, y: -100, x: 0 }}
+                              initial={{ opacity: 0, scale: 0 }}
                               animate={{ 
                                 opacity: 1, 
                                 scale: 1,
-                                y: 0,
-                                x: 0
                               }}
-                              exit={{ opacity: 0, scale: 0, y: -100 }}
-                              className="fixed top-32 left-1/2 transform -translate-x-1/2 z-50 pointer-events-none"
+                              exit={{ opacity: 0, scale: 0 }}
+                              className="absolute inset-0 flex items-center justify-center pointer-events-none"
                             >
                               <motion.div
                                 animate={{
