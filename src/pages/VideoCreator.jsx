@@ -676,118 +676,77 @@ export default function VideoCreator() {
           )}
 
           {(loading || messages.some(msg => msg.tool_calls?.some(tc => (tc.status === 'running' || tc.status === 'in_progress') && tc.name === 'createFullProductionVideo'))) && !currentVideo && (
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="w-full max-w-4xl px-2 sm:px-0 flex flex-col items-center justify-center gap-8"
-            >
-              {/* לב פועם עם צבעים מתפתחים */}
-              <div className="relative">
-                <motion.div
-                  animate={{
-                    scale: [1, 1.15, 1],
-                    rotate: [0, 5, -5, 0],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                >
-                  <svg width="240" height="240" viewBox="0 0 24 24" fill="none">
-                    <defs>
-                      <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor={`rgba(255, 0, 128, ${0.3 + (loadingProgress / 100) * 0.7})`} />
-                        <stop offset="20%" stopColor={`rgba(255, 0, 0, ${0.3 + (loadingProgress / 100) * 0.7})`} />
-                        <stop offset="40%" stopColor={`rgba(255, 128, 0, ${0.3 + (loadingProgress / 100) * 0.7})`} />
-                        <stop offset="60%" stopColor={`rgba(255, 255, 0, ${0.3 + (loadingProgress / 100) * 0.7})`} />
-                        <stop offset="80%" stopColor={`rgba(0, 255, 0, ${0.3 + (loadingProgress / 100) * 0.7})`} />
-                        <stop offset="100%" stopColor={`rgba(0, 128, 255, ${0.3 + (loadingProgress / 100) * 0.7})`} />
-                      </linearGradient>
-                      <filter id="glow">
-                        <feGaussianBlur stdDeviation={3 + (loadingProgress / 100) * 7} result="coloredBlur"/>
-                        <feMerge>
-                          <feMergeNode in="coloredBlur"/>
-                          <feMergeNode in="SourceGraphic"/>
-                        </feMerge>
-                      </filter>
-                    </defs>
-                    <motion.path
-                      d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
-                      fill="url(#progressGradient)"
-                      stroke="url(#progressGradient)"
-                      strokeWidth="1.5"
-                      filter="url(#glow)"
-                      animate={{
-                        opacity: [0.4 + (loadingProgress / 100) * 0.3, 1, 0.4 + (loadingProgress / 100) * 0.3],
-                      }}
-                      transition={{
-                        duration: 2,
-                        repeat: Infinity,
-                      }}
-                    />
-                  </svg>
-                </motion.div>
+                            <motion.div 
+                              initial={{ opacity: 0, scale: 0.95 }}
+                              animate={{ opacity: 1, scale: 1 }}
+                              className="flex flex-col items-center justify-center gap-8"
+                            >
+                              {/* לב פועם */}
+                              <div className="relative">
+                                <motion.div
+                                  animate={{
+                                    scale: [1, 1.15, 1],
+                                    rotate: [0, 5, -5, 0],
+                                  }}
+                                  transition={{
+                                    duration: 2,
+                                    repeat: Infinity,
+                                    ease: "easeInOut"
+                                  }}
+                                >
+                                  <svg width="240" height="240" viewBox="0 0 24 24" fill="none">
+                                    <defs>
+                                      <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" stopColor="rgba(255, 0, 128, 0.8)" />
+                                        <stop offset="20%" stopColor="rgba(255, 0, 0, 0.8)" />
+                                        <stop offset="40%" stopColor="rgba(255, 128, 0, 0.8)" />
+                                        <stop offset="60%" stopColor="rgba(255, 255, 0, 0.8)" />
+                                        <stop offset="80%" stopColor="rgba(0, 255, 0, 0.8)" />
+                                        <stop offset="100%" stopColor="rgba(0, 128, 255, 0.8)" />
+                                      </linearGradient>
+                                      <filter id="glow">
+                                        <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
+                                        <feMerge>
+                                          <feMergeNode in="coloredBlur"/>
+                                          <feMergeNode in="SourceGraphic"/>
+                                        </feMerge>
+                                      </filter>
+                                    </defs>
+                                    <motion.path
+                                      d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                                      fill="url(#progressGradient)"
+                                      stroke="url(#progressGradient)"
+                                      strokeWidth="1.5"
+                                      filter="url(#glow)"
+                                      animate={{
+                                        opacity: [0.6, 1, 0.6],
+                                      }}
+                                      transition={{
+                                        duration: 2,
+                                        repeat: Infinity,
+                                      }}
+                                    />
+                                  </svg>
+                                </motion.div>
+                              </div>
 
-                {/* Progress Ring */}
-                <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 240 240">
-                  <circle
-                    cx="120"
-                    cy="120"
-                    r="110"
-                    fill="none"
-                    stroke="rgba(255,255,255,0.1)"
-                    strokeWidth="4"
-                  />
-                  <motion.circle
-                    cx="120"
-                    cy="120"
-                    r="110"
-                    fill="none"
-                    stroke="url(#progressGradient)"
-                    strokeWidth="4"
-                    strokeLinecap="round"
-                    initial={{ pathLength: 0 }}
-                    animate={{ pathLength: loadingProgress / 100 }}
-                    transition={{ duration: 0.5 }}
-                    style={{
-                      strokeDasharray: 691.15,
-                      strokeDashoffset: 691.15 * (1 - loadingProgress / 100),
-                    }}
-                  />
-                </svg>
-
-                {/* Progress Percentage */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <motion.div
-                    className="text-center"
-                    animate={{ scale: [1, 1.05, 1] }}
-                    transition={{ duration: 2, repeat: Infinity }}
-                  >
-                    <div className="text-5xl font-black text-white drop-shadow-2xl">
-                      {loadingProgress}%
-                    </div>
-                  </motion.div>
-                </div>
-              </div>
-
-              {/* Status Text - Simple */}
-              <div className="text-center space-y-3">
-                <motion.h3 
-                  className="text-2xl sm:text-3xl font-bold text-white drop-shadow-lg"
-                  animate={{ opacity: [0.7, 1, 0.7] }}
-                  transition={{ duration: 2, repeat: Infinity }}
-                >
-                  יוצר סרטון מקצועי...
-                </motion.h3>
-                <p className="text-gray-400 text-sm sm:text-base">Digital Dreams</p>
-                <div className="flex items-center justify-center gap-2 text-gray-500 text-xs">
-                  <div className="w-2 h-2 rounded-full bg-purple-500 animate-pulse"></div>
-                  <span>זמן משוער: 3-5 דקות</span>
-                </div>
-              </div>
-            </motion.div>
-          )}
+                              {/* טקסט פשוט */}
+                              <div className="text-center space-y-3">
+                                <motion.h3 
+                                  className="text-2xl sm:text-3xl font-bold text-white drop-shadow-lg"
+                                  animate={{ opacity: [0.7, 1, 0.7] }}
+                                  transition={{ duration: 2, repeat: Infinity }}
+                                >
+                                  יוצר סרטון מקצועי...
+                                </motion.h3>
+                                <p className="text-gray-400 text-sm sm:text-base">Digital Dreams</p>
+                                <div className="flex items-center justify-center gap-2 text-gray-500 text-xs">
+                                  <div className="w-2 h-2 rounded-full bg-purple-500 animate-pulse"></div>
+                                  <span>זמן משוער: 3-5 דקות</span>
+                                </div>
+                              </div>
+                            </motion.div>
+                          )}
 
           {currentVideo && (
             <motion.div 
@@ -877,23 +836,72 @@ export default function VideoCreator() {
                   </div>
                 </div>
 
-                {/* Blueprint Panel */}
-                {blueprintData && (
-                  <motion.div
-                    initial={{ x: 300, opacity: 0 }}
-                    animate={{ x: 0, opacity: 1 }}
-                    className="lg:w-80 bg-gray-900/50 border border-gray-800 rounded-lg p-4 overflow-y-auto max-h-[600px]"
-                  >
-                    <h3 className="text-white font-bold mb-3 flex items-center gap-2">
-                      🎬 Production Blueprint
-                    </h3>
-                    <div className="bg-black/50 rounded-lg p-3">
-                      <pre className="text-gray-300 text-xs whitespace-pre-wrap font-mono">
-                        {blueprintData}
-                      </pre>
+                {/* Digital Dreams Magic Panel */}
+                <motion.div
+                  initial={{ x: 300, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  className="lg:w-96 bg-gradient-to-br from-purple-900/30 via-gray-900/50 to-pink-900/30 border-2 border-purple-500/30 rounded-xl p-5 overflow-y-auto max-h-[600px] shadow-2xl"
+                >
+                  <div className="flex items-center gap-3 mb-4">
+                    <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+                      <defs>
+                        <linearGradient id="magicGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                          <stop offset="0%" stopColor="#FF0080" />
+                          <stop offset="33%" stopColor="#FFFF00" />
+                          <stop offset="66%" stopColor="#00FF00" />
+                          <stop offset="100%" stopColor="#0080FF" />
+                        </linearGradient>
+                      </defs>
+                      <path
+                        d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                        fill="url(#magicGradient)"
+                      />
+                    </svg>
+                    <h3 className="text-white font-bold text-lg">קסם הפקה</h3>
+                  </div>
+
+                  {/* הפירוט המלא */}
+                  {messages.filter(m => m.role === 'assistant').slice(-1).map((msg, idx) => (
+                    <div key={idx} className="space-y-3">
+                      {msg.content && (
+                        <div className="bg-black/40 border border-purple-500/20 rounded-lg p-4">
+                          <div className="text-purple-300 text-sm whitespace-pre-wrap leading-relaxed">
+                            {msg.content}
+                          </div>
+                        </div>
+                      )}
+
+                      {msg.tool_calls?.map((tc, i) => (
+                        <div key={i} className="bg-black/40 border border-green-500/20 rounded-lg p-3">
+                          <div className="flex items-center gap-2 mb-2">
+                            <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                            <span className="text-green-400 text-xs font-bold">הפקה הושלמה</span>
+                          </div>
+                          {tc.arguments_string && (
+                            <div className="text-gray-400 text-xs">
+                              <pre className="whitespace-pre-wrap">
+                                {(() => {
+                                  try {
+                                    const args = JSON.parse(tc.arguments_string);
+                                    return `🎬 ${args.title || 'סרטון'}\n⏱️ ${args.duration || '?'}s\n🎨 ${args.visual_style || 'מקצועי'}`;
+                                  } catch {
+                                    return tc.arguments_string;
+                                  }
+                                })()}
+                              </pre>
+                            </div>
+                          )}
+                        </div>
+                      ))}
                     </div>
-                  </motion.div>
-                )}
+                  ))}
+
+                  <div className="mt-4 pt-4 border-t border-purple-500/20">
+                    <p className="text-purple-400 text-xs text-center">
+                      ✨ נוצר בקסם של Digital Dreams
+                    </p>
+                  </div>
+                </motion.div>
               </div>
             </motion.div>
           )}
