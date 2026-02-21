@@ -678,76 +678,7 @@ export default function VideoCreator() {
 
 
 
-          {(loading || messages.some(msg => msg.tool_calls?.some(tc => (tc.status === 'running' || tc.status === 'in_progress') && tc.name === 'createFullProductionVideo'))) && !currentVideo && (
-                            <motion.div 
-                              initial={{ opacity: 0, scale: 0 }}
-                              animate={{ 
-                                opacity: 1, 
-                                scale: 1,
-                              }}
-                              exit={{ opacity: 0, scale: 0 }}
-                              className="absolute inset-0 flex items-center justify-center pointer-events-none"
-                            >
-                              <motion.div
-                                animate={{
-                                  scale: [1, 1.2, 0.9, 1.35],
-                                  rotate: [0, 10, -10, 360],
-                                }}
-                                transition={{
-                                  duration: 4,
-                                  repeat: Infinity,
-                                  times: [0, 0.3, 0.6, 1],
-                                  ease: "easeInOut"
-                                }}
-                                style={{ willChange: 'transform' }}
-                              >
-                                <svg width="160" height="160" viewBox="0 0 24 24" fill="none">
-                                   <defs>
-                                     <linearGradient id="heartGradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                                      <motion.stop offset="0%" stopColor="#FF0080" 
-                                        animate={{ stopColor: ["#FF0080", "#FF0000", "#FF8000", "#FFFF00", "#00FF00", "#0080FF", "#FF0080"] }}
-                                        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-                                      />
-                                      <motion.stop offset="20%" stopColor="#FF0000"
-                                        animate={{ stopColor: ["#FF0000", "#FF8000", "#FFFF00", "#00FF00", "#0080FF", "#FF0080", "#FF0000"] }}
-                                        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-                                      />
-                                      <motion.stop offset="40%" stopColor="#FF8000"
-                                        animate={{ stopColor: ["#FF8000", "#FFFF00", "#00FF00", "#0080FF", "#FF0080", "#FF0000", "#FF8000"] }}
-                                        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-                                      />
-                                      <motion.stop offset="60%" stopColor="#FFFF00"
-                                        animate={{ stopColor: ["#FFFF00", "#00FF00", "#0080FF", "#FF0080", "#FF0000", "#FF8000", "#FFFF00"] }}
-                                        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-                                      />
-                                      <motion.stop offset="80%" stopColor="#00FF00"
-                                        animate={{ stopColor: ["#00FF00", "#0080FF", "#FF0080", "#FF0000", "#FF8000", "#FFFF00", "#00FF00"] }}
-                                        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-                                      />
-                                      <motion.stop offset="100%" stopColor="#0080FF"
-                                        animate={{ stopColor: ["#0080FF", "#FF0080", "#FF0000", "#FF8000", "#FFFF00", "#00FF00", "#0080FF"] }}
-                                        transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
-                                      />
-                                    </linearGradient>
-                                  </defs>
-                                  <motion.path
-                                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
-                                    fill="url(#heartGradient)"
-                                    animate={{
-                                      opacity: [0.5, 0.8, 0.5, 1],
-                                      scale: [1, 1.05, 1, 1.3],
-                                    }}
-                                    transition={{
-                                      duration: 3,
-                                      repeat: Infinity,
-                                      times: [0, 0.6, 0.8, 1],
-                                      ease: "easeInOut"
-                                    }}
-                                  />
-                                </svg>
-                              </motion.div>
-                            </motion.div>
-                          )}
+
 
           {currentVideo && (
             <motion.div 
