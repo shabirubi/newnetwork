@@ -526,7 +526,11 @@ export default function VideoCreator() {
       content: userMessage,
       timestamp: new Date().toISOString()
     };
-    setMessages(prev => [...prev, tempUserMessage]);
+    setMessages(prev => {
+      const updated = [...prev, tempUserMessage];
+      console.log('💬 User message added to UI:', updated.length, 'messages total');
+      return updated;
+    });
 
     try {
       let conv = conversationId ? await base44.agents.getConversation(conversationId) : null;
