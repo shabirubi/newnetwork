@@ -668,6 +668,37 @@ export default function VideoCreator() {
             </div>
           )}
 
+          {(loading || messages.some(msg => msg.tool_calls?.some(tc => (tc.status === 'running' || tc.status === 'in_progress') && tc.name === 'createFullProductionVideo'))) && !currentVideo && (
+            <motion.div 
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0 }}
+              className="absolute inset-0 flex items-center justify-center pointer-events-none"
+            >
+              <motion.div
+                animate={{ scale: [1, 1.2, 0.9, 1.35], rotate: [0, 10, -10, 360] }}
+                transition={{ duration: 4, repeat: Infinity, times: [0, 0.3, 0.6, 1], ease: "easeInOut" }}
+                style={{ willChange: 'transform' }}
+              >
+                <svg width="160" height="160" viewBox="0 0 24 24" fill="none">
+                  <defs>
+                    <linearGradient id="heartGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stopColor="#FF0080" />
+                      <stop offset="50%" stopColor="#FF0000" />
+                      <stop offset="100%" stopColor="#FF0080" />
+                    </linearGradient>
+                  </defs>
+                  <motion.path
+                    d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                    fill="url(#heartGradient)"
+                    animate={{ opacity: [0.5, 1, 0.5], scale: [1, 1.15, 1] }}
+                    transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+                  />
+                </svg>
+              </motion.div>
+            </motion.div>
+          )}
+
           {messages.length === 0 && !currentVideo && (
             <div className="text-center max-w-2xl px-4">
               <Video className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 text-gray-600 mx-auto mb-4 sm:mb-6" />
