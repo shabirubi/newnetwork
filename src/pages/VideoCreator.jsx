@@ -623,7 +623,7 @@ export default function VideoCreator() {
                   key={`${idx}-${msg.timestamp}`}
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className={`rounded-lg p-3 text-xs ${msg.role === 'user' ? 'bg-purple-600/30 border border-purple-500/30 text-purple-100' : 'bg-gray-800/50 border border-gray-700 text-gray-300'}`}
+                  className={`rounded-lg p-3 text-xs ${msg.role === 'user' ? 'bg-black/60 border border-purple-500/30 text-purple-100' : 'bg-gray-800/50 border border-gray-700 text-gray-300'}`}
                 >
                   {msg.role === 'user' ? (
                     <p className="font-bold mb-1">👤 אתה</p>
@@ -665,7 +665,7 @@ export default function VideoCreator() {
                     key={`${idx}-${msg.timestamp}`}
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className={`rounded-lg p-4 ${msg.role === 'user' ? 'bg-purple-600/30 border border-purple-500/30 text-purple-100 ml-8' : 'bg-gray-800/50 border border-gray-700 text-gray-300 mr-8'}`}
+                    className={`rounded-lg p-4 ${msg.role === 'user' ? 'bg-black/60 border border-purple-500/30 text-purple-100 ml-8' : 'bg-gray-800/50 border border-gray-700 text-gray-300 mr-8'}`}
                   >
                     {msg.role === 'user' ? (
                       <p className="font-bold mb-2">👤 אתה</p>
