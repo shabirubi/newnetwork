@@ -637,6 +637,37 @@ export default function VideoCreator() {
 
         {/* Center - Video Display */}
         <div className="flex-1 flex flex-col items-center justify-center p-3 sm:p-6 lg:p-8 overflow-y-auto pb-6">
+          {/* Chat Messages Display (Mobile) */}
+          {messages.length > 0 && !currentVideo && (
+            <div className="w-full h-full flex flex-col max-w-4xl">
+              <div className="flex-1 overflow-y-auto space-y-3 pb-4">
+                {messages.map((msg, idx) => (
+                  <motion.div 
+                    key={`${idx}-${msg.timestamp}`}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className={`rounded-lg p-4 ${msg.role === 'user' ? 'bg-purple-600/30 border border-purple-500/30 text-purple-100 ml-8' : 'bg-gray-800/50 border border-gray-700 text-gray-300 mr-8'}`}
+                  >
+                    <p className="font-bold mb-2">{msg.role === 'user' ? '👤 אתה' : '🤖 Digital Dreams'}</p>
+                    <p className="whitespace-pre-wrap break-words text-sm">{msg.content}</p>
+                    {msg.timestamp && <p className="text-xs mt-2 opacity-60">{new Date(msg.timestamp).toLocaleTimeString('he-IL')}</p>}
+                    {msg.tool_calls?.length > 0 && (
+                      <div className="mt-3 space-y-2">
+                        {msg.tool_calls.map((tc, i) => (
+                          <div key={i} className="bg-black/40 border border-green-500/20 rounded p-2">
+                            <p className="text-green-400 text-xs font-bold">🔧 {tc.name}</p>
+                            <p className="text-gray-400 text-xs">Status: {tc.status}</p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </motion.div>
+                ))}
+                <div ref={messagesEndRef} />
+              </div>
+            </div>
+          )}
+
           {messages.length === 0 && !currentVideo && (
             <div className="text-center max-w-2xl px-4">
               <Video className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 text-gray-600 mx-auto mb-4 sm:mb-6" />
