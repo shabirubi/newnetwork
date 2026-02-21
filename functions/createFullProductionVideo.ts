@@ -27,27 +27,34 @@ Deno.serve(async (req) => {
     const detectedLanguage = languageResult?.trim() || 'Hebrew';
     console.log('🌍 Detected language:', detectedLanguage);
 
-    // 2. Generate professional script
-    const scriptPrompt = `Create a professional broadcast-quality script (200-300 words) about: ${description}
+    // 2. Generate extended professional script (5+ minutes)
+    const scriptPrompt = `Create a comprehensive, professional broadcast-quality script (750-1050 words) about: ${description}
 
 Requirements:
 - Write in ${detectedLanguage} language ONLY
-- Professional news/broadcast tone
-- Strong opening hook
-- Rich content with details
-- Natural speaking rhythm
-- Clear conclusion
-- Make it engaging
+- Duration: 5-7 minutes of narration
+- Professional news/documentary tone with depth
+- Structure:
+  * Strong opening hook (30 seconds)
+  * Detailed main content with multiple angles (4-5 minutes)
+  * Background, context, and analysis (1-2 minutes)
+  * Strong closing summary (30 seconds)
+- Rich, detailed content - don't rush
+- Natural speaking rhythm with transitions
+- Include specific examples and context
+- Make it informative and engaging
 
-Return only the script text in ${detectedLanguage}.`;
+Return only the complete script text in ${detectedLanguage}.`;
 
+    console.log('📝 Generating extended script (5+ minutes)...');
     const scriptResult = await base44.integrations.Core.InvokeLLM({
       prompt: scriptPrompt,
       add_context_from_internet: true
     });
 
     const script = scriptResult?.trim() || description;
-    console.log('✅ Script generated:', script.substring(0, 100) + '...');
+    console.log('✅ Extended script generated:', script.length, 'characters');
+    console.log('📊 Preview:', script.substring(0, 150) + '...');
 
     // 3. Generate professional background
     let backgroundUrl = imageUrl;
