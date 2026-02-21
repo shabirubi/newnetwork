@@ -24,20 +24,6 @@ export default function VideoCreator() {
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
 
-  // טעינת השיחה השמורה
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem('digitalDreamsChat');
-      if (saved) {
-        const { conversationId: savedConvId, messages: savedMessages } = JSON.parse(saved);
-        setConversationId(savedConvId);
-        setMessages(savedMessages);
-      }
-    } catch (e) {
-      console.error('Error loading saved chat:', e);
-    }
-  }, []);
-
   // Load history from HeyGen + Database + localStorage
   useEffect(() => {
     const loadHistory = async () => {
@@ -163,12 +149,6 @@ export default function VideoCreator() {
     if (!conversationId) return;
     const unsubscribe = base44.agents.subscribeToConversation(conversationId, (data) => {
       setMessages(data.messages);
-      // שמירת השיחה ל-localStorage
-      localStorage.setItem('digitalDreamsChat', JSON.stringify({
-        conversationId,
-        messages: data.messages,
-        timestamp: new Date().toISOString()
-      }));
       const lastMsg = data.messages[data.messages.length - 1];
       if (lastMsg?.tool_calls) {
         lastMsg.tool_calls.forEach(tc => {
@@ -430,12 +410,6 @@ export default function VideoCreator() {
           setLoading(false);
           
           toast.success('✅ הסרטון מוכן והתווסף להיסטוריה!', { id: 'creating' });
-          
-          // הצגת הסרטון בתצוגה המקדימה
-          window.dispatchEvent(new CustomEvent('digitalDreamsVideoReady', {
-            detail: { videoUrl: data.video_url, title }
-          }));
-          
           console.log('✅ All done!');
           return;
         }
@@ -610,180 +584,126 @@ export default function VideoCreator() {
             </div>
           )}
 
-          {messages.some(msg => msg.tool_calls?.some(tc => (tc.status === 'running' || tc.status === 'in_progress') && tc.name === 'createFullProductionVideo')) && (
+          {(loading || messages.some(msg => msg.tool_calls?.some(tc => tc.status === 'running' || tc.status === 'in_progress'))) && !currentVideo && (
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="w-full max-w-2xl px-4"
+            >
+              {/* Simple Black Container */}
+              <div className="bg-black rounded-2xl p-8 sm:p-12 border border-gray-800">
+                {/* Logo/Brand */}
+                <div className="text-center mb-8">
+                  <h3 className="text-2xl sm:text-3xl font-bold text-white mb-2">Digital Dreams</h3>
+                  <p className="text-gray-400 text-sm">מייצר את הסרטון שלך...</p>
+                </div>
+
+                {/* Thin Progress Bar */}
+                <div className="relative h-1 bg-gray-800 rounded-full overflow-hidden mb-6">
+                  <motion.div
+                    className="absolute inset-y-0 left-0 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"
+                    initial={{ width: "0%" }}
+                    animate={{ width: "100%" }}
+                    transition={{ duration: 90, ease: "linear" }}
+                  />
+                </div>
+
+                {/* Progress Percentage */}
+                <motion.div 
+                  className="text-center"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.3 }}
+                >
+                  <motion.p
+                    className="text-4xl sm:text-5xl font-bold text-white mb-4"
+                    initial={{ scale: 0.9 }}
+                    animate={{ scale: 1 }}
+                    transition={{ duration: 0.5, repeat: Infinity, repeatType: "reverse" }}
+                  >
+                    <motion.span
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                    >
+                      {Math.floor(Math.random() * 30 + 45)}%
+                    </motion.span>
+                  </motion.p>
+
+                  {/* Status Steps */}
+                  <div className="flex items-center justify-center gap-2 text-xs sm:text-sm text-gray-400">
+                    <motion.span
+                      animate={{ opacity: [0.4, 1, 0.4] }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                    >
+                      הפקה
+                    </motion.span>
+                    <span>•</span>
+                    <motion.span
+                      animate={{ opacity: [0.4, 1, 0.4] }}
+                      transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
+                    >
+                      עיבוד
+                    </motion.span>
+                    <span>•</span>
+                    <motion.span
+                      animate={{ opacity: [0.4, 1, 0.4] }}
+                      transition={{ duration: 2, repeat: Infinity, delay: 1 }}
+                    >
+                      גימור
+                    </motion.span>
+                  </div>
+                </motion.div>
+              </div>
+            </motion.div>
+          )}
+
+          {currentVideo && !loading && (
             <motion.div 
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               className="w-full max-w-4xl px-2 sm:px-0"
             >
-              {/* נגן מעומעם עם לוגו לב צבעוני */}
-              <div className="bg-gradient-to-b from-gray-900 to-black rounded-lg overflow-hidden shadow-2xl border border-gray-800">
-                {/* Video Player Area - Dimmed */}
-                <div className="relative bg-black aspect-video flex items-center justify-center">
-                  {/* Background Pattern */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-gray-900/50 via-black to-gray-900/50"></div>
-                  
-                  {/* Animated Rainbow Heart Logo */}
-                  <motion.div
-                    className="relative z-10"
-                    animate={{
-                      scale: [1, 1.1, 1],
-                    }}
-                    transition={{
-                      duration: 2,
-                      repeat: Infinity,
-                      ease: "easeInOut"
-                    }}
-                  >
-                    <svg width="120" height="120" viewBox="0 0 24 24" fill="none">
-                      <defs>
-                        <linearGradient id="rainbowGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                          <stop offset="0%" stopColor="#FF0080" />
-                          <stop offset="20%" stopColor="#FF0000" />
-                          <stop offset="40%" stopColor="#FF8000" />
-                          <stop offset="60%" stopColor="#FFFF00" />
-                          <stop offset="80%" stopColor="#00FF00" />
-                          <stop offset="100%" stopColor="#0080FF" />
-                        </linearGradient>
-                      </defs>
-                      <motion.path
-                        d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
-                        fill="url(#rainbowGradient)"
-                        stroke="url(#rainbowGradient)"
-                        strokeWidth="1"
-                        animate={{
-                          opacity: [0.6, 1, 0.6],
-                        }}
-                        transition={{
-                          duration: 1.5,
-                          repeat: Infinity,
-                        }}
-                      />
-                    </svg>
-                  </motion.div>
-
-                  {/* Loading Overlay */}
-                  <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-sm">
-                    <div className="text-center">
-                      <motion.div
-                        className="text-white text-xl sm:text-2xl font-bold mb-3"
-                        animate={{ opacity: [0.5, 1, 0.5] }}
-                        transition={{ duration: 2, repeat: Infinity }}
-                      >
-                        Digital Dreams
-                      </motion.div>
-                      <motion.div
-                        className="text-gray-400 text-sm"
-                        animate={{ opacity: [0.3, 0.7, 0.3] }}
-                        transition={{ duration: 1.5, repeat: Infinity }}
-                      >
-                        מייצר את הסרטון שלך...
-                      </motion.div>
-                    </div>
-                  </div>
-
-                  {/* Video Element - Hidden until ready */}
-                  {currentVideo && (
-                    <video 
-                      src={currentVideo} 
-                      controls 
-                      autoPlay
-                      playsInline
-                      className="absolute inset-0 w-full h-full object-cover"
-                      controlsList="nodownload"
-                    />
-                  )}
-                </div>
-                
-                {/* Controls Bar */}
-                <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-t border-gray-700">
-                  <div className="p-4 sm:p-5">
-                    <div className="flex items-center gap-3 mb-4">
-                      {/* Rainbow Heart Icon */}
-                      <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                          <defs>
-                            <linearGradient id="smallRainbow" x1="0%" y1="0%" x2="100%" y2="100%">
-                              <stop offset="0%" stopColor="#FF0080" />
-                              <stop offset="33%" stopColor="#FFFF00" />
-                              <stop offset="66%" stopColor="#00FF00" />
-                              <stop offset="100%" stopColor="#0080FF" />
-                            </linearGradient>
-                          </defs>
-                          <path
-                            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
-                            fill="url(#smallRainbow)"
-                          />
-                        </svg>
-                      </div>
-                      <div className="flex-1">
-                        <h3 className="text-white font-bold text-sm sm:text-base">Digital Dreams Production</h3>
-                        <p className="text-gray-400 text-xs">
-                          {currentVideo ? 'סרטון מוכן להורדה' : 'מעבד את הסרטון...'}
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-1 px-3 py-1 bg-yellow-500/20 rounded-full border border-yellow-500/30">
-                        <motion.div 
-                          className="w-2 h-2 rounded-full bg-yellow-500"
-                          animate={{ opacity: [1, 0.3, 1] }}
-                          transition={{ duration: 1.5, repeat: Infinity }}
-                        />
-                        <span className="text-yellow-400 text-xs font-bold">
-                          {currentVideo ? 'מוכן' : 'מעבד'}
-                        </span>
-                      </div>
-                    </div>
-                    
-                    {/* Progress Bar */}
-                    {!currentVideo && (
-                      <div className="relative h-1 bg-gray-800 rounded-full overflow-hidden mb-4">
-                        <motion.div
-                          className="absolute inset-y-0 left-0 bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 rounded-full"
-                          initial={{ width: "0%" }}
-                          animate={{ width: "100%" }}
-                          transition={{ duration: 90, ease: "linear" }}
-                        />
-                      </div>
-                    )}
-                    
-                    {/* Action Buttons */}
-                    {currentVideo && (
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                        <a 
-                          href={currentVideo} 
-                          download 
-                          className="bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-white px-4 py-3 rounded-lg font-medium text-sm flex items-center justify-center gap-2 transition-all border border-gray-600 hover:border-gray-500"
-                        >
-                          <Download className="w-4 h-4" />
-                          הורד סרטון
-                        </a>
-                        <Button
-                          onClick={() => {
-                            window.dispatchEvent(new CustomEvent('addVideoToEditor', { 
-                              detail: { videoUrl: currentVideo } 
-                            }));
-                            toast.success('הסרטון נוסף לעורך');
-                          }}
-                          className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white px-4 py-3 rounded-lg font-medium text-sm transition-all"
-                        >
-                          הוסף לעורך
-                        </Button>
-                        <Button
-                          onClick={() => setCurrentVideo(null)}
-                          variant="outline"
-                          className="bg-gray-800/50 hover:bg-gray-700/50 border-gray-600 text-gray-300 px-4 py-3 rounded-lg font-medium text-sm"
-                        >
-                          צור חדש
-                        </Button>
-                      </div>
-                    )}
+              <div className="bg-gradient-to-br from-green-900/20 to-emerald-900/20 rounded-xl sm:rounded-2xl border-2 border-green-500/30 overflow-hidden">
+                <video 
+                  src={currentVideo} 
+                  controls 
+                  autoPlay
+                  playsInline
+                  className="w-full aspect-video bg-black"
+                />
+                <div className="p-3 sm:p-4 lg:p-6 bg-black/40 backdrop-blur-sm">
+                  <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
+                    <a 
+                      href={currentVideo} 
+                      download 
+                      className="flex-1 bg-green-600 hover:bg-green-700 text-white px-4 sm:px-6 py-3 sm:py-4 rounded-lg sm:rounded-xl font-bold text-sm sm:text-base lg:text-lg flex items-center justify-center gap-2 sm:gap-3 transition-all"
+                    >
+                      <Download className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
+                      הורד סרטון
+                    </a>
+                    <Button
+                      onClick={() => setCurrentVideo(null)}
+                      variant="outline"
+                      className="px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base lg:text-lg"
+                    >
+                      צור חדש
+                    </Button>
+                    <Button
+                      onClick={() => {
+                        window.dispatchEvent(new CustomEvent('addVideoToEditor', { 
+                          detail: { videoUrl: currentVideo } 
+                        }));
+                        toast.success('הסרטון נוסף לעורך הראשי');
+                      }}
+                      className="px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base lg:text-lg bg-purple-600 hover:bg-purple-700"
+                    >
+                      הוסף לעורך
+                    </Button>
                   </div>
                 </div>
               </div>
             </motion.div>
           )}
-
-
         </div>
 
         {/* Right Sidebar - Timeline - Hidden on Mobile */}
