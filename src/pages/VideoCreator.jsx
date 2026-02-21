@@ -827,10 +827,14 @@ export default function VideoCreator() {
               <button
                 onClick={(e) => {
                   e.preventDefault();
-                  handleSend();
+                  e.stopPropagation();
+                  if (input.trim() && !loading) {
+                    handleSend();
+                  }
                 }}
+                type="button"
                 disabled={!input.trim() || loading}
-                className="bg-gradient-to-br from-purple-600 via-purple-500 to-pink-600 hover:from-purple-700 hover:via-purple-600 hover:to-pink-700 disabled:from-gray-600 disabled:via-gray-600 disabled:to-gray-600 disabled:cursor-not-allowed px-4 sm:px-8 py-2 rounded-xl sm:rounded-2xl text-sm sm:text-base font-bold shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:shadow-[0_0_30px_rgba(168,85,247,0.6)] transition-all flex items-center justify-center"
+                className="bg-gradient-to-br from-purple-600 via-purple-500 to-pink-600 hover:from-purple-700 hover:via-purple-600 hover:to-pink-700 disabled:from-gray-600 disabled:via-gray-600 disabled:to-gray-600 disabled:cursor-not-allowed px-4 sm:px-8 py-2 rounded-xl sm:rounded-2xl text-sm sm:text-base font-bold shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:shadow-[0_0_30px_rgba(168,85,247,0.6)] transition-all flex items-center justify-center touch-manipulation active:scale-95"
               >
                 {loading ? <Loader2 className="w-5 h-5 sm:w-6 sm:h-6 animate-spin" /> : <Send className="w-5 h-5 sm:w-6 sm:h-6" />}
               </button>
