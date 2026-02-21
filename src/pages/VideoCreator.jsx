@@ -487,8 +487,6 @@ export default function VideoCreator() {
 
     const userMessage = input.trim();
     setInput("");
-    setLoading(true);
-    toast.loading('שולח בקשה...', { id: 'creating' });
 
     try {
       let conv = conversationId ? await base44.agents.getConversation(conversationId) : null;
@@ -509,13 +507,12 @@ export default function VideoCreator() {
         role: "user",
         content: userMessage
       });
-      console.log('✅ Message sent successfully');
+      console.log('✅ Message sent - waiting for Digital Dreams response...');
 
     } catch (err) {
       console.error('❌ Error in handleSend:', err);
-      toast.error('שגיאה: ' + err.message, { id: 'creating' });
+      toast.error('שגיאה: ' + err.message);
       setInput(userMessage);
-      setLoading(false);
     }
   };
 
