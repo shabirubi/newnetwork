@@ -561,9 +561,9 @@ export default function VideoCreator() {
       </div>
 
       {/* Main - Mobile Optimized */}
-      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden pb-32 sm:pb-24">
+      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden pb-40 sm:pb-24">
         {/* Center - Video Display */}
-        <div className="flex-1 flex flex-col items-center justify-center p-3 sm:p-6 lg:p-8 overflow-y-auto">
+        <div className="flex-1 flex flex-col items-center justify-center p-3 sm:p-6 lg:p-8 overflow-y-auto pb-6">
           {messages.length === 0 && !currentVideo && (
             <div className="text-center max-w-2xl px-4">
               <Video className="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 text-gray-600 mx-auto mb-4 sm:mb-6" />
@@ -832,10 +832,10 @@ export default function VideoCreator() {
       </div>
 
       {/* Bottom Input - Fixed Position */}
-      <div className="fixed bottom-0 left-0 right-0 p-3 sm:p-4 pb-6 sm:pb-4 bg-gradient-to-t from-black via-gray-900/95 to-transparent backdrop-blur-2xl border-t border-purple-500/30 z-50 safe-area-inset-bottom">
-        <div className="max-w-4xl mx-auto">
-          <div className="bg-gradient-to-br from-gray-800/80 to-gray-900/80 rounded-2xl sm:rounded-3xl p-2 sm:p-3 border border-purple-500/20 shadow-[0_0_30px_rgba(168,85,247,0.15)]">
-            <div className="flex gap-2 sm:gap-3">
+      <div className="fixed bottom-0 left-0 right-0 p-2 sm:p-4 pb-safe sm:pb-4 bg-gradient-to-t from-black via-black to-transparent backdrop-blur-2xl border-t border-purple-500/30 z-[100]" style={{ paddingBottom: 'max(env(safe-area-inset-bottom), 1rem)' }}>
+        <div className="max-w-4xl mx-auto w-full">
+          <div className="bg-gradient-to-br from-gray-800/90 to-gray-900/90 rounded-xl sm:rounded-3xl p-1.5 sm:p-3 border border-purple-500/20 shadow-[0_0_30px_rgba(168,85,247,0.15)]">
+            <div className="flex gap-1.5 sm:gap-3 items-center">
               <input
                 ref={fileInputRef}
                 type="file"
@@ -848,16 +848,16 @@ export default function VideoCreator() {
                 disabled={uploadingFile || loading || isRecording}
                 variant="ghost"
                 size="sm"
-                className="bg-gray-700/50 hover:bg-gray-700 border border-gray-600/50 rounded-xl px-3 sm:px-4"
+                className="bg-gray-700/50 hover:bg-gray-700 border border-gray-600/50 rounded-lg px-2 sm:px-4 h-10 sm:h-auto"
               >
-                {uploadingFile ? <Loader2 className="w-5 h-5 animate-spin text-purple-400" /> : <Plus className="w-5 h-5 text-purple-400" />}
+                {uploadingFile ? <Loader2 className="w-4 h-4 sm:w-5 sm:h-5 animate-spin text-purple-400" /> : <Plus className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400" />}
               </Button>
               <button
                 onClick={handleVoiceRecording}
                 disabled={uploadingFile || loading}
-                className={`${isRecording ? 'bg-red-600/50 hover:bg-red-600/70 animate-pulse' : 'bg-gray-700/50 hover:bg-gray-700'} border border-gray-600/50 rounded-xl px-3 sm:px-4 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center`}
+                className={`${isRecording ? 'bg-red-600/50 hover:bg-red-600/70 animate-pulse' : 'bg-gray-700/50 hover:bg-gray-700'} border border-gray-600/50 rounded-lg px-2 sm:px-4 h-10 sm:h-auto disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center`}
               >
-                {isRecording ? <Square className="w-5 h-5 text-white" /> : <Mic className="w-5 h-5 text-purple-400" />}
+                {isRecording ? <Square className="w-4 h-4 sm:w-5 sm:h-5 text-white" /> : <Mic className="w-4 h-4 sm:w-5 sm:h-5 text-purple-400" />}
               </button>
               <div className="flex-1 relative">
                 <input
@@ -878,10 +878,11 @@ export default function VideoCreator() {
                     }
                   }}
                   enterKeyHint="send"
-                  placeholder="תאר את הסרטון שאתה רוצה... 🎬"
-                  className="w-full px-4 sm:px-6 py-2.5 sm:py-3 rounded-xl sm:rounded-2xl bg-gray-900/60 border border-gray-700/50 text-white placeholder:text-gray-500 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all"
+                  placeholder="תאר את הסרטון... 🎬"
+                  className="w-full px-3 sm:px-6 py-2 sm:py-3 h-10 sm:h-auto rounded-lg sm:rounded-2xl bg-gray-900/60 border border-gray-700/50 text-white placeholder:text-gray-500 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 transition-all -webkit-appearance-none"
                   disabled={loading}
                   autoComplete="off"
+                  style={{ fontSize: '16px' }}
                 />
               </div>
               <button
@@ -894,9 +895,9 @@ export default function VideoCreator() {
                 }}
                 type="button"
                 disabled={!input.trim() || loading}
-                className="bg-gradient-to-br from-purple-600 via-purple-500 to-pink-600 hover:from-purple-700 hover:via-purple-600 hover:to-pink-700 disabled:from-gray-600 disabled:via-gray-600 disabled:to-gray-600 disabled:cursor-not-allowed px-4 sm:px-8 py-2 rounded-xl sm:rounded-2xl text-sm sm:text-base font-bold shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:shadow-[0_0_30px_rgba(168,85,247,0.6)] transition-all flex items-center justify-center touch-manipulation active:scale-95"
+                className="bg-gradient-to-br from-purple-600 via-purple-500 to-pink-600 hover:from-purple-700 hover:via-purple-600 hover:to-pink-700 disabled:from-gray-600 disabled:via-gray-600 disabled:to-gray-600 disabled:cursor-not-allowed px-3 sm:px-8 py-2 h-10 sm:h-auto rounded-lg sm:rounded-2xl text-sm sm:text-base font-bold shadow-[0_0_20px_rgba(168,85,247,0.4)] hover:shadow-[0_0_30px_rgba(168,85,247,0.6)] transition-all flex items-center justify-center touch-manipulation active:scale-95"
               >
-                {loading ? <Loader2 className="w-5 h-5 sm:w-6 sm:h-6 animate-spin" /> : <Send className="w-5 h-5 sm:w-6 sm:h-6" />}
+                {loading ? <Loader2 className="w-4 h-4 sm:w-6 sm:h-6 animate-spin" /> : <Send className="w-4 h-4 sm:w-6 sm:h-6" />}
               </button>
             </div>
           </div>
