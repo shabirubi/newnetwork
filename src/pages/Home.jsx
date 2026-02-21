@@ -99,13 +99,13 @@ export default function Home() {
     queryKey: ['featured-articles'],
     queryFn: async () => {
       try {
-        return await base44.entities.NewsArticle.filter({ is_featured: true }, '-created_date', 10);
+        return await base44.entities.NewsArticle.list('-created_date', 20);
       } catch {
         return [];
       }
     },
     initialData: [],
-    staleTime: 5 * 60 * 1000
+    staleTime: 0
   });
 
   const featuredArticle = articles[0];
