@@ -519,7 +519,7 @@ export default function VideoCreator() {
   return (
     <div className="h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex flex-col overflow-hidden" dir="rtl">
       {/* Header - Mobile Optimized */}
-      <div className="bg-black/80 backdrop-blur-xl border-b border-gray-800 px-3 sm:px-4 py-3 flex items-center justify-between z-10 flex-shrink-0">
+      <div className="bg-black/80 backdrop-blur-xl border-b border-gray-800 px-3 sm:px-4 py-3 flex items-center justify-between z-10 flex-shrink-0 safe-area-inset-top">
         <div className="flex items-center gap-2 sm:gap-3">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" className="w-5 h-5 sm:w-6 sm:h-6">
             <defs>
@@ -561,7 +561,7 @@ export default function VideoCreator() {
       </div>
 
       {/* Main - Mobile Optimized */}
-      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden pb-24">
+      <div className="flex-1 flex flex-col lg:flex-row overflow-hidden pb-32 sm:pb-24">
         {/* Center - Video Display */}
         <div className="flex-1 flex flex-col items-center justify-center p-3 sm:p-6 lg:p-8 overflow-y-auto">
           {messages.length === 0 && !currentVideo && (
@@ -832,7 +832,7 @@ export default function VideoCreator() {
       </div>
 
       {/* Bottom Input - Fixed Position */}
-      <div className="fixed bottom-4 left-0 right-0 p-3 sm:p-4 bg-gradient-to-t from-black via-gray-900/95 to-transparent backdrop-blur-2xl border-t border-purple-500/30 z-50">
+      <div className="fixed bottom-0 left-0 right-0 p-3 sm:p-4 pb-6 sm:pb-4 bg-gradient-to-t from-black via-gray-900/95 to-transparent backdrop-blur-2xl border-t border-purple-500/30 z-50 safe-area-inset-bottom">
         <div className="max-w-4xl mx-auto">
           <div className="bg-gradient-to-br from-gray-800/80 to-gray-900/80 rounded-2xl sm:rounded-3xl p-2 sm:p-3 border border-purple-500/20 shadow-[0_0_30px_rgba(168,85,247,0.15)]">
             <div className="flex gap-2 sm:gap-3">
