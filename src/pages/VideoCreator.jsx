@@ -635,30 +635,20 @@ export default function VideoCreator() {
                               >
                                 <svg width="240" height="240" viewBox="0 0 24 24" fill="none">
                                   <defs>
-                                    <linearGradient id="progressGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                      <stop offset="0%" stopColor="rgba(255, 0, 128, 0.8)" />
-                                      <stop offset="20%" stopColor="rgba(255, 0, 0, 0.8)" />
-                                      <stop offset="40%" stopColor="rgba(255, 128, 0, 0.8)" />
-                                      <stop offset="60%" stopColor="rgba(255, 255, 0, 0.8)" />
-                                      <stop offset="80%" stopColor="rgba(0, 255, 0, 0.8)" />
-                                      <stop offset="100%" stopColor="rgba(0, 128, 255, 0.8)" />
+                                    <linearGradient id="heartGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                      <stop offset="0%" stopColor="#FF0080" />
+                                      <stop offset="20%" stopColor="#FF0000" />
+                                      <stop offset="40%" stopColor="#FF8000" />
+                                      <stop offset="60%" stopColor="#FFFF00" />
+                                      <stop offset="80%" stopColor="#00FF00" />
+                                      <stop offset="100%" stopColor="#0080FF" />
                                     </linearGradient>
-                                    <filter id="glow">
-                                      <feGaussianBlur stdDeviation="8" result="coloredBlur"/>
-                                      <feMerge>
-                                        <feMergeNode in="coloredBlur"/>
-                                        <feMergeNode in="SourceGraphic"/>
-                                      </feMerge>
-                                    </filter>
                                   </defs>
                                   <motion.path
                                     d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
-                                    fill="url(#progressGradient)"
-                                    stroke="url(#progressGradient)"
-                                    strokeWidth="1.5"
-                                    filter="url(#glow)"
+                                    fill="url(#heartGradient)"
                                     animate={{
-                                      opacity: [0.6, 1, 0.6],
+                                      opacity: [0.7, 1, 0.7],
                                     }}
                                     transition={{
                                       duration: 2,
