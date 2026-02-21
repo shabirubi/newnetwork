@@ -639,9 +639,9 @@ export default function VideoCreator() {
                                 }}
                                 style={{ willChange: 'transform' }}
                               >
-                                <svg width="120" height="120" viewBox="0 0 24 24" fill="none">
-                                  <defs>
-                                    <linearGradient id="heartGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <svg width="160" height="160" viewBox="0 0 24 24" fill="none">
+                                   <defs>
+                                     <linearGradient id="heartGradient" x1="0%" y1="0%" x2="0%" y2="100%">
                                       <motion.stop offset="0%" stopColor="#FF0080" 
                                         animate={{ stopColor: ["#FF0080", "#FF0000", "#FF8000", "#FFFF00", "#00FF00", "#0080FF", "#FF0080"] }}
                                         transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
