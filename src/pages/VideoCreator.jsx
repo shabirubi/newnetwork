@@ -771,48 +771,19 @@ export default function VideoCreator() {
                 </div>
               </div>
 
-              {/* Status Text & Timeline */}
-              <div className="text-center space-y-6">
+              {/* Status Text - Simple */}
+              <div className="text-center space-y-3">
                 <motion.h3 
                   className="text-2xl sm:text-3xl font-bold text-white drop-shadow-lg"
                   animate={{ opacity: [0.7, 1, 0.7] }}
                   transition={{ duration: 2, repeat: Infinity }}
                 >
-                  {currentStage || '🎨 יצירת תוכן ויזואלי'}
+                  יוצר סרטון מקצועי...
                 </motion.h3>
-
-                {/* Production Timeline */}
-                <div className="max-w-md mx-auto space-y-2">
-                  {[
-                    { icon: '📝', label: 'Script Generation', threshold: 0 },
-                    { icon: '🎨', label: 'Visual Assembly', threshold: 20 },
-                    { icon: '🎬', label: 'Avatar Rendering', threshold: 40 },
-                    { icon: '🎵', label: 'Audio Sync', threshold: 60 },
-                    { icon: '✨', label: 'Final Export', threshold: 80 }
-                  ].map((stage, idx) => (
-                    <div key={idx} className="flex items-center gap-3">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
-                        loadingProgress >= stage.threshold 
-                          ? 'bg-purple-600 text-white' 
-                          : 'bg-gray-800 text-gray-500'
-                      }`}>
-                        {loadingProgress >= stage.threshold ? '✓' : stage.icon}
-                      </div>
-                      <div className="flex-1 text-left">
-                        <div className={`text-sm font-medium ${
-                          loadingProgress >= stage.threshold ? 'text-white' : 'text-gray-500'
-                        }`}>
-                          {stage.label}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                <p className="text-gray-400 text-sm sm:text-base">Digital Dreams מייצר עבורך סרטון מקצועי</p>
+                <p className="text-gray-400 text-sm sm:text-base">Digital Dreams</p>
                 <div className="flex items-center justify-center gap-2 text-gray-500 text-xs">
                   <div className="w-2 h-2 rounded-full bg-purple-500 animate-pulse"></div>
-                  <span>זמן משוער: {Math.ceil((100 - loadingProgress) / 20)} דקות</span>
+                  <span>זמן משוער: 3-5 דקות</span>
                 </div>
               </div>
             </motion.div>
