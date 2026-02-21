@@ -27,30 +27,9 @@ Deno.serve(async (req) => {
     const detectedLanguage = languageResult?.trim() || 'Hebrew';
     console.log('🌍 Detected language:', detectedLanguage);
 
-    // 2. Generate professional script (optimal for Video Agent - max 4 minutes)
-    const scriptPrompt = `Create a professional broadcast-quality script about: ${description}
-
-Requirements:
-- Write in ${detectedLanguage} language ONLY
-- Duration: 3-4 minutes of narration (optimal for HeyGen Video Agent)
-- Professional news/documentary tone
-- Structure:
-  * Strong opening hook (20 seconds)
-  * Main content with key points (2.5-3 minutes)
-  * Strong closing summary (20 seconds)
-- Clear, engaging delivery
-- Natural speaking rhythm
-
-Return only the complete script text in ${detectedLanguage}.`;
-
-    console.log('📝 Generating professional script (3-4 minutes)...');
-    const scriptResult = await base44.integrations.Core.InvokeLLM({
-      prompt: scriptPrompt,
-      add_context_from_internet: true
-    });
-
-    const fullScript = scriptResult?.trim() || description;
-    console.log('✅ Script generated:', fullScript.length, 'characters');
+    // 2. Use the description as-is (already provided script/text)
+    const fullScript = description.trim();
+    console.log('📝 Using provided text as script:', fullScript.length, 'characters');
     console.log('📊 Preview:', fullScript.substring(0, 150) + '...');
 
     // Split script into chunks if too long (Pro Plan limit: 5 minutes ≈ 1500 chars)
