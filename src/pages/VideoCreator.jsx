@@ -636,12 +636,30 @@ export default function VideoCreator() {
                                 <svg width="240" height="240" viewBox="0 0 24 24" fill="none">
                                   <defs>
                                     <linearGradient id="heartGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                      <stop offset="0%" stopColor="#FF0080" />
-                                      <stop offset="20%" stopColor="#FF0000" />
-                                      <stop offset="40%" stopColor="#FF8000" />
-                                      <stop offset="60%" stopColor="#FFFF00" />
-                                      <stop offset="80%" stopColor="#00FF00" />
-                                      <stop offset="100%" stopColor="#0080FF" />
+                                      <motion.stop offset="0%" stopColor="#FF0080" 
+                                        animate={{ stopColor: ["#FF0080", "#FF0000", "#FF8000", "#FFFF00", "#00FF00", "#0080FF", "#FF0080"] }}
+                                        transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+                                      />
+                                      <motion.stop offset="20%" stopColor="#FF0000"
+                                        animate={{ stopColor: ["#FF0000", "#FF8000", "#FFFF00", "#00FF00", "#0080FF", "#FF0080", "#FF0000"] }}
+                                        transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+                                      />
+                                      <motion.stop offset="40%" stopColor="#FF8000"
+                                        animate={{ stopColor: ["#FF8000", "#FFFF00", "#00FF00", "#0080FF", "#FF0080", "#FF0000", "#FF8000"] }}
+                                        transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+                                      />
+                                      <motion.stop offset="60%" stopColor="#FFFF00"
+                                        animate={{ stopColor: ["#FFFF00", "#00FF00", "#0080FF", "#FF0080", "#FF0000", "#FF8000", "#FFFF00"] }}
+                                        transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+                                      />
+                                      <motion.stop offset="80%" stopColor="#00FF00"
+                                        animate={{ stopColor: ["#00FF00", "#0080FF", "#FF0080", "#FF0000", "#FF8000", "#FFFF00", "#00FF00"] }}
+                                        transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+                                      />
+                                      <motion.stop offset="100%" stopColor="#0080FF"
+                                        animate={{ stopColor: ["#0080FF", "#FF0080", "#FF0000", "#FF8000", "#FFFF00", "#00FF00", "#0080FF"] }}
+                                        transition={{ duration: 6, repeat: Infinity, ease: "linear" }}
+                                      />
                                     </linearGradient>
                                   </defs>
                                   <motion.path
