@@ -84,8 +84,8 @@ import UserProfile from './pages/UserProfile';
 import UserVideos from './pages/UserVideos';
 import VOD from './pages/VOD';
 import VODContent from './pages/VODContent';
-import VideoEditor from './pages/VideoEditor';
 import VideoCreator from './pages/VideoCreator';
+import VideoEditor from './pages/VideoEditor';
 import __Layout from './Layout.jsx';
 
 
@@ -127,8 +127,8 @@ export const PAGES = {
     "UserVideos": UserVideos,
     "VOD": VOD,
     "VODContent": VODContent,
-    "VideoEditor": VideoEditor,
     "VideoCreator": VideoCreator,
+    "VideoEditor": VideoEditor,
 }
 
 export const pagesConfig = {

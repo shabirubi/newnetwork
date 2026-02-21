@@ -87,7 +87,7 @@ export default function VideoCreator() {
       // 2. Load from Database
       try {
         console.log('🔄 Step 2: Fetching Database...');
-        const dbVideos = await base44.entities.UserVideo.filter({ feed: 'user-videos' }, '-created_date', 100);
+        const dbVideos = await base44.entities.UserVideo.filter({ feed: 'user-videos' }, '-created_date', 1000);
         console.log('📡 Database Response:', dbVideos?.length || 0);
         
         if (dbVideos && dbVideos.length > 0) {
@@ -139,7 +139,7 @@ export default function VideoCreator() {
       console.log('🎯🎯🎯 Setting', uniqueVideos.length, 'unique videos to state!');
       console.log('📦 Full video list:', uniqueVideos.map(v => v.title));
       
-      // Save to localStorage
+      // Save to localStorage (keep all videos)
       try {
         localStorage.setItem('videoDownloadHistory', JSON.stringify(uniqueVideos));
         console.log('💾 Saved', uniqueVideos.length, 'videos to localStorage');
@@ -428,7 +428,7 @@ export default function VideoCreator() {
           }
           
           const existing = JSON.parse(localStorage.getItem('videoDownloadHistory') || '[]');
-          const updated = [newVideo, ...existing].slice(0, 100);
+          const updated = [newVideo, ...existing];
           localStorage.setItem('videoDownloadHistory', JSON.stringify(updated));
           console.log('💾 Saved to localStorage, total videos:', updated.length);
           
