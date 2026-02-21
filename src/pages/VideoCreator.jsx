@@ -492,6 +492,14 @@ export default function VideoCreator() {
     const userMessage = input.trim();
     setInput("");
 
+    // Add user message to UI immediately
+    const tempUserMessage = {
+      role: "user",
+      content: userMessage,
+      timestamp: new Date().toISOString()
+    };
+    setMessages(prev => [...prev, tempUserMessage]);
+
     try {
       let conv = conversationId ? await base44.agents.getConversation(conversationId) : null;
       if (!conv) {
@@ -517,6 +525,8 @@ export default function VideoCreator() {
       console.error('❌ Error in handleSend:', err);
       toast.error('שגיאה: ' + err.message);
       setInput(userMessage);
+      // Remove temp message on error
+      setMessages(prev => prev.filter(m => m !== tempUserMessage));
     }
   };
 
