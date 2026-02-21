@@ -24,6 +24,10 @@ export default function VideoCreator() {
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
   const [loadingProgress, setLoadingProgress] = useState(0);
+  const [currentStage, setCurrentStage] = useState('');
+  const [scriptPreview, setScriptPreview] = useState('');
+  const [showScriptPanel, setShowScriptPanel] = useState(false);
+  const [blueprintData, setBlueprintData] = useState(null);
 
   // טעינת השיחה השמורה
   useEffect(() => {
@@ -173,6 +177,23 @@ export default function VideoCreator() {
         timestamp: new Date().toISOString()
       }));
       const lastMsg = data.messages[data.messages.length - 1];
+      
+      // Extract script and blueprint from assistant messages
+      if (lastMsg?.role === 'assistant' && lastMsg?.content) {
+        const content = lastMsg.content;
+        // Extract script if exists
+        if (content.includes('📝 SCRIPT:')) {
+          const scriptMatch = content.match(/📝 SCRIPT:(.*?)(?=\n\n🎬|$)/s);
+          if (scriptMatch) {
+            setScriptPreview(scriptMatch[1].trim());
+            setShowScriptPanel(true);
+          }
+        }
+        // Extract blueprint
+        if (content.includes('DIGITAL DREAMS PRODUCTION')) {
+          setBlueprintData(content);
+        }
+      }
       console.log('📬 Last message:', lastMsg?.role, 'tool_calls:', lastMsg?.tool_calls?.length || 0);
 
       if (lastMsg?.tool_calls) {
@@ -405,6 +426,13 @@ export default function VideoCreator() {
 
         const progress = Math.floor((attempts / maxAttempts) * 100);
         setLoadingProgress(progress);
+
+        // Update stage based on progress
+        if (progress < 20) setCurrentStage('📝 Script Generation');
+        else if (progress < 40) setCurrentStage('🎨 Visual Assembly');
+        else if (progress < 60) setCurrentStage('🎬 Avatar Rendering');
+        else if (progress < 80) setCurrentStage('🎵 Audio Sync');
+        else setCurrentStage('✨ Final Export');
 
         if (data.status === 'completed' && data.video_url) {
           console.log('🎉 VIDEO READY! URL:', data.video_url);
@@ -743,15 +771,44 @@ export default function VideoCreator() {
                 </div>
               </div>
 
-              {/* Status Text */}
-              <div className="text-center space-y-3">
+              {/* Status Text & Timeline */}
+              <div className="text-center space-y-6">
                 <motion.h3 
                   className="text-2xl sm:text-3xl font-bold text-white drop-shadow-lg"
                   animate={{ opacity: [0.7, 1, 0.7] }}
                   transition={{ duration: 2, repeat: Infinity }}
                 >
-                  {loadingProgress < 35 ? '🎨 יצירת תוכן ויזואלי' : loadingProgress < 70 ? '⚙️ עיבוד וידאו מתקדם' : '🎬 גימור הסרטון'}
+                  {currentStage || '🎨 יצירת תוכן ויזואלי'}
                 </motion.h3>
+
+                {/* Production Timeline */}
+                <div className="max-w-md mx-auto space-y-2">
+                  {[
+                    { icon: '📝', label: 'Script Generation', threshold: 0 },
+                    { icon: '🎨', label: 'Visual Assembly', threshold: 20 },
+                    { icon: '🎬', label: 'Avatar Rendering', threshold: 40 },
+                    { icon: '🎵', label: 'Audio Sync', threshold: 60 },
+                    { icon: '✨', label: 'Final Export', threshold: 80 }
+                  ].map((stage, idx) => (
+                    <div key={idx} className="flex items-center gap-3">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center ${
+                        loadingProgress >= stage.threshold 
+                          ? 'bg-purple-600 text-white' 
+                          : 'bg-gray-800 text-gray-500'
+                      }`}>
+                        {loadingProgress >= stage.threshold ? '✓' : stage.icon}
+                      </div>
+                      <div className="flex-1 text-left">
+                        <div className={`text-sm font-medium ${
+                          loadingProgress >= stage.threshold ? 'text-white' : 'text-gray-500'
+                        }`}>
+                          {stage.label}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
                 <p className="text-gray-400 text-sm sm:text-base">Digital Dreams מייצר עבורך סרטון מקצועי</p>
                 <div className="flex items-center justify-center gap-2 text-gray-500 text-xs">
                   <div className="w-2 h-2 rounded-full bg-purple-500 animate-pulse"></div>
@@ -765,79 +822,107 @@ export default function VideoCreator() {
             <motion.div 
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
-              className="w-full max-w-4xl px-2 sm:px-0"
+              className="w-full max-w-6xl px-2 sm:px-0"
             >
-              <div className="bg-gradient-to-b from-gray-900 to-black rounded-lg overflow-hidden shadow-2xl border border-gray-800">
-                <div className="relative bg-black aspect-video">
-                  <video 
-                    src={currentVideo} 
-                    controls 
-                    autoPlay
-                    playsInline
-                    className="w-full h-full object-cover"
-                    controlsList="nodownload"
-                  />
-                </div>
+              <div className="flex flex-col lg:flex-row gap-4">
+                {/* Video Player */}
+                <div className="flex-1 bg-gradient-to-b from-gray-900 to-black rounded-lg overflow-hidden shadow-2xl border border-gray-800">
+                  <div className="relative bg-black aspect-video">
+                    <video 
+                      src={currentVideo} 
+                      controls 
+                      autoPlay
+                      playsInline
+                      className="w-full h-full object-cover"
+                      controlsList="nodownload"
+                    />
+                  </div>
 
-                <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-t border-gray-700">
-                  <div className="p-4 sm:p-5">
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-                          <defs>
-                            <linearGradient id="smallRainbow2" x1="0%" y1="0%" x2="100%" y2="100%">
-                              <stop offset="0%" stopColor="#FF0080" />
-                              <stop offset="33%" stopColor="#FFFF00" />
-                              <stop offset="66%" stopColor="#00FF00" />
-                              <stop offset="100%" stopColor="#0080FF" />
-                            </linearGradient>
-                          </defs>
-                          <path
-                            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
-                            fill="url(#smallRainbow2)"
-                          />
-                        </svg>
+                  <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-t border-gray-700">
+                    <div className="p-4 sm:p-5">
+                      <div className="flex items-center gap-3 mb-4">
+                        <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center">
+                          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <defs>
+                              <linearGradient id="smallRainbow2" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stopColor="#FF0080" />
+                                <stop offset="33%" stopColor="#FFFF00" />
+                                <stop offset="66%" stopColor="#00FF00" />
+                                <stop offset="100%" stopColor="#0080FF" />
+                              </linearGradient>
+                            </defs>
+                            <path
+                              d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                              fill="url(#smallRainbow2)"
+                            />
+                          </svg>
+                        </div>
+                        <div className="flex-1">
+                          <h3 className="text-white font-bold text-sm sm:text-base">Digital Dreams Production</h3>
+                          <p className="text-gray-400 text-xs">סרטון מוכן להורדה</p>
+                        </div>
+                        <div className="flex items-center gap-1 px-3 py-1 bg-green-500/20 rounded-full border border-green-500/30">
+                          <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                          <span className="text-green-400 text-xs font-bold">מוכן</span>
+                        </div>
                       </div>
-                      <div className="flex-1">
-                        <h3 className="text-white font-bold text-sm sm:text-base">Digital Dreams Production</h3>
-                        <p className="text-gray-400 text-xs">סרטון מוכן להורדה</p>
-                      </div>
-                      <div className="flex items-center gap-1 px-3 py-1 bg-green-500/20 rounded-full border border-green-500/30">
-                        <div className="w-2 h-2 rounded-full bg-green-500"></div>
-                        <span className="text-green-400 text-xs font-bold">מוכן</span>
-                      </div>
-                    </div>
 
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                      <a 
-                        href={currentVideo} 
-                        download 
-                        className="bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-white px-4 py-3 rounded-lg font-medium text-sm flex items-center justify-center gap-2 transition-all border border-gray-600 hover:border-gray-500"
-                      >
-                        <Download className="w-4 h-4" />
-                        הורד סרטון
-                      </a>
-                      <Button
-                        onClick={() => {
-                          window.dispatchEvent(new CustomEvent('addVideoToEditor', { 
-                            detail: { videoUrl: currentVideo } 
-                          }));
-                          toast.success('הסרטון נוסף לעורך');
-                        }}
-                        className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white px-4 py-3 rounded-lg font-medium text-sm transition-all"
-                      >
-                        הוסף לעורך
-                      </Button>
-                      <Button
-                        onClick={() => setCurrentVideo(null)}
-                        variant="outline"
-                        className="bg-gray-800/50 hover:bg-gray-700/50 border-gray-600 text-gray-300 px-4 py-3 rounded-lg font-medium text-sm"
-                      >
-                        צור חדש
-                      </Button>
+                      <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 mb-3">
+                        <a 
+                          href={currentVideo} 
+                          download 
+                          className="bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-white px-4 py-3 rounded-lg font-medium text-sm flex items-center justify-center gap-2 transition-all border border-gray-600 hover:border-gray-500"
+                        >
+                          <Download className="w-4 h-4" />
+                          הורד
+                        </a>
+                        <Button
+                          onClick={() => {
+                            window.dispatchEvent(new CustomEvent('addVideoToEditor', { 
+                              detail: { videoUrl: currentVideo } 
+                            }));
+                            toast.success('הסרטון נוסף לעורך');
+                          }}
+                          className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white px-4 py-3 rounded-lg font-medium text-sm transition-all"
+                        >
+                          לעורך
+                        </Button>
+                        <Button
+                          onClick={() => toast.info('בקרוב - עריכת סקריפט')}
+                          variant="outline"
+                          className="bg-gray-800/50 hover:bg-gray-700/50 border-gray-600 text-gray-300 px-4 py-3 rounded-lg font-medium text-sm"
+                        >
+                          ערוך
+                        </Button>
+                        <Button
+                          onClick={() => setCurrentVideo(null)}
+                          variant="outline"
+                          className="bg-gray-800/50 hover:bg-gray-700/50 border-gray-600 text-gray-300 px-4 py-3 rounded-lg font-medium text-sm"
+                        >
+                          צור חדש
+                        </Button>
+                      </div>
                     </div>
                   </div>
                 </div>
+
+                {/* Blueprint Panel */}
+                {blueprintData && (
+                  <motion.div
+                    initial={{ x: 300, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    className="lg:w-80 bg-gray-900/50 border border-gray-800 rounded-lg p-4 overflow-y-auto max-h-[600px]"
+                  >
+                    <h3 className="text-white font-bold mb-3 flex items-center gap-2">
+                      🎬 Production Blueprint
+                    </h3>
+                    <div className="bg-black/50 rounded-lg p-3">
+                      <pre className="text-gray-300 text-xs whitespace-pre-wrap font-mono">
+                        {blueprintData}
+                      </pre>
+                    </div>
+                  </motion.div>
+                )}
               </div>
             </motion.div>
           )}
