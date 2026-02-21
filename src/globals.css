@@ -3,6 +3,23 @@ css
 @tailwind components;
 @tailwind utilities;
 
+/* Prevent zoom on all inputs and buttons */
+input, textarea, select, button {
+  touch-action: manipulation;
+}
+
+/* Prevent double-tap zoom */
+* {
+  touch-action: pan-x pan-y;
+}
+
+/* iOS Safari specific zoom prevention */
+@supports (-webkit-touch-callout: none) {
+  input, textarea, select {
+    font-size: 16px !important;
+  }
+}
+
 /* Hide scrollbars globally but keep scrolling */
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
