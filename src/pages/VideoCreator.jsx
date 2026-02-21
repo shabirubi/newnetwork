@@ -173,16 +173,16 @@ export default function VideoCreator() {
       }));
       const lastMsg = data.messages[data.messages.length - 1];
       console.log('📬 Last message:', lastMsg?.role, 'tool_calls:', lastMsg?.tool_calls?.length || 0);
-      
+
       if (lastMsg?.tool_calls) {
         lastMsg.tool_calls.forEach(tc => {
           console.log('🔧 Tool call:', tc.name, 'Status:', tc.status, 'Results:', !!tc.results);
-          
+
           if (tc.status === 'completed' && tc.results) {
             try {
               const result = typeof tc.results === 'string' ? JSON.parse(tc.results) : tc.results;
               console.log('📦 Tool result:', result);
-              
+
               // If we got video_id, start polling
               if (result.video_id && !result.video_url) {
                 console.log('🎬 Got video_id:', result.video_id, 'Starting polling...');
@@ -191,7 +191,7 @@ export default function VideoCreator() {
                 const userMsg = data.messages.find(m => m.role === 'user');
                 pollVideoStatus(result.video_id, userMsg?.content || 'סרטון AI');
               }
-              
+
               // If we got video_url directly
               if (result.video_url) {
                 console.log('✅ Got video_url directly:', result.video_url);
@@ -201,11 +201,15 @@ export default function VideoCreator() {
                   id: Date.now(),
                   title,
                   videoUrl: result.video_url,
-                  timestamp: new Date().toISOString()
+                  timestamp: new Date().toISOString(),
+                  source: 'agent-direct'
                 };
-                const updated = [newVideo, ...generatedVideos].slice(0, 20);
-                setGeneratedVideos(updated);
-                localStorage.setItem('videoDownloadHistory', JSON.stringify(updated));
+                console.log('💾 Adding video to state and localStorage:', newVideo);
+                setGeneratedVideos(prev => {
+                  const updated = [newVideo, ...prev];
+                  localStorage.setItem('videoDownloadHistory', JSON.stringify(updated));
+                  return updated;
+                });
                 setCurrentVideo(result.video_url);
                 setLoading(false);
                 toast.success('✅ הסרטון מוכן!', { id: 'creating' });
@@ -221,7 +225,7 @@ export default function VideoCreator() {
       }
     });
     return () => unsubscribe();
-  }, [conversationId, generatedVideos]);
+  }, [conversationId]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -399,18 +403,19 @@ export default function VideoCreator() {
 
         if (data.status === 'completed' && data.video_url) {
           console.log('🎉 VIDEO READY! URL:', data.video_url);
-          
+
           const title = originalMessage.substring(0, 50) || "סרטון AI";
           const newVideo = {
             id: Date.now(),
             title,
             videoUrl: data.video_url,
-            timestamp: new Date().toISOString()
+            timestamp: new Date().toISOString(),
+            source: 'polling'
           };
-          
+
           localStorage.removeItem('pendingVideoId');
           localStorage.removeItem('pendingVideoTitle');
-          
+
           try {
             const user = await base44.auth.me();
             await base44.entities.UserVideo.create({
@@ -426,23 +431,18 @@ export default function VideoCreator() {
           } catch (e) {
             console.log('⚠️ DB save skipped:', e.message);
           }
-          
-          const existing = JSON.parse(localStorage.getItem('videoDownloadHistory') || '[]');
-          const updated = [newVideo, ...existing];
-          localStorage.setItem('videoDownloadHistory', JSON.stringify(updated));
-          console.log('💾 Saved to localStorage, total videos:', updated.length);
-          
-          setGeneratedVideos(prev => [newVideo, ...prev]);
+
+          console.log('💾 Adding video to state and localStorage:', newVideo);
+          setGeneratedVideos(prev => {
+            const updated = [newVideo, ...prev];
+            localStorage.setItem('videoDownloadHistory', JSON.stringify(updated));
+            return updated;
+          });
           setCurrentVideo(data.video_url);
           setLoading(false);
-          
+
           toast.success('✅ הסרטון מוכן והתווסף להיסטוריה!', { id: 'creating' });
-          
-          // הצגת הסרטון בתצוגה המקדימה
-          window.dispatchEvent(new CustomEvent('digitalDreamsVideoReady', {
-            detail: { videoUrl: data.video_url, title }
-          }));
-          
+
           console.log('✅ All done!');
           return;
         }
