@@ -630,7 +630,6 @@ export default function VideoCreator() {
                                 animate={{
                                   scale: [1, 1.2, 0.9, 1.35],
                                   rotate: [0, 10, -10, 360],
-                                  y: [0, -40, -20, -60],
                                 }}
                                 transition={{
                                   duration: 4,
@@ -638,6 +637,7 @@ export default function VideoCreator() {
                                   times: [0, 0.3, 0.6, 1],
                                   ease: "easeInOut"
                                 }}
+                                style={{ willChange: 'transform' }}
                               >
                                 <svg width="240" height="240" viewBox="0 0 24 24" fill="none">
                                   <defs>
