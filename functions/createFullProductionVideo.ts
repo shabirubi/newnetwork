@@ -68,11 +68,17 @@ Return only the script text in ${detectedLanguage}.`;
     }
     console.log('🎤 Voice ID:', voiceId);
 
-    // 5. Create HeyGen video using Video Agent API with SHORT prompt
-    const shortPrompt = `${detectedLanguage} news video: ${description.substring(0, 100)}`;
+    // 5. Create HeyGen video using Video Agent API with detailed prompt
+    const videoPrompt = `Create a professional ${detectedLanguage} news broadcast video about: ${description}
+
+Use this complete script (5+ minutes):
+${script}
+
+Style: Professional TV news presenter, studio background, engaging delivery.`;
 
     console.log('🎬 Calling HeyGen Video Agent API...');
-    console.log('📋 Prompt:', shortPrompt);
+    console.log('📋 Script length:', script.length, 'characters');
+    console.log('📋 Estimated duration: 5-7 minutes');
 
     const heygenResponse = await fetch('https://api.heygen.com/v1/video_agent/generate', {
       method: 'POST',
@@ -81,7 +87,7 @@ Return only the script text in ${detectedLanguage}.`;
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        prompt: shortPrompt
+        prompt: videoPrompt
       })
     });
 
