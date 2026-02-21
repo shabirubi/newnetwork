@@ -610,7 +610,7 @@ export default function VideoCreator() {
             </div>
           )}
 
-          {(loading || messages.some(msg => msg.tool_calls?.some(tc => tc.status === 'running' || tc.status === 'in_progress'))) && (
+          {messages.some(msg => msg.tool_calls?.some(tc => (tc.status === 'running' || tc.status === 'in_progress') && tc.name === 'createFullProductionVideo')) && (
             <motion.div 
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
