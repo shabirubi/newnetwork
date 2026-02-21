@@ -4,11 +4,11 @@ Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
 
-    const { description, imageUrl } = await req.json();
+    const { description, imageUrl, style = 'cinematic', mood = 'dramatic' } = await req.json();
 
-    if (!description) {
-      return Response.json({ error: 'Missing description' }, { status: 400 });
-    }
+        if (!description) {
+          return Response.json({ error: 'Missing description' }, { status: 400 });
+        }
 
     const HEYGEN_API_KEY = Deno.env.get('HEYGEN_API_KEY');
     
