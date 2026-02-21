@@ -639,7 +639,7 @@ export default function VideoCreator() {
                                 }}
                                 style={{ willChange: 'transform' }}
                               >
-                                <svg width="240" height="240" viewBox="0 0 24 24" fill="none">
+                                <svg width="120" height="120" viewBox="0 0 24 24" fill="none">
                                   <defs>
                                     <linearGradient id="heartGradient" x1="0%" y1="0%" x2="100%" y2="100%">
                                       <motion.stop offset="0%" stopColor="#FF0080" 
