@@ -161,7 +161,9 @@ export default function VideoCreator() {
   // Subscribe to conversation
   useEffect(() => {
     if (!conversationId) return;
+    console.log('🔔 Subscribing to conversation:', conversationId);
     const unsubscribe = base44.agents.subscribeToConversation(conversationId, (data) => {
+      console.log('📨 Conversation update:', data.messages.length, 'messages');
       setMessages(data.messages);
       // שמירת השיחה ל-localStorage
       localStorage.setItem('digitalDreamsChat', JSON.stringify({
@@ -170,9 +172,11 @@ export default function VideoCreator() {
         timestamp: new Date().toISOString()
       }));
       const lastMsg = data.messages[data.messages.length - 1];
+      console.log('📬 Last message:', lastMsg?.role, 'tool_calls:', lastMsg?.tool_calls?.length || 0);
+      
       if (lastMsg?.tool_calls) {
         lastMsg.tool_calls.forEach(tc => {
-          console.log('🔧 Tool call:', tc.name, 'Status:', tc.status);
+          console.log('🔧 Tool call:', tc.name, 'Status:', tc.status, 'Results:', !!tc.results);
           
           if (tc.status === 'completed' && tc.results) {
             try {
@@ -209,6 +213,9 @@ export default function VideoCreator() {
             } catch (e) {
               console.error('❌ Error parsing result:', e);
             }
+          } else if (tc.status === 'running' || tc.status === 'in_progress') {
+            console.log('⏳ Tool running:', tc.name);
+            setLoading(true);
           }
         });
       }
