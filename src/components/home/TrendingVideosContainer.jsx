@@ -112,7 +112,7 @@ export default function TrendingVideosContainer() {
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: -50 }}
               transition={{ duration: 0.3 }}
-              className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2 sm:gap-3"
+              className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-2 sm:gap-3"
             >
               {videos.slice(currentIndex, currentIndex + visibleVideos).map((video, idx) => (
                 <motion.div
@@ -138,12 +138,20 @@ export default function TrendingVideosContainer() {
                       src={video.thumbnail_url}
                       alt={video.title}
                       className="w-full h-full object-cover"
+                      onError={(e) => e.target.src = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png"}
                     />
-                  ) : (
+                  ) : video.video_url ? (
                     <video
                       src={video.video_url}
                       className="w-full h-full object-cover"
                       muted
+                      poster="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png"
+                    />
+                  ) : (
+                    <img
+                      src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png"
+                      alt="הרשת החדשה"
+                      className="w-full h-full object-cover opacity-70"
                     />
                   )}
 
