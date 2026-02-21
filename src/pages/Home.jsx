@@ -158,6 +158,35 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-black space-y-0 sm:space-y-6">
 
+      {/* Featured News Section */}
+      <section className="w-full px-4 py-8">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-3xl font-bold text-white mb-6 flex items-center gap-3">
+            <Flame className="w-8 h-8 text-[#E31E24]" />
+            חדשות מובלטות
+          </h2>
+          
+          {isLoading ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {[1, 2, 3, 4, 5, 6].map((i) => (
+                <Skeleton key={i} className="h-80 bg-gray-800 rounded-2xl" />
+              ))}
+            </div>
+          ) : articles.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {articles.map((article) => (
+                <NewsCard key={article.id} article={article} />
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <Newspaper className="w-16 h-16 text-gray-700 mx-auto mb-4" />
+              <p className="text-gray-500 text-lg">אין חדשות מובלטות כרגע</p>
+            </div>
+          )}
+        </div>
+      </section>
+
 
 
 
