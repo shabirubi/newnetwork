@@ -24,6 +24,20 @@ export default function VideoCreator() {
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
 
+  // טעינת השיחה השמורה
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('digitalDreamsChat');
+      if (saved) {
+        const { conversationId: savedConvId, messages: savedMessages } = JSON.parse(saved);
+        setConversationId(savedConvId);
+        setMessages(savedMessages);
+      }
+    } catch (e) {
+      console.error('Error loading saved chat:', e);
+    }
+  }, []);
+
   // Load history from HeyGen + Database + localStorage
   useEffect(() => {
     const loadHistory = async () => {
@@ -149,6 +163,12 @@ export default function VideoCreator() {
     if (!conversationId) return;
     const unsubscribe = base44.agents.subscribeToConversation(conversationId, (data) => {
       setMessages(data.messages);
+      // שמירת השיחה ל-localStorage
+      localStorage.setItem('digitalDreamsChat', JSON.stringify({
+        conversationId,
+        messages: data.messages,
+        timestamp: new Date().toISOString()
+      }));
       const lastMsg = data.messages[data.messages.length - 1];
       if (lastMsg?.tool_calls) {
         lastMsg.tool_calls.forEach(tc => {
@@ -410,6 +430,12 @@ export default function VideoCreator() {
           setLoading(false);
           
           toast.success('✅ הסרטון מוכן והתווסף להיסטוריה!', { id: 'creating' });
+          
+          // הצגת הסרטון בתצוגה המקדימה
+          window.dispatchEvent(new CustomEvent('digitalDreamsVideoReady', {
+            detail: { videoUrl: data.video_url, title }
+          }));
+          
           console.log('✅ All done!');
           return;
         }
@@ -663,42 +689,65 @@ export default function VideoCreator() {
               animate={{ opacity: 1, scale: 1 }}
               className="w-full max-w-4xl px-2 sm:px-0"
             >
-              <div className="bg-gradient-to-br from-green-900/20 to-emerald-900/20 rounded-xl sm:rounded-2xl border-2 border-green-500/30 overflow-hidden">
-                <video 
-                  src={currentVideo} 
-                  controls 
-                  autoPlay
-                  playsInline
-                  className="w-full aspect-video bg-black"
-                />
-                <div className="p-3 sm:p-4 lg:p-6 bg-black/40 backdrop-blur-sm">
-                  <div className="flex flex-col sm:flex-row gap-2 sm:gap-3">
-                    <a 
-                      href={currentVideo} 
-                      download 
-                      className="flex-1 bg-green-600 hover:bg-green-700 text-white px-4 sm:px-6 py-3 sm:py-4 rounded-lg sm:rounded-xl font-bold text-sm sm:text-base lg:text-lg flex items-center justify-center gap-2 sm:gap-3 transition-all"
-                    >
-                      <Download className="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" />
-                      הורד סרטון
-                    </a>
-                    <Button
-                      onClick={() => setCurrentVideo(null)}
-                      variant="outline"
-                      className="px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base lg:text-lg"
-                    >
-                      צור חדש
-                    </Button>
-                    <Button
-                      onClick={() => {
-                        window.dispatchEvent(new CustomEvent('addVideoToEditor', { 
-                          detail: { videoUrl: currentVideo } 
-                        }));
-                        toast.success('הסרטון נוסף לעורך הראשי');
-                      }}
-                      className="px-4 sm:px-6 py-3 sm:py-4 text-sm sm:text-base lg:text-lg bg-purple-600 hover:bg-purple-700"
-                    >
-                      הוסף לעורך
-                    </Button>
+              {/* נגן מקצועי בעיצוב קלאסי */}
+              <div className="bg-gradient-to-b from-gray-900 to-black rounded-lg overflow-hidden shadow-2xl border border-gray-800">
+                {/* Video Player */}
+                <div className="relative bg-black">
+                  <video 
+                    src={currentVideo} 
+                    controls 
+                    autoPlay
+                    playsInline
+                    className="w-full aspect-video bg-black"
+                    controlsList="nodownload"
+                  />
+                </div>
+                
+                {/* Controls Bar - עיצוב מקצועי */}
+                <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-t border-gray-700">
+                  <div className="p-4 sm:p-5">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center">
+                        <Video className="w-5 h-5 text-white" />
+                      </div>
+                      <div className="flex-1">
+                        <h3 className="text-white font-bold text-sm sm:text-base">Digital Dreams Production</h3>
+                        <p className="text-gray-400 text-xs">סרטון מוכן להורדה</p>
+                      </div>
+                      <div className="flex items-center gap-1 px-3 py-1 bg-green-500/20 rounded-full border border-green-500/30">
+                        <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                        <span className="text-green-400 text-xs font-bold">מוכן</span>
+                      </div>
+                    </div>
+                    
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                      <a 
+                        href={currentVideo} 
+                        download 
+                        className="bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-white px-4 py-3 rounded-lg font-medium text-sm flex items-center justify-center gap-2 transition-all border border-gray-600 hover:border-gray-500"
+                      >
+                        <Download className="w-4 h-4" />
+                        הורד סרטון
+                      </a>
+                      <Button
+                        onClick={() => {
+                          window.dispatchEvent(new CustomEvent('addVideoToEditor', { 
+                            detail: { videoUrl: currentVideo } 
+                          }));
+                          toast.success('הסרטון נוסף לעורך');
+                        }}
+                        className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white px-4 py-3 rounded-lg font-medium text-sm transition-all"
+                      >
+                        הוסף לעורך
+                      </Button>
+                      <Button
+                        onClick={() => setCurrentVideo(null)}
+                        variant="outline"
+                        className="bg-gray-800/50 hover:bg-gray-700/50 border-gray-600 text-gray-300 px-4 py-3 rounded-lg font-medium text-sm"
+                      >
+                        צור חדש
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>
