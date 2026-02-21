@@ -27,34 +27,55 @@ Deno.serve(async (req) => {
     const detectedLanguage = languageResult?.trim() || 'Hebrew';
     console.log('🌍 Detected language:', detectedLanguage);
 
-    // 2. Generate extended professional script (5+ minutes)
-    const scriptPrompt = `Create a comprehensive, professional broadcast-quality script (750-1050 words) about: ${description}
+    // 2. Generate professional script (optimal for Video Agent - max 4 minutes)
+    const scriptPrompt = `Create a professional broadcast-quality script about: ${description}
 
 Requirements:
 - Write in ${detectedLanguage} language ONLY
-- Duration: 5-7 minutes of narration
-- Professional news/documentary tone with depth
+- Duration: 3-4 minutes of narration (optimal for HeyGen Video Agent)
+- Professional news/documentary tone
 - Structure:
-  * Strong opening hook (30 seconds)
-  * Detailed main content with multiple angles (4-5 minutes)
-  * Background, context, and analysis (1-2 minutes)
-  * Strong closing summary (30 seconds)
-- Rich, detailed content - don't rush
-- Natural speaking rhythm with transitions
-- Include specific examples and context
-- Make it informative and engaging
+  * Strong opening hook (20 seconds)
+  * Main content with key points (2.5-3 minutes)
+  * Strong closing summary (20 seconds)
+- Clear, engaging delivery
+- Natural speaking rhythm
 
 Return only the complete script text in ${detectedLanguage}.`;
 
-    console.log('📝 Generating extended script (5+ minutes)...');
+    console.log('📝 Generating professional script (3-4 minutes)...');
     const scriptResult = await base44.integrations.Core.InvokeLLM({
       prompt: scriptPrompt,
       add_context_from_internet: true
     });
 
-    const script = scriptResult?.trim() || description;
-    console.log('✅ Extended script generated:', script.length, 'characters');
-    console.log('📊 Preview:', script.substring(0, 150) + '...');
+    const fullScript = scriptResult?.trim() || description;
+    console.log('✅ Script generated:', fullScript.length, 'characters');
+    console.log('📊 Preview:', fullScript.substring(0, 150) + '...');
+
+    // Split script into chunks if too long (Pro Plan limit: 5 minutes ≈ 1500 chars)
+    const chunkScript = (text) => {
+      const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
+      const chunks = [];
+      let current = '';
+      
+      sentences.forEach(sentence => {
+        if((current + sentence).length < 1400) {
+          current += sentence;
+        } else {
+          if(current) chunks.push(current.trim());
+          current = sentence;
+        }
+      });
+      if(current) chunks.push(current.trim());
+      return chunks;
+    };
+
+    const scriptChunks = chunkScript(fullScript);
+    console.log(`📊 Script split into ${scriptChunks.length} chunks for processing`);
+    scriptChunks.forEach((chunk, i) => {
+      console.log(`  Chunk ${i+1}: ${chunk.length} chars`);
+    });
 
     // 3. Generate professional background
     let backgroundUrl = imageUrl;
