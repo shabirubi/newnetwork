@@ -610,7 +610,7 @@ export default function VideoCreator() {
             </div>
           )}
 
-          {messages.some(msg => msg.tool_calls?.some(tc => (tc.status === 'running' || tc.status === 'in_progress') && tc.name === 'createFullProductionVideo')) && (
+          {(loading || messages.some(msg => msg.tool_calls?.some(tc => (tc.status === 'running' || tc.status === 'in_progress') && tc.name === 'createFullProductionVideo'))) && !currentVideo && (
             <motion.div 
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -622,7 +622,7 @@ export default function VideoCreator() {
                 <div className="relative bg-black aspect-video flex items-center justify-center">
                   {/* Background Pattern */}
                   <div className="absolute inset-0 bg-gradient-to-br from-gray-900/50 via-black to-gray-900/50"></div>
-                  
+
                   {/* Animated Rainbow Heart Logo */}
                   <motion.div
                     className="relative z-10"
@@ -681,20 +681,8 @@ export default function VideoCreator() {
                       </motion.div>
                     </div>
                   </div>
-
-                  {/* Video Element - Hidden until ready */}
-                  {currentVideo && (
-                    <video 
-                      src={currentVideo} 
-                      controls 
-                      autoPlay
-                      playsInline
-                      className="absolute inset-0 w-full h-full object-cover"
-                      controlsList="nodownload"
-                    />
-                  )}
                 </div>
-                
+
                 {/* Controls Bar */}
                 <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-t border-gray-700">
                   <div className="p-4 sm:p-5">
@@ -718,9 +706,7 @@ export default function VideoCreator() {
                       </div>
                       <div className="flex-1">
                         <h3 className="text-white font-bold text-sm sm:text-base">Digital Dreams Production</h3>
-                        <p className="text-gray-400 text-xs">
-                          {currentVideo ? 'סרטון מוכן להורדה' : 'מעבד את הסרטון...'}
-                        </p>
+                        <p className="text-gray-400 text-xs">מעבד את הסרטון...</p>
                       </div>
                       <div className="flex items-center gap-1 px-3 py-1 bg-yellow-500/20 rounded-full border border-yellow-500/30">
                         <motion.div 
@@ -728,55 +714,100 @@ export default function VideoCreator() {
                           animate={{ opacity: [1, 0.3, 1] }}
                           transition={{ duration: 1.5, repeat: Infinity }}
                         />
-                        <span className="text-yellow-400 text-xs font-bold">
-                          {currentVideo ? 'מוכן' : 'מעבד'}
-                        </span>
+                        <span className="text-yellow-400 text-xs font-bold">מעבד</span>
                       </div>
                     </div>
-                    
+
                     {/* Progress Bar */}
-                    {!currentVideo && (
-                      <div className="relative h-1 bg-gray-800 rounded-full overflow-hidden mb-4">
-                        <motion.div
-                          className="absolute inset-y-0 left-0 bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 rounded-full"
-                          initial={{ width: "0%" }}
-                          animate={{ width: "100%" }}
-                          transition={{ duration: 90, ease: "linear" }}
-                        />
+                    <div className="relative h-1 bg-gray-800 rounded-full overflow-hidden mb-4">
+                      <motion.div
+                        className="absolute inset-y-0 left-0 bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 rounded-full"
+                        initial={{ width: "0%" }}
+                        animate={{ width: "100%" }}
+                        transition={{ duration: 180, ease: "linear" }}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+          )}
+
+          {currentVideo && (
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              className="w-full max-w-4xl px-2 sm:px-0"
+            >
+              <div className="bg-gradient-to-b from-gray-900 to-black rounded-lg overflow-hidden shadow-2xl border border-gray-800">
+                <div className="relative bg-black aspect-video">
+                  <video 
+                    src={currentVideo} 
+                    controls 
+                    autoPlay
+                    playsInline
+                    className="w-full h-full object-cover"
+                    controlsList="nodownload"
+                  />
+                </div>
+
+                <div className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 border-t border-gray-700">
+                  <div className="p-4 sm:p-5">
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 rounded-lg bg-black flex items-center justify-center">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                          <defs>
+                            <linearGradient id="smallRainbow2" x1="0%" y1="0%" x2="100%" y2="100%">
+                              <stop offset="0%" stopColor="#FF0080" />
+                              <stop offset="33%" stopColor="#FFFF00" />
+                              <stop offset="66%" stopColor="#00FF00" />
+                              <stop offset="100%" stopColor="#0080FF" />
+                            </linearGradient>
+                          </defs>
+                          <path
+                            d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                            fill="url(#smallRainbow2)"
+                          />
+                        </svg>
                       </div>
-                    )}
-                    
-                    {/* Action Buttons */}
-                    {currentVideo && (
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                        <a 
-                          href={currentVideo} 
-                          download 
-                          className="bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-white px-4 py-3 rounded-lg font-medium text-sm flex items-center justify-center gap-2 transition-all border border-gray-600 hover:border-gray-500"
-                        >
-                          <Download className="w-4 h-4" />
-                          הורד סרטון
-                        </a>
-                        <Button
-                          onClick={() => {
-                            window.dispatchEvent(new CustomEvent('addVideoToEditor', { 
-                              detail: { videoUrl: currentVideo } 
-                            }));
-                            toast.success('הסרטון נוסף לעורך');
-                          }}
-                          className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white px-4 py-3 rounded-lg font-medium text-sm transition-all"
-                        >
-                          הוסף לעורך
-                        </Button>
-                        <Button
-                          onClick={() => setCurrentVideo(null)}
-                          variant="outline"
-                          className="bg-gray-800/50 hover:bg-gray-700/50 border-gray-600 text-gray-300 px-4 py-3 rounded-lg font-medium text-sm"
-                        >
-                          צור חדש
-                        </Button>
+                      <div className="flex-1">
+                        <h3 className="text-white font-bold text-sm sm:text-base">Digital Dreams Production</h3>
+                        <p className="text-gray-400 text-xs">סרטון מוכן להורדה</p>
                       </div>
-                    )}
+                      <div className="flex items-center gap-1 px-3 py-1 bg-green-500/20 rounded-full border border-green-500/30">
+                        <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                        <span className="text-green-400 text-xs font-bold">מוכן</span>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                      <a 
+                        href={currentVideo} 
+                        download 
+                        className="bg-gradient-to-r from-gray-700 to-gray-800 hover:from-gray-600 hover:to-gray-700 text-white px-4 py-3 rounded-lg font-medium text-sm flex items-center justify-center gap-2 transition-all border border-gray-600 hover:border-gray-500"
+                      >
+                        <Download className="w-4 h-4" />
+                        הורד סרטון
+                      </a>
+                      <Button
+                        onClick={() => {
+                          window.dispatchEvent(new CustomEvent('addVideoToEditor', { 
+                            detail: { videoUrl: currentVideo } 
+                          }));
+                          toast.success('הסרטון נוסף לעורך');
+                        }}
+                        className="bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white px-4 py-3 rounded-lg font-medium text-sm transition-all"
+                      >
+                        הוסף לעורך
+                      </Button>
+                      <Button
+                        onClick={() => setCurrentVideo(null)}
+                        variant="outline"
+                        className="bg-gray-800/50 hover:bg-gray-700/50 border-gray-600 text-gray-300 px-4 py-3 rounded-lg font-medium text-sm"
+                      >
+                        צור חדש
+                      </Button>
+                    </div>
                   </div>
                 </div>
               </div>
