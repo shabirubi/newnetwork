@@ -517,7 +517,7 @@ export default function VideoCreator() {
   };
 
   return (
-    <div className="h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex flex-col overflow-hidden" dir="rtl">
+    <div className="h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex flex-col overflow-hidden" dir="rtl" style={{ height: '100vh', height: '100dvh' }}>
       {/* Header - Mobile Optimized */}
       <div className="bg-black/80 backdrop-blur-xl border-b border-gray-800 px-3 sm:px-4 py-3 flex items-center justify-between z-10 flex-shrink-0 safe-area-inset-top">
         <div className="flex items-center gap-2 sm:gap-3">
