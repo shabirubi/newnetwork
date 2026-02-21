@@ -75,26 +75,25 @@ Return only the complete script text in ${detectedLanguage}.`;
     }
     console.log('🎤 Voice ID:', voiceId);
 
-    // 5. Create HeyGen video using Avatar API (more reliable, lower cost)
-    console.log('🎬 Calling HeyGen Avatar API...');
+    // 5. Create HeyGen video using Video Agent API
+    const videoPrompt = `Create a professional ${detectedLanguage} news broadcast video about: ${description}
+
+Use this complete script (5+ minutes):
+${script}
+
+Style: Professional TV news presenter, studio background, engaging delivery.`;
+
+    console.log('🎬 Calling HeyGen Video Agent API...');
     console.log('📋 Script length:', script.length, 'characters');
 
-    const heygenResponse = await fetch('https://api.heygen.com/v1/avatar/talk', {
+    const heygenResponse = await fetch('https://api.heygen.com/v1/video_agent/generate', {
       method: 'POST',
       headers: {
         'X-API-KEY': HEYGEN_API_KEY,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        text: script,
-        avatar_id: 'Wayne_20240711',
-        voice: {
-          voice_id: voiceId,
-          rate: 1.0
-        },
-        background: {
-          color: '#000000'
-        }
+        prompt: videoPrompt
       })
     });
 
@@ -112,8 +111,8 @@ Return only the complete script text in ${detectedLanguage}.`;
     const heygenData = JSON.parse(responseText);
     console.log('📦 Full HeyGen Response:', JSON.stringify(heygenData, null, 2));
     
-    // Avatar API returns different structure
-    const videoId = heygenData.data?.video_id || heygenData.video_id || heygenData.data?.id || heygenData.id;
+    // Video Agent API returns different structure
+    const videoId = heygenData.data?.video_id || heygenData.video_id || heygenData.data?.id;
     
     if (!videoId) {
       console.error('❌ No video ID in response. Full data:', heygenData);
