@@ -9,74 +9,54 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Missing description' }, { status: 400 });
     }
 
-    const LUMA_API_KEY = Deno.env.get('LUMA_API_KEY');
-    if (!LUMA_API_KEY) {
-      return Response.json({ error: 'Luma API key not configured' }, { status: 500 });
+    const HEYGEN_API_KEY = Deno.env.get('HEYGEN_API_KEY');
+    if (!HEYGEN_API_KEY) {
+      return Response.json({ error: 'HeyGen API key not configured' }, { status: 500 });
     }
 
-    console.log('🎨 Digital Dreams - Creating immersive world from:', description);
+    console.log('🎬 Digital Dreams - Creating video with HeyGen...');
+    console.log('📝 User Request:', description);
 
-    // Build artistic narrative with LLM
-    const narrativePrompt = `You are Digital Dreams Pro - a digital alchemist building immersive visual worlds.
-
-USER'S VISION: "${description}"
-
-Create a RICH NARRATIVE for a cinematic video experience (NOT a news report):
-
-Build:
-1. **Opening Scene** - Set the atmosphere, the mood, the world we're entering
-2. **Core Journey** - The heart of the story, what unfolds, the emotions
-3. **Visual Poetry** - Describe colors, movements, textures, light
-4. **Closing Moment** - How does this world leave us feeling?
-
-Write as if painting with words. Each frame is designed like a painting. Each moment has soul.
-
-Return ONLY the narrative text - poetic, atmospheric, immersive.`;
-
-    console.log('🎭 Building narrative with LLM...');
-    const narrative = await base44.integrations.Core.InvokeLLM({
-      prompt: narrativePrompt
-    });
-
-    console.log('📝 NARRATIVE CREATED:', narrative.substring(0, 200) + '...');
-
-    // Create video prompt for Luma - artistic and cinematic
-    const lumaPrompt = `${narrative}
-
-Cinematic, dreamlike, artistic, immersive visuals, emotional atmosphere, rich colors, dynamic camera movement, professional cinematography`;
-
-    console.log('🎬 Generating video with Luma AI...');
-    
-    const lumaResponse = await fetch('https://api.lumalabs.ai/dream-machine/v1/generations', {
+    // Call HeyGen Video Agent with user's exact text
+    const heygenResponse = await fetch('https://api.heygen.com/v1/video_agent/generate', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${LUMA_API_KEY}`,
+        'X-API-KEY': HEYGEN_API_KEY,
         'Content-Type': 'application/json'
       },
       body: JSON.stringify({
-        prompt: lumaPrompt,
-        aspect_ratio: '16:9',
-        expand_prompt: true,
-        loop: false
+        prompt: description
       })
     });
 
-    if (!lumaResponse.ok) {
-      const errorText = await lumaResponse.text();
-      console.error('❌ Luma error:', errorText);
-      return Response.json({ error: 'Luma generation failed', details: errorText }, { status: 500 });
+    const responseText = await heygenResponse.text();
+    console.log('📥 HeyGen Response:', heygenResponse.status);
+
+    if (!heygenResponse.ok) {
+      console.error('❌ HeyGen error:', heygenResponse.status, responseText);
+      return Response.json({ 
+        error: 'HeyGen generation failed', 
+        details: responseText 
+      }, { status: 500 });
     }
 
-    const lumaData = await lumaResponse.json();
-    const generationId = lumaData.id;
+    const heygenData = JSON.parse(responseText);
+    const videoId = heygenData.data?.video_id || heygenData.video_id || heygenData.data?.id || heygenData.id;
+    
+    if (!videoId) {
+      console.error('❌ No video ID:', heygenData);
+      return Response.json({ 
+        error: 'No video ID returned', 
+        details: heygenData 
+      }, { status: 500 });
+    }
 
-    console.log('✅ Luma generation started:', generationId);
+    console.log('✅ HeyGen generation started:', videoId);
 
     return Response.json({
-      video_id: generationId,
+      video_id: videoId,
       status: 'processing',
-      narrative: narrative,
-      message: 'Digital Dreams is crafting your immersive world...'
+      message: 'Digital Dreams is creating your video...'
     });
 
   } catch (error) {
