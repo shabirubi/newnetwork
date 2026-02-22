@@ -3,146 +3,80 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
 Deno.serve(async (req) => {
   try {
     const base44 = createClientFromRequest(req);
+    const { description } = await req.json();
 
-    const { description, imageUrl, style = 'cinematic', mood = 'dramatic' } = await req.json();
-
-        if (!description) {
-          return Response.json({ error: 'Missing description' }, { status: 400 });
-        }
-
-    const HEYGEN_API_KEY = Deno.env.get('HEYGEN_API_KEY');
-    
-    if (!HEYGEN_API_KEY) {
-      return Response.json({ error: 'HeyGen API key not configured' }, { status: 500 });
+    if (!description) {
+      return Response.json({ error: 'Missing description' }, { status: 400 });
     }
 
-    console.log('🎬 Creating professional video with HeyGen...');
-    console.log('📝 User Request:', description);
+    const LUMA_API_KEY = Deno.env.get('LUMA_API_KEY');
+    if (!LUMA_API_KEY) {
+      return Response.json({ error: 'Luma API key not configured' }, { status: 500 });
+    }
 
-    // 1. Detect language
-    const detectLanguagePrompt = `Detect the language of this text and return ONLY the language name in English (Hebrew/English/Arabic/Spanish/etc): ${description}`;
-    const languageResult = await base44.integrations.Core.InvokeLLM({
-      prompt: detectLanguagePrompt
-    });
-    const detectedLanguage = languageResult?.trim() || 'Hebrew';
-    console.log('🌍 Detected language:', detectedLanguage);
+    console.log('🎨 Digital Dreams - Creating immersive world from:', description);
 
-    // 2. Use the description as-is (already provided script/text)
-    const fullScript = description.trim();
-    console.log('📝 Using provided text as script:', fullScript.length, 'characters');
-    console.log('📊 Preview:', fullScript.substring(0, 150) + '...');
+    // Build artistic narrative with LLM
+    const narrativePrompt = `You are Digital Dreams Pro - a digital alchemist building immersive visual worlds.
 
-    // Split script into chunks if too long (Pro Plan limit: 5 minutes ≈ 1500 chars)
-    const chunkScript = (text) => {
-      const sentences = text.match(/[^.!?]+[.!?]+/g) || [text];
-      const chunks = [];
-      let current = '';
-      
-      sentences.forEach(sentence => {
-        if((current + sentence).length < 1400) {
-          current += sentence;
-        } else {
-          if(current) chunks.push(current.trim());
-          current = sentence;
-        }
-      });
-      if(current) chunks.push(current.trim());
-      return chunks;
-    };
+USER'S VISION: "${description}"
 
-    const scriptChunks = chunkScript(fullScript);
-    console.log(`📊 Script split into ${scriptChunks.length} chunks for processing`);
-    scriptChunks.forEach((chunk, i) => {
-      console.log(`  Chunk ${i+1}: ${chunk.length} chars`);
+Create a RICH NARRATIVE for a cinematic video experience (NOT a news report):
+
+Build:
+1. **Opening Scene** - Set the atmosphere, the mood, the world we're entering
+2. **Core Journey** - The heart of the story, what unfolds, the emotions
+3. **Visual Poetry** - Describe colors, movements, textures, light
+4. **Closing Moment** - How does this world leave us feeling?
+
+Write as if painting with words. Each frame is designed like a painting. Each moment has soul.
+
+Return ONLY the narrative text - poetic, atmospheric, immersive.`;
+
+    console.log('🎭 Building narrative with LLM...');
+    const narrative = await base44.integrations.Core.InvokeLLM({
+      prompt: narrativePrompt
     });
 
-    // 3. Generate professional background
-    let backgroundUrl = imageUrl;
-    if (!backgroundUrl) {
-      const bgResult = await base44.integrations.Core.GenerateImage({
-        prompt: 'Professional news studio background, modern TV broadcast set, blue and white colors, clean minimalist design, professional lighting, 16:9 aspect ratio, photorealistic'
-      });
-      backgroundUrl = bgResult.url;
-      console.log('✅ Background created');
-    }
+    console.log('📝 NARRATIVE CREATED:', narrative.substring(0, 200) + '...');
 
-    // 4. Select voice based on language
-    let voiceId = 'v6WKRTqObgmv7NHgVAFD'; // Hebrew
-    if (detectedLanguage.toLowerCase().includes('english')) {
-      voiceId = 'EXAVITQu4vr4xnSDxMaL';
-    } else if (detectedLanguage.toLowerCase().includes('arabic')) {
-      voiceId = 'AZnzlk1XvdvUeBnXmlld';
-    }
-    console.log('🎤 Voice ID:', voiceId);
+    // Create video prompt for Luma - artistic and cinematic
+    const lumaPrompt = `${narrative}
 
-    // 5. Process each script chunk with queue to respect concurrent limits (Pro: 3 concurrent)
-    console.log('🎬 Generating videos from script chunks...');
+Cinematic, dreamlike, artistic, immersive visuals, emotional atmosphere, rich colors, dynamic camera movement, professional cinematography`;
+
+    console.log('🎬 Generating video with Luma AI...');
     
-    const videoIds = [];
-    const baseDelay = 5000; // 5 seconds between requests
-    
-    for (let i = 0; i < scriptChunks.length; i++) {
-      const chunk = scriptChunks[i];
-      
-      // Respect concurrent limits - wait before processing
-      if(i > 0) {
-        await new Promise(resolve => setTimeout(resolve, baseDelay));
-      }
-      
-      // Use ONLY the user's text - no modifications to preserve intent
-      console.log(`📤 Chunk ${i+1}/${scriptChunks.length}: Calling HeyGen Video Agent API with original text...`);
-      console.log(`📝 Exact text: "${chunk.substring(0, 100)}..."`);
-      
-      try {
-        const heygenResponse = await fetch('https://api.heygen.com/v1/video_agent/generate', {
-          method: 'POST',
-          headers: {
-            'X-API-KEY': HEYGEN_API_KEY,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            prompt: chunk  // Send ONLY user's original text
-          })
-        });
+    const lumaResponse = await fetch('https://api.lumalabs.ai/dream-machine/v1/generations', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${LUMA_API_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        prompt: lumaPrompt,
+        aspect_ratio: '16:9',
+        expand_prompt: true,
+        loop: false
+      })
+    });
 
-        const responseText = await heygenResponse.text();
-        console.log(`📥 Chunk ${i+1} Response:`, heygenResponse.status);
-
-        if (!heygenResponse.ok) {
-          console.error(`❌ Chunk ${i+1} HeyGen error:`, heygenResponse.status, responseText);
-          continue; // Skip failed chunk and continue with next
-        }
-
-        const heygenData = JSON.parse(responseText);
-        const videoId = heygenData.data?.video_id || heygenData.video_id || heygenData.data?.id || heygenData.id;
-        
-        if (videoId) {
-          videoIds.push(videoId);
-          console.log(`✅ Chunk ${i+1} started! video_id:`, videoId);
-        } else {
-          console.error(`❌ No video ID for chunk ${i+1}:`, heygenData);
-        }
-      } catch (error) {
-        console.error(`❌ Chunk ${i+1} error:`, error.message);
-        continue;
-      }
+    if (!lumaResponse.ok) {
+      const errorText = await lumaResponse.text();
+      console.error('❌ Luma error:', errorText);
+      return Response.json({ error: 'Luma generation failed', details: errorText }, { status: 500 });
     }
 
-    if (videoIds.length === 0) {
-      return Response.json({ 
-        error: 'Failed to start any video generation',
-        details: 'All chunks failed'
-      }, { status: 500 });
-    }
+    const lumaData = await lumaResponse.json();
+    const generationId = lumaData.id;
 
-    console.log(`✅ Total videos queued: ${videoIds.length}/${scriptChunks.length}`);
+    console.log('✅ Luma generation started:', generationId);
 
     return Response.json({
-      video_ids: videoIds,
-      total_chunks: scriptChunks.length,
-      successful_chunks: videoIds.length,
+      video_id: generationId,
       status: 'processing',
-      message: `${videoIds.length} videos are being generated by HeyGen Video Agent`
+      narrative: narrative,
+      message: 'Digital Dreams is crafting your immersive world...'
     });
 
   } catch (error) {
