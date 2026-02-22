@@ -89,14 +89,9 @@ Deno.serve(async (req) => {
         await new Promise(resolve => setTimeout(resolve, baseDelay));
       }
       
-      const videoPrompt = `Create a professional ${detectedLanguage} news broadcast video.
-
-Script (chunk ${i+1}/${scriptChunks.length}):
-${chunk}
-
-Style: Professional TV news presenter, studio background, engaging delivery.`;
-
-      console.log(`📤 Chunk ${i+1}/${scriptChunks.length}: Calling HeyGen Video Agent API...`);
+      // Use ONLY the user's text - no modifications to preserve intent
+      console.log(`📤 Chunk ${i+1}/${scriptChunks.length}: Calling HeyGen Video Agent API with original text...`);
+      console.log(`📝 Exact text: "${chunk.substring(0, 100)}..."`);
       
       try {
         const heygenResponse = await fetch('https://api.heygen.com/v1/video_agent/generate', {
@@ -106,7 +101,7 @@ Style: Professional TV news presenter, studio background, engaging delivery.`;
             'Content-Type': 'application/json'
           },
           body: JSON.stringify({
-            prompt: videoPrompt
+            prompt: chunk  // Send ONLY user's original text
           })
         });
 
