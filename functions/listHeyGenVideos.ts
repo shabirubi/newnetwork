@@ -1,60 +1,113 @@
+import { createClientFromRequest } from 'npm:@base44/sdk@0.8.6';
+
 Deno.serve(async (req) => {
   try {
-    
     const HEYGEN_API_KEY = Deno.env.get('HEYGEN_API_KEY');
     
     if (!HEYGEN_API_KEY) {
       return Response.json({ error: 'HeyGen API key not configured' }, { status: 500 });
     }
 
-    console.log('📥 Fetching videos from HeyGen...');
+    console.log('📋 Fetching recent completed videos from HeyGen...');
 
-    const response = await fetch('https://api.heygen.com/v1/video.list', {
-      method: 'GET',
-      headers: {
-        'X-Api-Key': HEYGEN_API_KEY,
-        'Content-Type': 'application/json'
+    let allVideos = [];
+    let page = 0;
+    const maxPages = 100; // Fetch up to 100 pages (10,000 videos max)
+
+    // Use v1/video.list with pagination
+    while (page < maxPages) {
+      console.log(`📥 Page ${page}: Fetching 100 videos...`);
+
+      const response = await fetch(
+        `https://api.heygen.com/v1/video.list?page=${page}&limit=100`,
+        {
+          method: 'GET',
+          headers: {
+            'X-Api-Key': HEYGEN_API_KEY,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+
+      if (!response.ok) {
+        console.error(`❌ Page ${page} failed: ${response.status}`);
+        break;
       }
-    });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('❌ HeyGen API error:', response.status, errorText);
-      return Response.json({ 
-        error: `HeyGen API failed: ${errorText}`,
-        videos: []
-      }, { status: 500 });
+      const data = await response.json();
+      const videos = data.data?.videos || [];
+      
+      if (videos.length === 0) {
+        break;
+      }
+
+      allVideos.push(...videos);
+      
+      if (videos.length < 100) {
+        break;
+      }
+
+      page++;
     }
 
-    const data = await response.json();
-    const videos = data?.data?.videos || [];
+    console.log(`📦 Found ${allVideos.length} total videos from list API`);
 
-    console.log('✅ Fetched', videos.length, 'videos from HeyGen');
+    // Get only completed videos
+    const completedVideos = allVideos.filter(v => v.status === 'completed');
+    console.log(`✅ ${completedVideos.length} completed videos`);
 
-    // Transform videos to our format - only include videos with URLs
-    const transformedVideos = videos
-      .filter(v => v.video_url) // רק סרטונים מוכנים
-      .map(v => ({
-        id: v.video_id,
-        title: v.title || v.video_id,
-        video_url: v.video_url,
-        thumbnail_url: v.thumbnail_url || v.video_url,
-        created_date: v.created_at,
-        views: 0
-      }));
+    // Fetch video URLs for completed videos in batches
+    const result = [];
+    const batchSize = 50;
+    
+    for (let i = 0; i < Math.min(completedVideos.length, 1000); i += batchSize) {
+      const batch = completedVideos.slice(i, i + batchSize);
+      console.log(`🔄 Fetching URLs for videos ${i}-${i + batch.length}...`);
+      
+      const batchPromises = batch.map(async (v) => {
+        try {
+          const detailResponse = await fetch(
+            `https://api.heygen.com/v1/video_status.get?video_id=${v.video_id}`,
+            {
+              method: 'GET',
+              headers: {
+                'X-Api-Key': HEYGEN_API_KEY,
+                'Content-Type': 'application/json'
+              }
+            }
+          );
+          
+          if (detailResponse.ok) {
+            const detailData = await detailResponse.json();
+            return {
+              id: v.video_id,
+              title: v.video_title || `Video ${v.video_id.substring(0, 8)}`,
+              status: v.status,
+              video_url: detailData.data?.video_url,
+              thumbnail_url: detailData.data?.thumbnail_url,
+              created_at: v.created_at,
+              duration: detailData.data?.duration
+            };
+          }
+        } catch (e) {
+          console.error(`Failed to get URL for ${v.video_id}:`, e.message);
+        }
+        return null;
+      });
+      
+      const batchResults = await Promise.all(batchPromises);
+      result.push(...batchResults.filter(v => v && v.video_url));
+    }
 
-    console.log('✅ Returning', transformedVideos.length, 'completed videos');
+    console.log(`\n✅ Returning ${result.length} videos with URLs`);
 
-    return Response.json({ 
-      videos: transformedVideos,
-      count: transformedVideos.length 
+    return Response.json({
+      total: result.length,
+      videos: result
     });
 
   } catch (error) {
-    console.error('🔴 Error fetching HeyGen videos:', error);
-    return Response.json({ 
-      error: error.message,
-      videos: []
-    }, { status: 500 });
+    console.error('🔴 Error:', error);
+    return Response.json({ error: error.message }, { status: 500 });
   }
 });
