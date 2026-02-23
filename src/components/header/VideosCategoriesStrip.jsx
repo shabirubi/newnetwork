@@ -80,7 +80,7 @@ export default function VideosCategoriesStrip() {
         const data = await response.json();
         const videos = data?.data?.videos || [];
         
-        console.log('Loaded ALL HeyGen videos:', videos.length);
+        console.log('✅ טעינת כל סרטוני HeyGen הושלמה:', videos.length, 'סרטונים');
 
         // Transform ALL videos - no filtering by category
         const transformed = videos
@@ -200,7 +200,10 @@ export default function VideosCategoriesStrip() {
             return (
               <motion.div
                 key={cat.id}
-                onClick={() => setSelectedCategory(cat.id)}
+                onClick={() => {
+                  setSelectedCategory(cat.id);
+                  console.log('📂 נבחרה קטגוריה:', cat.label, '| סך הכל סרטונים זמינים:', categoryVideos.length);
+                }}
                 onMouseEnter={() => setHoveredCategory(cat.id)}
                 onMouseLeave={() => setHoveredCategory(null)}
                 whileHover={{ scale: 1.05 }}
@@ -261,9 +264,12 @@ export default function VideosCategoriesStrip() {
               <X className="w-8 h-8" />
             </button>
 
-            {/* Video Counter */}
-            <div className="fixed top-4 right-4 z-[10001] text-white bg-black/50 px-4 py-2 rounded-full backdrop-blur-sm text-sm">
-              {currentVideoIndex + 1} / {categoryVideos.length}
+            {/* Video Counter - Enhanced */}
+            <div className="fixed top-4 right-4 z-[10001] text-white bg-gradient-to-r from-purple-600 to-pink-600 px-5 py-3 rounded-full backdrop-blur-sm shadow-lg">
+              <div className="text-center">
+                <div className="text-2xl font-bold">{currentVideoIndex + 1} / {categoryVideos.length}</div>
+                <div className="text-xs opacity-90">כל הסרטונים מ-HeyGen 🎬</div>
+              </div>
             </div>
 
             {/* TikTok-Style Scrollable Videos */}
