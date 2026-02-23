@@ -42,49 +42,93 @@ export default function VideosCategoriesStrip() {
   };
 
   return (
-    <div className="relative bg-black/40 backdrop-blur-sm border-b border-white/10 shadow-2xl z-[34] overflow-hidden group">
-      {/* Cinema Running Lights Animation */}
+    <div className="relative bg-black/60 backdrop-blur-md border-b-2 border-yellow-500/40 shadow-2xl shadow-yellow-500/20 z-[34] overflow-hidden group">
+      {/* Intense Cinema Running Lights Animation */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Red spotlight */}
         <motion.div
-          className="absolute inset-0 h-full w-full bg-gradient-to-r from-transparent via-red-500/30 to-transparent"
+          className="absolute inset-0 h-full w-[400px] bg-gradient-to-r from-transparent via-red-600/70 to-transparent blur-xl"
           animate={{
-            x: ['-100%', '200%']
+            x: ['-400px', 'calc(100% + 400px)']
           }}
           transition={{
-            duration: 3,
+            duration: 2.5,
             repeat: Infinity,
             ease: "linear"
           }}
+          style={{
+            filter: 'drop-shadow(0 0 30px rgba(220, 38, 38, 0.8))'
+          }}
         />
+        
+        {/* Gold/Yellow spotlight */}
         <motion.div
-          className="absolute inset-0 h-full w-full bg-gradient-to-r from-transparent via-yellow-500/30 to-transparent"
+          className="absolute inset-0 h-full w-[400px] bg-gradient-to-r from-transparent via-yellow-400/70 to-transparent blur-xl"
           animate={{
-            x: ['-100%', '200%']
+            x: ['-400px', 'calc(100% + 400px)']
+          }}
+          transition={{
+            duration: 2.5,
+            repeat: Infinity,
+            ease: "linear",
+            delay: 0.8
+          }}
+          style={{
+            filter: 'drop-shadow(0 0 30px rgba(250, 204, 21, 0.8))'
+          }}
+        />
+        
+        {/* Purple spotlight */}
+        <motion.div
+          className="absolute inset-0 h-full w-[400px] bg-gradient-to-r from-transparent via-purple-600/70 to-transparent blur-xl"
+          animate={{
+            x: ['-400px', 'calc(100% + 400px)']
+          }}
+          transition={{
+            duration: 2.5,
+            repeat: Infinity,
+            ease: "linear",
+            delay: 1.6
+          }}
+          style={{
+            filter: 'drop-shadow(0 0 30px rgba(147, 51, 234, 0.8))'
+          }}
+        />
+        
+        {/* Cyan spotlight */}
+        <motion.div
+          className="absolute inset-0 h-full w-[400px] bg-gradient-to-r from-transparent via-cyan-400/70 to-transparent blur-xl"
+          animate={{
+            x: ['-400px', 'calc(100% + 400px)']
+          }}
+          transition={{
+            duration: 2.5,
+            repeat: Infinity,
+            ease: "linear",
+            delay: 2.4
+          }}
+          style={{
+            filter: 'drop-shadow(0 0 30px rgba(34, 211, 238, 0.8))'
+          }}
+        />
+        
+        {/* Pulsing ambient glow */}
+        <motion.div
+          className="absolute inset-0 bg-gradient-to-r from-red-600/20 via-yellow-600/20 to-purple-600/20"
+          animate={{
+            opacity: [0.3, 0.6, 0.3]
           }}
           transition={{
             duration: 3,
             repeat: Infinity,
-            ease: "linear",
-            delay: 1
-          }}
-        />
-        <motion.div
-          className="absolute inset-0 h-full w-full bg-gradient-to-r from-transparent via-blue-500/30 to-transparent"
-          animate={{
-            x: ['-100%', '200%']
-          }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            ease: "linear",
-            delay: 2
+            ease: "easeInOut"
           }}
         />
       </div>
       
-      {/* Film strip effect on top and bottom */}
-      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
-      <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white/20 to-transparent" />
+      {/* Hollywood marquee lights border */}
+      <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-yellow-500 via-red-500 to-yellow-500 opacity-60 animate-pulse" />
+      <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-yellow-500 via-purple-500 to-yellow-500 opacity-60 animate-pulse" style={{ animationDelay: '0.5s' }} />
       
       {/* Left Arrow */}
       <button
@@ -125,28 +169,50 @@ export default function VideosCategoriesStrip() {
                   className="relative group/card"
                 >
                   <div className="relative w-20 sm:w-24 group/item">
-                    {/* Film frame border */}
-                    <div className="absolute -inset-1 bg-gradient-to-br from-gray-700 to-gray-900 rounded-lg opacity-50" />
-                    <div className={`relative w-full bg-gradient-to-br ${cat.color} p-[1px] rounded-lg shadow-xl hover:shadow-2xl transition-all`}>
-                      <div className="w-full bg-black/90 backdrop-blur-xl rounded-lg flex flex-col items-center justify-center gap-1.5 p-3 relative overflow-hidden border border-white/5">
-                        {/* Cinema light reflection */}
-                        <div className={`absolute inset-0 bg-gradient-to-br ${cat.color} opacity-0 group-hover/card:opacity-30 transition-opacity duration-500`} />
+                    {/* Film frame border with glow */}
+                    <div className="absolute -inset-1 bg-gradient-to-br from-yellow-600 to-red-600 rounded-lg opacity-40 blur-sm group-hover/item:opacity-70 transition-opacity" />
+                    <div className={`relative w-full bg-gradient-to-br ${cat.color} p-[2px] rounded-lg shadow-2xl hover:shadow-[0_0_30px_rgba(234,179,8,0.6)] transition-all`}>
+                      <div className="w-full bg-black/95 backdrop-blur-xl rounded-lg flex flex-col items-center justify-center gap-1.5 p-3 relative overflow-hidden border border-yellow-500/20">
+                        {/* Intense cinema light reflection */}
+                        <div className={`absolute inset-0 bg-gradient-to-br ${cat.color} opacity-0 group-hover/card:opacity-50 transition-opacity duration-500`} />
                         
-                        {/* Icon with cinema glow */}
-                        <Icon className="w-10 h-10 text-white relative z-10 drop-shadow-[0_0_12px_rgba(255,255,255,0.6)] group-hover/item:scale-110 transition-transform duration-300" />
+                        {/* Rotating spotlight effect */}
+                        <motion.div
+                          className="absolute inset-0 opacity-20"
+                          animate={{
+                            background: [
+                              'radial-gradient(circle at 0% 0%, rgba(239, 68, 68, 0.4) 0%, transparent 50%)',
+                              'radial-gradient(circle at 100% 0%, rgba(250, 204, 21, 0.4) 0%, transparent 50%)',
+                              'radial-gradient(circle at 100% 100%, rgba(147, 51, 234, 0.4) 0%, transparent 50%)',
+                              'radial-gradient(circle at 0% 100%, rgba(34, 211, 238, 0.4) 0%, transparent 50%)',
+                              'radial-gradient(circle at 0% 0%, rgba(239, 68, 68, 0.4) 0%, transparent 50%)'
+                            ]
+                          }}
+                          transition={{
+                            duration: 4,
+                            repeat: Infinity,
+                            ease: "linear"
+                          }}
+                        />
                         
-                        {/* Label */}
-                        <p className="text-white font-bold text-[10px] sm:text-[11px] text-center leading-tight line-clamp-2 relative z-10 drop-shadow-lg">
+                        {/* Icon with intense cinema glow */}
+                        <Icon className="w-10 h-10 text-white relative z-10 drop-shadow-[0_0_20px_rgba(255,255,255,0.9)] group-hover/item:scale-125 group-hover/item:drop-shadow-[0_0_30px_rgba(250,204,21,1)] transition-all duration-300" />
+                        
+                        {/* Label with glow */}
+                        <p className="text-white font-bold text-[10px] sm:text-[11px] text-center leading-tight line-clamp-2 relative z-10 drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] group-hover/item:text-yellow-300 transition-colors">
                           {cat.label}
                         </p>
                         
-                        {/* Hover shimmer effect */}
+                        {/* Hover shimmer effect - stronger */}
                         {hoveredCategory === cat.id && (
                           <motion.div
                             initial={{ x: '-100%', opacity: 0 }}
                             animate={{ x: '200%', opacity: [0, 1, 0] }}
-                            transition={{ duration: 0.8, ease: "easeInOut" }}
-                            className="absolute inset-0 bg-gradient-to-r from-transparent via-white/40 to-transparent"
+                            transition={{ duration: 0.6, ease: "easeInOut" }}
+                            className="absolute inset-0 bg-gradient-to-r from-transparent via-yellow-300/60 to-transparent"
+                            style={{
+                              filter: 'drop-shadow(0 0 20px rgba(250, 204, 21, 0.8))'
+                            }}
                           />
                         )}
                       </div>
