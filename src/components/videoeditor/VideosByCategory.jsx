@@ -152,6 +152,11 @@ export default function VideosByCategory({ videos = [] }) {
                 <div className="absolute top-2 right-2 bg-gradient-to-r from-purple-600 to-pink-600 px-2 py-1 rounded text-white text-xs font-bold">
                   #{idx + 1}
                 </div>
+                {/* Like Badge */}
+                <div className="absolute bottom-2 left-2 bg-white/90 text-black px-2 py-1 rounded text-xs font-bold flex items-center gap-1">
+                  <Heart className="w-3 h-3 fill-red-500 text-red-500" />
+                  {likeCounts[video.videoUrl] || 0}
+                </div>
               </div>
               <p className="text-white text-sm font-medium mt-2 truncate">{video.title}</p>
             </motion.div>
