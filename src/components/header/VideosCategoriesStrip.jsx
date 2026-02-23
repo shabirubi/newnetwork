@@ -155,112 +155,74 @@ export default function VideosCategoriesStrip() {
   }, [comments]);
 
   return (
-    <div className="relative bg-black overflow-hidden z-[34] group" style={{ height: '100px' }}>
-      {/* Netflix-Style Background Video */}
-      <div className="absolute inset-0">
-        <video
-          autoPlay
-          muted
-          loop
-          playsInline
-          className="w-full h-full object-cover opacity-20"
-          style={{ filter: 'brightness(0.4) contrast(1.2)' }}
-        >
-          <source src="https://assets.mixkit.co/videos/preview/mixkit-cinema-projector-light-rays-in-the-dark-49031-large.mp4" type="video/mp4" />
-        </video>
-        <div className="absolute inset-0 bg-gradient-to-b from-black/90 via-black/70 to-black/90" />
-      </div>
-
-
-
-      {/* Netflix-style top gradient fade */}
-      <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-black/90 to-transparent pointer-events-none" />
-      <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-black/90 to-transparent pointer-events-none" />
+    <div className="relative bg-gradient-to-br from-black via-[#0080FF]/5 to-black overflow-hidden z-[34] border-b border-[#0080FF]/20" style={{ height: '80px' }}>
+      {/* Gradient Overlays */}
+      <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-black via-black/80 to-transparent z-10 pointer-events-none" />
+      <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-black via-black/80 to-transparent z-10 pointer-events-none" />
       
-      {/* Left Arrow */}
+      {/* Scroll Arrows */}
       <button
         onClick={() => scroll('left')}
-        className="absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-gradient-to-l from-black via-black to-transparent p-3 opacity-0 group-hover:opacity-100 transition-opacity"
+        className="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-black/60 backdrop-blur-sm p-2 rounded-full hover:bg-black/80 transition-all shadow-lg border border-[#0080FF]/30"
       >
-        <ChevronRight className="w-6 h-6 text-white" />
+        <ChevronRight className="w-5 h-5 text-white" />
       </button>
 
-      {/* Right Arrow */}
       <button
         onClick={() => scroll('right')}
-        className="absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-gradient-to-r from-black via-black to-transparent p-3 opacity-0 group-hover:opacity-100 transition-opacity"
+        className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-black/60 backdrop-blur-sm p-2 rounded-full hover:bg-black/80 transition-all shadow-lg border border-[#0080FF]/30"
       >
-        <ChevronLeft className="w-6 h-6 text-white" />
+        <ChevronLeft className="w-5 h-5 text-white" />
       </button>
 
       {/* Categories Scroll */}
       <div 
         ref={scrollRef}
-        className="overflow-x-auto relative z-10 scroll-smooth h-full"
+        className="overflow-x-auto h-full"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
-        <div className="flex gap-3 py-4 px-3 h-full items-center justify-center min-w-full">
-          {categories.map((cat, idx) => {
+        <div className="flex gap-3 py-4 h-full items-center justify-center" style={{ minWidth: '100%', width: 'max-content', margin: '0 auto' }}>
+          {categories.map((cat) => {
             const Icon = cat.icon;
             return (
-              <div
+              <motion.div
                 key={cat.id}
                 onClick={() => setSelectedCategory(cat.id)}
                 onMouseEnter={() => setHoveredCategory(cat.id)}
                 onMouseLeave={() => setHoveredCategory(null)}
-                className="flex-shrink-0 cursor-pointer"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="flex-shrink-0 cursor-pointer relative"
               >
-                <motion.div
-                  whileHover={{ scale: 1.05, y: -3 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="relative group/card"
-                >
-                  {/* Card Container */}
-                  <div className="relative w-32 sm:w-36 h-20 sm:h-24 rounded-lg overflow-hidden shadow-xl border border-white/10 group-hover/card:border-white/30 transition-all duration-300">
-                    {/* Background Image */}
-                    <img 
-                      src={cat.image} 
-                      alt={cat.label}
-                      className="absolute inset-0 w-full h-full object-cover group-hover/card:scale-110 transition-transform duration-500"
-                    />
-                    
-                    {/* Gradient Overlay */}
-                    <div className={`absolute inset-0 bg-gradient-to-br ${cat.color} opacity-40 group-hover/card:opacity-30 transition-opacity duration-300`} />
-                    
-                    {/* Dark Vignette */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-black/30" />
-                    
-                    {/* Glow Effect */}
-                    <div className={`absolute -inset-1 bg-gradient-to-br ${cat.color} opacity-0 group-hover/card:opacity-40 blur-xl transition-all duration-300`} />
-                    
-                    {/* Content */}
-                    <div className="absolute inset-0 flex flex-col items-center justify-center p-2">
-                      {/* Icon */}
-                      <motion.div
-                        whileHover={{ scale: 1.15, rotate: 5 }}
-                        className="mb-1"
-                      >
-                        <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]" />
-                      </motion.div>
-                      
-                      {/* Label */}
-                      <p className="text-white font-bold text-xs sm:text-sm text-center drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] group-hover/card:scale-105 transition-transform duration-300">
-                        {cat.label}
-                      </p>
-                    </div>
-                    
-                    {/* Shimmer Effect */}
-                    {hoveredCategory === cat.id && (
-                      <motion.div
-                        initial={{ x: '-100%' }}
-                        animate={{ x: '200%' }}
-                        transition={{ duration: 0.8, ease: "easeInOut" }}
-                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
-                      />
-                    )}
+                <div className="relative w-20 h-12 rounded-xl overflow-hidden border border-[#0080FF]/30 hover:border-[#0080FF]/60 transition-all shadow-lg hover:shadow-[0_0_20px_rgba(0,128,255,0.3)]">
+                  {/* Background Image */}
+                  <img 
+                    src={cat.image} 
+                    alt={cat.label}
+                    className="absolute inset-0 w-full h-full object-cover opacity-40"
+                  />
+                  
+                  {/* Gradient Overlay */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+                  
+                  {/* Content */}
+                  <div className="absolute inset-0 flex flex-col items-center justify-center p-1">
+                    <Icon className="w-4 h-4 text-white mb-0.5 drop-shadow-lg" />
+                    <p className="text-white font-bold text-[10px] text-center drop-shadow-lg leading-tight">
+                      {cat.label}
+                    </p>
                   </div>
-                </motion.div>
-              </div>
+                  
+                  {/* Hover Glow */}
+                  {hoveredCategory === cat.id && (
+                    <motion.div
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      className="absolute inset-0 bg-[#0080FF]/20 backdrop-blur-[2px]"
+                    />
+                  )}
+                </div>
+              </motion.div>
             );
           })}
         </div>
