@@ -233,34 +233,11 @@ export default function VideosByCategory({ videos = [] }) {
             </div>
 
             {/* Scroll Hint */}
-            {currentVideos.length > 1 && (
+            {videos.length > 1 && (
               <div className="fixed bottom-20 left-1/2 -translate-x-1/2 text-white/60 text-sm animate-bounce pointer-events-none">
                 גלול למעלה/למטה
               </div>
             )}
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {/* Desktop Full-Screen Player */}
-      <AnimatePresence>
-        {currentVideo && window.innerWidth >= 1024 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="hidden lg:block fixed inset-0 z-[9999] bg-black"
-            onClick={() => setCurrentVideoIndex(-1)}
-          >
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                setCurrentVideoIndex(-1);
-              }}
-              className="fixed top-4 left-4 z-[10001] text-white bg-black/50 p-2 rounded-full"
-            >
-              <X className="w-6 h-6" />
-            </button>
           </motion.div>
         )}
       </AnimatePresence>
