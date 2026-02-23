@@ -32,7 +32,7 @@ export default function VideosCategoriesStrip() {
   };
 
   return (
-    <div className="relative bg-gradient-to-r from-black via-gray-900 to-black border-b border-gray-800 py-3 overflow-hidden group">
+    <div className="relative bg-gradient-to-r from-black/80 via-black/70 to-black/80 backdrop-blur-xl border-b border-purple-500/30 shadow-lg shadow-purple-500/20 z-[34] overflow-hidden group">
       {/* Glow effect */}
       <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-purple-500/10 animate-pulse pointer-events-none" />
       
@@ -55,8 +55,8 @@ export default function VideosCategoriesStrip() {
       {/* Categories Scroll */}
       <div
         ref={scrollRef}
-        className="flex gap-4 px-4 overflow-x-auto scrollbar-hide scroll-smooth relative z-[1]"
-        style={{ scrollbarWidth: 'none' }}
+        className="flex gap-2 px-4 sm:px-10 py-3 overflow-x-auto scrollbar-hide scroll-smooth relative z-[1]"
+        style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' }}
       >
         {categories.map((cat) => {
           const Icon = cat.icon;
@@ -69,19 +69,20 @@ export default function VideosCategoriesStrip() {
               className="flex-shrink-0"
             >
               <motion.div
-                whileHover={{ scale: 1.05, y: -5 }}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
                 className="relative group/card"
               >
-                <div className={`w-32 h-32 rounded-2xl bg-gradient-to-br ${cat.color} p-[2px] shadow-lg hover:shadow-2xl transition-all`}>
-                  <div className="w-full h-full bg-black/80 backdrop-blur-xl rounded-2xl flex flex-col items-center justify-center gap-2 relative overflow-hidden">
+                <div className={`w-16 sm:w-20 bg-gradient-to-br ${cat.color} p-[2px] rounded-lg shadow-lg hover:shadow-2xl transition-all`}>
+                  <div className="w-full bg-black/80 backdrop-blur-xl rounded-lg flex flex-col items-center justify-center gap-1 p-2 relative overflow-hidden">
                     {/* Animated background */}
                     <div className={`absolute inset-0 bg-gradient-to-br ${cat.color} opacity-0 group-hover/card:opacity-20 transition-opacity`} />
                     
                     {/* Icon */}
-                    <Icon className="w-12 h-12 text-white relative z-10 drop-shadow-[0_0_10px_rgba(255,255,255,0.5)]" />
+                    <Icon className="w-8 h-8 text-white relative z-10 drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]" />
                     
                     {/* Label */}
-                    <p className="text-white font-bold text-sm text-center px-2 relative z-10">
+                    <p className="text-white font-bold text-[9px] sm:text-[10px] text-center leading-tight line-clamp-2 relative z-10">
                       {cat.label}
                     </p>
 
