@@ -51,10 +51,14 @@ Deno.serve(async (req) => {
     }
 
     console.log(`📦 Found ${allVideos.length} total videos from list API`);
+    console.log('📊 Video statuses:', allVideos.map(v => v.status).reduce((acc, s) => {
+      acc[s] = (acc[s] || 0) + 1;
+      return acc;
+    }, {}));
 
-    // Get only completed videos
-    const completedVideos = allVideos.filter(v => v.status === 'completed');
-    console.log(`✅ ${completedVideos.length} completed videos`);
+    // Get ALL videos regardless of status
+    const completedVideos = allVideos;
+    console.log(`✅ Processing ${completedVideos.length} videos (all statuses)`);
 
     // Fetch video URLs for ALL completed videos in batches
     const result = [];
