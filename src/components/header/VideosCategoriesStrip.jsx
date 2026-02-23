@@ -58,17 +58,49 @@ export default function VideosCategoriesStrip() {
     }
   };
 
-  // Fetch videos for selected category
+  // Fetch videos for selected category - all HeyGen videos
   const { data: categoryVideos = [] } = useQuery({
     queryKey: ['category-videos', selectedCategory],
     queryFn: async () => {
       if (!selectedCategory) return [];
       
-      // Fetch from UserVideo entity by category
-      if (selectedCategory === 'all') {
-        return await base44.entities.UserVideo.list('-created_date', 50);
-      } else {
-        return await base44.entities.UserVideo.filter({ category: selectedCategory }, '-created_date', 50);
+      try {
+        // Fetch ALL videos from HeyGen API
+        const response = await fetch('https://api.heygen.com/v1/video.list', {
+          method: 'GET',
+          headers: {
+            'X-Api-Key': 'ZjNjMDQzZGJhYTFmNDJhNTk0NjBiN2I3ZTQ1YjQyYWYtMTczNjE3Njg1OA==',
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          console.error('HeyGen API error:', response.status);
+          return [];
+        }
+        
+        const data = await response.json();
+        const videos = data?.data?.videos || [];
+        
+        console.log('Loaded HeyGen videos:', videos.length);
+
+        // Transform and filter videos
+        const transformed = videos
+          .filter(v => v.video_url) // Only videos with valid URLs
+          .map(v => ({
+            id: v.video_id,
+            title: v.title || v.video_id,
+            video_url: v.video_url,
+            thumbnail_url: v.thumbnail_url || v.video_url,
+            created_date: v.created_at,
+            category: selectedCategory,
+            views: 0
+          }));
+
+        return transformed;
+      } catch (error) {
+        console.error('Failed to fetch HeyGen videos:', error);
+        return [];
       }
     },
     enabled: !!selectedCategory,
