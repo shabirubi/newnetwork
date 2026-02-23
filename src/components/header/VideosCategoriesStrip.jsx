@@ -253,171 +253,36 @@ export default function VideosCategoriesStrip() {
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-[99999] bg-black w-screen h-screen overflow-hidden"
             style={{ position: 'fixed', inset: 0, width: '100vw', height: '100vh', top: 0, left: 0, right: 0, bottom: 0 }}
+            onClick={() => {
+              setSelectedCategory(null);
+              setCurrentVideoIndex(0);
+            }}
           >
-            {/* Close Button */}
-            <button
-              onClick={() => {
-                setSelectedCategory(null);
-                setCurrentVideoIndex(0);
-              }}
-              className="absolute top-4 left-4 z-[99999] text-white hover:text-[#E31E24] transition-colors bg-black/50 p-2 rounded-full backdrop-blur-sm"
-            >
-              <X className="w-8 h-8" />
-            </button>
-
-            {/* Video Counter - Enhanced */}
-            <div className="absolute top-4 right-4 z-[99999] text-white bg-gradient-to-r from-purple-600 to-pink-600 px-5 py-3 rounded-full backdrop-blur-sm shadow-lg">
-              <div className="text-center">
-                <div className="text-2xl font-bold">{currentVideoIndex + 1} / {categoryVideos.length}</div>
-                <div className="text-xs opacity-90">כל הסרטונים מ-HeyGen 🎬</div>
-              </div>
-            </div>
-
-            {/* TikTok-Style Scrollable Videos */}
+            {/* TikTok-Style Scrollable Videos - Clean */}
             <div
               ref={videoContainerRef}
               onScroll={handleScroll}
+              onClick={(e) => e.stopPropagation()}
               className="h-full w-full overflow-y-scroll snap-y snap-mandatory"
               style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
             >
               {categoryVideos.map((video, index) => (
                 <div
                   key={video.id}
-                  className="h-screen w-full snap-start snap-always flex relative"
+                  className="h-screen w-full snap-start snap-always flex items-center justify-center bg-black"
                 >
-                  {/* Video Player */}
-                  <div className="flex-1 flex items-center justify-center bg-black">
-                    {Math.abs(index - currentVideoIndex) <= 1 && (
-                      <video
-                        src={video.video_url}
-                        autoPlay={index === currentVideoIndex}
-                        loop
-                        playsInline
-                        className="h-full w-full object-contain"
-                      />
-                    )}
-                  </div>
-
-                  {/* Right Side - Chat (Desktop) */}
-                  <div className="hidden lg:flex w-96 flex-col bg-black/80 backdrop-blur-xl border-l border-gray-800">
-                    {/* Video Info */}
-                    <div className="p-4 border-b border-gray-800">
-                      <h2 className="text-xl font-bold text-white mb-2 line-clamp-2">
-                        {video.title || 'ללא כותרת'}
-                      </h2>
-                      <p className="text-gray-400 text-sm">
-                        {new Date(video.created_date).toLocaleDateString('he-IL')}
-                      </p>
-                    </div>
-
-                    {/* Chat Header */}
-                    <div className="bg-gradient-to-r from-[#E31E24] to-[#B91C1C] p-4 flex items-center gap-3">
-                      <MessageCircle className="w-6 h-6 text-white" />
-                      <div className="flex-1">
-                        <h3 className="text-white font-bold">צ'אט חי</h3>
-                        <p className="text-white/80 text-xs">{index === currentVideoIndex ? comments.length : 0} הודעות</p>
-                      </div>
-                    </div>
-
-                    {/* Messages */}
-                    <div className="flex-1 overflow-y-auto p-4 space-y-3">
-                      {index === currentVideoIndex && comments.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center h-full text-center text-gray-500">
-                          <MessageCircle className="w-12 h-12 mb-2 opacity-50" />
-                          <p className="text-sm">אין הודעות עדיין</p>
-                        </div>
-                      ) : index === currentVideoIndex ? (
-                        <>
-                          {comments.map((comment) => (
-                            <motion.div
-                              key={comment.id}
-                              initial={{ opacity: 0, y: 10 }}
-                              animate={{ opacity: 1, y: 0 }}
-                              className="bg-gray-800/50 rounded-lg p-3 border border-gray-700/50"
-                            >
-                              <div className="flex items-start gap-2">
-                                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#E31E24] to-[#B91C1C] flex items-center justify-center flex-shrink-0">
-                                  <span className="text-white text-xs font-bold">
-                                    {comment.user_name?.charAt(0)?.toUpperCase() || 'U'}
-                                  </span>
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                  <div className="flex items-center gap-2 mb-1">
-                                    <span className="text-white font-bold text-sm">
-                                      {comment.user_name || 'אורח'}
-                                    </span>
-                                    <span className="text-gray-500 text-xs">
-                                      {new Date(comment.created_date).toLocaleTimeString('he-IL', { 
-                                        hour: '2-digit', 
-                                        minute: '2-digit' 
-                                      })}
-                                    </span>
-                                  </div>
-                                  <p className="text-gray-300 text-sm break-words">
-                                    {comment.content}
-                                  </p>
-                                </div>
-                              </div>
-                            </motion.div>
-                          ))}
-                          <div ref={chatEndRef} />
-                        </>
-                      ) : null}
-                    </div>
-
-                    {/* Message Input */}
-                    {index === currentVideoIndex && (
-                      <div className="p-4 border-t border-gray-800">
-                        {!userName && (
-                          <Input
-                            type="text"
-                            placeholder="הכניסו שם משתמש..."
-                            value={userName}
-                            onChange={(e) => setUserName(e.target.value)}
-                            className="mb-2 bg-gray-800 border-gray-700 text-white"
-                          />
-                        )}
-                        <form onSubmit={handleSendMessage} className="flex gap-2">
-                          <Input
-                            type="text"
-                            placeholder="כתבו הודעה..."
-                            value={message}
-                            onChange={(e) => setMessage(e.target.value)}
-                            className="flex-1 bg-gray-800 border-gray-700 text-white"
-                          />
-                          <motion.button
-                            type="submit"
-                            whileHover={{ scale: 1.05 }}
-                            whileTap={{ scale: 0.95 }}
-                            disabled={!message.trim()}
-                            className="bg-gradient-to-r from-[#E31E24] to-[#B91C1C] text-white px-4 py-2 rounded-lg disabled:opacity-50"
-                          >
-                            <Send className="w-5 h-5" />
-                          </motion.button>
-                        </form>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Mobile - Bottom Info Overlay */}
-                  <div className="lg:hidden absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black via-black/80 to-transparent p-6 pb-20">
-                    <h3 className="text-white font-bold text-lg mb-2">
-                      {video.title || 'ללא כותרת'}
-                    </h3>
-                    <p className="text-gray-300 text-sm">
-                      {new Date(video.created_date).toLocaleDateString('he-IL')}
-                    </p>
-                  </div>
+                  {Math.abs(index - currentVideoIndex) <= 1 && (
+                    <video
+                      src={video.video_url}
+                      autoPlay={index === currentVideoIndex}
+                      loop
+                      playsInline
+                      className="h-full w-full object-cover"
+                    />
+                  )}
                 </div>
               ))}
             </div>
-
-            {/* Scroll Hint */}
-            {categoryVideos.length > 1 && (
-              <div className="absolute bottom-20 left-1/2 -translate-x-1/2 z-[99998] text-white/60 text-sm animate-bounce pointer-events-none">
-                גלול למעלה/למטה
-              </div>
-            )}
           </motion.div>
         )}
       </AnimatePresence>
