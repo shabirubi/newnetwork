@@ -64,20 +64,20 @@ export default function VideosCategoriesStrip() {
 
       {/* Categories Scroll - Auto Animated */}
       <div className="overflow-hidden relative z-[1]">
-        <motion.div
-          className="flex gap-2 py-3"
-          animate={{
-            x: [0, -(categories.length * 80)]
-          }}
-          transition={{
-            duration: 50,
-            repeat: Infinity,
-            ease: "linear",
-            repeatType: "loop"
-          }}
-          style={{ willChange: 'transform' }}
-        >
-          {[...categories, ...categories].map((cat, idx) => {
+        <div className="flex">
+          <motion.div
+            className="flex gap-2 py-3 flex-shrink-0"
+            animate={{
+              x: [0, -(categories.length * 88)]
+            }}
+            transition={{
+              duration: 60,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+            style={{ willChange: 'transform' }}
+          >
+            {categories.map((cat, idx) => {
           const Icon = cat.icon;
           return (
             <Link
@@ -120,7 +120,58 @@ export default function VideosCategoriesStrip() {
             </Link>
           );
         })}
-        </motion.div>
+          </motion.div>
+          
+          <motion.div
+            className="flex gap-2 py-3 flex-shrink-0"
+            animate={{
+              x: [0, -(categories.length * 88)]
+            }}
+            transition={{
+              duration: 60,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+            style={{ willChange: 'transform' }}
+          >
+            {categories.map((cat, idx) => {
+          const Icon = cat.icon;
+          return (
+            <Link
+              key={`${cat.id}-duplicate-${idx}`}
+              to={createPageUrl(`UserVideos?category=${cat.id}`)}
+              onMouseEnter={() => setHoveredCategory(cat.id)}
+              onMouseLeave={() => setHoveredCategory(null)}
+              className="flex-shrink-0"
+            >
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="relative group/card"
+              >
+                <div className={`w-16 sm:w-20 bg-gradient-to-br ${cat.color} p-[2px] rounded-lg shadow-lg hover:shadow-2xl transition-all`}>
+                  <div className="w-full bg-black/80 backdrop-blur-xl rounded-lg flex flex-col items-center justify-center gap-1 p-2 relative overflow-hidden">
+                    <div className={`absolute inset-0 bg-gradient-to-br ${cat.color} opacity-0 group-hover/card:opacity-20 transition-opacity`} />
+                    <Icon className="w-8 h-8 text-white relative z-10 drop-shadow-[0_0_8px_rgba(255,255,255,0.4)]" />
+                    <p className="text-white font-bold text-[9px] sm:text-[10px] text-center leading-tight line-clamp-2 relative z-10">
+                      {cat.label}
+                    </p>
+                    {hoveredCategory === cat.id && (
+                      <motion.div
+                        initial={{ x: '-100%', opacity: 0 }}
+                        animate={{ x: '200%', opacity: [0, 1, 0] }}
+                        transition={{ duration: 0.6 }}
+                        className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent"
+                      />
+                    )}
+                  </div>
+                </div>
+              </motion.div>
+            </Link>
+          );
+        })}
+          </motion.div>
+        </div>
       </div>
     </div>
   );
