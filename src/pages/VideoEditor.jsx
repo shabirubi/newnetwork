@@ -32,6 +32,7 @@ import ExportVideoModal from '../components/videoeditor/ExportVideoModal';
 import SampleVideosModal from '../components/videoeditor/SampleVideosModal';
 import KlingCharacterModal from '../components/videoeditor/KlingCharacterModal';
 import ArticleCreatorModal from '../components/videoeditor/ArticleCreatorModal';
+import AdminVideoUploadModal from '../components/videoeditor/AdminVideoUploadModal';
 
 // Projects Modal Component
 function ProjectsModal({ onClose, onLoad }) {
@@ -141,6 +142,7 @@ export default function VideoEditor() {
   const [showSampleVideosModal, setShowSampleVideosModal] = useState(false);
   const [showKlingCharacterModal, setShowKlingCharacterModal] = useState(false);
   const [showArticleCreatorModal, setShowArticleCreatorModal] = useState(false);
+  const [showAdminUploadModal, setShowAdminUploadModal] = useState(false);
   const videoRef = useRef(null);
   const audioRef = useRef(null);
 
@@ -510,6 +512,10 @@ export default function VideoEditor() {
             <Button onClick={() => setShowArticleCreatorModal(true)} className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white">
               <Sparkles size={18} className="mr-2" />
               כתבה חדשה
+            </Button>
+            <Button onClick={() => setShowAdminUploadModal(true)} className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white">
+              <Upload size={18} className="mr-2" />
+              העלאת וידאו גדול
             </Button>
           </div>
         </div>
@@ -1205,6 +1211,11 @@ export default function VideoEditor() {
       <ArticleCreatorModal 
         isOpen={showArticleCreatorModal}
         onClose={() => setShowArticleCreatorModal(false)}
+      />
+
+      <AdminVideoUploadModal 
+        isOpen={showAdminUploadModal}
+        onClose={() => setShowAdminUploadModal(false)}
       />
 
       {showExportModal && (
