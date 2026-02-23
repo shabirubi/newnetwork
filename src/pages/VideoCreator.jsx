@@ -931,6 +931,15 @@ export default function VideoCreator() {
               <div className="text-center py-12">
                 <Video className="w-12 h-12 text-gray-700 mx-auto mb-3" />
                 <p className="text-gray-400 text-sm font-bold">לא נמצאו סרטונים</p>
+                <p className="text-gray-500 text-xs mt-2">צור סרטון חדש כדי להתחיל! 🎬</p>
+              </div>
+            )}
+
+            {!loadingHistory && generatedVideos.length > 0 && (
+              <div className="mb-2 p-2 bg-gradient-to-r from-purple-600/20 to-pink-600/20 border border-purple-500/30 rounded-lg text-center">
+                <p className="text-purple-300 text-xs font-bold">
+                  🎉 {generatedVideos.length} סרטונים מ-Digital Dreams
+                </p>
               </div>
             )}
 
@@ -1093,9 +1102,18 @@ export default function VideoCreator() {
                     <p className="text-gray-500 text-lg">לא נמצאו סרטונים</p>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {generatedVideos.map((video, idx) => (
-                      <div key={video.id || idx} className="bg-black rounded-xl overflow-hidden border border-gray-800 hover:border-purple-500/50 transition-all">
+                 <>
+                   <div className="mb-4 p-4 bg-purple-600/20 border border-purple-500/30 rounded-xl">
+                     <p className="text-purple-300 text-lg font-bold text-center">
+                       ✅ נמצאו {generatedVideos.length} סרטונים מוכנים להורדה! 🎬
+                     </p>
+                     <p className="text-purple-400 text-xs text-center mt-1">
+                       כל הסרטונים שיצרת זמינים כאן 👇
+                     </p>
+                   </div>
+                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                     {generatedVideos.map((video, idx) => (
+                       <div key={video.id || idx} className="bg-black rounded-xl overflow-hidden border border-gray-800 hover:border-purple-500/50 transition-all">
                         <div className="relative">
                           <video 
                             src={video.videoUrl} 
@@ -1138,7 +1156,8 @@ export default function VideoCreator() {
                         </div>
                       </div>
                     ))}
-                  </div>
+                    </div>
+                  </>
                 )}
               </div>
             </motion.div>
