@@ -303,9 +303,28 @@ export default function VideosByCategory({ videos = [] }) {
                     <h3 className="text-white font-bold text-lg mb-2">
                       {video.title}
                     </h3>
-                    <p className="text-gray-300 text-sm">
+                    <p className="text-gray-300 text-sm mb-4">
                       {new Date(video.timestamp).toLocaleDateString('he-IL')}
                     </p>
+                    {/* Like & Share Buttons */}
+                    <div className="flex gap-3">
+                      <button
+                        onClick={() => toggleLike(video)}
+                        className="flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg transition-all flex-1"
+                      >
+                        <Heart 
+                          className={`w-5 h-5 transition-all ${likes[`${video.videoUrl}-${getUserId()}`] ? 'fill-red-500 text-red-500' : ''}`}
+                        />
+                        <span className="font-bold">{likeCounts[video.videoUrl] || 0}</span>
+                      </button>
+                      <button
+                        onClick={() => shareVideo(video)}
+                        className="flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg transition-all flex-1"
+                      >
+                        <Share2 className="w-5 h-5" />
+                        <span className="font-bold">שתף</span>
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}
