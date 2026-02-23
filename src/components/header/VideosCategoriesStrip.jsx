@@ -1,9 +1,11 @@
 import React, { useRef, useState, useEffect } from "react";
-import { motion } from "framer-motion";
-import { ChevronLeft, ChevronRight, Film, Clapperboard, Baby, Vote, Trophy, Heart, Globe, Cpu, Music, Star } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ChevronLeft, ChevronRight, Film, Clapperboard, Baby, Vote, Trophy, Heart, Globe, Cpu, Music, Star, X, Send, MessageCircle, Share2, Play } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../../utils";
 import { base44 } from "@/api/base44Client";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { Input } from "@/components/ui/input";
 
 const categories = [
   { id: "all", label: "כל הסרטונים", icon: Film, color: "from-purple-500 to-pink-500" },
@@ -32,6 +34,24 @@ export default function VideosCategoriesStrip() {
   const scrollRef = useRef(null);
   const [hoveredCategory, setHoveredCategory] = useState(null);
   const [categoryVideos, setCategoryVideos] = useState({});
+  const [selectedVideo, setSelectedVideo] = useState(null);
+  const [message, setMessage] = useState("");
+  const [userName, setUserName] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('chat_username') || '';
+    }
+    return '';
+  });
+  const [likedVideos, setLikedVideos] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem('likedUserVideos');
+      return saved ? JSON.parse(saved) : [];
+    }
+    return [];
+  });
+  const [showChat, setShowChat] = useState(true);
+  const chatEndRef = useRef(null);
+  const queryClient = useQueryClient();
 
   // Fetch videos for categories
   useEffect(() => {
@@ -65,6 +85,85 @@ export default function VideosCategoriesStrip() {
       });
     }
   };
+
+  // Fetch comments for selected video
+  const { data: comments = [] } = useQuery({
+    queryKey: ['video-comments', selectedVideo?.id],
+    queryFn: async () => {
+      if (!selectedVideo?.id) return [];
+      const response = await base44.entities.VideoComment.filter(
+        { video_id: selectedVideo.id },
+        '-created_date',
+        100
+      );
+      return response || [];
+    },
+    enabled: !!selectedVideo?.id,
+    refetchInterval: 3000,
+  });
+
+  // Send message mutation
+  const sendMessageMutation = useMutation({
+    mutationFn: async (messageData) => {
+      return await base44.entities.VideoComment.create(messageData);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['video-comments', selectedVideo?.id]);
+      setMessage("");
+    },
+  });
+
+  const handleSendMessage = (e) => {
+    e.preventDefault();
+    if (!message.trim() || !selectedVideo) return;
+
+    let finalUserName = userName.trim();
+    if (!finalUserName) {
+      finalUserName = 'אורח' + Math.floor(Math.random() * 1000);
+      setUserName(finalUserName);
+      localStorage.setItem('chat_username', finalUserName);
+    }
+
+    sendMessageMutation.mutate({
+      video_id: selectedVideo.id,
+      user_name: finalUserName,
+      content: message.trim(),
+      is_approved: true
+    });
+  };
+
+  const toggleLike = (videoId) => {
+    setLikedVideos(prev => {
+      const newLiked = prev.includes(videoId) 
+        ? prev.filter(id => id !== videoId)
+        : [...prev, videoId];
+      localStorage.setItem('likedUserVideos', JSON.stringify(newLiked));
+      return newLiked;
+    });
+  };
+
+  const shareVideo = (video) => {
+    if (navigator.share) {
+      navigator.share({
+        title: video.title || 'וידיאו מהרשת החדשה',
+        text: video.description || 'צפה בוידיאו זה',
+        url: window.location.href
+      }).catch(() => {});
+    }
+  };
+
+  const handleVideoClick = async (categoryId) => {
+    const videos = await base44.entities.UserVideo.filter({ category: categoryId }, '-created_date', 1);
+    if (videos && videos[0]) {
+      setSelectedVideo(videos[0]);
+    }
+  };
+
+  useEffect(() => {
+    if (chatEndRef.current) {
+      chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [comments]);
 
   return (
     <div className="relative bg-black overflow-hidden z-[34] group" style={{ height: '80px' }}>
@@ -116,12 +215,12 @@ export default function VideosCategoriesStrip() {
           {categories.map((cat, idx) => {
             const Icon = cat.icon;
             return (
-              <Link
+              <div
                 key={cat.id}
-                to={createPageUrl(`UserVideos?category=${cat.id}`)}
                 onMouseEnter={() => setHoveredCategory(cat.id)}
                 onMouseLeave={() => setHoveredCategory(null)}
-                className="flex-shrink-0"
+                onClick={() => handleVideoClick(cat.id)}
+                className="flex-shrink-0 cursor-pointer"
               >
                 <motion.div
                   whileHover={{ scale: 1.05 }}
