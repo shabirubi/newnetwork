@@ -1,23 +1,10 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronLeft, ChevronRight, X, Play, Send, MessageCircle } from "lucide-react";
+import { X, Play, Send, MessageCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Loader2 } from "lucide-react";
-
-const CATEGORIES = [
-  { id: "all", label: "כל הסרטונים", icon: "🎬" },
-  { id: "entertainment", label: "דרמה ובידור", icon: "🎭" },
-  { id: "news", label: "חדשות", icon: "📰" },
-  { id: "music", label: "מוזיקה", icon: "🎵" },
-  { id: "educational", label: "חינוכי", icon: "📚" },
-  { id: "comedy", label: "קומדיה", icon: "😂" },
-  { id: "sports", label: "ספורט", icon: "⚽" },
-  { id: "lifestyle", label: "לייף סטייל", icon: "✨" },
-];
 
 export default function VideosByCategory({ videos = [] }) {
-  const [selectedCategory, setSelectedCategory] = useState("all");
-  const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+  const [currentVideoIndex, setCurrentVideoIndex] = useState(-1);
   const [message, setMessage] = useState("");
   const [userName, setUserName] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -28,22 +15,7 @@ export default function VideosByCategory({ videos = [] }) {
   const [comments, setComments] = useState([]);
   const chatEndRef = React.useRef(null);
 
-  // Assign categories randomly if not specified
-  const categorizedVideos = videos.reduce((acc, video) => {
-    const category = video.category || 'all';
-    if (!acc[category]) acc[category] = [];
-    acc[category].push(video);
-    return acc;
-  }, {});
-
-  // Add to all category
-  Object.values(categorizedVideos).forEach(videoList => {
-    if (!categorizedVideos.all) categorizedVideos.all = [];
-    categorizedVideos.all = [...new Set([...categorizedVideos.all, ...videoList])];
-  });
-
-  const currentVideos = categorizedVideos[selectedCategory] || [];
-  const currentVideo = currentVideos[currentVideoIndex];
+  const currentVideo = currentVideoIndex >= 0 && videos[currentVideoIndex] ? videos[currentVideoIndex] : null;
 
   const handleSendMessage = (e) => {
     e.preventDefault();
