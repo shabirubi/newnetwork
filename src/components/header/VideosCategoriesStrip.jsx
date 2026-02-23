@@ -14,7 +14,17 @@ const categories = [
   { id: "world", label: "עולם", icon: Globe, color: "from-indigo-500 to-purple-500" },
   { id: "technology", label: "טכנולוגיה", icon: Cpu, color: "from-cyan-500 to-blue-500" },
   { id: "music", label: "מוזיקה", icon: Music, color: "from-yellow-500 to-orange-500" },
-  { id: "breaking", label: "חמות", icon: Star, color: "from-red-600 to-pink-600" }
+  { id: "breaking", label: "חמות", icon: Star, color: "from-red-600 to-pink-600" },
+  { id: "security", label: "ביטחון", icon: Film, color: "from-gray-700 to-gray-900" },
+  { id: "economy", label: "כלכלה", icon: Clapperboard, color: "from-emerald-600 to-green-700" },
+  { id: "crime", label: "פלילים", icon: Film, color: "from-orange-600 to-red-700" },
+  { id: "education", label: "חינוך", icon: Baby, color: "from-blue-600 to-indigo-700" },
+  { id: "culture", label: "תרבות", icon: Star, color: "from-purple-600 to-pink-700" },
+  { id: "environment", label: "סביבה", icon: Globe, color: "from-green-600 to-teal-700" },
+  { id: "science", label: "מדע", icon: Cpu, color: "from-indigo-600 to-blue-700" },
+  { id: "military", label: "צבא", icon: Film, color: "from-slate-700 to-gray-800" },
+  { id: "law", label: "משפט", icon: Vote, color: "from-amber-600 to-yellow-700" },
+  { id: "local", label: "מקומי", icon: Globe, color: "from-teal-500 to-cyan-600" }
 ];
 
 export default function VideosCategoriesStrip() {
@@ -52,17 +62,24 @@ export default function VideosCategoriesStrip() {
         <ChevronLeft className="w-6 h-6 text-white" />
       </button>
 
-      {/* Categories Scroll */}
-      <div
-        ref={scrollRef}
-        className="flex gap-2 px-4 sm:px-10 py-3 overflow-x-auto scrollbar-hide scroll-smooth relative z-[1]"
-        style={{ scrollbarWidth: 'none', WebkitOverflowScrolling: 'touch' }}
-      >
-        {categories.map((cat) => {
+      {/* Categories Scroll - Auto Animated */}
+      <div className="overflow-hidden relative z-[1]">
+        <motion.div
+          className="flex gap-2 py-3"
+          animate={{
+            x: [0, -2000]
+          }}
+          transition={{
+            duration: 40,
+            repeat: Infinity,
+            ease: "linear"
+          }}
+        >
+          {[...categories, ...categories].map((cat, idx) => {
           const Icon = cat.icon;
           return (
             <Link
-              key={cat.id}
+              key={`${cat.id}-${idx}`}
               to={createPageUrl(`UserVideos?category=${cat.id}`)}
               onMouseEnter={() => setHoveredCategory(cat.id)}
               onMouseLeave={() => setHoveredCategory(null)}
@@ -101,6 +118,7 @@ export default function VideosCategoriesStrip() {
             </Link>
           );
         })}
+        </motion.div>
       </div>
     </div>
   );
