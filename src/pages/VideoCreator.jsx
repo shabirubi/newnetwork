@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
 import TypewriterText from "../components/videoeditor/TypewriterText";
+import VideosByCategory from "../components/videoeditor/VideosByCategory";
 
 export default function VideoCreator() {
   const [input, setInput] = useState("");
