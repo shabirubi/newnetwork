@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Play, Send, MessageCircle } from "lucide-react";
+import { X, Play, Send, MessageCircle, Heart, Share2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { base44 } from "@/api/base44Client";
+import { toast } from "sonner";
 
 export default function VideosByCategory({ videos = [] }) {
   const [currentVideoIndex, setCurrentVideoIndex] = useState(-1);
