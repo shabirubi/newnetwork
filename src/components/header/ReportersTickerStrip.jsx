@@ -79,67 +79,71 @@ export default function ReportersTickerStrip() {
   return (
     <>
       {reporters.length > 0 && (
-      <div className="relative bg-gradient-to-r from-black/80 via-black/70 to-black/80 backdrop-blur-xl border-b border-[#0080FF]/30 shadow-lg shadow-[#0080FF]/20 z-[35] flex justify-center">
-        <div ref={containerRef} className="w-full max-w-5xl relative">
-          {/* Left Fade Gradient */}
-          <div className="hidden lg:block absolute left-0 top-0 bottom-0 w-8 bg-gradient-to-r from-black/90 to-transparent z-20 pointer-events-none" />
-          
-          {/* Right Fade Gradient */}
-          <div className="hidden lg:block absolute right-0 top-0 bottom-0 w-8 bg-gradient-to-l from-black/90 to-transparent z-20 pointer-events-none" />
+      <div className="relative bg-gradient-to-br from-black via-[#0080FF]/5 to-black overflow-hidden z-[35] border-b border-[#0080FF]/20" style={{ height: '80px' }}>
+        {/* Gradient Overlays */}
+        <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-black via-black/80 to-transparent z-10 pointer-events-none" />
+        <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-black via-black/80 to-transparent z-10 pointer-events-none" />
 
-          {/* Left Arrow */}
-          <button
-            onClick={() => scroll('left')}
-            className="hidden lg:flex absolute left-2 top-1/2 -translate-y-1/2 z-30 items-center justify-center w-8 h-8 hover:bg-white/20 rounded-full transition-all"
-          >
-            <ChevronLeft className="w-5 h-5 text-[#E31E24]" />
-          </button>
+        {/* Scroll Arrows */}
+        <button
+          onClick={() => scroll('left')}
+          className="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-black/60 backdrop-blur-sm p-2 rounded-full hover:bg-black/80 transition-all shadow-lg border border-[#0080FF]/30"
+        >
+          <ChevronRight className="w-5 h-5 text-white" />
+        </button>
 
-          {/* Right Arrow */}
-          <button
-            onClick={() => scroll('right')}
-            className="hidden lg:flex absolute right-2 top-1/2 -translate-y-1/2 z-30 items-center justify-center w-8 h-8 hover:bg-white/20 rounded-full transition-all"
-          >
-            <ChevronRight className="w-5 h-5 text-[#E31E24]" />
-          </button>
+        <button
+          onClick={() => scroll('right')}
+          className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-black/60 backdrop-blur-sm p-2 rounded-full hover:bg-black/80 transition-all shadow-lg border border-[#0080FF]/30"
+        >
+          <ChevronLeft className="w-5 h-5 text-white" />
+        </button>
 
-          <div ref={scrollContainerRef} className="overflow-x-auto overflow-y-hidden scrollbar-hide" onScroll={handleScroll} style={{ WebkitOverflowScrolling: 'touch', scrollbarWidth: 'none' }}>
-            <div className="flex gap-2 px-4 sm:px-10 py-3 min-h-fit" style={{ minWidth: 'max-content' }}>
-            {reporters.slice(0, 15).map((reporter, idx) => (
+        {/* Reporters Scroll */}
+        <div 
+          ref={scrollContainerRef}
+          className="overflow-x-auto h-full"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          onScroll={handleScroll}
+        >
+          <div className="flex gap-3 py-4 h-full items-center justify-center" style={{ minWidth: '100%', width: 'max-content', margin: '0 auto' }}>
+            {reporters.map((reporter) => (
               <motion.div
-                key={`${reporter.id}-${idx}`}
+                key={reporter.id}
                 onClick={() => {
                   setSelectedReporterForChat(reporter);
                   setOpenLiveChat(true);
                 }}
-                onMouseEnter={() => setHoveredReporter(reporter.id)}
-                onMouseLeave={() => setHoveredReporter(null)}
-                onTouchStart={() => setHoveredReporter(reporter.id)}
-                onTouchEnd={() => setHoveredReporter(null)}
-                className="flex-shrink-0 flex flex-col items-center gap-1 p-1.5 sm:p-2 bg-black/50 rounded-lg border border-[#0080FF]/40 hover:border-[#0080FF]/80 hover:bg-[#0080FF]/10 transition-all cursor-pointer group shadow-md"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
+                className="flex-shrink-0 cursor-pointer"
               >
-                <img
-                  src={reporter.image}
-                  alt={reporter.name}
-                  className="w-14 h-14 sm:w-16 sm:h-16 rounded-lg object-cover border border-[#0080FF]/30 shadow-lg reporter-ticker-image-animate"
-                  style={{ 
-                    display: 'block', 
-                    minWidth: '56px', 
-                    minHeight: '56px',
-                    animationDelay: `${idx * 0.3}s`
-                  }}
-                  onError={(e) => {
-                    e.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="80" height="80"%3E%3Crect fill="%23333" width="80" height="80"/%3E%3Ctext x="40" y="40" font-size="40" fill="white" text-anchor="middle" dy=".3em"%3E' + reporter.name.charAt(0) + '%3C/text%3E%3C/svg%3E';
-                  }}
-                />
-                <div className="text-center w-14 sm:w-16">
-                  <div className="text-white font-bold text-[9px] sm:text-[10px] line-clamp-2 leading-tight">{reporter.name}</div>
+                <div className="flex flex-col items-center gap-1">
+                  {/* Reporter Image */}
+                  <div className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-[#0080FF]/40 hover:border-[#0080FF]/80 transition-all shadow-lg hover:shadow-[0_0_20px_rgba(0,128,255,0.3)]">
+                    <img
+                      src={reporter.image}
+                      alt={reporter.name}
+                      className="w-full h-full object-cover"
+                      onError={(e) => {
+                        e.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="80" height="80"%3E%3Crect fill="%23333" width="80" height="80"/%3E%3Ctext x="40" y="40" font-size="40" fill="white" text-anchor="middle" dy=".3em"%3E' + reporter.name.charAt(0) + '%3C/text%3E%3C/svg%3E';
+                      }}
+                    />
+                    {/* Live Indicator */}
+                    <motion.div
+                      animate={{ scale: [1, 1.2, 1] }}
+                      transition={{ duration: 2, repeat: Infinity }}
+                      className="absolute top-0.5 right-0.5 w-2 h-2 bg-green-500 rounded-full border border-white"
+                    />
+                  </div>
+
+                  {/* Reporter Name */}
+                  <p className="text-white font-bold text-[10px] text-center drop-shadow-lg max-w-[60px] truncate">
+                    {reporter.name}
+                  </p>
                 </div>
               </motion.div>
-              ))}
-            </div>
+            ))}
           </div>
         </div>
       </div>
