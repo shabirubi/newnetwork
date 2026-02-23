@@ -56,13 +56,15 @@ Deno.serve(async (req) => {
     const completedVideos = allVideos.filter(v => v.status === 'completed');
     console.log(`✅ ${completedVideos.length} completed videos`);
 
-    // Fetch video URLs for completed videos in batches
+    // Fetch video URLs for ALL completed videos in batches
     const result = [];
     const batchSize = 50;
     
-    for (let i = 0; i < Math.min(completedVideos.length, 1000); i += batchSize) {
+    console.log(`🚀 Processing ALL ${completedVideos.length} completed videos...`);
+    
+    for (let i = 0; i < completedVideos.length; i += batchSize) {
       const batch = completedVideos.slice(i, i + batchSize);
-      console.log(`🔄 Fetching URLs for videos ${i}-${i + batch.length}...`);
+      console.log(`🔄 Fetching URLs for videos ${i}-${Math.min(i + batch.length, completedVideos.length)} of ${completedVideos.length}...`);
       
       const batchPromises = batch.map(async (v) => {
         try {
@@ -99,10 +101,12 @@ Deno.serve(async (req) => {
       result.push(...batchResults.filter(v => v && v.video_url));
     }
 
-    console.log(`\n✅ Returning ${result.length} videos with URLs`);
+    console.log(`\n✅✅✅ SUCCESS! Returning ${result.length} videos with URLs out of ${completedVideos.length} completed videos`);
+    console.log(`📊 Coverage: ${Math.round(result.length / completedVideos.length * 100)}% of completed videos have URLs`);
 
     return Response.json({
       total: result.length,
+      total_completed: completedVideos.length,
       videos: result
     });
 
