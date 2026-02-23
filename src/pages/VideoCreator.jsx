@@ -240,10 +240,15 @@ export default function VideoCreator() {
       console.log('סה"כ סרטונים:', uniqueVideos.length);
       
       toast.success(`🎉 ${uniqueVideos.length} סרטונים מוצגים! כל הנתונים שמורים בבטחה בדטא בייס ✅`, { duration: 10000 });
-    };
-    
-    loadHistory();
-  }, []);
+      } catch (e) {
+      console.error('❌ CRITICAL ERROR in loadHistory:', e);
+      setLoadingHistory(false);
+      toast.error('שגיאה בטעינה - בדוק את הקונסול', { duration: 5000 });
+      }
+      };
+
+      loadHistory();
+      }, []);
 
   // Subscribe to conversation
   useEffect(() => {
