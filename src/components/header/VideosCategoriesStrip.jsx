@@ -59,20 +59,24 @@ export default function VideosCategoriesStrip() {
   };
 
   // Fetch videos for selected category - from HeyGen via backend
-  const { data: categoryVideos = [] } = useQuery({
-    queryKey: ['category-videos', selectedCategory],
+  const { data: categoryVideos = [], isLoading: videosLoading } = useQuery({
+    queryKey: ['heygen-videos', selectedCategory],
     queryFn: async () => {
       if (!selectedCategory) return [];
       
       try {
         const response = await base44.functions.invoke('listHeyGenVideos', {});
-        return response.data?.videos || [];
+        const videos = response.data?.videos || [];
+        console.log('✅ Got videos:', videos.length);
+        return videos;
       } catch (error) {
-        console.error('Failed to fetch videos:', error);
+        console.error('❌ Failed to fetch videos:', error);
         return [];
       }
     },
     enabled: !!selectedCategory,
+    retry: 1,
+    staleTime: 60000,
   });
 
   const currentVideo = categoryVideos[currentVideoIndex];
@@ -252,7 +256,7 @@ export default function VideosCategoriesStrip() {
 
       {/* TikTok-Style Video Player Modal */}
       <AnimatePresence>
-        {selectedCategory && categoryVideos.length > 0 && (
+        {selectedCategory && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -271,18 +275,37 @@ export default function VideosCategoriesStrip() {
             </button>
 
             {/* Video Counter */}
-            <div className="fixed top-4 right-4 z-[10001] text-white bg-black/50 px-4 py-2 rounded-full backdrop-blur-sm text-sm">
-              {currentVideoIndex + 1} / {categoryVideos.length}
-            </div>
+            {categoryVideos.length > 0 && (
+              <div className="fixed top-4 right-4 z-[10001] text-white bg-black/50 px-4 py-2 rounded-full backdrop-blur-sm text-sm">
+                {currentVideoIndex + 1} / {categoryVideos.length}
+              </div>
+            )}
+
+            {/* Loading State */}
+            {videosLoading && (
+              <div className="flex items-center justify-center h-full">
+                <div className="text-white text-xl">טוען סרטונים...</div>
+              </div>
+            )}
+
+            {/* No Videos State */}
+            {!videosLoading && categoryVideos.length === 0 && (
+              <div className="flex flex-col items-center justify-center h-full text-center p-8">
+                <Film className="w-16 h-16 text-gray-600 mb-4" />
+                <p className="text-white text-xl mb-2">אין סרטונים זמינים</p>
+                <p className="text-gray-400">נסה קטגוריה אחרת</p>
+              </div>
+            )}
 
             {/* TikTok-Style Scrollable Videos */}
-            <div
-              ref={videoContainerRef}
-              onScroll={handleScroll}
-              className="h-full w-full overflow-y-scroll snap-y snap-mandatory"
-              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-            >
-              {categoryVideos.map((video, index) => (
+            {!videosLoading && categoryVideos.length > 0 && (
+              <div
+                ref={videoContainerRef}
+                onScroll={handleScroll}
+                className="h-full w-full overflow-y-scroll snap-y snap-mandatory"
+                style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+              >
+                {categoryVideos.map((video, index) => (
                 <div
                   key={video.id}
                   className="h-screen w-full snap-start snap-always flex relative"
@@ -410,12 +433,13 @@ export default function VideosCategoriesStrip() {
                       {new Date(video.created_date).toLocaleDateString('he-IL')}
                     </p>
                   </div>
-                </div>
-              ))}
-            </div>
+                  </div>
+                ))}
+              </div>
+            )}
 
             {/* Scroll Hint */}
-            {categoryVideos.length > 1 && (
+            {!videosLoading && categoryVideos.length > 1 && (
               <div className="fixed bottom-20 left-1/2 -translate-x-1/2 z-[10000] text-white/60 text-sm animate-bounce pointer-events-none">
                 גלול למעלה/למטה
               </div>
