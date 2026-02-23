@@ -251,8 +251,8 @@ export default function VideosCategoriesStrip() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed top-0 left-0 right-0 bottom-0 w-screen h-screen z-[50] bg-black overflow-hidden"
-            style={{ position: 'fixed', inset: 0, width: '100%', height: '100%' }}
+            className="fixed inset-0 z-[99999] bg-black w-screen h-screen overflow-hidden"
+            style={{ position: 'fixed', inset: 0, width: '100vw', height: '100vh', top: 0, left: 0, right: 0, bottom: 0 }}
           >
             {/* Close Button */}
             <button
@@ -260,13 +260,13 @@ export default function VideosCategoriesStrip() {
                 setSelectedCategory(null);
                 setCurrentVideoIndex(0);
               }}
-              className="fixed top-4 left-4 z-[10001] text-white hover:text-[#E31E24] transition-colors bg-black/50 p-2 rounded-full backdrop-blur-sm"
+              className="absolute top-4 left-4 z-[99999] text-white hover:text-[#E31E24] transition-colors bg-black/50 p-2 rounded-full backdrop-blur-sm"
             >
               <X className="w-8 h-8" />
             </button>
 
             {/* Video Counter - Enhanced */}
-            <div className="fixed top-4 right-4 z-[10001] text-white bg-gradient-to-r from-purple-600 to-pink-600 px-5 py-3 rounded-full backdrop-blur-sm shadow-lg">
+            <div className="absolute top-4 right-4 z-[99999] text-white bg-gradient-to-r from-purple-600 to-pink-600 px-5 py-3 rounded-full backdrop-blur-sm shadow-lg">
               <div className="text-center">
                 <div className="text-2xl font-bold">{currentVideoIndex + 1} / {categoryVideos.length}</div>
                 <div className="text-xs opacity-90">כל הסרטונים מ-HeyGen 🎬</div>
