@@ -45,38 +45,14 @@ export default function VideosByCategory({ videos = [] }) {
 
   return (
     <div className="space-y-6">
-      {/* Categories Scroll */}
-      <div className="flex gap-2 overflow-x-auto pb-2 px-2 lg:px-0">
-        {CATEGORIES.map((cat) => (
-          <motion.button
-            key={cat.id}
-            onClick={() => {
-              setSelectedCategory(cat.id);
-              setCurrentVideoIndex(0);
-              setComments([]);
-            }}
-            className={`flex-shrink-0 px-4 py-2 rounded-full font-bold text-sm transition-all whitespace-nowrap ${
-              selectedCategory === cat.id
-                ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg'
-                : 'bg-gray-800 text-gray-300 hover:bg-gray-700'
-            }`}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <span className="mr-2">{cat.icon}</span>
-            {cat.label}
-          </motion.button>
-        ))}
-      </div>
-
       {/* Video Grid - Desktop */}
-      {currentVideos.length === 0 ? (
+      {videos.length === 0 ? (
         <div className="text-center py-12 text-gray-500">
-          <p>אין סרטונים בקטגוריה זו</p>
+          <p>אין סרטונים זמינים</p>
         </div>
       ) : (
         <div className="hidden lg:grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-          {currentVideos.map((video, idx) => (
+          {videos.map((video, idx) => (
             <motion.div
               key={`${video.id}-${idx}`}
               initial={{ opacity: 0, scale: 0.9 }}
