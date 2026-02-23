@@ -1160,14 +1160,6 @@ export default function VideoCreator() {
                   </div>
                 ) : (
                  <>
-                   <div className="mb-4 p-4 bg-purple-600/20 border border-purple-500/30 rounded-xl">
-                     <p className="text-purple-300 text-lg font-bold text-center">
-                       ✅ נמצאו {generatedVideos.length} סרטונים מוכנים להורדה! 🎬
-                     </p>
-                     <p className="text-purple-400 text-xs text-center mt-1">
-                       כל הסרטונים שיצרת זמינים כאן 👇
-                     </p>
-                   </div>
                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                      {generatedVideos.map((video, idx) => (
                        <div key={video.id || idx} className="bg-black rounded-xl overflow-hidden border border-gray-800 hover:border-purple-500/50 transition-all">
