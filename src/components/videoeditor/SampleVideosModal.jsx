@@ -335,6 +335,16 @@ export default function SampleVideosModal({ onClose, onApply }) {
           {/* Tabs */}
           <div className="flex gap-2 mt-4 flex-wrap">
             <button
+              onClick={() => setActiveTab('heygen')}
+              className={`px-4 py-2 rounded-lg font-semibold transition-all ${
+                activeTab === 'heygen'
+                  ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white'
+                  : 'bg-white/5 text-gray-400 hover:bg-white/10'
+              }`}
+            >
+              🎬 HeyGen ({heygenVideos.length})
+            </button>
+            <button
               onClick={() => setActiveTab('samples')}
               className={`px-4 py-2 rounded-lg font-semibold transition-all ${
                 activeTab === 'samples'
