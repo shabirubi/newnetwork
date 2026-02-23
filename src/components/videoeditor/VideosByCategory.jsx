@@ -15,7 +15,84 @@ export default function VideosByCategory({ videos = [] }) {
     return '';
   });
   const [comments, setComments] = useState([]);
+  const [likes, setLikes] = useState({});
+  const [likeCounts, setLikeCounts] = useState({});
   const chatEndRef = React.useRef(null);
+
+  // Load likes from localStorage
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const savedLikes = localStorage.getItem('videoLikes');
+      const savedCounts = localStorage.getItem('videoCounts');
+      if (savedLikes) setLikes(JSON.parse(savedLikes));
+      if (savedCounts) setLikeCounts(JSON.parse(savedCounts));
+    }
+  }, []);
+
+  // Get unique user ID
+  const getUserId = () => {
+    let userId = localStorage.getItem('user_id');
+    if (!userId) {
+      userId = Math.random().toString(36).substr(2, 9);
+      localStorage.setItem('user_id', userId);
+    }
+    return userId;
+  };
+
+  const toggleLike = async (video) => {
+    const userId = getUserId();
+    const likeKey = `${video.videoUrl}-${userId}`;
+    const videoKey = video.videoUrl;
+    
+    const isLiked = likes[likeKey];
+    const newLikes = { ...likes };
+    const newCounts = { ...likeCounts };
+
+    if (isLiked) {
+      delete newLikes[likeKey];
+      newCounts[videoKey] = Math.max(0, (newCounts[videoKey] || 0) - 1);
+    } else {
+      newLikes[likeKey] = true;
+      newCounts[videoKey] = (newCounts[videoKey] || 0) + 1;
+    }
+
+    setLikes(newLikes);
+    setLikeCounts(newCounts);
+    localStorage.setItem('videoLikes', JSON.stringify(newLikes));
+    localStorage.setItem('videoCounts', JSON.stringify(newCounts));
+
+    // Save to database
+    try {
+      await base44.entities.VideoLike.create({
+        video_id: video.id,
+        video_url: videoKey,
+        user_identifier: userId,
+        is_liked: !isLiked,
+        like_count: newCounts[videoKey]
+      });
+    } catch (err) {
+      console.error('Error saving like:', err);
+    }
+  };
+
+  const shareVideo = async (video) => {
+    const shareUrl = `${window.location.origin}?video=${video.id}`;
+    
+    if (navigator.share) {
+      navigator.share({
+        title: video.title,
+        text: 'בואו תוצפו בסרטון הזה!',
+        url: shareUrl
+      }).catch(() => {});
+    } else {
+      try {
+        await navigator.clipboard.writeText(shareUrl);
+        toast.success('הקישור הועתק! 📋');
+      } catch {
+        toast.error('שגיאה בשיתוף');
+      }
+    }
+  };
 
   const currentVideo = currentVideoIndex >= 0 && videos[currentVideoIndex] ? videos[currentVideoIndex] : null;
 
