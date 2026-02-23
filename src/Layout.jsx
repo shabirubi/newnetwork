@@ -308,7 +308,7 @@ export default function Layout({ children, currentPageName }) {
           </div>
 
           {/* Search Box */}
-          <div className="hidden lg:block relative max-w-md flex-1">
+          <div className="relative max-w-md flex-1 hidden sm:block">
             <div className="relative">
               <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <Input
