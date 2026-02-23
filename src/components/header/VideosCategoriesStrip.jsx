@@ -42,14 +42,30 @@ export default function VideosCategoriesStrip() {
   };
 
   return (
-    <div className="relative bg-black/60 backdrop-blur-md border-b-2 border-yellow-500/40 shadow-2xl shadow-yellow-500/20 z-[34] overflow-hidden group">
+    <div className="relative bg-black overflow-hidden z-[34] group" style={{ height: '140px' }}>
+      {/* Netflix-Style Background Video */}
+      <div className="absolute inset-0">
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="w-full h-full object-cover opacity-30"
+          style={{ filter: 'brightness(0.4) contrast(1.2)' }}
+        >
+          <source src="https://assets.mixkit.co/videos/preview/mixkit-cinema-projector-light-rays-in-the-dark-49031-large.mp4" type="video/mp4" />
+        </video>
+        {/* Gradient overlay for depth */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black/80" />
+      </div>
+
       {/* Intense Cinema Running Lights Animation */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* Red spotlight */}
         <motion.div
-          className="absolute inset-0 h-full w-[400px] bg-gradient-to-r from-transparent via-red-600/70 to-transparent blur-xl"
+          className="absolute inset-0 h-full w-[500px] bg-gradient-to-r from-transparent via-red-600/60 to-transparent blur-2xl"
           animate={{
-            x: ['-400px', 'calc(100% + 400px)']
+            x: ['-500px', 'calc(100% + 500px)']
           }}
           transition={{
             duration: 2.5,
@@ -57,15 +73,15 @@ export default function VideosCategoriesStrip() {
             ease: "linear"
           }}
           style={{
-            filter: 'drop-shadow(0 0 30px rgba(220, 38, 38, 0.8))'
+            filter: 'drop-shadow(0 0 40px rgba(220, 38, 38, 0.9))'
           }}
         />
         
         {/* Gold/Yellow spotlight */}
         <motion.div
-          className="absolute inset-0 h-full w-[400px] bg-gradient-to-r from-transparent via-yellow-400/70 to-transparent blur-xl"
+          className="absolute inset-0 h-full w-[500px] bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent blur-2xl"
           animate={{
-            x: ['-400px', 'calc(100% + 400px)']
+            x: ['-500px', 'calc(100% + 500px)']
           }}
           transition={{
             duration: 2.5,
@@ -74,15 +90,15 @@ export default function VideosCategoriesStrip() {
             delay: 0.8
           }}
           style={{
-            filter: 'drop-shadow(0 0 30px rgba(250, 204, 21, 0.8))'
+            filter: 'drop-shadow(0 0 40px rgba(250, 204, 21, 0.9))'
           }}
         />
         
         {/* Purple spotlight */}
         <motion.div
-          className="absolute inset-0 h-full w-[400px] bg-gradient-to-r from-transparent via-purple-600/70 to-transparent blur-xl"
+          className="absolute inset-0 h-full w-[500px] bg-gradient-to-r from-transparent via-purple-600/60 to-transparent blur-2xl"
           animate={{
-            x: ['-400px', 'calc(100% + 400px)']
+            x: ['-500px', 'calc(100% + 500px)']
           }}
           transition={{
             duration: 2.5,
@@ -91,15 +107,15 @@ export default function VideosCategoriesStrip() {
             delay: 1.6
           }}
           style={{
-            filter: 'drop-shadow(0 0 30px rgba(147, 51, 234, 0.8))'
+            filter: 'drop-shadow(0 0 40px rgba(147, 51, 234, 0.9))'
           }}
         />
         
         {/* Cyan spotlight */}
         <motion.div
-          className="absolute inset-0 h-full w-[400px] bg-gradient-to-r from-transparent via-cyan-400/70 to-transparent blur-xl"
+          className="absolute inset-0 h-full w-[500px] bg-gradient-to-r from-transparent via-cyan-400/60 to-transparent blur-2xl"
           animate={{
-            x: ['-400px', 'calc(100% + 400px)']
+            x: ['-500px', 'calc(100% + 500px)']
           }}
           transition={{
             duration: 2.5,
@@ -108,27 +124,14 @@ export default function VideosCategoriesStrip() {
             delay: 2.4
           }}
           style={{
-            filter: 'drop-shadow(0 0 30px rgba(34, 211, 238, 0.8))'
-          }}
-        />
-        
-        {/* Pulsing ambient glow */}
-        <motion.div
-          className="absolute inset-0 bg-gradient-to-r from-red-600/20 via-yellow-600/20 to-purple-600/20"
-          animate={{
-            opacity: [0.3, 0.6, 0.3]
-          }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            ease: "easeInOut"
+            filter: 'drop-shadow(0 0 40px rgba(34, 211, 238, 0.9))'
           }}
         />
       </div>
-      
-      {/* Hollywood marquee lights border */}
-      <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-yellow-500 via-red-500 to-yellow-500 opacity-60 animate-pulse" />
-      <div className="absolute bottom-0 left-0 right-0 h-2 bg-gradient-to-r from-yellow-500 via-purple-500 to-yellow-500 opacity-60 animate-pulse" style={{ animationDelay: '0.5s' }} />
+
+      {/* Netflix-style top gradient fade */}
+      <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-black/90 to-transparent pointer-events-none" />
+      <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-black/90 to-transparent pointer-events-none" />
       
       {/* Left Arrow */}
       <button
@@ -149,10 +152,10 @@ export default function VideosCategoriesStrip() {
       {/* Categories Scroll - Manual Scrolling */}
       <div 
         ref={scrollRef}
-        className="overflow-x-auto relative z-10 scroll-smooth"
+        className="overflow-x-auto relative z-10 scroll-smooth h-full"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
-        <div className="flex gap-3 py-4 px-2">
+        <div className="flex gap-4 py-6 px-4 h-full items-center">
           {categories.map((cat, idx) => {
             const Icon = cat.icon;
             return (
@@ -168,56 +171,63 @@ export default function VideosCategoriesStrip() {
                   whileTap={{ scale: 0.95 }}
                   className="relative group/card"
                 >
-                  <div className="relative w-20 sm:w-24 group/item">
-                    {/* Film frame border with glow */}
-                    <div className="absolute -inset-1 bg-gradient-to-br from-yellow-600 to-red-600 rounded-lg opacity-40 blur-sm group-hover/item:opacity-70 transition-opacity" />
-                    <div className={`relative w-full bg-gradient-to-br ${cat.color} p-[2px] rounded-lg shadow-2xl hover:shadow-[0_0_30px_rgba(234,179,8,0.6)] transition-all`}>
-                      <div className="w-full bg-black/95 backdrop-blur-xl rounded-lg flex flex-col items-center justify-center gap-1.5 p-3 relative overflow-hidden border border-yellow-500/20">
-                        {/* Intense cinema light reflection */}
-                        <div className={`absolute inset-0 bg-gradient-to-br ${cat.color} opacity-0 group-hover/card:opacity-50 transition-opacity duration-500`} />
-                        
-                        {/* Rotating spotlight effect */}
-                        <motion.div
-                          className="absolute inset-0 opacity-20"
-                          animate={{
-                            background: [
-                              'radial-gradient(circle at 0% 0%, rgba(239, 68, 68, 0.4) 0%, transparent 50%)',
-                              'radial-gradient(circle at 100% 0%, rgba(250, 204, 21, 0.4) 0%, transparent 50%)',
-                              'radial-gradient(circle at 100% 100%, rgba(147, 51, 234, 0.4) 0%, transparent 50%)',
-                              'radial-gradient(circle at 0% 100%, rgba(34, 211, 238, 0.4) 0%, transparent 50%)',
-                              'radial-gradient(circle at 0% 0%, rgba(239, 68, 68, 0.4) 0%, transparent 50%)'
-                            ]
-                          }}
-                          transition={{
-                            duration: 4,
-                            repeat: Infinity,
-                            ease: "linear"
-                          }}
-                        />
-                        
-                        {/* Icon with intense cinema glow */}
-                        <Icon className="w-10 h-10 text-white relative z-10 drop-shadow-[0_0_20px_rgba(255,255,255,0.9)] group-hover/item:scale-125 group-hover/item:drop-shadow-[0_0_30px_rgba(250,204,21,1)] transition-all duration-300" />
-                        
-                        {/* Label with glow */}
-                        <p className="text-white font-bold text-[10px] sm:text-[11px] text-center leading-tight line-clamp-2 relative z-10 drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] group-hover/item:text-yellow-300 transition-colors">
-                          {cat.label}
-                        </p>
-                        
-                        {/* Hover shimmer effect - stronger */}
-                        {hoveredCategory === cat.id && (
+                  <motion.div 
+                    className="relative flex-shrink-0 group/item"
+                    whileHover={{ scale: 1.15 }}
+                    transition={{ duration: 0.3, ease: "easeOut" }}
+                  >
+                    {/* Netflix-style card */}
+                    <div className="relative w-24 h-24 sm:w-28 sm:h-28">
+                      {/* Glow effect on hover */}
+                      <div className={`absolute -inset-2 bg-gradient-to-br ${cat.color} rounded-xl opacity-0 group-hover/item:opacity-60 blur-xl transition-all duration-300`} />
+                      
+                      {/* Main card */}
+                      <div className={`relative w-full h-full bg-gradient-to-br ${cat.color} p-[2px] rounded-xl shadow-2xl overflow-hidden transform transition-all duration-300`}>
+                        <div className="w-full h-full bg-black/90 backdrop-blur-2xl rounded-xl flex flex-col items-center justify-center gap-2 relative overflow-hidden">
+                          
+                          {/* Animated gradient overlay */}
                           <motion.div
-                            initial={{ x: '-100%', opacity: 0 }}
-                            animate={{ x: '200%', opacity: [0, 1, 0] }}
-                            transition={{ duration: 0.6, ease: "easeInOut" }}
-                            className="absolute inset-0 bg-gradient-to-r from-transparent via-yellow-300/60 to-transparent"
-                            style={{
-                              filter: 'drop-shadow(0 0 20px rgba(250, 204, 21, 0.8))'
+                            className="absolute inset-0 opacity-0 group-hover/item:opacity-40"
+                            animate={{
+                              background: [
+                                'radial-gradient(circle at 0% 0%, rgba(239, 68, 68, 0.5) 0%, transparent 60%)',
+                                'radial-gradient(circle at 100% 0%, rgba(250, 204, 21, 0.5) 0%, transparent 60%)',
+                                'radial-gradient(circle at 100% 100%, rgba(147, 51, 234, 0.5) 0%, transparent 60%)',
+                                'radial-gradient(circle at 0% 100%, rgba(34, 211, 238, 0.5) 0%, transparent 60%)',
+                                'radial-gradient(circle at 0% 0%, rgba(239, 68, 68, 0.5) 0%, transparent 60%)'
+                              ]
+                            }}
+                            transition={{
+                              duration: 5,
+                              repeat: Infinity,
+                              ease: "linear"
                             }}
                           />
-                        )}
+                          
+                          {/* Icon */}
+                          <Icon className="w-12 h-12 sm:w-14 sm:h-14 text-white relative z-10 drop-shadow-[0_0_25px_rgba(255,255,255,1)] group-hover/item:drop-shadow-[0_0_40px_rgba(250,204,21,1)] transition-all duration-300" />
+                          
+                          {/* Label */}
+                          <p className="text-white font-bold text-xs sm:text-sm text-center leading-tight px-2 relative z-10 drop-shadow-[0_0_10px_rgba(0,0,0,1)] group-hover/item:text-yellow-300 transition-colors duration-300">
+                            {cat.label}
+                          </p>
+                          
+                          {/* Shimmer on hover */}
+                          {hoveredCategory === cat.id && (
+                            <motion.div
+                              initial={{ x: '-100%' }}
+                              animate={{ x: '200%' }}
+                              transition={{ duration: 0.8, ease: "easeInOut" }}
+                              className="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent"
+                              style={{
+                                filter: 'drop-shadow(0 0 30px rgba(255, 255, 255, 0.9))'
+                              }}
+                            />
+                          )}
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  </motion.div>
                 </motion.div>
               </Link>
             );
