@@ -198,7 +198,11 @@ export default function VideoCreator() {
       // Update state - THIS WILL TRIGGER RE-RENDER
       console.log('🚀 טעינת', uniqueVideos.length, 'סרטונים למסך');
       setGeneratedVideos(uniqueVideos);
-      setLoadingHistory(false);
+      
+      // Ensure loading state is false
+      setTimeout(() => {
+        setLoadingHistory(false);
+      }, 100);
       
       console.log('✅✅✅ STATE UPDATED! כל הסרטונים מוצגים כעת!');
       console.log('סה"כ סרטונים:', uniqueVideos.length);
