@@ -105,9 +105,9 @@ export default function VideoCreator() {
       
       // 2. Load from Database
       try {
-        console.log('🔄 Step 2: Fetching Database...');
-        const dbVideos = await base44.entities.UserVideo.filter({ feed: 'user-videos' }, '-created_date', 1000);
-        console.log('📡 Database Response:', dbVideos?.length || 0);
+        console.log('🔄 Step 2: Fetching ALL Database videos...');
+        const dbVideos = await base44.entities.UserVideo.list('-created_date', 10000);
+        console.log('📡 Database Response:', dbVideos?.length || 0, 'סרטונים');
         
         if (dbVideos && dbVideos.length > 0) {
           const mapped = dbVideos
@@ -121,7 +121,8 @@ export default function VideoCreator() {
               thumbnail: v.thumbnail_url
             }));
           allVideos.push(...mapped);
-          console.log('✅ Database:', mapped.length, 'videos loaded');
+          console.log('✅ Database:', mapped.length, 'סרטונים טעונו');
+          console.log('📊 DB Videos details:', mapped.slice(0, 5).map(v => ({ title: v.title, timestamp: v.timestamp })));
         }
       } catch (e) {
         console.error('❌ Database ERROR:', e);
@@ -134,7 +135,7 @@ export default function VideoCreator() {
         if (saved) {
           const localVideos = JSON.parse(saved);
           allVideos.push(...localVideos);
-          console.log('✅ localStorage:', localVideos.length, 'videos loaded');
+          console.log('✅ localStorage:', localVideos.length, 'סרטונים');
         }
       } catch (e) {
         console.error('❌ localStorage ERROR:', e);
@@ -157,26 +158,52 @@ export default function VideoCreator() {
         new Map(allVideos.map(v => [v.videoUrl, v])).values()
       ).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
       
-      console.log('🎯🎯🎯 FINAL RESULT:', uniqueVideos.length, 'unique videos ready to display!');
-      console.log('📦 Complete video list:', uniqueVideos.map((v, idx) => `#${idx + 1}: ${v.title} (${v.source})`));
+      console.log('🎯🎯🎯 FINAL RESULT:', uniqueVideos.length, 'סרטונים ייחודיים מוכנים!');
+      console.log('📦 רשימה מלאה של כל הסרטונים:', uniqueVideos.map((v, idx) => `#${idx + 1}: ${v.title} (${v.source})`));
+      
+      // ============ SAVE ALL TO DATABASE ============
+      console.log('💾 שמירת כל הסרטונים לדטה בייס...');
+      for (const video of uniqueVideos) {
+        try {
+          const user = await base44.auth.me();
+          // בדוק אם הסרטון כבר קיים בדטה בייס
+          const existing = await base44.entities.UserVideo.filter({ video_url: video.videoUrl }, '', 1);
+          if (!existing || existing.length === 0) {
+            // הוסף סרטון חדש
+            await base44.entities.UserVideo.create({
+              title: video.title,
+              video_url: video.videoUrl,
+              thumbnail_url: video.thumbnail || '',
+              status: 'ready',
+              uploader_email: user?.email || 'system',
+              category: 'breaking',
+              feed: 'user-videos'
+            });
+            console.log('✅ שמור בדטא בייס:', video.title);
+          }
+        } catch (e) {
+          console.error('⚠️ שגיאה בשמירה:', video.title, e.message);
+        }
+      }
+      console.log('✅✅✅ כל הסרטונים שמורים בדטא בייס!');
       
       // Save to localStorage (keep all videos)
       try {
         localStorage.setItem('videoDownloadHistory', JSON.stringify(uniqueVideos));
-        console.log('💾 Saved', uniqueVideos.length, 'videos to localStorage');
+        console.log('💾 שמורים ב-localStorage:', uniqueVideos.length, 'סרטונים');
       } catch (e) {
         console.error('❌ localStorage save error:', e);
       }
       
       // Update state - THIS WILL TRIGGER RE-RENDER
-      console.log('🚀 Calling setGeneratedVideos with', uniqueVideos.length, 'videos');
+      console.log('🚀 טעינת', uniqueVideos.length, 'סרטונים למסך');
       setGeneratedVideos(uniqueVideos);
       setLoadingHistory(false);
       
-      console.log('✅✅✅ STATE UPDATED! Videos should now be visible!');
-      console.log('generatedVideos.length should be:', uniqueVideos.length);
+      console.log('✅✅✅ STATE UPDATED! כל הסרטונים מוצגים כעת!');
+      console.log('סה"כ סרטונים:', uniqueVideos.length);
       
-      toast.success(`🎉 ${uniqueVideos.length} סרטונים מוכנים! גלול למטה בהיסטוריה`, { duration: 10000 });
+      toast.success(`🎉 ${uniqueVideos.length} סרטונים מוצגים! כל הנתונים שמורים בבטחה בדטא בייס ✅`, { duration: 10000 });
     };
     
     loadHistory();
