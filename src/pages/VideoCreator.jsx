@@ -53,40 +53,54 @@ export default function VideoCreator() {
       // 1. Load from Digital Dreams FIRST (main source)
       try {
         console.log('🔄 Step 1: Fetching ALL Digital Dreams videos...');
-        toast.loading('טוען את כל הסרטונים שלך...', { id: 'loading-heygen' });
+        toast.loading('טוען את כל הסרטונים שלך... זה יכול לקחת דקה', { id: 'loading-heygen' });
         
         const response = await base44.functions.invoke('listHeyGenVideos', {});
-        console.log('📡 Digital Dreams Full Response:', response);
+        console.log('📡 === DIGITAL DREAMS RESPONSE ===');
+        console.log('📡 Full Response Object:', JSON.stringify(response, null, 2));
         console.log('📡 Response Data:', response?.data);
         console.log('📡 Total videos:', response?.data?.total);
+        console.log('📡 Videos Array:', response?.data?.videos);
         console.log('📡 Videos Array length:', response?.data?.videos?.length);
+        console.log('📡 Videos Array is Array?', Array.isArray(response?.data?.videos));
         
-        if (response?.data?.videos && Array.isArray(response.data.videos)) {
-          console.log('✅✅✅ Found', response.data.videos.length, 'videos from Digital Dreams!');
+        if (response?.data?.videos && Array.isArray(response.data.videos) && response.data.videos.length > 0) {
+          console.log('🎉🎉🎉 SUCCESS! Found', response.data.videos.length, 'videos from Digital Dreams!');
           
-          const digitalDreamsVideos = response.data.videos.map(v => ({
-            id: v.id,
-            title: v.title || `Video ${v.id.substring(0, 8)}`,
-            videoUrl: v.video_url,
-            timestamp: v.created_at ? new Date(v.created_at * 1000).toISOString() : new Date().toISOString(),
-            source: 'digital-dreams',
-            thumbnail: v.thumbnail_url,
-            duration: v.duration
-          }));
+          const digitalDreamsVideos = response.data.videos
+            .filter(v => v.video_url) // Only videos with URLs
+            .map(v => ({
+              id: v.id,
+              title: v.title || `Video ${v.id.substring(0, 8)}`,
+              videoUrl: v.video_url,
+              timestamp: v.created_at ? new Date(v.created_at * 1000).toISOString() : new Date().toISOString(),
+              source: 'digital-dreams',
+              thumbnail: v.thumbnail_url,
+              duration: v.duration
+            }));
           
+          console.log('📦 Mapped', digitalDreamsVideos.length, 'videos with URLs');
           allVideos.push(...digitalDreamsVideos);
-          console.log('✅ Digital Dreams:', digitalDreamsVideos.length, 'videos added to list');
-          console.log('📋 First Digital Dreams video:', digitalDreamsVideos[0]);
-          console.log('📋 Last Digital Dreams video:', digitalDreamsVideos[digitalDreamsVideos.length - 1]);
+          console.log('✅ Digital Dreams:', digitalDreamsVideos.length, 'videos added to allVideos array');
+          console.log('📋 First video:', digitalDreamsVideos[0]);
+          console.log('📋 Last video:', digitalDreamsVideos[digitalDreamsVideos.length - 1]);
+          console.log('🎯 Current allVideos length:', allVideos.length);
           
-          toast.success(`✅ נטענו ${digitalDreamsVideos.length} סרטונים!`, { id: 'loading-heygen', duration: 5000 });
+          toast.success(`🎉 ${digitalDreamsVideos.length} סרטונים נטענו מ-HeyGen!`, { id: 'loading-heygen', duration: 8000 });
         } else {
-          console.warn('⚠️ Digital Dreams: No videos in response');
-          toast.error('לא נמצאו סרטונים', { id: 'loading-heygen' });
+          console.error('❌❌❌ NO VIDEOS FOUND!');
+          console.error('Response structure:', {
+            hasData: !!response?.data,
+            hasVideos: !!response?.data?.videos,
+            isArray: Array.isArray(response?.data?.videos),
+            length: response?.data?.videos?.length
+          });
+          toast.error('לא נמצאו סרטונים ב-HeyGen', { id: 'loading-heygen' });
         }
       } catch (e) {
-        console.error('❌ Digital Dreams ERROR:', e);
-        toast.error('שגיאה בטעינת סרטונים: ' + e.message, { id: 'loading-heygen' });
+        console.error('❌ Digital Dreams CRITICAL ERROR:', e);
+        console.error('Error stack:', e.stack);
+        toast.error('שגיאה קריטית: ' + e.message, { id: 'loading-heygen' });
       }
       
       // 2. Load from Database
@@ -127,12 +141,14 @@ export default function VideoCreator() {
       }
       
       // 4. Process and set videos
-      console.log('🔄 Processing', allVideos.length, 'total videos from all sources...');
+      console.log('🔄🔄🔄 Processing', allVideos.length, 'total videos from all sources...');
+      console.log('📦 All videos before deduplication:', allVideos.map(v => ({ title: v.title, source: v.source })));
       
       if (allVideos.length === 0) {
-        console.warn('⚠️ No videos found from any source');
+        console.error('❌❌❌ ZERO VIDEOS AFTER ALL SOURCES!');
         setLoadingHistory(false);
-        toast.error('לא נמצאו סרטונים');
+        setGeneratedVideos([]);
+        toast.error('❌ לא נמצאו סרטונים בשום מקור', { duration: 10000 });
         return;
       }
       
@@ -141,8 +157,8 @@ export default function VideoCreator() {
         new Map(allVideos.map(v => [v.videoUrl, v])).values()
       ).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
       
-      console.log('🎯🎯🎯 Setting', uniqueVideos.length, 'unique videos to state!');
-      console.log('📦 Full video list:', uniqueVideos.map(v => v.title));
+      console.log('🎯🎯🎯 FINAL RESULT:', uniqueVideos.length, 'unique videos ready to display!');
+      console.log('📦 Complete video list:', uniqueVideos.map((v, idx) => `#${idx + 1}: ${v.title} (${v.source})`));
       
       // Save to localStorage (keep all videos)
       try {
@@ -153,11 +169,14 @@ export default function VideoCreator() {
       }
       
       // Update state - THIS WILL TRIGGER RE-RENDER
+      console.log('🚀 Calling setGeneratedVideos with', uniqueVideos.length, 'videos');
       setGeneratedVideos(uniqueVideos);
       setLoadingHistory(false);
       
-      console.log('✅✅✅ History loaded successfully!', uniqueVideos.length, 'videos ready!');
-      toast.success(`✅ סה"כ ${uniqueVideos.length} סרטונים בהיסטוריה`, { duration: 5000 });
+      console.log('✅✅✅ STATE UPDATED! Videos should now be visible!');
+      console.log('generatedVideos.length should be:', uniqueVideos.length);
+      
+      toast.success(`🎉 ${uniqueVideos.length} סרטונים מוכנים! גלול למטה בהיסטוריה`, { duration: 10000 });
     };
     
     loadHistory();
