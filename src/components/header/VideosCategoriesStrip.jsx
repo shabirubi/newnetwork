@@ -58,50 +58,35 @@ export default function VideosCategoriesStrip() {
     }
   };
 
-  // Fetch ALL videos from HeyGen for all categories
+  // Load videos from localStorage (cached from VideoCreator)
   const { data: categoryVideos = [] } = useQuery({
-    queryKey: ['heygen-all-videos', selectedCategory],
+    queryKey: ['cached-videos', selectedCategory],
     queryFn: async () => {
       try {
-        // Fetch ALL videos from HeyGen API
-        const response = await fetch('https://api.heygen.com/v1/video.list', {
-          method: 'GET',
-          headers: {
-            'X-Api-Key': 'ZjNjMDQzZGJhYTFmNDJhNTk0NjBiN2I3ZTQ1YjQyYWYtMTczNjE3Njg1OA==',
-            'Content-Type': 'application/json'
-          }
-        });
-
-        if (!response.ok) {
-          console.error('HeyGen API error:', response.status);
-          return [];
-        }
+        if (typeof window === 'undefined') return [];
         
-        const data = await response.json();
-        const videos = data?.data?.videos || [];
-        
-        console.log('✅ טעינת כל סרטוני HeyGen הושלמה:', videos.length, 'סרטונים');
-
-        // Transform ALL videos - no filtering by category
-        const transformed = videos
-          .filter(v => v.video_url) // Only videos with valid URLs
-          .map(v => ({
-            id: v.video_id,
-            title: v.title || v.video_id,
-            video_url: v.video_url,
-            thumbnail_url: v.thumbnail_url || v.video_url,
-            created_date: v.created_at,
+        // Load from localStorage - faster and already available
+        const savedVideos = localStorage.getItem('videoDownloadHistory');
+        if (savedVideos) {
+          const videos = JSON.parse(savedVideos);
+          console.log('✅ טעינת סרטונים מ-localStorage:', videos.length, 'סרטונים');
+          return videos.map(v => ({
+            id: v.id,
+            title: v.title || 'סרטון ללא כותרת',
+            video_url: v.videoUrl,
+            thumbnail_url: v.thumbnail || v.videoUrl,
+            created_date: v.timestamp,
             views: 0
-          }));
-
-        return transformed;
+          })) || [];
+        }
+        return [];
       } catch (error) {
-        console.error('Failed to fetch HeyGen videos:', error);
+        console.error('Failed to load videos:', error);
         return [];
       }
     },
     enabled: !!selectedCategory,
-    staleTime: 60000,
+    staleTime: 30000,
   });
 
   const currentVideo = categoryVideos[currentVideoIndex];
