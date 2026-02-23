@@ -389,7 +389,67 @@ export default function SampleVideosModal({ onClose, onApply }) {
 
         {/* Content */}
         <div className="flex-1 overflow-y-auto">
-          {activeTab === 'broll' ? (
+          {activeTab === 'heygen' ? (
+            <div>
+              {heygenLoading ? (
+                <div className="flex items-center justify-center py-12">
+                  <Loader2 size={48} className="animate-spin text-purple-500" />
+                  <p className="text-white mr-4">טוען את כל הסרטונים מ-HeyGen...</p>
+                </div>
+              ) : heygenVideos.length === 0 ? (
+                <div className="text-center py-12 text-gray-400">
+                  <Play size={48} className="mx-auto mb-4 opacity-30" />
+                  <p>אין סרטונים מ-HeyGen</p>
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 pr-2">
+                  {heygenVideos.map(video => (
+                    <div
+                      key={video.id}
+                      className="group relative bg-black/40 border border-white/10 rounded-xl overflow-hidden hover:border-purple-500/50 transition-all"
+                    >
+                      <div className="relative aspect-video overflow-hidden bg-black">
+                        <video
+                          src={video.url}
+                          className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                          muted
+                          loop
+                          playsInline
+                          onMouseEnter={(e) => e.target.play()}
+                          onMouseLeave={(e) => e.target.pause()}
+                        />
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                          <button
+                            onClick={() => setPreviewingVideo(video)}
+                            className="bg-purple-600/80 hover:bg-purple-600 p-3 rounded-full transition-all transform scale-75 group-hover:scale-100"
+                          >
+                            <Play size={20} className="text-white fill-white" />
+                          </button>
+                        </div>
+                        <div className="absolute bottom-2 left-2 bg-black/80 px-2 py-1 rounded text-xs text-white font-bold">
+                          HeyGen
+                        </div>
+                      </div>
+                      <div className="p-3">
+                        <h4 className="font-semibold text-white text-sm truncate group-hover:text-purple-400 transition-colors mb-1">
+                          {video.title}
+                        </h4>
+                        <p className="text-xs text-gray-400 truncate mb-3">{video.description}</p>
+                        <Button
+                          onClick={() => handleAddVideo(video)}
+                          size="sm"
+                          className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white text-xs h-8"
+                        >
+                          <Download size={14} className="mr-1" />
+                          הוסף לעורך
+                        </Button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : activeTab === 'broll' ? (
             <div>
               <div className="mb-4 flex gap-2 flex-wrap">
                 {['nature', 'business', 'technology', 'city', 'people', 'food', 'sports', 'travel'].map(cat => (
