@@ -1,8 +1,9 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight, Film, Clapperboard, Baby, Vote, Trophy, Heart, Globe, Cpu, Music, Star } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../../utils";
+import { base44 } from "@/api/base44Client";
 
 const categories = [
   { id: "all", label: "כל הסרטונים", icon: Film, color: "from-purple-500 to-pink-500" },
@@ -30,6 +31,30 @@ const categories = [
 export default function VideosCategoriesStrip() {
   const scrollRef = useRef(null);
   const [hoveredCategory, setHoveredCategory] = useState(null);
+  const [categoryVideos, setCategoryVideos] = useState({});
+
+  // Fetch videos for categories
+  useEffect(() => {
+    const fetchVideos = async () => {
+      try {
+        const videos = await base44.entities.UserVideo.list('-created_date', 100);
+        const videosByCategory = {};
+        
+        categories.forEach(cat => {
+          const categoryVideo = videos.find(v => v.category === cat.id);
+          if (categoryVideo && categoryVideo.thumbnail_url) {
+            videosByCategory[cat.id] = categoryVideo.thumbnail_url;
+          }
+        });
+        
+        setCategoryVideos(videosByCategory);
+      } catch (err) {
+        console.error('Failed to fetch category videos:', err);
+      }
+    };
+    
+    fetchVideos();
+  }, []);
 
   const scroll = (direction) => {
     if (scrollRef.current) {
@@ -183,11 +208,19 @@ export default function VideosCategoriesStrip() {
                       
                       {/* Main card with video background */}
                       <div className="relative w-full h-full rounded-lg shadow-xl overflow-hidden border-2 border-white/10 group-hover/item:border-white/30 transition-all duration-300">
-                        {/* Video background - simulated with gradient */}
-                        <div className={`absolute inset-0 bg-gradient-to-br ${cat.color} opacity-80`} />
+                        {/* Real video thumbnail or gradient fallback */}
+                        {categoryVideos[cat.id] ? (
+                          <img 
+                            src={categoryVideos[cat.id]} 
+                            alt={cat.label}
+                            className="absolute inset-0 w-full h-full object-cover"
+                          />
+                        ) : (
+                          <div className={`absolute inset-0 bg-gradient-to-br ${cat.color} opacity-80`} />
+                        )}
                         
                         {/* Dark overlay */}
-                        <div className="absolute inset-0 bg-black/40 group-hover/item:bg-black/20 transition-all duration-300" />
+                        <div className="absolute inset-0 bg-black/50 group-hover/item:bg-black/30 transition-all duration-300" />
                         
                         {/* Animated gradient overlay */}
                         <motion.div
