@@ -702,8 +702,15 @@ export default function VideoCreator() {
         </div>
 
         {/* Center - Video Display */}
-        <div className="flex-1 flex flex-col items-center justify-center p-3 sm:p-6 lg:p-8 overflow-y-auto pb-6">
-          {/* Chat Messages Display (Mobile) */}
+         <div className="flex-1 flex flex-col items-center justify-center p-3 sm:p-6 lg:p-8 overflow-y-auto pb-6">
+           {/* Videos by Category - Main View */}
+           {!currentVideo && messages.length === 0 && (
+             <div className="w-full max-w-6xl">
+               <VideosByCategory videos={generatedVideos} />
+             </div>
+           )}
+
+           {/* Chat Messages Display (Mobile) */}
           {messages.length > 0 && !currentVideo && (
             <div className="w-full h-full flex flex-col max-w-4xl">
               <div className="flex-1 overflow-y-auto space-y-3 pb-4">
