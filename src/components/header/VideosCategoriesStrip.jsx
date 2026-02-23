@@ -245,48 +245,16 @@ export default function VideosCategoriesStrip() {
         </div>
       </div>
 
-      {/* TikTok-Style Video Player Modal */}
-      <AnimatePresence>
-        {selectedCategory && categoryVideos.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[99999] bg-black w-screen h-screen overflow-hidden"
-            style={{ position: 'fixed', inset: 0, width: '100vw', height: '100vh', top: 0, left: 0, right: 0, bottom: 0 }}
-            onClick={() => {
-              setSelectedCategory(null);
-              setCurrentVideoIndex(0);
-            }}
-          >
-            {/* TikTok-Style Scrollable Videos - Clean */}
-            <div
-              ref={videoContainerRef}
-              onScroll={handleScroll}
-              onClick={(e) => e.stopPropagation()}
-              className="h-full w-full overflow-y-scroll snap-y snap-mandatory"
-              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-            >
-              {categoryVideos.map((video, index) => (
-                <div
-                  key={video.id}
-                  className="h-screen w-full snap-start snap-always flex items-center justify-center bg-black"
-                >
-                  {Math.abs(index - currentVideoIndex) <= 1 && (
-                    <video
-                      src={video.video_url}
-                      autoPlay={index === currentVideoIndex}
-                      loop
-                      playsInline
-                      className="h-full w-full object-cover"
-                    />
-                  )}
-                </div>
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <VideoModalPortal
+        isOpen={selectedCategory && categoryVideos.length > 0}
+        onClose={() => {
+          setSelectedCategory(null);
+          setCurrentVideoIndex(0);
+        }}
+        videos={categoryVideos}
+        currentVideoIndex={currentVideoIndex}
+        onScroll={handleScroll}
+      />
     </div>
   );
 }
