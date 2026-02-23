@@ -239,15 +239,15 @@ export default function VideoCreator() {
       console.log('✅✅✅ STATE UPDATED! כל הסרטונים מוצגים כעת!');
       console.log('סה"כ סרטונים:', uniqueVideos.length);
       
-      toast.success(`🎉 ${uniqueVideos.length} סרטונים מוצגים! כל הנתונים שמורים בבטחה בדטא בייס ✅`, { duration: 10000 });
-      } catch (e) {
-      console.error('❌ CRITICAL ERROR in loadHistory:', e);
-      setLoadingHistory(false);
-      toast.error('שגיאה בטעינה - בדוק את הקונסול', { duration: 5000 });
-      }
-      };
+            toast.success(`🎉 ${uniqueVideos.length} סרטונים מוצגים! כל הנתונים שמורים בבטחה בדטא בייס ✅`, { duration: 10000 });
+          } catch (e) {
+            console.error('❌ CRITICAL ERROR in loadHistory:', e);
+            setLoadingHistory(false);
+            toast.error('שגיאה בטעינה - בדוק את הקונסול', { duration: 5000 });
+          }
+        };
 
-      loadHistory();
+        loadHistory();
       }, []);
 
   // Subscribe to conversation
