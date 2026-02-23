@@ -938,12 +938,12 @@ export default function VideoCreator() {
             </p>
           </div>
           
-          <div className="flex-1 overflow-y-auto p-3 space-y-2">
+          <div className="flex-1 overflow-y-auto p-3 space-y-2 max-h-full">
             {loadingHistory && (
               <div className="flex flex-col items-center justify-center py-12">
                 <Loader2 className="w-8 h-8 text-purple-500 animate-spin mb-3" />
-                <p className="text-white text-sm font-bold">טוען סרטונים...</p>
-                <p className="text-gray-500 text-xs mt-1">{generatedVideos.length} נטענו עד כה</p>
+                <p className="text-white text-sm font-bold">טוען {generatedVideos.length} סרטונים...</p>
+                <p className="text-gray-500 text-xs mt-1">בטוען מ-HeyGen...</p>
               </div>
             )}
             {!loadingHistory && generatedVideos.length === 0 && (
@@ -955,38 +955,44 @@ export default function VideoCreator() {
             )}
 
             {!loadingHistory && generatedVideos.length > 0 && (
-              <div className="mb-2 p-2 bg-gradient-to-r from-purple-600/20 to-pink-600/20 border border-purple-500/30 rounded-lg text-center">
-                <p className="text-purple-300 text-xs font-bold">
-                  🎉 {generatedVideos.length} סרטונים מ-Digital Dreams
+              <div className="sticky top-0 z-10 mb-3 p-3 bg-gradient-to-r from-purple-600/30 to-pink-600/30 border-2 border-purple-500/50 rounded-lg text-center backdrop-blur-sm">
+                <p className="text-white text-sm font-bold">
+                  🎬 סה"כ {generatedVideos.length} סרטונים
                 </p>
+                <p className="text-purple-300 text-xs mt-1">כל הסרטונים מ-HeyGen 💎</p>
               </div>
             )}
 
-            {!loadingHistory && generatedVideos.map((video, idx) => (
+            {!loadingHistory && generatedVideos.length > 0 && generatedVideos.map((video, idx) => (
               <motion.div
-                key={video.id}
+                key={`${video.id}-${idx}`}
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
-                className="bg-gray-900 rounded-lg overflow-hidden border border-gray-800 hover:border-purple-500/50 transition-all"
+                transition={{ delay: idx * 0.02 }}
+                className="bg-gray-900 rounded-lg overflow-hidden border border-gray-800 hover:border-purple-500/50 transition-all shadow-lg hover:shadow-purple-500/20"
               >
                 <div 
-                  className="relative aspect-video bg-black cursor-pointer"
+                  className="relative aspect-video bg-black cursor-pointer group"
                   onClick={() => setCurrentVideo(video.videoUrl)}
                 >
                   <video 
                     src={video.videoUrl} 
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover group-hover:opacity-80 transition-opacity"
+                    preload="metadata"
                   />
-                  <div className="absolute top-1.5 left-1.5 bg-purple-600 px-1.5 py-0.5 rounded text-white text-xs font-bold">
+                  <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-all flex items-center justify-center opacity-0 group-hover:opacity-100">
+                    <Play className="w-8 h-8 text-white drop-shadow-lg" />
+                  </div>
+                  <div className="absolute top-1.5 left-1.5 bg-purple-600 px-2 py-1 rounded text-white text-xs font-bold">
                     #{idx + 1}
                   </div>
-                  <div className="absolute top-1.5 right-1.5 bg-gradient-to-r from-purple-600 to-pink-600 px-1.5 py-0.5 rounded text-white text-xs font-bold">
+                  <div className="absolute top-1.5 right-1.5 bg-gradient-to-r from-purple-600 to-pink-600 px-2 py-1 rounded text-white text-xs font-bold shadow-lg">
                     Digital Dreams
                   </div>
                 </div>
-                <div className="p-2 space-y-1">
-                  <p className="text-white text-xs font-medium truncate">{video.title}</p>
-                  <p className="text-gray-500 text-[10px]">{new Date(video.timestamp).toLocaleDateString('he-IL')}</p>
+                <div className="p-3 space-y-2">
+                  <p className="text-white text-sm font-medium truncate" title={video.title}>{video.title}</p>
+                  <p className="text-gray-500 text-xs">{new Date(video.timestamp).toLocaleDateString('he-IL', { year: 'numeric', month: 'short', day: 'numeric' })}</p>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -995,9 +1001,9 @@ export default function VideoCreator() {
                       }));
                       toast.success('הסרטון נוסף לעורך!');
                     }}
-                    className="w-full bg-purple-600 hover:bg-purple-700 text-white px-2 py-1 rounded text-[10px] font-bold transition-all"
+                    className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white px-3 py-2 rounded text-xs font-bold transition-all active:scale-95"
                   >
-                    הוסף לעורך
+                    + הוסף לעורך
                   </button>
                 </div>
               </motion.div>
