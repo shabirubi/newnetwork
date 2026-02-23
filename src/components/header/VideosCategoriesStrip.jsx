@@ -414,7 +414,7 @@ export default function VideosCategoriesStrip() {
 
             {/* Scroll Hint */}
             {categoryVideos.length > 1 && (
-              <div className="fixed bottom-20 left-1/2 -translate-x-1/2 z-[10000] text-white/60 text-sm animate-bounce pointer-events-none">
+              <div className="absolute bottom-20 left-1/2 -translate-x-1/2 z-[99998] text-white/60 text-sm animate-bounce pointer-events-none">
                 גלול למעלה/למטה
               </div>
             )}
