@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { motion, AnimatePresence } from "framer-motion";
 import NewsTicker from "./components/header/NewsTicker";
 import ReportersTickerStrip from "./components/header/ReportersTickerStrip";
+import VideosCategoriesStrip from "./components/header/VideosCategoriesStrip";
 import ReportersModal from "./components/reporter/ReportersModal";
 import AIAnnouncer from "./components/news/AIAnnouncer";
 import RightSidebarUpdates from "./components/sidebar/RightSidebarUpdates";
@@ -372,6 +373,11 @@ export default function Layout({ children, currentPageName }) {
       {/* Reporters Ticker Strip */}
       <React.Suspense fallback={<div className="h-16 bg-black/40 animate-pulse" />}>
         <ReportersTickerStrip />
+      </React.Suspense>
+
+      {/* Videos Categories Strip */}
+      <React.Suspense fallback={<div className="h-32 bg-black/40 animate-pulse" />}>
+        <VideosCategoriesStrip />
       </React.Suspense>
 
 
