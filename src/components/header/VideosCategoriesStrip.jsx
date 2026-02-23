@@ -146,6 +146,21 @@ export default function VideosCategoriesStrip() {
     }
   };
 
+  // Hide body scroll when modal is open
+  React.useEffect(() => {
+    if (selectedCategory) {
+      document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+      document.documentElement.style.overflow = 'unset';
+    }
+    return () => {
+      document.body.style.overflow = 'unset';
+      document.documentElement.style.overflow = 'unset';
+    };
+  }, [selectedCategory]);
+
   React.useEffect(() => {
     if (chatEndRef.current) {
       chatEndRef.current.scrollIntoView({ behavior: 'smooth' });
