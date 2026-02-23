@@ -58,35 +58,19 @@ export default function VideosCategoriesStrip() {
     }
   };
 
-  // Fetch videos for selected category - from HeyGen
+  // Fetch videos for selected category - from HeyGen via backend
   const { data: categoryVideos = [] } = useQuery({
     queryKey: ['category-videos', selectedCategory],
     queryFn: async () => {
       if (!selectedCategory) return [];
       
-      // Fetch from HeyGen API
-      const response = await fetch('https://api.heygen.com/v1/video.list', {
-        method: 'GET',
-        headers: {
-          'X-Api-Key': 'ZjNjMDQzZGJhYTFmNDJhNTk0NjBiN2I3ZTQ1YjQyYWYtMTczNjE3Njg1OA==',
-          'Content-Type': 'application/json'
-        }
-      });
-
-      if (!response.ok) return [];
-      const data = await response.json();
-      const videos = data?.data?.videos || [];
-
-      // Transform HeyGen videos to our format
-      return videos.map(v => ({
-        id: v.video_id,
-        title: v.title || v.video_id,
-        video_url: v.video_url || v.gif_url,
-        thumbnail_url: v.thumbnail_url || v.gif_url,
-        created_date: v.created_at,
-        category: selectedCategory,
-        views: 0
-      }));
+      try {
+        const response = await base44.functions.invoke('listHeyGenVideos', {});
+        return response.data?.videos || [];
+      } catch (error) {
+        console.error('Failed to fetch videos:', error);
+        return [];
+      }
     },
     enabled: !!selectedCategory,
   });
