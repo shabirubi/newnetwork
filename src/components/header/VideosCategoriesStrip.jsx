@@ -60,7 +60,7 @@ export default function VideosCategoriesStrip() {
 
   // Fetch ALL videos from HeyGen for all categories
   const { data: categoryVideos = [] } = useQuery({
-    queryKey: ['heygen-all-videos'],
+    queryKey: ['heygen-all-videos', selectedCategory],
     queryFn: async () => {
       try {
         // Fetch ALL videos from HeyGen API
