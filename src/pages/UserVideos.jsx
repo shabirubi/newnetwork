@@ -6,6 +6,31 @@ import { Play, X, Share2, Heart } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
 
+const categoryLabels = {
+  all: "כל הסרטונים",
+  entertainment: "דרמה ובידור",
+  kids: "ילדים",
+  politics: "פוליטיקה",
+  sports: "ספורט",
+  health: "בריאות",
+  world: "עולם",
+  technology: "טכנולוגיה",
+  music: "מוזיקה",
+  breaking: "חמות",
+  security: "ביטחון",
+  economy: "כלכלה",
+  crime: "פלילים",
+  education: "חינוך",
+  culture: "תרבות",
+  environment: "סביבה",
+  science: "מדע",
+  military: "צבא",
+  law: "משפט",
+  local: "מקומי"
+};
+
+const getCategoryLabel = (category) => categoryLabels[category] || category;
+
 export default function UserVideos() {
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [likedVideos, setLikedVideos] = useState(() => {
@@ -16,15 +41,24 @@ export default function UserVideos() {
     return [];
   });
 
-  const { data: videos = [], isLoading } = useQuery({
+  // Get category from URL
+  const urlParams = new URLSearchParams(window.location.search);
+  const selectedCategory = urlParams.get('category') || 'all';
+
+  const { data: allVideos = [], isLoading } = useQuery({
     queryKey: ['user-videos'],
     queryFn: async () => {
-      const response = await base44.entities.UserUploadedVideo.list('-created_date', 100);
+      const response = await base44.entities.UserVideo.list('-created_date', 500);
       return response || [];
     },
     staleTime: 60000,
     initialData: []
   });
+
+  // Filter videos by category
+  const videos = selectedCategory === 'all' 
+    ? allVideos 
+    : allVideos.filter(video => video.category === selectedCategory);
 
   const toggleLike = (videoId) => {
     setLikedVideos(prev => {
@@ -50,13 +84,23 @@ export default function UserVideos() {
     <div className="min-h-screen bg-black overflow-x-hidden" dir="rtl">
       {/* Header */}
       <div className="sticky top-0 z-40 bg-gradient-to-b from-black via-black/80 to-transparent backdrop-blur-sm">
-        <div className="max-w-7xl mx-auto px-4 py-6 flex items-center justify-between">
-          <Link to={createPageUrl("Home")} className="flex items-center gap-2 hover:opacity-80 transition-opacity">
+        <div className="max-w-7xl mx-auto px-4 py-6">
+          <Link to={createPageUrl("Home")} className="flex items-center gap-2 hover:opacity-80 transition-opacity mb-4">
             <div className="w-10 h-10 bg-gradient-to-br from-[#E31E24] to-[#B91C1C] rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-lg">הר</span>
             </div>
-            <h1 className="text-2xl font-bold text-white">עדכונים שלכם</h1>
+            <h1 className="text-2xl font-bold text-white">
+              {selectedCategory === 'all' ? 'כל הסרטונים' : getCategoryLabel(selectedCategory)}
+            </h1>
           </Link>
+          {selectedCategory !== 'all' && (
+            <Link 
+              to={createPageUrl("UserVideos?category=all")}
+              className="inline-flex items-center gap-2 text-sm text-gray-400 hover:text-white transition-colors"
+            >
+              ← חזרה לכל הסרטונים
+            </Link>
+          )}
         </div>
       </div>
 
