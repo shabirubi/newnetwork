@@ -67,15 +67,15 @@ export default function VideosCategoriesStrip() {
         <motion.div
           className="flex gap-2 py-3"
           animate={{
-            x: [0, -2000]
+            x: ["0%", "-50%"]
           }}
           transition={{
-            duration: 40,
+            duration: 50,
             repeat: Infinity,
             ease: "linear"
           }}
         >
-          {[...categories, ...categories].map((cat, idx) => {
+          {[...categories, ...categories, ...categories, ...categories].map((cat, idx) => {
           const Icon = cat.icon;
           return (
             <Link
