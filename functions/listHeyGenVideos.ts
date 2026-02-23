@@ -31,15 +31,19 @@ Deno.serve(async (req) => {
 
     console.log('✅ Fetched', videos.length, 'videos from HeyGen');
 
-    // Transform videos to our format
-    const transformedVideos = videos.map(v => ({
-      id: v.video_id,
-      title: v.title || v.video_id,
-      video_url: v.video_url || v.gif_url,
-      thumbnail_url: v.thumbnail_url || v.gif_url,
-      created_date: v.created_at,
-      views: 0
-    }));
+    // Transform videos to our format - only include videos with URLs
+    const transformedVideos = videos
+      .filter(v => v.video_url) // רק סרטונים מוכנים
+      .map(v => ({
+        id: v.video_id,
+        title: v.title || v.video_id,
+        video_url: v.video_url,
+        thumbnail_url: v.thumbnail_url || v.video_url,
+        created_date: v.created_at,
+        views: 0
+      }));
+
+    console.log('✅ Returning', transformedVideos.length, 'completed videos');
 
     return Response.json({ 
       videos: transformedVideos,
