@@ -65,19 +65,19 @@ export default function VideosCategoriesStrip() {
       {/* Categories Scroll - Auto Animated */}
       <div className="overflow-hidden relative z-[1]">
         <motion.div
-          className="flex gap-2 py-3 whitespace-nowrap"
+          className="flex gap-2 py-3"
           animate={{
-            x: ["0%", "-50%"]
+            x: [0, -(categories.length * 80)]
           }}
           transition={{
-            duration: 60,
+            duration: 50,
             repeat: Infinity,
             ease: "linear",
             repeatType: "loop"
           }}
           style={{ willChange: 'transform' }}
         >
-          {[...categories, ...categories, ...categories, ...categories, ...categories, ...categories].map((cat, idx) => {
+          {[...categories, ...categories].map((cat, idx) => {
           const Icon = cat.icon;
           return (
             <Link
