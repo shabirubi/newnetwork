@@ -44,7 +44,7 @@ export default function VideosCategoriesStrip() {
   };
 
   return (
-    <div className="relative bg-black overflow-hidden z-[34] group" style={{ height: '140px' }}>
+    <div className="relative bg-black overflow-hidden z-[34] group" style={{ height: '100px' }}>
       {/* Netflix-Style Background Video */}
       <div className="absolute inset-0">
         <video
@@ -88,7 +88,7 @@ export default function VideosCategoriesStrip() {
         className="overflow-x-auto relative z-10 scroll-smooth h-full"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
-        <div className="flex gap-4 py-6 px-4 h-full items-center justify-start min-w-full">
+        <div className="flex gap-3 py-4 px-3 h-full items-center justify-start min-w-full">
           {categories.map((cat, idx) => {
             const Icon = cat.icon;
             return (
@@ -100,12 +100,12 @@ export default function VideosCategoriesStrip() {
                 className="flex-shrink-0"
               >
                 <motion.div
-                  whileHover={{ scale: 1.05, y: -5 }}
+                  whileHover={{ scale: 1.05, y: -3 }}
                   whileTap={{ scale: 0.98 }}
                   className="relative group/card"
                 >
                   {/* Card Container */}
-                  <div className="relative w-48 h-28 rounded-xl overflow-hidden shadow-2xl border-2 border-white/10 group-hover/card:border-white/30 transition-all duration-300">
+                  <div className="relative w-32 sm:w-36 h-20 sm:h-24 rounded-lg overflow-hidden shadow-xl border border-white/10 group-hover/card:border-white/30 transition-all duration-300">
                     {/* Background Image */}
                     <img 
                       src={cat.image} 
@@ -123,23 +123,18 @@ export default function VideosCategoriesStrip() {
                     <div className={`absolute -inset-1 bg-gradient-to-br ${cat.color} opacity-0 group-hover/card:opacity-40 blur-xl transition-all duration-300`} />
                     
                     {/* Content */}
-                    <div className="absolute inset-0 flex flex-col items-center justify-center p-3">
+                    <div className="absolute inset-0 flex flex-col items-center justify-center p-2">
                       {/* Icon */}
                       <motion.div
-                        whileHover={{ scale: 1.2, rotate: 5 }}
-                        className="mb-2"
+                        whileHover={{ scale: 1.15, rotate: 5 }}
+                        className="mb-1"
                       >
-                        <Icon className="w-8 h-8 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]" />
+                        <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-white drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)]" />
                       </motion.div>
                       
                       {/* Label */}
-                      <p className="text-white font-bold text-base text-center drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] group-hover/card:scale-105 transition-transform duration-300">
+                      <p className="text-white font-bold text-xs sm:text-sm text-center drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] group-hover/card:scale-105 transition-transform duration-300">
                         {cat.label}
-                      </p>
-                      
-                      {/* Subtitle */}
-                      <p className="text-white/80 text-xs text-center mt-1 opacity-0 group-hover/card:opacity-100 transition-opacity duration-300">
-                        לחץ לצפייה
                       </p>
                     </div>
                     
