@@ -195,14 +195,10 @@ export default function VideoCreator() {
         console.error('❌ localStorage save error:', e);
       }
       
-      // Update state - THIS WILL TRIGGER RE-RENDER
+      // Update state - DISPLAY IMMEDIATELY
       console.log('🚀 טעינת', uniqueVideos.length, 'סרטונים למסך');
       setGeneratedVideos(uniqueVideos);
-      
-      // Ensure loading state is false
-      setTimeout(() => {
-        setLoadingHistory(false);
-      }, 100);
+      setLoadingHistory(false);
       
       console.log('✅✅✅ STATE UPDATED! כל הסרטונים מוצגים כעת!');
       console.log('סה"כ סרטונים:', uniqueVideos.length);
