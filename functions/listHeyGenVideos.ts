@@ -60,57 +60,25 @@ Deno.serve(async (req) => {
     const completedVideos = allVideos;
     console.log(`✅ Processing ${completedVideos.length} videos (all statuses)`);
 
-    // Fetch video URLs for ALL completed videos in batches
-    const result = [];
-    const batchSize = 50;
-    
-    console.log(`🚀 Processing ALL ${completedVideos.length} completed videos...`);
-    
-    for (let i = 0; i < completedVideos.length; i += batchSize) {
-      const batch = completedVideos.slice(i, i + batchSize);
-      console.log(`🔄 Fetching URLs for videos ${i}-${Math.min(i + batch.length, completedVideos.length)} of ${completedVideos.length}...`);
-      
-      const batchPromises = batch.map(async (v) => {
-        try {
-          const detailResponse = await fetch(
-            `https://api.heygen.com/v1/video_status.get?video_id=${v.video_id}`,
-            {
-              method: 'GET',
-              headers: {
-                'X-Api-Key': HEYGEN_API_KEY,
-                'Content-Type': 'application/json'
-              }
-            }
-          );
-          
-          if (detailResponse.ok) {
-            const detailData = await detailResponse.json();
-            return {
-              id: v.video_id,
-              title: v.video_title || `Video ${v.video_id.substring(0, 8)}`,
-              status: v.status,
-              video_url: detailData.data?.video_url,
-              thumbnail_url: detailData.data?.thumbnail_url,
-              created_at: v.created_at,
-              duration: detailData.data?.duration
-            };
-          }
-        } catch (e) {
-          console.error(`Failed to get URL for ${v.video_id}:`, e.message);
-        }
-        return null;
-      });
-      
-      const batchResults = await Promise.all(batchPromises);
-      result.push(...batchResults.filter(v => v && v.video_url));
-    }
+    // Map directly from list API response - it already has video_url
+    const result = allVideos
+      .map(v => ({
+        id: v.video_id,
+        title: v.video_title || `Video ${v.video_id.substring(0, 8)}`,
+        status: v.status,
+        video_url: v.video_url, // Use video_url directly from list response
+        thumbnail_url: v.thumbnail_url,
+        created_at: v.created_at,
+        duration: v.duration
+      }))
+      .filter(v => v.video_url); // Only include videos with valid URLs
 
-    console.log(`\n✅✅✅ SUCCESS! Returning ${result.length} videos with URLs out of ${completedVideos.length} completed videos`);
-    console.log(`📊 Coverage: ${Math.round(result.length / completedVideos.length * 100)}% of completed videos have URLs`);
+    console.log(`\n✅✅✅ SUCCESS! Returning ${result.length} סרטונים עם URLs`);
+    console.log(`📊 כל הסרטונים של ${result.length} זמינים עכשיו!`);
 
     return Response.json({
       total: result.length,
-      total_completed: completedVideos.length,
+      total_completed: allVideos.length,
       videos: result
     });
 
