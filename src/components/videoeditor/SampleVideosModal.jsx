@@ -110,9 +110,50 @@ export default function SampleVideosModal({ onClose, onApply }) {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
-  const [activeTab, setActiveTab] = useState('samples'); // 'samples', 'search', 'images', 'broll'
+  const [activeTab, setActiveTab] = useState('heygen'); // 'heygen', 'samples', 'search', 'images', 'broll'
   const [imageResults, setImageResults] = useState([]);
   const [brollCategory, setBrollCategory] = useState('nature');
+
+  // Fetch ALL HeyGen videos
+  const { data: heygenVideos = [], isLoading: heygenLoading } = useQuery({
+    queryKey: ['heygen-all-videos-editor'],
+    queryFn: async () => {
+      try {
+        const response = await fetch('https://api.heygen.com/v1/video.list', {
+          method: 'GET',
+          headers: {
+            'X-Api-Key': 'ZjNjMDQzZGJhYTFmNDJhNTk0NjBiN2I3ZTQ1YjQyYWYtMTczNjE3Njg1OA==',
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!response.ok) {
+          console.error('HeyGen API error:', response.status);
+          return [];
+        }
+        
+        const data = await response.json();
+        const videos = data?.data?.videos || [];
+        
+        console.log('Loaded ALL HeyGen videos for editor:', videos.length);
+
+        return videos
+          .filter(v => v.video_url)
+          .map(v => ({
+            id: v.video_id,
+            title: v.title || v.video_id,
+            url: v.video_url,
+            thumbnail: v.thumbnail_url || v.video_url,
+            duration: 10,
+            description: v.video_id
+          }));
+      } catch (error) {
+        console.error('Failed to fetch HeyGen videos:', error);
+        return [];
+      }
+    },
+    staleTime: 60000,
+  });
 
   const handleAddVideo = async (video) => {
     const newClip = {
