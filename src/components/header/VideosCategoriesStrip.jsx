@@ -94,7 +94,7 @@ export default function VideosCategoriesStrip() {
       return await base44.entities.VideoComment.create(messageData);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['video-comments', selectedVideo?.id]);
+      queryClient.invalidateQueries(['video-comments', currentVideo?.id]);
       setMessage("");
     },
   });
