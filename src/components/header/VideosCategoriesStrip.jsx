@@ -59,27 +59,44 @@ export default function VideosCategoriesStrip() {
     }
   };
 
-  // Load videos from localStorage (cached from VideoCreator)
+  // Load videos from localStorage or database
   const { data: categoryVideos = [] } = useQuery({
     queryKey: ['cached-videos', selectedCategory],
     queryFn: async () => {
       try {
         if (typeof window === 'undefined') return [];
         
-        // Load from localStorage - faster and already available
+        // Try localStorage first
         const savedVideos = localStorage.getItem('videoDownloadHistory');
         if (savedVideos) {
           const videos = JSON.parse(savedVideos);
-          console.log('✅ טעינת סרטונים מ-localStorage:', videos.length, 'סרטונים');
-          return videos.map(v => ({
+          if (videos.length > 0) {
+            console.log('✅ טעינת סרטונים מ-localStorage:', videos.length, 'סרטונים');
+            return videos.map(v => ({
+              id: v.id,
+              title: v.title || 'סרטון ללא כותרת',
+              video_url: v.videoUrl,
+              thumbnail_url: v.thumbnail || v.videoUrl,
+              created_date: v.timestamp,
+              views: 0
+            }));
+          }
+        }
+        
+        // Fallback to database
+        const dbVideos = await base44.entities.UserVideo.filter({ status: 'ready' }, '-created_date', 50);
+        if (dbVideos && dbVideos.length > 0) {
+          console.log('✅ טעינת סרטונים מהמאגר:', dbVideos.length, 'סרטונים');
+          return dbVideos.map(v => ({
             id: v.id,
             title: v.title || 'סרטון ללא כותרת',
-            video_url: v.videoUrl,
-            thumbnail_url: v.thumbnail || v.videoUrl,
-            created_date: v.timestamp,
-            views: 0
-          })) || [];
+            video_url: v.video_url,
+            thumbnail_url: v.thumbnail_url || v.video_url,
+            created_date: v.created_date,
+            views: v.views || 0
+          }));
         }
+        
         return [];
       } catch (error) {
         console.error('Failed to load videos:', error);
