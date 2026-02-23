@@ -235,11 +235,8 @@ export default function Layout({ children, currentPageName }) {
     return children;
   }
 
-  // Check if video modal is open
-  const isVideoModalOpen = typeof window !== 'undefined' && window.location.pathname.includes('VideoCreator');
-
   return (
-    <div className={`min-h-screen bg-black transition-colors duration-300 flex flex-col overflow-x-hidden ${selectedCategory ? 'hidden' : ''}`} dir="rtl">
+    <div className="min-h-screen bg-black transition-colors duration-300 flex flex-col overflow-x-hidden" dir="rtl">
       <style>{`
         :root {
           --primary: #FFDD00;
