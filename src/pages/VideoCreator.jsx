@@ -957,13 +957,18 @@ export default function VideoCreator() {
         </div>
 
         {/* Right Sidebar - Timeline - Hidden on Mobile */}
-        <div className="hidden lg:flex lg:w-80 bg-black/50 border-r border-gray-800 flex-col">
-          <div className="p-4 border-b border-gray-800 sticky top-0 z-10 bg-black/90 backdrop-blur-xl">
-            <h3 className="text-white font-bold text-lg">🎬 Digital Dreams</h3>
-            <p className="text-purple-400 text-sm font-bold">
-              {loadingHistory ? '⏳ טוען...' : `✅ ${generatedVideos.length} סרטונים זמינים`}
-            </p>
-          </div>
+                <div className="hidden lg:flex lg:w-80 bg-black/50 border-r border-gray-800 flex-col">
+                    <div className="p-4 border-b border-gray-800 sticky top-0 z-10 bg-black/90 backdrop-blur-xl">
+                      <h3 className="text-white font-bold text-lg">🎬 Digital Dreams</h3>
+                      <p className="text-purple-400 text-sm font-bold">
+                        {loadingHistory ? '⏳ טוען...' : `✅ ${generatedVideos.length} סרטונים זמינים`}
+                      </p>
+                      {!loadingHistory && generatedVideos.length > 0 && (
+                        <p className="text-xs text-green-400 mt-2 font-bold">
+                          ✅ כל הנתונים שמורים בדטא בייס בטוח
+                        </p>
+                      )}
+                    </div>
           
           <div className="flex-1 overflow-y-auto p-3 space-y-2 max-h-full">
             {loadingHistory && (
