@@ -25,6 +25,8 @@ import AdminLoginModal from "./components/admin/AdminLoginModal";
 
 import AccessibilityFloatingButton from "./components/accessibility/AccessibilityFloatingButton";
 import { base44 } from "@/api/base44Client";
+import { Search } from "lucide-react";
+import { Input } from "@/components/ui/input";
 
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png";
 
@@ -123,6 +125,9 @@ export default function Layout({ children, currentPageName }) {
   const [didChatOpen, setDidChatOpen] = useState(false);
   const [menuSidebarOpen, setMenuSidebarOpen] = useState(false);
   const [siteSettings, setSiteSettings] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [searchResults, setSearchResults] = useState([]);
+  const [showSearchResults, setShowSearchResults] = useState(false);
 
   // בדיקת מצב האתר
   useEffect(() => {
@@ -138,6 +143,30 @@ export default function Layout({ children, currentPageName }) {
     };
     checkSiteStatus();
   }, []);
+
+  // חיפוש כתבות
+  useEffect(() => {
+    const searchArticles = async () => {
+      if (searchQuery.trim().length < 2) {
+        setSearchResults([]);
+        return;
+      }
+
+      try {
+        const articles = await base44.entities.NewsArticle.list('-created_date', 100);
+        const filtered = articles.filter(article => 
+          article.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          article.content?.toLowerCase().includes(searchQuery.toLowerCase())
+        ).slice(0, 5);
+        setSearchResults(filtered);
+      } catch (err) {
+        console.error('Search error:', err);
+      }
+    };
+
+    const debounce = setTimeout(searchArticles, 300);
+    return () => clearTimeout(debounce);
+  }, [searchQuery]);
 
   useEffect(() => {
       if (darkMode) {
@@ -278,20 +307,68 @@ export default function Layout({ children, currentPageName }) {
             </div>
           </div>
 
-          {/* Opening Date Display with Typewriter */}
-          <motion.div 
-            className="hidden lg:flex items-center justify-center px-4 py-1.5 bg-gradient-to-r from-[#0080FF] via-[#0066FF] to-[#0080FF] rounded-xl border border-[#0080FF]/50 max-w-md"
-            animate={{
-              boxShadow: [
-                '0 0 15px rgba(0, 128, 255, 0.4)',
-                '0 0 25px rgba(0, 128, 255, 0.6)',
-                '0 0 15px rgba(0, 128, 255, 0.4)'
-              ]
-            }}
-            transition={{ duration: 3, repeat: Infinity }}
-          >
-            <TypewriterDate />
-          </motion.div>
+          {/* Search Box */}
+          <div className="hidden lg:block relative max-w-md flex-1">
+            <div className="relative">
+              <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
+              <Input
+                type="text"
+                placeholder="חפש כתבות..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onFocus={() => setShowSearchResults(true)}
+                onBlur={() => setTimeout(() => setShowSearchResults(false), 200)}
+                className="pr-10 bg-black/60 border-[#0080FF]/50 text-white placeholder:text-gray-400 focus:border-[#0080FF] rounded-xl"
+              />
+            </div>
+
+            {/* Search Results Dropdown */}
+            <AnimatePresence>
+              {showSearchResults && searchQuery.length >= 2 && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  className="absolute top-full mt-2 left-0 right-0 bg-black/95 backdrop-blur-xl border border-[#0080FF]/50 rounded-xl shadow-2xl shadow-[#0080FF]/30 max-h-96 overflow-y-auto z-50"
+                >
+                  {searchResults.length === 0 ? (
+                    <div className="p-4 text-center text-gray-400">
+                      לא נמצאו תוצאות
+                    </div>
+                  ) : (
+                    searchResults.map((article) => (
+                      <Link
+                        key={article.id}
+                        to={createPageUrl(`Article?id=${article.id}`)}
+                        onClick={() => {
+                          setSearchQuery("");
+                          setShowSearchResults(false);
+                        }}
+                        className="block p-4 hover:bg-[#0080FF]/20 transition-colors border-b border-gray-800 last:border-b-0"
+                      >
+                        <h4 className="text-white font-bold text-sm mb-1 line-clamp-1">
+                          {article.title}
+                        </h4>
+                        <p className="text-gray-400 text-xs line-clamp-2">
+                          {article.subtitle || article.content?.substring(0, 100)}
+                        </p>
+                        <div className="flex items-center gap-2 mt-2">
+                          {article.category && (
+                            <span className="text-[#0080FF] text-xs">
+                              {article.category}
+                            </span>
+                          )}
+                          <span className="text-gray-500 text-xs">
+                            {new Date(article.created_date).toLocaleDateString('he-IL')}
+                          </span>
+                        </div>
+                      </Link>
+                    ))
+                  )}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
 
           <div className="flex items-center gap-3 flex-shrink-0">
 
