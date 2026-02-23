@@ -64,14 +64,32 @@ export default function VideoCreator() {
   // Load history from HeyGen + Database + localStorage
   useEffect(() => {
     const loadHistory = async () => {
-      console.log('🚀 === LOADING VIDEO HISTORY === 🚀');
-      setLoadingHistory(true);
-      const allVideos = [];
-      
-      // 1. Load from Digital Dreams FIRST (main source)
       try {
-        console.log('🔄 Step 1: Fetching ALL Digital Dreams videos...');
-        toast.loading('טוען את כל הסרטונים שלך... זה יכול לקחת דקה', { id: 'loading-heygen' });
+        console.log('🚀 === LOADING VIDEO HISTORY === 🚀');
+        setLoadingHistory(true);
+        const allVideos = [];
+
+        // FAST: Try localStorage first
+        try {
+          const localVideos = localStorage.getItem('videoDownloadHistory');
+          if (localVideos) {
+            const parsed = JSON.parse(localVideos);
+            if (Array.isArray(parsed) && parsed.length > 0) {
+              console.log('✅ FAST LOAD: Found', parsed.length, 'videos in localStorage');
+              setGeneratedVideos(parsed);
+              setLoadingHistory(false);
+              toast.success(`🎉 ${parsed.length} סרטונים טעונו מהעדכון האחרון ✅`, { duration: 5000 });
+              return;
+            }
+          }
+        } catch (e) {
+          console.error('localStorage check failed:', e);
+        }
+
+        // 1. Load from Digital Dreams (main source)
+        try {
+          console.log('🔄 Step 1: Fetching ALL Digital Dreams videos...');
+          toast.loading('טוען מ-HeyGen...', { id: 'loading-heygen' });
         
         const response = await base44.functions.invoke('listHeyGenVideos', {});
         console.log('📡 === DIGITAL DREAMS RESPONSE ===');
