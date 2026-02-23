@@ -67,7 +67,7 @@ export default function VideosCategoriesStrip() {
   };
 
   return (
-    <div className="relative bg-black overflow-hidden z-[34] group" style={{ height: '100px' }}>
+    <div className="relative bg-black overflow-hidden z-[34] group" style={{ height: '80px' }}>
       {/* Netflix-Style Background Video */}
       <div className="absolute inset-0">
         <video
@@ -84,75 +84,7 @@ export default function VideosCategoriesStrip() {
         <div className="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black/80" />
       </div>
 
-      {/* Intense Cinema Running Lights Animation */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* Red spotlight */}
-        <motion.div
-          className="absolute inset-0 h-full w-[500px] bg-gradient-to-r from-transparent via-red-600/60 to-transparent blur-2xl"
-          animate={{
-            x: ['-500px', 'calc(100% + 500px)']
-          }}
-          transition={{
-            duration: 2.5,
-            repeat: Infinity,
-            ease: "linear"
-          }}
-          style={{
-            filter: 'drop-shadow(0 0 40px rgba(220, 38, 38, 0.9))'
-          }}
-        />
-        
-        {/* Gold/Yellow spotlight */}
-        <motion.div
-          className="absolute inset-0 h-full w-[500px] bg-gradient-to-r from-transparent via-yellow-400/60 to-transparent blur-2xl"
-          animate={{
-            x: ['-500px', 'calc(100% + 500px)']
-          }}
-          transition={{
-            duration: 2.5,
-            repeat: Infinity,
-            ease: "linear",
-            delay: 0.8
-          }}
-          style={{
-            filter: 'drop-shadow(0 0 40px rgba(250, 204, 21, 0.9))'
-          }}
-        />
-        
-        {/* Purple spotlight */}
-        <motion.div
-          className="absolute inset-0 h-full w-[500px] bg-gradient-to-r from-transparent via-purple-600/60 to-transparent blur-2xl"
-          animate={{
-            x: ['-500px', 'calc(100% + 500px)']
-          }}
-          transition={{
-            duration: 2.5,
-            repeat: Infinity,
-            ease: "linear",
-            delay: 1.6
-          }}
-          style={{
-            filter: 'drop-shadow(0 0 40px rgba(147, 51, 234, 0.9))'
-          }}
-        />
-        
-        {/* Cyan spotlight */}
-        <motion.div
-          className="absolute inset-0 h-full w-[500px] bg-gradient-to-r from-transparent via-cyan-400/60 to-transparent blur-2xl"
-          animate={{
-            x: ['-500px', 'calc(100% + 500px)']
-          }}
-          transition={{
-            duration: 2.5,
-            repeat: Infinity,
-            ease: "linear",
-            delay: 2.4
-          }}
-          style={{
-            filter: 'drop-shadow(0 0 40px rgba(34, 211, 238, 0.9))'
-          }}
-        />
-      </div>
+
 
       {/* Netflix-style top gradient fade */}
       <div className="absolute top-0 left-0 right-0 h-8 bg-gradient-to-b from-black/90 to-transparent pointer-events-none" />
@@ -202,7 +134,7 @@ export default function VideosCategoriesStrip() {
                     transition={{ duration: 0.2, ease: "easeOut" }}
                   >
                     {/* Video thumbnail card */}
-                    <div className="relative w-32 h-20 sm:w-36 sm:h-20">
+                    <div className="relative w-24 h-14 sm:w-28 sm:h-16">
                       {/* Glow effect on hover */}
                       <div className={`absolute -inset-1 bg-gradient-to-br ${cat.color} rounded-lg opacity-0 group-hover/item:opacity-50 blur-lg transition-all duration-300`} />
                       
@@ -243,7 +175,7 @@ export default function VideosCategoriesStrip() {
                         
                         {/* Category label overlay */}
                         <div className="absolute inset-0 flex items-center justify-center">
-                          <p className="text-white font-bold text-sm sm:text-base text-center px-2 relative z-10 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] group-hover/item:scale-110 transition-transform duration-300">
+                          <p className="text-white font-bold text-xs sm:text-sm text-center px-1 relative z-10 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] group-hover/item:scale-105 transition-transform duration-300">
                             {cat.label}
                           </p>
                         </div>
