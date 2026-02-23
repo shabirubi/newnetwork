@@ -30,19 +30,36 @@ export default function VideoCreator() {
   const [showScriptPanel, setShowScriptPanel] = useState(false);
   const [blueprintData, setBlueprintData] = useState(null);
 
-  // טעינת השיחה השמורה
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem('digitalDreamsChat');
-      if (saved) {
-        const { conversationId: savedConvId, messages: savedMessages } = JSON.parse(saved);
-        setConversationId(savedConvId);
-        setMessages(savedMessages);
-      }
-    } catch (e) {
-      console.error('Error loading saved chat:', e);
-    }
-  }, []);
+  // טעינת השיחה השמורה + סרטונים מ-localStorage
+      useEffect(() => {
+        // 1. Load chat history
+        try {
+          const saved = localStorage.getItem('digitalDreamsChat');
+          if (saved) {
+            const { conversationId: savedConvId, messages: savedMessages } = JSON.parse(saved);
+            setConversationId(savedConvId);
+            setMessages(savedMessages);
+          }
+        } catch (e) {
+          console.error('Error loading saved chat:', e);
+        }
+
+        // 2. IMMEDIATELY load videos from localStorage (recovery)
+        try {
+          const localVideos = localStorage.getItem('videoDownloadHistory');
+          if (localVideos) {
+            const videos = JSON.parse(localVideos);
+            if (Array.isArray(videos) && videos.length > 0) {
+              console.log('✅ RECOVERY: Loaded', videos.length, 'videos from localStorage');
+              setGeneratedVideos(videos);
+              setLoadingHistory(false);
+              return; // Skip the main loadHistory since we have videos
+            }
+          }
+        } catch (e) {
+          console.error('Error loading from localStorage:', e);
+        }
+      }, []);
 
   // Load history from HeyGen + Database + localStorage
   useEffect(() => {
