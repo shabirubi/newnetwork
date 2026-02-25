@@ -303,9 +303,9 @@ export default function Layout({ children, currentPageName }) {
       </div>
 
       {/* Logo Header */}
-      <div className="bg-gradient-to-r from-black via-[#001a40] to-black border-b border-[#0080FF]/40 py-2 shadow-lg shadow-[#0080FF]/30 relative overflow-hidden">
+      <div className="bg-gradient-to-r from-black via-[#001a40] to-black border-b border-[#0080FF]/40 py-2 shadow-lg shadow-[#0080FF]/30 relative overflow-visible">
 
-        <div className="max-w-7xl mx-auto px-4 flex items-center justify-between gap-3 relative z-10">
+        <div className="max-w-7xl mx-auto px-4 flex items-center justify-between gap-3 relative z-[200]">
           <div className="flex items-center gap-3 flex-shrink-0">
             <motion.img 
               src={LOGO_URL} 
@@ -334,7 +334,7 @@ export default function Layout({ children, currentPageName }) {
           </div>
 
           {/* Search Box */}
-          <div className="relative max-w-md flex-1 hidden sm:block z-[100]">
+          <div className="relative max-w-md flex-1 hidden sm:block" style={{ zIndex: 10000 }}>
             <div className="relative">
               <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <Input
@@ -354,7 +354,8 @@ export default function Layout({ children, currentPageName }) {
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
-                  className="absolute top-full mt-2 left-0 right-0 bg-black/95 backdrop-blur-xl border border-[#0080FF]/50 rounded-xl shadow-2xl shadow-[#0080FF]/30 max-h-96 overflow-y-auto z-[100]"
+                  style={{ zIndex: 10000 }}
+                  className="absolute top-full mt-2 left-0 right-0 bg-black backdrop-blur-xl border-2 border-[#0080FF] rounded-xl shadow-2xl shadow-[#0080FF]/50 max-h-96 overflow-y-auto"
                   onMouseDown={(e) => e.preventDefault()}
                 >
                   {searchResults.length === 0 ? (
