@@ -295,6 +295,17 @@ export default function Layout({ children, currentPageName }) {
           0% { transform: translateX(-100vw); }
           100% { transform: translateX(100vw); }
         }
+
+        @keyframes colorShift {
+          0%, 100% { 
+            background: linear-gradient(to right, #0080FF, #0066FF, #4DA6FF);
+            box-shadow: 0 0 20px #0080FF;
+          }
+          50% { 
+            background: linear-gradient(to right, #FF8C00, #FF6600, #FFA500);
+            box-shadow: 0 0 20px #FF8C00;
+          }
+        }
       `}</style>
 
       {/* Animated Neon Blue Line */}
