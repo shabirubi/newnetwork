@@ -159,20 +159,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-black space-y-0 sm:space-y-6">
 
-      {/* Featured Video */}
-      <section className="w-full">
-        <div className="max-w-5xl mx-auto">
-          <div className="aspect-[9/16] sm:aspect-video bg-black">
-            <iframe
-              className="w-full h-full"
-              src="https://www.youtube.com/embed/HQ9s6unkZqU?autoplay=0&rel=0"
-              title="הרשת החדשה | עמוס ברנס | חף מפשע"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-          </div>
-        </div>
-      </section>
+
 
       {/* Featured News Section */}
       <section className="w-full px-4 py-8">
