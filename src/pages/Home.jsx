@@ -31,7 +31,6 @@ import ReporterLiveChat from "../components/reporter/ReporterLiveChat";
 
 import ZakaMediaKitContainer from "../components/home/ZakaMediaKitContainer";
 import WeatherForecastModal from "../components/weather/WeatherForecastModal";
-import YouTubeChannelContainer from "../components/home/YouTubeChannelContainer";
 
 // Lazy loaded components
 const NewsReels = React.lazy(() => import("../components/news/NewsReels"));
@@ -41,6 +40,7 @@ const AllVideosGallery = React.lazy(() => import("../components/home/AllVideosGa
 const KanArchiveContainer = React.lazy(() => import("../components/home/KanArchiveContainer"));
 const ReporterResponsesFeed = React.lazy(() => import("../components/home/ReporterResponsesFeed"));
 const TrendingVideosContainer = React.lazy(() => import("../components/home/TrendingVideosContainer"));
+const YouTubeChannelContainer = React.lazy(() => import("../components/home/YouTubeChannelContainer"));
 
 export default function Home() {
   const [vodModalOpen, setVodModalOpen] = React.useState(false);
@@ -203,9 +203,6 @@ export default function Home() {
 
 
       {/* Vertical News Scrollers */}
-      {/* YouTube Channel Container */}
-      <YouTubeChannelContainer />
-
       <section className="w-full px-4 mb-4 sm:mb-8">
         <VerticalNewsScroller
           category="security"
@@ -374,7 +371,12 @@ export default function Home() {
         />
       </section>
 
-
+      {/* YouTube Channel Videos */}
+      <section className="w-full px-4 mb-4 sm:mb-8">
+        <React.Suspense fallback={<Skeleton className="w-full h-96 bg-gray-800" />}>
+          <YouTubeChannelContainer />
+        </React.Suspense>
+      </section>
 
 
 
