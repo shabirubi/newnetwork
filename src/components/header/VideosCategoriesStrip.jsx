@@ -234,7 +234,9 @@ export default function VideosCategoriesStrip() {
                 key={cat.id}
                 onClick={() => {
                   setSelectedCategory(cat.id);
-                  console.log('📂 נבחרה קטגוריה:', cat.label, '| סך הכל סרטונים זמינים:', categoryVideos.length);
+                  setTimeout(() => {
+                    console.log('📂 נבחרה קטגוריה:', cat.label, '| סטטוס:', status, '| סרטונים:', categoryVideos.length);
+                  }, 100);
                 }}
                 onMouseEnter={() => setHoveredCategory(cat.id)}
                 onMouseLeave={() => setHoveredCategory(null)}

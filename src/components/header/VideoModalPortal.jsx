@@ -37,6 +37,10 @@ export default function VideoModalPortal({
 
   if (!mounted || !isOpen) return null;
 
+  React.useEffect(() => {
+    console.log('🎥 VideoModalPortal - isOpen:', isOpen, 'videos:', videos.length, 'currentIndex:', currentVideoIndex);
+  }, [isOpen, videos.length, currentVideoIndex]);
+
   return createPortal(
     <motion.div
       initial={{ opacity: 0 }}
