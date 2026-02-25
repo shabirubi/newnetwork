@@ -343,7 +343,6 @@ export default function Layout({ children, currentPageName }) {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => setShowSearchResults(true)}
-                onBlur={() => setTimeout(() => setShowSearchResults(false), 200)}
                 className="pr-10 bg-black/60 border-[#0080FF]/50 text-white placeholder:text-gray-400 focus:border-[#0080FF] rounded-xl"
               />
             </div>
@@ -356,10 +355,11 @@ export default function Layout({ children, currentPageName }) {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   className="absolute top-full mt-2 left-0 right-0 bg-black/95 backdrop-blur-xl border border-[#0080FF]/50 rounded-xl shadow-2xl shadow-[#0080FF]/30 max-h-96 overflow-y-auto z-50"
+                  onMouseDown={(e) => e.preventDefault()}
                 >
                   {searchResults.length === 0 ? (
                     <div className="p-4 text-center text-gray-400">
-                      לא נמצאו תוצאות
+                      {searchQuery.length >= 2 ? 'לא נמצאו תוצאות' : 'הקלד לפחות 2 תווים'}
                     </div>
                   ) : (
                     searchResults.map((article) => (
