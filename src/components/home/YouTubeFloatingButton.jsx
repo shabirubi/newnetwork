@@ -113,8 +113,41 @@ export default function YouTubeFloatingButton() {
                 </div>
               </div>
 
+              {/* Featured Videos */}
+              <div className="p-6 border-b border-gray-800">
+                <h3 className="text-white font-bold text-2xl mb-4 flex items-center gap-2">
+                  <span className="bg-gradient-to-r from-red-600 to-pink-600 px-4 py-2 rounded-lg shadow-lg">🔥 מומלצים מאוד</span>
+                </h3>
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {/* Video 1 */}
+                  <div className="bg-gradient-to-br from-red-900/30 to-pink-900/30 border-2 border-red-500 rounded-2xl overflow-hidden shadow-2xl shadow-red-500/50">
+                    <div className="relative aspect-video">
+                      <iframe
+                        src="https://www.youtube.com/embed/jpKk-5rwgUA"
+                        title="YouTube video"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        className="w-full h-full"
+                      />
+                    </div>
+                  </div>
+                  {/* Video 2 */}
+                  <div className="bg-gradient-to-br from-blue-900/30 to-purple-900/30 border-2 border-blue-500 rounded-2xl overflow-hidden shadow-2xl shadow-blue-500/50">
+                    <div className="relative aspect-video">
+                      <iframe
+                        src="https://www.youtube.com/embed/HQ9s6unkZqU"
+                        title="YouTube video"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowFullScreen
+                        className="w-full h-full"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+
               {/* Videos Grid */}
-              <div className="p-6 overflow-y-auto max-h-[calc(90vh-100px)]">
+              <div className="p-6 overflow-y-auto max-h-[calc(90vh-350px)]">
                 {loading ? (
                   <div className="text-center py-12">
                     <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-red-500 border-t-transparent"></div>
