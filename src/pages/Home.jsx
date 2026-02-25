@@ -159,6 +159,23 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-black space-y-0 sm:space-y-6">
 
+      {/* Featured Video */}
+      <section className="w-full px-4 py-8 bg-gradient-to-b from-gray-900 to-black">
+        <div className="max-w-5xl mx-auto">
+          <div className="bg-gradient-to-br from-blue-900/30 to-purple-900/30 border-2 border-blue-500 rounded-3xl overflow-hidden shadow-2xl shadow-blue-500/50">
+            <div className="relative aspect-video">
+              <iframe
+                src="https://www.youtube.com/embed/HQ9s6unkZqU"
+                title="הרשת החדשה|עמוס ברנס|חף מפשע|בקרוב"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="w-full h-full"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Featured News Section */}
       <section className="w-full px-4 py-8">
         <div className="max-w-7xl mx-auto">
