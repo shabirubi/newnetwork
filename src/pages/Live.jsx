@@ -79,12 +79,19 @@ export default function Live() {
 
       {/* Main Live Player */}
       <section className="max-w-5xl mx-auto">
-        <LivePlayer 
-          title={currentChannel?.name || activeLive?.title || "הרשת החדשה - שידור חי"}
-          isLive={true}
-          viewerCount={activeLive?.viewer_count || 2847}
-          streamUrl={channelStreamUrl}
-        />
+        <div className="w-full aspect-video rounded-xl overflow-hidden shadow-2xl bg-black">
+          <iframe 
+            width="100%" 
+            height="100%" 
+            src="https://www.youtube.com/embed/HQ9s6unkZqU" 
+            title="הרשת החדשה - שידור חי" 
+            frameBorder="0" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            referrerPolicy="strict-origin-when-cross-origin" 
+            allowFullScreen
+            className="w-full h-full"
+          />
+        </div>
         
         {/* Live Info Bar */}
         <div className="bg-white rounded-xl p-4 mt-4 flex flex-wrap items-center justify-between gap-4 shadow-sm">
