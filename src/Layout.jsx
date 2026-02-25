@@ -310,7 +310,7 @@ export default function Layout({ children, currentPageName }) {
 
       {/* Animated Neon Blue Line */}
       <div className="fixed top-0 left-0 right-0 h-2 bg-transparent overflow-hidden z-[35] pointer-events-none">
-        <div className="absolute top-0 h-full w-40" style={{ animation: 'slideRight 3s ease-in-out infinite, colorShift 6s ease-in-out infinite' }}></div>
+        <div className="absolute top-0 h-full w-96" style={{ animation: 'slideRight 3s ease-in-out infinite, colorShift 6s ease-in-out infinite' }}></div>
       </div>
 
       {/* Logo Header */}
