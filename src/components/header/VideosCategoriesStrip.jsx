@@ -34,7 +34,7 @@ const categories = [
 export default function VideosCategoriesStrip() {
   const scrollRef = useRef(null);
   const [hoveredCategory, setHoveredCategory] = useState(null);
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
   const [message, setMessage] = useState("");
   const [userName, setUserName] = useState(() => {
