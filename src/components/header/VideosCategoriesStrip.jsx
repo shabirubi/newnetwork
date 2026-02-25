@@ -116,7 +116,7 @@ export default function VideosCategoriesStrip() {
         return [];
       }
     },
-    enabled: !!selectedCategory,
+    enabled: selectedCategory !== null,
     staleTime: 0,
     gcTime: 0,
   });
