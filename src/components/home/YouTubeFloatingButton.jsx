@@ -47,16 +47,18 @@ export default function YouTubeFloatingButton() {
       {/* Floating YouTube Button */}
       <motion.button
         onClick={() => setIsOpen(true)}
-        className="fixed left-4 bottom-24 lg:bottom-8 z-40 bg-red-600 hover:bg-red-700 rounded-full p-4 shadow-2xl shadow-red-500/50 transition-all active:scale-95"
+        className="fixed left-4 bottom-24 lg:bottom-8 z-40 bg-black rounded-full p-2 shadow-2xl shadow-blue-500/50 transition-all active:scale-95 border-2 border-blue-500"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         initial={{ opacity: 0, scale: 0 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ delay: 1 }}
       >
-        <svg className="w-6 h-6" viewBox="0 0 24 24" fill="white">
-          <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-        </svg>
+        <img 
+          src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/4d875a88a_image.png" 
+          alt="הרשת החדשה" 
+          className="w-10 h-10 object-contain"
+        />
       </motion.button>
 
       {/* Modal */}
@@ -77,24 +79,18 @@ export default function YouTubeFloatingButton() {
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}
-              <div className="bg-gradient-to-r from-red-600 to-red-700 p-4 flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  {channelInfo?.thumbnail ? (
-                    <img 
-                      src={channelInfo.thumbnail} 
-                      alt="Channel" 
-                      className="w-12 h-12 rounded-full border-2 border-white shadow-lg"
-                    />
-                  ) : (
-                    <svg className="w-8 h-8" viewBox="0 0 24 24" fill="white">
-                      <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                    </svg>
-                  )}
-                  <div>
-                    <h2 className="text-white font-bold text-xl">{channelInfo?.title || 'הרשת החדשה'}</h2>
-                    <p className="text-red-100 text-sm">ערוץ YouTube רשמי</p>
-                  </div>
-                </div>
+              <div className="bg-gradient-to-r from-black via-blue-900 to-black p-4 flex items-center justify-between border-b-2 border-blue-500">
+               <div className="flex items-center gap-3">
+                 <img 
+                   src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/4d875a88a_image.png" 
+                   alt="הרשת החדשה" 
+                   className="w-14 h-14 object-contain bg-black rounded-lg p-1"
+                 />
+                 <div>
+                   <h2 className="text-white font-bold text-xl">{channelInfo?.title || 'הרשת החדשה'}</h2>
+                   <p className="text-blue-300 text-sm">ערוץ YouTube רשמי</p>
+                 </div>
+               </div>
                 <div className="flex items-center gap-2">
                   <a
                     href="https://www.youtube.com/@Hareshetahadasha"
