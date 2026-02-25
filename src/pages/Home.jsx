@@ -160,7 +160,7 @@ export default function Home() {
     <div className="min-h-screen bg-black space-y-0 sm:space-y-6">
 
       {/* Featured Video - TikTok Style on Mobile */}
-      <section className="w-full px-0 sm:px-4 py-0 sm:py-8 bg-gradient-to-b from-gray-900 to-black">
+      <section className="w-full px-0 sm:px-4 py-0 sm:py-8">
         <div className="max-w-5xl mx-auto">
           <a 
             href="https://www.youtube.com/watch?v=HQ9s6unkZqU"
@@ -168,47 +168,45 @@ export default function Home() {
             rel="noopener noreferrer"
             className="block group"
           >
-            <div className="bg-gradient-to-br from-blue-900/30 to-purple-900/30 border-0 sm:border-2 border-blue-500 hover:border-blue-400 rounded-none sm:rounded-3xl overflow-hidden shadow-2xl shadow-blue-500/50 hover:shadow-blue-400/70 transition-all">
-              {/* Mobile: Portrait (9:16) | Desktop: Landscape (16:9) */}
-              <div className="relative aspect-[9/16] sm:aspect-video bg-gradient-to-br from-gray-900 to-black overflow-hidden">
-                <img 
-                  src="https://img.youtube.com/vi/HQ9s6unkZqU/maxresdefault.jpg"
-                  alt="הרשת החדשה|עמוס ברנס|חף מפשע|בקרוב"
-                  className="w-full h-full object-cover group-hover:opacity-80 transition-opacity"
-                />
-                
-                {/* Running Ticker */}
-                <div className="absolute top-0 sm:top-4 left-0 right-0 bg-red-600 py-2 overflow-hidden">
-                  <motion.div
-                    className="flex items-center gap-8 whitespace-nowrap"
-                    animate={{
-                      x: [0, -2000]
-                    }}
-                    transition={{
-                      duration: 20,
-                      repeat: Infinity,
-                      ease: "linear"
-                    }}
-                  >
-                    {[...Array(10)].map((_, idx) => (
-                      <div key={idx} className="flex items-center gap-2">
-                        <span className="text-white font-bold text-sm sm:text-base">📺</span>
-                        <span className="text-white font-bold text-sm sm:text-base">עקבו אחרינו ביוטיוב</span>
-                        <span className="text-white font-bold text-sm sm:text-base">•</span>
-                      </div>
-                    ))}
-                  </motion.div>
-                </div>
+            {/* Mobile: Portrait (9:16) | Desktop: Landscape (16:9) */}
+            <div className="relative aspect-[9/16] sm:aspect-video bg-black overflow-hidden">
+              <img 
+                src="https://img.youtube.com/vi/HQ9s6unkZqU/maxresdefault.jpg"
+                alt="הרשת החדשה|עמוס ברנס|חף מפשע|בקרוב"
+                className="w-full h-full object-cover group-hover:opacity-80 transition-opacity"
+              />
+              
+              {/* Running Ticker - עקבו אחרינו ביוטיוב */}
+              <div className="absolute top-0 left-0 right-0 bg-red-600 py-2 overflow-hidden z-10">
+                <motion.div
+                  className="flex items-center gap-8 whitespace-nowrap"
+                  animate={{
+                    x: [0, -2000]
+                  }}
+                  transition={{
+                    duration: 20,
+                    repeat: Infinity,
+                    ease: "linear"
+                  }}
+                >
+                  {[...Array(10)].map((_, idx) => (
+                    <div key={idx} className="flex items-center gap-2">
+                      <span className="text-white font-bold text-sm sm:text-base">📺</span>
+                      <span className="text-white font-bold text-sm sm:text-base">עקבו אחרינו ביוטיוב</span>
+                      <span className="text-white font-bold text-sm sm:text-base">•</span>
+                    </div>
+                  ))}
+                </motion.div>
+              </div>
 
-                <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition-all">
-                  <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-red-600 hover:bg-red-700 flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform">
-                    <Play className="w-10 h-10 sm:w-12 sm:h-12 text-white mr-1" />
-                  </div>
+              <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition-all">
+                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-red-600 hover:bg-red-700 flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform">
+                  <Play className="w-10 h-10 sm:w-12 sm:h-12 text-white mr-1" />
                 </div>
-                <div className="absolute bottom-4 left-4 right-4 bg-black/80 backdrop-blur-sm rounded-xl p-4 border border-blue-500/30">
-                  <h3 className="text-white font-bold text-base sm:text-lg lg:text-xl">הרשת החדשה | עמוס ברנס | חף מפשע</h3>
-                  <p className="text-blue-400 text-xs sm:text-sm mt-1">לחץ לצפייה ב-YouTube →</p>
-                </div>
+              </div>
+              <div className="absolute bottom-4 left-4 right-4 bg-black/80 backdrop-blur-sm rounded-xl p-4">
+                <h3 className="text-white font-bold text-base sm:text-lg lg:text-xl">הרשת החדשה | עמוס ברנס | חף מפשע</h3>
+                <p className="text-gray-400 text-xs sm:text-sm mt-1">לחץ לצפייה ב-YouTube →</p>
               </div>
             </div>
           </a>
