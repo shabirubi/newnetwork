@@ -162,31 +162,7 @@ export default function Home() {
       {/* Featured Video */}
       <section className="w-full">
         <div className="max-w-5xl mx-auto">
-          <div className="relative aspect-[9/16] sm:aspect-video bg-black">
-            {/* Running Ticker */}
-            <div className="absolute top-0 left-0 right-0 bg-red-600 py-2 overflow-hidden z-10">
-              <motion.div
-                className="flex items-center gap-8 whitespace-nowrap"
-                animate={{
-                  x: [0, -2000]
-                }}
-                transition={{
-                  duration: 20,
-                  repeat: Infinity,
-                  ease: "linear"
-                }}
-              >
-                {[...Array(10)].map((_, idx) => (
-                  <div key={idx} className="flex items-center gap-2">
-                    <span className="text-white font-bold text-sm sm:text-base">📺</span>
-                    <span className="text-white font-bold text-sm sm:text-base">עקבו אחרינו ביוטיוב</span>
-                    <span className="text-white font-bold text-sm sm:text-base">•</span>
-                  </div>
-                ))}
-              </motion.div>
-            </div>
-
-            {/* YouTube Video Player */}
+          <div className="aspect-[9/16] sm:aspect-video bg-black">
             <iframe
               className="w-full h-full"
               src="https://www.youtube.com/embed/HQ9s6unkZqU?autoplay=0&rel=0"
