@@ -113,28 +113,8 @@ export default function YouTubeFloatingButton() {
                 </div>
               </div>
 
-              {/* Featured Video */}
-              <div className="p-6 border-b border-gray-800">
-                <h3 className="text-white font-bold text-2xl mb-4 flex items-center gap-2">
-                  <span className="bg-gradient-to-r from-blue-600 to-purple-600 px-4 py-2 rounded-lg shadow-lg">⭐ סרטון מומלץ</span>
-                </h3>
-                <div className="max-w-4xl mx-auto">
-                  <div className="bg-gradient-to-br from-blue-900/30 to-purple-900/30 border-2 border-blue-500 rounded-2xl overflow-hidden shadow-2xl shadow-blue-500/50">
-                    <div className="relative aspect-video">
-                      <iframe
-                        src="https://www.youtube.com/embed/HQ9s6unkZqU"
-                        title="YouTube video"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowFullScreen
-                        className="w-full h-full"
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
               {/* Videos Grid */}
-              <div className="p-6 overflow-y-auto max-h-[calc(90vh-280px)]">
+              <div className="p-6 overflow-y-auto max-h-[calc(90vh-200px)]">
                 {loading ? (
                   <div className="text-center py-12">
                     <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-red-500 border-t-transparent"></div>
