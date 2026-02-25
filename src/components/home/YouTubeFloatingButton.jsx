@@ -20,33 +20,20 @@ export default function YouTubeFloatingButton() {
   const fetchVideos = async () => {
     setLoading(true);
     try {
-      console.log('Fetching YouTube videos...');
       const response = await base44.functions.invoke('fetchYouTubeChannelVideos', {
-        channelHandle: 'Hareshetahadasha',
+        searchQuery: 'הרשת החדשה חדשות',
         maxResults: 50
       });
-      console.log('YouTube API response:', response);
       
-      if (response?.data?.error) {
-        toast.error('שגיאה: ' + response.data.error);
-        console.error('API Error:', response.data);
-        return;
-      }
-      
-      if (response?.data?.videos) {
-        console.log('Found videos:', response.data.videos.length);
+      if (response?.data?.videos && response.data.videos.length > 0) {
         setVideos(response.data.videos);
+        toast.success(`נטענו ${response.data.videos.length} סרטונים`);
       } else {
-        console.log('No videos in response');
-      }
-      
-      if (response?.data?.channelInfo) {
-        console.log('Channel info:', response.data.channelInfo);
-        setChannelInfo(response.data.channelInfo);
+        toast.error('לא נמצאו סרטונים');
       }
     } catch (err) {
-      toast.error('שגיאה בטעינת סרטונים: ' + err.message);
-      console.error('Fetch error:', err);
+      toast.error('שגיאה בטעינת סרטונים');
+      console.error(err);
     } finally {
       setLoading(false);
     }
