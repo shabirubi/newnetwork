@@ -9,6 +9,7 @@ export default function YouTubeFloatingButton() {
   const [videos, setVideos] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedVideo, setSelectedVideo] = useState(null);
+  const [channelInfo, setChannelInfo] = useState(null);
 
   useEffect(() => {
     if (isOpen && videos.length === 0) {
@@ -20,11 +21,14 @@ export default function YouTubeFloatingButton() {
     setLoading(true);
     try {
       const response = await base44.functions.invoke('fetchYouTubeChannelVideos', {
-        channelId: 'UCqYOBDlj3MTp1p5Zx0qiOiQ', // הרשת החדשה
+        channelHandle: 'Hareshetahadasha',
         maxResults: 50
       });
       if (response?.data?.videos) {
         setVideos(response.data.videos);
+      }
+      if (response?.data?.channelInfo) {
+        setChannelInfo(response.data.channelInfo);
       }
     } catch (err) {
       toast.error('שגיאה בטעינת סרטונים');
@@ -71,20 +75,39 @@ export default function YouTubeFloatingButton() {
               {/* Header */}
               <div className="bg-gradient-to-r from-red-600 to-red-700 p-4 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <svg className="w-8 h-8" viewBox="0 0 24 24" fill="white">
-                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                  </svg>
+                  {channelInfo?.thumbnail ? (
+                    <img 
+                      src={channelInfo.thumbnail} 
+                      alt="Channel" 
+                      className="w-12 h-12 rounded-full border-2 border-white shadow-lg"
+                    />
+                  ) : (
+                    <svg className="w-8 h-8" viewBox="0 0 24 24" fill="white">
+                      <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                    </svg>
+                  )}
                   <div>
-                    <h2 className="text-white font-bold text-xl">הרשת החדשה</h2>
+                    <h2 className="text-white font-bold text-xl">{channelInfo?.title || 'הרשת החדשה'}</h2>
                     <p className="text-red-100 text-sm">ערוץ YouTube רשמי</p>
                   </div>
                 </div>
-                <button
-                  onClick={() => setIsOpen(false)}
-                  className="p-2 hover:bg-white/10 rounded-lg transition-colors"
-                >
-                  <X className="w-6 h-6 text-white" />
-                </button>
+                <div className="flex items-center gap-2">
+                  <a
+                    href="https://www.youtube.com/@Hareshetahadasha"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                    title="פתח בYouTube"
+                  >
+                    <ExternalLink className="w-5 h-5 text-white" />
+                  </a>
+                  <button
+                    onClick={() => setIsOpen(false)}
+                    className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                  >
+                    <X className="w-6 h-6 text-white" />
+                  </button>
+                </div>
               </div>
 
               {/* Videos Grid */}
