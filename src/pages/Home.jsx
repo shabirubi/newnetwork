@@ -169,12 +169,36 @@ export default function Home() {
             className="block group"
           >
             <div className="bg-gradient-to-br from-blue-900/30 to-purple-900/30 border-2 border-blue-500 hover:border-blue-400 rounded-3xl overflow-hidden shadow-2xl shadow-blue-500/50 hover:shadow-blue-400/70 transition-all">
-              <div className="relative aspect-video bg-gradient-to-br from-gray-900 to-black">
+              <div className="relative aspect-video bg-gradient-to-br from-gray-900 to-black overflow-hidden">
                 <img 
                   src="https://img.youtube.com/vi/HQ9s6unkZqU/maxresdefault.jpg"
                   alt="הרשת החדשה|עמוס ברנס|חף מפשע|בקרוב"
                   className="w-full h-full object-cover group-hover:opacity-80 transition-opacity"
                 />
+                
+                {/* Running Ticker */}
+                <div className="absolute top-4 left-0 right-0 bg-red-600 py-2 overflow-hidden">
+                  <motion.div
+                    className="flex items-center gap-8 whitespace-nowrap"
+                    animate={{
+                      x: [0, -2000]
+                    }}
+                    transition={{
+                      duration: 20,
+                      repeat: Infinity,
+                      ease: "linear"
+                    }}
+                  >
+                    {[...Array(10)].map((_, idx) => (
+                      <div key={idx} className="flex items-center gap-2">
+                        <span className="text-white font-bold text-sm sm:text-base">📺</span>
+                        <span className="text-white font-bold text-sm sm:text-base">עקבו אחרינו ביוטיוב</span>
+                        <span className="text-white font-bold text-sm sm:text-base">•</span>
+                      </div>
+                    ))}
+                  </motion.div>
+                </div>
+
                 <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition-all">
                   <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-red-600 hover:bg-red-700 flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform">
                     <Play className="w-10 h-10 sm:w-12 sm:h-12 text-white mr-1" />
