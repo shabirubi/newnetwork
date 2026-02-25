@@ -169,17 +169,31 @@ export default function LivePlayer({
         </div>
 
         {/* Branding Frame - Bottom */}
-        <div className="absolute bottom-0 left-0 right-0 h-14 sm:h-16 bg-gradient-to-t from-black via-black/90 to-transparent z-30 pointer-events-none">
-          <div className="flex items-center justify-center h-full gap-4">
-            <div className="flex items-center gap-2 bg-[#0080FF]/20 backdrop-blur-sm px-4 py-2 rounded-full border border-[#0080FF]/50">
-              <span className="relative flex h-2.5 w-2.5">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#0080FF] opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#0080FF]"></span>
-              </span>
-              <span className="text-white font-bold text-sm sm:text-base">LIVE</span>
+        <div className="absolute bottom-0 left-0 right-0 h-14 sm:h-16 bg-gradient-to-t from-black via-black/90 to-transparent z-30">
+          <div className="flex items-center justify-between px-4 h-full gap-4">
+            <div className="flex items-center gap-2">
+              <button
+                onClick={toggleMute}
+                className="p-2 rounded-full bg-black/60 hover:bg-black/80 transition-all text-white"
+              >
+                {isMuted ? (
+                  <VolumeX className="w-5 h-5" />
+                ) : (
+                  <Volume2 className="w-5 h-5" />
+                )}
+              </button>
             </div>
-            <div className="text-white/80 font-bold text-xs sm:text-sm hidden sm:block">
-              {dynamicViewerCount.toLocaleString()} צופים
+            <div className="flex items-center justify-center gap-4">
+              <div className="flex items-center gap-2 bg-[#0080FF]/20 backdrop-blur-sm px-4 py-2 rounded-full border border-[#0080FF]/50">
+                <span className="relative flex h-2.5 w-2.5">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#0080FF] opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#0080FF]"></span>
+                </span>
+                <span className="text-white font-bold text-sm sm:text-base">LIVE</span>
+              </div>
+              <div className="text-white/80 font-bold text-xs sm:text-sm hidden sm:block">
+                {dynamicViewerCount.toLocaleString()} צופים
+              </div>
             </div>
           </div>
         </div>

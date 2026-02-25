@@ -84,7 +84,7 @@ export default function VideosCategoriesStrip() {
         }
         
         // Fallback to database
-        const dbVideos = await base44.entities.UserVideo.filter({ status: 'ready' }, '-created_date', 50);
+        const dbVideos = await base44.entities.UserVideo.list('-created_date', 100);
         if (dbVideos && dbVideos.length > 0) {
           console.log('✅ טעינת סרטונים מהמאגר:', dbVideos.length, 'סרטונים');
           return dbVideos.map(v => ({
@@ -97,6 +97,7 @@ export default function VideosCategoriesStrip() {
           }));
         }
         
+        console.warn('⚠️ אין סרטונים זמינים');
         return [];
       } catch (error) {
         console.error('Failed to load videos:', error);
