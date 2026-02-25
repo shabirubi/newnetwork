@@ -10,24 +10,19 @@ export default function VideoModalPortal({
   currentVideoIndex,
   onScroll,
 }) {
-  const videoContainerRef = useRef(null);
   const [mounted, setMounted] = useState(false);
+  const videoContainerRef = useRef(null);
 
   useEffect(() => {
     setMounted(true);
-    return () => setMounted(false);
   }, []);
 
+  if (!mounted || !isOpen) return null;
+
   useEffect(() => {
-    if (isOpen) {
-      document.body.style.overflow = 'hidden';
-      document.body.style.height = '100vh';
-      document.documentElement.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = '';
-      document.body.style.height = '';
-      document.documentElement.style.overflow = '';
-    }
+    document.body.style.overflow = 'hidden';
+    document.body.style.height = '100vh';
+    document.documentElement.style.overflow = 'hidden';
     return () => {
       document.body.style.overflow = '';
       document.body.style.height = '';
@@ -35,14 +30,12 @@ export default function VideoModalPortal({
     };
   }, [isOpen]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     console.log('🎥 VideoModalPortal - isOpen:', isOpen, 'videos:', videos.length, 'currentIndex:', currentVideoIndex);
     if (videos.length > 0) {
       console.log('🎥 Sample video:', videos[0]);
     }
   }, [isOpen, videos.length, currentVideoIndex, videos]);
-
-  if (!mounted || !isOpen) return null;
 
   return createPortal(
     <motion.div
