@@ -498,14 +498,14 @@ export default function Home() {
       {/* Floating Live Button */}
       <motion.button
         onClick={() => setLivePlayerModalOpen(true)}
-        className="fixed bottom-24 left-4 z-50 bg-gradient-to-r from-[#E31E24] to-[#B91C1C] hover:from-[#B91C1C] hover:to-[#E31E24] text-white p-4 rounded-full shadow-2xl shadow-[#E31E24]/50 border-2 border-[#E31E24]/50"
+        className="fixed bottom-24 left-4 z-50 bg-black hover:bg-gray-900 text-white p-4 rounded-full shadow-2xl shadow-black/50 border-2 border-gray-600"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         animate={{
           boxShadow: [
-            '0 0 20px rgba(227, 30, 36, 0.5)',
-            '0 0 40px rgba(227, 30, 36, 0.8)',
-            '0 0 20px rgba(227, 30, 36, 0.5)'
+            '0 0 20px rgba(0, 0, 0, 0.5)',
+            '0 0 40px rgba(0, 0, 0, 0.8)',
+            '0 0 20px rgba(0, 0, 0, 0.5)'
           ]
         }}
         transition={{
@@ -520,15 +520,15 @@ export default function Home() {
       {/* Floating Digital Dreams Button */}
       <Link to={createPageUrl("VideoCreator")}>
         <motion.button
-          className="fixed bottom-40 left-4 z-50 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white p-4 rounded-full shadow-2xl shadow-purple-500/50 border-2 border-purple-500/50"
+          className="fixed bottom-40 left-4 z-50 bg-black hover:bg-gray-900 text-white p-4 rounded-full shadow-2xl shadow-black/50 border-2 border-gray-600"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
           animate={{
-            boxShadow: [
-              '0 0 20px rgba(168, 85, 247, 0.5)',
-              '0 0 40px rgba(168, 85, 247, 0.8)',
-              '0 0 20px rgba(168, 85, 247, 0.5)'
-            ]
+           boxShadow: [
+             '0 0 20px rgba(0, 0, 0, 0.5)',
+             '0 0 40px rgba(0, 0, 0, 0.8)',
+             '0 0 20px rgba(0, 0, 0, 0.5)'
+           ]
           }}
           transition={{
             duration: 2,
