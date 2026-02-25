@@ -314,11 +314,26 @@ export default function Layout({ children, currentPageName }) {
             box-shadow: 0 0 30px #00CED1;
           }
         }
+
+        @keyframes twistEffect {
+          0%, 100% { 
+            transform: scaleY(1) rotateX(0deg);
+          }
+          25% { 
+            transform: scaleY(3) rotateX(180deg);
+          }
+          50% { 
+            transform: scaleY(2) rotateX(360deg);
+          }
+          75% { 
+            transform: scaleY(4) rotateX(540deg);
+          }
+        }
       `}</style>
 
       {/* Animated Neon Blue Line */}
       <div className="fixed top-0 left-0 right-0 h-2 bg-transparent overflow-hidden z-[35] pointer-events-none">
-        <div className="absolute top-0 h-full w-96" style={{ animation: 'slideRight 3s ease-in-out infinite, colorShift 6s ease-in-out infinite' }}></div>
+        <div className="absolute top-0 h-full w-96" style={{ animation: 'slideRight 3s ease-in-out infinite, colorShift 6s ease-in-out infinite, twistEffect 3s ease-in-out infinite' }}></div>
       </div>
 
       {/* Logo Header */}
