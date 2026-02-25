@@ -299,19 +299,23 @@ export default function Layout({ children, currentPageName }) {
         @keyframes colorShift {
           0%, 100% { 
             background: linear-gradient(to right, #0080FF, #0066FF, #4DA6FF);
-            box-shadow: 0 0 30px #0080FF;
+            box-shadow: 0 0 40px #0080FF;
           }
-          25% { 
+          20% { 
             background: linear-gradient(to right, #FF8C00, #FF6600, #FFA500);
-            box-shadow: 0 0 30px #FF8C00;
+            box-shadow: 0 0 40px #FF8C00;
           }
-          50% { 
-            background: linear-gradient(to right, #FFD700, #FFFF00, #FFA500);
-            box-shadow: 0 0 30px #FFD700;
+          40% { 
+            background: linear-gradient(to right, #FFFF00, #FFD700, #FFEA00);
+            box-shadow: 0 0 50px #FFFF00;
           }
-          75% { 
+          60% { 
+            background: linear-gradient(to right, #FFFF00, #FFD700, #FFEA00);
+            box-shadow: 0 0 50px #FFFF00;
+          }
+          80% { 
             background: linear-gradient(to right, #00CED1, #40E0D0, #48D1CC);
-            box-shadow: 0 0 30px #00CED1;
+            box-shadow: 0 0 40px #00CED1;
           }
         }
       `}</style>
