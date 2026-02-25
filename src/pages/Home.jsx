@@ -371,12 +371,7 @@ export default function Home() {
         />
       </section>
 
-      {/* YouTube Channel Videos */}
-      <section className="w-full px-4 mb-4 sm:mb-8">
-        <React.Suspense fallback={<Skeleton className="w-full h-96 bg-gray-800" />}>
-          <YouTubeChannelContainer />
-        </React.Suspense>
-      </section>
+
 
 
 
