@@ -159,8 +159,8 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-black space-y-0 sm:space-y-6">
 
-      {/* Featured Video */}
-      <section className="w-full px-4 py-8 bg-gradient-to-b from-gray-900 to-black">
+      {/* Featured Video - TikTok Style on Mobile */}
+      <section className="w-full px-0 sm:px-4 py-0 sm:py-8 bg-gradient-to-b from-gray-900 to-black">
         <div className="max-w-5xl mx-auto">
           <a 
             href="https://www.youtube.com/watch?v=HQ9s6unkZqU"
@@ -168,8 +168,9 @@ export default function Home() {
             rel="noopener noreferrer"
             className="block group"
           >
-            <div className="bg-gradient-to-br from-blue-900/30 to-purple-900/30 border-2 border-blue-500 hover:border-blue-400 rounded-3xl overflow-hidden shadow-2xl shadow-blue-500/50 hover:shadow-blue-400/70 transition-all">
-              <div className="relative aspect-video bg-gradient-to-br from-gray-900 to-black overflow-hidden">
+            <div className="bg-gradient-to-br from-blue-900/30 to-purple-900/30 border-0 sm:border-2 border-blue-500 hover:border-blue-400 rounded-none sm:rounded-3xl overflow-hidden shadow-2xl shadow-blue-500/50 hover:shadow-blue-400/70 transition-all">
+              {/* Mobile: Portrait (9:16) | Desktop: Landscape (16:9) */}
+              <div className="relative aspect-[9/16] sm:aspect-video bg-gradient-to-br from-gray-900 to-black overflow-hidden">
                 <img 
                   src="https://img.youtube.com/vi/HQ9s6unkZqU/maxresdefault.jpg"
                   alt="הרשת החדשה|עמוס ברנס|חף מפשע|בקרוב"
@@ -177,7 +178,7 @@ export default function Home() {
                 />
                 
                 {/* Running Ticker */}
-                <div className="absolute top-4 left-0 right-0 bg-red-600 py-2 overflow-hidden">
+                <div className="absolute top-0 sm:top-4 left-0 right-0 bg-red-600 py-2 overflow-hidden">
                   <motion.div
                     className="flex items-center gap-8 whitespace-nowrap"
                     animate={{
@@ -205,8 +206,8 @@ export default function Home() {
                   </div>
                 </div>
                 <div className="absolute bottom-4 left-4 right-4 bg-black/80 backdrop-blur-sm rounded-xl p-4 border border-blue-500/30">
-                  <h3 className="text-white font-bold text-lg sm:text-xl">הרשת החדשה | עמוס ברנס | חף מפשע</h3>
-                  <p className="text-blue-400 text-sm mt-1">לחץ לצפייה ב-YouTube →</p>
+                  <h3 className="text-white font-bold text-base sm:text-lg lg:text-xl">הרשת החדשה | עמוס ברנס | חף מפשע</h3>
+                  <p className="text-blue-400 text-xs sm:text-sm mt-1">לחץ לצפייה ב-YouTube →</p>
                 </div>
               </div>
             </div>
