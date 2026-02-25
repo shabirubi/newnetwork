@@ -40,6 +40,7 @@ const AllVideosGallery = React.lazy(() => import("../components/home/AllVideosGa
 const KanArchiveContainer = React.lazy(() => import("../components/home/KanArchiveContainer"));
 const ReporterResponsesFeed = React.lazy(() => import("../components/home/ReporterResponsesFeed"));
 const TrendingVideosContainer = React.lazy(() => import("../components/home/TrendingVideosContainer"));
+const YouTubeChannelContainer = React.lazy(() => import("../components/home/YouTubeChannelContainer"));
 
 export default function Home() {
   const [vodModalOpen, setVodModalOpen] = React.useState(false);
