@@ -34,7 +34,9 @@ export default function VideoModalPortal({
     };
   }, [isOpen]);
 
-  if (!mounted || !isOpen) return null;
+  if (!mounted || !isOpen) {
+    return null;
+  }
 
   return createPortal(
     <motion.div
