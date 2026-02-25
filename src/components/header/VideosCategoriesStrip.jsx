@@ -121,6 +121,10 @@ export default function VideosCategoriesStrip() {
     gcTime: 0,
   });
 
+  React.useEffect(() => {
+    console.log('🎬 CategoryVideos updated - count:', categoryVideos.length, 'status:', status);
+  }, [categoryVideos, status]);
+
   const currentVideo = categoryVideos[currentVideoIndex];
 
   // Fetch comments for current video
