@@ -421,6 +421,13 @@ export default function Layout({ children, currentPageName }) {
           </div>
 
           <div className="flex items-center gap-3 flex-shrink-0">
+            <button
+              onClick={() => setCategoriesSidebarOpen(true)}
+              className="flex items-center gap-1 px-2 py-1.5 bg-gradient-to-r from-[#0080FF] to-[#0066FF] backdrop-blur-xl rounded-lg shadow-lg shadow-[#0080FF]/50 border border-[#0080FF]/50 transition-all hover:scale-105 text-[11px]"
+            >
+              <Menu className="w-4 h-4 text-white" />
+              <span className="text-white font-bold hidden sm:inline">קטגוריות</span>
+            </button>
 
             <button
               onClick={() => window.open(createPageUrl("AdminPanel"), "_blank")}
