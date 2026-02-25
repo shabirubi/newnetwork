@@ -301,13 +301,17 @@ export default function Layout({ children, currentPageName }) {
             background: linear-gradient(to right, #0080FF, #0066FF, #4DA6FF);
             box-shadow: 0 0 30px #0080FF;
           }
-          33% { 
+          25% { 
             background: linear-gradient(to right, #FF8C00, #FF6600, #FFA500);
             box-shadow: 0 0 30px #FF8C00;
           }
-          66% { 
+          50% { 
             background: linear-gradient(to right, #FFD700, #FFFF00, #FFA500);
             box-shadow: 0 0 30px #FFD700;
+          }
+          75% { 
+            background: linear-gradient(to right, #00CED1, #40E0D0, #48D1CC);
+            box-shadow: 0 0 30px #00CED1;
           }
         }
       `}</style>
