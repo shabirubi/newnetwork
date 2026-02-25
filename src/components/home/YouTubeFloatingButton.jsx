@@ -21,7 +21,6 @@ export default function YouTubeFloatingButton() {
     setLoading(true);
     try {
       const response = await base44.functions.invoke('fetchYouTubeChannelVideos', {
-        channelId: 'UC2G__804P86EaUIYXPo4yAw',
         maxResults: 50
       });
       
@@ -31,6 +30,9 @@ export default function YouTubeFloatingButton() {
       
       if (response?.data?.videos && response.data.videos.length > 0) {
         setVideos(response.data.videos);
+        toast.success(`נטענו ${response.data.videos.length} סרטונים`);
+      } else {
+        toast.error('לא נמצאו סרטונים');
       }
     } catch (err) {
       toast.error('שגיאה בטעינת סרטונים');
