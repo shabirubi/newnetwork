@@ -79,34 +79,37 @@ export default function YouTubeFloatingButton() {
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}
-              <div className="bg-gradient-to-r from-black via-blue-900 to-black p-4 flex items-center justify-between border-b-2 border-blue-500">
-               <div className="flex items-center gap-3">
-                 <img 
-                   src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/4d875a88a_image.png" 
-                   alt="הרשת החדשה" 
-                   className="w-14 h-14 object-contain bg-black rounded-lg p-1"
-                 />
-                 <div>
-                   <h2 className="text-white font-bold text-xl">{channelInfo?.title || 'הרשת החדשה'}</h2>
-                   <p className="text-blue-300 text-sm">ערוץ YouTube רשמי</p>
-                 </div>
-               </div>
-                <div className="flex items-center gap-2">
+              <div className="relative">
+                {/* Cover Banner */}
+                <div className="w-full h-32 bg-black overflow-hidden">
+                  <img 
+                    src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/4d875a88a_image.png" 
+                    alt="הרשת החדשה" 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                {/* Controls */}
+                <div className="absolute top-4 left-4 flex items-center gap-2">
                   <a
                     href="https://www.youtube.com/@Hareshetahadasha"
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                    className="p-2 bg-black/60 hover:bg-black/80 backdrop-blur-sm rounded-lg transition-colors"
                     title="פתח בYouTube"
                   >
                     <ExternalLink className="w-5 h-5 text-white" />
                   </a>
                   <button
                     onClick={() => setIsOpen(false)}
-                    className="p-2 hover:bg-white/10 rounded-lg transition-colors"
+                    className="p-2 bg-black/60 hover:bg-black/80 backdrop-blur-sm rounded-lg transition-colors"
                   >
                     <X className="w-6 h-6 text-white" />
                   </button>
+                </div>
+                {/* Channel Info */}
+                <div className="bg-gradient-to-r from-black via-blue-900 to-black p-4 border-b-2 border-blue-500">
+                  <h2 className="text-white font-bold text-xl">{channelInfo?.title || 'הרשת החדשה'}</h2>
+                  <p className="text-blue-300 text-sm">ערוץ YouTube רשמי</p>
                 </div>
               </div>
 
