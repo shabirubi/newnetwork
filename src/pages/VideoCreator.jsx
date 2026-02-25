@@ -10,6 +10,8 @@ import TypewriterText from "../components/videoeditor/TypewriterText";
 import VideosByCategory from "../components/videoeditor/VideosByCategory";
 
 export default function VideoCreator() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [passwordInput, setPasswordInput] = useState("");
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [loadingHistory, setLoadingHistory] = useState(true);
@@ -29,6 +31,26 @@ export default function VideoCreator() {
   const [scriptPreview, setScriptPreview] = useState('');
   const [showScriptPanel, setShowScriptPanel] = useState(false);
   const [blueprintData, setBlueprintData] = useState(null);
+
+  // בדיקת סיסמה
+  useEffect(() => {
+    const savedAuth = localStorage.getItem('digitalDreamsAuth');
+    if (savedAuth === '024813602') {
+      setIsAuthenticated(true);
+    }
+  }, []);
+
+  const handlePasswordSubmit = (e) => {
+    e.preventDefault();
+    if (passwordInput === '024813602') {
+      setIsAuthenticated(true);
+      localStorage.setItem('digitalDreamsAuth', '024813602');
+      toast.success('אימות הצליח!');
+    } else {
+      toast.error('סיסמה שגויה');
+      setPasswordInput("");
+    }
+  };
 
   // טעינת השיחה השמורה + סרטונים מ-localStorage
       useEffect(() => {
@@ -648,6 +670,65 @@ export default function VideoCreator() {
       setMessages(prev => prev.filter(m => m !== tempUserMessage));
     }
   };
+
+  // מסך סיסמה
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex items-center justify-center p-4" dir="rtl">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="bg-black/80 backdrop-blur-xl rounded-3xl border-2 border-purple-500/30 shadow-2xl shadow-purple-500/20 p-8 max-w-md w-full"
+        >
+          <div className="text-center mb-8">
+            <svg width="80" height="80" viewBox="0 0 24 24" fill="none" className="mx-auto mb-4">
+              <defs>
+                <linearGradient id="lockGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#FF0080" />
+                  <stop offset="33%" stopColor="#FFFF00" />
+                  <stop offset="66%" stopColor="#00FF00" />
+                  <stop offset="100%" stopColor="#0080FF" />
+                </linearGradient>
+              </defs>
+              <path
+                d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"
+                fill="url(#lockGradient)"
+              />
+            </svg>
+            <h1 className="text-3xl font-bold text-white mb-2">Digital Dreams</h1>
+            <p className="text-gray-400">נדרשת הזנת סיסמה</p>
+          </div>
+          <form onSubmit={handlePasswordSubmit} className="space-y-4">
+            <div>
+              <input
+                type="password"
+                value={passwordInput}
+                onChange={(e) => setPasswordInput(e.target.value)}
+                placeholder="הזן סיסמה"
+                className="w-full px-4 py-3 rounded-xl bg-gray-900/60 border border-gray-700 text-white placeholder:text-gray-500 focus:outline-none focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50"
+                autoFocus
+              />
+            </div>
+            <Button
+              type="submit"
+              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white py-3 rounded-xl font-bold shadow-lg shadow-purple-500/30"
+            >
+              <Shield className="w-5 h-5 ml-2" />
+              כניסה
+            </Button>
+          </form>
+          <div className="mt-6 pt-6 border-t border-gray-800 text-center">
+            <Link to={createPageUrl("Home")}>
+              <Button variant="outline" className="gap-2">
+                <Home className="w-4 h-4" />
+                חזרה לדף הבית
+              </Button>
+            </Link>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
 
   return (
     <div className="h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex flex-col overflow-hidden" dir="rtl" style={{ height: '100vh', height: '100dvh' }}>
