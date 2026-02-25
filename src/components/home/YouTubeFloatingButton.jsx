@@ -20,19 +20,33 @@ export default function YouTubeFloatingButton() {
   const fetchVideos = async () => {
     setLoading(true);
     try {
+      console.log('Fetching YouTube videos...');
       const response = await base44.functions.invoke('fetchYouTubeChannelVideos', {
         channelHandle: 'Hareshetahadasha',
         maxResults: 50
       });
-      if (response?.data?.videos) {
-        setVideos(response.data.videos);
+      console.log('YouTube API response:', response);
+      
+      if (response?.data?.error) {
+        toast.error('שגיאה: ' + response.data.error);
+        console.error('API Error:', response.data);
+        return;
       }
+      
+      if (response?.data?.videos) {
+        console.log('Found videos:', response.data.videos.length);
+        setVideos(response.data.videos);
+      } else {
+        console.log('No videos in response');
+      }
+      
       if (response?.data?.channelInfo) {
+        console.log('Channel info:', response.data.channelInfo);
         setChannelInfo(response.data.channelInfo);
       }
     } catch (err) {
-      toast.error('שגיאה בטעינת סרטונים');
-      console.error(err);
+      toast.error('שגיאה בטעינת סרטונים: ' + err.message);
+      console.error('Fetch error:', err);
     } finally {
       setLoading(false);
     }

@@ -14,8 +14,16 @@ Deno.serve(async (req) => {
     // If handle provided, get channel ID first
     if (channelHandle && !channelId) {
       const channelUrl = `https://www.googleapis.com/youtube/v3/channels?key=${apiKey}&forHandle=${channelHandle}&part=snippet,brandingSettings`;
+      console.log('Fetching channel info for handle:', channelHandle);
       const channelResponse = await fetch(channelUrl);
       const channelData = await channelResponse.json();
+      
+      console.log('Channel API response:', JSON.stringify(channelData, null, 2));
+      
+      if (channelData.error) {
+        console.error('Channel API error:', channelData.error);
+        return Response.json({ error: channelData.error.message, details: channelData.error }, { status: 400 });
+      }
       
       if (channelData.items && channelData.items.length > 0) {
         actualChannelId = channelData.items[0].id;
@@ -25,6 +33,9 @@ Deno.serve(async (req) => {
           thumbnail: channelData.items[0].snippet.thumbnails.high?.url || channelData.items[0].snippet.thumbnails.medium?.url,
           bannerImage: channelData.items[0].brandingSettings?.image?.bannerExternalUrl
         };
+        console.log('Found channel:', actualChannelId, channelInfo.title);
+      } else {
+        console.log('No channel found for handle:', channelHandle);
       }
     }
 
