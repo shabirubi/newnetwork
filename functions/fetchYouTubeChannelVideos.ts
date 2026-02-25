@@ -39,25 +39,39 @@ Deno.serve(async (req) => {
 
     // Get videos from uploads playlist
     const playlistUrl = `https://www.googleapis.com/youtube/v3/playlistItems?key=${apiKey}&playlistId=${uploadsPlaylistId}&part=snippet&maxResults=${maxResults}`;
+    console.log('Fetching playlist:', playlistUrl);
     const playlistResponse = await fetch(playlistUrl);
     const playlistData = await playlistResponse.json();
 
+    console.log('Playlist data:', JSON.stringify(playlistData, null, 2));
+
     if (playlistData.error) {
-      return Response.json({ error: playlistData.error.message }, { status: 400 });
+      console.error('Playlist error:', playlistData.error);
+      return Response.json({ error: playlistData.error.message, details: playlistData.error }, { status: 400 });
     }
 
-    const videos = playlistData.items?.map(item => ({
-      id: item.snippet.resourceId.videoId,
-      title: item.snippet.title,
-      description: item.snippet.description,
-      thumbnail: item.snippet.thumbnails.high?.url || item.snippet.thumbnails.medium?.url,
-      publishedAt: item.snippet.publishedAt,
-      channelTitle: item.snippet.channelTitle,
-      url: `https://www.youtube.com/watch?v=${item.snippet.resourceId.videoId}`,
-      embedUrl: `https://www.youtube.com/embed/${item.snippet.resourceId.videoId}`
-    })) || [];
+    if (!playlistData.items || playlistData.items.length === 0) {
+      console.log('No videos found in playlist');
+      return Response.json({ videos: [], channelInfo, message: 'No videos found' });
+    }
 
-    return Response.json({ videos, channelInfo });
+    const videos = playlistData.items.map(item => {
+      const video = {
+        id: item.snippet.resourceId.videoId,
+        title: item.snippet.title,
+        description: item.snippet.description,
+        thumbnail: item.snippet.thumbnails.high?.url || item.snippet.thumbnails.medium?.url,
+        publishedAt: new Date(item.snippet.publishedAt).toLocaleDateString('he-IL'),
+        channelTitle: item.snippet.channelTitle,
+        url: `https://www.youtube.com/watch?v=${item.snippet.resourceId.videoId}`,
+        embedUrl: `https://www.youtube.com/embed/${item.snippet.resourceId.videoId}`
+      };
+      console.log('Processed video:', video.title);
+      return video;
+    });
+
+    console.log('Total videos:', videos.length);
+    return Response.json({ videos, channelInfo, total: videos.length });
 
   } catch (error) {
     console.error('YouTube API Error:', error);
