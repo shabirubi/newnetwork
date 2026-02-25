@@ -19,7 +19,10 @@ export default function YouTubeFloatingButton() {
   const fetchVideos = async () => {
     setLoading(true);
     try {
-      const response = await base44.functions.invoke('fetchYouTubeChannelVideos', {});
+      const response = await base44.functions.invoke('fetchYouTubeChannelVideos', {
+        channelId: 'UCqYOBDlj3MTp1p5Zx0qiOiQ', // הרשת החדשה
+        maxResults: 50
+      });
       if (response?.data?.videos) {
         setVideos(response.data.videos);
       }
