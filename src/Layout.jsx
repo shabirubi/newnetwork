@@ -954,7 +954,7 @@ export default function Layout({ children, currentPageName }) {
             </div>
 
       {/* Mobile Bottom Navigation */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-gradient-to-br from-black/90 via-[#0080FF]/30 to-black/90 backdrop-blur-xl border-t-2 border-[#0080FF]/50 z-[9999] safe-area-inset-bottom shadow-lg shadow-[#0080FF]/30">
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-black/90 backdrop-blur-xl border-t border-gray-700 z-[9999] safe-area-inset-bottom shadow-lg">
         <div className="grid grid-cols-5 gap-1 px-2 py-3">
           <Link
             to={createPageUrl("Home")}
@@ -962,7 +962,7 @@ export default function Layout({ children, currentPageName }) {
               e.preventDefault();
               window.location.href = createPageUrl("Home");
             }}
-            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-[#0080FF]/30 transition-colors touch-manipulation relative z-[110]"
+            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-gray-700/30 transition-colors touch-manipulation relative z-[110]"
             >
             <Home size={24} className="text-gray-300 mb-1" strokeWidth={2.5} />
             <span className="text-[10px] font-bold text-gray-300">בית</span>
@@ -970,7 +970,7 @@ export default function Layout({ children, currentPageName }) {
 
           <Link
             to={createPageUrl("Live")}
-            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-gray-600/20 transition-colors touch-manipulation"
+            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-gray-700/30 transition-colors touch-manipulation"
           >
             <Radio size={24} className="text-gray-300 mb-1" strokeWidth={2.5} />
             <span className="text-[10px] font-bold text-gray-300">חי</span>
@@ -978,26 +978,30 @@ export default function Layout({ children, currentPageName }) {
 
           <Link
             to={createPageUrl("VideoCreator")}
-            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-[#0080FF]/30 transition-colors touch-manipulation"
+            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-gray-700/30 transition-colors touch-manipulation"
           >
-            <Sparkles size={24} className="text-purple-400 drop-shadow-[0_0_8px_purple] mb-1 animate-pulse" strokeWidth={2.5} />
-            <span className="text-[10px] font-bold text-purple-400">AI</span>
+            <Sparkles size={24} className="text-gray-300 mb-1" strokeWidth={2.5} />
+            <span className="text-[10px] font-bold text-gray-300">AI</span>
           </Link>
 
-          <Link
-            to={createPageUrl("Category?cat=breaking")}
-            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-[#0080FF]/30 transition-colors touch-manipulation"
+          <a
+            href="https://www.youtube.com/@hareshet"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-gray-700/30 transition-colors touch-manipulation"
             >
-            <Flame size={24} className="text-gray-300 mb-1" strokeWidth={2.5} />
-            <span className="text-[10px] font-bold text-gray-300">חמות</span>
-            </Link>
+            <svg size={24} className="text-gray-300 mb-1 w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+            </svg>
+            <span className="text-[10px] font-bold text-gray-300">יוטיוב</span>
+            </a>
 
           <button
             onClick={() => setCategoriesSidebarOpen(true)}
-            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-gray-600/20 transition-colors touch-manipulation"
+            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-gray-700/30 transition-colors touch-manipulation"
           >
             <Menu size={24} className="text-gray-300 mb-1" strokeWidth={2.5} />
-            <span className="text-[10px] font-bold text-gray-300">קטגוריות</span>
+            <span className="text-[10px] font-bold text-gray-300">תפריט</span>
           </button>
         </div>
       </nav>
