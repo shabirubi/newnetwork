@@ -11,31 +11,35 @@ Deno.serve(async (req) => {
     let actualChannelId = channelId;
     let channelInfo = null;
 
-    // If handle provided, get channel ID first
+    // If handle provided, search for channel first
     if (channelHandle && !channelId) {
-      const channelUrl = `https://www.googleapis.com/youtube/v3/channels?key=${apiKey}&forHandle=${channelHandle}&part=snippet,brandingSettings`;
-      console.log('Fetching channel info for handle:', channelHandle);
-      const channelResponse = await fetch(channelUrl);
-      const channelData = await channelResponse.json();
+      const searchUrl = `https://www.googleapis.com/youtube/v3/search?key=${apiKey}&q=${encodeURIComponent(channelHandle)}&type=channel&part=snippet&maxResults=1`;
+      console.log('Searching for channel:', channelHandle);
+      const searchResponse = await fetch(searchUrl);
+      const searchData = await searchResponse.json();
       
-      console.log('Channel API response:', JSON.stringify(channelData, null, 2));
-      
-      if (channelData.error) {
-        console.error('Channel API error:', channelData.error);
-        return Response.json({ error: channelData.error.message, details: channelData.error }, { status: 400 });
+      if (searchData.error) {
+        console.error('Search error:', searchData.error);
+        return Response.json({ error: searchData.error.message }, { status: 400 });
       }
       
-      if (channelData.items && channelData.items.length > 0) {
-        actualChannelId = channelData.items[0].id;
-        channelInfo = {
-          title: channelData.items[0].snippet.title,
-          description: channelData.items[0].snippet.description,
-          thumbnail: channelData.items[0].snippet.thumbnails.high?.url || channelData.items[0].snippet.thumbnails.medium?.url,
-          bannerImage: channelData.items[0].brandingSettings?.image?.bannerExternalUrl
-        };
-        console.log('Found channel:', actualChannelId, channelInfo.title);
-      } else {
-        console.log('No channel found for handle:', channelHandle);
+      if (searchData.items && searchData.items.length > 0) {
+        actualChannelId = searchData.items[0].snippet.channelId;
+        console.log('Found channel ID:', actualChannelId);
+        
+        // Get full channel info
+        const channelUrl = `https://www.googleapis.com/youtube/v3/channels?key=${apiKey}&id=${actualChannelId}&part=snippet,brandingSettings`;
+        const channelResponse = await fetch(channelUrl);
+        const channelData = await channelResponse.json();
+        
+        if (channelData.items && channelData.items.length > 0) {
+          channelInfo = {
+            title: channelData.items[0].snippet.title,
+            description: channelData.items[0].snippet.description,
+            thumbnail: channelData.items[0].snippet.thumbnails.high?.url || channelData.items[0].snippet.thumbnails.medium?.url,
+            bannerImage: channelData.items[0].brandingSettings?.image?.bannerExternalUrl
+          };
+        }
       }
     }
 
