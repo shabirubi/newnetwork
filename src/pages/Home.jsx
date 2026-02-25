@@ -31,6 +31,7 @@ import ReporterLiveChat from "../components/reporter/ReporterLiveChat";
 
 import ZakaMediaKitContainer from "../components/home/ZakaMediaKitContainer";
 import WeatherForecastModal from "../components/weather/WeatherForecastModal";
+import YouTubeFloatingButton from "../components/home/YouTubeFloatingButton";
 
 // Lazy loaded components
 const NewsReels = React.lazy(() => import("../components/news/NewsReels"));
@@ -40,7 +41,6 @@ const AllVideosGallery = React.lazy(() => import("../components/home/AllVideosGa
 const KanArchiveContainer = React.lazy(() => import("../components/home/KanArchiveContainer"));
 const ReporterResponsesFeed = React.lazy(() => import("../components/home/ReporterResponsesFeed"));
 const TrendingVideosContainer = React.lazy(() => import("../components/home/TrendingVideosContainer"));
-const YouTubeChannelContainer = React.lazy(() => import("../components/home/YouTubeChannelContainer"));
 
 export default function Home() {
   const [vodModalOpen, setVodModalOpen] = React.useState(false);
@@ -563,6 +563,9 @@ export default function Home() {
           </Button>
         </Link>
       </section>
+
+      {/* YouTube Floating Button */}
+      <YouTubeFloatingButton />
     </div>
   );
 }
