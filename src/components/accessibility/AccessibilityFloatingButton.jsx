@@ -51,7 +51,7 @@ export default function AccessibilityFloatingButton() {
       {/* Floating Button */}
       <motion.button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed right-6 bottom-32 sm:bottom-24 lg:bottom-32 z-[130] w-16 h-16 rounded-full shadow-2xl flex items-center justify-center border-3 bg-[#0080FF] border-white transition-all"
+        className="fixed right-6 bottom-32 sm:bottom-24 lg:bottom-32 z-[99999] w-16 h-16 rounded-full shadow-2xl flex items-center justify-center border-3 bg-[#0080FF] border-white transition-all"
         whileHover={{ scale: 1.15 }}
         whileTap={{ scale: 0.9 }}
         animate={{
@@ -76,14 +76,14 @@ export default function AccessibilityFloatingButton() {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setIsOpen(false)}
-              className="fixed inset-0 bg-black/50 z-[140]"
+              className="fixed inset-0 bg-black/50 z-[99998]"
             />
             
             <motion.div
               initial={{ scale: 0.8, opacity: 0, y: 20 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.8, opacity: 0, y: 20 }}
-              className="fixed bottom-32 right-6 z-[150] w-80 bg-gradient-to-br from-gray-900 via-gray-800 to-black rounded-3xl shadow-2xl border-2 border-purple-500/50"
+              className="fixed bottom-32 right-6 z-[99999] w-80 bg-gradient-to-br from-gray-900 via-gray-800 to-black rounded-3xl shadow-2xl border-2 border-purple-500/50"
             >
               {/* Header */}
               <div className="bg-gradient-to-r from-purple-600 to-purple-700 text-white p-4 rounded-t-3xl flex items-center justify-between">
