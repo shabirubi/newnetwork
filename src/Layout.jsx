@@ -299,11 +299,15 @@ export default function Layout({ children, currentPageName }) {
         @keyframes colorShift {
           0%, 100% { 
             background: linear-gradient(to right, #0080FF, #0066FF, #4DA6FF);
-            box-shadow: 0 0 20px #0080FF;
+            box-shadow: 0 0 30px #0080FF;
           }
-          50% { 
+          33% { 
             background: linear-gradient(to right, #FF8C00, #FF6600, #FFA500);
-            box-shadow: 0 0 20px #FF8C00;
+            box-shadow: 0 0 30px #FF8C00;
+          }
+          66% { 
+            background: linear-gradient(to right, #FFD700, #FFFF00, #FFA500);
+            box-shadow: 0 0 30px #FFD700;
           }
         }
       `}</style>
