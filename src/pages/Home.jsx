@@ -162,17 +162,31 @@ export default function Home() {
       {/* Featured Video */}
       <section className="w-full px-4 py-8 bg-gradient-to-b from-gray-900 to-black">
         <div className="max-w-5xl mx-auto">
-          <div className="bg-gradient-to-br from-blue-900/30 to-purple-900/30 border-2 border-blue-500 rounded-3xl overflow-hidden shadow-2xl shadow-blue-500/50">
-            <div className="relative aspect-video">
-              <iframe
-                src="https://www.youtube.com/embed/HQ9s6unkZqU"
-                title="הרשת החדשה|עמוס ברנס|חף מפשע|בקרוב"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowFullScreen
-                className="w-full h-full"
-              />
+          <a 
+            href="https://www.youtube.com/watch?v=HQ9s6unkZqU"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block group"
+          >
+            <div className="bg-gradient-to-br from-blue-900/30 to-purple-900/30 border-2 border-blue-500 hover:border-blue-400 rounded-3xl overflow-hidden shadow-2xl shadow-blue-500/50 hover:shadow-blue-400/70 transition-all">
+              <div className="relative aspect-video bg-gradient-to-br from-gray-900 to-black">
+                <img 
+                  src="https://img.youtube.com/vi/HQ9s6unkZqU/maxresdefault.jpg"
+                  alt="הרשת החדשה|עמוס ברנס|חף מפשע|בקרוב"
+                  className="w-full h-full object-cover group-hover:opacity-80 transition-opacity"
+                />
+                <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/40 transition-all">
+                  <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-red-600 hover:bg-red-700 flex items-center justify-center shadow-2xl group-hover:scale-110 transition-transform">
+                    <Play className="w-10 h-10 sm:w-12 sm:h-12 text-white mr-1" />
+                  </div>
+                </div>
+                <div className="absolute bottom-4 left-4 right-4 bg-black/80 backdrop-blur-sm rounded-xl p-4 border border-blue-500/30">
+                  <h3 className="text-white font-bold text-lg sm:text-xl">הרשת החדשה | עמוס ברנס | חף מפשע</h3>
+                  <p className="text-blue-400 text-sm mt-1">לחץ לצפייה ב-YouTube →</p>
+                </div>
+              </div>
             </div>
-          </div>
+          </a>
         </div>
       </section>
 
