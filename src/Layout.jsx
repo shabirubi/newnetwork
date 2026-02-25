@@ -230,6 +230,32 @@ export default function Layout({ children, currentPageName }) {
     await base44.auth.redirectToLogin(createPageUrl('Home'));
   };
 
+  // בדיקת מצב סגירה
+  if (siteSettings?.is_closed) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-black via-[#0080FF]/20 to-black flex items-center justify-center p-4" dir="rtl">
+        <div className="max-w-2xl w-full bg-black/80 backdrop-blur-xl rounded-3xl border-2 border-[#0080FF]/50 shadow-2xl shadow-[#0080FF]/30 p-8 text-center">
+          <img 
+            src={LOGO_URL} 
+            alt="הרשת החדשה" 
+            className="h-20 w-auto mx-auto mb-6 drop-shadow-2xl"
+          />
+          <h1 className="text-4xl font-bold text-white mb-4">
+            {siteSettings.closure_title}
+          </h1>
+          <p className="text-xl text-gray-300 mb-6">
+            {siteSettings.closure_message}
+          </p>
+          {siteSettings.estimated_reopen && (
+            <div className="text-[#0080FF] text-lg font-bold">
+              זמן פתיחה משוער: {siteSettings.estimated_reopen}
+            </div>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   // דפים ללא Layout
   if (currentPageName === 'VODContent' || currentPageName === 'ReporterStudio' || currentPageName === 'BroadcastStudio' || currentPageName === 'VideoEditor' || currentPageName === 'VideoCreator' || currentPageName === 'ToMovieeStudio' || currentPageName === 'AdminPanel') {
     return children;
