@@ -334,7 +334,7 @@ export default function Layout({ children, currentPageName }) {
           </div>
 
           {/* Search Box */}
-          <div className="relative max-w-md flex-1 hidden sm:block">
+          <div className="relative max-w-md flex-1 hidden sm:block z-[100]">
             <div className="relative">
               <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <Input
@@ -354,7 +354,7 @@ export default function Layout({ children, currentPageName }) {
                   initial={{ opacity: 0, y: -10 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
-                  className="absolute top-full mt-2 left-0 right-0 bg-black/95 backdrop-blur-xl border border-[#0080FF]/50 rounded-xl shadow-2xl shadow-[#0080FF]/30 max-h-96 overflow-y-auto z-[9999]"
+                  className="absolute top-full mt-2 left-0 right-0 bg-black/95 backdrop-blur-xl border border-[#0080FF]/50 rounded-xl shadow-2xl shadow-[#0080FF]/30 max-h-96 overflow-y-auto z-[100]"
                   onMouseDown={(e) => e.preventDefault()}
                 >
                   {searchResults.length === 0 ? (
