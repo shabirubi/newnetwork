@@ -993,11 +993,11 @@ export default function Layout({ children, currentPageName }) {
             </Link>
 
           <button
-            onClick={() => setMobileMenuOpen(true)}
-            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-[#E31E24]/20 transition-colors touch-manipulation"
+            onClick={() => setCategoriesSidebarOpen(true)}
+            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-[#0080FF]/30 transition-colors touch-manipulation"
           >
-            <Menu size={24} className="text-gray-300 mb-1" strokeWidth={2.5} />
-            <span className="text-[10px] font-bold text-gray-300">עוד</span>
+            <Menu size={24} className="text-[#0080FF] drop-shadow-[0_0_8px_#0080FF] mb-1" strokeWidth={2.5} />
+            <span className="text-[10px] font-bold text-[#0080FF] drop-shadow-[0_0_8px_#0080FF]">קטגוריות</span>
           </button>
         </div>
       </nav>
