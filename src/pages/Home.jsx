@@ -162,16 +162,16 @@ export default function Home() {
 
 
       {/* Viral Video Section */}
-      <section className="w-full px-4 py-8" style={{ backgroundColor: '#000000' }}>
+      <section className="w-full px-2 sm:px-4 py-4 sm:py-8" style={{ backgroundColor: '#000000' }}>
         <div className="max-w-7xl mx-auto">
-          <div style={{ backgroundColor: '#000000', border: '3px solid #000000' }} className="rounded-2xl p-6 mb-8 shadow-2xl">
-            <div className="flex items-center gap-3 mb-4">
-              <Flame className="w-8 h-8 text-[#E31E24] animate-pulse" />
-              <h2 className="text-2xl md:text-3xl font-bold text-white">
+          <div style={{ backgroundColor: '#000000', border: '3px solid #000000' }} className="rounded-xl sm:rounded-2xl p-3 sm:p-6 mb-4 sm:mb-8 shadow-2xl">
+            <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
+              <Flame className="w-6 h-6 sm:w-8 sm:h-8 text-[#E31E24] animate-pulse" />
+              <h2 className="text-lg sm:text-2xl md:text-3xl font-bold text-white">
                 הסרטון שצבר 20,000,000 צפיות תוך 60 דקות! 🔥
               </h2>
             </div>
-            <div className="relative w-full rounded-xl overflow-hidden" style={{ paddingBottom: '56.25%', backgroundColor: '#000000', border: '2px solid #000000' }}>
+            <div className="relative w-full rounded-lg sm:rounded-xl overflow-hidden" style={{ paddingBottom: '56.25%', backgroundColor: '#000000', border: '2px solid #000000' }}>
               <iframe 
                 className="absolute top-0 left-0 w-full h-full"
                 src="https://www.youtube.com/embed/LYWjvm2MUUk" 
