@@ -524,7 +524,7 @@ export default function Home() {
           style={{
             background: 'linear-gradient(90deg, #FF0000, #FF7F00, #FFFF00, #00FF00, #0000FF, #4B0082, #9400D3)',
             backgroundSize: '200% 100%',
-            animation: 'rainbow 3s linear infinite',
+            animation: 'rainbow 8s linear infinite',
             borderColor: 'rgba(255, 255, 255, 0.3)'
           }}
           whileHover={{ scale: 1.1 }}

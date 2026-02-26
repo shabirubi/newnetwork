@@ -467,23 +467,26 @@ export default function Layout({ children, currentPageName }) {
               <>
                 <Link 
                   to={createPageUrl("UserProfile")}
-                  className="flex items-center gap-2 px-2 py-1 bg-gradient-to-r from-green-500/20 to-green-600/20 border border-green-500/30 rounded-2xl hover:from-green-500/30 hover:to-green-600/30 transition-all cursor-pointer active:scale-95"
+                  className="flex items-center gap-2 px-3 py-2 bg-black/80 border-2 border-gray-700 rounded-xl hover:border-gray-600 transition-all cursor-pointer active:scale-95 shadow-lg"
                 >
                   <div className="flex items-center gap-2 flex-1">
                     {user.profile_image ? (
                       <img 
                         src={user.profile_image} 
                         alt={user.full_name}
-                        className="w-8 h-8 rounded-full object-cover border border-green-400"
+                        className="w-9 h-9 rounded-full object-cover border-2 border-gray-600"
                       />
                     ) : (
-                      <div className="w-8 h-8 rounded-full bg-[#E31E24] flex items-center justify-center text-white text-xs font-bold">
+                      <div className="w-9 h-9 rounded-full bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center text-white text-sm font-bold border-2 border-gray-600">
                         {user.full_name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'U'}
                       </div>
                     )}
-                    <div className="flex items-center gap-1">
-                      <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                      <span className="text-green-300 font-bold text-sm hidden sm:inline">{user.full_name || user.email}</span>
+                    <div className="flex flex-col">
+                      <span className="text-white font-bold text-sm leading-tight hidden sm:inline">{user.full_name || user.email?.split('@')[0]}</span>
+                      <div className="flex items-center gap-1">
+                        <div className="w-1.5 h-1.5 rounded-full bg-green-500"></div>
+                        <span className="text-gray-400 text-xs hidden sm:inline">מחובר</span>
+                      </div>
                     </div>
                   </div>
                 </Link>
@@ -502,7 +505,7 @@ export default function Layout({ children, currentPageName }) {
                 style={{
                   background: 'linear-gradient(90deg, #FF0000, #FF7F00, #FFFF00, #00FF00, #0000FF, #4B0082, #9400D3)',
                   backgroundSize: '200% 100%',
-                  animation: 'rainbow 3s linear infinite',
+                  animation: 'rainbow 8s linear infinite',
                   border: '2px solid rgba(255, 255, 255, 0.3)'
                 }}
               >
