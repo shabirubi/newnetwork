@@ -237,10 +237,9 @@ export default function VideosCategoriesStrip() {
               <motion.div
                 key={cat.id}
                 onClick={() => {
+                  console.log('🎯 לחיצה על קטגוריה:', cat.label);
                   setSelectedCategory(cat.id);
-                  setTimeout(() => {
-                    console.log('📂 נבחרה קטגוריה:', cat.label, '| סטטוס:', status, '| סרטונים:', categoryVideos.length);
-                  }, 100);
+                  setCurrentVideoIndex(0);
                 }}
                 onMouseEnter={() => setHoveredCategory(cat.id)}
                 onMouseLeave={() => setHoveredCategory(null)}
