@@ -290,14 +290,29 @@ export default function Article() {
         <div className="prose prose-lg max-w-none text-white space-y-6">
           <div className="leading-relaxed text-lg whitespace-pre-wrap text-gray-100">
             {article.content?.split('\n').map((paragraph, idx) => {
-              // הסרת כל URL ואיזכורים
-              const cleanText = paragraph
-                .replace(/https?:\/\/[^\s]+/g, '')
-                .replace(/www\.[^\s]+/g, '')
-                .replace(/\([^)]*http[^)]*\)/g, '')
+              // הסרה מקיפה של כל לינקים ואיזכורים
+              let cleanText = paragraph
+                // הסרת לינקים Markdown: [text](url)
+                .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
+                // הסרת כל URL עם http/https
+                .replace(/https?:\/\/[^\s\)]+/g, '')
+                // הסרת כל URL עם www
+                .replace(/www\.[^\s\)]+/g, '')
+                // הסרת סוגריים עם שם אתר: (sitename.com)
+                .replace(/\([^\)]*\.[a-z]{2,}\)/gi, '')
+                // הסרת כל סוגרים עגולים עם תוכן שיש בו נקודה (כנראה אתר)
+                .replace(/\([^\)]*\w+\.\w+[^\)]*\)/g, '')
+                // הסרת שמות אתרים ללא http
+                .replace(/\b[\w-]+\.(?:com|org|net|co\.il|il|gov\.il)\b/gi, '')
+                // הסרת איזכורים
                 .replace(/מקור:.*$/gi, '')
                 .replace(/קרא עוד:.*$/gi, '')
                 .replace(/לפרטים נוספים:.*$/gi, '')
+                .replace(/באדיבות:.*$/gi, '')
+                .replace(/צילום:(?!.*הרשת).*$/gi, '')
+                // ניקוי סוגריים ריקים שנשארו
+                .replace(/\(\s*\)/g, '')
+                .replace(/\[\s*\]/g, '')
                 .trim();
               
               return cleanText ? <p key={idx} className="mb-4">{cleanText}</p> : null;
