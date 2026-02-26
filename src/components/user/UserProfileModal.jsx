@@ -104,7 +104,7 @@ export default function UserProfileModal({ isOpen, onClose, initialUser }) {
               <div className="flex flex-col items-center gap-3 mb-4">
                 {/* Avatar */}
                 <div className="relative">
-                  <div className="relative w-20 h-20 rounded-xl overflow-hidden shadow-xl">
+                  <div className="relative w-16 h-16 rounded-xl overflow-hidden shadow-xl">
                     {profileImage ? (
                       <img 
                         src={profileImage} 
@@ -129,14 +129,6 @@ export default function UserProfileModal({ isOpen, onClose, initialUser }) {
                         />
                       </label>
                     )}
-                  </div>
-                  <div className={`absolute -bottom-2 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-xs font-bold shadow-lg ${
-                    user.role === 'admin' 
-                      ? 'bg-yellow-500 text-black' 
-                      : 'bg-green-500 text-white'
-                  }`}>
-                    <Shield className="w-3 h-3 inline ml-1" />
-                    {user.role === 'admin' ? 'מנהל' : 'משתמש'}
                   </div>
                 </div>
 
@@ -176,13 +168,18 @@ export default function UserProfileModal({ isOpen, onClose, initialUser }) {
                         <span className="text-xs">הצטרף ב-{new Date(user.created_date).toLocaleDateString('he-IL')}</span>
                       </div>
                     </div>
-                    <Button 
+                    <button
                       onClick={() => setEditing(true)} 
-                      className="bg-gray-800 hover:bg-gray-700 text-white font-bold"
+                      className="py-2 px-4 rounded-lg font-bold text-white transition-all relative overflow-hidden"
+                      style={{
+                        background: 'linear-gradient(90deg, #FF0000, #FF7F00, #FFFF00, #00FF00, #0000FF, #4B0082, #9400D3)',
+                        backgroundSize: '200% 100%',
+                        animation: 'rainbow 8s linear infinite',
+                      }}
                     >
-                      <Edit2 className="w-4 h-4 ml-2" />
+                      <Edit2 className="w-4 h-4 inline ml-2" />
                       ערוך פרופיל
-                    </Button>
+                    </button>
                   </div>
                 )}
               </div>
@@ -217,14 +214,18 @@ export default function UserProfileModal({ isOpen, onClose, initialUser }) {
               </div>
 
               {/* Logout Button */}
-              <Button 
+              <button
                 onClick={handleLogout}
-                variant="destructive" 
-                className="w-full bg-red-600 hover:bg-red-700 font-bold"
+                className="w-full py-2 rounded-lg font-bold text-white transition-all relative overflow-hidden"
+                style={{
+                  background: 'linear-gradient(90deg, #FF0000, #FF7F00, #FFFF00, #00FF00, #0000FF, #4B0082, #9400D3)',
+                  backgroundSize: '200% 100%',
+                  animation: 'rainbow 8s linear infinite',
+                }}
               >
-                <LogOut className="w-4 h-4 ml-2" />
+                <LogOut className="w-4 h-4 inline ml-2" />
                 התנתק
-              </Button>
+              </button>
             </div>
           </motion.div>
         </motion.div>
