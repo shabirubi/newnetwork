@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import { createPortal } from "react-dom";
@@ -11,51 +11,32 @@ export default function VideoModalPortal({
   onScroll,
 }) {
   const videoContainerRef = useRef(null);
-  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (!mounted) return;
-    
     if (isOpen) {
       document.body.style.overflow = 'hidden';
-      document.body.style.height = '100vh';
       document.documentElement.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
-      document.body.style.height = '';
       document.documentElement.style.overflow = '';
     }
 
     return () => {
       document.body.style.overflow = '';
-      document.body.style.height = '';
       document.documentElement.style.overflow = '';
     };
-  }, [isOpen, mounted]);
+  }, [isOpen]);
 
-  if (!mounted) return null;
+  if (typeof document === 'undefined') return null;
 
-  const portalContent = (
+  return createPortal(
     <AnimatePresence>
       {isOpen && (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-[99999] bg-black overflow-hidden"
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            width: '100vw',
-            height: '100vh',
-          }}
+          className="fixed inset-0 z-[99999] bg-black"
           onClick={onClose}
         >
           {/* Close Button */}
@@ -76,9 +57,6 @@ export default function VideoModalPortal({
               scrollbarWidth: 'none',
               msOverflowStyle: 'none',
               WebkitOverflowScrolling: 'touch',
-              height: '100vh',
-              width: '100vw',
-              position: 'relative',
             }}
           >
             {videos.length > 0 ? (
@@ -86,10 +64,6 @@ export default function VideoModalPortal({
                 <div
                   key={video.id}
                   className="h-screen w-screen snap-start snap-always flex items-center justify-center bg-black"
-                  style={{
-                    height: '100vh',
-                    width: '100vw',
-                  }}
                 >
                   {Math.abs(index - currentVideoIndex) <= 1 && (
                     <video
@@ -97,26 +71,21 @@ export default function VideoModalPortal({
                       autoPlay={index === currentVideoIndex}
                       loop
                       playsInline
-                      controls={false}
-                      className="h-full w-full object-cover"
-                      style={{
-                        height: '100%',
-                        width: '100%',
-                      }}
+                      controls
+                      className="h-full w-full object-contain"
                     />
                   )}
                 </div>
               ))
             ) : (
               <div className="h-screen w-screen flex items-center justify-center bg-black">
-                <p className="text-white">אין סרטונים זמינים</p>
+                <p className="text-white text-xl">אין סרטונים זמינים</p>
               </div>
             )}
           </div>
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
-
-  return typeof document !== 'undefined' ? createPortal(portalContent, document.body) : null;
 }
