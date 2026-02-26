@@ -467,16 +467,16 @@ export default function Layout({ children, currentPageName }) {
               <>
                 <Link 
                   to={createPageUrl("UserProfile")}
-                  className="flex items-center gap-2 px-3 py-2 bg-black/80 border-2 border-gray-700 rounded-xl hover:border-gray-600 transition-all cursor-pointer active:scale-95 shadow-lg"
+                  className="flex items-center transition-all cursor-pointer active:scale-95"
                 >
                   {user.profile_image ? (
                     <img 
                       src={user.profile_image} 
                       alt={user.full_name}
-                      className="w-9 h-9 rounded-full object-cover border-2 border-gray-600"
+                      className="w-9 h-9 rounded-full object-cover"
                     />
                   ) : (
-                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center text-white text-sm font-bold border-2 border-gray-600">
+                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center text-white text-sm font-bold">
                       {user.full_name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'U'}
                     </div>
                   )}
