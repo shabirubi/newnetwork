@@ -80,10 +80,10 @@ export default function VideosCategoriesStrip() {
                 video_url: v.videoUrl,
                 thumbnail_url: v.thumbnail || v.videoUrl,
                 created_date: v.timestamp,
-                views: 0
+                views: 0,
+                category: v.category || 'all'
               }));
               console.log('✅ טעינת סרטונים מ-localStorage:', videos.length, 'סרטונים');
-              return videos;
             }
           } catch (e) {
             console.error('שגיאה בפרסום JSON:', e);
@@ -91,26 +91,37 @@ export default function VideosCategoriesStrip() {
         }
         
         // Fallback to database if no localStorage videos
-        try {
-          const dbVideos = await base44.entities.UserVideo.list('-created_date', 100);
-          if (dbVideos && Array.isArray(dbVideos) && dbVideos.length > 0) {
-            videos = dbVideos.map(v => ({
-              id: v.id,
-              title: v.title || 'סרטון ללא כותרת',
-              video_url: v.video_url,
-              thumbnail_url: v.thumbnail_url || v.video_url,
-              created_date: v.created_date,
-              views: v.views || 0
-            }));
-            console.log('✅ טעינת סרטונים מהמאגר:', videos.length, 'סרטונים');
-            return videos;
+        if (videos.length === 0) {
+          try {
+            const dbVideos = await base44.entities.UserVideo.list('-created_date', 100);
+            if (dbVideos && Array.isArray(dbVideos) && dbVideos.length > 0) {
+              videos = dbVideos.map(v => ({
+                id: v.id,
+                title: v.title || 'סרטון ללא כותרת',
+                video_url: v.video_url,
+                thumbnail_url: v.thumbnail_url || v.video_url,
+                created_date: v.created_date,
+                views: v.views || 0,
+                category: v.category || 'all'
+              }));
+              console.log('✅ טעינת סרטונים מהמאגר:', videos.length, 'סרטונים');
+            }
+          } catch (error) {
+            console.error('שגיאה בטעינה מהמאגר:', error);
           }
-        } catch (error) {
-          console.error('שגיאה בטעינה מהמאגר:', error);
         }
         
-        console.warn('⚠️ אין סרטונים זמינים');
-        return [];
+        // Filter by category
+        if (selectedCategory && selectedCategory !== 'all') {
+          videos = videos.filter(v => v.category === selectedCategory);
+          console.log(`🔍 סינון לפי קטגוריה "${selectedCategory}":`, videos.length, 'סרטונים');
+        }
+        
+        if (videos.length === 0) {
+          console.warn('⚠️ אין סרטונים זמינים לקטגוריה זו');
+        }
+        
+        return videos;
       } catch (error) {
         console.error('Failed to load videos:', error);
         return [];
