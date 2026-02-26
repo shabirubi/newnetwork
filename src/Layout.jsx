@@ -473,10 +473,10 @@ export default function Layout({ children, currentPageName }) {
                     <img 
                       src={user.profile_image} 
                       alt={user.full_name}
-                      className="w-9 h-9 rounded-full object-cover"
+                      className="w-8 h-8 rounded-full object-cover"
                     />
                   ) : (
-                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center text-white text-sm font-bold">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center text-white text-xs font-bold">
                       {user.full_name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'U'}
                     </div>
                   )}
