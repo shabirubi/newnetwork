@@ -104,7 +104,7 @@ export default function UserProfileModal({ isOpen, onClose, initialUser }) {
               <div className="flex flex-col items-center gap-3 mb-4">
                 {/* Avatar */}
                 <div className="relative">
-                  <div className="relative w-16 h-16 rounded-xl overflow-hidden shadow-xl">
+                  <div className="relative w-12 h-12 rounded-xl overflow-hidden shadow-xl">
                     {profileImage ? (
                       <img 
                         src={profileImage} 
