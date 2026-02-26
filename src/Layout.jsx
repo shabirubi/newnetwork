@@ -27,6 +27,7 @@ import AccessibilityFloatingButton from "./components/accessibility/Accessibilit
 import { base44 } from "@/api/base44Client";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import UserProfileModal from "./components/user/UserProfileModal";
 
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png";
 
@@ -128,6 +129,7 @@ export default function Layout({ children, currentPageName }) {
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [showSearchResults, setShowSearchResults] = useState(false);
+  const [profileModalOpen, setProfileModalOpen] = useState(false);
 
   // בדיקת מצב האתר
   useEffect(() => {
@@ -465,8 +467,8 @@ export default function Layout({ children, currentPageName }) {
               </div>
             ) : user ? (
               <>
-                <Link 
-                  to={createPageUrl("UserProfile")}
+                <button
+                  onClick={() => setProfileModalOpen(true)}
                   className="flex items-center transition-all cursor-pointer active:scale-95"
                 >
                   {user.profile_image ? (
@@ -480,7 +482,7 @@ export default function Layout({ children, currentPageName }) {
                       {user.full_name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'U'}
                     </div>
                   )}
-                </Link>
+                </button>
                 <button
                   onClick={handleLogout}
                   className="flex items-center gap-1 px-2 py-1 bg-red-600/20 hover:bg-red-600/40 backdrop-blur-xl rounded-lg shadow-lg border border-red-500/30 transition-all hover:scale-105 text-[11px]"
@@ -556,6 +558,13 @@ export default function Layout({ children, currentPageName }) {
 
       {/* Accessibility Floating Button */}
       <AccessibilityFloatingButton />
+
+      {/* User Profile Modal */}
+      <UserProfileModal 
+        isOpen={profileModalOpen}
+        onClose={() => setProfileModalOpen(false)}
+        initialUser={user}
+      />
 
       {/* Main Menu Sidebar */}
       <AnimatePresence>
