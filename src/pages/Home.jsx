@@ -520,21 +520,15 @@ export default function Home() {
       {/* Floating Digital Dreams Button */}
       <Link to={createPageUrl("VideoCreator")}>
         <motion.button
-          className="fixed bottom-40 left-4 z-50 bg-black hover:bg-gray-900 text-white p-4 rounded-full shadow-2xl shadow-black/50 border-2 border-gray-600"
+          className="fixed bottom-40 left-4 z-50 text-white p-4 rounded-full shadow-2xl border-2"
+          style={{
+            background: 'linear-gradient(90deg, #FF0000, #FF7F00, #FFFF00, #00FF00, #0000FF, #4B0082, #9400D3)',
+            backgroundSize: '200% 100%',
+            animation: 'rainbow 3s linear infinite',
+            borderColor: 'rgba(255, 255, 255, 0.3)'
+          }}
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
-          animate={{
-           boxShadow: [
-             '0 0 20px rgba(0, 0, 0, 0.5)',
-             '0 0 40px rgba(0, 0, 0, 0.8)',
-             '0 0 20px rgba(0, 0, 0, 0.5)'
-           ]
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
         >
           <Video className="w-6 h-6" />
         </motion.button>
