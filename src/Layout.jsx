@@ -469,7 +469,7 @@ export default function Layout({ children, currentPageName }) {
               <>
                 <button
                   onClick={() => setProfileModalOpen(true)}
-                  className="flex items-center transition-all cursor-pointer active:scale-95"
+                  className="flex items-center transition-all cursor-pointer active:scale-95 relative"
                 >
                   {user.profile_image ? (
                     <img 
