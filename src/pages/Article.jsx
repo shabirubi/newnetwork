@@ -346,8 +346,43 @@ export default function Article() {
             </div>
           </div>
         </div>
-        <div className="mt-8 pt-6 border-t border-gray-700">
-          <p className="text-gray-400 text-sm text-center">בחסות הרשת החדשה</p>
+        <div className="mt-8 pt-6">
+          <motion.div
+            className="relative overflow-hidden rounded-2xl p-6"
+            style={{
+              background: 'linear-gradient(90deg, #FF0000, #FF7F00, #FFFF00, #00FF00, #0000FF, #4B0082, #9400D3, #FF0000)',
+              backgroundSize: '200% 100%',
+            }}
+            animate={{
+              backgroundPosition: ['0% 50%', '200% 50%'],
+            }}
+            transition={{
+              duration: 8,
+              repeat: Infinity,
+              ease: "linear"
+            }}
+          >
+            <div className="relative z-10 text-center">
+              <motion.p
+                className="text-2xl font-bold text-white drop-shadow-2xl"
+                animate={{
+                  scale: [1, 1.05, 1],
+                  textShadow: [
+                    '0 0 20px rgba(255,255,255,0.8)',
+                    '0 0 40px rgba(255,255,255,1)',
+                    '0 0 20px rgba(255,255,255,0.8)'
+                  ]
+                }}
+                transition={{
+                  duration: 2,
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+              >
+                ✨ בחסות הרשת החדשה ✨
+              </motion.p>
+            </div>
+          </motion.div>
         </div>
       </motion.div>
 
