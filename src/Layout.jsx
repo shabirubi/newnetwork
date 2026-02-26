@@ -318,6 +318,15 @@ export default function Layout({ children, currentPageName }) {
             box-shadow: 0 0 40px #00CED1;
           }
         }
+
+        @keyframes rainbow {
+          0% {
+            background-position: 0% 50%;
+          }
+          100% {
+            background-position: 200% 50%;
+          }
+        }
       `}</style>
 
       {/* Animated Neon Blue Line */}
@@ -480,7 +489,13 @@ export default function Layout({ children, currentPageName }) {
             ) : (
               <button
                 onClick={handleLogin}
-                className="flex items-center gap-1 px-2 py-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 backdrop-blur-xl rounded-lg shadow-lg border border-blue-500/30 transition-all hover:scale-105 text-[11px]"
+                className="flex items-center gap-1 px-2 py-1 backdrop-blur-xl rounded-lg shadow-lg transition-all hover:scale-105 text-[11px] relative overflow-hidden"
+                style={{
+                  background: 'linear-gradient(90deg, #FF0000, #FF7F00, #FFFF00, #00FF00, #0000FF, #4B0082, #9400D3)',
+                  backgroundSize: '200% 100%',
+                  animation: 'rainbow 3s linear infinite',
+                  border: '2px solid rgba(255, 255, 255, 0.3)'
+                }}
               >
                 <LogIn className="w-3.5 h-3.5 text-white" />
                 <span className="text-white font-bold hidden sm:inline">התחבר</span>
