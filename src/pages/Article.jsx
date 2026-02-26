@@ -223,6 +223,7 @@ export default function Article() {
             alt={article.title}
             className="w-full rounded-2xl shadow-lg"
           />
+          <p className="text-gray-400 text-xs mt-2 text-center">צילום: הרשת החדשה</p>
         </motion.div>
       )}
 
@@ -288,7 +289,19 @@ export default function Article() {
         <h2 className="text-3xl font-bold text-white mb-6">הכתבה המורחבת</h2>
         <div className="prose prose-lg max-w-none text-white space-y-6">
           <div className="leading-relaxed text-lg whitespace-pre-wrap text-gray-100">
-            {article.content?.replace(/https?:\/\/[^\s]+/g, '').replace(/www\.[^\s]+/g, '')}
+            {article.content?.split('\n').map((paragraph, idx) => {
+              // הסרת כל URL ואיזכורים
+              const cleanText = paragraph
+                .replace(/https?:\/\/[^\s]+/g, '')
+                .replace(/www\.[^\s]+/g, '')
+                .replace(/\([^)]*http[^)]*\)/g, '')
+                .replace(/מקור:.*$/gi, '')
+                .replace(/קרא עוד:.*$/gi, '')
+                .replace(/לפרטים נוספים:.*$/gi, '')
+                .trim();
+              
+              return cleanText ? <p key={idx} className="mb-4">{cleanText}</p> : null;
+            })}
           </div>
         </div>
         <div className="mt-8 pt-6 border-t border-gray-700">
