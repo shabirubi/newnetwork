@@ -207,10 +207,19 @@ export default function Layout({ children, currentPageName }) {
     };
   }, []);
 
-  // בדיקת משתמש מחובר - מושבת זמנית
+  // בדיקת משתמש מחובר
   useEffect(() => {
-    setAuthLoading(false);
-    setUser(null);
+    const checkAuth = async () => {
+      try {
+        const currentUser = await base44.auth.me();
+        setUser(currentUser);
+      } catch (err) {
+        setUser(null);
+      } finally {
+        setAuthLoading(false);
+      }
+    };
+    checkAuth();
   }, []);
 
 
