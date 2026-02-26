@@ -83,7 +83,7 @@ export default function UserProfileModal({ isOpen, onClose, initialUser }) {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
             onClick={(e) => e.stopPropagation()}
-            className="relative bg-black border border-gray-800 rounded-2xl max-w-md w-full max-h-[80vh] overflow-y-auto shadow-2xl"
+            className="relative bg-black rounded-2xl max-w-md w-full max-h-[80vh] overflow-y-auto shadow-2xl"
             dir="rtl"
             style={{ scrollbarWidth: 'thin', scrollbarColor: '#333 #000' }}
           >
@@ -96,7 +96,7 @@ export default function UserProfileModal({ isOpen, onClose, initialUser }) {
             </button>
 
             {/* Header Banner */}
-            <div className="h-20 bg-gradient-to-b from-gray-900 to-black relative overflow-hidden border-b border-gray-800">
+            <div className="h-20 bg-gradient-to-b from-gray-900 to-black relative overflow-hidden">
             </div>
 
             {/* Profile Content */}
@@ -104,7 +104,7 @@ export default function UserProfileModal({ isOpen, onClose, initialUser }) {
               <div className="flex flex-col items-center gap-3 mb-4">
                 {/* Avatar */}
                 <div className="relative">
-                  <div className="relative w-20 h-20 rounded-xl overflow-hidden border-2 border-gray-700 shadow-xl">
+                  <div className="relative w-20 h-20 rounded-xl overflow-hidden shadow-xl">
                     {profileImage ? (
                       <img 
                         src={profileImage} 
@@ -130,7 +130,7 @@ export default function UserProfileModal({ isOpen, onClose, initialUser }) {
                       </label>
                     )}
                   </div>
-                  <div className={`absolute -bottom-2 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-xs font-bold ${
+                  <div className={`absolute -bottom-2 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-xs font-bold shadow-lg ${
                     user.role === 'admin' 
                       ? 'bg-yellow-500 text-black' 
                       : 'bg-green-500 text-white'
@@ -149,15 +149,15 @@ export default function UserProfileModal({ isOpen, onClose, initialUser }) {
                         value={formData.full_name}
                         onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
                         placeholder="שם מלא"
-                        className="bg-gray-900 border-gray-700 text-white"
+                        className="bg-gray-900 border-0 text-white"
                       />
                     </div>
                     <div className="flex gap-3">
-                      <Button onClick={handleSave} className="flex-1 bg-gray-800 hover:bg-gray-700 text-white font-bold border border-gray-700">
+                      <Button onClick={handleSave} className="flex-1 bg-gray-800 hover:bg-gray-700 text-white font-bold">
                         <Save className="w-4 h-4 ml-2" />
                         שמור
                       </Button>
-                      <Button onClick={() => setEditing(false)} variant="outline" className="flex-1 border-gray-700 text-white hover:bg-gray-900">
+                      <Button onClick={() => setEditing(false)} variant="outline" className="flex-1 border-0 text-white hover:bg-gray-900">
                         <X className="w-4 h-4 ml-2" />
                         ביטול
                       </Button>
@@ -178,7 +178,7 @@ export default function UserProfileModal({ isOpen, onClose, initialUser }) {
                     </div>
                     <Button 
                       onClick={() => setEditing(true)} 
-                      className="bg-gray-800 hover:bg-gray-700 text-white font-bold border border-gray-700"
+                      className="bg-gray-800 hover:bg-gray-700 text-white font-bold"
                     >
                       <Edit2 className="w-4 h-4 ml-2" />
                       ערוך פרופיל
@@ -189,7 +189,7 @@ export default function UserProfileModal({ isOpen, onClose, initialUser }) {
 
               {/* Quick Settings */}
               <div className="space-y-2 mb-4">
-                <div className="flex items-center justify-between p-3 bg-gray-900 rounded-lg border border-gray-800">
+                <div className="flex items-center justify-between p-3 bg-gray-900 rounded-lg">
                   <div className="flex items-center gap-2">
                     <Bell className="w-4 h-4 text-gray-400" />
                     <div>
@@ -197,12 +197,12 @@ export default function UserProfileModal({ isOpen, onClose, initialUser }) {
                       <p className="text-[10px] text-gray-400">עדכונים חמים</p>
                     </div>
                   </div>
-                  <Button variant="outline" size="sm" className="border-gray-700 text-white text-xs h-7 px-2 hover:bg-gray-800">
+                  <Button variant="outline" size="sm" className="border-0 text-white text-xs h-7 px-2 hover:bg-gray-800">
                     הפעל
                   </Button>
                 </div>
 
-                <div className="flex items-center justify-between p-3 bg-gray-900 rounded-lg border border-gray-800">
+                <div className="flex items-center justify-between p-3 bg-gray-900 rounded-lg">
                   <div className="flex items-center gap-2">
                     <Eye className="w-4 h-4 text-gray-400" />
                     <div>
@@ -210,7 +210,7 @@ export default function UserProfileModal({ isOpen, onClose, initialUser }) {
                       <p className="text-[10px] text-gray-400">נראות הפרופיל</p>
                     </div>
                   </div>
-                  <Button variant="outline" size="sm" className="border-gray-700 text-white text-xs h-7 px-2 hover:bg-gray-800">
+                  <Button variant="outline" size="sm" className="border-0 text-white text-xs h-7 px-2 hover:bg-gray-800">
                     נהל
                   </Button>
                 </div>
