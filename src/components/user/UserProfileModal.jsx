@@ -83,8 +83,9 @@ export default function UserProfileModal({ isOpen, onClose, initialUser }) {
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.9, opacity: 0 }}
             onClick={(e) => e.stopPropagation()}
-            className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-black border-2 border-[#0080FF]/50 rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-2xl shadow-[#0080FF]/30"
+            className="relative bg-gradient-to-br from-gray-900 via-gray-800 to-black border-2 border-[#0080FF]/50 rounded-3xl max-w-md w-full max-h-[80vh] overflow-y-auto shadow-2xl shadow-[#0080FF]/30"
             dir="rtl"
+            style={{ scrollbarWidth: 'thin', scrollbarColor: '#0080FF #1a1a1a' }}
           >
             {/* Close Button */}
             <button
@@ -95,18 +96,18 @@ export default function UserProfileModal({ isOpen, onClose, initialUser }) {
             </button>
 
             {/* Header Banner */}
-            <div className="h-32 bg-gradient-to-r from-[#0080FF]/30 via-[#0080FF]/10 to-black relative overflow-hidden">
+            <div className="h-20 bg-gradient-to-r from-[#0080FF]/30 via-[#0080FF]/10 to-black relative overflow-hidden">
               <div className="absolute inset-0 opacity-30" style={{
                 backgroundImage: 'radial-gradient(circle at 20% 50%, #0080FF 0%, transparent 50%)'
               }}></div>
             </div>
 
             {/* Profile Content */}
-            <div className="px-6 pb-6 -mt-16 relative z-10">
-              <div className="flex flex-col items-center gap-4 mb-6">
+            <div className="px-4 pb-4 -mt-10 relative z-10">
+              <div className="flex flex-col items-center gap-3 mb-4">
                 {/* Avatar */}
                 <div className="relative">
-                  <div className="relative w-32 h-32 rounded-2xl overflow-hidden border-4 border-[#0080FF] shadow-2xl shadow-[#0080FF]/50">
+                  <div className="relative w-20 h-20 rounded-xl overflow-hidden border-4 border-[#0080FF] shadow-2xl shadow-[#0080FF]/50">
                     {profileImage ? (
                       <img 
                         src={profileImage} 
@@ -115,14 +116,14 @@ export default function UserProfileModal({ isOpen, onClose, initialUser }) {
                       />
                     ) : (
                       <div className="w-full h-full bg-gradient-to-br from-[#0080FF] to-[#0066FF] flex items-center justify-center">
-                        <span className="text-5xl font-bold text-white">
+                        <span className="text-2xl font-bold text-white">
                           {getInitials(user.full_name)}
                         </span>
                       </div>
                     )}
                     {editing && (
                       <label className="absolute inset-0 flex items-center justify-center bg-black/60 cursor-pointer hover:bg-black/70 transition-all">
-                        <Camera className="w-6 h-6 text-white" />
+                        <Camera className="w-4 h-4 text-white" />
                         <input 
                           type="file" 
                           accept="image/*" 
@@ -167,15 +168,15 @@ export default function UserProfileModal({ isOpen, onClose, initialUser }) {
                   </div>
                 ) : (
                   <div className="text-center w-full">
-                    <h2 className="text-3xl font-bold text-white mb-2">{user.full_name}</h2>
-                    <div className="space-y-2 mb-4">
+                    <h2 className="text-xl font-bold text-white mb-2">{user.full_name}</h2>
+                    <div className="space-y-1 mb-3">
                       <div className="flex items-center justify-center gap-2 text-gray-300">
-                        <Mail className="w-4 h-4 text-[#0080FF]" />
-                        <span className="text-sm">{user.email}</span>
+                        <Mail className="w-3 h-3 text-[#0080FF]" />
+                        <span className="text-xs">{user.email}</span>
                       </div>
                       <div className="flex items-center justify-center gap-2 text-gray-300">
-                        <Calendar className="w-4 h-4 text-[#0080FF]" />
-                        <span className="text-sm">הצטרף ב-{new Date(user.created_date).toLocaleDateString('he-IL')}</span>
+                        <Calendar className="w-3 h-3 text-[#0080FF]" />
+                        <span className="text-xs">הצטרף ב-{new Date(user.created_date).toLocaleDateString('he-IL')}</span>
                       </div>
                     </div>
                     <Button 
@@ -190,29 +191,29 @@ export default function UserProfileModal({ isOpen, onClose, initialUser }) {
               </div>
 
               {/* Quick Settings */}
-              <div className="space-y-3 mb-6">
-                <div className="flex items-center justify-between p-4 bg-black/40 rounded-lg border border-[#0080FF]/20">
-                  <div className="flex items-center gap-3">
-                    <Bell className="w-5 h-5 text-[#0080FF]" />
+              <div className="space-y-2 mb-4">
+                <div className="flex items-center justify-between p-3 bg-black/40 rounded-lg border border-[#0080FF]/20">
+                  <div className="flex items-center gap-2">
+                    <Bell className="w-4 h-4 text-[#0080FF]" />
                     <div>
-                      <p className="text-white font-medium text-sm">התראות</p>
-                      <p className="text-xs text-gray-400">עדכונים על חדשות חמות</p>
+                      <p className="text-white font-medium text-xs">התראות</p>
+                      <p className="text-[10px] text-gray-400">עדכונים חמים</p>
                     </div>
                   </div>
-                  <Button variant="outline" size="sm" className="border-[#0080FF]/30 text-[#0080FF]">
+                  <Button variant="outline" size="sm" className="border-[#0080FF]/30 text-[#0080FF] text-xs h-7 px-2">
                     הפעל
                   </Button>
                 </div>
 
-                <div className="flex items-center justify-between p-4 bg-black/40 rounded-lg border border-[#0080FF]/20">
-                  <div className="flex items-center gap-3">
-                    <Eye className="w-5 h-5 text-[#0080FF]" />
+                <div className="flex items-center justify-between p-3 bg-black/40 rounded-lg border border-[#0080FF]/20">
+                  <div className="flex items-center gap-2">
+                    <Eye className="w-4 h-4 text-[#0080FF]" />
                     <div>
-                      <p className="text-white font-medium text-sm">פרטיות</p>
-                      <p className="text-xs text-gray-400">שלוט בנראות הפרופיל</p>
+                      <p className="text-white font-medium text-xs">פרטיות</p>
+                      <p className="text-[10px] text-gray-400">נראות הפרופיל</p>
                     </div>
                   </div>
-                  <Button variant="outline" size="sm" className="border-[#0080FF]/30 text-[#0080FF]">
+                  <Button variant="outline" size="sm" className="border-[#0080FF]/30 text-[#0080FF] text-xs h-7 px-2">
                     נהל
                   </Button>
                 </div>
