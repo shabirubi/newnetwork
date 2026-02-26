@@ -164,16 +164,16 @@ export default function Home() {
       {/* Viral Video Section */}
       <section className="w-full px-4 py-8">
         <div className="max-w-7xl mx-auto">
-          <div className="bg-gradient-to-r from-[#E31E24]/20 to-purple-600/20 rounded-2xl p-6 mb-8 border border-[#E31E24]/30">
+          <div className="bg-black rounded-2xl p-6 mb-8 border-2 border-black shadow-2xl">
             <div className="flex items-center gap-3 mb-4">
               <Flame className="w-8 h-8 text-[#E31E24] animate-pulse" />
               <h2 className="text-2xl md:text-3xl font-bold text-white">
-                הסרטון שצבר 20 מיליון צפיות תוך 60 דקות! 🔥
+                הסרטון שצבר 20,000,000 צפיות תוך 60 דקות! 🔥
               </h2>
             </div>
-            <div className="relative w-full" style={{ paddingBottom: '56.25%' }}>
+            <div className="relative w-full bg-black rounded-xl overflow-hidden" style={{ paddingBottom: '56.25%' }}>
               <iframe 
-                className="absolute top-0 left-0 w-full h-full rounded-xl"
+                className="absolute top-0 left-0 w-full h-full"
                 src="https://www.youtube.com/embed/LYWjvm2MUUk" 
                 title="הרשת החדשה-נעלמים" 
                 frameBorder="0" 

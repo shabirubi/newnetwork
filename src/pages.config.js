@@ -47,88 +47,88 @@
  *
  * The mainPage value must match a key in the PAGES object exactly.
  */
-import AIDesignStudio from './pages/AIDesignStudio';
-import Accessibility from './pages/Accessibility';
-import AdminPanel from './pages/AdminPanel';
-import AnimationStudio from './pages/AnimationStudio';
-import Archive from './pages/Archive';
-import Article from './pages/Article';
-import AvatarStudio from './pages/AvatarStudio';
-import BroadcastStudio from './pages/BroadcastStudio';
-import Category from './pages/Category';
-import ChannelsManager from './pages/ChannelsManager';
-import DownloadReporterImages from './pages/DownloadReporterImages';
-import GenerateReporterImages from './pages/GenerateReporterImages';
-import HeyGenEditor from './pages/HeyGenEditor';
-import HeyGenGallery from './pages/HeyGenGallery';
-import HeyGenHistory from './pages/HeyGenHistory';
-import Home from './pages/Home';
-import Live from './pages/Live';
-import LumaStudio from './pages/LumaStudio';
-import NewsAdmin from './pages/NewsAdmin';
-import NewsLoader from './pages/NewsLoader';
-import PublicReports from './pages/PublicReports';
-import RegenerateImages from './pages/RegenerateImages';
-import ReporterImageUpload from './pages/ReporterImageUpload';
-import ReporterImagesLibrary from './pages/ReporterImagesLibrary';
-import ReporterQA from './pages/ReporterQA';
-import ReporterStudio from './pages/ReporterStudio';
-import Reporters from './pages/Reporters';
-import Schedule from './pages/Schedule';
-import Subscription from './pages/Subscription';
 import Terms from './pages/Terms';
-import TestApps from './pages/TestApps';
-import TestDID from './pages/TestDID';
-import ToMovieeStudio from './pages/ToMovieeStudio';
-import UserProfile from './pages/UserProfile';
-import UserVideos from './pages/UserVideos';
-import VOD from './pages/VOD';
-import VODContent from './pages/VODContent';
-import VideoCreator from './pages/VideoCreator';
+import Reporters from './pages/Reporters';
+import ReporterImagesLibrary from './pages/ReporterImagesLibrary';
+import ReporterImageUpload from './pages/ReporterImageUpload';
+import AdminPanel from './pages/AdminPanel';
+import Home from './pages/Home';
 import VideoEditor from './pages/VideoEditor';
+import VODContent from './pages/VODContent';
+import Archive from './pages/Archive';
+import AvatarStudio from './pages/AvatarStudio';
+import UserVideos from './pages/UserVideos';
+import Article from './pages/Article';
+import VideoCreator from './pages/VideoCreator';
+import AIDesignStudio from './pages/AIDesignStudio';
+import Category from './pages/Category';
+import AnimationStudio from './pages/AnimationStudio';
+import Schedule from './pages/Schedule';
+import GenerateReporterImages from './pages/GenerateReporterImages';
+import VOD from './pages/VOD';
+import NewsAdmin from './pages/NewsAdmin';
+import DownloadReporterImages from './pages/DownloadReporterImages';
+import HeyGenGallery from './pages/HeyGenGallery';
+import Live from './pages/Live';
+import ReporterStudio from './pages/ReporterStudio';
+import ChannelsManager from './pages/ChannelsManager';
+import LumaStudio from './pages/LumaStudio';
+import Accessibility from './pages/Accessibility';
+import RegenerateImages from './pages/RegenerateImages';
+import PublicReports from './pages/PublicReports';
+import ToMovieeStudio from './pages/ToMovieeStudio';
+import NewsLoader from './pages/NewsLoader';
+import BroadcastStudio from './pages/BroadcastStudio';
+import HeyGenEditor from './pages/HeyGenEditor';
+import TestApps from './pages/TestApps';
+import UserProfile from './pages/UserProfile';
+import TestDID from './pages/TestDID';
+import HeyGenHistory from './pages/HeyGenHistory';
+import ReporterQA from './pages/ReporterQA';
+import Subscription from './pages/Subscription';
 import __Layout from './Layout.jsx';
 
 
 export const PAGES = {
-    "AIDesignStudio": AIDesignStudio,
-    "Accessibility": Accessibility,
-    "AdminPanel": AdminPanel,
-    "AnimationStudio": AnimationStudio,
-    "Archive": Archive,
-    "Article": Article,
-    "AvatarStudio": AvatarStudio,
-    "BroadcastStudio": BroadcastStudio,
-    "Category": Category,
-    "ChannelsManager": ChannelsManager,
-    "DownloadReporterImages": DownloadReporterImages,
-    "GenerateReporterImages": GenerateReporterImages,
-    "HeyGenEditor": HeyGenEditor,
-    "HeyGenGallery": HeyGenGallery,
-    "HeyGenHistory": HeyGenHistory,
-    "Home": Home,
-    "Live": Live,
-    "LumaStudio": LumaStudio,
-    "NewsAdmin": NewsAdmin,
-    "NewsLoader": NewsLoader,
-    "PublicReports": PublicReports,
-    "RegenerateImages": RegenerateImages,
-    "ReporterImageUpload": ReporterImageUpload,
-    "ReporterImagesLibrary": ReporterImagesLibrary,
-    "ReporterQA": ReporterQA,
-    "ReporterStudio": ReporterStudio,
-    "Reporters": Reporters,
-    "Schedule": Schedule,
-    "Subscription": Subscription,
     "Terms": Terms,
-    "TestApps": TestApps,
-    "TestDID": TestDID,
-    "ToMovieeStudio": ToMovieeStudio,
-    "UserProfile": UserProfile,
-    "UserVideos": UserVideos,
-    "VOD": VOD,
-    "VODContent": VODContent,
-    "VideoCreator": VideoCreator,
+    "Reporters": Reporters,
+    "ReporterImagesLibrary": ReporterImagesLibrary,
+    "ReporterImageUpload": ReporterImageUpload,
+    "AdminPanel": AdminPanel,
+    "Home": Home,
     "VideoEditor": VideoEditor,
+    "VODContent": VODContent,
+    "Archive": Archive,
+    "AvatarStudio": AvatarStudio,
+    "UserVideos": UserVideos,
+    "Article": Article,
+    "VideoCreator": VideoCreator,
+    "AIDesignStudio": AIDesignStudio,
+    "Category": Category,
+    "AnimationStudio": AnimationStudio,
+    "Schedule": Schedule,
+    "GenerateReporterImages": GenerateReporterImages,
+    "VOD": VOD,
+    "NewsAdmin": NewsAdmin,
+    "DownloadReporterImages": DownloadReporterImages,
+    "HeyGenGallery": HeyGenGallery,
+    "Live": Live,
+    "ReporterStudio": ReporterStudio,
+    "ChannelsManager": ChannelsManager,
+    "LumaStudio": LumaStudio,
+    "Accessibility": Accessibility,
+    "RegenerateImages": RegenerateImages,
+    "PublicReports": PublicReports,
+    "ToMovieeStudio": ToMovieeStudio,
+    "NewsLoader": NewsLoader,
+    "BroadcastStudio": BroadcastStudio,
+    "HeyGenEditor": HeyGenEditor,
+    "TestApps": TestApps,
+    "UserProfile": UserProfile,
+    "TestDID": TestDID,
+    "HeyGenHistory": HeyGenHistory,
+    "ReporterQA": ReporterQA,
+    "Subscription": Subscription,
 }
 
 export const pagesConfig = {
