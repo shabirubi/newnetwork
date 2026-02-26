@@ -244,7 +244,7 @@ export default function Article() {
             <User size={16} />
             כותב
           </p>
-          <p className="text-white text-lg font-bold">{article.source || 'הרשת'}</p>
+          <p className="text-white text-lg font-bold">הרשת החדשה</p>
         </div>
         <div className="space-y-1">
           <p className="text-gray-400 text-sm flex items-center gap-2">
@@ -290,6 +290,9 @@ export default function Article() {
           <div className="leading-relaxed text-lg whitespace-pre-wrap text-gray-100">
             {article.content}
           </div>
+        </div>
+        <div className="mt-8 pt-6 border-t border-gray-700">
+          <p className="text-gray-400 text-sm text-center">בחסות הרשת החדשה</p>
         </div>
       </motion.div>
 
