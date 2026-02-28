@@ -205,24 +205,25 @@ export default function WarNewsSection() {
                                     {/* Urgent badge */}
                                     {article.is_urgent && (
                                         <div className="absolute top-3 right-3">
-                                            <span className="bg-red-600 text-white text-[11px] font-black px-2.5 py-1 rounded-full animate-pulse shadow-lg"
-                                                style={{ fontFamily: FONT }}>
-                                                🔴 דחוף
+                                            <span className="bg-red-600 text-white text-[10px] font-black px-2.5 py-1 rounded animate-pulse shadow-lg tracking-widest"
+                                                style={{ fontFamily: FONT, letterSpacing: '0.1em' }}>
+                                                BREAKING
                                             </span>
                                         </div>
                                     )}
 
                                     {/* Category */}
                                     <div className="absolute top-3 left-3">
-                                        <span className="text-xs font-bold px-2 py-0.5 rounded-full"
+                                        <span className="text-[10px] font-black px-2.5 py-1 rounded tracking-widest"
                                             style={{
-                                                background: `${style.color}25`,
+                                                background: `${style.color}20`,
                                                 color: style.color,
-                                                border: `1px solid ${style.color}50`,
+                                                border: `1px solid ${style.color}60`,
                                                 fontFamily: FONT,
+                                                letterSpacing: '0.12em',
                                                 backdropFilter: 'blur(8px)'
                                             }}>
-                                            {style.icon} {article.category}
+                                            {style.icon}
                                         </span>
                                     </div>
 
