@@ -84,31 +84,19 @@ export default function AdminVideoUploadModal({ isOpen, onClose }) {
       const { file_url } = await base44.integrations.Core.UploadFile({ file });
       setVideoUrl(file_url);
 
-      // Get duration and thumbnail from video
+      // Get duration from video
       let thumbnailUrl = file_url;
       let duration = 0;
       try {
         const video = document.createElement('video');
         video.src = URL.createObjectURL(file);
-        video.crossOrigin = 'anonymous';
         await new Promise((resolve) => {
           video.addEventListener('loadedmetadata', () => {
             duration = video.duration;
-            video.currentTime = Math.min(1, video.duration * 0.1);
-          });
-          video.addEventListener('seeked', () => {
-            try {
-              const canvas = document.createElement('canvas');
-              canvas.width = video.videoWidth;
-              canvas.height = video.videoHeight;
-              const ctx = canvas.getContext('2d');
-              ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-              thumbnailUrl = canvas.toDataURL('image/jpeg', 0.7);
-            } catch (e) {}
             resolve();
           });
           video.addEventListener('error', resolve);
-          setTimeout(resolve, 5000);
+          setTimeout(resolve, 3000);
         });
       } catch (e) {}
 
