@@ -170,6 +170,28 @@ export default function WarNewsSection() {
     const [alertCard, setAlertCard] = useState(null);
     const [generatingAlert, setGeneratingAlert] = useState(false);
     const [lastAlertId, setLastAlertId] = useState(null);
+    const [articles, setArticles] = useState(() => {
+        // Try loading from cache immediately
+        const cached = getCachedImages();
+        if (cached) {
+            return WAR_ARTICLES_BASE.map((a, i) => ({ ...a, image: cached[i] || '' }));
+        }
+        return WAR_ARTICLES_BASE.map(a => ({ ...a, image: '' }));
+    });
+
+    // Load AI images once — from cache or via backend function
+    useEffect(() => {
+        const cached = getCachedImages();
+        if (cached) return; // already loaded from cache
+
+        base44.functions.invoke('generateWarNewsImages', {})
+            .then(res => {
+                const images = res?.data?.images || [];
+                setCachedImages(images);
+                setArticles(WAR_ARTICLES_BASE.map((a, i) => ({ ...a, image: images[i] || '' })));
+            })
+            .catch(() => {}); // silently ignore
+    }, []);
 
     // Poll for real OREF alerts — only generates ONE card per new alert
     useEffect(() => {
