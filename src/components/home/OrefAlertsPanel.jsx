@@ -40,7 +40,7 @@ function formatTime(dateStr) {
 }
 
 function getAlertType(cat) {
-    return ALERT_TYPES[cat] || { label: "התרעה", color: "#FF0000", icon: "🔴", bg: "rgba(255,0,0,0.15)" };
+    return ALERT_TYPES[cat] || { label: "התרעה", color: "#FF0000", Icon: AlertTriangle, bg: "rgba(255,0,0,0.15)" };
 }
 
 export default function AlertsPanel() {
