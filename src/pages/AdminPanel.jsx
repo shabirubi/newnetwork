@@ -107,14 +107,16 @@ export default function AdminPanel() {
               
               if (tab.isExternal) {
                 return (
-                  <button
+                  <a
                     key={tab.id}
-                    onClick={() => window.open(tab.url, '_blank', 'noopener,noreferrer')}
+                    href={tab.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="w-full flex items-center gap-3 px-4 py-3 rounded-xl font-medium text-purple-400 hover:bg-purple-600/20 transition-all border border-purple-500/30"
                   >
                     <Icon className="w-5 h-5" />
                     {tab.label}
-                  </button>
+                  </a>
                 );
               }
               
