@@ -82,7 +82,7 @@ export default function NewsTicker({ darkMode, setDarkMode, onMenuClick }) {
             <img 
               src="https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png" 
               alt="הרשת החדשה" 
-              className="h-8 sm:h-10 w-auto"
+              className="h-12 sm:h-16 w-auto"
             />
           <button
             onClick={() => window.dispatchEvent(new CustomEvent('openAIRadio'))}
