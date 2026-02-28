@@ -125,7 +125,7 @@ export default function AlertsPanel() {
                             <div className="flex items-start gap-3">
                                 <div className="flex items-center gap-2 flex-shrink-0">
                                     <Siren className="w-8 h-8 text-white animate-pulse" />
-                                    <span className="text-3xl">{alertType?.icon}</span>
+                                    {alertType?.Icon && <alertType.Icon className="w-7 h-7 text-white" />}
                                 </div>
                                 <div className="flex-1 min-w-0">
                                     <div className="flex items-center gap-2 mb-1 flex-wrap">
