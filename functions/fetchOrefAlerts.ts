@@ -47,17 +47,39 @@ Deno.serve(async (req) => {
         }
 
         // Try tzevaadom proxy if official gave nothing
+        // tzevaadom format: [{id, alerts:[{time(unix), cities:[], threat, isDrill}]}]
         if (historyAlerts.length === 0 && proxy1Res?.ok) {
             const text = await proxy1Res.text();
             const t = text.trim();
             if (t && t.length > 2) {
                 try {
                     const parsed = JSON.parse(t);
-                    const arr = Array.isArray(parsed) ? parsed : (parsed?.alerts || parsed?.data || []);
-                    if (arr.length > 0) {
-                        historyAlerts = arr.slice(0, 50);
+                    const groups = Array.isArray(parsed) ? parsed : (parsed?.alerts || parsed?.data || []);
+                    if (groups.length > 0) {
+                        // Flatten all inner alerts into a single list
+                        const flat = [];
+                        for (const group of groups) {
+                            const innerAlerts = group.alerts || [];
+                            for (const a of innerAlerts) {
+                                flat.push({
+                                    category: a.threat || 1,
+                                    time: a.time ? new Date(a.time * 1000).toLocaleString('he-IL', { timeZone: 'Asia/Jerusalem' }) : '',
+                                    data: Array.isArray(a.cities) ? a.cities.join(', ') : (a.cities || ''),
+                                    isDrill: a.isDrill,
+                                });
+                            }
+                        }
+                        // Sort newest first
+                        flat.sort((a, b) => {
+                            const ta = groups.flatMap(g => g.alerts || []).find(x => new Date(x.time*1000).toLocaleString('he-IL', {timeZone:'Asia/Jerusalem'}) === a.time)?.time || 0;
+                            const tb = groups.flatMap(g => g.alerts || []).find(x => new Date(x.time*1000).toLocaleString('he-IL', {timeZone:'Asia/Jerusalem'}) === b.time)?.time || 0;
+                            return tb - ta;
+                        });
+                        historyAlerts = flat.slice(0, 50);
                     }
-                } catch {}
+                } catch (e) {
+                    console.error('[oref] tzevaadom parse error:', e.message);
+                }
             }
         }
 
