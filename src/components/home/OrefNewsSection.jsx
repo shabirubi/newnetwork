@@ -143,9 +143,9 @@ function NewsCard({ article, index, isAlert = false }) {
                 </div>
 
                 {/* Logo watermark */}
-                <div className="absolute bottom-2 right-2 flex items-center gap-1.5 bg-black/60 rounded-lg px-2 py-1 backdrop-blur-sm">
-                    <img src={LOGO_URL} alt="הרשת החדשה" className="h-4 w-auto" />
-                    <span className="text-white text-[10px] font-bold" style={{ fontFamily: FONT }}>
+                <div className="absolute bottom-2 right-2 flex items-center gap-2 bg-black/70 rounded-xl px-3 py-1.5 backdrop-blur-sm">
+                    <img src={LOGO_URL} alt="הרשת החדשה" className="h-7 w-auto" />
+                    <span className="text-white text-sm font-bold" style={{ fontFamily: FONT }}>
                         הרשת החדשה
                     </span>
                 </div>
