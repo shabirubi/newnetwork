@@ -233,25 +233,32 @@ export default function AlertsPanel() {
                                 <div className="space-y-2 max-h-80 overflow-y-auto">
                                     {history.map((alert, i) => {
                                         const type = getAlertType(alert.category || alert.cat || 1);
+                                        const location = alert.data || alert.area || alert.name || "";
                                         return (
                                             <div key={i}
-                                                className="flex items-start gap-3 p-3 rounded-xl border"
+                                                className="flex items-center gap-3 p-2.5 rounded-xl border"
                                                 style={{ background: type.bg, borderColor: `${type.color}40` }}>
-                                                <span className="text-xl flex-shrink-0">{type.icon}</span>
+                                                <span className="text-lg flex-shrink-0">{type.icon}</span>
                                                 <div className="flex-1 min-w-0">
                                                     <div className="flex items-center gap-2 flex-wrap">
-                                                        <span className="text-sm font-bold" style={{ color: type.color, fontFamily: FONT }}>
+                                                        <span className="text-xs font-black px-2 py-0.5 rounded-full" 
+                                                            style={{ color: type.color, background: `${type.color}20`, fontFamily: FONT }}>
                                                             {type.label}
                                                         </span>
                                                         {alert.time && (
-                                                            <span className="text-gray-400 text-xs" style={{ fontFamily: FONT }}>
+                                                            <span className="text-gray-500 text-xs" style={{ fontFamily: FONT }}>
                                                                 {alert.time}
                                                             </span>
                                                         )}
                                                     </div>
-                                                    <p className="text-gray-200 text-sm mt-0.5 font-medium" style={{ fontFamily: FONT }}>
-                                                        {alert.data || alert.area || alert.name || ""}
-                                                    </p>
+                                                    {location && (
+                                                        <div className="flex items-center gap-1 mt-1">
+                                                            <MapPin className="w-3 h-3 text-gray-400 flex-shrink-0" />
+                                                            <p className="text-gray-200 text-sm font-medium leading-tight" style={{ fontFamily: FONT }}>
+                                                                {location}
+                                                            </p>
+                                                        </div>
+                                                    )}
                                                 </div>
                                             </div>
                                         );
