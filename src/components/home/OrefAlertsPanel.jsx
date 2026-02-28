@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { base44 } from "@/api/base44Client";
-import { Siren, AlertTriangle, Shield, MapPin, Clock, ChevronDown, ChevronUp, ExternalLink } from "lucide-react";
+import { Siren, AlertTriangle, Shield, MapPin, Clock, ChevronDown, ChevronUp, ExternalLink, Zap, Plane, Activity, Biohazard, AlertOctagon, Waves, CheckCircle2, ShieldAlert } from "lucide-react";
 
 const ALERT_TYPES = {
-    1:   { label: "ירי רקטות וטילים",   color: "#FF0000", icon: "🚀", bg: "rgba(255,0,0,0.15)" },
-    2:   { label: "חדירת כלי טיס עוין", color: "#FF4500", icon: "✈️", bg: "rgba(255,69,0,0.15)" },
-    3:   { label: "רעידת אדמה",          color: "#FF8C00", icon: "🌍", bg: "rgba(255,140,0,0.15)" },
-    4:   { label: "חומרים מסוכנים",      color: "#FF6B35", icon: "☢️", bg: "rgba(255,107,53,0.15)" },
-    5:   { label: "חדירת מחבלים",        color: "#DC143C", icon: "⚠️", bg: "rgba(220,20,60,0.15)" },
-    6:   { label: "צונאמי",               color: "#1E90FF", icon: "🌊", bg: "rgba(30,144,255,0.15)" },
-    13:  { label: "ביטול התרעה",          color: "#00CC00", icon: "✅", bg: "rgba(0,204,0,0.15)" },
-    101: { label: "אירוע חירום",           color: "#FF0000", icon: "🚨", bg: "rgba(255,0,0,0.15)" },
+    1:   { label: "ירי רקטות וטילים",   color: "#FF0000", Icon: Zap,          bg: "rgba(255,0,0,0.15)" },
+    2:   { label: "חדירת כלי טיס עוין", color: "#FF4500", Icon: Plane,        bg: "rgba(255,69,0,0.15)" },
+    3:   { label: "רעידת אדמה",          color: "#FF8C00", Icon: Activity,     bg: "rgba(255,140,0,0.15)" },
+    4:   { label: "חומרים מסוכנים",      color: "#FF6B35", Icon: Biohazard,    bg: "rgba(255,107,53,0.15)" },
+    5:   { label: "חדירת מחבלים",        color: "#DC143C", Icon: AlertOctagon, bg: "rgba(220,20,60,0.15)" },
+    6:   { label: "צונאמי",               color: "#1E90FF", Icon: Waves,        bg: "rgba(30,144,255,0.15)" },
+    13:  { label: "ביטול התרעה",          color: "#00CC00", Icon: CheckCircle2, bg: "rgba(0,204,0,0.15)" },
+    101: { label: "אירוע חירום",           color: "#FF0000", Icon: ShieldAlert,  bg: "rgba(255,0,0,0.15)" },
 };
 
 const FONT = 'system-ui, -apple-system, "Segoe UI", Arial, sans-serif';
