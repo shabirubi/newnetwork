@@ -160,7 +160,8 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-black space-y-0 sm:space-y-6">
 
-
+      {/* OREF Alerts - TOP PRIORITY */}
+      <OrefAlertsPanel />
 
       {/* Viral Video Section */}
       <section className="w-full px-2 sm:px-4 py-4 sm:py-8" style={{ backgroundColor: '#000000' }}>
