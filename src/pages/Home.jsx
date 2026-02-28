@@ -32,6 +32,7 @@ import ReporterLiveChat from "../components/reporter/ReporterLiveChat";
 import ZakaMediaKitContainer from "../components/home/ZakaMediaKitContainer";
 import WeatherForecastModal from "../components/weather/WeatherForecastModal";
 import YouTubeFloatingButton from "../components/home/YouTubeFloatingButton";
+import OrefAlertsPanel from "../components/home/OrefAlertsPanel";
 
 // Lazy loaded components
 const NewsReels = React.lazy(() => import("../components/news/NewsReels"));
