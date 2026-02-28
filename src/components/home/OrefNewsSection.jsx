@@ -277,21 +277,37 @@ export default function WarNewsSection() {
         <section className="w-full px-2 sm:px-4 py-6" dir="rtl">
             <div className="max-w-7xl mx-auto">
 
-                {/* Header */}
-                <div className="flex items-center gap-3 mb-6">
-                    <img src={LOGO_URL} alt="הרשת החדשה" className="h-10 w-auto drop-shadow-xl" />
-                    <div>
-                        <div className="flex items-center gap-2">
-                            <h2 className="text-xl sm:text-3xl font-black text-white" style={{ fontFamily: FONT }}>
+                {/* BBC-style Header Bar */}
+                <div className="rounded-xl overflow-hidden mb-6 shadow-2xl">
+                    {/* Top red bar */}
+                    <div className="bg-[#BB1919] px-5 py-3 flex items-center justify-between">
+                        <div className="flex items-center gap-4">
+                            <img src={LOGO_URL} alt="הרשת החדשה" className="h-9 w-auto drop-shadow-xl" />
+                            <div className="w-px h-8 bg-white/30" />
+                            <h2 style={{
+                                fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif',
+                                fontSize: '1.5rem',
+                                fontWeight: '700',
+                                color: '#fff',
+                                letterSpacing: '-0.01em'
+                            }}>
                                 חדשות המלחמה
                             </h2>
-                            <span className="flex items-center gap-1 bg-red-600 text-white text-xs font-black px-2 py-0.5 rounded animate-pulse">
-                                <Zap className="w-3 h-3" /> חי
-                            </span>
                         </div>
-                        <p className="text-gray-400 text-xs" style={{ fontFamily: FONT }}>
-                            ישראל · ארה"ב · איראן · עזה | הרשת החדשה
-                        </p>
+                        <span className="flex items-center gap-1.5 bg-white/20 border border-white/30 text-white text-xs font-black px-3 py-1 rounded animate-pulse"
+                            style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif', letterSpacing: '0.08em' }}>
+                            <Zap className="w-3 h-3" /> LIVE
+                        </span>
+                    </div>
+                    {/* Bottom subtitle bar */}
+                    <div className="bg-[#1A1A1A] px-5 py-2 flex items-center gap-2">
+                        <span className="text-gray-400 text-xs" style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
+                            ישראל · ארה"ב · איראן · עזה
+                        </span>
+                        <span className="text-gray-600">|</span>
+                        <span className="text-gray-500 text-xs" style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
+                            הרשת החדשה — עדכון שוטף
+                        </span>
                     </div>
                 </div>
 
