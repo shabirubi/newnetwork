@@ -6,7 +6,20 @@ import { Shield, Clock, Zap, ChevronDown, ChevronUp, Loader2 } from "lucide-reac
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png";
 const FONT = 'system-ui, -apple-system, "Segoe UI", Arial, sans-serif';
 
-// Static war articles — images loaded once via AI (cached in localStorage 24h)
+// Fallback Unsplash images shown immediately, replaced by AI images once loaded
+const FALLBACK_IMAGES = [
+    "https://images.unsplash.com/photo-1569025743873-ea3a9ade89f9?w=600&q=80",
+    "https://images.unsplash.com/photo-1580137189272-c9379f8864fd?w=600&q=80",
+    "https://images.unsplash.com/photo-1597733336794-db7de7a4c9f5?w=600&q=80",
+    "https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=600&q=80",
+    "https://images.unsplash.com/photo-1586771107445-d3ca888129ce?w=600&q=80",
+    "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&q=80",
+    "https://images.unsplash.com/photo-1521295121783-8a321d551ad2?w=600&q=80",
+    "https://images.unsplash.com/photo-1540910419892-4a36d2c3266c?w=600&q=80",
+    "https://images.unsplash.com/photo-1548502499-ef49d09e3185?w=600&q=80",
+];
+
+// Static war articles — shown immediately with Unsplash images, then AI images replace them (cached 24h)
 const WAR_ARTICLES_BASE = [
     {
         title: "ישראל ואמריקה מסכמות: מתקפה מתואמת על מתקני הגרעין של איראן",
