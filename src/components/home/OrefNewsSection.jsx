@@ -84,11 +84,11 @@ const WAR_ARTICLES = [
 ];
 
 const CATEGORY_STYLES = {
-    "ביטחון":    { color: "#FF4444", bg: "#1a0505", border: "#FF444440", icon: "🚀" },
-    "אזהרה":    { color: "#FF2222", bg: "#1a0303", border: "#FF222250", icon: "⚠️" },
-    "צבא":      { color: "#FF8C00", bg: "#1a0e00", border: "#FF8C0040", icon: "🪖" },
-    "דיפלומטיה":{ color: "#00BFFF", bg: "#00111a", border: "#00BFFF35", icon: "🌐" },
-    "כלכלה":    { color: "#FFD700", bg: "#1a1500", border: "#FFD70035", icon: "💰" },
+    "ביטחון":    { color: "#FF4444", bg: "#1a0505", border: "#FF444440", icon: "SECURITY" },
+    "אזהרה":    { color: "#FF2222", bg: "#1a0303", border: "#FF222250", icon: "ALERT" },
+    "צבא":      { color: "#FF8C00", bg: "#1a0e00", border: "#FF8C0040", icon: "MILITARY" },
+    "דיפלומטיה":{ color: "#00BFFF", bg: "#00111a", border: "#00BFFF35", icon: "DIPLOMACY" },
+    "כלכלה":    { color: "#FFD700", bg: "#1a1500", border: "#FFD70035", icon: "ECONOMY" },
 };
 
 function getCatStyle(cat) {
