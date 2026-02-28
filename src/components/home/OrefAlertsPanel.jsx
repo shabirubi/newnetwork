@@ -129,9 +129,9 @@ export default function AlertsPanel() {
                                 </div>
                                 <div className="flex-1 min-w-0">
                                     <div className="flex items-center gap-2 mb-1 flex-wrap">
-                                        <span className="bg-white text-red-700 text-xs font-black px-3 py-1 rounded-full animate-pulse"
+                                        <span className="bg-white text-red-700 text-xs font-black px-3 py-1 rounded-full animate-pulse flex items-center gap-1"
                                             style={{ fontFamily: FONT }}>
-                                            🚨 התרעה פעילה עכשיו
+                                            <ShieldAlert className="w-3 h-3" /> התרעה פעילה עכשיו
                                         </span>
                                         <span className="text-white font-black text-base sm:text-lg"
                                             style={{ fontFamily: FONT }}>
