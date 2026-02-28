@@ -205,14 +205,26 @@ export default function AlertsPanel() {
                         style={{ background: '#0a0a0a', borderBottom: '1px solid #222' }}
                     >
                         <div className="max-w-7xl mx-auto px-3 sm:px-6 py-4">
-                            <div className="flex items-center gap-2 mb-3">
-                                <Clock className="w-4 h-4 text-orange-400" />
-                                <h3 className="text-white font-bold text-sm" style={{ fontFamily: FONT }}>
-                                    היסטוריית התרעות אחרונות
-                                </h3>
-                                <span className="text-gray-500 text-xs" style={{ fontFamily: FONT }}>
-                                    • מתעדכן כל 5 שניות
-                                </span>
+                            <div className="flex items-center justify-between gap-2 mb-3">
+                                <div className="flex items-center gap-2">
+                                    <Clock className="w-4 h-4 text-orange-400" />
+                                    <h3 className="text-white font-bold text-sm" style={{ fontFamily: FONT }}>
+                                        היסטוריית התרעות אחרונות
+                                    </h3>
+                                    <span className="text-gray-500 text-xs" style={{ fontFamily: FONT }}>
+                                        • מתעדכן כל 5 שניות
+                                    </span>
+                                </div>
+                                <a
+                                    href="https://www.oref.org.il/heb/alerts-history"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="flex items-center gap-1 text-orange-400 hover:text-orange-300 text-xs transition-colors"
+                                    style={{ fontFamily: FONT }}
+                                >
+                                    <ExternalLink className="w-3 h-3" />
+                                    אתר פיקוד העורף
+                                </a>
                             </div>
 
                             {history.length === 0 ? (
