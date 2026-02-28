@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { base44 } from "@/api/base44Client";
-import { Siren, AlertTriangle, Shield, MapPin, Clock, ChevronDown, ChevronUp } from "lucide-react";
+import { Siren, AlertTriangle, Shield, MapPin, Clock, ChevronDown, ChevronUp, ExternalLink } from "lucide-react";
 
 const ALERT_TYPES = {
     1:   { label: "ירי רקטות וטילים",   color: "#FF0000", icon: "🚀", bg: "rgba(255,0,0,0.15)" },
