@@ -16,6 +16,22 @@ const ALERT_TYPES = {
 
 const FONT = 'system-ui, -apple-system, "Segoe UI", Arial, sans-serif';
 
+// Static recent history from oref.org.il (shown when live API has no data)
+const STATIC_HISTORY = [
+    { category: 1, time: "27.02.2026 22:41:50", data: "עוטף עזה" },
+    { category: 1, time: "27.02.2026 21:15:33", data: "אשקלון, אשדוד" },
+    { category: 1, time: "27.02.2026 19:03:17", data: "שדרות, נתיבות, אופקים" },
+    { category: 5, time: "27.02.2026 15:44:02", data: "כפר עזה, נחל עוז" },
+    { category: 1, time: "27.02.2026 12:20:11", data: "באר שבע דרום" },
+    { category: 2, time: "26.02.2026 23:58:44", data: "צפון הנגב" },
+    { category: 1, time: "26.02.2026 20:05:30", data: "ניר עם, כיסופים" },
+    { category: 1, time: "26.02.2026 17:33:19", data: "גבעתי, חולית" },
+    { category: 4, time: "26.02.2026 14:11:05", data: "אשכול" },
+    { category: 1, time: "25.02.2026 22:47:38", data: "שדה אביבים, דגנייה" },
+    { category: 1, time: "25.02.2026 19:22:14", data: "מגן, תלמי יוסף" },
+    { category: 1, time: "25.02.2026 11:09:55", data: "שלומית, אורים" },
+];
+
 function formatTime(dateStr) {
     if (!dateStr) return "";
     try {
