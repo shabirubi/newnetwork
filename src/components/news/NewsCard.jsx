@@ -83,6 +83,12 @@ export default function NewsCard({
             )}
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
             
+            {/* Logo Ticker */}
+            <div className="absolute bottom-2 right-2 flex items-center gap-2 bg-black/70 rounded-xl px-3 py-1.5 backdrop-blur-sm">
+              <img src={LOGO_URL} alt="הרשת החדשה" className="h-7 w-auto" />
+              <span className="text-white text-sm font-bold">הרשת החדשה</span>
+            </div>
+
             {/* Content Overlay */}
             <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10">
               <div className="flex items-center gap-3 mb-4">
