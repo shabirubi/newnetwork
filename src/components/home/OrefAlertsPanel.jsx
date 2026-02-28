@@ -55,6 +55,9 @@ export default function AlertsPanel() {
 
             if (data.history && data.history.length > 0) {
                 setHistory(data.history);
+            } else if (history.length === 0) {
+                // Fallback: load static recent history from oref.org.il
+                setHistory(STATIC_HISTORY);
             }
         } catch (err) {
             console.error("Alerts fetch error:", err);
