@@ -184,26 +184,31 @@ export default function WarNewsSection() {
     const [generatingAlert, setGeneratingAlert] = useState(false);
     const [lastAlertId, setLastAlertId] = useState(null);
     const [articles, setArticles] = useState(() => {
-        // Try loading from cache immediately
+        // Try loading from cache immediately, else use Unsplash fallbacks
         const cached = getCachedImages();
-        if (cached) {
-            return WAR_ARTICLES_BASE.map((a, i) => ({ ...a, image: cached[i] || '' }));
-        }
-        return WAR_ARTICLES_BASE.map(a => ({ ...a, image: '' }));
+        return WAR_ARTICLES_BASE.map((a, i) => ({
+            ...a,
+            image: (cached && cached[i]) || FALLBACK_IMAGES[i] || ''
+        }));
     });
 
     // Load AI images once — from cache or via backend function
     useEffect(() => {
         const cached = getCachedImages();
-        if (cached) return; // already loaded from cache
+        if (cached) return; // already loaded from cache, Unsplash shown until AI ready
 
         base44.functions.invoke('generateWarNewsImages', {})
             .then(res => {
                 const images = res?.data?.images || [];
-                setCachedImages(images);
-                setArticles(WAR_ARTICLES_BASE.map((a, i) => ({ ...a, image: images[i] || '' })));
+                if (images.some(Boolean)) {
+                    setCachedImages(images);
+                    setArticles(WAR_ARTICLES_BASE.map((a, i) => ({
+                        ...a,
+                        image: images[i] || FALLBACK_IMAGES[i] || ''
+                    })));
+                }
             })
-            .catch(() => {}); // silently ignore
+            .catch(() => {}); // silently ignore, Unsplash fallbacks remain
     }, []);
 
     // Poll for real OREF alerts — only generates ONE card per new alert
