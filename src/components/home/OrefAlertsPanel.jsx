@@ -1,34 +1,33 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { base44 } from "@/api/base44Client";
-import { Siren, AlertTriangle, Shield, MapPin, Clock, ChevronDown, ChevronUp, X, Zap } from "lucide-react";
+import { Siren, AlertTriangle, Shield, MapPin, Clock, ChevronDown, ChevronUp } from "lucide-react";
 
 const ALERT_TYPES = {
-    1: { label: "ירי רקטות וטילים", color: "#FF0000", icon: "🚀", bg: "rgba(255,0,0,0.15)" },
-    2: { label: "חדירת כלי טיס עוין", color: "#FF4500", icon: "✈️", bg: "rgba(255,69,0,0.15)" },
-    3: { label: "רעידת אדמה", color: "#FF8C00", icon: "🌍", bg: "rgba(255,140,0,0.15)" },
-    4: { label: "חומרים מסוכנים", color: "#FF6B35", icon: "☢️", bg: "rgba(255,107,53,0.15)" },
-    5: { label: "חדירת מחבלים", color: "#DC143C", icon: "⚠️", bg: "rgba(220,20,60,0.15)" },
-    6: { label: "צונאמי", color: "#1E90FF", icon: "🌊", bg: "rgba(30,144,255,0.15)" },
-    13: { label: "ביטול התרעה", color: "#00CC00", icon: "✅", bg: "rgba(0,204,0,0.15)" },
-    101: { label: "אירוע חירום", color: "#FF0000", icon: "🚨", bg: "rgba(255,0,0,0.15)" },
+    1:   { label: "ירי רקטות וטילים",   color: "#FF0000", icon: "🚀", bg: "rgba(255,0,0,0.15)" },
+    2:   { label: "חדירת כלי טיס עוין", color: "#FF4500", icon: "✈️", bg: "rgba(255,69,0,0.15)" },
+    3:   { label: "רעידת אדמה",          color: "#FF8C00", icon: "🌍", bg: "rgba(255,140,0,0.15)" },
+    4:   { label: "חומרים מסוכנים",      color: "#FF6B35", icon: "☢️", bg: "rgba(255,107,53,0.15)" },
+    5:   { label: "חדירת מחבלים",        color: "#DC143C", icon: "⚠️", bg: "rgba(220,20,60,0.15)" },
+    6:   { label: "צונאמי",               color: "#1E90FF", icon: "🌊", bg: "rgba(30,144,255,0.15)" },
+    13:  { label: "ביטול התרעה",          color: "#00CC00", icon: "✅", bg: "rgba(0,204,0,0.15)" },
+    101: { label: "אירוע חירום",           color: "#FF0000", icon: "🚨", bg: "rgba(255,0,0,0.15)" },
 };
+
+const FONT = 'system-ui, -apple-system, "Segoe UI", Arial, sans-serif';
 
 function formatTime(dateStr) {
     if (!dateStr) return "";
     try {
-        const d = new Date(dateStr);
-        return d.toLocaleTimeString("he-IL", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
-    } catch {
-        return dateStr;
-    }
+        return new Date(dateStr).toLocaleTimeString("he-IL", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+    } catch { return dateStr; }
 }
 
 function getAlertType(cat) {
     return ALERT_TYPES[cat] || { label: "התרעה", color: "#FF0000", icon: "🔴", bg: "rgba(255,0,0,0.15)" };
 }
 
-export default function OrefAlertsPanel() {
+export default function AlertsPanel() {
     const [activeAlert, setActiveAlert] = useState(null);
     const [history, setHistory] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -36,7 +35,6 @@ export default function OrefAlertsPanel() {
     const [lastFetch, setLastFetch] = useState(null);
     const [hasActiveNow, setHasActiveNow] = useState(false);
     const intervalRef = useRef(null);
-    const audioRef = useRef(null);
     const prevActiveRef = useRef(null);
 
     const fetchAlerts = async () => {
@@ -45,18 +43,9 @@ export default function OrefAlertsPanel() {
             const data = res.data;
             setLastFetch(new Date());
 
-            // Check active alert
             if (data.active && data.active.data && data.active.data.length > 0) {
                 setActiveAlert(data.active);
                 setHasActiveNow(true);
-                // Play sound if new alert
-                if (!prevActiveRef.current) {
-                    try {
-                        if (audioRef.current) {
-                            audioRef.current.play().catch(() => {});
-                        }
-                    } catch (e) {}
-                }
                 prevActiveRef.current = data.active;
             } else {
                 setActiveAlert(null);
@@ -68,7 +57,7 @@ export default function OrefAlertsPanel() {
                 setHistory(data.history);
             }
         } catch (err) {
-            console.error("Error fetching oref alerts:", err);
+            console.error("Alerts fetch error:", err);
         } finally {
             setLoading(false);
         }
@@ -76,7 +65,6 @@ export default function OrefAlertsPanel() {
 
     useEffect(() => {
         fetchAlerts();
-        // Poll every 5 seconds for real-time alerts
         intervalRef.current = setInterval(fetchAlerts, 5000);
         return () => clearInterval(intervalRef.current);
     }, []);
@@ -85,7 +73,9 @@ export default function OrefAlertsPanel() {
         return (
             <div className="w-full bg-black border-b border-red-900/50 py-2 px-4 flex items-center gap-2">
                 <div className="w-3 h-3 rounded-full bg-red-500 animate-pulse" />
-                <span className="text-red-400 text-sm font-bold">טוען התרעות פיקוד העורף...</span>
+                <span className="text-red-400 text-sm font-bold" style={{ fontFamily: FONT }}>
+                    מחפש התרעות...
+                </span>
             </div>
         );
     }
@@ -94,12 +84,8 @@ export default function OrefAlertsPanel() {
 
     return (
         <div className="w-full" dir="rtl">
-            {/* Audio for alerts */}
-            <audio ref={audioRef} preload="auto">
-                <source src="https://www.oref.org.il/sounds/alert.mp3" type="audio/mpeg" />
-            </audio>
 
-            {/* ACTIVE ALERT - Full Width Red Banner */}
+            {/* ACTIVE ALERT Banner */}
             <AnimatePresence>
                 {hasActiveNow && activeAlert && (
                     <motion.div
@@ -113,12 +99,9 @@ export default function OrefAlertsPanel() {
                             boxShadow: '0 0 40px rgba(255,0,0,0.8)',
                         }}
                     >
-                        {/* Animated border */}
-                        <div className="absolute inset-0 animate-pulse" style={{ 
-                            border: '3px solid rgba(255,255,255,0.4)',
-                            borderRadius: 0
-                        }} />
-                        
+                        <div className="absolute inset-0 animate-pulse"
+                            style={{ border: '3px solid rgba(255,255,255,0.4)' }} />
+
                         <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4">
                             <div className="flex items-start gap-3">
                                 <div className="flex items-center gap-2 flex-shrink-0">
@@ -127,30 +110,35 @@ export default function OrefAlertsPanel() {
                                 </div>
                                 <div className="flex-1 min-w-0">
                                     <div className="flex items-center gap-2 mb-1 flex-wrap">
-                                        <span className="bg-white text-red-700 text-xs font-black px-3 py-1 rounded-full animate-pulse">
+                                        <span className="bg-white text-red-700 text-xs font-black px-3 py-1 rounded-full animate-pulse"
+                                            style={{ fontFamily: FONT }}>
                                             🚨 התרעה פעילה עכשיו
                                         </span>
-                                        <span className="text-white font-black text-base sm:text-lg">
+                                        <span className="text-white font-black text-base sm:text-lg"
+                                            style={{ fontFamily: FONT }}>
                                             {alertType?.label || "התרעה"}
                                         </span>
                                     </div>
                                     <div className="flex flex-wrap gap-2 mt-2">
                                         {activeAlert.data?.slice(0, 10).map((city, i) => (
-                                            <span key={i} className="bg-white/20 text-white text-sm font-bold px-2 py-1 rounded-lg flex items-center gap-1">
+                                            <span key={i} className="bg-white/20 text-white text-sm font-bold px-2 py-1 rounded-lg flex items-center gap-1"
+                                                style={{ fontFamily: FONT }}>
                                                 <MapPin className="w-3 h-3" /> {city}
                                             </span>
                                         ))}
                                         {activeAlert.data?.length > 10 && (
-                                            <span className="text-white/80 text-sm font-bold">
+                                            <span className="text-white/80 text-sm font-bold" style={{ fontFamily: FONT }}>
                                                 +{activeAlert.data.length - 10} עוד...
                                             </span>
                                         )}
                                     </div>
                                     {activeAlert.desc && (
-                                        <p className="text-white/90 text-sm mt-1">{activeAlert.desc}</p>
+                                        <p className="text-white/90 text-sm mt-1" style={{ fontFamily: FONT }}>
+                                            {activeAlert.desc}
+                                        </p>
                                     )}
                                 </div>
-                                <div className="flex-shrink-0 text-white/70 text-xs text-left">
+                                <div className="flex-shrink-0 text-white/70 text-xs text-left" style={{ fontFamily: FONT }}>
                                     {activeAlert.alertDate && formatTime(activeAlert.alertDate)}
                                 </div>
                             </div>
@@ -159,13 +147,11 @@ export default function OrefAlertsPanel() {
                 )}
             </AnimatePresence>
 
-            {/* STATUS BAR - always visible */}
+            {/* STATUS BAR */}
             <div
                 className="w-full flex items-center justify-between px-3 sm:px-6 py-2 cursor-pointer select-none"
                 style={{
-                    background: hasActiveNow 
-                        ? 'linear-gradient(90deg, #1a0000, #2d0000)' 
-                        : 'linear-gradient(90deg, #0a0a0a, #111111)',
+                    background: hasActiveNow ? 'linear-gradient(90deg, #1a0000, #2d0000)' : 'linear-gradient(90deg, #0a0a0a, #111111)',
                     borderBottom: hasActiveNow ? '1px solid #FF4444' : '1px solid #333',
                 }}
                 onClick={() => setExpanded(!expanded)}
@@ -173,25 +159,23 @@ export default function OrefAlertsPanel() {
                 <div className="flex items-center gap-2">
                     <div className={`w-2.5 h-2.5 rounded-full ${hasActiveNow ? 'bg-red-500 animate-pulse' : 'bg-green-500'}`} />
                     <Shield className={`w-4 h-4 ${hasActiveNow ? 'text-red-400' : 'text-green-400'}`} />
-                    <span className={`text-sm font-bold ${hasActiveNow ? 'text-red-300' : 'text-green-300'}`}>
-                        {hasActiveNow 
-                            ? `⚠️ התרעה פעילה!` 
-                            : '✅ אין התרעות פעילות כרגע'}
+                    <span className={`text-sm font-bold ${hasActiveNow ? 'text-red-300' : 'text-green-300'}`}
+                        style={{ fontFamily: FONT }}>
+                        {hasActiveNow ? '⚠️ התרעה פעילה!' : '✅ אין התרעות פעילות כרגע'}
                     </span>
                     {lastFetch && (
-                        <span className="text-gray-600 text-xs hidden sm:inline">
+                        <span className="text-gray-600 text-xs hidden sm:inline" style={{ fontFamily: FONT }}>
                             • עודכן: {formatTime(lastFetch)}
                         </span>
                     )}
                 </div>
-
                 <div className="flex items-center gap-2">
-                    <span className="text-gray-500 text-xs">פיקוד העורף</span>
+                    <span className="text-gray-500 text-xs" style={{ fontFamily: FONT }}>הרשת החדשה</span>
                     {expanded ? <ChevronUp className="w-4 h-4 text-gray-500" /> : <ChevronDown className="w-4 h-4 text-gray-500" />}
                 </div>
             </div>
 
-            {/* HISTORY PANEL - expandable */}
+            {/* HISTORY PANEL */}
             <AnimatePresence>
                 {expanded && (
                     <motion.div
@@ -204,36 +188,37 @@ export default function OrefAlertsPanel() {
                         <div className="max-w-7xl mx-auto px-3 sm:px-6 py-4">
                             <div className="flex items-center gap-2 mb-3">
                                 <Clock className="w-4 h-4 text-orange-400" />
-                                <h3 className="text-white font-bold text-sm">היסטוריית התרעות אחרונות</h3>
-                                <span className="text-gray-500 text-xs">• מתעדכן כל 5 שניות</span>
+                                <h3 className="text-white font-bold text-sm" style={{ fontFamily: FONT }}>
+                                    היסטוריית התרעות אחרונות
+                                </h3>
+                                <span className="text-gray-500 text-xs" style={{ fontFamily: FONT }}>
+                                    • מתעדכן כל 5 שניות
+                                </span>
                             </div>
 
                             {history.length === 0 ? (
-                                <p className="text-gray-500 text-sm">אין התרעות אחרונות</p>
+                                <p className="text-gray-500 text-sm" style={{ fontFamily: FONT }}>אין התרעות אחרונות</p>
                             ) : (
                                 <div className="space-y-2 max-h-80 overflow-y-auto">
                                     {history.map((alert, i) => {
                                         const type = getAlertType(alert.category || alert.cat || 1);
                                         return (
-                                            <div
-                                                key={i}
+                                            <div key={i}
                                                 className="flex items-start gap-3 p-3 rounded-xl border"
-                                                style={{ 
-                                                    background: type.bg, 
-                                                    borderColor: `${type.color}40`
-                                                }}
-                                            >
+                                                style={{ background: type.bg, borderColor: `${type.color}40` }}>
                                                 <span className="text-xl flex-shrink-0">{type.icon}</span>
                                                 <div className="flex-1 min-w-0">
                                                     <div className="flex items-center gap-2 flex-wrap">
-                                                        <span className="text-sm font-bold" style={{ color: type.color }}>
+                                                        <span className="text-sm font-bold" style={{ color: type.color, fontFamily: FONT }}>
                                                             {type.label}
                                                         </span>
                                                         {alert.time && (
-                                                            <span className="text-gray-400 text-xs">{alert.time}</span>
+                                                            <span className="text-gray-400 text-xs" style={{ fontFamily: FONT }}>
+                                                                {alert.time}
+                                                            </span>
                                                         )}
                                                     </div>
-                                                    <p className="text-gray-200 text-sm mt-0.5 font-medium">
+                                                    <p className="text-gray-200 text-sm mt-0.5 font-medium" style={{ fontFamily: FONT }}>
                                                         {alert.data || alert.area || alert.name || ""}
                                                     </p>
                                                 </div>
@@ -242,19 +227,6 @@ export default function OrefAlertsPanel() {
                                     })}
                                 </div>
                             )}
-
-                            <div className="mt-3 pt-3 border-t border-gray-800 flex items-center justify-between">
-                                <span className="text-gray-600 text-xs">מקור: פיקוד העורף oref.org.il</span>
-                                <a 
-                                    href="https://www.oref.org.il/heb" 
-                                    target="_blank" 
-                                    rel="noopener noreferrer"
-                                    className="text-blue-400 text-xs hover:text-blue-300 underline"
-                                    onClick={e => e.stopPropagation()}
-                                >
-                                    לאתר פיקוד העורף ←
-                                </a>
-                            </div>
                         </div>
                     </motion.div>
                 )}
