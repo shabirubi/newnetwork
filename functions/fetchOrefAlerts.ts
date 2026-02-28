@@ -56,26 +56,22 @@ Deno.serve(async (req) => {
                     const parsed = JSON.parse(t);
                     const groups = Array.isArray(parsed) ? parsed : (parsed?.alerts || parsed?.data || []);
                     if (groups.length > 0) {
-                        // Flatten all inner alerts into a single list
+                        // Flatten all inner alerts into a single list, preserving unix time for sorting
                         const flat = [];
                         for (const group of groups) {
-                            const innerAlerts = group.alerts || [];
-                            for (const a of innerAlerts) {
+                            for (const a of (group.alerts || [])) {
+                                const unixTime = a.time || 0;
                                 flat.push({
+                                    _unix: unixTime,
                                     category: a.threat || 1,
-                                    time: a.time ? new Date(a.time * 1000).toLocaleString('he-IL', { timeZone: 'Asia/Jerusalem' }) : '',
+                                    time: unixTime ? new Date(unixTime * 1000).toLocaleString('he-IL', { timeZone: 'Asia/Jerusalem' }) : '',
                                     data: Array.isArray(a.cities) ? a.cities.join(', ') : (a.cities || ''),
-                                    isDrill: a.isDrill,
                                 });
                             }
                         }
                         // Sort newest first
-                        flat.sort((a, b) => {
-                            const ta = groups.flatMap(g => g.alerts || []).find(x => new Date(x.time*1000).toLocaleString('he-IL', {timeZone:'Asia/Jerusalem'}) === a.time)?.time || 0;
-                            const tb = groups.flatMap(g => g.alerts || []).find(x => new Date(x.time*1000).toLocaleString('he-IL', {timeZone:'Asia/Jerusalem'}) === b.time)?.time || 0;
-                            return tb - ta;
-                        });
-                        historyAlerts = flat.slice(0, 50);
+                        flat.sort((a, b) => b._unix - a._unix);
+                        historyAlerts = flat.slice(0, 50).map(({ _unix, ...rest }) => rest);
                     }
                 } catch (e) {
                     console.error('[oref] tzevaadom parse error:', e.message);
