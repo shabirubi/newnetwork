@@ -7,6 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import moment from "moment";
 import ShareButtons from "../shared/ShareButtons";
 
+const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png";
+
 const categoryLabels = {
   breaking: "חדשות חמות",
   security: "ביטחון",
