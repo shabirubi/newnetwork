@@ -180,7 +180,7 @@ export default function AlertsPanel() {
                     <Shield className={`w-4 h-4 ${hasActiveNow ? 'text-red-400' : 'text-green-400'}`} />
                     <span className={`text-sm font-bold ${hasActiveNow ? 'text-red-300' : 'text-green-300'}`}
                         style={{ fontFamily: FONT }}>
-                        {hasActiveNow ? '⚠️ התרעה פעילה!' : '✅ אין התרעות פעילות כרגע'}
+                        {hasActiveNow ? 'התרעה פעילה!' : 'אין התרעות פעילות כרגע'}
                     </span>
                     {lastFetch && (
                         <span className="text-gray-600 text-xs hidden sm:inline" style={{ fontFamily: FONT }}>
