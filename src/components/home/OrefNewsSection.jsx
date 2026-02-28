@@ -166,7 +166,7 @@ export default function SecurityNewsSection() {
                                         initial={{ opacity: 0, y: 20 }}
                                         animate={{ opacity: 1, y: 0 }}
                                         transition={{ delay: i * 0.05 }}
-                                        onClick={() => setExpandedId(isExpanded ? null : i)}
+                                        onClick={(e) => { e.stopPropagation(); setExpandedId(isExpanded ? null : i); }}
                                         className="relative rounded-2xl overflow-hidden cursor-pointer transition-all hover:scale-[1.02] active:scale-[0.99]"
                                         style={{
                                             background: '#111',
