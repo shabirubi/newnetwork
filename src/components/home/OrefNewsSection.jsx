@@ -240,19 +240,18 @@ export default function SecurityNewsSection() {
                                             )}
 
                                             <h3 className="text-white font-bold text-sm sm:text-base leading-snug mb-2"
-                                                style={{
-                                                    fontFamily: 'system-ui, -apple-system, "Segoe UI", sans-serif',
-                                                    lineClamp: isExpanded ? 'none' : 2,
-                                                    WebkitLineClamp: isExpanded ? 'none' : 2,
-                                                    display: '-webkit-box',
-                                                    WebkitBoxOrient: 'vertical',
-                                                    overflow: 'hidden'
-                                                }}>
+                                                style={{ fontFamily: 'system-ui, -apple-system, "Segoe UI", sans-serif' }}>
                                                 {article.title}
                                             </h3>
 
-                                            <p className={`text-gray-400 text-sm leading-relaxed ${isExpanded ? '' : 'line-clamp-2'}`}
-                                                style={{ fontFamily: 'system-ui, -apple-system, "Segoe UI", sans-serif' }}>
+                                            <p className="text-gray-400 text-sm leading-relaxed"
+                                                style={{
+                                                    fontFamily: 'system-ui, -apple-system, "Segoe UI", sans-serif',
+                                                    display: '-webkit-box',
+                                                    WebkitLineClamp: isExpanded ? 'none' : 3,
+                                                    WebkitBoxOrient: 'vertical',
+                                                    overflow: isExpanded ? 'visible' : 'hidden'
+                                                }}>
                                                 {article.content}
                                             </p>
 
