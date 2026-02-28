@@ -1,46 +1,109 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { base44 } from "@/api/base44Client";
-import { Shield, Clock, RefreshCw, ChevronLeft, Info, Loader2 } from "lucide-react";
+import { Shield, Clock, RefreshCw, ChevronDown, ChevronUp, Loader2, Zap } from "lucide-react";
+
+const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png";
+
+const FONT = 'system-ui, -apple-system, "Segoe UI", Arial, sans-serif';
+
+// Static war news – Israel / Iran / USA / Gaza
+const WAR_ARTICLES = [
+    {
+        title: "ישראל ואמריקה מסכמות: מתקפה מקומית על מתקני הגרעין של איראן",
+        content: "גורמים בכירים בממשל האמריקאי ובממשלת ישראל מסרו הלילה כי השתיים הגיעו להסכמה עקרונית לפעולה משותפת נגד מתקני הגרעין האיראניים. הבית הלבן ממתין לאישור הסנאט.",
+        category: "ביטחון",
+        date: "עכשיו",
+        is_urgent: true,
+        prompt: "Israel USA joint military operation fighter jets Middle East dramatic sky cinematic photo no text"
+    },
+    {
+        title: "איראן: נפעיל 3,000 טיל באם תהיה תקיפה – הגנת הביניים תופעל",
+        content: "דובר משמרות המהפכה האיראניות הזהיר הלילה כי כל מתקפה ישראלית-אמריקאית תגרור ירי של אלפי טילים לכיוון ישראל, לרבות פגיעה בנמלי תעופה ובתחנות כוח.",
+        category: "אזהרה",
+        date: "לפני שעה",
+        is_urgent: true,
+        prompt: "Iran missiles launch dramatic night sky military threat no text cinematic"
+    },
+    {
+        title: "צבא ישראל מוכן לסבב נוסף – כ-40 אלף מגויסים בכוננות גבוהה",
+        content: "המטכ\"ל הורה על העברת אוגדות שריון וחי\"ר לאזורי כינוס לקראת התרחיש הצפוי. פקודת מבצע תינתן בהחלטת הקבינט המדיני-ביטחוני.",
+        category: "צבא",
+        date: "לפני שעתיים",
+        is_urgent: false,
+        prompt: "Israel army tanks IDF soldiers ready for battle dramatic desert landscape no text"
+    },
+    {
+        title: "נשיא ארה\"ב: 'לא נאפשר לאיראן נשק גרעיני – זו קו אדום'",
+        content: "בנאום שנישא בבית הלבן הצהיר הנשיא האמריקאי כי ארצות הברית מחויבת לעצור את התפתחות הנשק הגרעיני האיראני בכל האמצעים הנדרשים, לרבות צבאיים.",
+        category: "דיפלומטיה",
+        date: "לפני 3 שעות",
+        is_urgent: false,
+        prompt: "US president White House podium dramatic lighting speech no text"
+    },
+    {
+        title: "חיזבאללה מפעיל מחדש חוליות מחבלים בצפון – הצבא בכוננות",
+        content: "מודיעין צבאי מצביע על חזרה לפעילות מבצעית של חיזבאללה בדרום לבנון. כוחות צה\"ל חיזקו עמדות בגבול ואוכלוסיות היישובים הצפוניים קיבלו הנחיות מעודכנות.",
+        category: "ביטחון",
+        date: "לפני 4 שעות",
+        is_urgent: false,
+        prompt: "Hezbollah Lebanon border Israel military night dramatic no text"
+    },
+    {
+        title: "ישראל מדממת כלכלית: עלות המלחמה עלתה ל-300 מיליארד שקל",
+        content: "בנק ישראל פרסם היום דו\"ח מיוחד לפיו העלות הישירה של המלחמה לכלכלה הישראלית הגיעה ל-300 מיליארד שקל, כולל נזק לתשתיות, ירידה בתיירות ועצירת השקעות.",
+        category: "כלכלה",
+        date: "הבוקר",
+        is_urgent: false,
+        prompt: "Israel economy financial crisis war cost dramatic graph money no text"
+    },
+    {
+        title: "רוסיה מספקת טכנולוגיה לאיראן – ישראל מגיבה בחריפות",
+        content: "ישראל מחתה בפני מוסקבה על העברת טכנולוגיה טילית מתקדמת לאיראן. שר החוץ הישראלי הזמין את השגריר הרוסי לשיחת מחאה רשמית.",
+        category: "דיפלומטיה",
+        date: "אתמול",
+        is_urgent: false,
+        prompt: "Russia Iran military technology deal diplomacy dramatic meeting no text"
+    },
+    {
+        title: "חמאס וישראל: שבוע לסיום שלב א' – מה יקרה אחר כך?",
+        content: "שבוע לפני תום שלב א' של הסכם החטופים, עדיין לא הושגה הסכמה על תנאי שלב ב'. מקורות דיפלומטיים: 'הפער עדיין גדול, אך ניהול משא ומתן נמשך'.",
+        category: "ביטחון",
+        date: "אתמול",
+        is_urgent: false,
+        prompt: "Gaza hostage deal negotiation dramatic Israel flags meeting no text"
+    },
+    {
+        title: "אמריקה מזיזה נושאת מטוסים נוסף למזרח התיכון",
+        content: "הפנטגון אישר העברה של נושאת מטוסים שנייה לאזור הים התיכון, לצד קבוצת המכה הקיימת. הצעד נתפס כמסר ישיר לאיראן ולגורמים פרוקסי באזור.",
+        category: "צבא",
+        date: "אתמול",
+        is_urgent: false,
+        prompt: "US Navy aircraft carrier Mediterranean sea dramatic aerial photo no text"
+    },
+];
 
 const CATEGORY_STYLES = {
-    "ביטחון":  { color: "#FF4444", bg: "rgba(255,68,68,0.10)",   icon: "🚀", border: "#FF444435" },
-    "הוראות": { color: "#FF8C00", bg: "rgba(255,140,0,0.10)",   icon: "📋", border: "#FF8C0035" },
-    "אזהרה":  { color: "#FF2222", bg: "rgba(255,34,34,0.12)",   icon: "⚠️", border: "#FF222240" },
-    "עדכון":  { color: "#00BFFF", bg: "rgba(0,191,255,0.08)",   icon: "📡", border: "#00BFFF30" },
-    "כללי":   { color: "#AAAAAA", bg: "rgba(120,120,120,0.07)", icon: "ℹ️", border: "#AAAAAA20" },
+    "ביטחון":    { color: "#FF4444", bg: "#1a0505", border: "#FF444440", icon: "🚀" },
+    "אזהרה":    { color: "#FF2222", bg: "#1a0303", border: "#FF222250", icon: "⚠️" },
+    "צבא":      { color: "#FF8C00", bg: "#1a0e00", border: "#FF8C0040", icon: "🪖" },
+    "דיפלומטיה":{ color: "#00BFFF", bg: "#00111a", border: "#00BFFF35", icon: "🌐" },
+    "כלכלה":    { color: "#FFD700", bg: "#1a1500", border: "#FFD70035", icon: "💰" },
 };
 
-const IMAGE_PROMPTS = {
-    "ביטחון":  "dramatic military security alert Israel sky at night with red warning lights, dark cinematic photo, no text",
-    "הוראות": "emergency guidance civilian safety shelter Israel, dramatic lighting, photorealistic, no text",
-    "אזהרה":  "emergency siren red alert urban Israel city night, dramatic cinematic sky, no text",
-    "עדכון":  "Israel news update broadcast room dramatic light blue glow, modern studio, no text",
-    "כללי":   "Israel news broadcast studio modern dramatic lighting, no text",
-};
-
-function getCategoryStyle(cat) {
-    return CATEGORY_STYLES[cat] || CATEGORY_STYLES["כללי"];
+function getCatStyle(cat) {
+    return CATEGORY_STYLES[cat] || { color: "#AAAAAA", bg: "#111", border: "#AAAAAA25", icon: "📰" };
 }
 
-function getImagePrompt(cat, title) {
-    const base = IMAGE_PROMPTS[cat] || IMAGE_PROMPTS["כללי"];
-    return `${base}, related to: ${title}`;
-}
-
-// Cache generated images per article title to avoid regenerating
 const imageCache = {};
 
-export default function SecurityNewsSection() {
-    const [articles, setArticles] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [refreshing, setRefreshing] = useState(false);
-    const [lastUpdated, setLastUpdated] = useState(null);
-    const [expandedId, setExpandedId] = useState(null);
+export default function WarNewsSection() {
     const [images, setImages] = useState({});
     const [loadingImages, setLoadingImages] = useState({});
+    const [expanded, setExpanded] = useState(null);
 
-    const generateImage = async (key, prompt) => {
+    const generateImage = async (i, prompt) => {
+        const key = `war-${i}`;
         if (imageCache[key]) {
             setImages(prev => ({ ...prev, [key]: imageCache[key] }));
             return;
@@ -53,239 +116,162 @@ export default function SecurityNewsSection() {
                 setImages(prev => ({ ...prev, [key]: res.url }));
             }
         } catch (e) {
-            // silently fail, show fallback gradient
+            // fallback gradient
         } finally {
             setLoadingImages(prev => ({ ...prev, [key]: false }));
         }
     };
 
-    const fetchNews = async (isRefresh = false) => {
-        if (isRefresh) setRefreshing(true);
-        try {
-            const res = await base44.functions.invoke('fetchOrefNews', {});
-            const data = res.data;
-            if (data.articles && data.articles.length > 0) {
-                setArticles(data.articles);
-                setLastUpdated(new Date());
-                // Generate images for each article asynchronously
-                data.articles.forEach((article, i) => {
-                    const key = `${i}-${article.title}`;
-                    if (!imageCache[key]) {
-                        generateImage(key, getImagePrompt(article.category, article.title));
-                    } else {
-                        setImages(prev => ({ ...prev, [key]: imageCache[key] }));
-                    }
-                });
-            }
-        } catch (err) {
-            console.error("Error fetching security news:", err);
-        } finally {
-            setLoading(false);
-            setRefreshing(false);
-        }
-    };
-
     useEffect(() => {
-        fetchNews();
-        const interval = setInterval(() => fetchNews(true), 3 * 60 * 1000);
-        return () => clearInterval(interval);
+        // Generate images in batches to avoid overload
+        WAR_ARTICLES.forEach((article, i) => {
+            setTimeout(() => generateImage(i, article.prompt), i * 800);
+        });
     }, []);
 
     return (
-        <section className="w-full px-2 sm:px-4 py-4 sm:py-6" dir="rtl">
+        <section className="w-full px-2 sm:px-4 py-6" dir="rtl">
             <div className="max-w-7xl mx-auto">
 
-                {/* Header */}
-                <div className="flex items-center justify-between mb-4 sm:mb-6">
-                    <div className="flex items-center gap-2 sm:gap-3">
-                        <div className="relative">
-                            <Shield className="w-7 h-7 sm:w-9 sm:h-9 text-red-500" />
-                            <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-red-500 animate-ping" />
-                        </div>
-                        <div>
-                            <h2 className="text-lg sm:text-2xl font-black text-white leading-tight"
-                                style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
-                                עדכוני ביטחון ומצב
+                {/* Section Header */}
+                <div className="flex items-center gap-3 mb-6">
+                    <img src={LOGO_URL} alt="הרשת החדשה" className="h-10 w-auto drop-shadow-xl" />
+                    <div>
+                        <div className="flex items-center gap-2">
+                            <h2 className="text-xl sm:text-3xl font-black text-white" style={{ fontFamily: FONT }}>
+                                חדשות המלחמה
                             </h2>
-                            <p className="text-xs text-gray-400" style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}>
-                                עדכונים שוטפים מהרשת החדשה
-                            </p>
-                        </div>
-                        <div className="flex items-center gap-1.5 bg-red-900/30 border border-red-500/40 rounded-full px-2.5 py-1">
-                            <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-                            <span className="text-red-400 text-xs font-bold">חי</span>
-                        </div>
-                    </div>
-
-                    <div className="flex items-center gap-2">
-                        {lastUpdated && (
-                            <span className="text-gray-600 text-xs hidden sm:inline">
-                                {lastUpdated.toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' })}
+                            <span className="flex items-center gap-1 bg-red-600 text-white text-xs font-black px-2 py-0.5 rounded-full animate-pulse">
+                                <Zap className="w-3 h-3" /> חי
                             </span>
-                        )}
-                        <button
-                            onClick={() => fetchNews(true)}
-                            disabled={refreshing}
-                            className="p-2 rounded-xl bg-gray-800 hover:bg-gray-700 border border-gray-700 transition-all"
-                        >
-                            <RefreshCw className={`w-4 h-4 text-gray-400 ${refreshing ? 'animate-spin' : ''}`} />
-                        </button>
+                        </div>
+                        <p className="text-gray-400 text-xs" style={{ fontFamily: FONT }}>
+                            ישראל · ארה"ב · איראן · עזה | הרשת החדשה
+                        </p>
                     </div>
                 </div>
 
-                {/* Loading skeleton */}
-                {loading && (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-                        {[1,2,3,4,5,6].map(i => (
-                            <div key={i} className="bg-gray-900 rounded-2xl overflow-hidden animate-pulse">
-                                <div className="h-40 bg-gray-800" />
-                                <div className="p-4">
-                                    <div className="h-4 bg-gray-800 rounded w-1/3 mb-3" />
-                                    <div className="h-5 bg-gray-800 rounded w-full mb-2" />
-                                    <div className="h-5 bg-gray-800 rounded w-4/5" />
+                {/* Cards Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {WAR_ARTICLES.map((article, i) => {
+                        const style = getCatStyle(article.category);
+                        const imgKey = `war-${i}`;
+                        const imgUrl = images[imgKey];
+                        const imgLoading = loadingImages[imgKey];
+                        const isExpanded = expanded === i;
+
+                        return (
+                            <motion.div
+                                key={i}
+                                initial={{ opacity: 0, y: 24 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: i * 0.04 }}
+                                className="rounded-2xl overflow-hidden cursor-pointer group"
+                                style={{
+                                    background: style.bg,
+                                    border: `1.5px solid ${style.border}`,
+                                    boxShadow: isExpanded ? `0 0 30px ${style.color}25` : '0 2px 12px rgba(0,0,0,0.5)'
+                                }}
+                                onClick={() => setExpanded(isExpanded ? null : i)}
+                            >
+                                {/* Image */}
+                                <div className="relative h-44 overflow-hidden">
+                                    {imgLoading && (
+                                        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2"
+                                            style={{ background: `linear-gradient(135deg, ${style.bg}, #000)` }}>
+                                            <Loader2 className="w-7 h-7 animate-spin text-gray-500" />
+                                            <span className="text-gray-600 text-xs" style={{ fontFamily: FONT }}>
+                                                מייצר תמונה...
+                                            </span>
+                                        </div>
+                                    )}
+                                    {imgUrl ? (
+                                        <img
+                                            src={imgUrl}
+                                            alt={article.title}
+                                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                                        />
+                                    ) : !imgLoading ? (
+                                        <div className="absolute inset-0 flex items-center justify-center"
+                                            style={{ background: `linear-gradient(135deg, ${style.bg}, #000)` }}>
+                                            <span className="text-6xl opacity-20">{style.icon}</span>
+                                        </div>
+                                    ) : null}
+
+                                    {/* Gradient overlay */}
+                                    <div className="absolute inset-0"
+                                        style={{ background: 'linear-gradient(to bottom, rgba(0,0,0,0.1) 30%, rgba(0,0,0,0.85) 100%)' }} />
+
+                                    {/* Urgent badge */}
+                                    {article.is_urgent && (
+                                        <div className="absolute top-3 right-3">
+                                            <span className="bg-red-600 text-white text-[11px] font-black px-2.5 py-1 rounded-full animate-pulse shadow-lg"
+                                                style={{ fontFamily: FONT }}>
+                                                🔴 דחוף
+                                            </span>
+                                        </div>
+                                    )}
+
+                                    {/* Category */}
+                                    <div className="absolute top-3 left-3">
+                                        <span className="text-xs font-bold px-2 py-0.5 rounded-full"
+                                            style={{
+                                                background: `${style.color}25`,
+                                                color: style.color,
+                                                border: `1px solid ${style.color}50`,
+                                                fontFamily: FONT,
+                                                backdropFilter: 'blur(8px)'
+                                            }}>
+                                            {style.icon} {article.category}
+                                        </span>
+                                    </div>
+
+                                    {/* LOGO watermark bottom left */}
+                                    <div className="absolute bottom-2 right-2 flex items-center gap-1.5 bg-black/60 rounded-lg px-2 py-1 backdrop-blur-sm">
+                                        <img src={LOGO_URL} alt="הרשת החדשה" className="h-4 w-auto" />
+                                        <span className="text-white text-[10px] font-bold" style={{ fontFamily: FONT }}>
+                                            הרשת החדשה
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
-                        ))}
-                    </div>
-                )}
 
-                {/* Articles Grid */}
-                {!loading && articles.length > 0 && (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
-                        <AnimatePresence>
-                            {articles.map((article, i) => {
-                                const style = getCategoryStyle(article.category);
-                                const isExpanded = expandedId === i;
-                                const imgKey = `${i}-${article.title}`;
-                                const imgUrl = images[imgKey];
-                                const imgLoading = loadingImages[imgKey];
+                                {/* Content */}
+                                <div className="p-4">
+                                    <div className="flex items-center gap-1 mb-2 text-gray-500 text-xs" style={{ fontFamily: FONT }}>
+                                        <Clock className="w-3 h-3" />
+                                        {article.date}
+                                    </div>
 
-                                return (
-                                    <motion.div
-                                        key={i}
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        transition={{ delay: i * 0.05 }}
-                                        onClick={(e) => { e.stopPropagation(); setExpandedId(isExpanded ? null : i); }}
-                                        className="relative rounded-2xl overflow-hidden cursor-pointer transition-all hover:scale-[1.02] active:scale-[0.99]"
+                                    <h3 className="text-white font-black text-sm sm:text-base leading-snug mb-3"
+                                        style={{ fontFamily: FONT }}>
+                                        {article.title}
+                                    </h3>
+
+                                    <p className="text-gray-300 text-sm leading-relaxed"
                                         style={{
-                                            background: '#111',
-                                            border: `1.5px solid ${style.border}`,
-                                            boxShadow: isExpanded ? `0 0 24px ${style.color}30` : 'none'
-                                        }}
+                                            fontFamily: FONT,
+                                            display: '-webkit-box',
+                                            WebkitLineClamp: isExpanded ? 'unset' : 3,
+                                            WebkitBoxOrient: 'vertical',
+                                            overflow: isExpanded ? 'visible' : 'hidden'
+                                        }}>
+                                        {article.content}
+                                    </p>
+
+                                    <button
+                                        className="mt-3 flex items-center gap-1 text-xs font-bold"
+                                        style={{ color: style.color, fontFamily: FONT }}
                                     >
-                                        {/* AI Generated Image */}
-                                        <div className="relative h-40 overflow-hidden">
-                                            {imgLoading && (
-                                                <div className="absolute inset-0 flex items-center justify-center"
-                                                    style={{ background: style.bg }}>
-                                                    <Loader2 className="w-6 h-6 animate-spin text-gray-500" />
-                                                </div>
-                                            )}
-                                            {imgUrl && !imgLoading && (
-                                                <img
-                                                    src={imgUrl}
-                                                    alt={article.title}
-                                                    className="w-full h-full object-cover"
-                                                    style={{ opacity: 0.85 }}
-                                                />
-                                            )}
-                                            {!imgUrl && !imgLoading && (
-                                                <div className="absolute inset-0"
-                                                    style={{
-                                                        background: `linear-gradient(135deg, ${style.bg}, #000)`,
-                                                    }}>
-                                                    <span className="absolute inset-0 flex items-center justify-center text-5xl opacity-30">
-                                                        {style.icon}
-                                                    </span>
-                                                </div>
-                                            )}
-                                            {/* Gradient overlay */}
-                                            <div className="absolute inset-0"
-                                                style={{
-                                                    background: 'linear-gradient(to bottom, transparent 30%, #111 100%)'
-                                                }} />
-
-                                            {/* Badges on image */}
-                                            <div className="absolute top-3 right-3 flex items-center gap-2">
-                                                <span className="text-xs font-bold px-2 py-0.5 rounded-full"
-                                                    style={{ background: `${style.color}30`, color: style.color, border: `1px solid ${style.color}50`, fontFamily: 'system-ui, sans-serif' }}>
-                                                    {style.icon} {article.category || "עדכון"}
-                                                </span>
-                                            </div>
-                                            {article.is_urgent && (
-                                                <div className="absolute top-3 left-3">
-                                                    <span className="bg-red-600 text-white text-[10px] font-black px-2 py-0.5 rounded-full animate-pulse"
-                                                        style={{ fontFamily: 'system-ui, sans-serif' }}>
-                                                        דחוף
-                                                    </span>
-                                                </div>
-                                            )}
-                                            {/* Network branding watermark */}
-                                            <div className="absolute bottom-2 left-2 opacity-60">
-                                                <span className="text-white text-[9px] font-bold bg-black/50 px-1.5 py-0.5 rounded"
-                                                    style={{ fontFamily: 'system-ui, sans-serif' }}>
-                                                    הרשת החדשה
-                                                </span>
-                                            </div>
-                                        </div>
-
-                                        {/* Content */}
-                                        <div className="p-4">
-                                            {article.date && (
-                                                <span className="text-gray-500 text-xs flex items-center gap-1 mb-2"
-                                                    style={{ fontFamily: 'system-ui, sans-serif' }}>
-                                                    <Clock className="w-3 h-3" /> {article.date}
-                                                </span>
-                                            )}
-
-                                            <h3 className="text-white font-bold text-sm sm:text-base leading-snug mb-2"
-                                                style={{ fontFamily: 'system-ui, -apple-system, "Segoe UI", sans-serif' }}>
-                                                {article.title}
-                                            </h3>
-
-                                            <p className="text-gray-400 text-sm leading-relaxed"
-                                                style={{
-                                                    fontFamily: 'system-ui, -apple-system, "Segoe UI", sans-serif',
-                                                    display: '-webkit-box',
-                                                    WebkitLineClamp: isExpanded ? 'none' : 3,
-                                                    WebkitBoxOrient: 'vertical',
-                                                    overflow: isExpanded ? 'visible' : 'hidden'
-                                                }}>
-                                                {article.content}
-                                            </p>
-
-                                            <div className="flex items-center justify-between mt-3 pt-2"
-                                                style={{ borderTop: `1px solid ${style.border}` }}>
-                                                <span className="text-xs font-bold flex items-center gap-1"
-                                                    style={{ color: style.color, fontFamily: 'system-ui, sans-serif' }}>
-                                                    {isExpanded ? 'הסתר' : 'קרא עוד'}
-                                                    <ChevronLeft className={`w-3 h-3 transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
-                                                </span>
-                                            </div>
-                                        </div>
-                                    </motion.div>
-                                );
-                            })}
-                        </AnimatePresence>
-                    </div>
-                )}
-
-                {/* Empty state */}
-                {!loading && articles.length === 0 && (
-                    <div className="text-center py-12">
-                        <Shield className="w-16 h-16 text-gray-700 mx-auto mb-4" />
-                        <p className="text-gray-500" style={{ fontFamily: 'system-ui, sans-serif' }}>
-                            לא נטענו ידיעות, נסה לרענן
-                        </p>
-                        <button
-                            onClick={() => fetchNews(true)}
-                            className="mt-4 px-6 py-2 bg-red-700/40 border border-red-500/40 text-red-300 rounded-xl text-sm font-bold hover:bg-red-700/60 transition-all"
-                        >
-                            רענן
-                        </button>
-                    </div>
-                )}
+                                        {isExpanded ? 'הסתר' : 'קרא עוד'}
+                                        {isExpanded
+                                            ? <ChevronUp className="w-3.5 h-3.5" />
+                                            : <ChevronDown className="w-3.5 h-3.5" />}
+                                    </button>
+                                </div>
+                            </motion.div>
+                        );
+                    })}
+                </div>
             </div>
         </section>
     );
