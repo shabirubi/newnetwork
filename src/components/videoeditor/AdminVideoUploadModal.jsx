@@ -84,27 +84,33 @@ export default function AdminVideoUploadModal({ isOpen, onClose }) {
       const { file_url } = await base44.integrations.Core.UploadFile({ file });
       setVideoUrl(file_url);
 
-      // Create thumbnail from video
-      const video = document.createElement('video');
-      video.src = URL.createObjectURL(file);
-      video.crossOrigin = 'anonymous';
-
-      await new Promise((resolve) => {
-        video.addEventListener('loadedmetadata', () => {
-          video.currentTime = Math.min(1, video.duration * 0.1);
+      // Get duration and thumbnail from video
+      let thumbnailUrl = file_url;
+      let duration = 0;
+      try {
+        const video = document.createElement('video');
+        video.src = URL.createObjectURL(file);
+        video.crossOrigin = 'anonymous';
+        await new Promise((resolve) => {
+          video.addEventListener('loadedmetadata', () => {
+            duration = video.duration;
+            video.currentTime = Math.min(1, video.duration * 0.1);
+          });
+          video.addEventListener('seeked', () => {
+            try {
+              const canvas = document.createElement('canvas');
+              canvas.width = video.videoWidth;
+              canvas.height = video.videoHeight;
+              const ctx = canvas.getContext('2d');
+              ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+              thumbnailUrl = canvas.toDataURL('image/jpeg', 0.7);
+            } catch (e) {}
+            resolve();
+          });
+          video.addEventListener('error', resolve);
+          setTimeout(resolve, 5000);
         });
-        video.addEventListener('seeked', () => resolve());
-      });
-
-      const canvas = document.createElement('canvas');
-      canvas.width = video.videoWidth;
-      canvas.height = video.videoHeight;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-      const thumbnailUrl = canvas.toDataURL('image/jpeg', 0.7);
-
-      // Get duration
-      const duration = video.duration;
+      } catch (e) {}
 
       // Save to database
       const userEmail = localStorage.getItem('user_email') || 'admin@hareshet.co.il';
@@ -122,6 +128,22 @@ export default function AdminVideoUploadModal({ isOpen, onClose }) {
         views: 0,
         likes: 0
       });
+
+      // Also save to LiveStream so it appears in the main player
+      await base44.entities.LiveStream.create({
+        title: title.trim(),
+        stream_url: file_url,
+        is_active: true,
+        viewer_count: 0,
+        thumbnail_url: thumbnailUrl,
+        started_at: new Date().toISOString()
+      });
+
+      // Dispatch event to refresh feeds
+      window.dispatchEvent(new CustomEvent('videoUploaded'));
+      window.dispatchEvent(new CustomEvent('playVideo', {
+        detail: { url: file_url, title: title.trim(), autoPlay: true }
+      }));
 
       toast.success('הסרטון הועלה בהצלחה! 🎬');
       
