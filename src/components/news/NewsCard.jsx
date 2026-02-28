@@ -215,6 +215,12 @@ export default function NewsCard({
               </Badge>
             </div>
           )}
+
+          {/* Logo Ticker */}
+          <div className="absolute bottom-2 right-2 flex items-center gap-2 bg-black/70 rounded-xl px-3 py-1.5 backdrop-blur-sm">
+            <img src={LOGO_URL} alt="הרשת החדשה" className="h-7 w-auto" />
+            <span className="text-white text-sm font-bold">הרשת החדשה</span>
+          </div>
         </div>
         
         <div className="p-3 sm:p-4">
