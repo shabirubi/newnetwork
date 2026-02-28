@@ -238,7 +238,7 @@ export default function AlertsPanel() {
                                             <div key={i}
                                                 className="flex items-center gap-3 p-2.5 rounded-xl border"
                                                 style={{ background: type.bg, borderColor: `${type.color}40` }}>
-                                                <span className="text-lg flex-shrink-0">{type.icon}</span>
+                                                {type.Icon && <type.Icon className="w-5 h-5 flex-shrink-0" style={{ color: type.color }} />}
                                                 <div className="flex-1 min-w-0">
                                                     <div className="flex items-center gap-2 flex-wrap">
                                                         <span className="text-xs font-black px-2 py-0.5 rounded-full" 
