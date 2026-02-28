@@ -6,117 +6,75 @@ import { Shield, Clock, Zap, ChevronDown, ChevronUp, Loader2 } from "lucide-reac
 const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png";
 const FONT = 'system-ui, -apple-system, "Segoe UI", Arial, sans-serif';
 
-// Static war articles with REAL images from Unsplash (no AI, no credits)
-const WAR_ARTICLES = [
+// Static war articles — images loaded once via AI (cached in localStorage 24h)
+const WAR_ARTICLES_BASE = [
     {
         title: "ישראל ואמריקה מסכמות: מתקפה מתואמת על מתקני הגרעין של איראן",
         content: "גורמים בכירים בממשל האמריקאי ובממשלת ישראל מסרו הלילה כי השתיים הגיעו להסכמה עקרונית לפעולה משותפת נגד מתקני הגרעין האיראניים. הבית הלבן ממתין לאישור הסנאט.",
-        category: "SECURITY",
-        label: "ביטחון",
-        color: "#FF4444",
-        border: "#FF444440",
-        bg: "#1a0505",
-        is_urgent: true,
-        date: "עכשיו",
-        image: "https://images.unsplash.com/photo-1569025743873-ea3a9ade89f9?w=600&q=80"
+        category: "SECURITY", label: "ביטחון", color: "#FF4444", border: "#FF444440", bg: "#1a0505", is_urgent: true, date: "עכשיו",
     },
     {
         title: "איראן: נפעיל 3,000 טיל — הגנת הביניים תופעל מיידית",
         content: "דובר משמרות המהפכה האיראניות הזהיר הלילה כי כל מתקפה ישראלית-אמריקאית תגרור ירי של אלפי טילים לכיוון ישראל, לרבות פגיעה בנמלי תעופה ובתחנות כוח.",
-        category: "ALERT",
-        label: "אזהרה",
-        color: "#FF2222",
-        border: "#FF222250",
-        bg: "#1a0303",
-        is_urgent: true,
-        date: "לפני שעה",
-        image: "https://images.unsplash.com/photo-1580137189272-c9379f8864fd?w=600&q=80"
+        category: "ALERT", label: "אזהרה", color: "#FF2222", border: "#FF222250", bg: "#1a0303", is_urgent: true, date: "לפני שעה",
     },
     {
         title: "צבא ישראל: 40,000 מגויסים בכוננות גבוהה לקראת התרחיש הצפוי",
         content: "המטכ\"ל הורה על העברת אוגדות שריון וחי\"ר לאזורי כינוס. פקודת מבצע תינתן בהחלטת הקבינט המדיני-ביטחוני.",
-        category: "MILITARY",
-        label: "צבאי",
-        color: "#FF8C00",
-        border: "#FF8C0040",
-        bg: "#1a0e00",
-        is_urgent: false,
-        date: "לפני שעתיים",
-        image: "https://images.unsplash.com/photo-1597733336794-db7de7a4c9f5?w=600&q=80"
+        category: "MILITARY", label: "צבאי", color: "#FF8C00", border: "#FF8C0040", bg: "#1a0e00", is_urgent: false, date: "לפני שעתיים",
     },
     {
         title: "נשיא ארה\"ב: 'לא נאפשר לאיראן נשק גרעיני — זו קו אדום'",
         content: "בנאום שנישא בבית הלבן הצהיר הנשיא האמריקאי כי ארצות הברית מחויבת לעצור את התפתחות הנשק הגרעיני האיראני בכל האמצעים הנדרשים.",
-        category: "DIPLOMACY",
-        label: "דיפלומטיה",
-        color: "#00BFFF",
-        border: "#00BFFF35",
-        bg: "#00111a",
-        is_urgent: false,
-        date: "לפני 3 שעות",
-        image: "https://images.unsplash.com/photo-1529107386315-e1a2ed48a620?w=600&q=80"
+        category: "DIPLOMACY", label: "דיפלומטיה", color: "#00BFFF", border: "#00BFFF35", bg: "#00111a", is_urgent: false, date: "לפני 3 שעות",
     },
     {
         title: "חיזבאללה מפעיל מחדש חוליות בצפון — צה\"ל מחזק את הגבול",
         content: "מודיעין צבאי מצביע על חזרה לפעילות מבצעית של חיזבאללה בדרום לבנון. כוחות צה\"ל חיזקו עמדות ואוכלוסיות הצפון קיבלו הנחיות מעודכנות.",
-        category: "SECURITY",
-        label: "ביטחון",
-        color: "#FF4444",
-        border: "#FF444440",
-        bg: "#1a0505",
-        is_urgent: false,
-        date: "לפני 4 שעות",
-        image: "https://images.unsplash.com/photo-1586771107445-d3ca888129ce?w=600&q=80"
+        category: "SECURITY", label: "ביטחון", color: "#FF4444", border: "#FF444440", bg: "#1a0505", is_urgent: false, date: "לפני 4 שעות",
     },
     {
         title: "עלות המלחמה עלתה ל-300 מיליארד שקל — בנק ישראל מזהיר",
         content: "בנק ישראל פרסם דו\"ח מיוחד לפיו העלות הישירה של המלחמה לכלכלה הישראלית הגיעה ל-300 מיליארד שקל, כולל נזק לתשתיות, ירידה בתיירות ועצירת השקעות.",
-        category: "ECONOMY",
-        label: "כלכלה",
-        color: "#FFD700",
-        border: "#FFD70035",
-        bg: "#1a1500",
-        is_urgent: false,
-        date: "הבוקר",
-        image: "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?w=600&q=80"
+        category: "ECONOMY", label: "כלכלה", color: "#FFD700", border: "#FFD70035", bg: "#1a1500", is_urgent: false, date: "הבוקר",
     },
     {
         title: "רוסיה מספקת טכנולוגיה טילית לאיראן — ישראל מוחה בחריפות",
         content: "ישראל מחתה בפני מוסקבה על העברת טכנולוגיה מתקדמת לאיראן. שר החוץ הישראלי הזמין את השגריר הרוסי לשיחת מחאה רשמית.",
-        category: "DIPLOMACY",
-        label: "דיפלומטיה",
-        color: "#00BFFF",
-        border: "#00BFFF35",
-        bg: "#00111a",
-        is_urgent: false,
-        date: "אתמול",
-        image: "https://images.unsplash.com/photo-1521295121783-8a321d551ad2?w=600&q=80"
+        category: "DIPLOMACY", label: "דיפלומטיה", color: "#00BFFF", border: "#00BFFF35", bg: "#00111a", is_urgent: false, date: "אתמול",
     },
     {
         title: "חמאס וישראל: שבוע לסיום שלב א' — המו\"מ על שלב ב' נמשך",
         content: "שבוע לפני תום שלב א' של הסכם החטופים, עדיין לא הושגה הסכמה על תנאי שלב ב'. מקורות דיפלומטיים: 'הפער עדיין גדול, אך המשא ומתן נמשך'.",
-        category: "SECURITY",
-        label: "ביטחון",
-        color: "#FF4444",
-        border: "#FF444440",
-        bg: "#1a0505",
-        is_urgent: false,
-        date: "אתמול",
-        image: "https://images.unsplash.com/photo-1540910419892-4a36d2c3266c?w=600&q=80"
+        category: "SECURITY", label: "ביטחון", color: "#FF4444", border: "#FF444440", bg: "#1a0505", is_urgent: false, date: "אתמול",
     },
     {
         title: "אמריקה מזיזה נושאת מטוסים שנייה לים התיכון — מסר לאיראן",
         content: "הפנטגון אישר העברה של נושאת מטוסים שנייה לאזור הים התיכון. הצעד נתפס כמסר ישיר לאיראן ולגורמים פרוקסי באזור.",
-        category: "MILITARY",
-        label: "צבאי",
-        color: "#FF8C00",
-        border: "#FF8C0040",
-        bg: "#1a0e00",
-        is_urgent: false,
-        date: "אתמול",
-        image: "https://images.unsplash.com/photo-1548502499-ef49d09e3185?w=600&q=80"
+        category: "MILITARY", label: "צבאי", color: "#FF8C00", border: "#FF8C0040", bg: "#1a0e00", is_urgent: false, date: "אתמול",
     },
 ];
+
+const CACHE_KEY = 'war_news_images';
+const CACHE_TTL = 24 * 60 * 60 * 1000; // 24 hours
+
+function getCachedImages() {
+    try {
+        const cached = localStorage.getItem(CACHE_KEY);
+        if (!cached) return null;
+        const { images, timestamp } = JSON.parse(cached);
+        if (Date.now() - timestamp > CACHE_TTL) return null;
+        return images;
+    } catch {
+        return null;
+    }
+}
+
+function setCachedImages(images) {
+    try {
+        localStorage.setItem(CACHE_KEY, JSON.stringify({ images, timestamp: Date.now() }));
+    } catch {}
+}
 
 function NewsCard({ article, index, isAlert = false }) {
     const [expanded, setExpanded] = useState(false);
