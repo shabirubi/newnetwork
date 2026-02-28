@@ -164,6 +164,9 @@ export default function Home() {
       {/* OREF Alerts - TOP PRIORITY */}
       <OrefAlertsPanel />
 
+      {/* Oref News Section */}
+      <OrefNewsSection />
+
       {/* Viral Video Section */}
       <section className="w-full px-2 sm:px-4 py-4 sm:py-8" style={{ backgroundColor: '#000000' }}>
         <div className="max-w-7xl mx-auto">
