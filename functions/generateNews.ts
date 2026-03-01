@@ -94,46 +94,8 @@ Deno.serve(async (req) => {
             const hebrewSubtitle = article.subtitle || '';
             const hebrewContent = article.content || '';
 
-            // יצירת תמונה מותאמת לקטגוריה ותוכן הכתבה
-            let imageUrl = '';
-            try {
-              console.log(`Generating image for: ${hebrewTitle}`);
-              
-              // סגנונות ייחודיים לכל קטגוריה
-              const categoryStyles = {
-                sports: 'action sports photography, athletes in motion, stadium atmosphere, dynamic sports action, professional sports event',
-                technology: 'modern technology innovation, sleek devices, futuristic tech, digital transformation, high-tech workspace',
-                economy: 'business environment, financial market, stock exchange, corporate headquarters, economic growth',
-                politics: 'government building, political leaders meeting, parliamentary session, official ceremony, diplomatic event',
-                security: 'military forces, security operations, defense systems, strategic equipment, protective measures',
-                entertainment: 'celebrities on red carpet, movie premiere, concert performance, entertainment venue, cultural event',
-                world: 'international landmark, global leaders summit, world map visualization, diplomatic relations, international cooperation',
-                health: 'modern medical facility, healthcare professionals, hospital technology, medical treatment, health innovation',
-                breaking: 'dramatic breaking news scene, urgent situation, emergency response, crisis management, important moment',
-                music: 'live concert stage, musical performance, recording studio, music festival, artist performing',
-                horoscope: 'mystical zodiac symbols, cosmic space imagery, astrological charts, celestial patterns, spiritual atmosphere',
-                finance: 'financial trading floor, investment banking, money markets, wealth management, economic indicators',
-                crime: 'crime scene investigation, police action, justice system, law enforcement, legal proceedings',
-                education: 'school classroom, university campus, learning environment, educational technology, graduation ceremony',
-                culture: 'cultural heritage, museum display, artistic performance, traditional arts, cultural celebration',
-                environment: 'natural landscape, climate change imagery, environmental protection, nature conservation, ecology',
-                science: 'scientific laboratory, research equipment, scientists working, breakthrough discovery, innovation',
-                israel: 'israeli landscape, historic sites, israeli culture, vibrant cities, mediterranean scenery',
-                military: 'military personnel, defense equipment, strategic operations, armed forces, tactical training',
-                law: 'courtroom interior, legal documents, justice symbol, courthouse building, legal profession',
-                local: 'neighborhood street, community gathering, local shops, urban landscape, city streets'
-              };
-
-              const categoryStyle = categoryStyles[cat.category] || 'professional news photography, current events, journalistic style';
-              
-              const imageResponse = await base44.asServiceRole.integrations.Core.GenerateImage({
-                prompt: `Professional photojournalism: ${hebrewTitle}. ${categoryStyle}. High quality realistic photograph, dramatic lighting, modern composition, news photography style, 16:9 format. No text, no Hebrew letters, only visual storytelling.`
-              });
-              imageUrl = imageResponse.url || '';
-              console.log(`Image created for ${cat.category}: ${imageUrl}`);
-            } catch (imgErr) {
-              console.log('Image generation error:', imgErr.message);
-            }
+            // Skip image generation to avoid timeouts — images can be generated separately
+            const imageUrl = '';
 
             await base44.asServiceRole.entities.NewsArticle.create({
               title: hebrewTitle,
