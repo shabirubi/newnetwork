@@ -34,7 +34,8 @@ const categoryColors = {
 };
 
 export default function NewsCard({ article, variant = "default", index = 0 }) {
-  const { title, subtitle, category, image_url, video_url, is_breaking, created_date, id } = article;
+  const { title, subtitle, category, image_url, video_url, is_breaking, created_date, id: articleId } = article;
+  const id = articleId;
 
   if (variant === "featured") {
     return (
