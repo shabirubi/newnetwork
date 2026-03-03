@@ -33,11 +33,7 @@ const categoryColors = {
   health: "bg-gradient-to-r from-black/80 to-[#0080FF]/40 text-white border border-[#0080FF]/50"
 };
 
-export default function NewsCard({ 
-  article, 
-  variant = "default",
-  index = 0 
-}) {
+export default function NewsCard({ article, variant = "default", index = 0 }) {
   const { title, subtitle, category, image_url, video_url, is_breaking, created_date, id } = article;
 
   if (variant === "featured") {
