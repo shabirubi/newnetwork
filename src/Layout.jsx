@@ -339,20 +339,6 @@ export default function Layout({ children, currentPageName }) {
 
         <div className="max-w-7xl mx-auto px-4 flex items-center justify-between gap-3 relative z-[200]">
           <div className="flex items-center gap-3 flex-shrink-0">
-            <motion.img 
-              src={LOGO_URL} 
-              alt="הרשת החדשה" 
-              className="h-12 sm:h-14 w-auto drop-shadow-2xl"
-              animate={{ 
-                scale: [1, 1.05, 1],
-                filter: ['brightness(1)', 'brightness(1.2)', 'brightness(1)']
-              }}
-              transition={{ 
-                duration: 3, 
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-            />
             <div className="flex flex-col text-right">
               <h1 className="text-lg sm:text-xl font-bold text-white">הרשת החדשה</h1>
               <motion.p 
@@ -360,7 +346,7 @@ export default function Layout({ children, currentPageName }) {
                 animate={{ opacity: [0.7, 1, 0.7] }}
                 transition={{ duration: 2, repeat: Infinity }}
               >
-                🟢 NOW ONLINE
+                🟠 NOW ONLINE
               </motion.p>
             </div>
           </div>
