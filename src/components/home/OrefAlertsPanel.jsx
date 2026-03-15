@@ -104,7 +104,7 @@ export default function AlertsPanel() {
     return (
         <div className="w-full" dir="rtl">
 
-            {/* ACTIVE ALERT Banner */}
+            {/* ACTIVE ALERT Banner - Oref Style */}
             <AnimatePresence>
                 {hasActiveNow && activeAlert && (
                     <motion.div
@@ -113,51 +113,46 @@ export default function AlertsPanel() {
                         exit={{ opacity: 0, y: -60 }}
                         className="w-full relative overflow-hidden"
                         style={{
-                            background: 'linear-gradient(135deg, #8B0000, #CC0000, #FF0000)',
-                            borderBottom: '3px solid #FF4444',
-                            boxShadow: '0 0 40px rgba(255,0,0,0.8)',
+                            background: '#CC0000',
+                            borderBottom: '4px solid #FF6600',
                         }}
                     >
-                        <div className="absolute inset-0 animate-pulse"
-                            style={{ border: '3px solid rgba(255,255,255,0.4)' }} />
+                        {/* Oref-style flashing top bar */}
+                        <div className="w-full h-2 animate-pulse" style={{ background: 'repeating-linear-gradient(90deg, #FF6600 0px, #FF6600 20px, #CC0000 20px, #CC0000 40px)' }} />
 
-                        <div className="max-w-7xl mx-auto px-3 sm:px-6 py-3 sm:py-4">
-                            <div className="flex items-start gap-3">
-                                <div className="flex items-center gap-2 flex-shrink-0">
-                                    <Siren className="w-8 h-8 text-white animate-pulse" />
-                                    {alertType?.Icon && <alertType.Icon className="w-7 h-7 text-white" />}
+                        <div className="max-w-7xl mx-auto px-3 sm:px-6 py-4">
+                            <div className="flex items-center gap-4">
+                                {/* Oref logo-style siren icon */}
+                                <div className="flex-shrink-0 w-16 h-16 rounded-full bg-white flex items-center justify-center shadow-lg">
+                                    <Siren className="w-9 h-9 text-red-600 animate-pulse" />
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                    <div className="flex items-center gap-2 mb-1 flex-wrap">
-                                        <span className="bg-white text-red-700 text-xs font-black px-3 py-1 rounded-full animate-pulse flex items-center gap-1"
-                                            style={{ fontFamily: FONT }}>
-                                            <ShieldAlert className="w-3 h-3" /> התרעה פעילה עכשיו
-                                        </span>
-                                        <span className="text-white font-black text-base sm:text-lg"
-                                            style={{ fontFamily: FONT }}>
+                                    <div className="flex items-center gap-3 mb-2 flex-wrap">
+                                        <span className="text-white font-black text-xl sm:text-2xl" style={{ fontFamily: FONT }}>
                                             {alertType?.label || "התרעה"}
                                         </span>
+                                        <span className="bg-white/20 text-white text-xs font-bold px-2 py-1 rounded border border-white/30 animate-pulse" style={{ fontFamily: FONT }}>
+                                            התרעה פעילה
+                                        </span>
                                     </div>
-                                    <div className="flex flex-wrap gap-2 mt-2">
+                                    <div className="flex flex-wrap gap-2">
                                         {activeAlert.data?.slice(0, 10).map((city, i) => (
-                                            <span key={i} className="bg-white/20 text-white text-sm font-bold px-2 py-1 rounded-lg flex items-center gap-1"
+                                            <span key={i} className="bg-white text-red-700 text-sm font-black px-3 py-1 rounded flex items-center gap-1"
                                                 style={{ fontFamily: FONT }}>
                                                 <MapPin className="w-3 h-3" /> {city}
                                             </span>
                                         ))}
                                         {activeAlert.data?.length > 10 && (
-                                            <span className="text-white/80 text-sm font-bold" style={{ fontFamily: FONT }}>
+                                            <span className="text-white/80 text-sm font-bold bg-white/10 px-2 py-1 rounded" style={{ fontFamily: FONT }}>
                                                 +{activeAlert.data.length - 10} עוד...
                                             </span>
                                         )}
                                     </div>
                                     {activeAlert.desc && (
-                                        <p className="text-white/90 text-sm mt-1" style={{ fontFamily: FONT }}>
-                                            {activeAlert.desc}
-                                        </p>
+                                        <p className="text-white/90 text-sm mt-2" style={{ fontFamily: FONT }}>{activeAlert.desc}</p>
                                     )}
                                 </div>
-                                <div className="flex-shrink-0 text-white/70 text-xs text-left" style={{ fontFamily: FONT }}>
+                                <div className="flex-shrink-0 text-white/80 text-sm font-bold" style={{ fontFamily: FONT }}>
                                     {activeAlert.alertDate && formatTime(activeAlert.alertDate)}
                                 </div>
                             </div>
@@ -166,30 +161,34 @@ export default function AlertsPanel() {
                 )}
             </AnimatePresence>
 
-            {/* STATUS BAR */}
+            {/* STATUS BAR - Oref Style */}
             <div
                 className="w-full flex items-center justify-between px-3 sm:px-6 py-2 cursor-pointer select-none"
                 style={{
-                    background: hasActiveNow ? 'linear-gradient(90deg, #1a0000, #2d0000)' : 'linear-gradient(90deg, #0a0a0a, #111111)',
-                    borderBottom: hasActiveNow ? '1px solid #FF4444' : '1px solid #333',
+                    background: hasActiveNow ? '#1a0000' : '#1c1c1c',
+                    borderBottom: hasActiveNow ? '2px solid #CC0000' : '1px solid #333',
+                    borderTop: '3px solid #FF6600',
                 }}
                 onClick={() => setExpanded(!expanded)}
             >
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-3">
+                    {/* Oref logo */}
+                    <div className="flex items-center gap-1.5 bg-white rounded px-2 py-0.5">
+                        <Shield className="w-3.5 h-3.5 text-red-600" />
+                        <span className="text-red-700 text-xs font-black" style={{ fontFamily: FONT }}>פיקוד העורף</span>
+                    </div>
                     <div className={`w-2.5 h-2.5 rounded-full ${hasActiveNow ? 'bg-red-500 animate-pulse' : 'bg-green-500'}`} />
-                    <Shield className={`w-4 h-4 ${hasActiveNow ? 'text-red-400' : 'text-green-400'}`} />
                     <span className={`text-sm font-bold ${hasActiveNow ? 'text-red-300' : 'text-green-300'}`}
                         style={{ fontFamily: FONT }}>
                         {hasActiveNow ? 'התרעה פעילה!' : 'אין התרעות פעילות כרגע'}
                     </span>
                     {lastFetch && (
-                        <span className="text-gray-600 text-xs hidden sm:inline" style={{ fontFamily: FONT }}>
+                        <span className="text-gray-500 text-xs hidden sm:inline" style={{ fontFamily: FONT }}>
                             • עודכן: {formatTime(lastFetch)}
                         </span>
                     )}
                 </div>
                 <div className="flex items-center gap-2">
-                    <span className="text-gray-500 text-xs" style={{ fontFamily: FONT }}>הרשת החדשה</span>
                     {expanded ? <ChevronUp className="w-4 h-4 text-gray-500" /> : <ChevronDown className="w-4 h-4 text-gray-500" />}
                 </div>
             </div>
