@@ -29,7 +29,7 @@ const ALERT_META = {
   101: { label: "אירוע חירום",            Icon: ShieldAlert,  color: "#FF0000", shelter_time: "מיידי" },
 };
 
-const FONT = '"Arial", "Helvetica Neue", sans-serif';
+const FONT = '"Helvetica Neue", Helvetica, Arial, sans-serif';
 
 function OrefLogoSVG({ size = 48 }) {
   return (

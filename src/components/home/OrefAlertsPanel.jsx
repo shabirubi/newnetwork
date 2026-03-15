@@ -14,7 +14,7 @@ const ALERT_TYPES = {
     101: { label: "אירוע חירום",           color: "#FF0000", Icon: ShieldAlert,  bg: "rgba(255,0,0,0.15)",   instruction: "פעלו לפי הנחיות פיקוד העורף" },
 };
 
-const FONT = '"Arial", "Helvetica Neue", sans-serif';
+const FONT = '"Helvetica Neue", Helvetica, Arial, sans-serif';
 
 const STATIC_HISTORY = [
     { category: 1, time: "27.02.2026 22:41:50", data: "עוטף עזה" },
