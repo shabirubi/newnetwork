@@ -36,7 +36,8 @@ const ALERT_TYPES = {
 };
 
 // Official Oref Hebrew font stack — matches government/broadcast design
-const OREF_FONT = '"David CLM", "FrankRuehl CLM", "Arial", "Helvetica", sans-serif';
+// Uses system Hebrew fonts available in Israeli browsers
+const OREF_FONT = '"Arial", "Helvetica Neue", "Helvetica", sans-serif';
 
 const STATIC_HISTORY = [
     { category: 1, time: "27.02.2026 22:41:50", data: "עוטף עזה" },
