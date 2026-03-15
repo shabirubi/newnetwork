@@ -16,20 +16,7 @@ const ALERT_TYPES = {
 
 const FONT = '"Varela Round", "Helvetica Neue", Helvetica, Arial, sans-serif';
 
-const STATIC_HISTORY = [
-    { category: 1, time: "15.03.2026 08:14:22", data: ["נתיב העשרה", "ניר עם", "כיסופים", "עין השלושה"] },
-    { category: 1, time: "15.03.2026 07:58:11", data: ["ערערה בנגב", "רהט", "לקיה"] },
-    { category: 1, time: "15.03.2026 07:33:44", data: ["זיקים", "אשכול", "נחל עוז"] },
-    { category: 1, time: "15.03.2026 06:51:09", data: ["שדרות", "נתיבות", "אופקים", "מגן"] },
-    { category: 1, time: "15.03.2026 06:20:37", data: ["כפר מימון ותושיה", "בני נצרים"] },
-    { category: 1, time: "15.03.2026 05:47:55", data: ["כפר עזה", "נחל עוז", "פרי גן"] },
-    { category: 2, time: "15.03.2026 05:12:03", data: ["ערערה בנגב", "חצב"] },
-    { category: 1, time: "15.03.2026 04:38:28", data: ["סעד", "עלומים", "שוקדה"] },
-    { category: 1, time: "15.03.2026 03:55:14", data: ["עוטף עזה", "ניר עם", "גבעתי"] },
-    { category: 1, time: "15.03.2026 03:11:42", data: ["שדרות", "אשקלון דרום"] },
-    { category: 1, time: "15.03.2026 02:04:19", data: ["נתיב העשרה", "זיקים", "חולית"] },
-    { category: 1, time: "15.03.2026 01:22:55", data: ["אשקלון", "אשדוד"] },
-];
+
 
 function getAlertType(cat) {
     return ALERT_TYPES[cat] || { label: "התרעה", color: "#FF0000", Icon: AlertTriangle, bg: "rgba(255,0,0,0.15)", instruction: "היכנסו למרחב המוגן מיד!" };
