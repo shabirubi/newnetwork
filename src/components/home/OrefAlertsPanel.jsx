@@ -361,13 +361,10 @@ export default function AlertsPanel() {
             }
             if (data.history && data.history.length > 0) {
                 setHistory(data.history);
-            } else if (history.length === 0) {
-                setHistory(STATIC_HISTORY);
             }
+            // If no real history, keep the static one (already set in useEffect)
         } catch (err) {
-            console.error("Alerts fetch error:", err);
-        } finally {
-            setLoading(false);
+            // Silently fail — static history is already shown
         }
     };
 
