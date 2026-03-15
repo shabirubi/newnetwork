@@ -335,7 +335,7 @@ export default function Layout({ children, currentPageName }) {
       </div>
 
       {/* Logo Header */}
-      <div className="bg-[#000000] border-b border-[#282828] py-2 shadow-xl relative overflow-visible">
+      <div className="bg-[#000000] py-2 shadow-xl relative overflow-visible">
 
         <div className="max-w-7xl mx-auto px-4 flex items-center justify-between gap-3 relative z-[200]">
           <div className="flex items-center gap-3 flex-shrink-0">
