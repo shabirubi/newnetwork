@@ -34,6 +34,7 @@ import WeatherForecastModal from "../components/weather/WeatherForecastModal";
 import YouTubeFloatingButton from "../components/home/YouTubeFloatingButton";
 import OrefAlertsPanel from "../components/home/OrefAlertsPanel";
 import OrefNewsSection from "../components/home/OrefNewsSection";
+import OrefEmergencyPopup from "../components/home/OrefEmergencyPopup";
 
 // Lazy loaded components
 const NewsReels = React.lazy(() => import("../components/news/NewsReels"));
