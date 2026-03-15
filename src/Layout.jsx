@@ -339,8 +339,10 @@ export default function Layout({ children, currentPageName }) {
 
         <div className="max-w-7xl mx-auto px-4 flex items-center justify-between gap-3 relative z-[200]">
           <div className="flex items-center gap-3 flex-shrink-0">
-            <motion.svg 
-              width="48" height="56" viewBox="0 0 48 56" className="drop-shadow-2xl"
+            <motion.img 
+              src={LOGO_URL} 
+              alt="הרשת החדשה" 
+              className="h-12 sm:h-14 w-auto drop-shadow-2xl"
               animate={{ 
                 scale: [1, 1.05, 1],
                 filter: ['brightness(1)', 'brightness(1.2)', 'brightness(1)']
@@ -350,18 +352,7 @@ export default function Layout({ children, currentPageName }) {
                 repeat: Infinity,
                 ease: "easeInOut"
               }}
-            >
-              {/* Orange base */}
-              <rect x="4" y="4" width="40" height="48" rx="4" fill="#FF6600"/>
-              {/* Black accent */}
-              <rect x="4" y="4" width="40" height="8" fill="#000000"/>
-              {/* Red stripe */}
-              <rect x="4" y="24" width="40" height="4" fill="#CC0000"/>
-              {/* Text background */}
-              <circle cx="24" cy="36" r="10" fill="#000000"/>
-              {/* Circle accent */}
-              <circle cx="24" cy="36" r="6" fill="#FF6600"/>
-            </motion.svg>
+            />
             <div className="flex flex-col text-right">
               <h1 className="text-lg sm:text-xl font-bold text-white">הרשת החדשה</h1>
               <motion.p 
