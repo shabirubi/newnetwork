@@ -191,18 +191,24 @@ function CityRow({ city, index }) {
     );
 }
 
+/* Parse cities from data field — can be string or array */
+function parseCities(data) {
+    if (!data) return [];
+    if (Array.isArray(data)) return data.filter(Boolean);
+    return data.split(',').map(s => s.trim()).filter(Boolean);
+}
+
 /* Full-screen popup — TV broadcast style like the real Pikud HaOref */
 function AlertsPopup({ activeAlert, history, lastFetch, onClose }) {
-    // Collect all cities from history
-    const allCities = [];
-    history.forEach(alert => {
-        const cities = Array.isArray(alert.data) ? alert.data : (alert.data ? alert.data.split(',').map(s => s.trim()) : []);
-        cities.forEach(city => { if (city) allCities.push(city); });
-    });
+    const allAlerts = [];
+    // Active alert first
     if (activeAlert?.data) {
-        const activeCities = Array.isArray(activeAlert.data) ? activeAlert.data : [activeAlert.data];
-        activeCities.forEach(city => { if (city && !allCities.includes(city)) allCities.unshift(city); });
+        allAlerts.push({ ...activeAlert, isActive: true });
     }
+    // Then history
+    history.forEach(a => allAlerts.push({ ...a, isActive: false }));
+
+    const totalCities = allAlerts.reduce((acc, a) => acc + parseCities(a.data).length, 0);
 
     return (
         <motion.div
@@ -219,9 +225,9 @@ function AlertsPopup({ activeAlert, history, lastFetch, onClose }) {
                 exit={{ opacity: 0, scale: 0.92, y: -20 }}
                 transition={{ duration: 0.2, ease: 'easeOut' }}
                 style={{
-                    width: '320px',
-                    maxHeight: '85vh',
-                    borderRadius: '4px',
+                    width: '360px',
+                    maxHeight: '88vh',
+                    borderRadius: '6px',
                     overflow: 'hidden',
                     boxShadow: '0 8px 40px rgba(0,0,0,0.8)',
                     display: 'flex',
@@ -230,7 +236,7 @@ function AlertsPopup({ activeAlert, history, lastFetch, onClose }) {
                 onClick={e => e.stopPropagation()}
                 dir="rtl"
             >
-                {/* Blue header — exactly like TV broadcast */}
+                {/* Blue header */}
                 <div style={{
                     background: '#1565C0',
                     padding: '10px 14px',
@@ -247,90 +253,70 @@ function AlertsPopup({ activeAlert, history, lastFetch, onClose }) {
                             </div>
                             {lastFetch && (
                                 <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: '11px', fontFamily: FONT }}>
-                                    עודכן: {formatTime(lastFetch)}
+                                    עודכן: {lastFetch.toLocaleTimeString('he-IL')}
                                 </div>
                             )}
                         </div>
                     </div>
-                    <button
-                        onClick={onClose}
-                        style={{
-                            background: 'rgba(255,255,255,0.2)',
-                            border: 'none',
-                            borderRadius: '50%',
-                            width: '28px',
-                            height: '28px',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            cursor: 'pointer',
-                            color: 'white',
-                            flexShrink: 0,
-                        }}
-                    >
+                    <button onClick={onClose} style={{
+                        background: 'rgba(255,255,255,0.2)', border: 'none', borderRadius: '50%',
+                        width: '28px', height: '28px', display: 'flex', alignItems: 'center',
+                        justifyContent: 'center', cursor: 'pointer', color: 'white', flexShrink: 0,
+                    }}>
                         <X size={16} />
                     </button>
                 </div>
 
-                {/* Alert type label */}
-                <div style={{
-                    background: '#1A237E',
-                    padding: '6px 14px',
-                    borderBottom: '2px solid #E8650A',
-                    flexShrink: 0,
-                }}>
-                    <span style={{
-                        color: '#FFD700',
-                        fontSize: '13px',
-                        fontWeight: '900',
-                        fontFamily: FONT,
-                        letterSpacing: '0.02em',
-                    }}>
-                        🚨 ירי רקטות וטילים — היכנסו למרחב המוגן!
-                    </span>
-                </div>
-
-                {/* City rows — scrollable */}
-                <div style={{ overflowY: 'auto', flexGrow: 1 }}>
-                    {allCities.length > 0 ? (
-                        allCities.map((city, i) => (
-                            <CityRow key={i} city={city} index={i} />
-                        ))
-                    ) : (
-                        <div style={{
-                            background: '#E8650A',
-                            padding: '20px',
-                            textAlign: 'center',
-                            color: 'white',
-                            fontFamily: FONT,
-                            fontSize: '14px',
-                            fontWeight: '700',
-                        }}>
-                            אין התרעות פעילות כרגע
+                {/* Scrollable alert list */}
+                <div style={{ overflowY: 'auto', flexGrow: 1, background: '#0d0d0d' }}>
+                    {allAlerts.length === 0 ? (
+                        <div style={{ padding: '20px', textAlign: 'center', color: 'white', fontFamily: FONT }}>
+                            אין נתונים זמינים
                         </div>
-                    )}
+                    ) : allAlerts.map((alert, idx) => {
+                        const cities = parseCities(alert.data);
+                        const type = getAlertType(alert.cat || alert.category || 1);
+                        return (
+                            <div key={idx} style={{
+                                borderBottom: '2px solid #1a1a1a',
+                                background: alert.isActive ? '#2a0000' : (idx % 2 === 0 ? '#111' : '#161616'),
+                            }}>
+                                {/* Alert header row */}
+                                <div style={{
+                                    background: alert.isActive ? '#CC0000' : '#1565C0',
+                                    padding: '4px 12px',
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                }}>
+                                    <span style={{ color: '#FFD700', fontSize: '12px', fontWeight: '900', fontFamily: FONT }}>
+                                        {alert.isActive ? '🔴 ' : ''}🚨 {type.label}
+                                    </span>
+                                    <span style={{ color: 'rgba(255,255,255,0.7)', fontSize: '11px', fontFamily: FONT }}>
+                                        {alert.time || alert.alertDate || ''}
+                                    </span>
+                                </div>
+                                {/* Cities */}
+                                {cities.map((city, ci) => (
+                                    <CityRow key={ci} city={city} index={ci} />
+                                ))}
+                            </div>
+                        );
+                    })}
                 </div>
 
                 {/* Footer */}
                 <div style={{
-                    background: '#1565C0',
-                    padding: '6px 14px',
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    flexShrink: 0,
+                    background: '#1565C0', padding: '6px 14px',
+                    display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexShrink: 0,
                 }}>
-                    <a
-                        href="https://www.oref.org.il/heb/alerts-history"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{ color: 'rgba(255,255,255,0.7)', fontSize: '11px', fontFamily: FONT, display: 'flex', alignItems: 'center', gap: '4px' }}
-                    >
+                    <a href="https://www.oref.org.il/heb/alerts-history" target="_blank" rel="noopener noreferrer"
+                        style={{ color: 'rgba(255,255,255,0.7)', fontSize: '11px', fontFamily: FONT, display: 'flex', alignItems: 'center', gap: '4px' }}>
                         <ExternalLink size={12} />
                         oref.org.il
                     </a>
                     <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '10px', fontFamily: FONT }}>
-                        {allCities.length} אזורים
+                        {allAlerts.length} התרעות | {totalCities} אזורים
                     </span>
                 </div>
             </motion.div>
