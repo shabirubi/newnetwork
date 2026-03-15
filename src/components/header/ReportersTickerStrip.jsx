@@ -121,12 +121,12 @@ export default function ReportersTickerStrip() {
                 <div className="flex flex-col items-center gap-1">
                   {/* Reporter Image */}
                   {/* Reporter Image only - no frame, no background */}
-                  <div className="relative w-14 h-14">
+                  <div className="relative w-14 h-14" style={{ background: '#000000' }}>
                     <img
                       src={reporter.image}
                       alt={reporter.name}
-                      className="w-full h-full object-contain object-bottom"
-                      style={{ background: 'transparent', borderRadius: 0 }}
+                      className="w-full h-full object-contain object-bottom mix-blend-lighten"
+                      style={{ background: '#000000', borderRadius: 0 }}
                       onError={(e) => {
                         e.target.style.display = 'none';
                       }}
