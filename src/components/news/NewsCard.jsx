@@ -54,7 +54,7 @@ export default function NewsCard({ article, variant, index }) {
         transition={{ delay: safeIndex * 0.1 }}
         className="group relative overflow-hidden rounded-lg sm:rounded-2xl bg-black border border-[#222] hover:border-[#444] transition-all duration-300"
       >
-        <Link to={createPageUrl(`Article?id=${articleId}`)} className="block active:scale-[0.98] transition-transform">
+        <Link to={`/Article?id=${articleId}`} className="block active:scale-[0.98] transition-transform">
           <div className="relative aspect-[16/9] md:aspect-[21/9] bg-gray-900">
             {video_url ? (
               <>
@@ -117,7 +117,7 @@ export default function NewsCard({ article, variant, index }) {
         transition={{ delay: safeIndex * 0.05 }}
         className="group"
       >
-        <Link to={createPageUrl(`Article?id=${articleId}`)} className="flex items-start gap-4 p-4 rounded-2xl active:bg-gray-100 dark:active:bg-gray-800 transition-colors active:scale-[0.98]">
+        <Link to={`/Article?id=${articleId}`} className="flex items-start gap-4 p-4 rounded-2xl active:bg-gray-100 dark:active:bg-gray-800 transition-colors active:scale-[0.98]">
           <span className="text-3xl font-bold text-gray-200 group-hover:text-white transition-colors">
             {String(safeIndex + 1).padStart(2, '0')}
           </span>
@@ -143,7 +143,7 @@ export default function NewsCard({ article, variant, index }) {
       className="group bg-[#181818] rounded-xl sm:rounded-2xl overflow-hidden border border-[#282828] hover:border-[#FF6600]/50 transition-all duration-300 active:scale-95 sm:active:scale-[0.98]"
       style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.6)' }}
     >
-      <Link to={createPageUrl(`Article?id=${articleId}`)} className="block">
+      <Link to={`/Article?id=${articleId}`} className="block">
         <div className="relative aspect-video overflow-hidden bg-gray-900">
           {video_url ? (
             <>
