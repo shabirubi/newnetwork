@@ -172,16 +172,16 @@ function NewsCard({ article, index, isAlert = false }) {
                         .flag-wave-delay { animation: wavePath 1.2s ease-in-out infinite 0.4s; transform-origin: left center; }
                     `}</style>
                     <svg width="60" height="38" viewBox="0 0 60 38" xmlns="http://www.w3.org/2000/svg">
-                        {/* White background */}
-                        <rect width="60" height="38" fill="white"/>
-                        {/* Top blue stripe */}
-                        <rect className="flag-wave" y="5" width="60" height="8" fill="#009EE0" rx="1"/>
-                        {/* Bottom blue stripe */}
-                        <rect className="flag-wave-delay" y="25" width="60" height="8" fill="#009EE0" rx="1"/>
+                        {/* Transparent background */}
+                        <rect width="60" height="38" fill="transparent"/>
+                        {/* Top blue stripe - thin */}
+                        <rect className="flag-wave" y="7" width="60" height="4" fill="#009EE0" opacity="0.9"/>
+                        {/* Bottom blue stripe - thin */}
+                        <rect className="flag-wave-delay" y="27" width="60" height="4" fill="#009EE0" opacity="0.9"/>
                         {/* Star of David */}
                         <g transform="translate(30,19)">
-                            <polygon points="0,-7 6,3.5 -6,3.5" fill="none" stroke="#009EE0" strokeWidth="1.8"/>
-                            <polygon points="0,7 -6,-3.5 6,-3.5" fill="none" stroke="#009EE0" strokeWidth="1.8"/>
+                            <polygon points="0,-6 5.2,3 -5.2,3" fill="none" stroke="#009EE0" strokeWidth="1.5"/>
+                            <polygon points="0,6 -5.2,-3 5.2,-3" fill="none" stroke="#009EE0" strokeWidth="1.5"/>
                         </g>
                     </svg>
                 </div>
