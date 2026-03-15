@@ -67,7 +67,7 @@ export default function NewsTicker({ darkMode, setDarkMode, onMenuClick }) {
         {/* Menu Button - Right Side */}
         <button
           onClick={onMenuClick}
-          className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-lg hover:bg-white/20 text-[#E31E24] active:scale-95 transition-all touch-manipulation relative z-[70] group shrink-0"
+          className="flex items-center justify-center w-9 h-9 sm:w-10 sm:h-10 rounded-lg hover:bg-white/20 text-orange-500 active:scale-95 transition-all touch-manipulation relative z-[70] group shrink-0"
           title="תפריט"
         >
           <div className="flex flex-col gap-1.5">

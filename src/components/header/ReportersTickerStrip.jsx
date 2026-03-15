@@ -79,7 +79,7 @@ export default function ReportersTickerStrip() {
   return (
     <>
       {reporters.length > 0 && (
-      <div className="relative bg-gradient-to-br from-black via-[#0080FF]/5 to-black overflow-hidden z-[35] border-b border-[#0080FF]/20" style={{ height: '80px' }}>
+      <div className="relative bg-[#0d1b2a] overflow-hidden z-[35] border-b border-[#1565C0]/40" style={{ height: '80px' }}>
         {/* Gradient Overlays */}
         <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-black via-black/80 to-transparent z-10 pointer-events-none" />
         <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-black via-black/80 to-transparent z-10 pointer-events-none" />
@@ -87,14 +87,14 @@ export default function ReportersTickerStrip() {
         {/* Scroll Arrows */}
         <button
           onClick={() => scroll('left')}
-          className="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-black/60 backdrop-blur-sm p-2 rounded-full hover:bg-black/80 transition-all shadow-lg border border-[#0080FF]/30"
+          className="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-[#1565C0]/60 backdrop-blur-sm p-2 rounded-full hover:bg-[#1565C0]/80 transition-all shadow-lg border border-white/20"
         >
           <ChevronRight className="w-5 h-5 text-white" />
         </button>
 
         <button
           onClick={() => scroll('right')}
-          className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-black/60 backdrop-blur-sm p-2 rounded-full hover:bg-black/80 transition-all shadow-lg border border-[#0080FF]/30"
+          className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-[#1565C0]/60 backdrop-blur-sm p-2 rounded-full hover:bg-[#1565C0]/80 transition-all shadow-lg border border-white/20"
         >
           <ChevronLeft className="w-5 h-5 text-white" />
         </button>
@@ -120,25 +120,24 @@ export default function ReportersTickerStrip() {
               >
                 <div className="flex flex-col items-center gap-1">
                   {/* Reporter Image */}
-                  <div className="relative w-12 h-12 rounded-full overflow-hidden border-2 border-[#0080FF]/40 hover:border-[#0080FF]/80 transition-all shadow-lg hover:shadow-[0_0_20px_rgba(0,128,255,0.3)]">
+                  {/* Reporter Image only - no frame, no background */}
+                  <div className="relative w-14 h-14">
                     <img
                       src={reporter.image}
                       alt={reporter.name}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover object-top"
+                      style={{ borderRadius: 0, background: 'transparent' }}
                       onError={(e) => {
-                        e.target.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="80" height="80"%3E%3Crect fill="%23333" width="80" height="80"/%3E%3Ctext x="40" y="40" font-size="40" fill="white" text-anchor="middle" dy=".3em"%3E' + reporter.name.charAt(0) + '%3C/text%3E%3C/svg%3E';
+                        e.target.style.display = 'none';
                       }}
                     />
-                    {/* Live Indicator */}
                     <motion.div
-                      animate={{ scale: [1, 1.2, 1] }}
+                      animate={{ scale: [1, 1.3, 1] }}
                       transition={{ duration: 2, repeat: Infinity }}
-                      className="absolute top-0.5 right-0.5 w-2 h-2 bg-green-500 rounded-full border border-white"
+                      className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-400 rounded-full"
                     />
                   </div>
-
-                  {/* Reporter Name */}
-                  <p className="text-white font-bold text-[10px] text-center drop-shadow-lg max-w-[60px] truncate">
+                  <p className="text-white font-bold text-[10px] text-center max-w-[60px] truncate">
                     {reporter.name}
                   </p>
                 </div>
