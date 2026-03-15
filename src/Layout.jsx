@@ -276,11 +276,11 @@ export default function Layout({ children, currentPageName }) {
     <div className="min-h-screen bg-black transition-colors duration-300 flex flex-col overflow-x-hidden" dir="rtl">
       <style>{`
         :root {
-          --primary: #FFDD00;
-          --primary-dark: #E6C200;
-          --primary-light: #FFED33;
-          --accent: #FFDD00;
-          --accent-dark: #CCB000;
+          --primary: #FF6B00;
+          --primary-dark: #CC5500;
+          --primary-light: #FF8C33;
+          --accent: #FF6B00;
+          --accent-dark: #CC5500;
         }
 
         /* Hide scrollbars */

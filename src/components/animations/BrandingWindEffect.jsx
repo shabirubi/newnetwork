@@ -67,7 +67,7 @@ export default function BrandingWindEffect() {
             blur: [0, 10, 20]
           }}
           transition={{ duration: 4, ease: "easeInOut" }}
-          className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-400/30 to-transparent blur-3xl"
+          className="absolute inset-0 bg-gradient-to-r from-transparent via-orange-500/30 to-transparent blur-3xl"
         />
       </motion.div>
     </div>

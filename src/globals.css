@@ -5,13 +5,19 @@ css
 @tailwind components;
 @tailwind utilities;
 
-/* Western Union Yellow Theme */
+/* Dark Mode - Orange & Gray Theme */
 :root {
-  --primary: #FFDD00;
-  --primary-dark: #E6C200;
-  --primary-light: #FFED33;
-  --accent: #FFDD00;
-  --accent-dark: #CCB000;
+  --primary: #FF6B00;
+  --primary-dark: #CC5500;
+  --primary-light: #FF8C33;
+  --accent: #FF6B00;
+  --accent-dark: #CC5500;
+}
+
+/* Force dark background everywhere */
+body, html {
+  background-color: #111111 !important;
+  color: #e0e0e0 !important;
 }
 
 /* Prevent zoom on all inputs and buttons */
