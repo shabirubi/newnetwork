@@ -306,7 +306,7 @@ export default function WarNewsSection() {
 
                 {/* BBC-style Header Bar */}
                 <div className="rounded-xl overflow-hidden mb-6 shadow-2xl">
-                    {/* Top red bar */}
+                    {/* Top bar */}
                     <div className="bg-[#FF6600] px-5 py-3 flex items-center justify-between">
                         <div className="flex items-center gap-4">
                             <img src={LOGO_URL} alt="הרשת החדשה" className="h-9 w-auto drop-shadow-xl" />
