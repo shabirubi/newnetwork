@@ -162,6 +162,9 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-black space-y-0 sm:space-y-6">
 
+      {/* OREF Emergency Popup - shown when real active alert exists */}
+      <OrefEmergencyPopup />
+
       {/* OREF Alerts - TOP PRIORITY */}
       <OrefAlertsPanel />
 
