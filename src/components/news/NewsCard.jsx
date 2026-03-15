@@ -43,9 +43,7 @@ export default function NewsCard({ article, variant = "default", index = 0 }) {
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: index * 0.1 }}
         className="group relative overflow-hidden rounded-lg sm:rounded-2xl bg-black border border-[#0080FF]/30 hover:border-[#0080FF]/60 transition-all duration-300"
-        style={{
-          boxShadow: '0 0 20px rgba(0, 128, 255, 0.25)'
-        }}
+        style={{ boxShadow: '0 0 20px rgba(0, 128, 255, 0.25)' }}
       >
         <Link to={createPageUrl(`Article?id=${id}`)} className="block active:scale-[0.98] transition-transform">
           <div className="relative aspect-[16/9] md:aspect-[21/9] bg-gray-900">
@@ -66,8 +64,8 @@ export default function NewsCard({ article, variant = "default", index = 0 }) {
                 </div>
               </>
             ) : image_url ? (
-              <img 
-                src={image_url} 
+              <img
+                src={image_url}
                 alt={title}
                 loading="lazy"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
@@ -78,14 +76,10 @@ export default function NewsCard({ article, variant = "default", index = 0 }) {
               </div>
             )}
             <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-transparent" />
-            
-            {/* Logo Ticker */}
             <div className="absolute bottom-2 right-2 flex items-center gap-2 bg-black/70 rounded-xl px-3 py-1.5 backdrop-blur-sm">
               <img src={LOGO_URL} alt="הרשת החדשה" className="h-7 w-auto" />
               <span className="text-white text-sm font-bold">הרשת החדשה</span>
             </div>
-
-            {/* Content Overlay */}
             <div className="absolute bottom-0 left-0 right-0 p-6 md:p-10">
               <div className="flex items-center gap-3 mb-4">
                 {is_breaking && (
@@ -94,21 +88,14 @@ export default function NewsCard({ article, variant = "default", index = 0 }) {
                     חדשות חמות
                   </Badge>
                 )}
-                <Badge className={categoryColors[category]}>
-                  {categoryLabels[category]}
-                </Badge>
+                <Badge className={categoryColors[category]}>{categoryLabels[category]}</Badge>
               </div>
-              
               <h2 className="text-2xl md:text-4xl font-bold text-white mb-3 group-hover:text-[#0080FF] transition-colors">
                 {title}
               </h2>
-              
               {subtitle && (
-                <p className="text-gray-300 text-lg md:text-xl mb-4 line-clamp-2">
-                  {subtitle}
-                </p>
+                <p className="text-gray-300 text-lg md:text-xl mb-4 line-clamp-2">{subtitle}</p>
               )}
-              
               <div className="flex items-center gap-4 text-gray-400 text-sm">
                 <span className="flex items-center gap-1">
                   <Clock size={14} />
@@ -130,7 +117,7 @@ export default function NewsCard({ article, variant = "default", index = 0 }) {
         transition={{ delay: index * 0.05 }}
         className="group"
       >
-        <Link 
+        <Link
           to={createPageUrl(`Article?id=${id}`)}
           className="flex items-start gap-4 p-4 rounded-2xl active:bg-gray-100 dark:active:bg-gray-800 transition-colors active:scale-[0.98]"
         >
@@ -142,9 +129,7 @@ export default function NewsCard({ article, variant = "default", index = 0 }) {
               {title}
             </h3>
             <div className="flex items-center gap-2 mt-2 text-sm text-gray-500">
-              <Badge variant="secondary" className="text-xs">
-                {categoryLabels[category]}
-              </Badge>
+              <Badge variant="secondary" className="text-xs">{categoryLabels[category]}</Badge>
               <span>{moment(created_date).fromNow()}</span>
             </div>
           </div>
@@ -154,16 +139,14 @@ export default function NewsCard({ article, variant = "default", index = 0 }) {
     );
   }
 
-  // Default variant - native mobile dark card
+  // Default variant
   return (
     <motion.article
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.1 }}
       className="group bg-black rounded-xl sm:rounded-2xl overflow-hidden border border-[#0080FF]/20 hover:border-[#0080FF]/60 transition-all duration-300 active:scale-95 sm:active:scale-[0.98]"
-      style={{
-        boxShadow: '0 0 15px rgba(0, 128, 255, 0.2)'
-      }}
+      style={{ boxShadow: '0 0 15px rgba(0, 128, 255, 0.2)' }}
     >
       <Link to={createPageUrl(`Article?id=${id}`)} className="block">
         <div className="relative aspect-video overflow-hidden bg-gray-900">
@@ -187,14 +170,12 @@ export default function NewsCard({ article, variant = "default", index = 0 }) {
             </>
           ) : image_url ? (
             <>
-              <img 
-                src={image_url} 
+              <img
+                src={image_url}
                 alt={title}
                 loading="lazy"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                onError={(e) => {
-                  e.target.style.display = 'none';
-                }}
+                onError={(e) => { e.target.style.display = 'none'; }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
             </>
@@ -203,7 +184,7 @@ export default function NewsCard({ article, variant = "default", index = 0 }) {
               <span className="text-[#0080FF]/60 text-3xl sm:text-4xl font-bold">{categoryLabels[category]?.[0] || '📰'}</span>
             </div>
           )}
-          
+
           {is_breaking && (
             <div className="absolute top-2 right-2">
               <Badge className="bg-[#E31E24] text-white text-[10px] sm:text-xs font-bold py-0.5 px-2 animate-pulse">
@@ -212,35 +193,29 @@ export default function NewsCard({ article, variant = "default", index = 0 }) {
             </div>
           )}
 
-          {/* Logo Ticker */}
           <div className="absolute bottom-2 right-2 flex items-center gap-2 bg-black/70 rounded-xl px-3 py-1.5 backdrop-blur-sm">
             <img src={LOGO_URL} alt="הרשת החדשה" className="h-7 w-auto" />
             <span className="text-white text-sm font-bold">הרשת החדשה</span>
           </div>
         </div>
-        
+
         <div className="p-3 sm:p-4">
           <Badge className={`${categoryColors[category]} text-[10px] sm:text-xs mb-2 rounded-full px-2.5 py-1 inline-block`}>
             {categoryLabels[category]}
           </Badge>
-          
           <h3 className="font-bold text-sm sm:text-base text-white group-hover:text-[#0080FF] transition-colors line-clamp-2 mb-1.5 leading-snug">
             {title}
           </h3>
-          
           {subtitle && (
-            <p className="text-gray-400 text-[11px] sm:text-sm line-clamp-1 sm:line-clamp-2 mb-2">
-              {subtitle}
-            </p>
+            <p className="text-gray-400 text-[11px] sm:text-sm line-clamp-1 sm:line-clamp-2 mb-2">{subtitle}</p>
           )}
-          
           <div className="flex items-center justify-between gap-2">
             <span className="flex items-center gap-1 text-gray-500 text-[10px] sm:text-xs flex-1">
               <Clock size={10} />
               {moment(created_date).fromNow()}
             </span>
             <div onClick={(e) => e.preventDefault()} className="flex-shrink-0">
-              <ShareButtons 
+              <ShareButtons
                 url={`${window.location.origin}${createPageUrl(`Article?id=${id}`)}`}
                 title={title}
                 size="small"
