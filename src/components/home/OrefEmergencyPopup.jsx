@@ -146,7 +146,7 @@ export default function OrefEmergencyPopup() {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'space-between',
-              borderBottom: '2px solid rgba(255,102,0,0.5)',
+              borderBottom: '2px solid rgba(21,101,192,0.5)',
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <OrefLogoSVG size={44} />
