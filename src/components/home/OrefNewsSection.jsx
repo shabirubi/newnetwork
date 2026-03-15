@@ -158,28 +158,36 @@ function NewsCard({ article, index, isAlert = false }) {
                         <Clock className="w-3 h-3" /> {article.date}
                     </div>
                     {/* Waving Israeli Flag */}
-                    <div className="relative overflow-hidden" style={{ width: 36, height: 24 }}>
+                    <div style={{ width: 40, height: 26, overflow: 'hidden', borderRadius: 3, boxShadow: '0 1px 4px rgba(0,0,0,0.5)' }}>
                         <style>{`
-                            @keyframes flagWave {
-                                0%   { transform: perspective(200px) rotateY(0deg) scaleX(1); }
-                                25%  { transform: perspective(200px) rotateY(8deg) scaleX(0.97); }
-                                50%  { transform: perspective(200px) rotateY(0deg) scaleX(1); }
-                                75%  { transform: perspective(200px) rotateY(-8deg) scaleX(0.97); }
-                                100% { transform: perspective(200px) rotateY(0deg) scaleX(1); }
+                            @keyframes wave {
+                                0%   { border-radius: 0% 100% 100% 0% / 50% 50% 50% 50%; }
+                                25%  { border-radius: 0% 80% 80% 0% / 40% 60% 40% 60%; }
+                                50%  { border-radius: 0% 100% 100% 0% / 50% 50% 50% 50%; }
+                                75%  { border-radius: 0% 80% 80% 0% / 60% 40% 60% 40%; }
+                                100% { border-radius: 0% 100% 100% 0% / 50% 50% 50% 50%; }
+                            }
+                            @keyframes flagRipple {
+                                0%   { transform: skewY(0deg) scaleX(1); }
+                                25%  { transform: skewY(1.5deg) scaleX(0.97); }
+                                50%  { transform: skewY(0deg) scaleX(1); }
+                                75%  { transform: skewY(-1.5deg) scaleX(0.97); }
+                                100% { transform: skewY(0deg) scaleX(1); }
                             }
                         `}</style>
-                        <svg
-                            width="36" height="24" viewBox="0 0 220 150"
-                            style={{ animation: 'flagWave 2s ease-in-out infinite', transformOrigin: 'left center', display: 'block' }}
-                        >
-                            <rect width="220" height="150" fill="white"/>
-                            <rect y="0" width="220" height="28" fill="#0038b8"/>
-                            <rect y="122" width="220" height="28" fill="#0038b8"/>
-                            <g transform="translate(110,75)">
-                                <polygon points="0,-28 24,14 -24,14" fill="none" stroke="#0038b8" strokeWidth="5"/>
-                                <polygon points="0,28 24,-14 -24,-14" fill="none" stroke="#0038b8" strokeWidth="5"/>
-                            </g>
-                        </svg>
+                        <img
+                            src="https://flagcdn.com/w40/il.png"
+                            srcSet="https://flagcdn.com/w80/il.png 2x"
+                            alt="ישראל"
+                            style={{
+                                width: '100%',
+                                height: '100%',
+                                objectFit: 'cover',
+                                animation: 'flagRipple 1.8s ease-in-out infinite',
+                                transformOrigin: 'left center',
+                                display: 'block'
+                            }}
+                        />
                     </div>
                 </div>
                 <h3 className="text-white font-black text-sm sm:text-base leading-snug mb-3" style={{ fontFamily: FONT }}>
