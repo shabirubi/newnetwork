@@ -158,7 +158,7 @@ function NewsCard({ article, index, isAlert = false }) {
                         <Clock className="w-3 h-3" /> {article.date}
                     </div>
                     {/* Waving Israeli Flag */}
-                    <div style={{ width: 40, height: 26, overflow: 'hidden', borderRadius: 3, boxShadow: '0 1px 4px rgba(0,0,0,0.5)' }}>
+                    <div style={{ width: 52, height: 34, overflow: 'hidden', borderRadius: 0, boxShadow: 'none' }}>
                         <style>{`
                             @keyframes flagWave {
                                 0%   { transform: rotate3d(0,1,0,0deg)   skewY(0deg); }
