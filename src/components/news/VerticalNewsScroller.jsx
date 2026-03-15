@@ -72,7 +72,7 @@ export default function VerticalNewsScroller({ category, title, icon: Icon }) {
   }
 
   return (
-    <div className="bg-gradient-to-br from-gray-900 to-black rounded-2xl overflow-hidden border border-gray-800">
+    <div className="bg-black rounded-2xl overflow-hidden">
       {/* Header */}
       <div className="p-4 sm:p-6 border-b border-gray-800 flex items-center gap-3">
         <div className="p-2 bg-gradient-to-br from-[#0080FF] to-[#0066FF] rounded-lg">
@@ -98,7 +98,7 @@ export default function VerticalNewsScroller({ category, title, icon: Icon }) {
               transition={{ delay: idx * 0.05 }}
             >
               <Link to={`/article/${article.id}`}>
-                <div className="group relative bg-gradient-to-br from-gray-800/50 to-gray-900/50 border border-gray-700/50 rounded-xl overflow-hidden hover:border-[#0080FF]/50 transition-all cursor-pointer h-32 sm:h-40">
+                <div className="group relative bg-[#111] rounded-xl overflow-hidden hover:bg-[#181818] transition-all cursor-pointer h-32 sm:h-40">
                   {/* Image Background */}
                   {article.image_url && (
                     <div className="absolute inset-0 overflow-hidden">
