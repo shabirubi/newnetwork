@@ -137,7 +137,7 @@ export default function OrefEmergencyPopup() {
             {/* Top stripe */}
             <div style={{
               height: '8px',
-              background: 'repeating-linear-gradient(90deg, #FF6600 0px, #FF6600 24px, #FF9900 24px, #FF9900 48px)',
+              background: 'repeating-linear-gradient(90deg, #1565C0 0px, #1565C0 24px, #1976D2 24px, #1976D2 48px)',
             }} />
 
             {/* Header */}
