@@ -439,7 +439,7 @@ export default function Home() {
 
       {/* User Uploaded Videos */}
       <section className="px-4 mb-8 max-w-full overflow-hidden">
-        <UserUploadedVideos />
+        <UserUploadedVideos onUploadClick={() => setUploadVideoModalOpen(true)} />
       </section>
 
       {/* Entertainment Updates */}
