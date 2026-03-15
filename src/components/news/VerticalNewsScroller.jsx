@@ -75,7 +75,7 @@ export default function VerticalNewsScroller({ category, title, icon: Icon }) {
     <div className="bg-black rounded-2xl overflow-hidden">
       {/* Header */}
       <div className="p-4 sm:p-6 border-b border-gray-800 flex items-center gap-3">
-        <div className="p-2 bg-gradient-to-br from-[#0080FF] to-[#0066FF] rounded-lg">
+        <div className="p-2 bg-[#222] rounded-lg">
           <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
         </div>
         <div>
@@ -149,7 +149,7 @@ export default function VerticalNewsScroller({ category, title, icon: Icon }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             onClick={() => scroll('up')}
-            className="absolute top-2 left-1/2 transform -translate-x-1/2 z-10 bg-black/80 hover:bg-black border border-[#0080FF]/50 text-[#0080FF] p-2 rounded-full transition-all"
+            className="absolute top-2 left-1/2 transform -translate-x-1/2 z-10 bg-black/80 hover:bg-black border border-gray-600 text-white p-2 rounded-full transition-all"
           >
             ↑
           </motion.button>
@@ -160,7 +160,7 @@ export default function VerticalNewsScroller({ category, title, icon: Icon }) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             onClick={() => scroll('down')}
-            className="absolute bottom-2 left-1/2 transform -translate-x-1/2 z-10 bg-black/80 hover:bg-black border border-[#0080FF]/50 text-[#0080FF] p-2 rounded-full transition-all"
+            className="absolute bottom-2 left-1/2 transform -translate-x-1/2 z-10 bg-black/80 hover:bg-black border border-gray-600 text-white p-2 rounded-full transition-all"
           >
             ↓
           </motion.button>
@@ -170,7 +170,7 @@ export default function VerticalNewsScroller({ category, title, icon: Icon }) {
       {/* Footer Link */}
       <Link to={createPageUrl(`Category?cat=${category}`)}>
         <div className="p-4 border-t border-gray-800 hover:bg-gray-900/50 transition-colors text-center cursor-pointer">
-          <span className="text-gray-300 hover:text-[#0080FF] transition-colors font-bold text-sm">
+          <span className="text-gray-300 hover:text-white transition-colors font-bold text-sm">
             כל החדשות →
           </span>
         </div>
