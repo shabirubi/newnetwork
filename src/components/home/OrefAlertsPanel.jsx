@@ -165,99 +165,173 @@ function AlertPolygonRow({ alert, isActive = false }) {
     );
 }
 
-/* Full-screen popup with all alerts stacked */
+/* TV-style city row — alternating orange/yellow like Pikud HaOref broadcast */
+function CityRow({ city, index }) {
+    const isOrange = index % 2 === 0;
+    return (
+        <div style={{
+            background: isOrange ? '#E8650A' : '#F5A623',
+            padding: '7px 18px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-end',
+            borderBottom: '1px solid rgba(0,0,0,0.15)',
+        }}>
+            <span style={{
+                color: 'white',
+                fontSize: '17px',
+                fontWeight: '900',
+                fontFamily: FONT,
+                textShadow: '1px 1px 2px rgba(0,0,0,0.5)',
+                letterSpacing: '0.01em',
+            }}>
+                {city}
+            </span>
+        </div>
+    );
+}
+
+/* Full-screen popup — TV broadcast style like the real Pikud HaOref */
 function AlertsPopup({ activeAlert, history, lastFetch, onClose }) {
+    // Collect all cities from history
+    const allCities = [];
+    history.forEach(alert => {
+        const cities = Array.isArray(alert.data) ? alert.data : (alert.data ? alert.data.split(',').map(s => s.trim()) : []);
+        cities.forEach(city => { if (city) allCities.push(city); });
+    });
+    if (activeAlert?.data) {
+        const activeCities = Array.isArray(activeAlert.data) ? activeAlert.data : [activeAlert.data];
+        activeCities.forEach(city => { if (city && !allCities.includes(city)) allCities.unshift(city); });
+    }
+
     return (
         <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[99999] flex items-start justify-center pt-4 sm:pt-10 px-3"
-            style={{ background: 'rgba(0,0,0,0.88)', backdropFilter: 'blur(4px)' }}
+            className="fixed inset-0 z-[99999] flex items-center justify-center"
+            style={{ background: 'rgba(0,0,0,0.75)', backdropFilter: 'blur(3px)' }}
             onClick={onClose}
         >
             <motion.div
-                initial={{ opacity: 0, y: -30, scale: 0.97 }}
-                animate={{ opacity: 1, y: 0, scale: 1 }}
-                exit={{ opacity: 0, y: -30, scale: 0.97 }}
-                transition={{ duration: 0.25, ease: 'easeOut' }}
-                className="w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl"
-                style={{ background: '#0d0000', border: '3px solid #FF6600', boxShadow: '0 0 60px rgba(204,0,0,0.6)' }}
+                initial={{ opacity: 0, scale: 0.92, y: -20 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.92, y: -20 }}
+                transition={{ duration: 0.2, ease: 'easeOut' }}
+                style={{
+                    width: '320px',
+                    maxHeight: '85vh',
+                    borderRadius: '4px',
+                    overflow: 'hidden',
+                    boxShadow: '0 8px 40px rgba(0,0,0,0.8)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                }}
                 onClick={e => e.stopPropagation()}
                 dir="rtl"
             >
-                {/* Popup header */}
+                {/* Blue header — exactly like TV broadcast */}
                 <div style={{
-                    background: 'linear-gradient(90deg, #8B0000, #CC0000)',
-                    padding: '14px 18px',
+                    background: '#1565C0',
+                    padding: '10px 14px',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'space-between',
-                    borderBottom: '3px solid #FF6600',
-                    position: 'sticky',
-                    top: 0,
-                    zIndex: 10,
+                    flexShrink: 0,
                 }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                        <OrefLogoSVG size={36} />
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <OrefLogoSVG size={32} />
                         <div>
-                            <div style={{ color: 'white', fontSize: '18px', fontWeight: '900', fontFamily: FONT }}>פיקוד העורף</div>
-                            <div style={{ color: '#FFD700', fontSize: '12px', fontWeight: '700', fontFamily: FONT }}>
-                                היסטוריית התרעות
-                                {lastFetch && <span style={{ color: 'rgba(255,255,255,0.5)', marginRight: '8px' }}>• עודכן {formatTime(lastFetch)}</span>}
+                            <div style={{ color: 'white', fontSize: '16px', fontWeight: '900', fontFamily: FONT, lineHeight: 1.1 }}>
+                                התרעות פיקוד העורף
                             </div>
+                            {lastFetch && (
+                                <div style={{ color: 'rgba(255,255,255,0.7)', fontSize: '11px', fontFamily: FONT }}>
+                                    עודכן: {formatTime(lastFetch)}
+                                </div>
+                            )}
                         </div>
                     </div>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                        <a
-                            href="https://www.oref.org.il/heb/alerts-history"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            style={{ color: '#FFD700', fontSize: '12px', fontFamily: FONT, display: 'flex', alignItems: 'center', gap: '4px' }}
-                        >
-                            <ExternalLink size={14} />
-                            אתר רשמי
-                        </a>
-                        <button
-                            onClick={onClose}
-                            style={{ background: 'rgba(255,255,255,0.15)', border: 'none', borderRadius: '50%', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', color: 'white' }}
-                        >
-                            <X size={18} />
-                        </button>
-                    </div>
+                    <button
+                        onClick={onClose}
+                        style={{
+                            background: 'rgba(255,255,255,0.2)',
+                            border: 'none',
+                            borderRadius: '50%',
+                            width: '28px',
+                            height: '28px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            cursor: 'pointer',
+                            color: 'white',
+                            flexShrink: 0,
+                        }}
+                    >
+                        <X size={16} />
+                    </button>
                 </div>
 
-                <div style={{ padding: '16px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-                    {/* Active alert first */}
-                    {activeAlert && activeAlert.data?.length > 0 && (
-                        <div>
-                            <div style={{ color: '#FF6666', fontSize: '11px', fontWeight: '700', fontFamily: FONT, marginBottom: '6px', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-                                ● התרעה פעילה עכשיו
-                            </div>
-                            <AlertPolygonRow alert={activeAlert} isActive={true} />
-                        </div>
-                    )}
+                {/* Alert type label */}
+                <div style={{
+                    background: '#1A237E',
+                    padding: '6px 14px',
+                    borderBottom: '2px solid #E8650A',
+                    flexShrink: 0,
+                }}>
+                    <span style={{
+                        color: '#FFD700',
+                        fontSize: '13px',
+                        fontWeight: '900',
+                        fontFamily: FONT,
+                        letterSpacing: '0.02em',
+                    }}>
+                        🚨 ירי רקטות וטילים — היכנסו למרחב המוגן!
+                    </span>
+                </div>
 
-                    {/* History */}
-                    {history.length > 0 && (
-                        <div>
-                            <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: '11px', fontWeight: '700', fontFamily: FONT, marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.1em', borderTop: '1px solid #330000', paddingTop: '12px' }}>
-                                <Clock size={12} style={{ display: 'inline', marginLeft: '4px' }} />
-                                התרעות אחרונות
-                            </div>
-                            {history.map((alert, i) => (
-                                <div key={i} style={{ marginBottom: '10px' }}>
-                                    <AlertPolygonRow alert={alert} isActive={false} />
-                                </div>
-                            ))}
+                {/* City rows — scrollable */}
+                <div style={{ overflowY: 'auto', flexGrow: 1 }}>
+                    {allCities.length > 0 ? (
+                        allCities.map((city, i) => (
+                            <CityRow key={i} city={city} index={i} />
+                        ))
+                    ) : (
+                        <div style={{
+                            background: '#E8650A',
+                            padding: '20px',
+                            textAlign: 'center',
+                            color: 'white',
+                            fontFamily: FONT,
+                            fontSize: '14px',
+                            fontWeight: '700',
+                        }}>
+                            אין התרעות פעילות כרגע
                         </div>
                     )}
+                </div>
 
-                    {!activeAlert && history.length === 0 && (
-                        <div style={{ color: '#00CC00', textAlign: 'center', padding: '32px', fontFamily: FONT, fontSize: '16px', fontWeight: '700' }}>
-                            ✅ אין התרעות פעילות כרגע
-                        </div>
-                    )}
+                {/* Footer */}
+                <div style={{
+                    background: '#1565C0',
+                    padding: '6px 14px',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    flexShrink: 0,
+                }}>
+                    <a
+                        href="https://www.oref.org.il/heb/alerts-history"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ color: 'rgba(255,255,255,0.7)', fontSize: '11px', fontFamily: FONT, display: 'flex', alignItems: 'center', gap: '4px' }}
+                    >
+                        <ExternalLink size={12} />
+                        oref.org.il
+                    </a>
+                    <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '10px', fontFamily: FONT }}>
+                        {allCities.length} אזורים
+                    </span>
                 </div>
             </motion.div>
         </motion.div>
