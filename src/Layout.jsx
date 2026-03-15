@@ -273,7 +273,7 @@ export default function Layout({ children, currentPageName }) {
   }
 
   return (
-    <div className="min-h-screen bg-[#0d1b2a] transition-colors duration-300 flex flex-col overflow-x-hidden" dir="rtl">
+    <div className="min-h-screen bg-black transition-colors duration-300 flex flex-col overflow-x-hidden" dir="rtl">
       <style>{`
         :root {
           --primary: #1565C0;
@@ -282,8 +282,7 @@ export default function Layout({ children, currentPageName }) {
           --accent: #CC0000;
           --accent-dark: #990000;
         }
-        body { background-color: #0d1b2a !important; }
-        /* Oref color scheme: dark navy + red + white */
+        body { background-color: #000000 !important; }
 
         /* Hide scrollbars */
         * {
@@ -336,7 +335,7 @@ export default function Layout({ children, currentPageName }) {
       </div>
 
       {/* Logo Header */}
-      <div className="bg-gradient-to-r from-[#0d1b2a] via-[#1565C0] to-[#0d1b2a] border-b-2 border-[#CC0000] py-2 shadow-lg shadow-[#1565C0]/30 relative overflow-visible">
+      <div className="bg-black border-b-2 border-[#CC0000] py-2 shadow-lg relative overflow-visible">
 
         <div className="max-w-7xl mx-auto px-4 flex items-center justify-between gap-3 relative z-[200]">
           <div className="flex items-center gap-3 flex-shrink-0">
