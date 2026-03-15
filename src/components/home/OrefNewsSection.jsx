@@ -24,12 +24,12 @@ const WAR_ARTICLES_BASE = [
     {
         title: "ישראל ואמריקה מסכמות: מתקפה מתואמת על מתקני הגרעין של איראן",
         content: "גורמים בכירים בממשל האמריקאי ובממשלת ישראל מסרו הלילה כי השתיים הגיעו להסכמה עקרונית לפעולה משותפת נגד מתקני הגרעין האיראניים. הבית הלבן ממתין לאישור הסנאט.",
-        category: "SECURITY", label: "ביטחון", color: "#FF4444", border: "#FF444440", bg: "#1a0505", is_urgent: true, date: "עכשיו",
+        category: "SECURITY", label: "ביטחון", color: "#FF6600", border: "#FF660040", bg: "#1a0e00", is_urgent: true, date: "עכשיו",
     },
     {
         title: "איראן: נפעיל 3,000 טיל — הגנת הביניים תופעל מיידית",
         content: "דובר משמרות המהפכה האיראניות הזהיר הלילה כי כל מתקפה ישראלית-אמריקאית תגרור ירי של אלפי טילים לכיוון ישראל, לרבות פגיעה בנמלי תעופה ובתחנות כוח.",
-        category: "ALERT", label: "אזהרה", color: "#FF2222", border: "#FF222250", bg: "#1a0303", is_urgent: true, date: "לפני שעה",
+        category: "ALERT", label: "אזהרה", color: "#FF6600", border: "#FF660050", bg: "#1a0e00", is_urgent: true, date: "לפני שעה",
     },
     {
         title: "צבא ישראל: 40,000 מגויסים בכוננות גבוהה לקראת התרחיש הצפוי",
@@ -44,7 +44,7 @@ const WAR_ARTICLES_BASE = [
     {
         title: "חיזבאללה מפעיל מחדש חוליות בצפון — צה\"ל מחזק את הגבול",
         content: "מודיעין צבאי מצביע על חזרה לפעילות מבצעית של חיזבאללה בדרום לבנון. כוחות צה\"ל חיזקו עמדות ואוכלוסיות הצפון קיבלו הנחיות מעודכנות.",
-        category: "SECURITY", label: "ביטחון", color: "#FF4444", border: "#FF444440", bg: "#1a0505", is_urgent: false, date: "לפני 4 שעות",
+        category: "SECURITY", label: "ביטחון", color: "#FF6600", border: "#FF660040", bg: "#1a0e00", is_urgent: false, date: "לפני 4 שעות",
     },
     {
         title: "עלות המלחמה עלתה ל-300 מיליארד שקל — בנק ישראל מזהיר",
@@ -59,7 +59,7 @@ const WAR_ARTICLES_BASE = [
     {
         title: "חמאס וישראל: שבוע לסיום שלב א' — המו\"מ על שלב ב' נמשך",
         content: "שבוע לפני תום שלב א' של הסכם החטופים, עדיין לא הושגה הסכמה על תנאי שלב ב'. מקורות דיפלומטיים: 'הפער עדיין גדול, אך המשא ומתן נמשך'.",
-        category: "SECURITY", label: "ביטחון", color: "#FF4444", border: "#FF444440", bg: "#1a0505", is_urgent: false, date: "אתמול",
+        category: "SECURITY", label: "ביטחון", color: "#FF6600", border: "#FF660040", bg: "#1a0e00", is_urgent: false, date: "אתמול",
     },
     {
         title: "אמריקה מזיזה נושאת מטוסים שנייה לים התיכון — מסר לאיראן",
@@ -278,7 +278,7 @@ export default function WarNewsSection() {
                 {/* BBC-style Header Bar */}
                 <div className="rounded-xl overflow-hidden mb-6 shadow-2xl">
                     {/* Top red bar */}
-                    <div className="bg-[#BB1919] px-5 py-3 flex items-center justify-between">
+                    <div className="bg-[#FF6600] px-5 py-3 flex items-center justify-between">
                         <div className="flex items-center gap-4">
                             <img src={LOGO_URL} alt="הרשת החדשה" className="h-9 w-auto drop-shadow-xl" />
                             <div className="w-px h-8 bg-white/30" />
