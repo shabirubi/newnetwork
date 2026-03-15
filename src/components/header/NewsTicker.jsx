@@ -93,29 +93,40 @@ export default function NewsTicker({ darkMode, setDarkMode, onMenuClick }) {
           </button>
         </div>
 
-        <button 
-          onClick={() => {
-            window.location.href = createPageUrl("VODContent");
-          }}
-          className="overflow-hidden flex-1 cursor-pointer hover:opacity-90 transition-opacity min-w-0 relative z-10"
-        >
-          <div className="flex items-center whitespace-nowrap">
-            {news.map((item, index) => (
-              <span key={`news-${index}`} className="inline-flex items-center gap-6 px-6 font-bold text-base md:text-lg text-white animate-marquee">
-                {item}
-              </span>
-            ))}
+        <div className="flex-1 flex flex-col items-center justify-center min-w-0 relative z-10">
+          {/* Scrolling text */}
+          <div className="overflow-hidden w-full">
+            <div className="flex items-center whitespace-nowrap">
+              {news.map((item, index) => (
+                <span key={`news-${index}`} className="inline-flex items-center gap-6 px-6 font-bold text-base md:text-lg text-white animate-marquee">
+                  {item}
+                </span>
+              ))}
+            </div>
           </div>
-        </button>
-        
+          {/* Israeli Flag */}
+          <div className="flex items-center justify-center mt-1">
+            <svg width="80" height="48" viewBox="0 0 220 150" xmlns="http://www.w3.org/2000/svg">
+              <rect width="220" height="150" fill="white"/>
+              <rect y="0" width="220" height="28" fill="#0038b8"/>
+              <rect y="122" width="220" height="28" fill="#0038b8"/>
+              {/* Star of David */}
+              <polygon points="110,45 122,65 98,65" fill="none" stroke="#0038b8" strokeWidth="5"/>
+              <polygon points="110,105 98,85 122,85" fill="none" stroke="#0038b8" strokeWidth="5"/>
+              <line x1="110" y1="45" x2="110" y2="105" stroke="none"/>
+              {/* Magen David proper */}
+              <g transform="translate(110,75)">
+                <polygon points="0,-28 24,14 -24,14" fill="none" stroke="#0038b8" strokeWidth="5"/>
+                <polygon points="0,28 24,-14 -24,-14" fill="none" stroke="#0038b8" strokeWidth="5"/>
+              </g>
+            </svg>
+          </div>
+        </div>
+
         <style>{`
           @keyframes marquee {
-            0% {
-              transform: translateX(100%);
-            }
-            100% {
-              transform: translateX(-100%);
-            }
+            0% { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
           }
           .animate-marquee {
             animation: marquee 12s linear infinite;
