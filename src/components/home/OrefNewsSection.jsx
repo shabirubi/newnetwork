@@ -99,9 +99,9 @@ function NewsCard({ article, index, isAlert = false }) {
             transition={{ delay: index * 0.04 }}
             className="rounded-2xl overflow-hidden cursor-pointer group"
             style={{
-                background: article.bg,
-                border: `1.5px solid ${article.border}`,
-                boxShadow: isAlert ? `0 0 40px ${article.color}40` : '0 2px 12px rgba(0,0,0,0.5)'
+                background: '#0a0a0a',
+                border: '1.5px solid #222',
+                boxShadow: '0 2px 12px rgba(0,0,0,0.6)'
             }}
             onClick={() => setExpanded(e => !e)}
         >
