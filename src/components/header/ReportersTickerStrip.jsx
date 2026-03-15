@@ -133,9 +133,7 @@ export default function ReportersTickerStrip() {
                       className="absolute bottom-0.5 right-0.5 w-2 h-2 bg-green-400 rounded-full"
                     />
                   </div>
-                  <p className="text-white font-bold text-[10px] text-center max-w-[60px] truncate">
-                    {reporter.name}
-                  </p>
+
                 </div>
               </motion.div>
             ))}
