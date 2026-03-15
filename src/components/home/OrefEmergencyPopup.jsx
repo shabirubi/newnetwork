@@ -279,7 +279,7 @@ export default function OrefEmergencyPopup() {
 
             {/* Footer */}
             <div style={{
-              borderTop: '2px solid rgba(255,102,0,0.4)',
+              borderTop: '2px solid rgba(21,101,192,0.4)',
               padding: '10px 20px',
               display: 'flex',
               alignItems: 'center',
