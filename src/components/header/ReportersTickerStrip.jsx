@@ -119,14 +119,13 @@ export default function ReportersTickerStrip() {
                 className="flex-shrink-0 cursor-pointer"
               >
                 <div className="flex flex-col items-center gap-1">
-                  {/* Reporter Image */}
-                  {/* Reporter Image only - no frame, no background */}
-                  <div className="relative w-14 h-14" style={{ background: '#ffffff' }}>
+                  {/* Reporter Image only - transparent bg */}
+                  <div className="relative w-14 h-14 flex items-end justify-center" style={{ background: 'transparent' }}>
                     <img
                       src={reporter.image}
                       alt={reporter.name}
-                      className="w-full h-full object-contain object-bottom mix-blend-multiply"
-                      style={{ borderRadius: 0 }}
+                      className="w-full h-full object-contain object-bottom"
+                      style={{ background: 'transparent', mixBlendMode: 'normal' }}
                       onError={(e) => {
                         e.target.style.display = 'none';
                       }}
