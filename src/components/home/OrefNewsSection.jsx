@@ -327,7 +327,7 @@ export default function WarNewsSection() {
                         </span>
                     </div>
                     {/* Bottom subtitle bar */}
-                    <div className="bg-[#1A1A1A] px-5 py-2 flex items-center gap-2">
+                    <div className="bg-[#2A2A2A] px-5 py-2 flex items-center gap-2">
                         <span className="text-gray-400 text-xs" style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
                             ישראל · ארה"ב · איראן · עזה
                         </span>
