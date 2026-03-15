@@ -273,7 +273,7 @@ export default function Layout({ children, currentPageName }) {
   }
 
   return (
-    <div className="min-h-screen bg-black transition-colors duration-300 flex flex-col overflow-x-hidden" dir="rtl">
+    <div className="min-h-screen bg-[#1a1a1a] transition-colors duration-300 flex flex-col overflow-x-hidden" dir="rtl">
       <style>{`
         :root {
           --primary: #1565C0;
@@ -282,7 +282,7 @@ export default function Layout({ children, currentPageName }) {
           --accent: #CC0000;
           --accent-dark: #990000;
         }
-        body { background-color: #000000 !important; }
+        body { background-color: #1a1a1a !important; }
 
         /* Hide scrollbars */
         * {
@@ -310,12 +310,12 @@ export default function Layout({ children, currentPageName }) {
 
         @keyframes colorShift {
           0%, 100% { 
-            background: linear-gradient(to right, #1565C0, #0d47a1, #1976D2);
-            box-shadow: 0 0 40px #1565C0;
+            background: linear-gradient(to right, #FF6600, #FF8800, #FF4400);
+            box-shadow: 0 0 40px #FF6600;
           }
           50% { 
-            background: linear-gradient(to right, #CC0000, #990000, #FF0000);
-            box-shadow: 0 0 40px #CC0000;
+            background: linear-gradient(to right, #1a1a1a, #333333, #111111);
+            box-shadow: 0 0 40px #444444;
           }
         }
 
@@ -335,7 +335,7 @@ export default function Layout({ children, currentPageName }) {
       </div>
 
       {/* Logo Header */}
-      <div className="bg-black border-b-2 border-[#CC0000] py-2 shadow-lg relative overflow-visible">
+      <div className="bg-[#111111] border-b-2 border-[#333333] py-2 shadow-lg relative overflow-visible">
 
         <div className="max-w-7xl mx-auto px-4 flex items-center justify-between gap-3 relative z-[200]">
           <div className="flex items-center gap-3 flex-shrink-0">
