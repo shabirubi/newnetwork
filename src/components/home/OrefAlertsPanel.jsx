@@ -394,9 +394,9 @@ export default function AlertsPanel() {
                 dir="rtl"
             >
                 <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-1.5 bg-white rounded px-2 py-0.5">
-                        <Shield className="w-3 h-3 text-red-700" />
-                        <span className="text-red-800 text-xs font-black" style={{ fontFamily: FONT }}>פיקוד העורף</span>
+                    <div className="flex items-center gap-1.5 rounded px-2 py-0.5" style={{ background: 'linear-gradient(135deg, #FF6600 0%, #000000 100%)' }}>
+                        <Shield className="w-3 h-3 text-white" />
+                        <span className="text-white text-xs font-black" style={{ fontFamily: FONT }}>פיקוד העורף</span>
                     </div>
                     <div className={`w-2 h-2 rounded-full ${hasActiveNow ? 'bg-red-500 animate-pulse' : 'bg-green-500'}`} />
                     <span className={`text-sm font-bold ${hasActiveNow ? 'text-red-300' : 'text-green-300'}`} style={{ fontFamily: FONT }}>
