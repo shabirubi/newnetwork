@@ -215,24 +215,24 @@ export default function VideosCategoriesStrip() {
   }, [comments]);
 
   return (
-    <div className="relative bg-[#000000] overflow-hidden z-[34] border-b border-[#222]" style={{ height: '80px' }}>
+    <div className="relative bg-black overflow-hidden z-[34]" style={{ height: '72px' }}>
       {/* Gradient Overlays */}
-      <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-black via-black/80 to-transparent z-10 pointer-events-none" />
-      <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-black via-black/80 to-transparent z-10 pointer-events-none" />
+      <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
+      <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
       
       {/* Scroll Arrows */}
       <button
         onClick={() => scroll('left')}
-        className="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-black/80 backdrop-blur-sm p-2 rounded-full hover:bg-[#222] transition-all shadow-lg border border-gray-700"
+        className="absolute right-1 top-1/2 -translate-y-1/2 z-20 p-1 text-gray-600 hover:text-white transition-colors"
       >
-        <ChevronRight className="w-5 h-5 text-white" />
+        <ChevronRight className="w-4 h-4" />
       </button>
 
       <button
         onClick={() => scroll('right')}
-        className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-black/80 backdrop-blur-sm p-2 rounded-full hover:bg-[#222] transition-all shadow-lg border border-gray-700"
+        className="absolute left-1 top-1/2 -translate-y-1/2 z-20 p-1 text-gray-600 hover:text-white transition-colors"
       >
-        <ChevronLeft className="w-5 h-5 text-white" />
+        <ChevronLeft className="w-4 h-4" />
       </button>
 
       {/* Categories Scroll */}
