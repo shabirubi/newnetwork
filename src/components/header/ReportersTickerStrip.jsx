@@ -119,21 +119,18 @@ export default function ReportersTickerStrip() {
                 className="flex-shrink-0 cursor-pointer"
               >
                 <div className="flex flex-col items-center gap-1">
-                  {/* Reporter Image only - transparent bg */}
-                  <div className="relative w-14 h-14 flex items-end justify-center" style={{ background: 'transparent' }}>
+                  {/* Reporter Image - grayscale, color on hover */}
+                  <div className="relative w-12 h-12 overflow-hidden rounded group">
                     <img
                       src={reporter.image}
                       alt={reporter.name}
-                      className="w-full h-full object-contain object-bottom"
-                      style={{ background: 'transparent', mixBlendMode: 'normal' }}
-                      onError={(e) => {
-                        e.target.style.display = 'none';
-                      }}
+                      className="w-full h-full object-cover transition-all duration-300 grayscale group-hover:grayscale-0"
+                      onError={(e) => { e.target.style.display = 'none'; }}
                     />
                     <motion.div
                       animate={{ scale: [1, 1.3, 1] }}
                       transition={{ duration: 2, repeat: Infinity }}
-                      className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-green-400 rounded-full"
+                      className="absolute bottom-0.5 right-0.5 w-2 h-2 bg-green-400 rounded-full"
                     />
                   </div>
                   <p className="text-white font-bold text-[10px] text-center max-w-[60px] truncate">
