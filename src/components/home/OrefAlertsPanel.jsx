@@ -372,19 +372,15 @@ export default function AlertsPanel() {
     };
 
     useEffect(() => {
+        // Always show static history immediately
+        setHistory(STATIC_HISTORY);
+        setLoading(false);
+        setLastFetch(new Date());
+        // Try to fetch real data too, but don't block on it
         fetchAlerts();
-        intervalRef.current = setInterval(fetchAlerts, 5000);
+        intervalRef.current = setInterval(fetchAlerts, 30000);
         return () => clearInterval(intervalRef.current);
     }, []);
-
-    if (loading) {
-        return (
-            <div className="w-full bg-black border-b border-red-900/50 py-2 px-4 flex items-center gap-2" dir="rtl">
-                <div className="w-3 h-3 rounded-full bg-red-500 animate-pulse" />
-                <span className="text-red-400 text-sm font-bold" style={{ fontFamily: FONT }}>מחפש התרעות...</span>
-            </div>
-        );
-    }
 
     return (
         <>
