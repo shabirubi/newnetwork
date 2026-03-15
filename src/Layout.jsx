@@ -273,7 +273,7 @@ export default function Layout({ children, currentPageName }) {
   }
 
   return (
-    <div className="min-h-screen bg-black transition-colors duration-300 flex flex-col overflow-x-hidden" dir="rtl">
+    <div className="min-h-screen bg-[#0d1b2a] transition-colors duration-300 flex flex-col overflow-x-hidden" dir="rtl">
       <style>{`
         :root {
           --primary: #FF6B00;
@@ -338,7 +338,7 @@ export default function Layout({ children, currentPageName }) {
       </div>
 
       {/* Logo Header */}
-      <div className="bg-gradient-to-r from-[#111111] via-[#1a1a1a] to-[#111111] border-b border-[#FF6B00]/40 py-2 shadow-lg shadow-[#FF6B00]/20 relative overflow-visible">
+      <div className="bg-gradient-to-r from-[#0d1b2a] via-[#1565C0] to-[#0d1b2a] border-b-2 border-[#CC0000] py-2 shadow-lg shadow-[#1565C0]/30 relative overflow-visible">
 
         <div className="max-w-7xl mx-auto px-4 flex items-center justify-between gap-3 relative z-[200]">
           <div className="flex items-center gap-3 flex-shrink-0">
