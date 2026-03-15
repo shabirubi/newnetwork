@@ -238,53 +238,43 @@ export default function VideosCategoriesStrip() {
       {/* Categories Scroll */}
       <div 
         ref={scrollRef}
-        className="overflow-x-auto h-full"
+        className="overflow-x-auto h-full flex items-center px-8"
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
-        <div className="flex gap-3 py-4 h-full items-center justify-center" style={{ minWidth: '100%', width: 'max-content', margin: '0 auto' }}>
+        <div className="flex gap-4 items-center" style={{ width: 'max-content' }}>
           {categories.map((cat) => {
             const Icon = cat.icon;
             return (
               <motion.div
                 key={cat.id}
                 onClick={() => {
-                  console.log('🎯 לחיצה על קטגוריה:', cat.label);
                   setSelectedCategory(cat.id);
                   setCurrentVideoIndex(0);
                 }}
                 onMouseEnter={() => setHoveredCategory(cat.id)}
                 onMouseLeave={() => setHoveredCategory(null)}
-                whileHover={{ scale: 1.05 }}
+                whileHover={{ scale: 1.08 }}
                 whileTap={{ scale: 0.95 }}
                 className="flex-shrink-0 cursor-pointer relative"
               >
-                <div className="relative w-20 h-12 rounded-xl overflow-hidden border border-[#333] hover:border-[#555] transition-all shadow-lg">
+                <div className="relative w-16 h-12 rounded-lg overflow-hidden">
                   {/* Background Image */}
                   <img 
                     src={cat.image} 
                     alt={cat.label}
-                    className="absolute inset-0 w-full h-full object-cover opacity-40"
+                    className="absolute inset-0 w-full h-full object-cover"
                   />
                   
                   {/* Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-black/50 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
                   
                   {/* Content */}
                   <div className="absolute inset-0 flex flex-col items-center justify-center p-1">
                     <Icon className="w-4 h-4 text-white mb-0.5 drop-shadow-lg" />
-                    <p className="text-white font-bold text-[10px] text-center drop-shadow-lg leading-tight">
+                    <p className="text-white font-bold text-[9px] text-center drop-shadow-lg">
                       {cat.label}
                     </p>
                   </div>
-                  
-                  {/* Hover Glow */}
-                  {hoveredCategory === cat.id && (
-                    <motion.div
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      className="absolute inset-0 bg-white/10 backdrop-blur-[2px]"
-                    />
-                  )}
                 </div>
               </motion.div>
             );
