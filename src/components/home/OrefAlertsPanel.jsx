@@ -342,11 +342,6 @@ export default function AlertsPanel() {
     };
 
     useEffect(() => {
-        // Always show static history immediately
-        setHistory(STATIC_HISTORY);
-        setLoading(false);
-        setLastFetch(new Date());
-        // Try to fetch real data too, but don't block on it
         fetchAlerts();
         intervalRef.current = setInterval(fetchAlerts, 30000);
         return () => clearInterval(intervalRef.current);
