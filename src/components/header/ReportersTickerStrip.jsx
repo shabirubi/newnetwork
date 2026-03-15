@@ -76,7 +76,9 @@ export default function ReportersTickerStrip() {
                     <img
                       src={reporter.image || DEFAULT_IMAGE}
                       alt={reporter.name}
-                      className="w-full h-full object-cover transition-all duration-300 group-hover:scale-110"
+                      className={`w-full h-full object-cover transition-all duration-300 ${
+                        isLive ? '' : 'grayscale group-hover:grayscale-0'
+                      }`}
                       onError={(e) => { e.target.src = DEFAULT_IMAGE; }}
                     />
                   </div>
