@@ -124,12 +124,12 @@ export default function OrefEmergencyPopup() {
             className="w-full max-w-lg rounded-2xl overflow-hidden"
             style={{
               background: flash
-                ? 'linear-gradient(160deg, #7a0000 0%, #CC0000 100%)'
-                : 'linear-gradient(160deg, #5a0000 0%, #AA0000 100%)',
-              border: '4px solid #FF6600',
+                ? 'linear-gradient(160deg, #1565C0 0%, #1976D2 100%)'
+                : 'linear-gradient(160deg, #0d47a1 0%, #1565C0 100%)',
+              border: '4px solid #1976D2',
               boxShadow: flash
-                ? '0 0 60px rgba(255,0,0,0.9), 0 0 120px rgba(255,100,0,0.5)'
-                : '0 0 40px rgba(200,0,0,0.7)',
+                ? '0 0 60px rgba(21,101,192,0.9), 0 0 120px rgba(25,118,210,0.5)'
+                : '0 0 40px rgba(13,71,161,0.7)',
               transition: 'background 0.3s, box-shadow 0.3s',
               fontFamily: FONT,
             }}
