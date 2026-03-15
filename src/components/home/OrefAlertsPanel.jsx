@@ -314,7 +314,7 @@ function AlertsPopup({ activeAlert, history, lastFetch, onClose }) {
 export default function AlertsPanel() {
     const [activeAlert, setActiveAlert] = useState(null);
     const [history, setHistory] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [popupOpen, setPopupOpen] = useState(false);
     const [lastFetch, setLastFetch] = useState(null);
     const [hasActiveNow, setHasActiveNow] = useState(false);
