@@ -33,19 +33,29 @@ const categoryColors = {
   health: "bg-gradient-to-r from-black/80 to-[#0080FF]/40 text-white border border-[#0080FF]/50"
 };
 
-export default function NewsCard({ article, variant = "default", index = 0 }) {
-  const { title, subtitle, category, image_url, video_url, is_breaking, created_date, id } = article || {};
+export default function NewsCard({ article, variant, index }) {
+  const safeVariant = variant || "default";
+  const safeIndex = index || 0;
+  const articleData = article || {};
+  const articleId = articleData.id;
+  const title = articleData.title;
+  const subtitle = articleData.subtitle;
+  const category = articleData.category;
+  const image_url = articleData.image_url;
+  const video_url = articleData.video_url;
+  const is_breaking = articleData.is_breaking;
+  const created_date = articleData.created_date;
 
-  if (variant === "featured") {
+  if (safeVariant === "featured") {
     return (
       <motion.article
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: index * 0.1 }}
+        transition={{ delay: safeIndex * 0.1 }}
         className="group relative overflow-hidden rounded-lg sm:rounded-2xl bg-black border border-[#0080FF]/30 hover:border-[#0080FF]/60 transition-all duration-300"
         style={{ boxShadow: '0 0 20px rgba(0, 128, 255, 0.25)' }}
       >
-        <Link to={createPageUrl(`Article?id=${id}`)} className="block active:scale-[0.98] transition-transform">
+        <Link to={createPageUrl(`Article?id=${articleId}`)} className="block active:scale-[0.98] transition-transform">
           <div className="relative aspect-[16/9] md:aspect-[21/9] bg-gray-900">
             {video_url ? (
               <>
@@ -64,12 +74,7 @@ export default function NewsCard({ article, variant = "default", index = 0 }) {
                 </div>
               </>
             ) : image_url ? (
-              <img
-                src={image_url}
-                alt={title}
-                loading="lazy"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-              />
+              <img src={image_url} alt={title} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
             ) : (
               <div className="w-full h-full bg-gradient-to-br from-[#0080FF]/20 to-black flex items-center justify-center">
                 <span className="text-[#0080FF]/40 text-5xl sm:text-6xl font-bold">📺</span>
@@ -90,12 +95,8 @@ export default function NewsCard({ article, variant = "default", index = 0 }) {
                 )}
                 <Badge className={categoryColors[category]}>{categoryLabels[category]}</Badge>
               </div>
-              <h2 className="text-2xl md:text-4xl font-bold text-white mb-3 group-hover:text-[#0080FF] transition-colors">
-                {title}
-              </h2>
-              {subtitle && (
-                <p className="text-gray-300 text-lg md:text-xl mb-4 line-clamp-2">{subtitle}</p>
-              )}
+              <h2 className="text-2xl md:text-4xl font-bold text-white mb-3 group-hover:text-[#0080FF] transition-colors">{title}</h2>
+              {subtitle && <p className="text-gray-300 text-lg md:text-xl mb-4 line-clamp-2">{subtitle}</p>}
               <div className="flex items-center gap-4 text-gray-400 text-sm">
                 <span className="flex items-center gap-1">
                   <Clock size={14} />
@@ -109,25 +110,20 @@ export default function NewsCard({ article, variant = "default", index = 0 }) {
     );
   }
 
-  if (variant === "compact") {
+  if (safeVariant === "compact") {
     return (
       <motion.article
         initial={{ opacity: 0, x: -20 }}
         animate={{ opacity: 1, x: 0 }}
-        transition={{ delay: index * 0.05 }}
+        transition={{ delay: safeIndex * 0.05 }}
         className="group"
       >
-        <Link
-          to={createPageUrl(`Article?id=${id}`)}
-          className="flex items-start gap-4 p-4 rounded-2xl active:bg-gray-100 dark:active:bg-gray-800 transition-colors active:scale-[0.98]"
-        >
+        <Link to={createPageUrl(`Article?id=${articleId}`)} className="flex items-start gap-4 p-4 rounded-2xl active:bg-gray-100 dark:active:bg-gray-800 transition-colors active:scale-[0.98]">
           <span className="text-3xl font-bold text-gray-200 group-hover:text-[#0080FF] transition-colors">
-            {String(index + 1).padStart(2, '0')}
+            {String(safeIndex + 1).padStart(2, '0')}
           </span>
           <div className="flex-1">
-            <h3 className="font-bold text-gray-900 group-hover:text-[#0080FF] transition-colors line-clamp-2">
-              {title}
-            </h3>
+            <h3 className="font-bold text-gray-900 group-hover:text-[#0080FF] transition-colors line-clamp-2">{title}</h3>
             <div className="flex items-center gap-2 mt-2 text-sm text-gray-500">
               <Badge variant="secondary" className="text-xs">{categoryLabels[category]}</Badge>
               <span>{moment(created_date).fromNow()}</span>
@@ -144,24 +140,15 @@ export default function NewsCard({ article, variant = "default", index = 0 }) {
     <motion.article
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.1 }}
+      transition={{ delay: safeIndex * 0.1 }}
       className="group bg-black rounded-xl sm:rounded-2xl overflow-hidden border border-[#0080FF]/20 hover:border-[#0080FF]/60 transition-all duration-300 active:scale-95 sm:active:scale-[0.98]"
       style={{ boxShadow: '0 0 15px rgba(0, 128, 255, 0.2)' }}
     >
-      <Link to={createPageUrl(`Article?id=${id}`)} className="block">
+      <Link to={createPageUrl(`Article?id=${articleId}`)} className="block">
         <div className="relative aspect-video overflow-hidden bg-gray-900">
           {video_url ? (
             <>
-              <video
-                src={video_url}
-                className="w-full h-full object-cover"
-                muted
-                loop
-                playsInline
-                autoPlay
-                preload="metadata"
-                onError={() => {}}
-              />
+              <video src={video_url} className="w-full h-full object-cover" muted loop playsInline autoPlay preload="metadata" onError={() => {}} />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
               <div className="absolute bottom-2 left-2 bg-[#0080FF] text-white px-2 py-0.5 rounded text-xs font-bold flex items-center gap-1">
                 <Play size={10} fill="white" />
@@ -170,13 +157,7 @@ export default function NewsCard({ article, variant = "default", index = 0 }) {
             </>
           ) : image_url ? (
             <>
-              <img
-                src={image_url}
-                alt={title}
-                loading="lazy"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-                onError={(e) => { e.target.style.display = 'none'; }}
-              />
+              <img src={image_url} alt={title} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" onError={(e) => { e.target.style.display = 'none'; }} />
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
             </>
           ) : (
@@ -184,31 +165,22 @@ export default function NewsCard({ article, variant = "default", index = 0 }) {
               <span className="text-[#0080FF]/60 text-3xl sm:text-4xl font-bold">{categoryLabels[category]?.[0] || '📰'}</span>
             </div>
           )}
-
           {is_breaking && (
             <div className="absolute top-2 right-2">
-              <Badge className="bg-[#E31E24] text-white text-[10px] sm:text-xs font-bold py-0.5 px-2 animate-pulse">
-                🔴 חם
-              </Badge>
+              <Badge className="bg-[#E31E24] text-white text-[10px] sm:text-xs font-bold py-0.5 px-2 animate-pulse">🔴 חם</Badge>
             </div>
           )}
-
           <div className="absolute bottom-2 right-2 flex items-center gap-2 bg-black/70 rounded-xl px-3 py-1.5 backdrop-blur-sm">
             <img src={LOGO_URL} alt="הרשת החדשה" className="h-7 w-auto" />
             <span className="text-white text-sm font-bold">הרשת החדשה</span>
           </div>
         </div>
-
         <div className="p-3 sm:p-4">
           <Badge className={`${categoryColors[category]} text-[10px] sm:text-xs mb-2 rounded-full px-2.5 py-1 inline-block`}>
             {categoryLabels[category]}
           </Badge>
-          <h3 className="font-bold text-sm sm:text-base text-white group-hover:text-[#0080FF] transition-colors line-clamp-2 mb-1.5 leading-snug">
-            {title}
-          </h3>
-          {subtitle && (
-            <p className="text-gray-400 text-[11px] sm:text-sm line-clamp-1 sm:line-clamp-2 mb-2">{subtitle}</p>
-          )}
+          <h3 className="font-bold text-sm sm:text-base text-white group-hover:text-[#0080FF] transition-colors line-clamp-2 mb-1.5 leading-snug">{title}</h3>
+          {subtitle && <p className="text-gray-400 text-[11px] sm:text-sm line-clamp-1 sm:line-clamp-2 mb-2">{subtitle}</p>}
           <div className="flex items-center justify-between gap-2">
             <span className="flex items-center gap-1 text-gray-500 text-[10px] sm:text-xs flex-1">
               <Clock size={10} />
@@ -216,7 +188,7 @@ export default function NewsCard({ article, variant = "default", index = 0 }) {
             </span>
             <div onClick={(e) => e.preventDefault()} className="flex-shrink-0">
               <ShareButtons
-                url={`${window.location.origin}${createPageUrl(`Article?id=${id}`)}`}
+                url={`${window.location.origin}${createPageUrl(`Article?id=${articleId}`)}`}
                 title={title}
                 size="small"
                 showLabel={false}
