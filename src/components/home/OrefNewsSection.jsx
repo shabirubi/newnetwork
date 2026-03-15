@@ -153,8 +153,34 @@ function NewsCard({ article, index, isAlert = false }) {
 
             {/* Content */}
             <div className="p-4">
-                <div className="flex items-center gap-1 mb-2 text-gray-500 text-xs" style={{ fontFamily: FONT }}>
-                    <Clock className="w-3 h-3" /> {article.date}
+                <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-1 text-gray-500 text-xs" style={{ fontFamily: FONT }}>
+                        <Clock className="w-3 h-3" /> {article.date}
+                    </div>
+                    {/* Waving Israeli Flag */}
+                    <div className="relative overflow-hidden" style={{ width: 36, height: 24 }}>
+                        <style>{`
+                            @keyframes flagWave {
+                                0%   { transform: perspective(200px) rotateY(0deg) scaleX(1); }
+                                25%  { transform: perspective(200px) rotateY(8deg) scaleX(0.97); }
+                                50%  { transform: perspective(200px) rotateY(0deg) scaleX(1); }
+                                75%  { transform: perspective(200px) rotateY(-8deg) scaleX(0.97); }
+                                100% { transform: perspective(200px) rotateY(0deg) scaleX(1); }
+                            }
+                        `}</style>
+                        <svg
+                            width="36" height="24" viewBox="0 0 220 150"
+                            style={{ animation: 'flagWave 2s ease-in-out infinite', transformOrigin: 'left center', display: 'block' }}
+                        >
+                            <rect width="220" height="150" fill="white"/>
+                            <rect y="0" width="220" height="28" fill="#0038b8"/>
+                            <rect y="122" width="220" height="28" fill="#0038b8"/>
+                            <g transform="translate(110,75)">
+                                <polygon points="0,-28 24,14 -24,14" fill="none" stroke="#0038b8" strokeWidth="5"/>
+                                <polygon points="0,28 24,-14 -24,-14" fill="none" stroke="#0038b8" strokeWidth="5"/>
+                            </g>
+                        </svg>
+                    </div>
                 </div>
                 <h3 className="text-white font-black text-sm sm:text-base leading-snug mb-3" style={{ fontFamily: FONT }}>
                     {article.title}
