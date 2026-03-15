@@ -160,19 +160,13 @@ function NewsCard({ article, index, isAlert = false }) {
                     {/* Waving Israeli Flag */}
                     <div style={{ width: 40, height: 26, overflow: 'hidden', borderRadius: 3, boxShadow: '0 1px 4px rgba(0,0,0,0.5)' }}>
                         <style>{`
-                            @keyframes wave {
-                                0%   { border-radius: 0% 100% 100% 0% / 50% 50% 50% 50%; }
-                                25%  { border-radius: 0% 80% 80% 0% / 40% 60% 40% 60%; }
-                                50%  { border-radius: 0% 100% 100% 0% / 50% 50% 50% 50%; }
-                                75%  { border-radius: 0% 80% 80% 0% / 60% 40% 60% 40%; }
-                                100% { border-radius: 0% 100% 100% 0% / 50% 50% 50% 50%; }
-                            }
-                            @keyframes flagRipple {
-                                0%   { transform: skewY(0deg) scaleX(1); }
-                                25%  { transform: skewY(1.5deg) scaleX(0.97); }
-                                50%  { transform: skewY(0deg) scaleX(1); }
-                                75%  { transform: skewY(-1.5deg) scaleX(0.97); }
-                                100% { transform: skewY(0deg) scaleX(1); }
+                            @keyframes flagWave {
+                                0%   { transform: rotate3d(0,1,0,0deg)   skewY(0deg); }
+                                20%  { transform: rotate3d(0,1,0,12deg)  skewY(2deg); }
+                                40%  { transform: rotate3d(0,1,0,-8deg)  skewY(-1.5deg); }
+                                60%  { transform: rotate3d(0,1,0,10deg)  skewY(1.5deg); }
+                                80%  { transform: rotate3d(0,1,0,-6deg)  skewY(-1deg); }
+                                100% { transform: rotate3d(0,1,0,0deg)   skewY(0deg); }
                             }
                         `}</style>
                         <img
@@ -183,9 +177,10 @@ function NewsCard({ article, index, isAlert = false }) {
                                 width: '100%',
                                 height: '100%',
                                 objectFit: 'cover',
-                                animation: 'flagRipple 1.8s ease-in-out infinite',
+                                animation: 'flagWave 1.4s ease-in-out infinite',
                                 transformOrigin: 'left center',
-                                display: 'block'
+                                display: 'block',
+                                perspective: '200px'
                             }}
                         />
                     </div>
