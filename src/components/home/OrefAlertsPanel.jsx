@@ -322,18 +322,49 @@ export default function AlertsPanel() {
 
     const fetchAlerts = async () => {
         try {
-            const res = await base44.functions.invoke('fetchOrefAlerts', {});
-            const data = res.data;
+            // Fetch active alerts directly from Oref (via a public CORS proxy)
+            const [activeRes, historyRes] = await Promise.all([
+                fetch('https://corsproxy.io/?https://www.oref.org.il/WarningMessages/alert/alerts.json', {
+                    headers: { 'Accept': 'application/json', 'Referer': 'https://www.oref.org.il/' }
+                }).catch(() => null),
+                fetch('https://corsproxy.io/?https://www.oref.org.il/WarningMessages/alert/History/AlertsHistory.json', {
+                    headers: { 'Accept': 'application/json', 'Referer': 'https://www.oref.org.il/' }
+                }).catch(() => null),
+            ]);
+
             setLastFetch(new Date());
-            if (data.active && data.active.data && data.active.data.length > 0) {
-                setActiveAlert(data.active);
-                setHasActiveNow(true);
-            } else {
-                setActiveAlert(null);
-                setHasActiveNow(false);
+
+            if (activeRes?.ok) {
+                const text = await activeRes.text();
+                const t = text.trim();
+                if (t && t !== 'null' && t.length > 2) {
+                    try {
+                        const parsed = JSON.parse(t);
+                        if (parsed?.data?.length > 0) {
+                            setActiveAlert(parsed);
+                            setHasActiveNow(true);
+                        } else {
+                            setActiveAlert(null);
+                            setHasActiveNow(false);
+                        }
+                    } catch { setActiveAlert(null); setHasActiveNow(false); }
+                } else {
+                    setActiveAlert(null);
+                    setHasActiveNow(false);
+                }
             }
-            if (data.history && data.history.length > 0) {
-                setHistory(data.history);
+
+            if (historyRes?.ok) {
+                const text = await historyRes.text();
+                const t = text.trim();
+                if (t && t.length > 2) {
+                    try {
+                        const parsed = JSON.parse(t);
+                        if (Array.isArray(parsed) && parsed.length > 0) {
+                            setHistory(parsed.slice(0, 50));
+                        }
+                    } catch {}
+                }
             }
         } catch (err) {
             // ignore
