@@ -239,7 +239,7 @@ export default function AlertsPanel() {
     const [activeAlert, setActiveAlert] = useState(null);
     const [history, setHistory] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [expanded, setExpanded] = useState(false);
+    const [expanded, setExpanded] = useState(true);
     const [lastFetch, setLastFetch] = useState(null);
     const [hasActiveNow, setHasActiveNow] = useState(false);
     const intervalRef = useRef(null);
