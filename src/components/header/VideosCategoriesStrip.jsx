@@ -215,7 +215,7 @@ export default function VideosCategoriesStrip() {
   }, [comments]);
 
   return (
-    <div className="relative bg-gradient-to-br from-black via-[#0080FF]/5 to-black overflow-hidden z-[34] border-b border-[#0080FF]/20" style={{ height: '80px' }}>
+    <div className="relative bg-[#000000] overflow-hidden z-[34] border-b border-[#222]" style={{ height: '80px' }}>
       {/* Gradient Overlays */}
       <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-black via-black/80 to-transparent z-10 pointer-events-none" />
       <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-black via-black/80 to-transparent z-10 pointer-events-none" />
@@ -223,14 +223,14 @@ export default function VideosCategoriesStrip() {
       {/* Scroll Arrows */}
       <button
         onClick={() => scroll('left')}
-        className="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-black/60 backdrop-blur-sm p-2 rounded-full hover:bg-black/80 transition-all shadow-lg border border-[#0080FF]/30"
+        className="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-black/80 backdrop-blur-sm p-2 rounded-full hover:bg-[#222] transition-all shadow-lg border border-gray-700"
       >
         <ChevronRight className="w-5 h-5 text-white" />
       </button>
 
       <button
         onClick={() => scroll('right')}
-        className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-black/60 backdrop-blur-sm p-2 rounded-full hover:bg-black/80 transition-all shadow-lg border border-[#0080FF]/30"
+        className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-black/80 backdrop-blur-sm p-2 rounded-full hover:bg-[#222] transition-all shadow-lg border border-gray-700"
       >
         <ChevronLeft className="w-5 h-5 text-white" />
       </button>
@@ -258,7 +258,7 @@ export default function VideosCategoriesStrip() {
                 whileTap={{ scale: 0.95 }}
                 className="flex-shrink-0 cursor-pointer relative"
               >
-                <div className="relative w-20 h-12 rounded-xl overflow-hidden border border-[#0080FF]/30 hover:border-[#0080FF]/60 transition-all shadow-lg hover:shadow-[0_0_20px_rgba(0,128,255,0.3)]">
+                <div className="relative w-20 h-12 rounded-xl overflow-hidden border border-[#333] hover:border-[#555] transition-all shadow-lg">
                   {/* Background Image */}
                   <img 
                     src={cat.image} 
@@ -282,7 +282,7 @@ export default function VideosCategoriesStrip() {
                     <motion.div
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      className="absolute inset-0 bg-[#0080FF]/20 backdrop-blur-[2px]"
+                      className="absolute inset-0 bg-white/10 backdrop-blur-[2px]"
                     />
                   )}
                 </div>
