@@ -157,33 +157,33 @@ function NewsCard({ article, index, isAlert = false }) {
                     <div className="flex items-center gap-1 text-gray-500 text-xs" style={{ fontFamily: FONT }}>
                         <Clock className="w-3 h-3" /> {article.date}
                     </div>
-                    {/* Waving Israeli Flag */}
-                    <div style={{ width: 52, height: 34, overflow: 'hidden', borderRadius: 0, boxShadow: 'none' }}>
-                        <style>{`
-                            @keyframes flagWave {
-                                0%   { transform: rotate3d(0,1,0,0deg)   skewY(0deg); }
-                                20%  { transform: rotate3d(0,1,0,12deg)  skewY(2deg); }
-                                40%  { transform: rotate3d(0,1,0,-8deg)  skewY(-1.5deg); }
-                                60%  { transform: rotate3d(0,1,0,10deg)  skewY(1.5deg); }
-                                80%  { transform: rotate3d(0,1,0,-6deg)  skewY(-1deg); }
-                                100% { transform: rotate3d(0,1,0,0deg)   skewY(0deg); }
-                            }
-                        `}</style>
-                        <img
-                            src="https://flagcdn.com/w40/il.png"
-                            srcSet="https://flagcdn.com/w80/il.png 2x"
-                            alt="ישראל"
-                            style={{
-                                width: '100%',
-                                height: '100%',
-                                objectFit: 'cover',
-                                animation: 'flagWave 1.4s ease-in-out infinite',
-                                transformOrigin: 'left center',
-                                display: 'block',
-                                perspective: '200px'
-                            }}
-                        />
-                    </div>
+                    {/* Waving Israeli Flag SVG */}
+                    <style>{`
+                        @keyframes wave1 { 0%,100%{d:path("M0,8 Q13,4 26,8 Q39,12 52,8 L52,14 Q39,18 26,14 Q13,10 0,14 Z")} 50%{d:path("M0,10 Q13,6 26,10 Q39,14 52,10 L52,16 Q39,20 26,16 Q13,12 0,16 Z")} }
+                        @keyframes wave2 { 0%,100%{d:path("M0,20 Q13,16 26,20 Q39,24 52,20 L52,26 Q39,30 26,26 Q13,22 0,26 Z")} 50%{d:path("M0,18 Q13,14 26,18 Q39,22 52,18 L52,24 Q39,28 26,24 Q13,20 0,24 Z")} }
+                        @keyframes wavePath {
+                            0%   { transform: translateY(0px) scaleY(1); }
+                            25%  { transform: translateY(-3px) scaleY(0.94); }
+                            50%  { transform: translateY(0px) scaleY(1); }
+                            75%  { transform: translateY(3px) scaleY(0.94); }
+                            100% { transform: translateY(0px) scaleY(1); }
+                        }
+                        .flag-wave { animation: wavePath 1.2s ease-in-out infinite; transform-origin: left center; }
+                        .flag-wave-delay { animation: wavePath 1.2s ease-in-out infinite 0.4s; transform-origin: left center; }
+                    `}</style>
+                    <svg width="60" height="38" viewBox="0 0 60 38" xmlns="http://www.w3.org/2000/svg">
+                        {/* White background */}
+                        <rect width="60" height="38" fill="white"/>
+                        {/* Top blue stripe */}
+                        <rect className="flag-wave" y="5" width="60" height="8" fill="#009EE0" rx="1"/>
+                        {/* Bottom blue stripe */}
+                        <rect className="flag-wave-delay" y="25" width="60" height="8" fill="#009EE0" rx="1"/>
+                        {/* Star of David */}
+                        <g transform="translate(30,19)">
+                            <polygon points="0,-7 6,3.5 -6,3.5" fill="none" stroke="#009EE0" strokeWidth="1.8"/>
+                            <polygon points="0,7 -6,-3.5 6,-3.5" fill="none" stroke="#009EE0" strokeWidth="1.8"/>
+                        </g>
+                    </svg>
                 </div>
                 <h3 className="text-white font-black text-sm sm:text-base leading-snug mb-3" style={{ fontFamily: FONT }}>
                     {article.title}
