@@ -276,12 +276,14 @@ export default function Layout({ children, currentPageName }) {
     <div className="min-h-screen bg-[#0d1b2a] transition-colors duration-300 flex flex-col overflow-x-hidden" dir="rtl">
       <style>{`
         :root {
-          --primary: #FF6B00;
-          --primary-dark: #CC5500;
-          --primary-light: #FF8C33;
-          --accent: #FF6B00;
-          --accent-dark: #CC5500;
+          --primary: #1565C0;
+          --primary-dark: #0d47a1;
+          --primary-light: #1976D2;
+          --accent: #CC0000;
+          --accent-dark: #990000;
         }
+        body { background-color: #0d1b2a !important; }
+        /* Oref color scheme: dark navy + red + white */
 
         /* Hide scrollbars */
         * {
@@ -309,16 +311,12 @@ export default function Layout({ children, currentPageName }) {
 
         @keyframes colorShift {
           0%, 100% { 
-            background: linear-gradient(to right, #FF6B00, #CC5500, #FF8C33);
-            box-shadow: 0 0 40px #FF6B00;
+            background: linear-gradient(to right, #1565C0, #0d47a1, #1976D2);
+            box-shadow: 0 0 40px #1565C0;
           }
-          33% { 
-            background: linear-gradient(to right, #888888, #555555, #aaaaaa);
-            box-shadow: 0 0 40px #888888;
-          }
-          66% { 
-            background: linear-gradient(to right, #FF8C33, #FF6B00, #CC5500);
-            box-shadow: 0 0 40px #FF8C33;
+          50% { 
+            background: linear-gradient(to right, #CC0000, #990000, #FF0000);
+            box-shadow: 0 0 40px #CC0000;
           }
         }
 
