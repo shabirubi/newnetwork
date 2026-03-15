@@ -346,7 +346,7 @@ export default function Layout({ children, currentPageName }) {
       </div>
 
       {/* Logo Header */}
-      <div className="bg-gradient-to-r from-black via-[#001a40] to-black border-b border-[#0080FF]/40 py-2 shadow-lg shadow-[#0080FF]/30 relative overflow-visible">
+      <div className="bg-gradient-to-r from-[#111111] via-[#1a1a1a] to-[#111111] border-b border-[#FF6B00]/40 py-2 shadow-lg shadow-[#FF6B00]/20 relative overflow-visible">
 
         <div className="max-w-7xl mx-auto px-4 flex items-center justify-between gap-3 relative z-[200]">
           <div className="flex items-center gap-3 flex-shrink-0">
