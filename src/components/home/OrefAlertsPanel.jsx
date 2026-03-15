@@ -313,13 +313,7 @@ function AlertsPopup({ activeAlert, history, lastFetch, onClose }) {
 
 export default function AlertsPanel() {
     const [activeAlert, setActiveAlert] = useState(null);
-    const [history, setHistory] = useState([
-        { time: "08:45", data: "אשקלון, שדרות, נתיבות", category: 1 },
-        { time: "08:32", data: "אשדוד, קריית מלאכי", category: 1 },
-        { time: "07:55", data: "באר שבע", category: 1 },
-        { time: "07:20", data: "ספיר, יתד, תלמי אליהו", category: 1 },
-        { time: "06:48", data: "כפר עזה, ניר עוז, בארי", category: 1 },
-    ]);
+    const [history, setHistory] = useState([]);
     const [loading, setLoading] = useState(false);
     const [popupOpen, setPopupOpen] = useState(false);
     const [lastFetch, setLastFetch] = useState(null);
