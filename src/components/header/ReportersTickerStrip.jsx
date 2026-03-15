@@ -38,28 +38,28 @@ export default function ReportersTickerStrip() {
   // First reporter is always "live" (index 0), rest are offline
   return (
     <>
-      <div className="relative bg-[#000000] overflow-hidden z-[35] border-b border-[#222]" style={{ height: '88px' }}>
+      <div className="relative bg-black overflow-hidden z-[35]" style={{ height: '72px' }}>
         {/* Gradient Overlays */}
-        <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
-        <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
+        <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
+        <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
 
         {/* Scroll Arrows */}
-        <button onClick={() => scroll('left')} className="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-black/80 p-1.5 rounded-full hover:bg-[#222] transition-all border border-gray-700">
-          <ChevronRight className="w-4 h-4 text-white" />
+        <button onClick={() => scroll('left')} className="absolute right-1 top-1/2 -translate-y-1/2 z-20 p-1 text-gray-600 hover:text-white transition-colors">
+          <ChevronRight className="w-4 h-4" />
         </button>
-        <button onClick={() => scroll('right')} className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-black/80 p-1.5 rounded-full hover:bg-[#222] transition-all border border-gray-700">
-          <ChevronLeft className="w-4 h-4 text-white" />
+        <button onClick={() => scroll('right')} className="absolute left-1 top-1/2 -translate-y-1/2 z-20 p-1 text-gray-600 hover:text-white transition-colors">
+          <ChevronLeft className="w-4 h-4" />
         </button>
 
         {/* Reporters Scroll */}
         <div
           ref={scrollContainerRef}
-          className="overflow-x-auto h-full flex items-center px-10"
+          className="overflow-x-auto h-full flex items-center px-8"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
-          <div className="flex gap-4 items-center" style={{ width: 'max-content' }}>
+          <div className="flex gap-5 items-center" style={{ width: 'max-content' }}>
             {reporters.map((reporter, index) => {
-              const isLive = index === 0; // רק הראשון לייב
+              const isLive = index === 0;
               return (
                 <motion.div
                   key={reporter.id}
@@ -67,38 +67,31 @@ export default function ReportersTickerStrip() {
                     setSelectedReporterForChat(reporter);
                     setOpenLiveChat(true);
                   }}
-                  whileHover={{ scale: 1.08 }}
+                  whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
                   className="flex-shrink-0 cursor-pointer flex flex-col items-center gap-1"
                 >
-                  {/* Image */}
-                  <div className="relative w-12 h-12 overflow-hidden rounded group">
+                  {/* Image — circle, no border */}
+                  <div className="relative w-10 h-10 overflow-hidden rounded-full group">
                     <img
                       src={reporter.image || DEFAULT_IMAGE}
                       alt={reporter.name}
-                      className="w-full h-full object-cover transition-all duration-300 grayscale group-hover:grayscale-0"
+                      className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300"
                       onError={(e) => { e.target.src = DEFAULT_IMAGE; }}
                     />
-                    {/* Live indicator */}
-                    {isLive && (
-                      <div className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity">
-                        <Mic className="w-4 h-4 text-white" />
-                      </div>
-                    )}
                   </div>
 
-                  {/* Live / Offline badge */}
+                  {/* Badge */}
                   {isLive ? (
-                    <motion.div
-                      animate={{ opacity: [1, 0.4, 1] }}
+                    <motion.span
+                      animate={{ opacity: [1, 0.5, 1] }}
                       transition={{ duration: 1.2, repeat: Infinity }}
-                      className="flex items-center gap-1 bg-red-600 px-1.5 py-0.5 rounded text-white text-[9px] font-black"
+                      className="text-red-500 text-[8px] font-black tracking-widest"
                     >
-                      <span className="w-1.5 h-1.5 bg-white rounded-full inline-block" />
-                      LIVE
-                    </motion.div>
+                      ● LIVE
+                    </motion.span>
                   ) : (
-                    <span className="text-gray-500 text-[9px] font-bold">offline</span>
+                    <span className="text-gray-700 text-[8px]">·</span>
                   )}
                 </motion.div>
               );
