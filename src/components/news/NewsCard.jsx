@@ -144,7 +144,7 @@ export default function NewsCard({ article, variant, index }) {
       style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.6)' }}
     >
       <Link to={`/Article?id=${articleId}`} className="block">
-        <div className="relative aspect-[4/3] sm:aspect-video overflow-hidden bg-gray-900">
+        <div className="relative aspect-video overflow-hidden bg-gray-900">
           {video_url ? (
             <>
               <video src={video_url} className="w-full h-full object-cover" muted loop playsInline autoPlay preload="metadata" onError={() => {}} />
@@ -174,18 +174,18 @@ export default function NewsCard({ article, variant, index }) {
             <span className="text-white text-sm font-bold">הרשת החדשה</span>
           </div>
         </div>
-        <div className="p-3 sm:p-4">
-          <Badge className={`${categoryColors[category]} text-[10px] sm:text-xs mb-2 rounded-full px-2.5 py-1 inline-block`}>
+        <div className="p-2 sm:p-4">
+          <Badge className={`${categoryColors[category]} text-[9px] sm:text-xs mb-1.5 sm:mb-2 rounded-full px-2 py-0.5 inline-block`}>
             {categoryLabels[category]}
           </Badge>
-          <h3 className="font-bold text-sm sm:text-base text-[#FF6600] group-hover:text-[#FF8C00] transition-colors line-clamp-2 mb-1.5 leading-snug">{title}</h3>
-          {subtitle && <p className="text-gray-400 text-[11px] sm:text-sm line-clamp-1 sm:line-clamp-2 mb-2">{subtitle}</p>}
-          <div className="flex items-center justify-between gap-2">
-            <span className="flex items-center gap-1 text-gray-500 text-[10px] sm:text-xs flex-1">
-              <Clock size={10} />
+          <h3 className="font-bold text-xs sm:text-base text-[#FF6600] group-hover:text-[#FF8C00] transition-colors line-clamp-2 mb-1 leading-snug">{title}</h3>
+          {subtitle && <p className="hidden sm:block text-gray-400 text-xs sm:text-sm line-clamp-2 mb-2">{subtitle}</p>}
+          <div className="flex items-center justify-between gap-1">
+            <span className="flex items-center gap-1 text-gray-500 text-[9px] sm:text-xs flex-1">
+              <Clock size={9} />
               {moment(created_date).fromNow()}
             </span>
-            <div onClick={(e) => e.preventDefault()} className="flex-shrink-0">
+            <div onClick={(e) => e.preventDefault()} className="flex-shrink-0 hidden sm:block">
               <ShareButtons
                 url={`${window.location.origin}${createPageUrl(`Article?id=${articleId}`)}`}
                 title={title}
