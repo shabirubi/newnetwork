@@ -249,8 +249,8 @@ export default function Layout({ children, currentPageName }) {
         <div className="max-w-2xl w-full bg-black/80 backdrop-blur-xl rounded-3xl border-2 border-[#FF6B00]/50 shadow-2xl shadow-[#FF6B00]/30 p-8 text-center">
           <img 
             src={LOGO_URL} 
-            alt="הרשת החדשה" 
-            className="h-20 w-auto mx-auto mb-6 drop-shadow-2xl"
+                          alt="הרשת החדשה" 
+                          className="h-20 w-20 mx-auto mb-6 drop-shadow-2xl object-contain"
           />
           <h1 className="text-4xl font-bold text-white mb-4">
             {siteSettings.closure_title}
