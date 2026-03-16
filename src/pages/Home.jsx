@@ -413,14 +413,14 @@ export default function Home() {
 
 
       {/* TikTok News Feed */}
-      <section className="px-4 mb-8 max-w-full overflow-hidden">
+      <section className="px-2 sm:px-4 mb-4 sm:mb-8 max-w-full overflow-hidden">
         <React.Suspense fallback={<Skeleton className="w-full h-96 bg-gray-800" />}>
           <TikTokNewsContainer />
         </React.Suspense>
       </section>
 
       {/* All Videos Gallery */}
-      <section className="px-4 mb-8 max-w-full overflow-hidden">
+      <section className="px-2 sm:px-4 mb-4 sm:mb-8 max-w-full overflow-hidden">
         <React.Suspense fallback={<Skeleton className="w-full h-96 bg-gray-800" />}>
           <AllVideosGallery />
         </React.Suspense>
@@ -429,7 +429,7 @@ export default function Home() {
 
 
       {/* Reporter Responses Feed */}
-      <section className="px-4 mb-8 max-w-full overflow-hidden">
+      <section className="px-2 sm:px-4 mb-4 sm:mb-8 max-w-full overflow-hidden">
         <React.Suspense fallback={<Skeleton className="w-full h-96 bg-gray-800" />}>
           <ReporterResponsesFeed />
         </React.Suspense>
@@ -438,17 +438,17 @@ export default function Home() {
 
 
       {/* User Uploaded Videos */}
-      <section className="px-4 mb-8 max-w-full overflow-hidden">
+      <section className="px-2 sm:px-4 mb-4 sm:mb-8 max-w-full overflow-hidden">
         <UserUploadedVideos onUploadClick={() => setUploadVideoModalOpen(true)} />
       </section>
 
       {/* Entertainment Updates */}
-      <section className="px-4 mb-8 max-w-full overflow-hidden">
+      <section className="px-2 sm:px-4 mb-4 sm:mb-8 max-w-full overflow-hidden">
         <EntertainmentUpdatesFeed />
       </section>
 
       {/* Zaka Media Kit */}
-      <section className="px-4 mb-8 max-w-full overflow-hidden">
+      <section className="px-2 sm:px-4 mb-4 sm:mb-8 max-w-full overflow-hidden">
         <React.Suspense fallback={<Skeleton className="w-full h-96 bg-gray-800" />}>
           <ZakaMediaKitContainer />
         </React.Suspense>
