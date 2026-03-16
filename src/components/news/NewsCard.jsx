@@ -144,7 +144,7 @@ export default function NewsCard({ article, variant, index }) {
       style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.6)' }}
     >
       <Link to={`/Article?id=${articleId}`} className="block">
-        <div className="relative aspect-video overflow-hidden bg-gray-900">
+        <div className="relative aspect-[4/3] sm:aspect-video overflow-hidden bg-gray-900">
           {video_url ? (
             <>
               <video src={video_url} className="w-full h-full object-cover" muted loop playsInline autoPlay preload="metadata" onError={() => {}} />
