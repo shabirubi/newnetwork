@@ -30,7 +30,7 @@ import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import UserProfileModal from "./components/user/UserProfileModal";
 
-const LOGO_URL = "https://qtrypzzcjebvfcihiynt.supabase.co/storage/v1/object/public/base44-prod/public/695b39080025f4d38a586978/c3131992b_image.png";
+const LOGO_URL = "https://media.base44.com/images/public/695b39080025f4d38a586978/56d78bc7b_image.png";
 
 // Scrolling Breaking News Component
 function TypewriterDate() {
