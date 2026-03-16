@@ -72,15 +72,15 @@ export default function VerticalNewsScroller({ category, title, icon: Icon }) {
   }
 
   return (
-    <div className="bg-black rounded-2xl overflow-hidden">
+    <div className="bg-black rounded-xl sm:rounded-2xl overflow-hidden">
       {/* Header */}
-      <div className="p-4 sm:p-6 border-b border-gray-800 flex items-center gap-3">
+      <div className="p-3 sm:p-6 border-b border-gray-800 flex items-center gap-3">
         <div className="p-2 bg-[#222] rounded-lg">
           <Icon className="w-5 h-5 sm:w-6 sm:h-6 text-white" />
         </div>
         <div>
-          <h3 className="font-bold text-base sm:text-lg text-white">{title}</h3>
-          <p className="text-xs sm:text-sm text-gray-400">{articles.length} חדשות</p>
+          <h3 className="font-bold text-sm sm:text-lg text-white">{title}</h3>
+          <p className="text-xs text-gray-400">{articles.length} חדשות</p>
         </div>
       </div>
 
@@ -88,7 +88,7 @@ export default function VerticalNewsScroller({ category, title, icon: Icon }) {
       <div className="relative">
         <div
           ref={scrollContainerRef}
-          className="h-[600px] overflow-y-auto scrollbar-hide space-y-3 p-4"
+          className="h-[300px] sm:h-[500px] overflow-y-auto scrollbar-hide space-y-2 sm:space-y-3 p-2 sm:p-4"
         >
           {articles.map((article, idx) => (
             <motion.div
@@ -97,8 +97,8 @@ export default function VerticalNewsScroller({ category, title, icon: Icon }) {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: idx * 0.05 }}
             >
-              <Link to={`/article/${article.id}`}>
-                <div className="group relative bg-[#111] rounded-xl overflow-hidden hover:bg-[#181818] transition-all cursor-pointer h-32 sm:h-40">
+              <Link to={`/Article?id=${article.id}`}>
+                <div className="group relative bg-[#111] rounded-xl overflow-hidden hover:bg-[#181818] transition-all cursor-pointer h-24 sm:h-40">
                   {/* Image Background */}
                   {article.image_url && (
                     <div className="absolute inset-0 overflow-hidden">

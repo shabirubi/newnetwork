@@ -197,21 +197,21 @@ export default function Home() {
       </section>
 
       {/* Featured News Section */}
-      <section className="w-full px-4 py-8">
+      <section className="w-full px-2 sm:px-4 py-4 sm:py-8">
         <div className="max-w-7xl mx-auto">
-          <h2 className="text-3xl font-bold text-white mb-6 flex items-center gap-3">
-            <Flame className="w-8 h-8 text-[#E31E24]" />
+          <h2 className="text-xl sm:text-3xl font-bold text-white mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3">
+            <Flame className="w-6 h-6 sm:w-8 sm:h-8 text-[#E31E24]" />
             חדשות מובלטות
           </h2>
           
           {isLoading ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
               {[1, 2, 3, 4, 5, 6].map((i) => (
-                <Skeleton key={i} className="h-80 bg-gray-800 rounded-2xl" />
+                <Skeleton key={i} className="h-48 sm:h-80 bg-gray-800 rounded-xl sm:rounded-2xl" />
               ))}
             </div>
           ) : articles.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
               {articles.map((article) => (
                 <NewsCard key={article.id} article={article} />
               ))}
