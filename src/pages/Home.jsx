@@ -240,7 +240,7 @@ export default function Home() {
 
 
       {/* Vertical News Scrollers */}
-      <section className="w-full px-4 mb-4 sm:mb-8">
+      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
         <VerticalNewsScroller
           category="security"
           title="ביטחון ומדיניות"
@@ -248,7 +248,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="w-full px-4 mb-4 sm:mb-8">
+      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
         <VerticalNewsScroller
           category="economy"
           title="כלכלה ועסקים"
@@ -256,7 +256,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="w-full px-4 mb-4 sm:mb-8">
+      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
         <VerticalNewsScroller
           category="technology"
           title="טכנולוגיה"
@@ -264,7 +264,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="w-full px-4 mb-4 sm:mb-8">
+      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
         <VerticalNewsScroller
           category="crime"
           title="פלילים ומשטרה"
@@ -272,7 +272,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="w-full px-4 mb-4 sm:mb-8">
+      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
         <VerticalNewsScroller
           category="politics"
           title="פוליטיקה"
@@ -280,7 +280,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="w-full px-4 mb-4 sm:mb-8">
+      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
         <VerticalNewsScroller
           category="sports"
           title="ספורט"
@@ -288,7 +288,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="w-full px-4 mb-4 sm:mb-8">
+      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
         <VerticalNewsScroller
           category="entertainment"
           title="בידור ותרבות"
@@ -296,7 +296,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="w-full px-4 mb-4 sm:mb-8">
+      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
         <VerticalNewsScroller
           category="world"
           title="חדשות עולם"
@@ -304,7 +304,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="w-full px-4 mb-4 sm:mb-8">
+      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
         <VerticalNewsScroller
           category="health"
           title="בריאות"
@@ -312,7 +312,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="w-full px-4 mb-4 sm:mb-8">
+      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
         <VerticalNewsScroller
           category="israel"
           title="חדשות ישראל"
@@ -320,7 +320,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="w-full px-4 mb-4 sm:mb-8">
+      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
         <VerticalNewsScroller
           category="education"
           title="חינוך"
@@ -328,7 +328,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="w-full px-4 mb-4 sm:mb-8">
+      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
         <VerticalNewsScroller
           category="culture"
           title="תרבות"
@@ -336,7 +336,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="w-full px-4 mb-4 sm:mb-8">
+      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
         <VerticalNewsScroller
           category="environment"
           title="סביבה"
@@ -344,7 +344,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="w-full px-4 mb-4 sm:mb-8">
+      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
         <VerticalNewsScroller
           category="science"
           title="מדע"
@@ -352,7 +352,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="w-full px-4 mb-4 sm:mb-8">
+      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
         <VerticalNewsScroller
           category="military"
           title="צבא וביטחון"
@@ -360,7 +360,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="w-full px-4 mb-4 sm:mb-8">
+      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
         <VerticalNewsScroller
           category="law"
           title="משפט ופלילים"
@@ -368,7 +368,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="w-full px-4 mb-4 sm:mb-8">
+      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
         <VerticalNewsScroller
           category="local"
           title="חדשות מקומיות"
@@ -376,7 +376,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="w-full px-4 mb-4 sm:mb-8">
+      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
         <VerticalNewsScroller
           category="documentary"
           title="סדרות תיעודיות"
@@ -384,7 +384,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="w-full px-4 mb-4 sm:mb-8">
+      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
         <VerticalNewsScroller
           category="music"
           title="מוזיקה"
@@ -392,7 +392,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="w-full px-4 mb-4 sm:mb-8">
+      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
         <VerticalNewsScroller
           category="horoscope"
           title="הורוסקופ ואסטרולוגיה"
@@ -400,7 +400,7 @@ export default function Home() {
         />
       </section>
 
-      <section className="w-full px-4 mb-4 sm:mb-8">
+      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
         <VerticalNewsScroller
           category="finance"
           title="פיננסים והשקעות"
