@@ -24,6 +24,7 @@ import DIDLiveChat from "./components/avatar/DIDLiveChat";
 import AdminLoginModal from "./components/admin/AdminLoginModal";
 
 import AccessibilityFloatingButton from "./components/accessibility/AccessibilityFloatingButton";
+import InstallAppButton from "./components/shared/InstallAppButton";
 import { base44 } from "@/api/base44Client";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
