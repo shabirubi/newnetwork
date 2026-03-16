@@ -26,27 +26,12 @@ export default function RightSidebarCategories() {
   const displayCategories = Array.from({ length: 3 }, () => CATEGORIES).flat();
 
   return (
-    <div className="hidden xl:flex w-40 bg-black/60 backdrop-blur-xl border-r border-[#00D4FF]/30 overflow-hidden sticky top-0 h-screen">
-      <div className="flex items-center justify-center w-full relative">
-        <div className="flex flex-col gap-4 absolute">
-          <motion.div
-            animate={{ y: `-${(CATEGORIES.length * 90)}px` }}
-            transition={{ duration: CATEGORIES.length * 3, repeat: Infinity, ease: "linear" }}
-            className="flex flex-col gap-4"
-          >
-            {displayCategories.map((cat, idx) => {
-              const Icon = cat.icon;
-              return (
-                <Link
-                  key={`${cat.id}-${idx}`}
-                  to={createPageUrl(cat.href)}
-                  className="flex flex-col items-center gap-1 px-2 py-3 group cursor-pointer"
-                  title={cat.label}
-                >
-                  <div className={`w-16 h-16 rounded-lg bg-black/40 border border-[#00D4FF]/30 flex items-center justify-center group-hover:border-[#00D4FF]/80 transition-all text-[#00D4FF]`}>
+    <div className="hidden xl:flex w-40 bg-black/60 backdrop-blur-xl border-r border-[#FF6B00]/30 overflow-hidden sticky top-0 h-screen">
+...
+                  <div className={`w-16 h-16 rounded-lg bg-black/40 border border-[#FF6B00]/30 flex items-center justify-center group-hover:border-[#FF6B00]/80 transition-all text-[#FF6B00]`}>
                     <Icon className="w-8 h-8" />
                   </div>
-                  <span className="text-[10px] text-[#00D4FF] text-center font-bold">
+                  <span className="text-[10px] text-[#FF6B00] text-center font-bold">
                     {cat.label}
                   </span>
                 </Link>
