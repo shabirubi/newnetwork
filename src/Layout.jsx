@@ -535,6 +535,9 @@ export default function Layout({ children, currentPageName }) {
       {/* Accessibility Floating Button */}
       <AccessibilityFloatingButton />
 
+      {/* PWA Install Banner */}
+      <InstallAppButton />
+
       {/* User Profile Modal */}
       <UserProfileModal 
         isOpen={profileModalOpen}
