@@ -343,7 +343,7 @@ export default function Layout({ children, currentPageName }) {
             <img
               src={LOGO_URL}
               alt="הרשת החדשה"
-              className="h-16 w-16 object-contain flex-shrink-0"
+              className="h-24 w-24 object-contain flex-shrink-0"
             />
             <div className="flex flex-col text-right">
               <h1 className="text-lg sm:text-xl font-bold text-white">הרשת החדשה</h1>
