@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { Play, Heart, MessageCircle, Share2, Search, Home, Compass, Plus, Mail, User } from "lucide-react";
+import { Play, Heart, MessageCircle, Share2, Search, Home, Compass, Plus, Mail, User, Eye, ChevronLeft } from "lucide-react";
 
 // Design System Colors
 export const colors = {

@@ -245,8 +245,8 @@ export default function Layout({ children, currentPageName }) {
   // בדיקת מצב סגירה
   if (siteSettings?.is_closed) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-black via-[#FF6B00]/20 to-black flex items-center justify-center p-4" dir="rtl">
-        <div className="max-w-2xl w-full bg-black/80 backdrop-blur-xl rounded-3xl border-2 border-[#FF6B00]/50 shadow-2xl shadow-[#FF6B00]/30 p-8 text-center">
+      <div className="min-h-screen bg-gradient-to-br from-black via-[#0057B8]/20 to-black flex items-center justify-center p-4" dir="rtl">
+        <div className="max-w-2xl w-full bg-black/80 backdrop-blur-xl rounded-3xl border-2 border-[#0057B8]/50 shadow-2xl shadow-[#0057B8]/30 p-8 text-center">
           <img 
             src={LOGO_URL} 
                           alt="הרשת החדשה" 
@@ -259,7 +259,7 @@ export default function Layout({ children, currentPageName }) {
             {siteSettings.closure_message}
           </p>
           {siteSettings.estimated_reopen && (
-            <div className="text-[#FF6B00] text-lg font-bold">
+            <div className="text-[#0057B8] text-lg font-bold">
               זמן פתיחה משוער: {siteSettings.estimated_reopen}
             </div>
           )}
@@ -311,8 +311,8 @@ export default function Layout({ children, currentPageName }) {
 
         @keyframes colorShift {
           0%, 100% { 
-            background: linear-gradient(to right, #FF6600, #FF8800, #FF4400);
-            box-shadow: 0 0 40px #FF6600;
+            background: linear-gradient(to right, #0057B8, #FF8800, #FF4400);
+            box-shadow: 0 0 40px #0057B8;
           }
           50% { 
             background: linear-gradient(to right, #1a1a1a, #333333, #111111);
@@ -367,7 +367,7 @@ export default function Layout({ children, currentPageName }) {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => setShowSearchResults(true)}
-                className="pr-10 bg-black/60 border-[#FF6B00]/50 text-white placeholder:text-gray-400 focus:border-[#FF6B00] rounded-xl"
+                className="pr-10 bg-black/60 border-[#0057B8]/50 text-white placeholder:text-gray-400 focus:border-[#0057B8] rounded-xl"
               />
             </div>
 
@@ -379,7 +379,7 @@ export default function Layout({ children, currentPageName }) {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   style={{ zIndex: 10000 }}
-                  className="absolute top-full mt-2 left-0 right-0 bg-black backdrop-blur-xl border-2 border-[#FF6B00] rounded-xl shadow-2xl shadow-[#FF6B00]/50 max-h-96 overflow-y-auto"
+                  className="absolute top-full mt-2 left-0 right-0 bg-black backdrop-blur-xl border-2 border-[#0057B8] rounded-xl shadow-2xl shadow-[#0057B8]/50 max-h-96 overflow-y-auto"
                   onMouseDown={(e) => e.preventDefault()}
                 >
                   {searchResults.length === 0 ? (
@@ -395,7 +395,7 @@ export default function Layout({ children, currentPageName }) {
                           setSearchQuery("");
                           setShowSearchResults(false);
                         }}
-                        className="block p-4 hover:bg-[#FF6B00]/20 transition-colors border-b border-gray-800 last:border-b-0"
+                        className="block p-4 hover:bg-[#0057B8]/20 transition-colors border-b border-gray-800 last:border-b-0"
                       >
                         <h4 className="text-white font-bold text-sm mb-1 line-clamp-1">
                           {article.title}
@@ -405,7 +405,7 @@ export default function Layout({ children, currentPageName }) {
                         </p>
                         <div className="flex items-center gap-2 mt-2">
                           {article.category && (
-                            <span className="text-[#FF6B00] text-xs">
+                            <span className="text-[#0057B8] text-xs">
                               {article.category}
                             </span>
                           )}
@@ -570,12 +570,12 @@ export default function Layout({ children, currentPageName }) {
                 transition={{ type: "spring", damping: 25, stiffness: 200 }}
                 className="absolute right-0 top-0 bottom-0 w-80 bg-black/90 backdrop-blur-xl border-l border-[#E31E24]/30 shadow-2xl shadow-[#E31E24]/20 overflow-y-auto"
               >
-                <div className="sticky top-0 bg-gradient-to-br from-black via-[#FF6B00]/30 to-black p-4 shadow-lg shadow-[#FF6B00]/20 border-b-2 border-[#FF6B00]/50">
+                <div className="sticky top-0 bg-gradient-to-br from-black via-[#0057B8]/30 to-black p-4 shadow-lg shadow-[#0057B8]/20 border-b-2 border-[#0057B8]/50">
                   <div className="flex items-center justify-between">
                     <h2 className="text-white font-bold text-xl">תפריט ראשי</h2>
                     <button
                       onClick={() => setMenuSidebarOpen(false)}
-                      className="p-2 rounded-full bg-[#FF6B00]/30 hover:bg-[#FF6B00]/50 text-white active:scale-95 transition-all shadow-[0_0_15px_#0080FF]"
+                      className="p-2 rounded-full bg-[#0057B8]/30 hover:bg-[#0057B8]/50 text-white active:scale-95 transition-all shadow-[0_0_15px_#0080FF]"
                     >
                       <X size={22} />
                     </button>
@@ -588,13 +588,13 @@ export default function Layout({ children, currentPageName }) {
                       setReportersModalOpen(true);
                       setMenuSidebarOpen(false);
                     }}
-                    className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#FF6B00]/30 active:bg-[#FF6B00]/50 transition-all border border-transparent hover:border-[#FF6B00]/50 hover:shadow-[0_0_20px_#0080FF] w-full"
+                    className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#0057B8]/30 active:bg-[#0057B8]/50 transition-all border border-transparent hover:border-[#0057B8]/50 hover:shadow-[0_0_20px_#0080FF] w-full"
                   >
-                    <div className="w-10 h-10 rounded-xl bg-black/40 border-2 border-[#FF6B00]/50 flex items-center justify-center shadow-[0_0_15px_#0080FF]">
-                      <Users size={20} className="text-[#FF6B00]" />
+                    <div className="w-10 h-10 rounded-xl bg-black/40 border-2 border-[#0057B8]/50 flex items-center justify-center shadow-[0_0_15px_#0080FF]">
+                      <Users size={20} className="text-[#0057B8]" />
                     </div>
                     <span className="flex-1 font-medium text-right">כתבים</span>
-                    <ChevronLeft size={18} className="text-[#FF6B00]" />
+                    <ChevronLeft size={18} className="text-[#0057B8]" />
                   </button>
 
                   <Link
@@ -778,14 +778,14 @@ export default function Layout({ children, currentPageName }) {
                 animate={{ x: 0 }}
                 exit={{ x: "100%" }}
                 transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                className="absolute right-0 top-0 bottom-0 w-64 bg-black/90 backdrop-blur-xl border-l border-[#FF6B00]/30 shadow-2xl shadow-[#FF6B00]/20 overflow-y-auto"
+                className="absolute right-0 top-0 bottom-0 w-64 bg-black/90 backdrop-blur-xl border-l border-[#0057B8]/30 shadow-2xl shadow-[#0057B8]/20 overflow-y-auto"
               >
-                <div className="sticky top-0 bg-gradient-to-br from-black via-[#FF6B00]/20 to-black p-4 shadow-lg border-b border-[#FF6B00]/30">
+                <div className="sticky top-0 bg-gradient-to-br from-black via-[#0057B8]/20 to-black p-4 shadow-lg border-b border-[#0057B8]/30">
                   <div className="flex items-center justify-between">
                     <h2 className="text-white font-bold">קטגוריות</h2>
                     <button
                       onClick={() => setCategoriesSidebarOpen(false)}
-                      className="p-2 rounded-full bg-[#FF6B00]/20 hover:bg-[#FF6B00]/40 text-white active:scale-95 transition-all"
+                      className="p-2 rounded-full bg-[#0057B8]/20 hover:bg-[#0057B8]/40 text-white active:scale-95 transition-all"
                     >
                       <X size={22} />
                     </button>
@@ -798,13 +798,13 @@ export default function Layout({ children, currentPageName }) {
                       key={cat.id}
                       to={createPageUrl(cat.href)}
                       onClick={() => setCategoriesSidebarOpen(false)}
-                      className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#FF6B00]/20 active:bg-[#FF6B00]/40 transition-all border border-transparent hover:border-[#FF6B00]/30"
+                      className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#0057B8]/20 active:bg-[#0057B8]/40 transition-all border border-transparent hover:border-[#0057B8]/30"
                     >
-                      <div className="w-10 h-10 rounded-xl bg-black/40 border border-[#FF6B00]/20 flex items-center justify-center">
-                        <cat.icon size={20} className="text-[#FF6B00]" />
+                      <div className="w-10 h-10 rounded-xl bg-black/40 border border-[#0057B8]/20 flex items-center justify-center">
+                        <cat.icon size={20} className="text-[#0057B8]" />
                       </div>
                       <span className="flex-1 font-medium">{cat.label}</span>
-                      <ChevronLeft size={18} className="text-[#FF6B00]" />
+                      <ChevronLeft size={18} className="text-[#0057B8]" />
                     </Link>
                   ))}
                 </div>
@@ -1016,7 +1016,7 @@ export default function Layout({ children, currentPageName }) {
       </nav>
 
       {/* Footer */}
-      <footer className="bg-gradient-to-br from-black via-[#FF6B00]/20 to-black border-t-2 border-[#FF6B00]/50 shadow-[0_-10px_50px_rgba(0,128,255,0.3)] text-white mt-12">
+      <footer className="bg-gradient-to-br from-black via-[#0057B8]/20 to-black border-t-2 border-[#0057B8]/50 shadow-[0_-10px_50px_rgba(0,128,255,0.3)] text-white mt-12">
         <div className="max-w-7xl mx-auto px-4 py-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>

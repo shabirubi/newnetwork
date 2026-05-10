@@ -555,7 +555,7 @@ export default function Home() {
       {/* Floating Digital Dreams Button */}
       <Link to={createPageUrl("VideoCreator")}>
         <motion.button
-          className="fixed bottom-40 left-4 z-50 text-white p-4 rounded-full shadow-2xl border-2 border-[#FF6600]/60 bg-[#FF6600] hover:bg-[#FF8C00]"
+          className="fixed bottom-40 left-4 z-50 text-white p-4 rounded-full shadow-2xl border-2 border-[#0057B8]/60 bg-[#0057B8] hover:bg-[#1a6fd4]"
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.95 }}
         >

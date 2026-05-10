@@ -94,7 +94,7 @@ export default function NewsCard({ article, variant, index }) {
                 )}
                 <Badge className={categoryColors[category]}>{categoryLabels[category]}</Badge>
               </div>
-              <h2 className="text-2xl md:text-4xl font-bold text-[#FF6600] mb-3 group-hover:text-[#FF8C00] transition-colors">{title}</h2>
+              <h2 className="text-2xl md:text-4xl font-bold text-[#0057B8] mb-3 group-hover:text-[#1a6fd4] transition-colors">{title}</h2>
               {subtitle && <p className="text-gray-300 text-lg md:text-xl mb-4 line-clamp-2">{subtitle}</p>}
               <div className="flex items-center gap-4 text-gray-400 text-sm">
                 <span className="flex items-center gap-1">
@@ -140,7 +140,7 @@ export default function NewsCard({ article, variant, index }) {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: safeIndex * 0.1 }}
-      className="group bg-[#181818] rounded-xl sm:rounded-2xl overflow-hidden border border-[#282828] hover:border-[#FF6600]/50 transition-all duration-300 active:scale-95 sm:active:scale-[0.98]"
+      className="group bg-[#181818] rounded-xl sm:rounded-2xl overflow-hidden border border-[#282828] hover:border-[#0057B8]/50 transition-all duration-300 active:scale-95 sm:active:scale-[0.98]"
       style={{ boxShadow: '0 2px 8px rgba(0,0,0,0.6)' }}
     >
       <Link to={`/Article?id=${articleId}`} className="block">
@@ -178,7 +178,7 @@ export default function NewsCard({ article, variant, index }) {
           <Badge className={`${categoryColors[category]} text-[9px] sm:text-xs mb-1.5 sm:mb-2 rounded-full px-2 py-0.5 inline-block`}>
             {categoryLabels[category]}
           </Badge>
-          <h3 className="font-bold text-xs sm:text-base text-[#FF6600] group-hover:text-[#FF8C00] transition-colors line-clamp-2 mb-1 leading-snug">{title}</h3>
+          <h3 className="font-bold text-xs sm:text-base text-[#0057B8] group-hover:text-[#1a6fd4] transition-colors line-clamp-2 mb-1 leading-snug">{title}</h3>
           {subtitle && <p className="hidden sm:block text-gray-400 text-xs sm:text-sm line-clamp-2 mb-2">{subtitle}</p>}
           <div className="flex items-center justify-between gap-1">
             <span className="flex items-center gap-1 text-gray-500 text-[9px] sm:text-xs flex-1">

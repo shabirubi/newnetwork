@@ -178,7 +178,7 @@ export default function TalkingAvatar() {
                     <Button
                       onClick={() => {
                         setIsOpen(false);
-                        setShowLiveChat(true);
+                        setShowDIDChat(true);
                       }}
                       className="bg-white/20 hover:bg-white/30 text-white"
                     >
