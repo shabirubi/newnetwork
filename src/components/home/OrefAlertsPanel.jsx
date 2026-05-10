@@ -62,7 +62,7 @@ function AlertPolygonRow({ alert, isActive = false }) {
                         ? 'linear-gradient(135deg, #8B0000 0%, #CC0000 100%)'
                         : 'linear-gradient(135deg, #6B0000 0%, #AA0000 100%)')
                     : 'linear-gradient(135deg, #1a0000 0%, #2d0000 100%)',
-                border: isActive ? '3px solid #FF6600' : '2px solid #440000',
+                border: isActive ? '3px solid #0057B8' : '2px solid #440000',
                 borderRadius: '8px',
                 overflow: 'hidden',
                 transition: 'background 0.3s',
@@ -74,7 +74,7 @@ function AlertPolygonRow({ alert, isActive = false }) {
             <div style={{
                 height: '5px',
                 background: isActive
-                    ? 'repeating-linear-gradient(90deg, #FF6600 0px, #FF6600 20px, #FF8800 20px, #FF8800 40px)'
+                    ? 'repeating-linear-gradient(90deg, #0057B8 0px, #0057B8 20px, #1a6fd4 20px, #1a6fd4 40px)'
                     : '#440000',
             }} />
 
@@ -145,7 +145,7 @@ function AlertPolygonRow({ alert, isActive = false }) {
             <div style={{
                 height: '5px',
                 background: isActive
-                    ? 'repeating-linear-gradient(90deg, #FF6600 0px, #FF6600 20px, #FF8800 20px, #FF8800 40px)'
+                    ? 'repeating-linear-gradient(90deg, #0057B8 0px, #0057B8 20px, #1a6fd4 20px, #1a6fd4 40px)'
                     : '#440000',
             }} />
         </div>
@@ -387,14 +387,14 @@ export default function AlertsPanel() {
                 style={{
                     background: hasActiveNow ? '#1a0000' : '#111',
                     borderBottom: hasActiveNow ? '2px solid #CC0000' : '1px solid #222',
-                    borderTop: '3px solid #FF6600',
+                    borderTop: '3px solid #0057B8',
                     fontFamily: FONT,
                 }}
                 onClick={() => setPopupOpen(true)}
                 dir="rtl"
             >
                 <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-1.5 rounded px-2 py-0.5" style={{ background: 'linear-gradient(135deg, #FF6600 0%, #000000 100%)' }}>
+                    <div className="flex items-center gap-1.5 rounded px-2 py-0.5" style={{ background: 'linear-gradient(135deg, #0057B8 0%, #000000 100%)' }}>
                         <Shield className="w-3 h-3 text-white" />
                         <span className="text-white text-xs font-black" style={{ fontFamily: FONT }}>פיקוד העורף</span>
                     </div>
@@ -408,7 +408,7 @@ export default function AlertsPanel() {
                         </span>
                     )}
                 </div>
-                <span style={{ color: '#FF6600', fontSize: '12px', fontWeight: '700', fontFamily: FONT }}>▼ פתח</span>
+                <span style={{ color: '#0057B8', fontSize: '12px', fontWeight: '700', fontFamily: FONT }}>▼ פתח</span>
             </div>
 
             {/* POPUP */}

@@ -24,7 +24,7 @@ const WAR_ARTICLES_BASE = [
     {
         title: "ישראל ואמריקה מסכמות: מתקפה מתואמת על מתקני הגרעין של איראן",
         content: "גורמים בכירים בממשל האמריקאי ובממשלת ישראל מסרו הלילה כי השתיים הגיעו להסכמה עקרונית לפעולה משותפת נגד מתקני הגרעין האיראניים. הבית הלבן ממתין לאישור הסנאט.",
-        category: "SECURITY", label: "ביטחון", color: "#FF6600", border: "#FF660040", bg: "#1a0e00", is_urgent: true, date: "עכשיו",
+        category: "SECURITY", label: "ביטחון", color: "#0057B8", border: "#0057B840", bg: "#000d1a", is_urgent: true, date: "עכשיו",
     },
     {
         title: "איראן: נפעיל 3,000 טיל — הגנת הביניים תופעל מיידית",
@@ -34,7 +34,7 @@ const WAR_ARTICLES_BASE = [
     {
         title: "צבא ישראל: 40,000 מגויסים בכוננות גבוהה לקראת התרחיש הצפוי",
         content: "המטכ\"ל הורה על העברת אוגדות שריון וחי\"ר לאזורי כינוס. פקודת מבצע תינתן בהחלטת הקבינט המדיני-ביטחוני.",
-        category: "MILITARY", label: "צבאי", color: "#FF8C00", border: "#FF8C0040", bg: "#1a0e00", is_urgent: false, date: "לפני שעתיים",
+        category: "MILITARY", label: "צבאי", color: "#0057B8", border: "#0057B840", bg: "#000d1a", is_urgent: false, date: "לפני שעתיים",
     },
     {
         title: "נשיא ארה\"ב: 'לא נאפשר לאיראן נשק גרעיני — זו קו אדום'",
@@ -44,7 +44,7 @@ const WAR_ARTICLES_BASE = [
     {
         title: "חיזבאללה מפעיל מחדש חוליות בצפון — צה\"ל מחזק את הגבול",
         content: "מודיעין צבאי מצביע על חזרה לפעילות מבצעית של חיזבאללה בדרום לבנון. כוחות צה\"ל חיזקו עמדות ואוכלוסיות הצפון קיבלו הנחיות מעודכנות.",
-        category: "SECURITY", label: "ביטחון", color: "#FF6600", border: "#FF660040", bg: "#1a0e00", is_urgent: false, date: "לפני 4 שעות",
+        category: "SECURITY", label: "ביטחון", color: "#0057B8", border: "#0057B840", bg: "#000d1a", is_urgent: false, date: "לפני 4 שעות",
     },
     {
         title: "עלות המלחמה עלתה ל-300 מיליארד שקל — בנק ישראל מזהיר",
@@ -59,12 +59,12 @@ const WAR_ARTICLES_BASE = [
     {
         title: "חמאס וישראל: שבוע לסיום שלב א' — המו\"מ על שלב ב' נמשך",
         content: "שבוע לפני תום שלב א' של הסכם החטופים, עדיין לא הושגה הסכמה על תנאי שלב ב'. מקורות דיפלומטיים: 'הפער עדיין גדול, אך המשא ומתן נמשך'.",
-        category: "SECURITY", label: "ביטחון", color: "#FF6600", border: "#FF660040", bg: "#1a0e00", is_urgent: false, date: "אתמול",
+        category: "SECURITY", label: "ביטחון", color: "#0057B8", border: "#0057B840", bg: "#000d1a", is_urgent: false, date: "אתמול",
     },
     {
         title: "אמריקה מזיזה נושאת מטוסים שנייה לים התיכון — מסר לאיראן",
         content: "הפנטגון אישר העברה של נושאת מטוסים שנייה לאזור הים התיכון. הצעד נתפס כמסר ישיר לאיראן ולגורמים פרוקסי באזור.",
-        category: "MILITARY", label: "צבאי", color: "#FF8C00", border: "#FF8C0040", bg: "#1a0e00", is_urgent: false, date: "אתמול",
+        category: "MILITARY", label: "צבאי", color: "#0057B8", border: "#0057B840", bg: "#000d1a", is_urgent: false, date: "אתמול",
     },
 ];
 
@@ -307,7 +307,7 @@ export default function WarNewsSection() {
                 {/* BBC-style Header Bar */}
                 <div className="rounded-xl overflow-hidden mb-6 shadow-2xl">
                     {/* Top bar */}
-                    <div className="bg-[#FF6600] px-5 py-3 flex items-center justify-between">
+                    <div className="bg-[#0057B8] px-5 py-3 flex items-center justify-between">
                         <div className="flex items-center gap-4">
                             <img src={LOGO_URL} alt="הרשת החדשה" className="h-9 w-auto drop-shadow-xl" />
                             <div className="w-px h-8 bg-white/30" />
