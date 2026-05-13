@@ -502,11 +502,6 @@ export default function Layout({ children, currentPageName }) {
 
 
 
-      {/* Reporters Ticker Strip */}
-      <React.Suspense fallback={<div className="h-16 bg-black/40 animate-pulse" />}>
-        <ReportersTickerStrip />
-      </React.Suspense>
-
       {/* Videos Categories Strip */}
       <React.Suspense fallback={<div className="h-32 bg-black/40 animate-pulse" />}>
         <VideosCategoriesStrip />

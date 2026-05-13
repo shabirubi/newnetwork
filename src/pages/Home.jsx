@@ -13,6 +13,7 @@ import NewsCard from "../components/news/NewsCard";
 import UpdatesFeed from "../components/news/UpdatesFeed";
 import EntertainmentUpdatesFeed from "../components/news/EntertainmentUpdatesFeed";
 import VerticalNewsScroller from "../components/news/VerticalNewsScroller";
+import CategoryRow from "../components/home/CategoryRow";
 import StudioSidebar from "../components/home/StudioSidebar";
 import WeatherAlertsContainer from "../components/weather/WeatherAlertsContainer";
 
@@ -196,34 +197,28 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Featured News Section */}
-      <section className="w-full px-2 sm:px-4 py-4 sm:py-8">
-        <div className="max-w-7xl mx-auto">
-          <h2 className="text-xl sm:text-3xl font-bold text-white mb-4 sm:mb-6 flex items-center gap-2 sm:gap-3">
-            <Flame className="w-6 h-6 sm:w-8 sm:h-8 text-[#E31E24]" />
-            חדשות מובלטות
-          </h2>
-          
-          {isLoading ? (
-            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
-              {[1, 2, 3, 4, 5, 6].map((i) => (
-                <Skeleton key={i} className="h-48 sm:h-80 bg-gray-800 rounded-xl sm:rounded-2xl" />
-              ))}
-            </div>
-          ) : articles.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-6">
-              {articles.map((article) => (
-                <NewsCard key={article.id} article={article} />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-12">
-              <Newspaper className="w-16 h-16 text-gray-700 mx-auto mb-4" />
-              <p className="text-gray-500 text-lg">אין חדשות מובלטות כרגע</p>
-            </div>
-          )}
-        </div>
-      </section>
+      {/* Category Rows - חדשות + סרטונים לפי קטגוריה */}
+      <CategoryRow category="breaking" title="חדשות עכשיו" icon={Radio} onUploadClick={() => setUploadVideoModalOpen(true)} />
+      <CategoryRow category="security" title="ביטחון ומדיניות" icon={Shield} onUploadClick={() => setUploadVideoModalOpen(true)} />
+      <CategoryRow category="economy" title="כלכלה ועסקים" icon={DollarSign} onUploadClick={() => setUploadVideoModalOpen(true)} />
+      <CategoryRow category="politics" title="פוליטיקה" icon={Landmark} onUploadClick={() => setUploadVideoModalOpen(true)} />
+      <CategoryRow category="technology" title="טכנולוגיה" icon={Cpu} onUploadClick={() => setUploadVideoModalOpen(true)} />
+      <CategoryRow category="sports" title="ספורט" icon={Trophy} onUploadClick={() => setUploadVideoModalOpen(true)} />
+      <CategoryRow category="entertainment" title="בידור ותרבות" icon={Clapperboard} onUploadClick={() => setUploadVideoModalOpen(true)} />
+      <CategoryRow category="world" title="חדשות עולם" icon={Globe} onUploadClick={() => setUploadVideoModalOpen(true)} />
+      <CategoryRow category="health" title="בריאות" icon={Heart} onUploadClick={() => setUploadVideoModalOpen(true)} />
+      <CategoryRow category="israel" title="חדשות ישראל" icon={Newspaper} onUploadClick={() => setUploadVideoModalOpen(true)} />
+      <CategoryRow category="crime" title="פלילים ומשטרה" icon={AlertTriangle} onUploadClick={() => setUploadVideoModalOpen(true)} />
+      <CategoryRow category="education" title="חינוך" icon={BookOpen} onUploadClick={() => setUploadVideoModalOpen(true)} />
+      <CategoryRow category="culture" title="תרבות" icon={Clapperboard} onUploadClick={() => setUploadVideoModalOpen(true)} />
+      <CategoryRow category="environment" title="סביבה" icon={TreePine} onUploadClick={() => setUploadVideoModalOpen(true)} />
+      <CategoryRow category="science" title="מדע" icon={Microscope} onUploadClick={() => setUploadVideoModalOpen(true)} />
+      <CategoryRow category="military" title="צבא וביטחון" icon={Shield} onUploadClick={() => setUploadVideoModalOpen(true)} />
+      <CategoryRow category="law" title="משפט ופלילים" icon={Scale} onUploadClick={() => setUploadVideoModalOpen(true)} />
+      <CategoryRow category="local" title="חדשות מקומיות" icon={HomeIcon} onUploadClick={() => setUploadVideoModalOpen(true)} />
+      <CategoryRow category="music" title="מוזיקה" icon={Music} onUploadClick={() => setUploadVideoModalOpen(true)} />
+      <CategoryRow category="horoscope" title="הורוסקופ" icon={Stars} onUploadClick={() => setUploadVideoModalOpen(true)} />
+      <CategoryRow category="finance" title="פיננסים" icon={TrendingUp} onUploadClick={() => setUploadVideoModalOpen(true)} />
 
 
 
@@ -239,220 +234,6 @@ export default function Home() {
 
 
 
-      {/* Vertical News Scrollers */}
-      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
-        <VerticalNewsScroller
-          category="security"
-          title="ביטחון ומדיניות"
-          icon={Shield}
-        />
-      </section>
-
-      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
-        <VerticalNewsScroller
-          category="economy"
-          title="כלכלה ועסקים"
-          icon={DollarSign}
-        />
-      </section>
-
-      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
-        <VerticalNewsScroller
-          category="technology"
-          title="טכנולוגיה"
-          icon={Cpu}
-        />
-      </section>
-
-      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
-        <VerticalNewsScroller
-          category="crime"
-          title="פלילים ומשטרה"
-          icon={AlertTriangle}
-        />
-      </section>
-
-      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
-        <VerticalNewsScroller
-          category="politics"
-          title="פוליטיקה"
-          icon={Landmark}
-        />
-      </section>
-
-      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
-        <VerticalNewsScroller
-          category="sports"
-          title="ספורט"
-          icon={Trophy}
-        />
-      </section>
-
-      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
-        <VerticalNewsScroller
-          category="entertainment"
-          title="בידור ותרבות"
-          icon={Clapperboard}
-        />
-      </section>
-
-      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
-        <VerticalNewsScroller
-          category="world"
-          title="חדשות עולם"
-          icon={Globe}
-        />
-      </section>
-
-      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
-        <VerticalNewsScroller
-          category="health"
-          title="בריאות"
-          icon={Heart}
-        />
-      </section>
-
-      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
-        <VerticalNewsScroller
-          category="israel"
-          title="חדשות ישראל"
-          icon={Newspaper}
-        />
-      </section>
-
-      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
-        <VerticalNewsScroller
-          category="education"
-          title="חינוך"
-          icon={BookOpen}
-        />
-      </section>
-
-      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
-        <VerticalNewsScroller
-          category="culture"
-          title="תרבות"
-          icon={Clapperboard}
-        />
-      </section>
-
-      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
-        <VerticalNewsScroller
-          category="environment"
-          title="סביבה"
-          icon={TreePine}
-        />
-      </section>
-
-      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
-        <VerticalNewsScroller
-          category="science"
-          title="מדע"
-          icon={Microscope}
-        />
-      </section>
-
-      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
-        <VerticalNewsScroller
-          category="military"
-          title="צבא וביטחון"
-          icon={Shield}
-        />
-      </section>
-
-      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
-        <VerticalNewsScroller
-          category="law"
-          title="משפט ופלילים"
-          icon={Scale}
-        />
-      </section>
-
-      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
-        <VerticalNewsScroller
-          category="local"
-          title="חדשות מקומיות"
-          icon={HomeIcon}
-        />
-      </section>
-
-      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
-        <VerticalNewsScroller
-          category="documentary"
-          title="סדרות תיעודיות"
-          icon={Film}
-        />
-      </section>
-
-      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
-        <VerticalNewsScroller
-          category="music"
-          title="מוזיקה"
-          icon={Music}
-        />
-      </section>
-
-      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
-        <VerticalNewsScroller
-          category="horoscope"
-          title="הורוסקופ ואסטרולוגיה"
-          icon={Stars}
-        />
-      </section>
-
-      <section className="w-full px-2 sm:px-4 mb-3 sm:mb-8">
-        <VerticalNewsScroller
-          category="finance"
-          title="פיננסים והשקעות"
-          icon={TrendingUp}
-        />
-      </section>
-
-
-
-
-
-      {/* TikTok News Feed */}
-      <section className="px-2 sm:px-4 mb-4 sm:mb-8 max-w-full overflow-hidden">
-        <React.Suspense fallback={<Skeleton className="w-full h-96 bg-gray-800" />}>
-          <TikTokNewsContainer />
-        </React.Suspense>
-      </section>
-
-      {/* All Videos Gallery */}
-      <section className="px-2 sm:px-4 mb-4 sm:mb-8 max-w-full overflow-hidden">
-        <React.Suspense fallback={<Skeleton className="w-full h-96 bg-gray-800" />}>
-          <AllVideosGallery />
-        </React.Suspense>
-      </section>
-
-
-
-      {/* Reporter Responses Feed */}
-      <section className="px-2 sm:px-4 mb-4 sm:mb-8 max-w-full overflow-hidden">
-        <React.Suspense fallback={<Skeleton className="w-full h-96 bg-gray-800" />}>
-          <ReporterResponsesFeed />
-        </React.Suspense>
-      </section>
-
-
-
-      {/* User Uploaded Videos */}
-      <section className="px-2 sm:px-4 mb-4 sm:mb-8 max-w-full overflow-hidden">
-        <UserUploadedVideos onUploadClick={() => setUploadVideoModalOpen(true)} />
-      </section>
-
-      {/* Entertainment Updates */}
-      <section className="px-2 sm:px-4 mb-4 sm:mb-8 max-w-full overflow-hidden">
-        <EntertainmentUpdatesFeed />
-      </section>
-
-      {/* Zaka Media Kit */}
-      <section className="px-2 sm:px-4 mb-4 sm:mb-8 max-w-full overflow-hidden">
-        <React.Suspense fallback={<Skeleton className="w-full h-96 bg-gray-800" />}>
-          <ZakaMediaKitContainer />
-        </React.Suspense>
-      </section>
 
       {/* VOD Modal */}
       <VODModal isOpen={vodModalOpen} onClose={() => setVodModalOpen(false)} />

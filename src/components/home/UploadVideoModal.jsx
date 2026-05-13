@@ -167,6 +167,10 @@ export default function UploadVideoModal({ isOpen, onClose }) {
                       accept="video/*,image/*"
                       onChange={(e) => {
                         const file = e.target.files?.[0];
+                        if (file && file.size > 100 * 1024 * 1024) {
+                          toast.error("הקובץ גדול מדי - מקסימום 100MB");
+                          return;
+                        }
                         setFormData({ ...formData, videoFile: file });
                       }}
                       className="hidden"
