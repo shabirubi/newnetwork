@@ -506,6 +506,11 @@ export default function Layout({ children, currentPageName }) {
 
 
 
+      {/* Videos Categories Strip */}
+      <React.Suspense fallback={<div className="h-[72px] bg-black/40 animate-pulse" />}>
+        <VideosCategoriesStrip />
+      </React.Suspense>
+
       {/* Reporters Modal */}
       <ReportersModal 
         isOpen={reportersModalOpen} 
