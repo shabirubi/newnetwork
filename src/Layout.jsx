@@ -502,10 +502,7 @@ export default function Layout({ children, currentPageName }) {
 
 
 
-      {/* Videos Categories Strip */}
-      <React.Suspense fallback={<div className="h-32 bg-black/40 animate-pulse" />}>
-        <VideosCategoriesStrip />
-      </React.Suspense>
+
 
 
 

@@ -172,31 +172,6 @@ export default function Home() {
       {/* Oref News Section */}
       <OrefNewsSection />
 
-      {/* Viral Video Section */}
-      <section className="w-full px-2 sm:px-4 py-4 sm:py-8" style={{ backgroundColor: '#000000' }}>
-        <div className="max-w-7xl mx-auto">
-          <div className="rounded-xl sm:rounded-2xl p-3 sm:p-6 mb-4 sm:mb-8">
-            <div className="flex items-center gap-2 sm:gap-3 mb-3 sm:mb-4">
-              <Flame className="w-6 h-6 sm:w-8 sm:h-8 text-[#E31E24] animate-pulse" />
-              <h2 className="text-lg sm:text-2xl md:text-3xl font-bold text-white">
-                הסרטון שצבר 20,000,000 צפיות תוך 60 דקות! 🔥
-              </h2>
-            </div>
-            <div className="relative w-full rounded-lg sm:rounded-xl overflow-hidden" style={{ paddingBottom: '56.25%' }}>
-              <iframe 
-                className="absolute top-0 left-0 w-full h-full"
-                src="https://www.youtube.com/embed/LYWjvm2MUUk" 
-                title="הרשת החדשה-נעלמים" 
-                frameBorder="0" 
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                referrerPolicy="strict-origin-when-cross-origin" 
-                allowFullScreen
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Category Rows - חדשות + סרטונים לפי קטגוריה */}
       <CategoryRow category="breaking" title="חדשות עכשיו" icon={Radio} onUploadClick={() => setUploadVideoModalOpen(true)} />
       <CategoryRow category="security" title="ביטחון ומדיניות" icon={Shield} onUploadClick={() => setUploadVideoModalOpen(true)} />
@@ -249,9 +224,6 @@ export default function Home() {
 
       {/* Accessibility Panel */}
       <AccessibilityPanel isOpen={a11yOpen} onClose={() => setA11yOpen(false)} />
-
-      {/* Talking Avatar */}
-      <TalkingAvatar />
 
       {/* LiveAvatar Chat Modal */}
       <LiveAvatarChatModal 
@@ -311,41 +283,7 @@ export default function Home() {
         )}
       </AnimatePresence>
 
-      {/* Floating Live Button */}
-      <motion.button
-        onClick={() => setLivePlayerModalOpen(true)}
-        className="fixed bottom-24 left-4 z-50 bg-black hover:bg-gray-900 text-white p-4 rounded-full shadow-2xl shadow-black/50 border-2 border-gray-600"
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-        animate={{
-          boxShadow: [
-            '0 0 20px rgba(0, 0, 0, 0.5)',
-            '0 0 40px rgba(0, 0, 0, 0.8)',
-            '0 0 20px rgba(0, 0, 0, 0.5)'
-          ]
-        }}
-        transition={{
-          duration: 2,
-          repeat: Infinity,
-          ease: "easeInOut"
-        }}
-      >
-        <Radio className="w-6 h-6" />
-      </motion.button>
 
-      {/* Floating Digital Dreams Button */}
-      <Link to={createPageUrl("VideoCreator")}>
-        <motion.button
-          className="fixed bottom-40 left-4 z-50 text-white p-4 rounded-full shadow-2xl border-2 border-[#0057B8]/60 bg-[#0057B8] hover:bg-[#1a6fd4]"
-          whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <Video className="w-6 h-6" />
-        </motion.button>
-      </Link>
-
-      {/* Studio Sidebar */}
-      <StudioSidebar />
 
 
 
