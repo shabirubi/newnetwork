@@ -170,11 +170,11 @@ export default function Home() {
       {/* OREF Alerts - TOP PRIORITY */}
       <OrefAlertsPanel />
 
+      {/* Featured Article Editor - above war news */}
+      <FeaturedArticleEditor />
+
       {/* Oref News Section */}
       <OrefNewsSection />
-
-      {/* Featured Article Editor */}
-      <FeaturedArticleEditor />
 
       {/* Category Rows - חדשות + סרטונים לפי קטגוריה */}
       <CategoryRow category="breaking" title="חדשות עכשיו" icon={Radio} onUploadClick={() => setUploadVideoModalOpen(true)} />
