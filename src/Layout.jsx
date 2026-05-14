@@ -30,7 +30,17 @@ import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import UserProfileModal from "./components/user/UserProfileModal";
 
-const LOGO_URL = "https://media.base44.com/images/public/695b39080025f4d38a586978/e50cb05b1_unnamed5.jpg";
+const LOGO_URL = "https://media.base44.com/videos/public/695b39080025f4d38a586978/be7e061f7_shavit1313.mp4";
+const LogoVideo = ({ className }) => (
+  <video
+    src={LOGO_URL}
+    autoPlay
+    loop
+    muted
+    playsInline
+    className={className}
+  />
+);
 
 // Scrolling Breaking News Component
 function TypewriterDate() {
@@ -247,11 +257,7 @@ export default function Layout({ children, currentPageName }) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-black via-[#0057B8]/20 to-black flex items-center justify-center p-4" dir="rtl">
         <div className="max-w-2xl w-full bg-black/80 backdrop-blur-xl rounded-3xl border-2 border-[#0057B8]/50 shadow-2xl shadow-[#0057B8]/30 p-8 text-center">
-          <img 
-            src={LOGO_URL} 
-                          alt="הרשת החדשה" 
-                          className="h-20 w-20 mx-auto mb-6 drop-shadow-2xl object-contain"
-          />
+          <LogoVideo className="h-20 w-20 mx-auto mb-6 drop-shadow-2xl object-contain rounded-full" />
           <h1 className="text-4xl font-bold text-white mb-4">
             {siteSettings.closure_title}
           </h1>
@@ -340,11 +346,7 @@ export default function Layout({ children, currentPageName }) {
 
         <div className="max-w-7xl mx-auto px-4 flex items-center justify-between gap-3 relative z-[200]">
           <div className="flex items-center gap-3 flex-shrink-0">
-            <img
-              src={LOGO_URL}
-              alt="הרשת החדשה"
-              className="h-24 w-24 object-contain flex-shrink-0"
-            />
+            <LogoVideo className="h-24 w-24 object-contain flex-shrink-0 rounded-full" />
             <div className="flex flex-col text-right">
               <h1 className="text-lg sm:text-xl font-bold text-white">הרשת החדשה</h1>
               <motion.p 
@@ -833,11 +835,7 @@ export default function Layout({ children, currentPageName }) {
                 {/* Drawer Header */}
                 <div className="sticky top-0 bg-gradient-to-br from-black via-[#E31E24]/20 to-black p-4 shadow-lg border-b border-[#E31E24]/30">
                   <div className="flex items-center justify-between">
-                    <img 
-                      src={LOGO_URL} 
-                      alt="הרשת החדשה" 
-                      className="h-12 w-12 object-contain"
-                    />
+                    <LogoVideo className="h-12 w-12 object-contain rounded-full" />
                     <button
                       onClick={() => setMobileMenuOpen(false)}
                       className="p-2 rounded-full bg-[#E31E24]/20 hover:bg-[#E31E24]/40 text-white active:scale-95 transition-all"
@@ -1017,11 +1015,7 @@ export default function Layout({ children, currentPageName }) {
         <div className="max-w-7xl mx-auto px-4 py-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
-              <img 
-                src={LOGO_URL} 
-                alt="הרשת החדשה" 
-                className="h-16 w-16 mb-4 object-contain"
-              />
+              <LogoVideo className="h-16 w-16 mb-4 object-contain rounded-full" />
               <p className="text-gray-400 text-sm">
                 ערוץ חדשות דיגיטלי מבוסס AI עם בקרה אנושית, המייצר תוכן דיגיטלי במהירות ובאיכות.
               </p>
