@@ -211,8 +211,25 @@ export default function Article() {
         </div>
       </motion.header>
 
+      {/* Featured Video */}
+      {article.video_url && (
+        <motion.div
+          initial={{ opacity: 0, scale: 0.98 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="mb-8"
+        >
+          <video
+            src={article.video_url}
+            controls
+            playsInline
+            className="w-full rounded-2xl shadow-lg bg-black"
+            style={{ maxHeight: '70vh' }}
+          />
+        </motion.div>
+      )}
+
       {/* Featured Image */}
-      {article.image_url && (
+      {article.image_url && !article.video_url && (
         <motion.div
           initial={{ opacity: 0, scale: 0.98 }}
           animate={{ opacity: 1, scale: 1 }}
@@ -224,6 +241,23 @@ export default function Article() {
             className="w-full rounded-2xl shadow-lg"
           />
           <p className="text-gray-400 text-xs mt-2 text-center">צילום: הרשת החדשה</p>
+        </motion.div>
+      )}
+
+      {/* Extra Videos & Images Gallery */}
+      {((article.extra_videos?.length > 0) || (article.extra_images?.length > 0)) && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="mb-8 grid grid-cols-1 sm:grid-cols-2 gap-4"
+        >
+          {(article.extra_videos || []).map((url, i) => (
+            <video key={`v-${i}`} src={url} controls playsInline
+              className="w-full rounded-xl bg-black" style={{ maxHeight: 300 }} />
+          ))}
+          {(article.extra_images || []).map((url, i) => (
+            <img key={`img-${i}`} src={url} alt="" className="w-full rounded-xl object-cover" style={{ maxHeight: 300 }} />
+          ))}
         </motion.div>
       )}
 

@@ -171,7 +171,7 @@ function EditorModal({ article, onClose, onSaved }) {
   const extraVideoRef = useRef(null);
   const queryClient = useQueryClient();
 
-  const uploadFile = async (file, type) => {
+  const uploadImage = async (file, type) => {
     setUploading(type);
     try {
       const { file_url } = await base44.integrations.Core.UploadFile({ file });
@@ -181,9 +181,21 @@ function EditorModal({ article, onClose, onSaved }) {
     }
   };
 
+  const uploadVideo = async (file, type) => {
+    setUploading(type);
+    try {
+      // Use UploadPrivateFile for large videos, then get signed URL
+      const { file_uri } = await base44.integrations.Core.UploadPrivateFile({ file });
+      const { signed_url } = await base44.integrations.Core.CreateFileSignedUrl({ file_uri, expires_in: 60 * 60 * 24 * 365 });
+      return signed_url;
+    } finally {
+      setUploading(null);
+    }
+  };
+
   const handleMainImage = async (e) => {
     const file = e.target.files?.[0]; if (!file) return;
-    const url = await uploadFile(file, 'main-image');
+    const url = await uploadImage(file, 'main-image');
     setForm(f => ({ ...f, image_url: url }));
     toast.success("תמונה ראשית הועלתה");
     e.target.value = '';
@@ -191,7 +203,8 @@ function EditorModal({ article, onClose, onSaved }) {
 
   const handleMainVideo = async (e) => {
     const file = e.target.files?.[0]; if (!file) return;
-    const url = await uploadFile(file, 'main-video');
+    toast.info("מעלה וידאו, אנא המתן...");
+    const url = await uploadVideo(file, 'main-video');
     setForm(f => ({ ...f, video_url: url }));
     toast.success("וידאו ראשי הועלה");
     e.target.value = '';
@@ -215,11 +228,13 @@ function EditorModal({ article, onClose, onSaved }) {
   const handleExtraVideos = async (e) => {
     const files = Array.from(e.target.files || []);
     if (!files.length) return;
+    toast.info("מעלה סרטונים, אנא המתן...");
     setUploading('extra-video');
     const urls = [];
     for (const file of files) {
-      const url = await base44.integrations.Core.UploadFile({ file }).then(r => r.file_url);
-      urls.push(url);
+      const { file_uri } = await base44.integrations.Core.UploadPrivateFile({ file });
+      const { signed_url } = await base44.integrations.Core.CreateFileSignedUrl({ file_uri, expires_in: 60 * 60 * 24 * 365 });
+      urls.push(signed_url);
     }
     setUploading(null);
     setForm(f => ({ ...f, extra_videos: [...(f.extra_videos || []), ...urls] }));
