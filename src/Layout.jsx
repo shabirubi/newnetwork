@@ -22,6 +22,7 @@ import KanArchiveModal from "./components/home/KanArchiveModal";
 import TalkingAvatar from "./components/avatar/TalkingAvatar";
 import DIDLiveChat from "./components/avatar/DIDLiveChat";
 import AdminLoginModal from "./components/admin/AdminLoginModal";
+import ReelsModal from "./components/home/ReelsModal";
 
 import AccessibilityFloatingButton from "./components/accessibility/AccessibilityFloatingButton";
 import InstallAppButton from "./components/shared/InstallAppButton";
@@ -141,6 +142,7 @@ export default function Layout({ children, currentPageName }) {
   const [searchResults, setSearchResults] = useState([]);
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [profileModalOpen, setProfileModalOpen] = useState(false);
+  const [reelsOpen, setReelsOpen] = useState(false);
 
   // בדיקת מצב האתר
   useEffect(() => {
@@ -490,13 +492,13 @@ export default function Layout({ children, currentPageName }) {
               </button>
             )}
 
-              <Link 
-                to={createPageUrl("Live")}
-                className="flex items-center gap-1 px-2 py-1 bg-black/60 backdrop-blur-xl rounded-lg border border-gray-600 transition-all hover:scale-105 animate-pulse text-[11px]"
+              <button
+                onClick={() => setReelsOpen(true)}
+                className="flex items-center gap-1 px-2 py-1 bg-[#E31E24]/80 hover:bg-[#E31E24] backdrop-blur-xl rounded-lg border border-red-500/50 transition-all hover:scale-105 animate-pulse text-[11px]"
               >
                 <Radio className="w-4 h-4 text-white" />
-                <span className="text-white font-bold">שידור חי</span>
-              </Link>
+                <span className="text-white font-bold">ריילס</span>
+              </button>
             </div>
           </div>
         </div>
@@ -548,6 +550,11 @@ export default function Layout({ children, currentPageName }) {
         onClose={() => setProfileModalOpen(false)}
         initialUser={user}
       />
+
+      {/* Reels Modal */}
+      <AnimatePresence>
+        {reelsOpen && <ReelsModal isOpen={reelsOpen} onClose={() => setReelsOpen(false)} />}
+      </AnimatePresence>
 
       {/* Main Menu Sidebar */}
       <AnimatePresence>
@@ -974,13 +981,13 @@ export default function Layout({ children, currentPageName }) {
             <span className="text-[10px] font-bold text-gray-300">בית</span>
           </Link>
 
-          <Link
-            to={createPageUrl("Live")}
+          <button
+            onClick={() => setReelsOpen(true)}
             className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-gray-700/30 transition-colors touch-manipulation"
           >
-            <Radio size={24} className="text-gray-300 mb-1" strokeWidth={2.5} />
-            <span className="text-[10px] font-bold text-gray-300">חי</span>
-          </Link>
+            <Radio size={24} className="text-red-400 mb-1" strokeWidth={2.5} />
+            <span className="text-[10px] font-bold text-red-400">ריילס</span>
+          </button>
 
           <Link
             to={createPageUrl("VideoCreator")}

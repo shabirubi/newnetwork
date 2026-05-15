@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import {
   Edit3, Save, X, Image, Video, Tag, Play, Pause,
   ChevronDown, Plus, Trash2, Check, Loader2, Camera,
-  Upload, ChevronLeft, ChevronRight
+  Upload, ChevronLeft, ChevronRight, Clapperboard
 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -29,6 +29,21 @@ const CATEGORIES = [
   { id: "military", label: "צבא וביטחון" },
   { id: "law", label: "משפט ופלילים" },
   { id: "local", label: "חדשות מקומיות" },
+  { id: "music", label: "מוזיקה" },
+  { id: "horoscope", label: "הורוסקופ" },
+  { id: "finance", label: "פיננסים" },
+];
+
+const REEL_CATEGORIES = [
+  { id: "breaking", label: "חדשות עכשיו" },
+  { id: "security", label: "ביטחון" },
+  { id: "economy", label: "כלכלה" },
+  { id: "politics", label: "פוליטיקה" },
+  { id: "technology", label: "טכנולוגיה" },
+  { id: "sports", label: "ספורט" },
+  { id: "entertainment", label: "בידור" },
+  { id: "world", label: "עולם" },
+  { id: "health", label: "בריאות" },
   { id: "music", label: "מוזיקה" },
   { id: "horoscope", label: "הורוסקופ" },
   { id: "finance", label: "פיננסים" },
@@ -162,13 +177,18 @@ function EditorModal({ article, onClose, onSaved }) {
   }));
 
   const [saving, setSaving] = useState(false);
-  const [uploading, setUploading] = useState(null); // 'main-image'|'main-video'|'extra-image'|'extra-video'
+  const [uploading, setUploading] = useState(null); // 'main-image'|'main-video'|'extra-image'|'extra-video'|'reel'
   const [categoryOpen, setCategoryOpen] = useState(false);
+  const [reelCategory, setReelCategory] = useState("breaking");
+  const [reelTitle, setReelTitle] = useState("");
+  const [reelDescription, setReelDescription] = useState("");
+  const [uploadedReels, setUploadedReels] = useState([]);
 
   const mainImageRef = useRef(null);
   const mainVideoRef = useRef(null);
   const extraImageRef = useRef(null);
   const extraVideoRef = useRef(null);
+  const reelVideoRef = useRef(null);
   const queryClient = useQueryClient();
 
   const uploadImage = async (file, type) => {
@@ -244,6 +264,38 @@ function EditorModal({ article, onClose, onSaved }) {
 
   const removeExtraImage = (i) => setForm(f => ({ ...f, extra_images: f.extra_images.filter((_, j) => j !== i) }));
   const removeExtraVideo = (i) => setForm(f => ({ ...f, extra_videos: f.extra_videos.filter((_, j) => j !== i) }));
+
+  const handleReelUpload = async (e) => {
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+    if (!reelTitle.trim()) { toast.error("חובה להזין כותרת לריל"); return; }
+    toast.info("מעלה ריל, אנא המתן...");
+    setUploading('reel');
+    try {
+      for (const file of files) {
+        const { file_uri } = await base44.integrations.Core.UploadPrivateFile({ file });
+        const { signed_url } = await base44.integrations.Core.CreateFileSignedUrl({ file_uri, expires_in: 60 * 60 * 24 * 365 });
+        await base44.entities.UserVideo.create({
+          title: reelTitle,
+          description: reelDescription,
+          video_url: signed_url,
+          category: reelCategory,
+          feed: "tiktok",
+          status: "ready",
+          uploader_email: "admin",
+          views: 0,
+          likes: 0,
+        });
+        setUploadedReels(r => [...r, { title: reelTitle, category: reelCategory }]);
+      }
+      toast.success("הריל הועלה בהצלחה!");
+      setReelTitle("");
+      setReelDescription("");
+    } finally {
+      setUploading(null);
+      e.target.value = '';
+    }
+  };
 
   const handleSave = async () => {
     if (!form.title.trim()) { toast.error("חובה להזין כותרת"); return; }
@@ -520,6 +572,74 @@ function EditorModal({ article, onClose, onSaved }) {
 
             </div>
           </div>
+          {/* === REELS SECTION === */}
+          <div className="border border-purple-800/50 rounded-2xl overflow-hidden">
+            <div className="bg-[#111] px-4 py-3 border-b border-purple-800/50">
+              <h3 className="text-white font-bold text-sm flex items-center gap-2">
+                <Clapperboard className="w-4 h-4 text-purple-400" />
+                העלאת ריל (TikTok-style)
+              </h3>
+            </div>
+            <div className="p-4 space-y-3">
+              <div>
+                <label className="text-gray-400 text-xs mb-1 block">כותרת הריל *</label>
+                <Input
+                  value={reelTitle}
+                  onChange={e => setReelTitle(e.target.value)}
+                  placeholder="כותרת הריל..."
+                  className="bg-[#1a1a1a] border-gray-700 text-white text-sm placeholder:text-gray-600 focus:border-purple-500"
+                />
+              </div>
+              <div>
+                <label className="text-gray-400 text-xs mb-1 block">תיאור (אופציונלי)</label>
+                <Input
+                  value={reelDescription}
+                  onChange={e => setReelDescription(e.target.value)}
+                  placeholder="תיאור קצר..."
+                  className="bg-[#1a1a1a] border-gray-700 text-white text-sm placeholder:text-gray-600 focus:border-purple-500"
+                />
+              </div>
+              <div>
+                <label className="text-gray-400 text-xs mb-1 block">קטגוריה</label>
+                <div className="flex flex-wrap gap-2">
+                  {REEL_CATEGORIES.map(cat => (
+                    <button
+                      key={cat.id}
+                      onClick={() => setReelCategory(cat.id)}
+                      className={`px-3 py-1 rounded-full text-xs font-bold transition-all border ${
+                        reelCategory === cat.id
+                          ? "bg-purple-600 border-purple-500 text-white"
+                          : "bg-gray-800 border-gray-700 text-gray-400 hover:bg-gray-700"
+                      }`}
+                    >
+                      {cat.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <input ref={reelVideoRef} type="file" accept="video/*" multiple className="hidden" onChange={handleReelUpload} />
+              <button
+                onClick={() => reelVideoRef.current?.click()}
+                disabled={uploading === 'reel' || !reelTitle.trim()}
+                className="flex items-center gap-2 px-4 py-2.5 bg-purple-600/30 hover:bg-purple-600/50 text-purple-300 rounded-xl border border-purple-600/40 text-sm transition-colors disabled:opacity-50 w-full justify-center font-bold"
+              >
+                {uploading === 'reel' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Clapperboard className="w-4 h-4" />}
+                {uploading === 'reel' ? 'מעלה ריל...' : 'בחר קובץ וידאו לריל'}
+              </button>
+              {uploadedReels.length > 0 && (
+                <div className="mt-2 space-y-1">
+                  {uploadedReels.map((r, i) => (
+                    <div key={i} className="flex items-center gap-2 text-xs text-green-400">
+                      <Check className="w-3 h-3" />
+                      <span>{r.title}</span>
+                      <span className="text-gray-500">· {REEL_CATEGORIES.find(c => c.id === r.category)?.label}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
         </div>
       </motion.div>
     </motion.div>
