@@ -15,6 +15,7 @@ import EntertainmentUpdatesFeed from "../components/news/EntertainmentUpdatesFee
 import VerticalNewsScroller from "../components/news/VerticalNewsScroller";
 import CategoryRow from "../components/home/CategoryRow";
 import FeaturedArticleEditor from "../components/home/FeaturedArticleEditor";
+import AllCategoryEditors from "../components/home/CategoryArticleEditor";
 import StudioSidebar from "../components/home/StudioSidebar";
 import WeatherAlertsContainer from "../components/weather/WeatherAlertsContainer";
 
@@ -175,6 +176,9 @@ export default function Home() {
 
       {/* Oref News Section */}
       <OrefNewsSection />
+
+      {/* Category Article Editors — one per category with full editor */}
+      <AllCategoryEditors />
 
       {/* Category Rows - חדשות + סרטונים לפי קטגוריה */}
       <CategoryRow category="breaking" title="חדשות עכשיו" icon={Radio} onUploadClick={() => setUploadVideoModalOpen(true)} />
