@@ -34,6 +34,7 @@ import ReporterLiveChat from "../components/reporter/ReporterLiveChat";
 
 import ZakaMediaKitContainer from "../components/home/ZakaMediaKitContainer";
 import PodcastsContainer from "../components/home/PodcastsContainer";
+import CategoriesHighlightContainer from "../components/home/CategoriesHighlightContainer";
 import WeatherForecastModal from "../components/weather/WeatherForecastModal";
 import YouTubeFloatingButton from "../components/home/YouTubeFloatingButton";
 import OrefAlertsPanel from "../components/home/OrefAlertsPanel";
@@ -186,8 +187,8 @@ export default function Home() {
       {/* Podcasts Container */}
       <PodcastsContainer />
 
-      {/* Categories Highlight */}
-      <CategoriesMenu isOpen={false} onClose={() => {}} />
+      {/* Category Rows - Featured article per category */}
+      <CategoriesHighlightContainer />
 
       {/* Category Article Editors — one per category with full editor */}
       <AllCategoryEditors />
