@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../../utils";
-import { ChevronDown, ChevronUp, Eye, Clock } from "lucide-react";
+import { ChevronDown, ChevronUp, Eye, Clock, Play } from "lucide-react";
 
 const CATEGORIES = [
   { id: "breaking", label: "חדשות עכשיו", color: "#E31E24" },
@@ -102,7 +102,21 @@ function CategorySection({ category, articles }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const displayArticles = articles.slice(0, isExpanded ? articles.length : 3);
 
-  if (articles.length === 0) return null;
+  const { data: videos } = useQuery({
+    queryKey: ['category-videos', category.id],
+    queryFn: async () => {
+      try {
+        const allVideos = await base44.entities.UserVideo.list('-created_date', 50);
+        return (allVideos || []).filter(v => v.category === category.id || v.category === 'breaking');
+      } catch (err) {
+        console.error('Failed to fetch videos:', err);
+        return [];
+      }
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+
+  if (articles.length === 0 && (!videos || videos.length === 0)) return null;
 
   return (
     <div className="mb-8">
@@ -139,6 +153,53 @@ function CategorySection({ category, articles }) {
             </>
           )}
         </button>
+      )}
+
+      {/* Video Reels Strip */}
+      {videos && videos.length > 0 && (
+        <div className="mt-6">
+          <div className="flex items-center gap-2 mb-3">
+            <Play className="w-4 h-4 text-[#E31E24]" />
+            <h4 className="text-gray-300 font-bold text-sm">רילס</h4>
+            <Badge className="text-xs bg-[#E31E24] text-white">
+              {videos.length} סרטונים
+            </Badge>
+          </div>
+          <div className="flex overflow-x-auto gap-3 pb-2 scrollbar-hide" style={{ scrollSnapType: 'x mandatory' }}>
+            {videos.slice(0, 10).map((video) => (
+              <div
+                key={video.id}
+                className="flex-shrink-0 w-40 sm:w-48 scroll-snap-align-start"
+              >
+                <div className="bg-[#0d0d0d] rounded-xl overflow-hidden border border-gray-800 hover:border-[#E31E24]/50 transition-all">
+                  <div className="relative h-64 sm:h-72">
+                    {video.thumbnail_url ? (
+                      <img
+                        src={video.thumbnail_url}
+                        alt={video.title}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
+                        <Play className="w-12 h-12 text-gray-600" />
+                      </div>
+                    )}
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                    <div className="absolute bottom-2 right-2 left-2">
+                      <p className="text-white text-xs font-bold line-clamp-2">{video.title}</p>
+                      <p className="text-gray-400 text-[10px] mt-1">
+                        {video.views || 0} צפיות
+                      </p>
+                    </div>
+                    <div className="absolute top-2 right-2 w-8 h-8 bg-[#E31E24]/90 rounded-full flex items-center justify-center">
+                      <Play className="w-4 h-4 text-white" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       )}
     </div>
   );
