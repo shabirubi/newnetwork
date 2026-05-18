@@ -179,11 +179,6 @@ export default function Home() {
 
       {/* Oref News Section - removed WarNewsSection */}
 
-      {/* TikTok News Container - Reels */}
-      <React.Suspense fallback={<div className="h-[400px] bg-black/40 animate-pulse" />}>
-        <TikTokNewsContainer />
-      </React.Suspense>
-
       {/* Podcasts Container */}
       <PodcastsContainer />
 
