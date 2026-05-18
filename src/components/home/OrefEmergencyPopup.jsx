@@ -56,41 +56,9 @@ export default function OrefEmergencyPopup() {
     return () => clearInterval(t);
   }, [visible]);
 
-  // Poll every 5 seconds
+  // Polling disabled — no external sources in use
   useEffect(() => {
-    const poll = async () => {
-      try {
-        const res = await base44.functions.invoke('fetchOrefAlerts', {});
-        const active = res?.data?.active;
-
-        if (active && active.data && active.data.length > 0) {
-          const alertId = active.id || active.alertDate || JSON.stringify(active.data);
-
-          // Show popup only if it's a new alert we haven't dismissed
-          if (alertId !== lastAlertIdRef.current && alertId !== dismissedIdRef.current) {
-            lastAlertIdRef.current = alertId;
-            setAlert(active);
-            setVisible(true);
-
-            // Auto-close after 60 seconds
-            clearTimeout(autoCloseRef.current);
-            autoCloseRef.current = setTimeout(() => setVisible(false), 60000);
-          }
-        } else {
-          // No active alert — reset so next real alert will show
-          lastAlertIdRef.current = null;
-        }
-      } catch (e) {
-        // silently ignore
-      }
-    };
-
-    poll();
-    const interval = setInterval(poll, 5000);
-    return () => {
-      clearInterval(interval);
-      clearTimeout(autoCloseRef.current);
-    };
+    return () => clearTimeout(autoCloseRef.current);
   }, []);
 
   const dismiss = () => {

@@ -320,63 +320,9 @@ export default function AlertsPanel() {
     const [hasActiveNow, setHasActiveNow] = useState(false);
     const intervalRef = useRef(null);
 
-    const fetchAlerts = async () => {
-        try {
-            // Fetch active alerts directly from Oref (via a public CORS proxy)
-            const [activeRes, historyRes] = await Promise.all([
-                fetch('https://corsproxy.io/?https://www.oref.org.il/WarningMessages/alert/alerts.json', {
-                    headers: { 'Accept': 'application/json', 'Referer': 'https://www.oref.org.il/' }
-                }).catch(() => null),
-                fetch('https://corsproxy.io/?https://www.oref.org.il/WarningMessages/alert/History/AlertsHistory.json', {
-                    headers: { 'Accept': 'application/json', 'Referer': 'https://www.oref.org.il/' }
-                }).catch(() => null),
-            ]);
-
-            setLastFetch(new Date());
-
-            if (activeRes?.ok) {
-                const text = await activeRes.text();
-                const t = text.trim();
-                if (t && t !== 'null' && t.length > 2) {
-                    try {
-                        const parsed = JSON.parse(t);
-                        if (parsed?.data?.length > 0) {
-                            setActiveAlert(parsed);
-                            setHasActiveNow(true);
-                        } else {
-                            setActiveAlert(null);
-                            setHasActiveNow(false);
-                        }
-                    } catch { setActiveAlert(null); setHasActiveNow(false); }
-                } else {
-                    setActiveAlert(null);
-                    setHasActiveNow(false);
-                }
-            }
-
-            if (historyRes?.ok) {
-                const text = await historyRes.text();
-                const t = text.trim();
-                if (t && t.length > 2) {
-                    try {
-                        const parsed = JSON.parse(t);
-                        if (Array.isArray(parsed) && parsed.length > 0) {
-                            setHistory(parsed.slice(0, 50));
-                        }
-                    } catch {}
-                }
-            }
-        } catch (err) {
-            // ignore
-        } finally {
-            setLoading(false);
-        }
-    };
-
     useEffect(() => {
-        fetchAlerts();
-        intervalRef.current = setInterval(fetchAlerts, 30000);
-        return () => clearInterval(intervalRef.current);
+        // External API polling disabled — no external sources in use
+        setLoading(false);
     }, []);
 
     return (

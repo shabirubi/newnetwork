@@ -57,7 +57,7 @@ function TypewriterDate() {
       }
     };
     fetchNews();
-    const interval = setInterval(fetchNews, 30000);
+    const interval = setInterval(fetchNews, 5 * 60 * 1000); // every 5 min instead of 30s
     return () => clearInterval(interval);
   }, []);
 

@@ -128,8 +128,8 @@ export default function VideosCategoriesStrip() {
       }
     },
     enabled: selectedCategory !== null,
-    staleTime: 0,
-    gcTime: 0,
+    staleTime: 60000,
+    gcTime: 120000,
   });
 
   React.useEffect(() => {
@@ -146,7 +146,7 @@ export default function VideosCategoriesStrip() {
       return await base44.entities.VideoComment.filter({ video_id: currentVideo.id }, '-created_date', 100);
     },
     enabled: !!currentVideo?.id,
-    refetchInterval: 3000,
+    staleTime: 30000,
   });
 
   // Send message mutation
