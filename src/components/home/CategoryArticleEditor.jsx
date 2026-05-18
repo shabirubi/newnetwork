@@ -527,23 +527,38 @@ function CategoryReelsStrip({ category, color }) {
         <div className="flex gap-3 overflow-x-auto pb-2">
           {reels.map((reel, i) => (
             <button key={reel.id} onClick={() => openPlayer(i)}
-              className="flex-shrink-0 w-24 h-36 rounded-xl overflow-hidden relative border-2 transition-all hover:scale-105 group"
+              className="flex-shrink-0 w-24 h-36 rounded-xl overflow-hidden relative border-2 transition-all hover:scale-105 active:scale-95 group"
               style={{ borderColor: color + '60' }}>
+              {/* Background: thumbnail or styled placeholder */}
               {reel.thumbnail_url ? (
                 <img src={reel.thumbnail_url} alt={reel.title} className="w-full h-full object-cover" />
               ) : (
-                <div className="w-full h-full flex items-center justify-center" style={{ background: color + '22' }}>
-                  <Clapperboard className="w-6 h-6 text-white/50" />
+                <div className="w-full h-full flex flex-col items-center justify-center gap-1 px-1"
+                  style={{ background: `linear-gradient(135deg, ${color}33 0%, #111 60%, ${color}22 100%)` }}>
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center mb-1"
+                    style={{ background: color + '40', border: `1.5px solid ${color}80` }}>
+                    <Play className="w-5 h-5 fill-white text-white" />
+                  </div>
+                  <p className="text-white text-[8px] font-bold text-center leading-tight line-clamp-3 px-0.5">
+                    {reel.title}
+                  </p>
                 </div>
               )}
-              <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors flex items-center justify-center">
-                <div className="bg-black/50 rounded-full p-2">
-                  <Play className="w-4 h-4 text-white fill-white" />
+              {/* Overlay with play button */}
+              <div className="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-colors" />
+              {reel.thumbnail_url && (
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div className="bg-black/60 rounded-full p-2">
+                    <Play className="w-4 h-4 text-white fill-white" />
+                  </div>
                 </div>
-              </div>
-              <p className="absolute bottom-0 inset-x-0 bg-black/70 text-white text-[9px] px-1 py-1 line-clamp-2 leading-tight">
-                {reel.title}
-              </p>
+              )}
+              {/* Title bar at bottom (only if has thumbnail) */}
+              {reel.thumbnail_url && (
+                <p className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 to-transparent text-white text-[9px] px-1.5 pb-1.5 pt-3 line-clamp-2 leading-tight">
+                  {reel.title}
+                </p>
+              )}
             </button>
           ))}
           {/* Open player button */}
