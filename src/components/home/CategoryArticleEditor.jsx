@@ -23,6 +23,17 @@ const REEL_CATEGORIES = [
   { id: "world", label: "עולם" },
   { id: "health", label: "בריאות" },
   { id: "music", label: "מוזיקה" },
+  { id: "crime", label: "פלילים" },
+  { id: "israel", label: "ישראל" },
+  { id: "military", label: "צבא" },
+  { id: "education", label: "חינוך" },
+  { id: "culture", label: "תרבות" },
+  { id: "environment", label: "סביבה" },
+  { id: "science", label: "מדע" },
+  { id: "local", label: "מקומי" },
+  { id: "law", label: "משפט" },
+  { id: "finance", label: "פיננסים" },
+  { id: "vod", label: "VOD" },
 ];
 
 const emptyForm = (category) => ({
@@ -535,7 +546,8 @@ function CategoryReelsStrip({ category, color }) {
   const { data: reels = [] } = useQuery({
     queryKey: ['cat-reels', category],
     queryFn: () => base44.entities.UserVideo.filter({ category, status: 'ready' }, '-created_date', 20),
-    staleTime: 30 * 1000,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
   });
 
   if (reels.length === 0) return null;
@@ -604,7 +616,8 @@ function CategoryRow({ category, label, color }) {
       const res = await base44.entities.NewsArticle.filter({ category }, '-created_date', 1);
       return res[0] || null;
     },
-    staleTime: 30 * 1000,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
   });
 
   const openNew = () => { setEditingArticle(null); setEditorOpen(true); };
@@ -705,6 +718,115 @@ function CategoryRow({ category, label, color }) {
   );
 }
 
+// ---- VOD Strip (standalone, shown at bottom) ----
+function VODStrip() {
+  const [playerOpen, setPlayerOpen] = useState(false);
+  const [activeIdx, setActiveIdx] = useState(0);
+  const [uploading, setUploading] = useState(false);
+  const [reelTitle, setReelTitle] = useState("");
+  const [editorOpen, setEditorOpen] = useState(false);
+  const reelVideoRef = useRef(null);
+  const queryClient = useQueryClient();
+
+  const { data: reels = [] } = useQuery({
+    queryKey: ['cat-reels', 'vod'],
+    queryFn: () => base44.entities.UserVideo.filter({ category: 'vod', status: 'ready' }, '-created_date', 30),
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
+  });
+
+  const handleUpload = async (e) => {
+    const files = Array.from(e.target.files || []); if (!files.length) return;
+    if (!reelTitle.trim()) { toast.error("חובה להזין כותרת"); return; }
+    setUploading(true);
+    try {
+      for (const file of files) {
+        const { file_uri } = await base44.integrations.Core.UploadPrivateFile({ file });
+        const { signed_url } = await base44.integrations.Core.CreateFileSignedUrl({ file_uri, expires_in: 60 * 60 * 24 * 365 });
+        await base44.entities.UserVideo.create({
+          title: reelTitle, video_url: signed_url,
+          category: 'vod', feed: 'tiktok', status: 'ready',
+          uploader_email: 'admin', views: 0, likes: 0,
+        });
+      }
+      toast.success("הועלה ל-VOD!");
+      setReelTitle("");
+      queryClient.invalidateQueries({ queryKey: ['cat-reels', 'vod'] });
+    } finally { setUploading(false); e.target.value = ''; }
+  };
+
+  const openPlayer = (idx) => { setActiveIdx(idx); setPlayerOpen(true); };
+  const goNext = () => setActiveIdx(i => Math.min(i + 1, reels.length - 1));
+  const goPrev = () => setActiveIdx(i => Math.max(i - 1, 0));
+
+  return (
+    <div className="w-full px-2 sm:px-4 mb-8" dir="rtl">
+      <div className="max-w-7xl mx-auto">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <div className="w-1 h-6 rounded-full bg-[#E31E24]" />
+            <Tv className="w-5 h-5 text-[#E31E24]" />
+            <h2 className="text-white font-bold text-lg">VOD</h2>
+            {reels.length > 0 && <span className="text-gray-500 text-xs">({reels.length})</span>}
+          </div>
+          <button onClick={() => setEditorOpen(e => !e)}
+            className="flex items-center gap-1 px-3 py-1.5 text-xs bg-[#E31E24]/20 hover:bg-[#E31E24]/40 text-[#E31E24] rounded-lg border border-[#E31E24]/30 transition-colors">
+            <Plus className="w-3.5 h-3.5" /> הוסף VOD
+          </button>
+        </div>
+
+        {/* Quick upload form */}
+        <AnimatePresence>
+          {editorOpen && (
+            <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}
+              className="mb-3 p-4 bg-[#0d0d0d] rounded-2xl border border-[#E31E24]/30 flex gap-3 items-center flex-wrap overflow-hidden">
+              <Input value={reelTitle} onChange={e => setReelTitle(e.target.value)}
+                placeholder="כותרת הסרטון..." className="flex-1 min-w-40 bg-[#1a1a1a] border-gray-700 text-white text-sm placeholder:text-gray-600" />
+              <input ref={reelVideoRef} type="file" accept="video/*" multiple className="hidden" onChange={handleUpload} />
+              <button onClick={() => reelVideoRef.current?.click()} disabled={uploading || !reelTitle.trim()}
+                className="flex items-center gap-2 px-4 py-2 bg-[#E31E24]/30 hover:bg-[#E31E24]/50 text-white rounded-xl border border-[#E31E24]/40 text-sm transition-colors disabled:opacity-50 font-bold">
+                {uploading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Upload className="w-4 h-4" />}
+                {uploading ? 'מעלה...' : 'העלה סרטון'}
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Thumbnails strip */}
+        {reels.length > 0 ? (
+          <div className="flex gap-3 overflow-x-auto pb-2">
+            {reels.map((reel, i) => (
+              <button key={reel.id} onClick={() => openPlayer(i)}
+                className="flex-shrink-0 w-24 h-36 rounded-xl overflow-hidden relative border-2 border-[#E31E24]/40 transition-all hover:scale-105 active:scale-95 group">
+                <ReelThumbnail reel={reel} color="#E31E24" />
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors rounded-xl" />
+              </button>
+            ))}
+            <button onClick={() => openPlayer(0)}
+              className="flex-shrink-0 w-24 h-36 rounded-xl flex flex-col items-center justify-center gap-2 border-2 border-dashed border-[#E31E24]/40 hover:scale-105 transition-all"
+              style={{ background: '#E31E2411' }}>
+              <Tv className="w-6 h-6 text-[#E31E24]" />
+              <span className="text-[10px] font-bold text-[#E31E24]">פתח נגן</span>
+            </button>
+          </div>
+        ) : (
+          <div className="flex items-center justify-center py-8 text-gray-600 border border-dashed border-gray-800 rounded-2xl">
+            <p className="text-sm">אין סרטוני VOD עדיין — לחץ "הוסף VOD" להעלאה</p>
+          </div>
+        )}
+      </div>
+
+      <AnimatePresence>
+        {playerOpen && reels[activeIdx] && (
+          <VideoPlayerModal video={reels[activeIdx]} onClose={() => setPlayerOpen(false)}
+            onNext={goNext} onPrev={goPrev} total={reels.length} current={activeIdx} />
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 // ---- All Categories ----
 const ALL_CATEGORIES = [
   { id: "breaking", label: "חדשות עכשיו", color: "#E31E24" },
@@ -738,6 +860,8 @@ export default function AllCategoryEditors() {
           <CategoryReelsStrip category={cat.id} color={cat.color} />
         </React.Fragment>
       ))}
+      {/* VOD Strip at the bottom */}
+      <VODStrip />
     </div>
   );
 }
