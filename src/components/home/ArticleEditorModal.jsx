@@ -114,14 +114,10 @@ export default function ArticleEditorModal({ article, onClose, onSaved }) {
     } catch { toast.error("שגיאה במחיקה"); }
   };
 
-  const uploadFile = async (file, type, isPrivate = false) => {
+  // כל ההעלאות — public URL שלא יפוג
+  const uploadFile = async (file, type) => {
     setUploading(type);
     try {
-      if (isPrivate) {
-        const { file_uri } = await base44.integrations.Core.UploadPrivateFile({ file });
-        const { signed_url } = await base44.integrations.Core.CreateFileSignedUrl({ file_uri, expires_in: 60 * 60 * 24 * 365 });
-        return signed_url;
-      }
       const { file_url } = await base44.integrations.Core.UploadFile({ file });
       return file_url;
     } finally { setUploading(null); }
@@ -129,7 +125,8 @@ export default function ArticleEditorModal({ article, onClose, onSaved }) {
 
   const handleMainImage = async (e) => {
     const file = e.target.files?.[0]; if (!file) return;
-    const url = await uploadFile(file, 'main-image', false);
+    toast.info("מעלה תמונה...");
+    const url = await uploadFile(file, 'main-image');
     setForm(f => ({ ...f, image_url: url }));
     toast.success("תמונה הועלתה"); e.target.value = '';
   };
@@ -137,7 +134,7 @@ export default function ArticleEditorModal({ article, onClose, onSaved }) {
   const handleMainVideo = async (e) => {
     const file = e.target.files?.[0]; if (!file) return;
     toast.info("מעלה וידאו...");
-    const url = await uploadFile(file, 'main-video', true);
+    const url = await uploadFile(file, 'main-video');
     setForm(f => ({ ...f, video_url: url }));
     toast.success("וידאו הועלה"); e.target.value = '';
   };
@@ -146,7 +143,10 @@ export default function ArticleEditorModal({ article, onClose, onSaved }) {
     const files = Array.from(e.target.files || []); if (!files.length) return;
     setUploading('extra-image');
     const urls = [];
-    for (const file of files) urls.push(await base44.integrations.Core.UploadFile({ file }).then(r => r.file_url));
+    for (const file of files) {
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      urls.push(file_url);
+    }
     setUploading(null);
     setForm(f => ({ ...f, extra_images: [...(f.extra_images || []), ...urls] }));
     toast.success(`${urls.length} תמונות הועלו`); e.target.value = '';
@@ -157,9 +157,8 @@ export default function ArticleEditorModal({ article, onClose, onSaved }) {
     setUploading('extra-video');
     const urls = [];
     for (const file of files) {
-      const { file_uri } = await base44.integrations.Core.UploadPrivateFile({ file });
-      const { signed_url } = await base44.integrations.Core.CreateFileSignedUrl({ file_uri, expires_in: 60 * 60 * 24 * 365 });
-      urls.push(signed_url);
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
+      urls.push(file_url);
     }
     setUploading(null);
     setForm(f => ({ ...f, extra_videos: [...(f.extra_videos || []), ...urls] }));
@@ -173,10 +172,9 @@ export default function ArticleEditorModal({ article, onClose, onSaved }) {
     setUploading('reel');
     try {
       for (const file of files) {
-        const { file_uri } = await base44.integrations.Core.UploadPrivateFile({ file });
-        const { signed_url } = await base44.integrations.Core.CreateFileSignedUrl({ file_uri, expires_in: 60 * 60 * 24 * 365 });
+        const { file_url } = await base44.integrations.Core.UploadFile({ file });
         await base44.entities.UserVideo.create({
-          title: reelTitle, description: reelDescription, video_url: signed_url,
+          title: reelTitle, description: reelDescription, video_url: file_url,
           category: reelCategory, feed: "tiktok", status: "ready",
           uploader_email: "admin", views: 0, likes: 0,
         });
