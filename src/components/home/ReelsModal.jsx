@@ -2,7 +2,17 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, Heart, MessageCircle, Share2, Volume2, VolumeX, ChevronUp, ChevronDown, Play } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+
+// get or create a stable anonymous user ID
+function getUserId() {
+  let uid = localStorage.getItem("anon_uid");
+  if (!uid) {
+    uid = "u_" + Math.random().toString(36).slice(2) + Date.now().toString(36);
+    localStorage.setItem("anon_uid", uid);
+  }
+  return uid;
+}
 
 const CATEGORY_LABELS = {
   all: "הכל",
@@ -23,8 +33,50 @@ const CATEGORY_LABELS = {
 function ReelItem({ video, isActive, onNext, onPrev }) {
   const videoRef = useRef(null);
   const [muted, setMuted] = useState(true);
-  const [liked, setLiked] = useState(false);
   const [playing, setPlaying] = useState(false);
+  const [heartAnim, setHeartAnim] = useState(false);
+  const qc = useQueryClient();
+  const userId = getUserId();
+
+  // Fetch likes for this video
+  const { data: likesData } = useQuery({
+    queryKey: ["video-likes", video.id],
+    queryFn: () => base44.entities.VideoLike.filter({ video_id: video.id }),
+    staleTime: 10000,
+    enabled: !!video.id,
+  });
+
+  const totalLikes = likesData?.length ?? (video.likes ?? 0);
+  const myLike = likesData?.find(l => l.user_identifier === userId);
+  const liked = !!myLike;
+
+  const likeMutation = useMutation({
+    mutationFn: async () => {
+      if (myLike) {
+        await base44.entities.VideoLike.delete(myLike.id);
+      } else {
+        await base44.entities.VideoLike.create({
+          video_id: video.id,
+          video_url: video.video_url,
+          user_identifier: userId,
+          is_liked: true,
+        });
+      }
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ["video-likes", video.id] }),
+  });
+
+  const handleLike = () => {
+    if (!liked) setHeartAnim(true);
+    likeMutation.mutate();
+  };
+
+  useEffect(() => {
+    if (heartAnim) {
+      const t = setTimeout(() => setHeartAnim(false), 700);
+      return () => clearTimeout(t);
+    }
+  }, [heartAnim]);
 
   useEffect(() => {
     if (!videoRef.current) return;
@@ -83,25 +135,39 @@ function ReelItem({ video, isActive, onNext, onPrev }) {
         </div>
       )}
 
+      {/* Heart burst animation */}
+      <AnimatePresence>
+        {heartAnim && (
+          <motion.div
+            initial={{ scale: 0.5, opacity: 1, y: 0 }}
+            animate={{ scale: 2.5, opacity: 0, y: -80 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.7 }}
+            className="absolute inset-0 flex items-center justify-center pointer-events-none z-50"
+          >
+            <Heart className="w-20 h-20 text-red-500 fill-red-500 drop-shadow-2xl" />
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Right side actions */}
       <div className="absolute left-3 bottom-24 flex flex-col items-center gap-5">
-        <button
-          onClick={() => setMuted(m => !m)}
-          className="flex flex-col items-center gap-1"
-        >
+        <button onClick={() => setMuted(m => !m)} className="flex flex-col items-center gap-1">
           <div className="w-11 h-11 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center">
             {muted ? <VolumeX className="w-5 h-5 text-white" /> : <Volume2 className="w-5 h-5 text-white" />}
           </div>
         </button>
 
-        <button
-          onClick={() => setLiked(l => !l)}
-          className="flex flex-col items-center gap-1"
-        >
-          <div className="w-11 h-11 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center">
-            <Heart className={`w-5 h-5 ${liked ? 'text-red-500 fill-red-500' : 'text-white'}`} />
-          </div>
-          <span className="text-white text-xs font-bold">{(video.likes || 0) + (liked ? 1 : 0)}</span>
+        <button onClick={handleLike} className="flex flex-col items-center gap-1 group">
+          <motion.div
+            whileTap={{ scale: 1.4 }}
+            className="w-11 h-11 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center"
+          >
+            <Heart className={`w-6 h-6 transition-all ${liked ? 'text-red-500 fill-red-500 scale-110' : 'text-white'}`} />
+          </motion.div>
+          <span className={`text-xs font-bold transition-colors ${liked ? 'text-red-400' : 'text-white'}`}>
+            {totalLikes}
+          </span>
         </button>
 
         <button
