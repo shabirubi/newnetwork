@@ -9,22 +9,18 @@ import { base44 } from "@/api/base44Client";
 export default function CategoryRow({ category, title, icon: Icon, onUploadClick }) {
   const { data: articles = [] } = useQuery({
     queryKey: ['cat-articles', category],
-    queryFn: async () => {
-      const all = await base44.entities.NewsArticle.list('-created_date', 100);
-      return all.filter(a => a.category === category).slice(0, 8);
-    },
+    queryFn: () => base44.entities.NewsArticle.filter({ category }, '-created_date', 8),
     initialData: [],
-    staleTime: 60 * 1000
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
   });
 
   const { data: videos = [] } = useQuery({
     queryKey: ['cat-videos', category],
-    queryFn: async () => {
-      const all = await base44.entities.UserVideo.list('-created_date', 50);
-      return all.filter(v => v.category === category && v.status === 'ready').slice(0, 6);
-    },
+    queryFn: () => base44.entities.UserVideo.filter({ category, status: 'ready' }, '-created_date', 6),
     initialData: [],
-    staleTime: 30 * 1000
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
   });
 
   const hasContent = articles.length > 0 || videos.length > 0;

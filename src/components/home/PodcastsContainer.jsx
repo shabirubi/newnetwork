@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
-import { Mic, Play, Pause, Plus, Upload, Loader2, X, Headphones, Clock, ChevronLeft, ChevronRight, Volume2 } from "lucide-react";
+import { Mic, Play, Pause, Plus, Upload, Loader2, X, Headphones, Clock, ChevronLeft, ChevronRight, Volume2, Share2, Facebook, Twitter, Link2, MessageCircle } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { base44 } from "@/api/base44Client";
@@ -142,6 +142,37 @@ function AudioPlayer({ ep, onClose, onNext, onPrev, hasPrev, hasNext }) {
             className="p-2 rounded-full hover:bg-purple-800/30 text-gray-400 hover:text-white transition-colors disabled:opacity-30">
             <ChevronLeft className="w-5 h-5" />
           </button>
+        </div>
+
+        {/* Share buttons */}
+        <div className="flex items-center gap-1 mr-2">
+          <button
+            onClick={() => { navigator.clipboard.writeText(ep.video_url); import('sonner').then(m => m.toast.success('קישור הועתק!')); }}
+            className="p-2 rounded-full hover:bg-gray-800 text-gray-500 hover:text-white transition-colors" title="העתק קישור"
+          >
+            <Link2 className="w-4 h-4" />
+          </button>
+          <a
+            href={`https://wa.me/?text=${encodeURIComponent(`🎙️ ${ep.title} — ${ep.video_url}`)}`}
+            target="_blank" rel="noopener noreferrer"
+            className="p-2 rounded-full hover:bg-green-900/40 text-gray-500 hover:text-green-400 transition-colors" title="שתף בוואטסאפ"
+          >
+            <MessageCircle className="w-4 h-4" />
+          </a>
+          <a
+            href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`🎙️ ${ep.title}`)}&url=${encodeURIComponent(ep.video_url)}`}
+            target="_blank" rel="noopener noreferrer"
+            className="p-2 rounded-full hover:bg-sky-900/40 text-gray-500 hover:text-sky-400 transition-colors" title="שתף בטוויטר/X"
+          >
+            <Twitter className="w-4 h-4" />
+          </a>
+          <a
+            href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(ep.video_url)}`}
+            target="_blank" rel="noopener noreferrer"
+            className="p-2 rounded-full hover:bg-blue-900/40 text-gray-500 hover:text-blue-400 transition-colors" title="שתף בפייסבוק"
+          >
+            <Facebook className="w-4 h-4" />
+          </a>
         </div>
 
         <button onClick={onClose} className="p-2 text-gray-600 hover:text-white transition-colors">
