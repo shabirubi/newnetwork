@@ -2,7 +2,7 @@ import React from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
-import { Radio, TrendingUp, Clock, ChevronLeft, Flame, Zap, Target, Shield, DollarSign, Landmark, Cpu, Trophy, Clapperboard, Globe, Heart, Tv, Newspaper, MessageCircle, Settings, X, Film, Video, Cloud, BookOpen, Microscope, TreePine, Scale, Music, Stars, Home as HomeIcon, AlertTriangle, Droplet, Mic, Users, Wand2, FileVideo, Play } from "lucide-react";
+import { Radio, X } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../utils";
 import { Button } from "@/components/ui/button";
@@ -13,7 +13,7 @@ import NewsCard from "../components/news/NewsCard";
 import UpdatesFeed from "../components/news/UpdatesFeed";
 import EntertainmentUpdatesFeed from "../components/news/EntertainmentUpdatesFeed";
 import VerticalNewsScroller from "../components/news/VerticalNewsScroller";
-import CategoryRow from "../components/home/CategoryRow";
+
 import FeaturedArticleEditor from "../components/home/FeaturedArticleEditor";
 import AllCategoryEditors from "../components/home/CategoryArticleEditor";
 import StudioSidebar from "../components/home/StudioSidebar";
@@ -113,7 +113,8 @@ export default function Home() {
       }
     },
     initialData: [],
-    staleTime: 0
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
   });
 
   const featuredArticle = articles[0];
@@ -183,28 +184,7 @@ export default function Home() {
       {/* Category Article Editors — one per category with full editor */}
       <AllCategoryEditors />
 
-      {/* Category Rows - חדשות + סרטונים לפי קטגוריה */}
-      <CategoryRow category="breaking" title="חדשות עכשיו" icon={Radio} onUploadClick={() => setUploadVideoModalOpen(true)} />
-      <CategoryRow category="security" title="ביטחון ומדיניות" icon={Shield} onUploadClick={() => setUploadVideoModalOpen(true)} />
-      <CategoryRow category="economy" title="כלכלה ועסקים" icon={DollarSign} onUploadClick={() => setUploadVideoModalOpen(true)} />
-      <CategoryRow category="politics" title="פוליטיקה" icon={Landmark} onUploadClick={() => setUploadVideoModalOpen(true)} />
-      <CategoryRow category="technology" title="טכנולוגיה" icon={Cpu} onUploadClick={() => setUploadVideoModalOpen(true)} />
-      <CategoryRow category="sports" title="ספורט" icon={Trophy} onUploadClick={() => setUploadVideoModalOpen(true)} />
-      <CategoryRow category="entertainment" title="בידור ותרבות" icon={Clapperboard} onUploadClick={() => setUploadVideoModalOpen(true)} />
-      <CategoryRow category="world" title="חדשות עולם" icon={Globe} onUploadClick={() => setUploadVideoModalOpen(true)} />
-      <CategoryRow category="health" title="בריאות" icon={Heart} onUploadClick={() => setUploadVideoModalOpen(true)} />
-      <CategoryRow category="israel" title="חדשות ישראל" icon={Newspaper} onUploadClick={() => setUploadVideoModalOpen(true)} />
-      <CategoryRow category="crime" title="פלילים ומשטרה" icon={AlertTriangle} onUploadClick={() => setUploadVideoModalOpen(true)} />
-      <CategoryRow category="education" title="חינוך" icon={BookOpen} onUploadClick={() => setUploadVideoModalOpen(true)} />
-      <CategoryRow category="culture" title="תרבות" icon={Clapperboard} onUploadClick={() => setUploadVideoModalOpen(true)} />
-      <CategoryRow category="environment" title="סביבה" icon={TreePine} onUploadClick={() => setUploadVideoModalOpen(true)} />
-      <CategoryRow category="science" title="מדע" icon={Microscope} onUploadClick={() => setUploadVideoModalOpen(true)} />
-      <CategoryRow category="military" title="צבא וביטחון" icon={Shield} onUploadClick={() => setUploadVideoModalOpen(true)} />
-      <CategoryRow category="law" title="משפט ופלילים" icon={Scale} onUploadClick={() => setUploadVideoModalOpen(true)} />
-      <CategoryRow category="local" title="חדשות מקומיות" icon={HomeIcon} onUploadClick={() => setUploadVideoModalOpen(true)} />
-      <CategoryRow category="music" title="מוזיקה" icon={Music} onUploadClick={() => setUploadVideoModalOpen(true)} />
-      <CategoryRow category="horoscope" title="הורוסקופ" icon={Stars} onUploadClick={() => setUploadVideoModalOpen(true)} />
-      <CategoryRow category="finance" title="פיננסים" icon={TrendingUp} onUploadClick={() => setUploadVideoModalOpen(true)} />
+      {/* Category Rows removed - AllCategoryEditors above already covers all categories */}
 
 
 
