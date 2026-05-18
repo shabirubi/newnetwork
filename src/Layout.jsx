@@ -440,6 +440,24 @@ export default function Layout({ children, currentPageName }) {
               <span className="text-white font-bold hidden sm:inline">קטגוריות</span>
             </button>
 
+            {/* Dark/Light toggle */}
+            <button
+              onClick={() => setDarkMode(v => !v)}
+              className="flex items-center gap-1 px-2 py-1.5 bg-black/60 backdrop-blur-xl rounded-lg border border-gray-600 transition-all hover:scale-105 text-[11px] relative overflow-hidden"
+              aria-label="Toggle dark mode"
+            >
+              <motion.div
+                key={darkMode ? 'moon' : 'sun'}
+                initial={{ rotate: -90, opacity: 0 }}
+                animate={{ rotate: 0, opacity: 1 }}
+                exit={{ rotate: 90, opacity: 0 }}
+                transition={{ duration: 0.25 }}
+              >
+                {darkMode ? <Moon className="w-4 h-4 text-blue-300" /> : <Sun className="w-4 h-4 text-yellow-400" />}
+              </motion.div>
+              <span className="text-white font-bold hidden sm:inline">{darkMode ? 'לילה' : 'יום'}</span>
+            </button>
+
             <button
               onClick={() => window.open(createPageUrl("AdminPanel"), "_blank")}
               className="flex items-center gap-1 px-2 py-1.5 bg-black/60 backdrop-blur-xl rounded-lg border border-gray-600 transition-all hover:scale-105 text-[11px]"
