@@ -178,8 +178,16 @@ export default function Home() {
 
       {/* Oref News Section - removed WarNewsSection */}
 
+      {/* TikTok News Container - Reels */}
+      <React.Suspense fallback={<div className="h-[400px] bg-black/40 animate-pulse" />}>
+        <TikTokNewsContainer />
+      </React.Suspense>
+
       {/* Podcasts Container */}
       <PodcastsContainer />
+
+      {/* Categories Highlight */}
+      <CategoriesMenu isOpen={false} onClose={() => {}} />
 
       {/* Category Article Editors — one per category with full editor */}
       <AllCategoryEditors />
