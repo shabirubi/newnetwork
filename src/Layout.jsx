@@ -144,6 +144,12 @@ export default function Layout({ children, currentPageName }) {
   const [profileModalOpen, setProfileModalOpen] = useState(false);
   const [reelsOpen, setReelsOpen] = useState(false);
 
+  useEffect(() => {
+    const handler = () => setReelsOpen(true);
+    window.addEventListener('openReels', handler);
+    return () => window.removeEventListener('openReels', handler);
+  }, []);
+
   // בדיקת מצב האתר
   useEffect(() => {
     const checkSiteStatus = async () => {
