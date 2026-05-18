@@ -27,7 +27,7 @@ const CATEGORIES = [
 
 export default function RightSidebarCategories() {
   return (
-    <div className="hidden xl:flex w-36 bg-black/60 backdrop-blur-xl border-r border-[#1565C0]/30 sticky top-0 h-screen overflow-y-auto flex-col py-4 gap-1">
+    <div className="hidden xl:flex w-36 bg-black/60 backdrop-blur-xl border-r border-[#1565C0]/30 self-start sticky top-0 max-h-screen overflow-y-auto flex-col py-4 gap-1">
       {CATEGORIES.map((cat) => {
         const Icon = cat.icon;
         return (
