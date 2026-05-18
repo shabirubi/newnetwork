@@ -182,6 +182,9 @@ export default function Home() {
       {/* Podcasts Container */}
       <PodcastsContainer />
 
+      {/* Categories Highlight - All categories grid */}
+      <CategoriesHighlightContainer />
+
       {/* Category Article Editors — one per category with full editor */}
       <AllCategoryEditors />
 
