@@ -33,6 +33,7 @@ import ReportersSpotlight from "../components/home/ReportersSpotlight";
 import ReporterLiveChat from "../components/reporter/ReporterLiveChat";
 
 import ZakaMediaKitContainer from "../components/home/ZakaMediaKitContainer";
+import PodcastsContainer from "../components/home/PodcastsContainer";
 import WeatherForecastModal from "../components/weather/WeatherForecastModal";
 import YouTubeFloatingButton from "../components/home/YouTubeFloatingButton";
 import OrefAlertsPanel from "../components/home/OrefAlertsPanel";
@@ -175,6 +176,9 @@ export default function Home() {
       <FeaturedArticleEditor />
 
       {/* Oref News Section - removed WarNewsSection */}
+
+      {/* Podcasts Container */}
+      <PodcastsContainer />
 
       {/* Category Article Editors — one per category with full editor */}
       <AllCategoryEditors />
