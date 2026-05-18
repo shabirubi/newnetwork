@@ -356,14 +356,14 @@ export default function Layout({ children, currentPageName }) {
       </div>
 
       {/* Logo Header */}
-      <div className={`py-2 shadow-xl relative overflow-visible ${darkMode ? 'bg-[#000000]' : 'bg-white border-b border-gray-200'}`}>
+      <div className="bg-[#000000] py-2 shadow-xl relative overflow-visible">
         <div className="max-w-7xl mx-auto px-3 flex items-center justify-between gap-2 relative z-[200]">
           
           {/* Logo — always visible */}
           <div className="flex items-center gap-2 flex-shrink-0">
             <LogoVideo className="h-14 w-14 sm:h-20 sm:w-20 object-contain flex-shrink-0 rounded-full" />
-            <div className="flex flex-col text-right hidden sm:flex">
-              <h1 className={`text-base sm:text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>הרשת החדשה</h1>
+            <div className="flex-col text-right hidden sm:flex">
+              <h1 className="text-base sm:text-xl font-bold text-white">הרשת החדשה</h1>
               <motion.p className="text-xs text-orange-500" animate={{ opacity: [0.7, 1, 0.7] }} transition={{ duration: 2, repeat: Infinity }}>
                 🟠 NOW ONLINE
               </motion.p>
@@ -412,59 +412,62 @@ export default function Layout({ children, currentPageName }) {
           <div className="flex items-center gap-1.5 flex-shrink-0">
             {/* Categories */}
             <button onClick={() => setCategoriesSidebarOpen(true)}
-              className={`flex items-center gap-1 px-2 py-2 rounded-lg border transition-all hover:scale-105 ${darkMode ? 'bg-black/60 border-gray-600' : 'bg-gray-100 border-gray-300'}`}>
-              <Menu className={`w-4 h-4 ${darkMode ? 'text-white' : 'text-gray-700'}`} />
-              <span className={`font-bold hidden sm:inline text-xs ${darkMode ? 'text-white' : 'text-gray-700'}`}>קטגוריות</span>
+              className="flex items-center gap-1 px-2 py-1.5 bg-black/60 backdrop-blur-xl rounded-lg border border-gray-600 transition-all hover:scale-105 text-[11px]">
+              <Menu className="w-4 h-4 text-white" />
+              <span className="text-white font-bold hidden sm:inline">קטגוריות</span>
             </button>
 
             {/* Dark/Light toggle */}
             <button onClick={() => setDarkMode(v => !v)}
-              className={`flex items-center gap-1 px-2 py-2 rounded-lg border transition-all hover:scale-105 ${darkMode ? 'bg-black/60 border-gray-600' : 'bg-yellow-50 border-yellow-300'}`}
+              className="flex items-center gap-1 px-2 py-1.5 bg-black/60 backdrop-blur-xl rounded-lg border border-gray-600 transition-all hover:scale-105 text-[11px]"
               aria-label="Toggle dark mode">
-              {darkMode ? <Moon className="w-4 h-4 text-blue-300" /> : <Sun className="w-4 h-4 text-yellow-500" />}
-              <span className={`font-bold hidden sm:inline text-xs ${darkMode ? 'text-blue-300' : 'text-yellow-600'}`}>{darkMode ? 'לילה' : 'יום'}</span>
+              {darkMode ? <Moon className="w-4 h-4 text-blue-300" /> : <Sun className="w-4 h-4 text-yellow-400" />}
+              <span className="text-white font-bold hidden sm:inline">{darkMode ? 'לילה' : 'יום'}</span>
             </button>
 
             {/* Admin */}
             <button onClick={() => window.open(createPageUrl("AdminPanel"), "_blank")}
-              className={`flex items-center gap-1 px-2 py-2 rounded-lg border transition-all hover:scale-105 ${darkMode ? 'bg-black/60 border-gray-600' : 'bg-gray-100 border-gray-300'}`}>
-              <Shield className={`w-4 h-4 ${darkMode ? 'text-white' : 'text-gray-700'}`} />
-              <span className={`font-bold hidden sm:inline text-xs ${darkMode ? 'text-white' : 'text-gray-700'}`}>Admin</span>
+              className="flex items-center gap-1 px-2 py-1.5 bg-black/60 backdrop-blur-xl rounded-lg border border-gray-600 transition-all hover:scale-105 text-[11px]">
+              <Shield className="w-4 h-4 text-white" />
+              <span className="text-white font-bold">Admin</span>
             </button>
 
             {/* Auth */}
             {authLoading ? (
-              <div className="p-2"><Loader2 className="w-4 h-4 text-gray-400 animate-spin" /></div>
+              <div className="flex items-center gap-2 px-3 py-2 bg-black/60 rounded-2xl">
+                <Loader2 className="w-4 h-4 text-white animate-spin" />
+              </div>
             ) : user ? (
               <>
-                <button onClick={() => setProfileModalOpen(true)} className="transition-all cursor-pointer active:scale-95">
+                <button onClick={() => setProfileModalOpen(true)} className="flex items-center transition-all cursor-pointer active:scale-95 relative">
                   {user.profile_image ? (
-                    <img src={user.profile_image} alt={user.full_name} className="w-8 h-8 rounded-full object-contain shadow-lg" />
+                    <img src={user.profile_image} alt={user.full_name} className="w-9 h-9 rounded-full object-contain bg-black shadow-lg" />
                   ) : (
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gray-600 to-gray-700 flex items-center justify-center text-white text-xs font-bold shadow-lg">
+                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center text-white text-sm font-bold shadow-lg">
                       {user.full_name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'U'}
                     </div>
                   )}
                 </button>
                 <button onClick={handleLogout}
-                  className="flex items-center gap-1 px-2 py-2 bg-red-600/20 rounded-lg border border-red-500/30 transition-all hover:scale-105">
+                  className="flex items-center gap-1 px-2 py-1 bg-red-600/20 hover:bg-red-600/40 backdrop-blur-xl rounded-lg shadow-lg border border-red-500/30 transition-all hover:scale-105 text-[11px]">
                   <LogOut className="w-3.5 h-3.5 text-red-400" />
+                  <span className="text-red-300 font-bold hidden sm:inline">התנתק</span>
                 </button>
               </>
             ) : (
               <button onClick={handleLogin}
-                className="flex items-center gap-1 px-2 py-2 rounded-lg border-2 border-white/30 transition-all hover:scale-105"
-                style={{ background: 'linear-gradient(90deg,#E31E24,#0057B8)', backgroundSize: '200% 100%' }}>
-                <LogIn className="w-4 h-4 text-white" />
-                <span className="text-white font-bold hidden sm:inline text-xs">התחבר</span>
+                className="flex items-center gap-1 px-2 py-1 backdrop-blur-xl rounded-lg shadow-lg transition-all hover:scale-105 text-[11px] relative overflow-hidden"
+                style={{ background: 'linear-gradient(90deg, #FF0000, #FF7F00, #FFFF00, #00FF00, #0000FF, #4B0082, #9400D3)', backgroundSize: '200% 100%', animation: 'rainbow 8s linear infinite', border: '2px solid rgba(255,255,255,0.3)' }}>
+                <LogIn className="w-3.5 h-3.5 text-white" />
+                <span className="text-white font-bold hidden sm:inline">התחבר</span>
               </button>
             )}
 
             {/* Reels — desktop */}
             <button onClick={() => setReelsOpen(true)}
-              className="hidden sm:flex items-center gap-1 px-2 py-2 bg-[#E31E24]/80 hover:bg-[#E31E24] rounded-lg border border-red-500/50 transition-all hover:scale-105 animate-pulse">
+              className="hidden sm:flex items-center gap-1 px-2 py-1 bg-[#E31E24]/80 hover:bg-[#E31E24] backdrop-blur-xl rounded-lg border border-red-500/50 transition-all hover:scale-105 animate-pulse text-[11px]">
               <Radio className="w-4 h-4 text-white" />
-              <span className="text-white font-bold text-xs">ריילס</span>
+              <span className="text-white font-bold">ריילס</span>
             </button>
           </div>
         </div>
