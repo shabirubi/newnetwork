@@ -447,33 +447,36 @@ function CategoryRow({ category, label, color }) {
           </div>
         </div>
 
-        {/* Article Display */}
+        {/* Article Display — same layout as FeaturedArticleEditor */}
         <div className="bg-[#0d0d0d] rounded-2xl overflow-hidden border border-gray-800">
           {topArticle ? (
-            <div className="grid grid-cols-1 lg:grid-cols-2" style={{ minHeight: '40vh' }}>
+            <div className="grid grid-cols-1 lg:grid-cols-2" style={{ minHeight: '60vh' }}>
               {/* Media */}
-              <div className="relative bg-black" style={{ minHeight: 280 }}>
+              <div className="relative bg-black flex items-stretch" style={{ minHeight: 360 }}>
                 {topArticle.video_url ? (
-                  <video src={topArticle.video_url} controls playsInline className="w-full h-full object-cover" style={{ minHeight: 280, maxHeight: '50vh' }} />
+                  <video src={topArticle.video_url} controls playsInline className="w-full object-cover" style={{ minHeight: 360, maxHeight: '70vh' }} />
                 ) : topArticle.image_url ? (
-                  <img src={topArticle.image_url} alt={topArticle.title} className="w-full h-full object-cover" style={{ minHeight: 280, maxHeight: '50vh' }} />
+                  <img src={topArticle.image_url} alt={topArticle.title} className="w-full object-cover" style={{ minHeight: 360, maxHeight: '70vh' }} />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center" style={{ minHeight: 280, background: color + '22' }}>
-                    <span className="text-5xl opacity-30">📰</span>
+                  <div className="w-full flex items-center justify-center" style={{ minHeight: 360, background: color + '22' }}>
+                    <span className="text-7xl opacity-20">📰</span>
                   </div>
                 )}
               </div>
               {/* Content */}
-              <div className="flex flex-col p-5 sm:p-8 gap-3">
+              <div className="flex flex-col p-5 sm:p-8 gap-4">
                 <span className="text-xs font-bold px-3 py-1 rounded-lg w-fit text-white" style={{ background: color }}>{label}</span>
-                <h2 className="text-white text-xl sm:text-2xl font-bold leading-tight">{topArticle.title}</h2>
-                {topArticle.subtitle && <p className="text-gray-300 text-sm">{topArticle.subtitle}</p>}
+                <h2 className="text-white text-2xl sm:text-3xl font-bold leading-tight">{topArticle.title}</h2>
+                {topArticle.subtitle && <p className="text-gray-300 text-base sm:text-lg">{topArticle.subtitle}</p>}
                 {topArticle.content && (
-                  <p className="text-gray-400 text-sm leading-relaxed line-clamp-4">{topArticle.content}</p>
+                  <p className="text-gray-400 text-sm leading-relaxed flex-1" style={{ whiteSpace: 'pre-wrap' }}>
+                    {topArticle.content.length > 400 ? topArticle.content.slice(0, 400) + '...' : topArticle.content}
+                  </p>
                 )}
-                <div className="mt-auto pt-2">
+                {topArticle.source && <p className="text-gray-500 text-xs">מקור: {topArticle.source}</p>}
+                <div className="mt-auto pt-3 flex items-center gap-3">
                   <Link to={createPageUrl(`Article?id=${topArticle.id}`)}
-                    className="inline-flex items-center gap-2 px-5 py-2.5 text-white text-sm font-bold rounded-xl transition-colors"
+                    className="inline-flex items-center gap-2 px-5 py-2.5 text-white text-sm font-bold rounded-xl transition-colors hover:opacity-90"
                     style={{ background: color }}>
                     קרא עוד →
                   </Link>
@@ -481,8 +484,8 @@ function CategoryRow({ category, label, color }) {
               </div>
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center py-16 gap-3 text-gray-600">
-              <span className="text-4xl">📭</span>
+            <div className="flex flex-col items-center justify-center py-20 gap-3 text-gray-600" style={{ minHeight: '60vh' }}>
+              <span className="text-5xl">📭</span>
               <p className="text-sm">אין כתבות בקטגוריה זו</p>
               <button onClick={openNew} className="flex items-center gap-1 px-4 py-2 text-sm bg-green-600/20 text-green-400 rounded-xl border border-green-600/30 hover:bg-green-600/30 transition-colors">
                 <Plus className="w-4 h-4" /> הוסף כתבה ראשונה
