@@ -296,16 +296,16 @@ export default function Layout({ children, currentPageName }) {
   }
 
   return (
-    <div className={`min-h-screen transition-colors duration-300 flex flex-col overflow-x-hidden ${darkMode ? 'bg-[#121212]' : 'bg-[#f5f5f5]'}`} dir="rtl">
+    <div className={`min-h-screen transition-colors duration-300 flex flex-col overflow-x-hidden ${darkMode ? 'bg-[#0d1117]' : 'bg-[#f0f4f8]'}`} dir="rtl">
       <style>{`
         :root {
           --primary: #1565C0;
           --primary-dark: #0d47a1;
           --primary-light: #1976D2;
-          --accent: #CC0000;
-          --accent-dark: #990000;
+          --accent: #E87722;
+          --accent-dark: #c25e00;
         }
-        body { background-color: ${darkMode ? '#121212' : '#f5f5f5'} !important; color: ${darkMode ? '#ffffff' : '#111111'} !important; }
+        body { background-color: ${darkMode ? '#0d1117' : '#f0f4f8'} !important; color: ${darkMode ? '#e8edf5' : '#111827'} !important; }
 
         /* Hide scrollbars */
         * {
@@ -333,12 +333,12 @@ export default function Layout({ children, currentPageName }) {
 
         @keyframes colorShift {
           0%, 100% { 
-            background: linear-gradient(to right, #0057B8, #FF8800, #FF4400);
-            box-shadow: 0 0 40px #0057B8;
+            background: linear-gradient(to right, #1565C0, #E87722, #1565C0);
+            box-shadow: 0 0 40px #1565C0;
           }
           50% { 
-            background: linear-gradient(to right, #1a1a1a, #333333, #111111);
-            box-shadow: 0 0 40px #444444;
+            background: linear-gradient(to right, #E87722, #1565C0, #E87722);
+            box-shadow: 0 0 40px #E87722;
           }
         }
 
@@ -475,7 +475,7 @@ export default function Layout({ children, currentPageName }) {
 
             {/* Reels — desktop */}
             <button onClick={() => setReelsOpen(true)}
-              className="hidden sm:flex items-center gap-1 px-2 py-1 bg-[#E31E24]/80 hover:bg-[#E31E24] backdrop-blur-xl rounded-lg border border-red-500/50 transition-all hover:scale-105 animate-pulse text-[11px]">
+              className="hidden sm:flex items-center gap-1 px-2 py-1 bg-[#E87722]/80 hover:bg-[#E87722] backdrop-blur-xl rounded-lg border border-orange-500/50 transition-all hover:scale-105 animate-pulse text-[11px]">
               <Radio className="w-4 h-4 text-white" />
               <span className="text-white font-bold">ריילס</span>
             </button>
@@ -997,7 +997,7 @@ export default function Layout({ children, currentPageName }) {
       </nav>
 
       {/* Footer */}
-      <footer className="bg-gradient-to-br from-black via-[#0057B8]/20 to-black border-t-2 border-[#0057B8]/50 shadow-[0_-10px_50px_rgba(0,128,255,0.3)] text-white mt-12">
+      <footer className="bg-gradient-to-br from-[#060c18] via-[#0d2a5e]/40 to-[#060c18] border-t-2 border-[#1565C0]/50 shadow-[0_-10px_50px_rgba(21,101,192,0.3)] text-white mt-12">
         <div className="max-w-7xl mx-auto px-4 py-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
@@ -1031,7 +1031,7 @@ export default function Layout({ children, currentPageName }) {
               </p>
               <Link 
                 to={createPageUrl("Live")}
-                className="inline-flex items-center gap-2 bg-[#E31E24] text-white px-6 py-3 rounded-full hover:bg-[#B91C1C] transition-all"
+                className="inline-flex items-center gap-2 bg-[#E87722] text-white px-6 py-3 rounded-full hover:bg-[#c25e00] transition-all"
               >
                 <Radio size={18} />
                 צפו בשידור חי

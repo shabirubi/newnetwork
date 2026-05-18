@@ -214,64 +214,42 @@ export default function VideosCategoriesStrip() {
     }
   }, [comments]);
 
+  const itemWidth = 76; // px per item including gap
+  const totalWidth = categories.length * itemWidth;
+
   return (
-    <div className="relative bg-black overflow-hidden z-[34]" style={{ height: '72px' }}>
+    <div className="relative bg-[#0a0a0a] border-b border-[#1a3a6b]/40 overflow-hidden z-[34]" style={{ height: '72px' }}>
       {/* Gradient Overlays */}
-      <div className="absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-black to-transparent z-10 pointer-events-none" />
-      <div className="absolute left-0 top-0 bottom-0 w-12 bg-gradient-to-r from-black to-transparent z-10 pointer-events-none" />
-      
-      {/* Scroll Arrows */}
-      <button
-        onClick={() => scroll('left')}
-        className="absolute right-1 top-1/2 -translate-y-1/2 z-20 p-1 text-gray-600 hover:text-white transition-colors"
-      >
-        <ChevronRight className="w-4 h-4" />
-      </button>
+      <div className="absolute right-0 top-0 bottom-0 w-16 bg-gradient-to-l from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
+      <div className="absolute left-0 top-0 bottom-0 w-16 bg-gradient-to-r from-[#0a0a0a] to-transparent z-10 pointer-events-none" />
 
-      <button
-        onClick={() => scroll('right')}
-        className="absolute left-1 top-1/2 -translate-y-1/2 z-20 p-1 text-gray-600 hover:text-white transition-colors"
-      >
-        <ChevronLeft className="w-4 h-4" />
-      </button>
-
-      {/* Categories Scroll */}
-      <div 
-        ref={scrollRef}
-        className="overflow-x-auto h-full flex items-center px-8"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-      >
-        <div className="flex gap-4 items-center" style={{ width: 'max-content' }}>
-          {categories.map((cat) => {
+      {/* Auto-scrolling carousel */}
+      <div className="h-full flex items-center overflow-hidden">
+        <motion.div
+          className="flex gap-3 items-center px-4"
+          style={{ width: 'max-content' }}
+          animate={{ x: [0, -totalWidth] }}
+          transition={{ duration: categories.length * 2.2, repeat: Infinity, ease: "linear", repeatType: "loop" }}
+        >
+          {[...categories, ...categories].map((cat, idx) => {
             const Icon = cat.icon;
             return (
               <motion.div
-                key={cat.id}
+                key={`${cat.id}-${idx}`}
                 onClick={() => {
                   setSelectedCategory(cat.id);
                   setCurrentVideoIndex(0);
                 }}
-                onMouseEnter={() => setHoveredCategory(cat.id)}
-                onMouseLeave={() => setHoveredCategory(null)}
-                whileHover={{ scale: 1.08 }}
-                whileTap={{ scale: 0.95 }}
-                className="flex-shrink-0 cursor-pointer relative"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.92 }}
+                className="flex-shrink-0 cursor-pointer"
               >
-                <div className="relative w-16 h-12 rounded-lg overflow-hidden">
-                  {/* Background Image */}
-                  <img 
-                    src={cat.image} 
-                    alt={cat.label}
-                    className="absolute inset-0 w-full h-full object-cover"
-                  />
-                  
-                  {/* Gradient Overlay */}
-                  <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
-                  
-                  {/* Content */}
+                <div className="relative w-16 h-12 rounded-xl overflow-hidden border border-[#1565C0]/40 shadow-lg shadow-[#0057B8]/20">
+                  <img src={cat.image} alt={cat.label} className="absolute inset-0 w-full h-full object-cover" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[#0d2a5e]/90 via-[#0d2a5e]/30 to-transparent" />
                   <div className="absolute inset-0 flex flex-col items-center justify-center p-1">
-                    <Icon className="w-4 h-4 text-white mb-0.5 drop-shadow-lg" />
-                    <p className="text-white font-bold text-[9px] text-center drop-shadow-lg">
+                    <Icon className="w-3.5 h-3.5 text-[#5ba3ff] mb-0.5 drop-shadow-lg" />
+                    <p className="text-white font-bold text-[9px] text-center drop-shadow-lg leading-tight">
                       {cat.label}
                     </p>
                   </div>
@@ -279,7 +257,7 @@ export default function VideosCategoriesStrip() {
               </motion.div>
             );
           })}
-        </div>
+        </motion.div>
       </div>
 
       <VideoModalPortal
