@@ -167,7 +167,7 @@ export default function PodcastsFloatingButton() {
 
   return (
     <>
-      {/* Floating Button - Spotify Logo */}
+      {/* Floating Button - Spotify Official Logo */}
       <motion.button
         onClick={() => setIsOpen(true)}
         className="fixed bottom-48 left-4 z-[999] w-14 h-14 rounded-full bg-[#1DB954] hover:bg-[#1ed760] shadow-lg shadow-[#1DB954]/50 flex items-center justify-center transition-all hover:scale-110 active:scale-95"
@@ -175,42 +175,43 @@ export default function PodcastsFloatingButton() {
         whileTap={{ scale: 0.95 }}
         title="פודקאסטים"
       >
-        {/* Spotify Logo SVG */}
-        <svg className="w-7 h-7" viewBox="0 0 24 24" fill="currentColor" color="white">
-          <circle cx="12" cy="12" r="10" fill="white"/>
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.5 10c-2.33 0-4.31-1.46-5.12-3.49-.19-.52-.77-.87-1.38-.87-.84 0-1.5.66-1.5 1.5 0 .58.35 1.08.85 1.3 1.24.63 2.64.98 4.15.98 3.59 0 6.5-2.91 6.5-6.5 0-3.59-2.91-6.5-6.5-6.5-3.59 0-6.5 2.91-6.5 6.5 0 .84.67 1.5 1.5 1.5s1.5-.66 1.5-1.5c0-1.93 1.57-3.5 3.5-3.5s3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z" fill="#1DB954"/>
+        {/* Spotify Official Logo - Three curved sound waves */}
+        <svg className="w-7 h-7" viewBox="0 0 24 24" fill="white">
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.5 14.5c-.28.28-.7.28-1 .14-3.05-1.87-6.88-2.3-11.34-1.44-.42.07-.77-.21-.84-.63-.07-.42.21-.77.63-.84 4.83-.93 9.03-.42 12.43 1.68.35.21.42.7.14 1.09zm1.12-2.94c-.35.56-1.05.7-1.61.35-3.78-2.31-9.52-2.94-13.93-1.61-.63.21-1.33-.14-1.54-.77-.21-.63.14-1.33.77-1.54 5.11-1.54 11.48-.84 15.89 1.89.56.35.77 1.05.42 1.68zm.21-3.08c-4.55-2.73-12.04-2.94-16.38-1.61-.77.21-1.61-.21-1.82-.98-.21-.77.21-1.61.98-1.82 5.04-1.54 13.37-1.26 18.62 1.89.7.42.91 1.33.49 2.03-.42.63-1.33.84-1.89.49z"/>
         </svg>
       </motion.button>
 
-      {/* Podcasts Modal */}
+      {/* Podcasts Side Drawer */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[10000]"
-            onClick={() => {
-              setIsOpen(false);
-              setSelectedPodcast(null);
-            }}
-          >
-            <div className="absolute inset-0 bg-black/90 backdrop-blur-md" />
-            
+          <>
+            {/* Backdrop */}
             <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.8, opacity: 0 }}
-              transition={{ type: "spring", damping: 30, stiffness: 300 }}
-              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[95vw] md:w-[600px] max-h-[85vh] bg-gradient-to-br from-[#121212] to-black rounded-3xl border-2 border-[#1DB954]/30 shadow-2xl shadow-[#1DB954]/20 overflow-hidden flex flex-col"
-              onClick={(e) => e.stopPropagation()}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[10000]"
+              onClick={() => {
+                setIsOpen(false);
+                setSelectedPodcast(null);
+              }}
+            />
+            
+            {/* Side Drawer */}
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ type: "spring", damping: 25, stiffness: 200 }}
+              className="fixed top-0 right-0 h-full w-[90vw] md:w-[400px] bg-gradient-to-b from-[#121212] to-black border-l-2 border-[#1DB954]/30 shadow-2xl shadow-[#1DB954]/20 z-[10001] overflow-hidden flex flex-col"
             >
               {/* Header */}
-              <div className="sticky top-0 bg-gradient-to-br from-[#1DB954]/30 to-black p-4 border-b border-[#1DB954]/20 flex items-center justify-between">
+              <div className="sticky top-0 bg-gradient-to-br from-[#1DB954]/30 to-black p-5 border-b border-[#1DB954]/20 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-[#1DB954] flex items-center justify-center">
-                    <Headphones className="w-5 h-5 text-white" />
-                  </div>
+                  {/* Spotify Official Logo */}
+                  <svg className="w-9 h-9" viewBox="0 0 24 24" fill="white">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.5 14.5c-.28.28-.7.28-1 .14-3.05-1.87-6.88-2.3-11.34-1.44-.42.07-.77-.21-.84-.63-.07-.42.21-.77.63-.84 4.83-.93 9.03-.42 12.43 1.68.35.21.42.7.14 1.09zm1.12-2.94c-.35.56-1.05.7-1.61.35-3.78-2.31-9.52-2.94-13.93-1.61-.63.21-1.33-.14-1.54-.77-.21-.63.14-1.33.77-1.54 5.11-1.54 11.48-.84 15.89 1.89.56.35.77 1.05.42 1.68zm.21-3.08c-4.55-2.73-12.04-2.94-16.38-1.61-.77.21-1.61-.21-1.82-.98-.21-.77.21-1.61.98-1.82 5.04-1.54 13.37-1.26 18.62 1.89.7.42.91 1.33.49 2.03-.42.63-1.33.84-1.89.49z"/>
+                  </svg>
                   <div>
                     <h2 className="text-white font-bold text-lg">פודקאסטים</h2>
                     <p className="text-gray-400 text-xs">הרשת החדשה</p>
@@ -280,7 +281,7 @@ export default function PodcastsFloatingButton() {
                 )}
               </div>
             </motion.div>
-          </motion.div>
+          </>
         )}
       </AnimatePresence>
     </>
