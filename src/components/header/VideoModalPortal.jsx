@@ -4,6 +4,7 @@ import { X, Heart } from "lucide-react";
 import { createPortal } from "react-dom";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import confetti from "canvas-confetti";
 
 function getUserId() {
   let uid = localStorage.getItem("anon_uid");
@@ -12,6 +13,27 @@ function getUserId() {
     localStorage.setItem("anon_uid", uid);
   }
   return uid;
+}
+
+function fireHeartConfetti() {
+  const count = 200;
+  const defaults = { origin: { y: 0.7 } };
+
+  function fire(particleRatio, opts) {
+    confetti(
+      Object.assign({}, defaults, opts, {
+        particleCount: Math.floor(count * particleRatio),
+        shapes: ["heart"],
+        colors: ["#ff0000", "#ff4d4d", "#ff9999", "#e60000"],
+      })
+    );
+  }
+
+  fire(0.25, { spread: 26, startVelocity: 55 });
+  fire(0.2, { spread: 40, startVelocity: 45 });
+  fire(0.35, { spread: 50, startVelocity: 35 });
+  fire(0.1, { spread: 60, startVelocity: 25, decay: 0.92 });
+  fire(0.1, { spread: 70, startVelocity: 15, decay: 0.85 });
 }
 
 function LikeButton({ video }) {
@@ -48,8 +70,11 @@ function LikeButton({ video }) {
 
   const handleLike = (e) => {
     e.stopPropagation();
-    if (!liked) setHeartAnim(true);
-    setTimeout(() => setHeartAnim(false), 700);
+    if (!liked) {
+      setHeartAnim(true);
+      fireHeartConfetti();
+      setTimeout(() => setHeartAnim(false), 700);
+    }
     likeMutation.mutate();
   };
 

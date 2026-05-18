@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X, Heart, MessageCircle, Share2, Volume2, VolumeX, ChevronUp, ChevronDown, Play } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import confetti from "canvas-confetti";
 
 // get or create a stable anonymous user ID
 function getUserId() {
@@ -12,6 +13,30 @@ function getUserId() {
     localStorage.setItem("anon_uid", uid);
   }
   return uid;
+}
+
+// Heart confetti effect
+function fireHeartConfetti() {
+  const count = 200;
+  const defaults = {
+    origin: { y: 0.7 },
+  };
+
+  function fire(particleRatio, opts) {
+    confetti(
+      Object.assign({}, defaults, opts, {
+        particleCount: Math.floor(count * particleRatio),
+        shapes: ["heart"],
+        colors: ["#ff0000", "#ff4d4d", "#ff9999", "#e60000"],
+      })
+    );
+  }
+
+  fire(0.25, { spread: 26, startVelocity: 55 });
+  fire(0.2, { spread: 40, startVelocity: 45 });
+  fire(0.35, { spread: 50, startVelocity: 35 });
+  fire(0.1, { spread: 60, startVelocity: 25, decay: 0.92 });
+  fire(0.1, { spread: 70, startVelocity: 15, decay: 0.85 });
 }
 
 const CATEGORY_LABELS = {
@@ -67,7 +92,10 @@ function ReelItem({ video, isActive, onNext, onPrev }) {
   });
 
   const handleLike = () => {
-    if (!liked) setHeartAnim(true);
+    if (!liked) {
+      setHeartAnim(true);
+      fireHeartConfetti();
+    }
     likeMutation.mutate();
   };
 
