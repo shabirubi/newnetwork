@@ -27,7 +27,7 @@ import ReelsModal from "./components/home/ReelsModal";
 import AccessibilityFloatingButton from "./components/accessibility/AccessibilityFloatingButton";
 import InstallAppButton from "./components/shared/InstallAppButton";
 import { base44 } from "@/api/base44Client";
-import { Search } from "lucide-react";
+import { Search, Headphones } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import UserProfileModal from "./components/user/UserProfileModal";
 
@@ -478,6 +478,15 @@ export default function Layout({ children, currentPageName }) {
               className="hidden sm:flex items-center gap-1 px-2 py-1 bg-[#E87722]/80 hover:bg-[#E87722] backdrop-blur-xl rounded-lg border border-orange-500/50 transition-all hover:scale-105 animate-pulse text-[11px]">
               <Radio className="w-4 h-4 text-white" />
               <span className="text-white font-bold">ריילס</span>
+            </button>
+
+            {/* Podcasts */}
+            <button onClick={() => {
+              document.getElementById('podcasts-section')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }}
+              className="flex items-center gap-1 px-2 py-1 bg-[#1DB954]/80 hover:bg-[#1DB954] backdrop-blur-xl rounded-lg border border-green-500/50 transition-all hover:scale-105 text-[11px]">
+              <Headphones className="w-4 h-4 text-white" />
+              <span className="text-white font-bold hidden sm:inline">פודקאסטים</span>
             </button>
           </div>
         </div>
