@@ -16,7 +16,7 @@ import VerticalNewsScroller from "../components/news/VerticalNewsScroller";
 
 import FeaturedArticleEditor from "../components/home/FeaturedArticleEditor";
 import AllCategoryEditors from "../components/home/CategoryArticleEditor";
-import CategoryArticlesDisplay from "../components/home/CategoryArticlesDisplay";
+import AllCategoryArticlesDisplay from "../components/home/AllCategoryArticlesDisplay";
 import StudioSidebar from "../components/home/StudioSidebar";
 import WeatherAlertsContainer from "../components/weather/WeatherAlertsContainer";
 
@@ -183,8 +183,8 @@ export default function Home() {
       {/* Podcasts Container */}
       <PodcastsContainer />
 
-      {/* Category Articles Display - Latest article from each category */}
-      <CategoryArticlesDisplay />
+      {/* All Category Articles - Full display of all articles from all categories */}
+      <AllCategoryArticlesDisplay />
 
       {/* Category Article Editors — one per category with full editor */}
       <AllCategoryEditors />
