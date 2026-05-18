@@ -174,8 +174,7 @@ export default function Home() {
       {/* Featured Article Editor - above war news */}
       <FeaturedArticleEditor />
 
-      {/* Oref News Section */}
-      <OrefNewsSection />
+      {/* Oref News Section - removed WarNewsSection */}
 
       {/* Category Article Editors — one per category with full editor */}
       <AllCategoryEditors />

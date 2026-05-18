@@ -1,8 +1,9 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Edit3, Save, X, Image, Video, Tag, Play,
-  Plus, Trash2, Check, Loader2, Clapperboard, Upload
+  Edit3, Save, X, Image, Video, Play, Pause,
+  Plus, Trash2, Check, Loader2, Clapperboard, Upload,
+  Volume2, VolumeX, ChevronUp, ChevronDown, Tv
 } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
@@ -397,6 +398,181 @@ function EditorModal({ article, category, onClose, onSaved }) {
   );
 }
 
+// ---- Inline Video Player Modal ----
+function VideoPlayerModal({ video, onClose, onNext, onPrev, total, current }) {
+  const videoRef = useRef(null);
+  const [muted, setMuted] = useState(false);
+  const [playing, setPlaying] = useState(true);
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.play().catch(() => {});
+      setPlaying(true);
+    }
+  }, [video?.video_url]);
+
+  const togglePlay = () => {
+    if (!videoRef.current) return;
+    if (playing) { videoRef.current.pause(); setPlaying(false); }
+    else { videoRef.current.play(); setPlaying(true); }
+  };
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (e.key === "ArrowRight" || e.key === "ArrowUp") onPrev();
+      if (e.key === "ArrowLeft" || e.key === "ArrowDown") onNext();
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [onNext, onPrev, onClose]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[99999] bg-black flex flex-col"
+      dir="rtl"
+    >
+      {/* Header */}
+      <div className="flex items-center justify-between px-4 py-3 bg-black/80 border-b border-gray-800 flex-shrink-0">
+        <div className="flex items-center gap-3">
+          <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
+          <span className="text-white font-bold truncate max-w-xs">{video.title}</span>
+          <span className="text-gray-500 text-sm">{current + 1} / {total}</span>
+        </div>
+        <button onClick={onClose} className="p-2 hover:bg-gray-800 rounded-full transition-colors">
+          <X className="w-6 h-6 text-white" />
+        </button>
+      </div>
+
+      {/* Video */}
+      <div className="flex-1 relative flex items-center justify-center bg-black" onClick={togglePlay}>
+        <video
+          ref={videoRef}
+          src={video.video_url}
+          muted={muted}
+          loop
+          playsInline
+          className="max-w-full max-h-full object-contain"
+          style={{ maxHeight: 'calc(100vh - 120px)' }}
+        />
+        <AnimatePresence>
+          {!playing && (
+            <motion.div initial={{ opacity: 0, scale: 0.8 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0 }}
+              className="absolute inset-0 flex items-center justify-center pointer-events-none">
+              <div className="bg-black/50 rounded-full p-5">
+                <Play className="w-14 h-14 text-white fill-white" />
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Prev / Next */}
+        <button onClick={(e) => { e.stopPropagation(); onPrev(); }}
+          className="absolute right-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/50 hover:bg-black/80 rounded-full flex items-center justify-center transition-all">
+          <ChevronUp className="w-6 h-6 text-white" />
+        </button>
+        <button onClick={(e) => { e.stopPropagation(); onNext(); }}
+          className="absolute left-4 top-1/2 -translate-y-1/2 w-12 h-12 bg-black/50 hover:bg-black/80 rounded-full flex items-center justify-center transition-all">
+          <ChevronDown className="w-6 h-6 text-white" />
+        </button>
+      </div>
+
+      {/* Controls */}
+      <div className="flex items-center justify-center gap-6 py-4 bg-black/80 border-t border-gray-800 flex-shrink-0">
+        <button onClick={() => setMuted(m => !m)} className="p-3 hover:bg-gray-800 rounded-full transition-colors">
+          {muted ? <VolumeX className="w-6 h-6 text-white" /> : <Volume2 className="w-6 h-6 text-white" />}
+        </button>
+        <button onClick={togglePlay} className="p-4 bg-white/10 hover:bg-white/20 rounded-full transition-colors">
+          {playing ? <Pause className="w-7 h-7 text-white" /> : <Play className="w-7 h-7 text-white fill-white" />}
+        </button>
+        <button onClick={onPrev} className="p-3 hover:bg-gray-800 rounded-full transition-colors">
+          <ChevronUp className="w-6 h-6 text-white" />
+        </button>
+        <button onClick={onNext} className="p-3 hover:bg-gray-800 rounded-full transition-colors">
+          <ChevronDown className="w-6 h-6 text-white" />
+        </button>
+      </div>
+    </motion.div>
+  );
+}
+
+// ---- Category Reels Strip ----
+function CategoryReelsStrip({ category, color }) {
+  const [playerOpen, setPlayerOpen] = useState(false);
+  const [activeIdx, setActiveIdx] = useState(0);
+
+  const { data: reels = [] } = useQuery({
+    queryKey: ['cat-reels', category],
+    queryFn: () => base44.entities.UserVideo.filter({ category, status: 'ready' }, '-created_date', 20),
+    staleTime: 30 * 1000,
+  });
+
+  if (reels.length === 0) return null;
+
+  const openPlayer = (idx) => { setActiveIdx(idx); setPlayerOpen(true); };
+  const goNext = () => setActiveIdx(i => Math.min(i + 1, reels.length - 1));
+  const goPrev = () => setActiveIdx(i => Math.max(i - 1, 0));
+
+  return (
+    <div className="w-full px-2 sm:px-4 mb-3" dir="rtl">
+      <div className="max-w-7xl mx-auto">
+        {/* Strip header */}
+        <div className="flex items-center gap-2 mb-2">
+          <div className="w-1 h-4 rounded-full" style={{ background: color }} />
+          <span className="text-gray-300 text-sm font-bold">ריילס</span>
+          <span className="text-gray-600 text-xs">({reels.length})</span>
+        </div>
+        {/* Horizontal scroll of thumbnails */}
+        <div className="flex gap-3 overflow-x-auto pb-2">
+          {reels.map((reel, i) => (
+            <button key={reel.id} onClick={() => openPlayer(i)}
+              className="flex-shrink-0 w-24 h-36 rounded-xl overflow-hidden relative border-2 transition-all hover:scale-105 group"
+              style={{ borderColor: color + '60' }}>
+              {reel.thumbnail_url ? (
+                <img src={reel.thumbnail_url} alt={reel.title} className="w-full h-full object-cover" />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center" style={{ background: color + '22' }}>
+                  <Clapperboard className="w-6 h-6 text-white/50" />
+                </div>
+              )}
+              <div className="absolute inset-0 bg-black/30 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                <div className="bg-black/50 rounded-full p-2">
+                  <Play className="w-4 h-4 text-white fill-white" />
+                </div>
+              </div>
+              <p className="absolute bottom-0 inset-x-0 bg-black/70 text-white text-[9px] px-1 py-1 line-clamp-2 leading-tight">
+                {reel.title}
+              </p>
+            </button>
+          ))}
+          {/* Open player button */}
+          <button onClick={() => openPlayer(0)}
+            className="flex-shrink-0 w-24 h-36 rounded-xl flex flex-col items-center justify-center gap-2 border-2 border-dashed transition-all hover:scale-105"
+            style={{ borderColor: color + '50', background: color + '11' }}>
+            <Tv className="w-6 h-6" style={{ color }} />
+            <span className="text-[10px] font-bold text-center" style={{ color }}>פתח נגן</span>
+          </button>
+        </div>
+      </div>
+
+      {/* Player Modal */}
+      <AnimatePresence>
+        {playerOpen && reels[activeIdx] && (
+          <VideoPlayerModal
+            video={reels[activeIdx]}
+            onClose={() => setPlayerOpen(false)}
+            onNext={goNext}
+            onPrev={goPrev}
+            total={reels.length}
+            current={activeIdx}
+          />
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
 // ---- Single Category Row with editor ----
 function CategoryRow({ category, label, color }) {
   const [editorOpen, setEditorOpen] = useState(false);
@@ -538,7 +714,10 @@ export default function AllCategoryEditors() {
   return (
     <div className="w-full">
       {ALL_CATEGORIES.map(cat => (
-        <CategoryRow key={cat.id} category={cat.id} label={cat.label} color={cat.color} />
+        <React.Fragment key={cat.id}>
+          <CategoryRow category={cat.id} label={cat.label} color={cat.color} />
+          <CategoryReelsStrip category={cat.id} color={cat.color} />
+        </React.Fragment>
       ))}
     </div>
   );
