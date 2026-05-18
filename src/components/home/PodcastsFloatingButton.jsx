@@ -167,7 +167,7 @@ export default function PodcastsFloatingButton() {
 
   return (
     <>
-      {/* Floating Button - positioned above editor button */}
+      {/* Floating Button - Spotify Logo */}
       <motion.button
         onClick={() => setIsOpen(true)}
         className="fixed bottom-48 left-4 z-[999] w-14 h-14 rounded-full bg-[#1DB954] hover:bg-[#1ed760] shadow-lg shadow-[#1DB954]/50 flex items-center justify-center transition-all hover:scale-110 active:scale-95"
@@ -175,7 +175,11 @@ export default function PodcastsFloatingButton() {
         whileTap={{ scale: 0.95 }}
         title="פודקאסטים"
       >
-        <Headphones className="w-6 h-6 text-white" />
+        {/* Spotify Logo SVG */}
+        <svg className="w-7 h-7" viewBox="0 0 24 24" fill="currentColor" color="white">
+          <circle cx="12" cy="12" r="10" fill="white"/>
+          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm3.5 10c-2.33 0-4.31-1.46-5.12-3.49-.19-.52-.77-.87-1.38-.87-.84 0-1.5.66-1.5 1.5 0 .58.35 1.08.85 1.3 1.24.63 2.64.98 4.15.98 3.59 0 6.5-2.91 6.5-6.5 0-3.59-2.91-6.5-6.5-6.5-3.59 0-6.5 2.91-6.5 6.5 0 .84.67 1.5 1.5 1.5s1.5-.66 1.5-1.5c0-1.93 1.57-3.5 3.5-3.5s3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z" fill="#1DB954"/>
+        </svg>
       </motion.button>
 
       {/* Podcasts Modal */}
@@ -194,11 +198,11 @@ export default function PodcastsFloatingButton() {
             <div className="absolute inset-0 bg-black/90 backdrop-blur-md" />
             
             <motion.div
-              initial={{ scale: 0.8, opacity: 0, y: 50 }}
-              animate={{ scale: 1, opacity: 1, y: 0 }}
-              exit={{ scale: 0.8, opacity: 0, y: 50 }}
-              transition={{ type: "spring", damping: 25, stiffness: 300 }}
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[95vw] md:w-[600px] max-h-[85vh] bg-gradient-to-br from-[#121212] to-black rounded-3xl border-2 border-[#1DB954]/30 shadow-2xl shadow-[#1DB954]/20 overflow-hidden flex flex-col"
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              transition={{ type: "spring", damping: 30, stiffness: 300 }}
+              className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[95vw] md:w-[600px] max-h-[85vh] bg-gradient-to-br from-[#121212] to-black rounded-3xl border-2 border-[#1DB954]/30 shadow-2xl shadow-[#1DB954]/20 overflow-hidden flex flex-col"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}
