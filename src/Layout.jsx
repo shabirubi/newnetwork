@@ -43,9 +43,10 @@ const LogoVideo = ({ className }) => (
   />
 );
 
-// Scrolling Breaking News Component
+// Vertical Carousel Breaking News Component
 function TypewriterDate() {
   const [news, setNews] = React.useState([]);
+  const [currentIndex, setCurrentIndex] = React.useState(0);
 
   React.useEffect(() => {
     const fetchNews = async () => {
@@ -57,38 +58,39 @@ function TypewriterDate() {
       }
     };
     fetchNews();
-    const interval = setInterval(fetchNews, 5 * 60 * 1000); // every 5 min instead of 30s
+    const interval = setInterval(fetchNews, 5 * 60 * 1000);
     return () => clearInterval(interval);
   }, []);
 
+  React.useEffect(() => {
+    if (news.length <= 1) return;
+    const timer = setInterval(() => {
+      setCurrentIndex(i => (i + 1) % news.length);
+    }, 3500);
+    return () => clearInterval(timer);
+  }, [news.length]);
+
   if (news.length === 0) {
     return (
-      <div className="text-sm md:text-base font-bold text-white">
-        פתיחה רשמית: 7 למרץ 2026
-      </div>
+      <div className="text-sm font-bold text-white">פתיחה רשמית: 7 למרץ 2026</div>
     );
   }
 
   return (
-    <div className="relative overflow-hidden w-full h-8 flex items-center">
-      <motion.div
-        className="flex items-center gap-8 whitespace-nowrap"
-        animate={{
-          x: [0, -2000]
-        }}
-        transition={{
-          duration: 30,
-          repeat: Infinity,
-          ease: "linear"
-        }}
-      >
-        {[...news, ...news].map((article, idx) => (
-          <div key={`${article.id}-${idx}`} className="flex items-center gap-2">
-            <span className="text-sm md:text-base font-bold text-white">🔴</span>
-            <span className="text-sm md:text-base font-bold text-white">{article.title}</span>
-          </div>
-        ))}
-      </motion.div>
+    <div className="overflow-hidden h-7 flex items-center w-full">
+      <AnimatePresence mode="wait">
+        <motion.div
+          key={currentIndex}
+          initial={{ y: 28, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          exit={{ y: -28, opacity: 0 }}
+          transition={{ duration: 0.4, ease: "easeInOut" }}
+          className="flex items-center gap-2 whitespace-nowrap w-full"
+        >
+          <span className="text-red-500 text-xs">🔴</span>
+          <span className="text-sm font-bold text-white truncate">{news[currentIndex]?.title}</span>
+        </motion.div>
+      </AnimatePresence>
     </div>
   );
 }
@@ -367,6 +369,14 @@ export default function Layout({ children, currentPageName }) {
               <motion.p className="text-xs text-orange-500" animate={{ opacity: [0.7, 1, 0.7] }} transition={{ duration: 2, repeat: Infinity }}>
                 🟠 NOW ONLINE
               </motion.p>
+            </div>
+          </div>
+
+          {/* Breaking News Vertical Carousel */}
+          <div className="flex-1 hidden md:flex items-center gap-2 bg-black/40 border border-red-700/30 rounded-lg px-3 py-1 min-w-0 max-w-sm">
+            <span className="text-red-500 text-xs font-bold shrink-0">🔴 חדש</span>
+            <div className="flex-1 min-w-0">
+              <TypewriterDate />
             </div>
           </div>
 
