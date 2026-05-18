@@ -303,7 +303,7 @@ export default function Layout({ children, currentPageName }) {
           --accent: #CC0000;
           --accent-dark: #990000;
         }
-        body { background-color: #121212 !important; }
+        body { background-color: ${darkMode ? '#121212' : '#f5f5f5'} !important; color: ${darkMode ? '#ffffff' : '#111111'} !important; }
 
         /* Hide scrollbars */
         * {
