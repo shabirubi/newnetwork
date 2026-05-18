@@ -1,0 +1,80 @@
+{
+  "name": "NewsArticle",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "\u05db\u05d5\u05ea\u05e8\u05ea \u05d4\u05d9\u05d3\u05d9\u05e2\u05d4"
+    },
+    "subtitle": {
+      "type": "string",
+      "description": "\u05db\u05d5\u05ea\u05e8\u05ea \u05de\u05e9\u05e0\u05d4"
+    },
+    "content": {
+      "type": "string",
+      "description": "\u05ea\u05d5\u05db\u05df \u05d4\u05d9\u05d3\u05d9\u05e2\u05d4"
+    },
+    "category": {
+      "type": "string",
+      "enum": [
+        "breaking",
+        "security",
+        "economy",
+        "politics",
+        "technology",
+        "sports",
+        "entertainment",
+        "world",
+        "health",
+        "music",
+        "horoscope",
+        "finance",
+        "crime",
+        "education",
+        "culture",
+        "environment",
+        "science",
+        "israel",
+        "military",
+        "law",
+        "local",
+        "custom"
+      ],
+      "description": "\u05e7\u05d8\u05d2\u05d5\u05e8\u05d9\u05d9\u05ea \u05d4\u05d9\u05d3\u05d9\u05e2\u05d4"
+    },
+    "custom_category": {
+      "type": "string",
+      "description": "\u05e7\u05d8\u05d2\u05d5\u05e8\u05d9\u05d4 \u05de\u05d5\u05ea\u05d0\u05de\u05ea \u05d0\u05d9\u05e9\u05d9\u05ea (\u05db\u05e9category=custom)"
+    },
+    "image_url": {
+      "type": "string",
+      "description": "\u05ea\u05de\u05d5\u05e0\u05ea \u05d4\u05d9\u05d3\u05d9\u05e2\u05d4"
+    },
+    "is_breaking": {
+      "type": "boolean",
+      "default": false,
+      "description": "\u05d9\u05d3\u05d9\u05e2\u05d4 \u05d7\u05de\u05d4"
+    },
+    "is_featured": {
+      "type": "boolean",
+      "default": false,
+      "description": "\u05d9\u05d3\u05d9\u05e2\u05d4 \u05de\u05d5\u05d1\u05dc\u05d8\u05ea"
+    },
+    "source": {
+      "type": "string",
+      "description": "\u05de\u05e7\u05d5\u05e8 \u05d4\u05d9\u05d3\u05d9\u05e2\u05d4"
+    },
+    "video_url": {
+      "type": "string",
+      "description": "\u05e7\u05d9\u05e9\u05d5\u05e8 \u05dc\u05d5\u05d9\u05d3\u05d0\u05d5"
+    },
+    "channel_id": {
+      "type": "string",
+      "description": "\u05de\u05d6\u05d4\u05d4 \u05e2\u05e8\u05d9\u05e5 \u05d4\u05d7\u05d3\u05e9\u05d5\u05ea"
+    }
+  },
+  "required": [
+    "title",
+    "category"
+  ]
+}
