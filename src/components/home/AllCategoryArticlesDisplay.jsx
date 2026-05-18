@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../../utils";
-import { ChevronDown, ChevronUp, Eye, Clock, TrendingUp } from "lucide-react";
+import { ChevronDown, ChevronUp, Eye, Clock } from "lucide-react";
 
 const CATEGORIES = [
   { id: "breaking", label: "חדשות עכשיו", color: "#E31E24" },
@@ -33,57 +33,74 @@ const CATEGORIES = [
   { id: "horoscope", label: "אסטרולוגיה", color: "#8B5CF6" },
 ];
 
-function ArticleCard({ article, categoryColor }) {
+function CategoryArticleCard({ article, category }) {
   if (!article) return null;
 
+  const displayImages = article.extra_images || [];
+  const displayVideos = article.extra_videos || [];
+
   return (
-    <Link to={createPageUrl(`Article?id=${article.id}`)} className="block">
-      <Card className="bg-[#0a0a0a] border border-gray-800 overflow-hidden hover:border-[#0057B8]/50 transition-all hover:shadow-lg hover:shadow-[#0057B8]/20 group">
-        <div className="flex gap-3 p-3">
-          <div className="w-24 h-24 flex-shrink-0 overflow-hidden rounded-lg">
-            {article.image_url ? (
-              <img
-                src={article.image_url}
-                alt={article.title}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              />
-            ) : (
-              <div className="w-full h-full bg-gradient-to-br from-gray-900 to-gray-800 flex items-center justify-center">
-                <TrendingUp className="w-6 h-6 text-gray-700" />
-              </div>
-            )}
-          </div>
-          <div className="flex-1 min-w-0">
-            <h3 className="text-white font-bold text-sm mb-1 line-clamp-2 group-hover:text-[#0057B8] transition-colors">
-              {article.title}
-            </h3>
-            {article.subtitle && (
-              <p className="text-gray-400 text-xs mb-2 line-clamp-1">
-                {article.subtitle}
-              </p>
-            )}
-            <div className="flex items-center gap-2 text-xs text-gray-500">
-              <span className="flex items-center gap-1">
-                <Clock className="w-3 h-3" />
-                {new Date(article.created_date).toLocaleDateString('he-IL')}
-              </span>
-              {article.views && (
-                <span className="flex items-center gap-1">
-                  <Eye className="w-3 h-3" />
-                  {article.views}
-                </span>
-              )}
+    <div className="bg-[#0d0d0d] rounded-2xl overflow-hidden border border-gray-800 hover:border-[#0057B8]/50 transition-all">
+      <div className="grid grid-cols-1 lg:grid-cols-2">
+        {/* Media Gallery */}
+        <div className="relative h-64 lg:h-auto overflow-hidden bg-gradient-to-br from-gray-900 to-gray-800">
+          {article.image_url ? (
+            <img
+              src={article.image_url}
+              alt={article.title}
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center">
+              <span className="text-gray-600">ללא תמונה</span>
             </div>
+          )}
+          <Badge
+            className="absolute top-3 right-3 font-bold text-xs"
+            style={{ backgroundColor: category.color, color: '#fff' }}
+          >
+            {category.label}
+          </Badge>
+          {article.is_breaking && (
+            <Badge className="absolute top-3 left-3 bg-red-600 text-white text-xs font-bold animate-pulse">
+              🔴 דחוף
+            </Badge>
+          )}
+        </div>
+
+        {/* Content */}
+        <div className="flex flex-col p-5 gap-3">
+          <h3 className="text-white text-xl font-bold leading-tight line-clamp-2">
+            {article.title}
+          </h3>
+          {article.subtitle && (
+            <p className="text-gray-300 text-sm">{article.subtitle}</p>
+          )}
+          {article.content && (
+            <p className="text-gray-400 text-xs leading-relaxed line-clamp-3" style={{ whiteSpace: 'pre-wrap' }}>
+              {article.content}
+            </p>
+          )}
+          <div className="mt-auto pt-2 flex items-center gap-3">
+            <Link
+              to={createPageUrl(`Article?id=${article.id}`)}
+              className="inline-flex items-center gap-2 px-4 py-2 bg-[#0057B8] hover:bg-[#1a6fd4] text-white text-xs font-bold rounded-xl transition-colors"
+            >
+              קרא עוד →
+            </Link>
+            <span className="text-gray-600 text-xs">
+              {displayImages.length + (article.image_url ? 1 : 0)} תמונות · {displayVideos.length + (article.video_url ? 1 : 0)} סרטונים
+            </span>
           </div>
         </div>
-      </Card>
-    </Link>
+      </div>
+    </div>
   );
 }
 
 function CategorySection({ category, articles }) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const displayArticles = articles.slice(0, isExpanded ? articles.length : 5);
+  const displayArticles = articles.slice(0, isExpanded ? articles.length : 3);
 
   if (articles.length === 0) return null;
 
@@ -96,16 +113,16 @@ function CategorySection({ category, articles }) {
           {articles.length} כתבות
         </Badge>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="space-y-4">
         {displayArticles.map((article) => (
-          <ArticleCard
+          <CategoryArticleCard
             key={article.id}
             article={article}
-            categoryColor={category.color}
+            category={category}
           />
         ))}
       </div>
-      {articles.length > 5 && (
+      {articles.length > 3 && (
         <button
           onClick={() => setIsExpanded(!isExpanded)}
           className="mt-4 flex items-center gap-2 mx-auto px-6 py-3 bg-[#0057B8]/20 hover:bg-[#0057B8]/30 rounded-full text-[#0057B8] font-bold transition-all"
@@ -118,7 +135,7 @@ function CategorySection({ category, articles }) {
           ) : (
             <>
               <ChevronDown className="w-4 h-4" />
-              הצג עוד {articles.length - 5} כתבות
+              הצג עוד {articles.length - 3} כתבות
             </>
           )}
         </button>
@@ -152,7 +169,6 @@ export default function AllCategoryArticlesDisplay() {
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center gap-2 mb-6">
           <div className="w-1 h-6 rounded-full bg-[#E31E24]" />
-          <TrendingUp className="w-5 h-5 text-[#0057B8]" />
           <h2 className="text-white font-bold text-xl">כל הכתבות לפי קטגוריות</h2>
         </div>
 
@@ -161,15 +177,9 @@ export default function AllCategoryArticlesDisplay() {
             {Array.from({ length: 3 }).map((_, i) => (
               <div key={i}>
                 <Skeleton className="h-8 w-48 mb-4" />
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                  {Array.from({ length: 6 }).map((_, j) => (
-                    <Card key={j} className="bg-[#0a0a0a] border border-gray-800">
-                      <Skeleton className="h-32" />
-                      <div className="p-3 space-y-2">
-                        <Skeleton className="h-5 w-full" />
-                        <Skeleton className="h-4 w-2/3" />
-                      </div>
-                    </Card>
+                <div className="space-y-4">
+                  {Array.from({ length: 3 }).map((_, j) => (
+                    <Skeleton key={j} className="h-64 w-full rounded-2xl" />
                   ))}
                 </div>
               </div>
