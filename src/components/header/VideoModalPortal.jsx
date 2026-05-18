@@ -162,6 +162,20 @@ export default function VideoModalPortal({
                         playsInline
                         controls
                         className="h-full w-full object-contain"
+                        onPlay={() => {
+                          // Save to view history
+                          const history = JSON.parse(localStorage.getItem("view_history") || "[]");
+                          const newEntry = {
+                            videoId: video.id,
+                            videoUrl: video.video_url,
+                            title: video.title,
+                            thumbnail: video.thumbnail_url,
+                            watchedAt: new Date().toISOString(),
+                          };
+                          const filtered = history.filter(h => h.videoId !== video.id);
+                          const updated = [newEntry, ...filtered].slice(0, 50);
+                          localStorage.setItem("view_history", JSON.stringify(updated));
+                        }}
                       />
                       {/* Like button overlay */}
                       <div className="absolute bottom-20 left-4 z-10">

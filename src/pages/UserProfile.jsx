@@ -3,7 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { motion } from "framer-motion";
 import { 
   User, Mail, Shield, Calendar, Edit2, Save, X,
-  Settings, Bell, Eye, Heart, BookMarked, Clock, Upload, Camera, CreditCard, RefreshCw, Zap
+  Settings, Bell, Eye, Heart, BookMarked, Clock, Upload, Camera, CreditCard, RefreshCw, Zap, Play, Trash2
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,6 +11,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useQuery } from "@tanstack/react-query";
 
 export default function UserProfile() {
   const [user, setUser] = useState(null);
@@ -19,6 +20,11 @@ export default function UserProfile() {
   const [formData, setFormData] = useState({ full_name: "", profile_image: "" });
   const [profileImage, setProfileImage] = useState(null);
   const [subscription, setSubscription] = useState(null);
+
+  // Get user ID for likes
+  const userId = typeof window !== 'undefined' 
+    ? localStorage.getItem("anon_uid") || user?.email 
+    : null;
 
   useEffect(() => {
     loadUser();
@@ -39,6 +45,30 @@ export default function UserProfile() {
       console.error("Error loading subscription:", error);
     }
   };
+
+  // Fetch liked videos
+  const { data: likedVideos = [], refetch: refetchLiked } = useQuery({
+    queryKey: ["user-liked-videos", userId],
+    queryFn: async () => {
+      if (!userId) return [];
+      const likes = await base44.entities.VideoLike.filter({ user_identifier: userId });
+      if (!likes || likes.length === 0) return [];
+      // Get unique video IDs
+      const videoIds = [...new Set(likes.map(l => l.video_id))];
+      const videos = await base44.entities.UserVideo.list('-created_date', 100);
+      return videos.filter(v => videoIds.includes(v.id));
+    },
+    enabled: !!userId,
+  });
+
+  // Fetch viewing history (last 50 watched videos from localStorage)
+  const [viewHistory, setViewHistory] = useState([]);
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const history = JSON.parse(localStorage.getItem("view_history") || "[]");
+      setViewHistory(history.slice(0, 50));
+    }
+  }, []);
 
   const logLogin = async () => {
     try {
@@ -257,19 +287,60 @@ export default function UserProfile() {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
+              className="space-y-4"
             >
               <Card className="bg-black/60 border-white/20">
                 <CardHeader>
-                  <CardTitle className="text-white">פעילות אחרונה</CardTitle>
+                  <CardTitle className="text-white flex items-center gap-2">
+                    <Clock className="w-5 h-5 text-[#E31E24]" />
+                    היסטוריית צפיות
+                  </CardTitle>
                   <CardDescription className="text-gray-400">
-                    היסטוריית הפעילות שלך באתר
+                    {viewHistory.length} סרטונים שצפית בהם לאחרונה
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-center py-12 text-gray-400">
-                    <Clock className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                    <p>אין פעילות אחרונה להצגה</p>
-                  </div>
+                  {viewHistory.length === 0 ? (
+                    <div className="text-center py-12 text-gray-400">
+                      <Clock className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                      <p>אין היסטוריית צפיות</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      {viewHistory.map((item, idx) => (
+                        <div
+                          key={idx}
+                          className="flex items-center gap-4 p-3 bg-black/40 rounded-lg border border-white/10 hover:border-[#E31E24]/30 transition-all"
+                        >
+                          <div className="relative w-24 h-16 flex-shrink-0 rounded overflow-hidden bg-gray-800">
+                            {item.thumbnail ? (
+                              <img src={item.thumbnail} alt={item.title} className="w-full h-full object-cover" />
+                            ) : (
+                              <div className="w-full h-full flex items-center justify-center">
+                                <Play className="w-6 h-6 text-gray-600" />
+                              </div>
+                            )}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <h4 className="text-white font-bold text-sm mb-1 line-clamp-1">{item.title}</h4>
+                            <div className="flex items-center gap-3 text-xs text-gray-400">
+                              <span>{new Date(item.watchedAt).toLocaleDateString('he-IL')}</span>
+                              <span>•</span>
+                              <span>{new Date(item.watchedAt).toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' })}</span>
+                            </div>
+                          </div>
+                          <a
+                            href={`/VideoCreator?video=${item.videoUrl}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="bg-[#E31E24]/20 hover:bg-[#E31E24]/40 text-[#E31E24] px-3 py-1.5 rounded-full text-xs font-bold transition-colors"
+                          >
+                            צפה
+                          </a>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </motion.div>
@@ -279,19 +350,68 @@ export default function UserProfile() {
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
+              className="space-y-4"
             >
               <Card className="bg-black/60 border-white/20">
                 <CardHeader>
-                  <CardTitle className="text-white">מועדפים</CardTitle>
+                  <CardTitle className="text-white flex items-center gap-2">
+                    <Heart className="w-5 h-5 text-[#E31E24]" />
+                    הסרטונים שאהבת
+                  </CardTitle>
                   <CardDescription className="text-gray-400">
-                    הכתבות והתכנים שסימנת כמועדפים
+                    {likedVideos.length} סרטונים שאהבת
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <div className="text-center py-12 text-gray-400">
-                    <Heart className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                    <p>לא סימנת עדיין פריטים כמועדפים</p>
-                  </div>
+                  {likedVideos.length === 0 ? (
+                    <div className="text-center py-12 text-gray-400">
+                      <Heart className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                      <p>לא אהבת עדיין אף סרטון</p>
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {likedVideos.map((video) => (
+                        <div
+                          key={video.id}
+                          className="bg-black/40 rounded-lg overflow-hidden border border-white/10 hover:border-[#E31E24]/50 transition-all group"
+                        >
+                          <div className="relative aspect-video">
+                            {video.thumbnail_url ? (
+                              <img
+                                src={video.thumbnail_url}
+                                alt={video.title}
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              <div className="w-full h-full bg-gradient-to-br from-gray-800 to-black flex items-center justify-center">
+                                <Play className="w-12 h-12 text-gray-600" />
+                              </div>
+                            )}
+                            <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                              <a
+                                href={`/VideoCreator?video=${video.video_url}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="bg-[#E31E24] text-white px-4 py-2 rounded-full font-bold text-sm hover:bg-[#B91C1C] transition-colors"
+                              >
+                                צפה שוב
+                              </a>
+                            </div>
+                          </div>
+                          <div className="p-3">
+                            <h4 className="text-white font-bold text-sm mb-1 line-clamp-2">{video.title}</h4>
+                            <div className="flex items-center justify-between text-xs text-gray-400">
+                              <span>{new Date(video.created_date).toLocaleDateString('he-IL')}</span>
+                              <Badge className="bg-[#E31E24]/20 text-[#E31E24] border-[#E31E24]/30">
+                                <Heart className="w-3 h-3 ml-1 fill-current" />
+                                אהבת
+                              </Badge>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </CardContent>
               </Card>
             </motion.div>

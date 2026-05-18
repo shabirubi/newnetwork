@@ -449,7 +449,7 @@ export default function Layout({ children, currentPageName }) {
               </div>
             ) : user ? (
               <>
-                <button onClick={() => setProfileModalOpen(true)} className="flex items-center transition-all cursor-pointer active:scale-95 relative">
+                <Link to={createPageUrl("UserProfile")} className="flex items-center transition-all cursor-pointer active:scale-95 relative">
                   {user.profile_image ? (
                     <img src={user.profile_image} alt={user.full_name} className="w-9 h-9 rounded-full object-contain bg-black shadow-lg" />
                   ) : (
@@ -457,7 +457,7 @@ export default function Layout({ children, currentPageName }) {
                       {user.full_name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'U'}
                     </div>
                   )}
-                </button>
+                </Link>
                 <button onClick={handleLogout}
                   className="flex items-center gap-1 px-2 py-1 bg-red-600/20 hover:bg-red-600/40 backdrop-blur-xl rounded-lg shadow-lg border border-red-500/30 transition-all hover:scale-105 text-[11px]">
                   <LogOut className="w-3.5 h-3.5 text-red-400" />

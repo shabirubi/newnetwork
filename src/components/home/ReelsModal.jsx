@@ -111,11 +111,24 @@ function ReelItem({ video, isActive, onNext, onPrev }) {
     if (isActive) {
       videoRef.current.currentTime = 0;
       videoRef.current.play().then(() => setPlaying(true)).catch(() => {});
+      // Save to view history
+      const history = JSON.parse(localStorage.getItem("view_history") || "[]");
+      const newEntry = {
+        videoId: video.id,
+        videoUrl: video.video_url,
+        title: video.title,
+        thumbnail: video.thumbnail_url,
+        watchedAt: new Date().toISOString(),
+      };
+      // Remove if exists, add to top
+      const filtered = history.filter(h => h.videoId !== video.id);
+      const updated = [newEntry, ...filtered].slice(0, 50);
+      localStorage.setItem("view_history", JSON.stringify(updated));
     } else {
       videoRef.current.pause();
       setPlaying(false);
     }
-  }, [isActive]);
+  }, [isActive, video.id, video.video_url, video.title, video.thumbnail_url]);
 
   const togglePlay = () => {
     if (!videoRef.current) return;
