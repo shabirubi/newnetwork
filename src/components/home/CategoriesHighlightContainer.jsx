@@ -8,14 +8,27 @@ import {
 } from "lucide-react";
 
 const categories = [
-  { id: "breaking", label: "חדשות חמות", icon: Radio },
-  { id: "security", label: "ביטחון", icon: Shield },
-  { id: "economy", label: "כלכלה", icon: TrendingUp },
+  { id: "breaking", label: "חדשות עכשיו", icon: Radio },
+  { id: "security", label: "ביטחון ומדיניות", icon: Shield },
+  { id: "economy", label: "כלכלה ועסקים", icon: TrendingUp },
   { id: "politics", label: "פוליטיקה", icon: Vote },
   { id: "technology", label: "טכנולוגיה", icon: Cpu },
   { id: "sports", label: "ספורט", icon: Trophy },
-  { id: "entertainment", label: "בידור", icon: Clapperboard },
-  { id: "world", label: "עולם", icon: Globe },
+  { id: "entertainment", label: "בידור ותרבות", icon: Clapperboard },
+  { id: "world", label: "חדשות עולם", icon: Globe },
+  { id: "health", label: "בריאות", icon: Heart },
+  { id: "israel", label: "חדשות ישראל", icon: Radio },
+  { id: "crime", label: "פלילים ומשטרה", icon: Shield },
+  { id: "education", label: "חינוך", icon: TrendingUp },
+  { id: "culture", label: "תרבות", icon: Clapperboard },
+  { id: "environment", label: "סביבה", icon: Globe },
+  { id: "science", label: "מדע", icon: Cpu },
+  { id: "military", label: "צבא וביטחון", icon: Shield },
+  { id: "law", label: "משפט ופלילים", icon: Vote },
+  { id: "local", label: "חדשות מקומיות", icon: Radio },
+  { id: "music", label: "מוזיקה", icon: Clapperboard },
+  { id: "horoscope", label: "הורוסקופ", icon: Globe },
+  { id: "finance", label: "פיננסים", icon: TrendingUp },
 ];
 
 export default function CategoriesHighlightContainer() {
