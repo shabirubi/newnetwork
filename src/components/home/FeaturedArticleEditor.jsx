@@ -681,24 +681,12 @@ export default function FeaturedArticleEditor() {
       <div className="max-w-7xl mx-auto">
 
         {/* Toolbar */}
-        <div className="flex items-center justify-between mb-3">
-          <div className="flex items-center gap-2">
-            <div className="w-1 h-6 bg-[#E31E24] rounded-full" />
-            <h2 className="text-white font-bold text-lg">כתבה מרכזית</h2>
-            {article?.is_breaking && (
-              <span className="bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded animate-pulse">🔴 חם</span>
-            )}
-          </div>
-          <div className="flex items-center gap-2">
-            <button onClick={openNew}
-              className="flex items-center gap-1 px-3 py-1.5 text-xs bg-green-600/20 hover:bg-green-600/40 text-green-400 rounded-lg border border-green-600/30 transition-colors">
-              <Plus className="w-3.5 h-3.5" /> כתבה חדשה
-            </button>
-            <button onClick={openEdit}
-              className="flex items-center gap-1 px-3 py-1.5 text-xs bg-[#0057B8]/20 hover:bg-[#0057B8]/40 text-[#0057B8] rounded-lg border border-[#0057B8]/30 transition-colors">
-              <Edit3 className="w-3.5 h-3.5" /> עורך מתקדם
-            </button>
-          </div>
+        <div className="flex items-center mb-3 gap-2">
+          <div className="w-1 h-6 bg-[#E31E24] rounded-full" />
+          <h2 className="text-white font-bold text-lg">כתבה מרכזית</h2>
+          {article?.is_breaking && (
+            <span className="bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded animate-pulse">🔴 חם</span>
+          )}
         </div>
 
         {/* Article Display */}

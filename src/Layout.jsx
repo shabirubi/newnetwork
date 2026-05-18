@@ -190,16 +190,22 @@ export default function Layout({ children, currentPageName }) {
   }, [searchQuery]);
 
   useEffect(() => {
-      if (darkMode) {
-        document.documentElement.classList.add('dark');
-        document.documentElement.style.colorScheme = 'dark';
-        localStorage.setItem('darkMode', 'true');
-      } else {
-        document.documentElement.classList.remove('dark');
-        document.documentElement.style.colorScheme = 'light';
-        localStorage.setItem('darkMode', 'false');
-      }
-    }, [darkMode]);
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+      document.documentElement.classList.remove('light-mode');
+      document.documentElement.style.colorScheme = 'dark';
+      document.body.style.backgroundColor = '#121212';
+      document.body.style.color = '#ffffff';
+      localStorage.setItem('darkMode', 'true');
+    } else {
+      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.add('light-mode');
+      document.documentElement.style.colorScheme = 'light';
+      document.body.style.backgroundColor = '#f5f5f5';
+      document.body.style.color = '#111111';
+      localStorage.setItem('darkMode', 'false');
+    }
+  }, [darkMode]);
 
   useEffect(() => {
       const savedColor = localStorage.getItem('themeColor') || '#0080FF';
@@ -288,7 +294,7 @@ export default function Layout({ children, currentPageName }) {
   }
 
   return (
-    <div className="min-h-screen bg-[#121212] transition-colors duration-300 flex flex-col overflow-x-hidden" dir="rtl">
+    <div className={`min-h-screen transition-colors duration-300 flex flex-col overflow-x-hidden ${darkMode ? 'bg-[#121212]' : 'bg-[#f5f5f5]'}`} dir="rtl">
       <style>{`
         :root {
           --primary: #1565C0;
@@ -350,25 +356,22 @@ export default function Layout({ children, currentPageName }) {
       </div>
 
       {/* Logo Header */}
-      <div className="bg-[#000000] py-2 shadow-xl relative overflow-visible">
-
-        <div className="max-w-7xl mx-auto px-4 flex items-center justify-between gap-3 relative z-[200]">
-          <div className="flex items-center gap-3 flex-shrink-0">
-            <LogoVideo className="h-24 w-24 object-contain flex-shrink-0 rounded-full" />
-            <div className="flex flex-col text-right">
-              <h1 className="text-lg sm:text-xl font-bold text-white">הרשת החדשה</h1>
-              <motion.p 
-                className="text-xs sm:text-sm text-white"
-                animate={{ opacity: [0.7, 1, 0.7] }}
-                transition={{ duration: 2, repeat: Infinity }}
-              >
+      <div className={`py-2 shadow-xl relative overflow-visible ${darkMode ? 'bg-[#000000]' : 'bg-white border-b border-gray-200'}`}>
+        <div className="max-w-7xl mx-auto px-3 flex items-center justify-between gap-2 relative z-[200]">
+          
+          {/* Logo — always visible */}
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <LogoVideo className="h-14 w-14 sm:h-20 sm:w-20 object-contain flex-shrink-0 rounded-full" />
+            <div className="flex flex-col text-right hidden sm:flex">
+              <h1 className={`text-base sm:text-xl font-bold ${darkMode ? 'text-white' : 'text-gray-900'}`}>הרשת החדשה</h1>
+              <motion.p className="text-xs text-orange-500" animate={{ opacity: [0.7, 1, 0.7] }} transition={{ duration: 2, repeat: Infinity }}>
                 🟠 NOW ONLINE
               </motion.p>
             </div>
           </div>
 
-          {/* Search Box */}
-          <div className="relative max-w-md flex-1 hidden sm:block" style={{ zIndex: 10000 }}>
+          {/* Search Box — desktop only */}
+          <div className="relative max-w-md flex-1 hidden md:block" style={{ zIndex: 10000 }}>
             <div className="relative">
               <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
               <Input
@@ -377,52 +380,26 @@ export default function Layout({ children, currentPageName }) {
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => setShowSearchResults(true)}
-                className="pr-10 bg-black/60 border-[#0057B8]/50 text-white placeholder:text-gray-400 focus:border-[#0057B8] rounded-xl"
+                className={`pr-10 rounded-xl ${darkMode ? 'bg-black/60 border-[#0057B8]/50 text-white placeholder:text-gray-400' : 'bg-gray-100 border-gray-300 text-gray-900 placeholder:text-gray-500'}`}
               />
             </div>
-
-            {/* Search Results Dropdown */}
             <AnimatePresence>
               {showSearchResults && searchQuery.length >= 2 && (
                 <motion.div
-                  initial={{ opacity: 0, y: -10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -10 }}
+                  initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
                   style={{ zIndex: 10000 }}
-                  className="absolute top-full mt-2 left-0 right-0 bg-black backdrop-blur-xl border-2 border-[#0057B8] rounded-xl shadow-2xl shadow-[#0057B8]/50 max-h-96 overflow-y-auto"
+                  className={`absolute top-full mt-2 left-0 right-0 backdrop-blur-xl border-2 rounded-xl shadow-2xl max-h-96 overflow-y-auto ${darkMode ? 'bg-black border-[#0057B8]' : 'bg-white border-blue-300'}`}
                   onMouseDown={(e) => e.preventDefault()}
                 >
                   {searchResults.length === 0 ? (
-                    <div className="p-4 text-center text-gray-400">
-                      {searchQuery.length >= 2 ? 'לא נמצאו תוצאות' : 'הקלד לפחות 2 תווים'}
-                    </div>
+                    <div className={`p-4 text-center ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>לא נמצאו תוצאות</div>
                   ) : (
                     searchResults.map((article) => (
-                      <Link
-                        key={article.id}
-                        to={createPageUrl(`Article?id=${article.id}`)}
-                        onClick={() => {
-                          setSearchQuery("");
-                          setShowSearchResults(false);
-                        }}
-                        className="block p-4 hover:bg-[#0057B8]/20 transition-colors border-b border-gray-800 last:border-b-0"
-                      >
-                        <h4 className="text-white font-bold text-sm mb-1 line-clamp-1">
-                          {article.title}
-                        </h4>
-                        <p className="text-gray-400 text-xs line-clamp-2">
-                          {article.subtitle || article.content?.substring(0, 100)}
-                        </p>
-                        <div className="flex items-center gap-2 mt-2">
-                          {article.category && (
-                            <span className="text-[#0057B8] text-xs">
-                              {article.category}
-                            </span>
-                          )}
-                          <span className="text-gray-500 text-xs">
-                            {new Date(article.created_date).toLocaleDateString('he-IL')}
-                          </span>
-                        </div>
+                      <Link key={article.id} to={createPageUrl(`Article?id=${article.id}`)}
+                        onClick={() => { setSearchQuery(""); setShowSearchResults(false); }}
+                        className={`block p-4 transition-colors border-b last:border-b-0 ${darkMode ? 'hover:bg-[#0057B8]/20 border-gray-800' : 'hover:bg-blue-50 border-gray-100'}`}>
+                        <h4 className={`font-bold text-sm mb-1 line-clamp-1 ${darkMode ? 'text-white' : 'text-gray-900'}`}>{article.title}</h4>
+                        <span className="text-gray-500 text-xs">{new Date(article.created_date).toLocaleDateString('he-IL')}</span>
                       </Link>
                     ))
                   )}
@@ -431,99 +408,64 @@ export default function Layout({ children, currentPageName }) {
             </AnimatePresence>
           </div>
 
-          <div className="flex items-center gap-3 flex-shrink-0">
-            <button
-              onClick={() => setCategoriesSidebarOpen(true)}
-              className="flex items-center gap-1 px-2 py-1.5 bg-black/60 backdrop-blur-xl rounded-lg border border-gray-600 transition-all hover:scale-105 text-[11px]"
-            >
-              <Menu className="w-4 h-4 text-white" />
-              <span className="text-white font-bold hidden sm:inline">קטגוריות</span>
+          {/* Action buttons */}
+          <div className="flex items-center gap-1.5 flex-shrink-0">
+            {/* Categories */}
+            <button onClick={() => setCategoriesSidebarOpen(true)}
+              className={`flex items-center gap-1 px-2 py-2 rounded-lg border transition-all hover:scale-105 ${darkMode ? 'bg-black/60 border-gray-600' : 'bg-gray-100 border-gray-300'}`}>
+              <Menu className={`w-4 h-4 ${darkMode ? 'text-white' : 'text-gray-700'}`} />
+              <span className={`font-bold hidden sm:inline text-xs ${darkMode ? 'text-white' : 'text-gray-700'}`}>קטגוריות</span>
             </button>
 
             {/* Dark/Light toggle */}
-            <button
-              onClick={() => setDarkMode(v => !v)}
-              className="flex items-center gap-1 px-2 py-1.5 bg-black/60 backdrop-blur-xl rounded-lg border border-gray-600 transition-all hover:scale-105 text-[11px] relative overflow-hidden"
-              aria-label="Toggle dark mode"
-            >
-              <motion.div
-                key={darkMode ? 'moon' : 'sun'}
-                initial={{ rotate: -90, opacity: 0 }}
-                animate={{ rotate: 0, opacity: 1 }}
-                exit={{ rotate: 90, opacity: 0 }}
-                transition={{ duration: 0.25 }}
-              >
-                {darkMode ? <Moon className="w-4 h-4 text-blue-300" /> : <Sun className="w-4 h-4 text-yellow-400" />}
-              </motion.div>
-              <span className="text-white font-bold hidden sm:inline">{darkMode ? 'לילה' : 'יום'}</span>
+            <button onClick={() => setDarkMode(v => !v)}
+              className={`flex items-center gap-1 px-2 py-2 rounded-lg border transition-all hover:scale-105 ${darkMode ? 'bg-black/60 border-gray-600' : 'bg-yellow-50 border-yellow-300'}`}
+              aria-label="Toggle dark mode">
+              {darkMode ? <Moon className="w-4 h-4 text-blue-300" /> : <Sun className="w-4 h-4 text-yellow-500" />}
+              <span className={`font-bold hidden sm:inline text-xs ${darkMode ? 'text-blue-300' : 'text-yellow-600'}`}>{darkMode ? 'לילה' : 'יום'}</span>
             </button>
 
-            <button
-              onClick={() => window.open(createPageUrl("AdminPanel"), "_blank")}
-              className="flex items-center gap-1 px-2 py-1.5 bg-black/60 backdrop-blur-xl rounded-lg border border-gray-600 transition-all hover:scale-105 text-[11px]"
-            >
-              <Shield className="w-4 h-4 text-white" />
-              <span className="text-white font-bold">Admin</span>
+            {/* Admin */}
+            <button onClick={() => window.open(createPageUrl("AdminPanel"), "_blank")}
+              className={`flex items-center gap-1 px-2 py-2 rounded-lg border transition-all hover:scale-105 ${darkMode ? 'bg-black/60 border-gray-600' : 'bg-gray-100 border-gray-300'}`}>
+              <Shield className={`w-4 h-4 ${darkMode ? 'text-white' : 'text-gray-700'}`} />
+              <span className={`font-bold hidden sm:inline text-xs ${darkMode ? 'text-white' : 'text-gray-700'}`}>Admin</span>
             </button>
 
-            <div className="hidden sm:flex items-center gap-4">
-
-
-              {/* Auth Buttons */}
+            {/* Auth */}
             {authLoading ? (
-              <div className="flex items-center gap-2 px-3 py-2 bg-black/60 rounded-2xl">
-                <Loader2 className="w-4 h-4 text-white animate-spin" />
-              </div>
+              <div className="p-2"><Loader2 className="w-4 h-4 text-gray-400 animate-spin" /></div>
             ) : user ? (
               <>
-                <button
-                  onClick={() => setProfileModalOpen(true)}
-                  className="flex items-center transition-all cursor-pointer active:scale-95 relative"
-                >
+                <button onClick={() => setProfileModalOpen(true)} className="transition-all cursor-pointer active:scale-95">
                   {user.profile_image ? (
-                    <img 
-                      src={user.profile_image} 
-                      alt={user.full_name}
-                      className="w-9 h-9 rounded-full object-contain bg-black shadow-lg"
-                    />
+                    <img src={user.profile_image} alt={user.full_name} className="w-8 h-8 rounded-full object-contain shadow-lg" />
                   ) : (
-                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center text-white text-sm font-bold shadow-lg">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gray-600 to-gray-700 flex items-center justify-center text-white text-xs font-bold shadow-lg">
                       {user.full_name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'U'}
                     </div>
                   )}
                 </button>
-                <button
-                  onClick={handleLogout}
-                  className="flex items-center gap-1 px-2 py-1 bg-red-600/20 hover:bg-red-600/40 backdrop-blur-xl rounded-lg shadow-lg border border-red-500/30 transition-all hover:scale-105 text-[11px]"
-                >
+                <button onClick={handleLogout}
+                  className="flex items-center gap-1 px-2 py-2 bg-red-600/20 rounded-lg border border-red-500/30 transition-all hover:scale-105">
                   <LogOut className="w-3.5 h-3.5 text-red-400" />
-                  <span className="text-red-300 font-bold hidden sm:inline">התנתק</span>
                 </button>
               </>
             ) : (
-              <button
-                onClick={handleLogin}
-                className="flex items-center gap-1 px-2 py-1 backdrop-blur-xl rounded-lg shadow-lg transition-all hover:scale-105 text-[11px] relative overflow-hidden"
-                style={{
-                  background: 'linear-gradient(90deg, #FF0000, #FF7F00, #FFFF00, #00FF00, #0000FF, #4B0082, #9400D3)',
-                  backgroundSize: '200% 100%',
-                  animation: 'rainbow 8s linear infinite',
-                  border: '2px solid rgba(255, 255, 255, 0.3)'
-                }}
-              >
-                <LogIn className="w-3.5 h-3.5 text-white" />
-                <span className="text-white font-bold hidden sm:inline">התחבר</span>
+              <button onClick={handleLogin}
+                className="flex items-center gap-1 px-2 py-2 rounded-lg border-2 border-white/30 transition-all hover:scale-105"
+                style={{ background: 'linear-gradient(90deg,#E31E24,#0057B8)', backgroundSize: '200% 100%' }}>
+                <LogIn className="w-4 h-4 text-white" />
+                <span className="text-white font-bold hidden sm:inline text-xs">התחבר</span>
               </button>
             )}
 
-              <button
-                onClick={() => setReelsOpen(true)}
-                className="flex items-center gap-1 px-2 py-1 bg-[#E31E24]/80 hover:bg-[#E31E24] backdrop-blur-xl rounded-lg border border-red-500/50 transition-all hover:scale-105 animate-pulse text-[11px]"
-              >
-                <Radio className="w-4 h-4 text-white" />
-                <span className="text-white font-bold">ריילס</span>
-              </button>
-            </div>
+            {/* Reels — desktop */}
+            <button onClick={() => setReelsOpen(true)}
+              className="hidden sm:flex items-center gap-1 px-2 py-2 bg-[#E31E24]/80 hover:bg-[#E31E24] rounded-lg border border-red-500/50 transition-all hover:scale-105 animate-pulse">
+              <Radio className="w-4 h-4 text-white" />
+              <span className="text-white font-bold text-xs">ריילס</span>
+            </button>
           </div>
         </div>
       </div>
