@@ -167,12 +167,13 @@ export default function PodcastsFloatingButton() {
 
   return (
     <>
-      {/* Floating Button */}
+      {/* Floating Button - positioned above editor button */}
       <motion.button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-24 left-4 z-[999] w-14 h-14 rounded-full bg-[#1DB954] hover:bg-[#1ed760] shadow-lg shadow-[#1DB954]/50 flex items-center justify-center transition-all hover:scale-110 active:scale-95"
+        className="fixed bottom-48 left-4 z-[999] w-14 h-14 rounded-full bg-[#1DB954] hover:bg-[#1ed760] shadow-lg shadow-[#1DB954]/50 flex items-center justify-center transition-all hover:scale-110 active:scale-95"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
+        title="פודקאסטים"
       >
         <Headphones className="w-6 h-6 text-white" />
       </motion.button>
@@ -184,19 +185,20 @@ export default function PodcastsFloatingButton() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[1000]"
+            className="fixed inset-0 z-[10000]"
             onClick={() => {
               setIsOpen(false);
               setSelectedPodcast(null);
             }}
           >
-            <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" />
+            <div className="absolute inset-0 bg-black/90 backdrop-blur-md" />
             
             <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              className="absolute inset-4 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 md:w-[600px] md:max-h-[80vh] bg-gradient-to-br from-[#121212] to-black rounded-3xl border-2 border-[#1DB954]/30 shadow-2xl overflow-hidden flex flex-col"
+              initial={{ scale: 0.8, opacity: 0, y: 50 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.8, opacity: 0, y: 50 }}
+              transition={{ type: "spring", damping: 25, stiffness: 300 }}
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[95vw] md:w-[600px] max-h-[85vh] bg-gradient-to-br from-[#121212] to-black rounded-3xl border-2 border-[#1DB954]/30 shadow-2xl shadow-[#1DB954]/20 overflow-hidden flex flex-col"
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header */}
