@@ -398,6 +398,36 @@ function EditorModal({ article, category, onClose, onSaved }) {
   );
 }
 
+// ---- Reel Thumbnail with error fallback ----
+function ReelThumbnail({ reel, color }) {
+  const [imgError, setImgError] = useState(false);
+  const showPlaceholder = !reel.thumbnail_url || imgError;
+
+  if (showPlaceholder) {
+    return (
+      <div className="w-full h-full flex flex-col items-center justify-center gap-1 px-1"
+        style={{ background: `linear-gradient(135deg, ${color}44 0%, #0a0a0a 60%, ${color}22 100%)` }}>
+        <div className="w-10 h-10 rounded-full flex items-center justify-center"
+          style={{ background: color + '50', border: `1.5px solid ${color}` }}>
+          <Play className="w-5 h-5 fill-white text-white" />
+        </div>
+        <p className="text-white text-[8px] font-bold text-center leading-tight line-clamp-3 px-1 mt-1">
+          {reel.title}
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={reel.thumbnail_url}
+      alt={reel.title}
+      className="w-full h-full object-cover"
+      onError={() => setImgError(true)}
+    />
+  );
+}
+
 // ---- Inline Video Player Modal ----
 function VideoPlayerModal({ video, onClose, onNext, onPrev, total, current }) {
   const videoRef = useRef(null);
@@ -530,35 +560,9 @@ function CategoryReelsStrip({ category, color }) {
               className="flex-shrink-0 w-24 h-36 rounded-xl overflow-hidden relative border-2 transition-all hover:scale-105 active:scale-95 group"
               style={{ borderColor: color + '60' }}>
               {/* Background: thumbnail or styled placeholder */}
-              {reel.thumbnail_url ? (
-                <img src={reel.thumbnail_url} alt={reel.title} className="w-full h-full object-cover" />
-              ) : (
-                <div className="w-full h-full flex flex-col items-center justify-center gap-1 px-1"
-                  style={{ background: `linear-gradient(135deg, ${color}33 0%, #111 60%, ${color}22 100%)` }}>
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center mb-1"
-                    style={{ background: color + '40', border: `1.5px solid ${color}80` }}>
-                    <Play className="w-5 h-5 fill-white text-white" />
-                  </div>
-                  <p className="text-white text-[8px] font-bold text-center leading-tight line-clamp-3 px-0.5">
-                    {reel.title}
-                  </p>
-                </div>
-              )}
-              {/* Overlay with play button */}
-              <div className="absolute inset-0 bg-black/20 group-hover:bg-black/0 transition-colors" />
-              {reel.thumbnail_url && (
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                  <div className="bg-black/60 rounded-full p-2">
-                    <Play className="w-4 h-4 text-white fill-white" />
-                  </div>
-                </div>
-              )}
-              {/* Title bar at bottom (only if has thumbnail) */}
-              {reel.thumbnail_url && (
-                <p className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/90 to-transparent text-white text-[9px] px-1.5 pb-1.5 pt-3 line-clamp-2 leading-tight">
-                  {reel.title}
-                </p>
-              )}
+              <ReelThumbnail reel={reel} color={color} />
+              {/* Hover overlay */}
+              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors rounded-xl" />
             </button>
           ))}
           {/* Open player button */}
