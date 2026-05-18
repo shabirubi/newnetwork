@@ -182,9 +182,6 @@ export default function Home() {
       {/* Podcasts Container */}
       <PodcastsContainer />
 
-      {/* Category Rows - Featured article per category */}
-      <CategoriesHighlightContainer />
-
       {/* Category Article Editors — one per category with full editor */}
       <AllCategoryEditors />
 
