@@ -321,6 +321,7 @@ function UploadModal({ onClose, onUploaded }) {
 export default function PodcastsContainer() {
   const [activeIdx, setActiveIdx] = useState(null);
   const [uploadOpen, setUploadOpen] = useState(false);
+  const [floatingButtonVisible, setFloatingButtonVisible] = useState(true);
   const queryClient = useQueryClient();
   const scrollRef = useRef(null);
 
@@ -346,7 +347,7 @@ export default function PodcastsContainer() {
       <div className="max-w-7xl mx-auto">
 
         {/* Header */}
-        <div className="flex items-center justify-between mb-4">
+        <div id="podcasts-section" className="flex items-center justify-between mb-4 scroll-mt-20">
           <div className="flex items-center gap-2">
             <div className="w-1 h-6 rounded-full bg-purple-500" />
             <Mic className="w-5 h-5 text-purple-400" />
@@ -417,6 +418,37 @@ export default function PodcastsContainer() {
           />
         )}
       </AnimatePresence>
+
+      {/* Floating Spotify-style Button */}
+      {floatingButtonVisible && (
+        <motion.div
+          initial={{ scale: 0, y: 20 }}
+          animate={{ scale: 1, y: 0 }}
+          exit={{ scale: 0, y: 20 }}
+          className="fixed bottom-24 left-4 z-[9997]"
+        >
+          <button
+            onClick={() => {
+              document.getElementById('podcasts-section')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }}
+            className="relative group flex items-center gap-3 px-4 py-3 bg-[#1DB954] hover:bg-[#1ed760] rounded-full shadow-2xl shadow-green-900/50 transition-all hover:scale-105"
+          >
+            {/* Spotify Icon */}
+            <div className="w-8 h-8 rounded-full bg-black/20 flex items-center justify-center">
+              <svg viewBox="0 0 24 24" className="w-5 h-5 text-black" fill="currentColor">
+                <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.6 0 12 0zm5.5 17.3c-.2.3-.5.4-.8.2-2.2-1.3-5-1.6-8.2-.9-.3.1-.6-.2-.7-.5-.1-.3.2-.6.5-.7 3.5-.8 6.6-.4 9.1 1.1.3.2.4.5.1.8zm1.1-2.6c-.3.4-.8.5-1.2.3-2.6-1.6-6.6-2.1-9.6-1.1-.4.1-.9-.1-1-.5-.1-.4.1-.9.5-1 3.5-1.1 7.9-.6 11 1.3.4.2.5.7.3 1zm.1-2.7c-3.1-1.8-8.2-2-11.1-1-.5.2-1-.1-1.2-.6-.2-.5.1-1 .6-1.2 3.5-1.2 9.2-.9 12.8 1.2.5.3.6.8.4 1.3-.3.5-.8.6-1.3.3z"/>
+              </svg>
+            </div>
+            <span className="text-black font-bold text-sm">פודקאסטים</span>
+            <button
+              onClick={(e) => { e.stopPropagation(); setFloatingButtonVisible(false); }}
+              className="absolute -top-1 -right-1 w-5 h-5 rounded-full bg-red-500 hover:bg-red-600 text-white flex items-center justify-center text-xs opacity-0 group-hover:opacity-100 transition-opacity"
+            >
+              <X className="w-3 h-3" />
+            </button>
+          </button>
+        </motion.div>
+      )}
     </div>
   );
 }
