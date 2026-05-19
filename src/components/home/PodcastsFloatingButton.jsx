@@ -113,13 +113,15 @@ export default function PodcastsFloatingButton() {
 
   return (
     <>
-      {/* Floating Button - Spotify Official Logo */}
+      {/* Floating Button - Spotify Official Logo - Opens Upload Modal */}
       <motion.button
-        onClick={() => setIsOpen(true)}
+        onClick={() => {
+          window.dispatchEvent(new CustomEvent('openUploadPodcast'));
+        }}
         className="fixed bottom-48 left-4 z-[999] w-14 h-14 rounded-full bg-[#1DB954] hover:bg-[#1ed760] shadow-lg shadow-[#1DB954]/50 flex items-center justify-center transition-all hover:scale-110 active:scale-95"
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
-        title="פודקאסטים"
+        title="העלה פודקאסט"
       >
         {/* Spotify Official Logo - Three curved sound waves */}
         <svg className="w-7 h-7" viewBox="0 0 24 24" fill="white">
