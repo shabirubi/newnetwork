@@ -96,11 +96,13 @@ export default function UserUploadedVideos({ onUploadClick }) {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true }}
-              onClick={() => setSelectedVideo(video)}
-              className="group cursor-pointer"
+              className="group"
             >
               {/* Video Card */}
-              <div className="relative rounded-2xl overflow-hidden bg-gray-900 border border-gray-700 hover:border-red-600 transition-all duration-300">
+              <div 
+                onClick={() => setSelectedVideo(video)}
+                className="relative rounded-2xl overflow-hidden bg-gray-900 border border-gray-700 hover:border-red-600 transition-all duration-300 cursor-pointer"
+              >
                 {/* Thumbnail */}
                 <div className="relative h-0 pb-[56.25%] overflow-hidden bg-gradient-to-br from-gray-900 to-black">
                   {video.thumbnail_url ? (

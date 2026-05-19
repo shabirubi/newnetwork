@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
@@ -71,6 +71,13 @@ export default function Home() {
       window.removeEventListener('openUploadPodcast', handleOpenPodcast);
       window.removeEventListener('openWeatherChatModal', handleOpenWeatherChat);
     };
+  }, []);
+
+  // Handle podcast upload from mobile nav
+  React.useEffect(() => {
+    const handlePodcastUpload = () => setUploadPodcastModalOpen(true);
+    window.addEventListener('openUploadPodcast', handlePodcastUpload);
+    return () => window.removeEventListener('openUploadPodcast', handlePodcastUpload);
   }, []);
   const [reportersModalOpen, setReportersModalOpen] = React.useState(false);
   const [liveAvatarChatOpen, setLiveAvatarChatOpen] = React.useState(false);
@@ -179,14 +186,14 @@ export default function Home() {
       {/* OREF Alerts - TOP PRIORITY */}
       <OrefAlertsPanel />
 
-      {/* Podcast Upload Button - Small floating button */}
+      {/* Podcast Upload Button - Small floating button (desktop only) */}
       <motion.button
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         onClick={() => setUploadPodcastModalOpen(true)}
-        className="fixed top-28 left-4 sm:left-8 z-[998] w-10 h-10 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white rounded-xl shadow-lg shadow-purple-900/50 border border-purple-400/30 backdrop-blur-sm flex items-center justify-center transition-all"
+        className="hidden sm:flex fixed top-28 left-4 sm:left-8 z-[998] w-10 h-10 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white rounded-xl shadow-lg shadow-purple-900/50 border border-purple-400/30 backdrop-blur-sm items-center justify-center transition-all"
       >
         <Mic className="w-5 h-5" />
       </motion.button>
