@@ -274,6 +274,7 @@ export default function UploadVideoModal({ isOpen, onClose }) {
                       <option value="user-videos">User Uploaded Videos</option>
                       <option value="all-videos">All Videos Gallery</option>
                       <option value="reporter-responses">תשובות הכתבים</option>
+                      <option value="podcasts">🎙️ פודקאסטים</option>
                     </select>
                   </div>
 
