@@ -561,7 +561,7 @@ export default function Layout({ children, currentPageName }) {
             transition={{ duration: 1.4, ease: "easeOut", times: [0, 0.2, 0.5, 0.75, 1] }}
             className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[99998] pointer-events-none"
           >
-            <LogoVideo className="h-16 w-16 rounded-full shadow-2xl shadow-red-500/50 border-2 border-red-500/40" />
+            <LogoVideo className="h-32 w-32 rounded-full shadow-2xl shadow-red-500/50 border-2 border-red-500/40" />
           </motion.div>
         )}
       </AnimatePresence>
