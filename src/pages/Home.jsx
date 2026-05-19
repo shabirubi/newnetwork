@@ -34,7 +34,7 @@ import ReportersSpotlight from "../components/home/ReportersSpotlight";
 import ReporterLiveChat from "../components/reporter/ReporterLiveChat";
 
 import ZakaMediaKitContainer from "../components/home/ZakaMediaKitContainer";
-
+import PodcastUploadModal from "../components/home/PodcastUploadModal";
 import CategoriesHighlightContainer from "../components/home/CategoriesHighlightContainer";
 import WeatherForecastModal from "../components/weather/WeatherForecastModal";
 import YouTubeFloatingButton from "../components/home/YouTubeFloatingButton";
@@ -56,16 +56,19 @@ export default function Home() {
   const [categoriesMenuOpen, setCategoriesMenuOpen] = React.useState(false);
   const [a11yOpen, setA11yOpen] = React.useState(false);
   const [uploadVideoModalOpen, setUploadVideoModalOpen] = React.useState(false);
-
+  const [uploadPodcastModalOpen, setUploadPodcastModalOpen] = React.useState(false);
   const [livePlayerOpen, setLivePlayerOpen] = React.useState(false);
 
   React.useEffect(() => {
     const handleOpenUpload = () => setUploadVideoModalOpen(true);
+    const handleOpenPodcast = () => setUploadPodcastModalOpen(true);
     const handleOpenWeatherChat = () => setWeatherChatOpen(true);
     window.addEventListener('openUploadVideo', handleOpenUpload);
+    window.addEventListener('openUploadPodcast', handleOpenPodcast);
     window.addEventListener('openWeatherChatModal', handleOpenWeatherChat);
     return () => {
       window.removeEventListener('openUploadVideo', handleOpenUpload);
+      window.removeEventListener('openUploadPodcast', handleOpenPodcast);
       window.removeEventListener('openWeatherChatModal', handleOpenWeatherChat);
     };
   }, []);
@@ -176,6 +179,17 @@ export default function Home() {
       {/* OREF Alerts - TOP PRIORITY */}
       <OrefAlertsPanel />
 
+      {/* Podcast Upload Button */}
+      <div className="mx-4 my-6">
+        <button
+          onClick={() => window.dispatchEvent(new CustomEvent('openUploadPodcast'))}
+          className="w-full max-w-2xl mx-auto flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 rounded-2xl text-white font-bold text-lg shadow-lg shadow-purple-900/50 transition-all hover:scale-105"
+        >
+          <Mic className="w-6 h-6" />
+          העלה פודקאסט חדש
+        </button>
+      </div>
+
       {/* Featured Article Editor - above war news */}
       <FeaturedArticleEditor />
 
@@ -212,6 +226,13 @@ export default function Home() {
 
       {/* Upload Video Modal */}
       <UploadVideoModal isOpen={uploadVideoModalOpen} onClose={() => setUploadVideoModalOpen(false)} />
+
+      {/* Podcast Upload Modal */}
+      <PodcastUploadModal 
+        isOpen={uploadPodcastModalOpen} 
+        onClose={() => setUploadPodcastModalOpen(false)}
+        onUploaded={() => {}}
+      />
 
       {/* Reporters Modal */}
       <ReportersModal isOpen={reportersModalOpen} onClose={() => setReportersModalOpen(false)} />
