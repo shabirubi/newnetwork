@@ -189,17 +189,6 @@ export default function Home() {
       {/* OREF Alerts - TOP PRIORITY */}
       <OrefAlertsPanel />
 
-      {/* Podcast Upload Button - Small floating button (desktop only) */}
-      <motion.button
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={() => setUploadPodcastModalOpen(true)}
-        className="hidden sm:flex fixed top-28 left-4 sm:left-8 z-[998] w-10 h-10 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white rounded-xl shadow-lg shadow-purple-900/50 border border-purple-400/30 backdrop-blur-sm items-center justify-center transition-all"
-      >
-        <Mic className="w-5 h-5" />
-      </motion.button>
 
       {/* Featured Article Editor - above war news */}
       <FeaturedArticleEditor />
