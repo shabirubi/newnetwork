@@ -57,42 +57,6 @@ const categoryLabels = {
 };
 
 function PodcastPlayer({ podcast, onClose }) {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const audioRef = React.useRef(null);
-
-  React.useEffect(() => {
-    if (audioRef.current && podcast) {
-      audioRef.current.src = podcast.video_url;
-      if (isPlaying) {
-        audioRef.current.play().catch(err => console.error('Playback error:', err));
-      }
-    }
-  }, [podcast, isPlaying]);
-
-  const handleTimeUpdate = () => {
-    if (audioRef.current) {
-      const current = audioRef.current.currentTime;
-      const duration = audioRef.current.duration || 1;
-      setProgress((current / duration) * 100);
-    }
-  };
-
-  const handleEnded = () => {
-    setIsPlaying(false);
-    setProgress(100);
-  };
-
-  const togglePlay = () => {
-    setIsPlaying(!isPlaying);
-  };
-
-  const formatTime = (seconds) => {
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.floor(seconds % 60);
-    return `${mins}:${secs.toString().padStart(2, '0')}`;
-  };
-
   return (
     <div className="bg-gradient-to-br from-[#1DB954]/20 to-black rounded-2xl p-4 border border-[#1DB954]/30">
       <div className="flex items-center gap-4 mb-4">
@@ -110,35 +74,17 @@ function PodcastPlayer({ podcast, onClose }) {
         </div>
       </div>
 
-      <audio 
-        ref={audioRef}
-        onTimeUpdate={handleTimeUpdate}
-        onEnded={handleEnded}
-        onError={(e) => console.error('Audio error:', e)}
+      {/* Spotify Embedded Player */}
+      <iframe
+        src={podcast.video_url}
+        width="100%"
+        height="351"
+        frameBorder="0"
+        allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+        loading="lazy"
+        className="rounded-xl overflow-hidden"
+        title={podcast.title}
       />
-
-      <div className="space-y-2">
-        <div className="flex items-center gap-2">
-          <Button
-            onClick={togglePlay}
-            className="w-10 h-10 rounded-full bg-[#1DB954] hover:bg-[#1ed760] text-white p-0"
-          >
-            {isPlaying ? <Pause size={20} /> : <Play size={20} />}
-          </Button>
-          <div className="flex-1">
-            <div className="h-1 bg-gray-700 rounded-full overflow-hidden">
-              <div 
-                className="h-full bg-[#1DB954] transition-all"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
-            <div className="flex justify-between text-xs text-gray-400 mt-1">
-              <span>{formatTime(audioRef.current?.currentTime || 0)}</span>
-              <span>{formatTime(podcast.duration || 0)}</span>
-            </div>
-          </div>
-        </div>
-      </div>
 
       <div className="flex items-center justify-between mt-4 text-xs text-gray-400">
         <span>{podcast.views || 0} צפיות</span>
