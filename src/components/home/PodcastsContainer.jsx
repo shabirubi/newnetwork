@@ -214,14 +214,13 @@ function UploadModal({ onClose, onUploaded }) {
     setUploadProgress(`מעלה ${isAudio ? 'אודיו' : 'וידאו'} (${fileMB.toFixed(1)}MB)...`);
 
     try {
-      const { file_uri } = await base44.integrations.Core.UploadPrivateFile({ file });
-      const { signed_url } = await base44.integrations.Core.CreateFileSignedUrl({ file_uri, expires_in: 60 * 60 * 24 * 365 * 3 });
+      const { file_url } = await base44.integrations.Core.UploadFile({ file });
 
       setUploadProgress("שומר...");
       await base44.entities.UserVideo.create({
         title,
         description,
-        video_url: signed_url,
+        video_url: file_url,
         thumbnail_url: thumbUrl || "",
         category: "breaking",
         feed: "podcasts",
