@@ -375,7 +375,7 @@ export default function ReelsModal({ isOpen, onClose }) {
         ) : (
           <AnimatePresence mode="wait">
             <motion.div
-              key={activeIdx}
+              key={`${selectedCategory}-${activeIdx}-${filtered[activeIdx]?.id}`}
               initial={{ y: activeIdx === 0 ? 0 : 100, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: -100, opacity: 0 }}
