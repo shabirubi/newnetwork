@@ -353,8 +353,14 @@ export default function ReelsModal({ isOpen, onClose }) {
         ) : filtered.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center px-8">
             <div className="text-5xl mb-4">🎬</div>
-            <p className="text-white font-bold text-xl mb-2">אין סרטונים עדיין</p>
-            <p className="text-gray-400 text-sm">העלה ריילס מהעורך המתקדם</p>
+            <p className="text-white font-bold text-xl mb-2">אין סרטוני ריילס עדיין</p>
+            <p className="text-gray-400 text-sm mb-6">כדי להוסיף ריילס - העלה סרטון ובחר פיד "ריילס"</p>
+            <button
+              onClick={() => { onClose(); window.dispatchEvent(new CustomEvent('openUploadVideo')); }}
+              className="bg-[#E31E24] text-white px-6 py-3 rounded-full font-bold text-sm"
+            >
+              📹 העלה סרטון עכשיו
+            </button>
           </div>
         ) : (
           <AnimatePresence mode="wait">
