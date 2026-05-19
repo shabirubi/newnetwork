@@ -252,17 +252,28 @@ export default function ReelsModal({ isOpen, onClose }) {
   const containerRef = useRef(null);
   const touchStartY = useRef(null);
 
+  const queryClient = useQueryClient();
+
   const { data: videos = [], isLoading } = useQuery({
     queryKey: ["reels-videos"],
     queryFn: () => base44.entities.UserVideo.list("-created_date", 200),
     enabled: isOpen,
-    staleTime: 30 * 1000,
+    staleTime: 0,
   });
 
-  // סנן רק סרטוני וידאו - לא mp3/אודיו/פודקאסטים
+  // רענן ריילס אחרי העלאת סרטון חדש
+  useEffect(() => {
+    const handler = () => queryClient.invalidateQueries({ queryKey: ["reels-videos"] });
+    window.addEventListener("videoUploaded", handler);
+    return () => window.removeEventListener("videoUploaded", handler);
+  }, [queryClient]);
+
+  // סנן רק סרטוני וידאו אמיתיים - feed=reels, tiktok, all, user-videos, all-videos וכדומה. לא פודקאסטים ולא MP3
   const videoOnly = videos.filter(v => {
     const url = v.video_url || "";
-    return !url.includes(".mp3") && !url.includes(".m4a") && !url.includes(".wav") && !url.includes(".ogg") && v.feed !== "podcasts";
+    const isAudio = url.includes(".mp3") || url.includes(".m4a") || url.includes(".wav") || url.includes(".ogg");
+    const isPodcastFeed = v.feed === "podcasts";
+    return !isAudio && !isPodcastFeed;
   });
 
   const filtered = selectedCategory === "all"
@@ -297,8 +308,7 @@ export default function ReelsModal({ isOpen, onClose }) {
     touchStartY.current = null;
   };
 
-  const categories = ["all", ...Object.keys(CATEGORY_LABELS).filter(k => k !== "all")];
-  const usedCategories = ["all", ...new Set(videos.map(v => v.category).filter(Boolean))];
+  const usedCategories = ["all", ...new Set(videoOnly.map(v => v.category).filter(Boolean))];
 
   if (!isOpen) return null;
 
