@@ -179,16 +179,17 @@ export default function Home() {
       {/* OREF Alerts - TOP PRIORITY */}
       <OrefAlertsPanel />
 
-      {/* Podcast Upload Button */}
-      <div className="mx-4 my-6">
-        <button
-          onClick={() => window.dispatchEvent(new CustomEvent('openUploadPodcast'))}
-          className="w-full max-w-2xl mx-auto flex items-center justify-center gap-3 px-6 py-4 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 rounded-2xl text-white font-bold text-lg shadow-lg shadow-purple-900/50 transition-all hover:scale-105"
-        >
-          <Mic className="w-6 h-6" />
-          העלה פודקאסט חדש
-        </button>
-      </div>
+      {/* Podcast Upload Button - Small floating button */}
+      <motion.button
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={() => setUploadPodcastModalOpen(true)}
+        className="fixed top-28 left-4 sm:left-8 z-[998] w-10 h-10 bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-500 hover:to-purple-600 text-white rounded-xl shadow-lg shadow-purple-900/50 border border-purple-400/30 backdrop-blur-sm flex items-center justify-center transition-all"
+      >
+        <Mic className="w-5 h-5" />
+      </motion.button>
 
       {/* Featured Article Editor - above war news */}
       <FeaturedArticleEditor />
@@ -228,11 +229,17 @@ export default function Home() {
       <UploadVideoModal isOpen={uploadVideoModalOpen} onClose={() => setUploadVideoModalOpen(false)} />
 
       {/* Podcast Upload Modal */}
-      <PodcastUploadModal 
-        isOpen={uploadPodcastModalOpen} 
-        onClose={() => setUploadPodcastModalOpen(false)}
-        onUploaded={() => {}}
-      />
+      <AnimatePresence>
+        {uploadPodcastModalOpen && (
+          <PodcastUploadModal 
+            onClose={() => setUploadPodcastModalOpen(false)}
+            onUploaded={() => {
+              setUploadPodcastModalOpen(false);
+              queryClient.invalidateQueries({ queryKey: ['userVideos'] });
+            }}
+          />
+        )}
+      </AnimatePresence>
 
       {/* Reporters Modal */}
       <ReportersModal isOpen={reportersModalOpen} onClose={() => setReportersModalOpen(false)} />

@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
 import { base44 } from "@/api/base44Client";
 
-export default function PodcastUploadModal({ onClose, onUploaded }) {
+export default function PodcastUploadModal({ onClose, onUploaded, isOpen }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [uploading, setUploading] = useState(false);
@@ -13,6 +13,8 @@ export default function PodcastUploadModal({ onClose, onUploaded }) {
   const fileRef = useRef(null);
   const thumbRef = useRef(null);
   const [thumbUrl, setThumbUrl] = useState("");
+
+  if (!isOpen) return null;
 
   const MAX_AUDIO_MB = 50;
   const MAX_VIDEO_MB = 100;
