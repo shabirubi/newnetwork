@@ -556,10 +556,9 @@ export default function Layout({ children, currentPageName }) {
       <AnimatePresence>
         {logoFloat && (
           <motion.div
-            initial={{ opacity: 0, scale: 0.5, y: 0 }}
-            animate={{ opacity: 1, scale: 1.2, y: -80 }}
-            exit={{ opacity: 0, scale: 0.8, y: -160 }}
-            transition={{ duration: 1.2, ease: "easeOut" }}
+            initial={{ opacity: 0, scale: 0.1 }}
+            animate={{ opacity: [0, 1, 1, 0.8, 0], scale: [0.1, 1.5, 2.5, 3.5, 5], y: [0, -20, -50, -90, -140] }}
+            transition={{ duration: 1.4, ease: "easeOut", times: [0, 0.2, 0.5, 0.75, 1] }}
             className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[99998] pointer-events-none"
           >
             <LogoVideo className="h-16 w-16 rounded-full shadow-2xl shadow-red-500/50 border-2 border-red-500/40" />
