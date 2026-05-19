@@ -146,6 +146,19 @@ export default function Layout({ children, currentPageName }) {
   const [showSearchResults, setShowSearchResults] = useState(false);
   const [profileModalOpen, setProfileModalOpen] = useState(false);
   const [reelsOpen, setReelsOpen] = useState(false);
+  const [logoFloat, setLogoFloat] = useState(false);
+
+  // הפעל אנימציית לוגו בכל פעולה של המשתמש
+  const triggerLogoFloat = () => {
+    setLogoFloat(true);
+    setTimeout(() => setLogoFloat(false), 1200);
+  };
+
+  useEffect(() => {
+    const handleUserAction = () => triggerLogoFloat();
+    window.addEventListener('click', handleUserAction);
+    return () => window.removeEventListener('click', handleUserAction);
+  }, []);
 
   useEffect(() => {
     const handler = () => setReelsOpen(true);
@@ -367,8 +380,8 @@ export default function Layout({ children, currentPageName }) {
             <LogoVideo className="h-14 w-14 sm:h-20 sm:w-20 object-contain flex-shrink-0 rounded-full" />
             <div className="flex-col text-right hidden sm:flex">
               <h1 className="text-base sm:text-xl font-bold text-white">הרשת החדשה</h1>
-              <motion.p className="text-xs text-orange-500" animate={{ opacity: [0.7, 1, 0.7] }} transition={{ duration: 2, repeat: Infinity }}>
-                🟠 NOW ONLINE
+              <motion.p className="text-xs text-red-500 font-bold" animate={{ opacity: [0.7, 1, 0.7] }} transition={{ duration: 2, repeat: Infinity }}>
+                🔴 NOW ONLINE
               </motion.p>
             </div>
           </div>
@@ -537,6 +550,21 @@ export default function Layout({ children, currentPageName }) {
       {/* Reels Modal */}
       <AnimatePresence>
         {reelsOpen && <ReelsModal isOpen={reelsOpen} onClose={() => setReelsOpen(false)} />}
+      </AnimatePresence>
+
+      {/* Logo Float Animation on user action */}
+      <AnimatePresence>
+        {logoFloat && (
+          <motion.div
+            initial={{ opacity: 0, scale: 0.5, y: 0 }}
+            animate={{ opacity: 1, scale: 1.2, y: -80 }}
+            exit={{ opacity: 0, scale: 0.8, y: -160 }}
+            transition={{ duration: 1.2, ease: "easeOut" }}
+            className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[99998] pointer-events-none"
+          >
+            <LogoVideo className="h-16 w-16 rounded-full shadow-2xl shadow-red-500/50 border-2 border-red-500/40" />
+          </motion.div>
+        )}
       </AnimatePresence>
 
       {/* Main Menu Sidebar */}
