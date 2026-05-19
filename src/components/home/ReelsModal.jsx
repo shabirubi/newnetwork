@@ -222,10 +222,10 @@ function ReelItem({ video, isActive, onNext, onPrev }) {
       </div>
 
       {/* Bottom info */}
-      <div className="absolute bottom-6 right-4 left-16 pointer-events-none">
-        <p className="text-white font-bold text-base leading-snug drop-shadow-lg line-clamp-2">{video.title}</p>
+      <div className="absolute bottom-20 right-4 left-16 pointer-events-none z-10">
+        <p className="text-white font-bold text-lg leading-snug drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] line-clamp-3 bg-black/30 rounded-lg px-2 py-1">{video.title}</p>
         {video.description && (
-          <p className="text-gray-300 text-sm mt-1 line-clamp-2 drop-shadow">{video.description}</p>
+          <p className="text-gray-200 text-sm mt-1 line-clamp-2 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] bg-black/20 rounded px-2">{video.description}</p>
         )}
       </div>
 
