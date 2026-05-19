@@ -254,7 +254,7 @@ export default function ReelsModal({ isOpen, onClose }) {
 
   const { data: videos = [], isLoading } = useQuery({
     queryKey: ["reels-videos"],
-    queryFn: () => base44.entities.UserVideo.filter({ status: "ready" }, "-created_date", 100),
+    queryFn: () => base44.entities.UserVideo.list("-created_date", 200),
     enabled: isOpen,
     staleTime: 30 * 1000,
   });
