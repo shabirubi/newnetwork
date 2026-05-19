@@ -968,13 +968,29 @@ export default function Layout({ children, currentPageName }) {
             <span className="text-[10px] font-bold text-red-400">ריילס</span>
           </button>
 
-          <Link
-            to={createPageUrl("VideoCreator")}
-            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-gray-700/30 transition-colors touch-manipulation"
-          >
-            <Sparkles size={24} className="text-gray-300 mb-1" strokeWidth={2.5} />
-            <span className="text-[10px] font-bold text-gray-300">AI</span>
-          </Link>
+          <div className="relative flex flex-col items-center">
+            {/* Podcast Upload Floating Button - Above AI Button */}
+            <motion.button
+              initial={{ scale: 0 }}
+              animate={{ scale: 1 }}
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => {
+                console.log('Floating podcast button clicked');
+                window.dispatchEvent(new CustomEvent('openUploadPodcast'));
+              }}
+              className="absolute -top-14 left-1/2 -translate-x-1/2 z-[9998] w-14 h-14 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-full shadow-2xl shadow-purple-900/50 border-2 border-purple-400/50 backdrop-blur-sm flex items-center justify-center transition-all"
+            >
+              <Mic className="w-7 h-7" />
+            </motion.button>
+            <Link
+              to={createPageUrl("VideoCreator")}
+              className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-gray-700/30 transition-colors touch-manipulation"
+            >
+              <Sparkles size={24} className="text-gray-300 mb-1" strokeWidth={2.5} />
+              <span className="text-[10px] font-bold text-gray-300">AI</span>
+            </Link>
+          </div>
 
           <button
             onClick={() => setCategoriesSidebarOpen(true)}
@@ -985,21 +1001,6 @@ export default function Layout({ children, currentPageName }) {
           </button>
         </div>
       </nav>
-
-      {/* Podcast Upload Floating Button - Mobile */}
-      <motion.button
-        initial={{ scale: 0 }}
-        animate={{ scale: 1 }}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-        onClick={() => {
-          console.log('Floating podcast button clicked');
-          window.dispatchEvent(new CustomEvent('openUploadPodcast'));
-        }}
-        className="lg:hidden fixed bottom-24 left-1/2 -translate-x-1/2 z-[9998] w-14 h-14 bg-gradient-to-r from-purple-600 to-purple-700 text-white rounded-full shadow-2xl shadow-purple-900/50 border-2 border-purple-400/50 backdrop-blur-sm flex items-center justify-center transition-all"
-      >
-        <Mic className="w-7 h-7" />
-      </motion.button>
 
       {/* Footer */}
       <footer className="bg-gradient-to-br from-[#060c18] via-[#0d2a5e]/40 to-[#060c18] border-t-2 border-[#1565C0]/50 shadow-[0_-10px_50px_rgba(21,101,192,0.3)] text-white mt-12">
