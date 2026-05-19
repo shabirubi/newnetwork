@@ -259,9 +259,15 @@ export default function ReelsModal({ isOpen, onClose }) {
     staleTime: 30 * 1000,
   });
 
+  // סנן רק סרטוני וידאו - לא mp3/אודיו/פודקאסטים
+  const videoOnly = videos.filter(v => {
+    const url = v.video_url || "";
+    return !url.includes(".mp3") && !url.includes(".m4a") && !url.includes(".wav") && !url.includes(".ogg") && v.feed !== "podcasts";
+  });
+
   const filtered = selectedCategory === "all"
-    ? videos
-    : videos.filter(v => v.category === selectedCategory);
+    ? videoOnly
+    : videoOnly.filter(v => v.category === selectedCategory);
 
   const goNext = useCallback(() => setActiveIdx(i => Math.min(i + 1, filtered.length - 1)), [filtered.length]);
   const goPrev = useCallback(() => setActiveIdx(i => Math.max(i - 1, 0)), []);
