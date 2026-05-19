@@ -74,8 +74,11 @@ export default function Home() {
   }, []);
 
   // Handle podcast upload from mobile nav
-  React.useEffect(() => {
-    const handlePodcastUpload = () => setUploadPodcastModalOpen(true);
+  useEffect(() => {
+    const handlePodcastUpload = () => {
+      console.log('Opening podcast modal from event');
+      setUploadPodcastModalOpen(true);
+    };
     window.addEventListener('openUploadPodcast', handlePodcastUpload);
     return () => window.removeEventListener('openUploadPodcast', handlePodcastUpload);
   }, []);

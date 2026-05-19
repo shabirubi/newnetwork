@@ -977,7 +977,10 @@ export default function Layout({ children, currentPageName }) {
           </Link>
 
           <button
-            onClick={() => window.dispatchEvent(new CustomEvent('openUploadPodcast'))}
+            onClick={() => {
+              console.log('Podcast button clicked');
+              window.dispatchEvent(new CustomEvent('openUploadPodcast'));
+            }}
             className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-gray-700/30 transition-colors touch-manipulation"
           >
             <Mic size={24} className="text-purple-400 mb-1" strokeWidth={2.5} />
