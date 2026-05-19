@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Headphones, X, Play, Pause } from "lucide-react";
+import { Headphones, X, Play, Pause, Mic } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import PodcastUploadModal from "./PodcastUploadModal";
 
 const categoryColors = {
   breaking: "bg-red-500",
@@ -97,6 +98,15 @@ function PodcastPlayer({ podcast, onClose }) {
 export default function PodcastsFloatingButton() {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedPodcast, setSelectedPodcast] = useState(null);
+  const [uploadOpen, setUploadOpen] = useState(false);
+  const queryClient = useQueryClient();
+
+  // האזן לאירוע openUploadPodcast מהנביגציה התחתונה
+  useEffect(() => {
+    const handler = () => setUploadOpen(true);
+    window.addEventListener("openUploadPodcast", handler);
+    return () => window.removeEventListener("openUploadPodcast", handler);
+  }, []);
 
   const { data: podcasts, isLoading } = useQuery({
     queryKey: ['podcasts'],
@@ -113,19 +123,43 @@ export default function PodcastsFloatingButton() {
 
   return (
     <>
-      {/* Floating Button - Spotify Official Logo */}
-      <motion.button
-        onClick={() => setIsOpen(true)}
-        className="fixed bottom-48 left-4 z-[999] w-14 h-14 rounded-full bg-[#1DB954] hover:bg-[#1ed760] shadow-lg shadow-[#1DB954]/50 flex items-center justify-center transition-all hover:scale-110 active:scale-95"
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 0.95 }}
-        title="פודקאסטים"
-      >
-        {/* Spotify Official Logo - Three curved sound waves */}
-        <svg className="w-7 h-7" viewBox="0 0 24 24" fill="white">
-          <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.5 14.5c-.28.28-.7.28-1 .14-3.05-1.87-6.88-2.3-11.34-1.44-.42.07-.77-.21-.84-.63-.07-.42.21-.77.63-.84 4.83-.93 9.03-.42 12.43 1.68.35.21.42.7.14 1.09zm1.12-2.94c-.35.56-1.05.7-1.61.35-3.78-2.31-9.52-2.94-13.93-1.61-.63.21-1.33-.14-1.54-.77-.21-.63.14-1.33.77-1.54 5.11-1.54 11.48-.84 15.89 1.89.56.35.77 1.05.42 1.68zm.21-3.08c-4.55-2.73-12.04-2.94-16.38-1.61-.77.21-1.61-.21-1.82-.98-.21-.77.21-1.61.98-1.82 5.04-1.54 13.37-1.26 18.62 1.89.7.42.91 1.33.49 2.03-.42.63-1.33.84-1.89.49z"/>
-        </svg>
-      </motion.button>
+      {/* Podcast Upload Modal */}
+      <AnimatePresence>
+        {uploadOpen && (
+          <PodcastUploadModal
+            isOpen={uploadOpen}
+            onClose={() => setUploadOpen(false)}
+            onUploaded={() => queryClient.invalidateQueries({ queryKey: ['podcasts'] })}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Floating Buttons */}
+      <div className="fixed bottom-48 left-4 z-[999] flex flex-col gap-3 items-center">
+        {/* Spotify - פתיחת רשימת פודקאסטים */}
+        <motion.button
+          onClick={() => setIsOpen(true)}
+          className="w-14 h-14 rounded-full bg-[#1DB954] hover:bg-[#1ed760] shadow-lg shadow-[#1DB954]/50 flex items-center justify-center transition-all"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          title="פודקאסטים"
+        >
+          <svg className="w-7 h-7" viewBox="0 0 24 24" fill="white">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.5 14.5c-.28.28-.7.28-1 .14-3.05-1.87-6.88-2.3-11.34-1.44-.42.07-.77-.21-.84-.63-.07-.42.21-.77.63-.84 4.83-.93 9.03-.42 12.43 1.68.35.21.42.7.14 1.09zm1.12-2.94c-.35.56-1.05.7-1.61.35-3.78-2.31-9.52-2.94-13.93-1.61-.63.21-1.33-.14-1.54-.77-.21-.63.14-1.33.77-1.54 5.11-1.54 11.48-.84 15.89 1.89.56.35.77 1.05.42 1.68zm.21-3.08c-4.55-2.73-12.04-2.94-16.38-1.61-.77.21-1.61-.21-1.82-.98-.21-.77.21-1.61.98-1.82 5.04-1.54 13.37-1.26 18.62 1.89.7.42.91 1.33.49 2.03-.42.63-1.33.84-1.89.49z"/>
+          </svg>
+        </motion.button>
+
+        {/* מיקרופון - העלאת פודקאסט */}
+        <motion.button
+          onClick={() => setUploadOpen(true)}
+          className="w-14 h-14 rounded-full bg-gradient-to-br from-purple-600 to-purple-800 hover:from-purple-500 hover:to-purple-700 shadow-lg shadow-purple-900/50 flex items-center justify-center transition-all border-2 border-purple-400/30"
+          whileHover={{ scale: 1.1 }}
+          whileTap={{ scale: 0.95 }}
+          title="העלה פודקאסט"
+        >
+          <Mic className="w-6 h-6 text-white" />
+        </motion.button>
+      </div>
 
       {/* Podcasts Side Drawer */}
       <AnimatePresence>
