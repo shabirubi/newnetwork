@@ -175,13 +175,15 @@ export default function Home() {
       {/* OREF Alerts - TOP PRIORITY */}
       <OrefAlertsPanel />
 
+      {/* Podcasts Container - PROMINENT POSITION */}
+      <div className="bg-gradient-to-r from-purple-900/40 via-purple-800/30 to-purple-900/40 border-y border-purple-700/30 py-6">
+        <PodcastsContainer />
+      </div>
+
       {/* Featured Article Editor - above war news */}
       <FeaturedArticleEditor />
 
       {/* Oref News Section - removed WarNewsSection */}
-
-      {/* Podcasts Container */}
-      <PodcastsContainer />
 
       {/* All Category Articles - Full display of all articles from all categories */}
       <AllCategoryArticlesDisplay />
