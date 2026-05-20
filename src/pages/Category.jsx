@@ -72,10 +72,10 @@ export default function Category() {
   const cat = urlParams.get('cat') || 'breaking';
 
   const config = categoryConfig[cat] || { 
-    label: cat, 
+    label: decodeURIComponent(cat), 
     icon: Flame, 
     color: "bg-gray-600",
-    description: `ידיעות בקטגוריה: ${cat}`
+    description: `ידיעות בקטגוריה: ${decodeURIComponent(cat)}`
   };
   const Icon = config.icon;
 
@@ -86,8 +86,15 @@ export default function Category() {
       let result;
       if (cat === 'breaking') {
         result = await base44.entities.NewsArticle.filter({ is_breaking: true }, '-created_date', 50);
-      } else {
+      } else if (categoryConfig[cat]) {
+        // קטגוריה מובנית - חיפוש ישיר
         result = await base44.entities.NewsArticle.filter({ category: cat }, '-created_date', 50);
+      } else {
+        // קטגוריה מותאמת אישית - חפש לפי custom_category
+        const allCustom = await base44.entities.NewsArticle.filter({ category: 'custom' }, '-created_date', 200);
+        result = allCustom.filter(a => 
+          a.custom_category && a.custom_category.toLowerCase() === cat.toLowerCase()
+        );
       }
       console.log(`✅ נטענו ${result.length} ידיעות`);
       return result;
