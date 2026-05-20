@@ -71,7 +71,12 @@ export default function Category() {
   const urlParams = new URLSearchParams(window.location.search);
   const cat = urlParams.get('cat') || 'breaking';
 
-  const config = categoryConfig[cat] || categoryConfig.breaking;
+  const config = categoryConfig[cat] || { 
+    label: cat, 
+    icon: Flame, 
+    color: "bg-gray-600",
+    description: `ידיעות בקטגוריה: ${cat}`
+  };
   const Icon = config.icon;
 
   const { data: articles = [], isLoading } = useQuery({
