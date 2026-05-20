@@ -7,8 +7,8 @@ import {
   Trophy, Clapperboard, Globe, Heart, Flame
 } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
-
 import NewsCard from "../components/news/NewsCard";
+import VideosCategoriesStrip from "../components/header/VideosCategoriesStrip";
 
 const categoryConfig = {
   breaking: { 
@@ -124,6 +124,9 @@ export default function Category() {
 
   return (
     <div className="space-y-8">
+      {/* Reels Strip */}
+      <VideosCategoriesStrip />
+
       {/* Header */}
       <motion.div
         initial={{ opacity: 0, y: -20 }}
