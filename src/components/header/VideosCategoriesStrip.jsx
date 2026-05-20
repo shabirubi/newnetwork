@@ -36,6 +36,12 @@ export default function VideosCategoriesStrip() {
   const [hoveredCategory, setHoveredCategory] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
+  const { data: customCategories = [] } = useQuery({
+    queryKey: ["custom-categories-strip"],
+    queryFn: () => base44.entities.CustomCategory.list('-created_date', 50),
+    staleTime: 60000,
+  });
+  const customCatMap = Object.fromEntries(customCategories.map(c => [c.id, c.label]));
   const [message, setMessage] = useState("");
   const [userName, setUserName] = useState(() => {
     if (typeof window !== 'undefined') {

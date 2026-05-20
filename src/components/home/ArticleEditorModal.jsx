@@ -562,10 +562,10 @@ export default function ArticleEditorModal({ article, onClose, onSaved }) {
                 <div>
                   <p className="text-gray-500 text-xs mb-2 px-1">קטגוריה לריל:</p>
                   <div className="flex flex-wrap gap-1.5">
-                    {[...BUILTIN_CATEGORIES, ...customCategories.map(c => ({ id: c.id, label: c.label, color: c.color || '#6366F1' }))].map(cat => (
-                      <button key={cat.id} onClick={() => setReelCategory(cat.id)}
+                    {[...BUILTIN_CATEGORIES, ...customCategories.map(c => ({ id: c.id, label: c.label, color: c.color || '#6366F1', isCustom: true }))].map(cat => (
+                      <button key={cat.id} onClick={() => setReelCategory(cat.isCustom ? "custom" : cat.id)}
                         className="px-2.5 py-1 rounded-full text-xs font-bold transition-all active:scale-95 border"
-                        style={reelCategory === cat.id
+                        style={reelCategory === (cat.isCustom ? "custom" : cat.id)
                           ? { background: cat.color, borderColor: cat.color, color: '#fff' }
                           : { background: 'transparent', borderColor: '#333', color: '#666' }}>
                         {cat.label}

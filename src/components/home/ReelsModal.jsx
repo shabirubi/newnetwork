@@ -53,9 +53,10 @@ const CATEGORY_LABELS = {
   music: "מוזיקה",
   horoscope: "הורוסקופ",
   finance: "פיננסים",
+  custom: "מותאם",
 };
 
-function ReelItem({ video, isActive, onNext, onPrev }) {
+function ReelItem({ video, isActive, onNext, onPrev, customCatMap = {} }) {
   const videoRef = useRef(null);
   const [muted, setMuted] = useState(true);
   const [playing, setPlaying] = useState(false);
@@ -172,7 +173,7 @@ function ReelItem({ video, isActive, onNext, onPrev }) {
       {/* Category badge */}
       {video.category && (
         <div className="absolute top-4 right-4 bg-[#E31E24]/90 text-white text-xs font-bold px-3 py-1 rounded-full">
-          {CATEGORY_LABELS[video.category] || video.category}
+          {CATEGORY_LABELS[video.category] || customCatMap[video.category] || video.category}
         </div>
       )}
 
@@ -261,6 +262,16 @@ export default function ReelsModal({ isOpen, onClose }) {
     staleTime: 0,
   });
 
+  // טעינת קטגוריות מותאמות לתצוגה נכונה
+  const { data: customCategories = [] } = useQuery({
+    queryKey: ["custom-categories"],
+    queryFn: () => base44.entities.CustomCategory.list('-created_date', 50),
+    enabled: isOpen,
+    staleTime: 60000,
+  });
+
+  const customCatMap = Object.fromEntries(customCategories.map(c => [c.id, c.label]));
+
   // רענן ריילס אחרי העלאת סרטון חדש
   useEffect(() => {
     const handler = () => queryClient.invalidateQueries({ queryKey: ["reels-videos"] });
@@ -344,7 +355,7 @@ export default function ReelsModal({ isOpen, onClose }) {
                 : "bg-gray-800 text-gray-400 hover:bg-gray-700"
             }`}
           >
-            {CATEGORY_LABELS[cat] || cat}
+            {CATEGORY_LABELS[cat] || customCatMap[cat] || cat}
           </button>
         ))}
       </div>
@@ -387,6 +398,7 @@ export default function ReelsModal({ isOpen, onClose }) {
                 isActive={true}
                 onNext={goNext}
                 onPrev={goPrev}
+                customCatMap={customCatMap}
               />
             </motion.div>
           </AnimatePresence>
