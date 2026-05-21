@@ -281,7 +281,8 @@ export default function ReelsModal({ isOpen, onClose }) {
     const url = v.video_url || "";
     const isAudio = url.includes(".mp3") || url.includes(".m4a") || url.includes(".wav") || url.includes(".ogg");
     const isPodcastFeed = v.feed === "podcasts";
-    return !isAudio && !isPodcastFeed;
+    const isKanArchive = v.feed === "kan-archive";
+    return !isAudio && !isPodcastFeed && !isKanArchive;
   });
 
   const usedCategories = ["all", ...new Set(videoOnly.map(v => v.category).filter(Boolean))];
