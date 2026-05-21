@@ -248,8 +248,8 @@ function ReelItem({ video, isActive, onNext, onPrev, customCatMap = {} }) {
 }
 
 export default function ReelsModal({ isOpen, onClose }) {
-  const [activeIdx, setActiveIdx] = useState(0);
-  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [categoryIdx, setCategoryIdx] = useState(0);
+  const [reelIndices, setReelIndices] = useState({});
   const containerRef = useRef(null);
   const touchStartY = useRef(null);
 
@@ -262,7 +262,6 @@ export default function ReelsModal({ isOpen, onClose }) {
     staleTime: 0,
   });
 
-  // טעינת קטגוריות מותאמות לתצוגה נכונה
   const { data: customCategories = [] } = useQuery({
     queryKey: ["custom-categories"],
     queryFn: () => base44.entities.CustomCategory.list('-created_date', 50),
@@ -272,14 +271,12 @@ export default function ReelsModal({ isOpen, onClose }) {
 
   const customCatMap = Object.fromEntries(customCategories.map(c => [c.id, c.label]));
 
-  // רענן ריילס אחרי העלאת סרטון חדש
   useEffect(() => {
     const handler = () => queryClient.invalidateQueries({ queryKey: ["reels-videos"] });
     window.addEventListener("videoUploaded", handler);
     return () => window.removeEventListener("videoUploaded", handler);
   }, [queryClient]);
 
-  // סנן רק סרטוני וידאו אמיתיים - feed=reels, tiktok, all, user-videos, all-videos וכדומה. לא פודקאסטים ולא MP3
   const videoOnly = videos.filter(v => {
     const url = v.video_url || "";
     const isAudio = url.includes(".mp3") || url.includes(".m4a") || url.includes(".wav") || url.includes(".ogg");
@@ -287,39 +284,71 @@ export default function ReelsModal({ isOpen, onClose }) {
     return !isAudio && !isPodcastFeed;
   });
 
-  const filtered = selectedCategory === "all"
-    ? videoOnly
-    : videoOnly.filter(v => v.category === selectedCategory);
+  const usedCategories = ["all", ...new Set(videoOnly.map(v => v.category).filter(Boolean))];
 
-  const goNext = useCallback(() => setActiveIdx(i => Math.min(i + 1, filtered.length - 1)), [filtered.length]);
-  const goPrev = useCallback(() => setActiveIdx(i => Math.max(i - 1, 0)), []);
+  // בנית מפת קטגוריה → ריילסים
+  const categorizedReels = usedCategories.reduce((acc, cat) => {
+    const reels = cat === "all" 
+      ? videoOnly 
+      : videoOnly.filter(v => v.category === cat);
+    acc[cat] = reels;
+    return acc;
+  }, {});
 
-  // Reset index when category changes
-  useEffect(() => { setActiveIdx(0); }, [selectedCategory]);
+  const currentCat = usedCategories[categoryIdx] || "all";
+  const currentReels = categorizedReels[currentCat] || [];
+  const currentReelIdx = reelIndices[currentCat] || 0;
+  const currentReel = currentReels[currentReelIdx];
+
+  // ניווט בין קטגוריות
+  const goNextCategory = useCallback(() => {
+    setCategoryIdx(i => Math.min(i + 1, usedCategories.length - 1));
+    setReelIndices({});
+  }, [usedCategories.length]);
+
+  const goPrevCategory = useCallback(() => {
+    setCategoryIdx(i => Math.max(i - 1, 0));
+    setReelIndices({});
+  }, []);
+
+  // ניווט בתוך קטגוריה
+  const goNextReel = useCallback(() => {
+    setReelIndices(prev => ({
+      ...prev,
+      [currentCat]: Math.min((prev[currentCat] || 0) + 1, currentReels.length - 1)
+    }));
+  }, [currentCat, currentReels.length]);
+
+  const goPrevReel = useCallback(() => {
+    setReelIndices(prev => ({
+      ...prev,
+      [currentCat]: Math.max((prev[currentCat] || 0) - 1, 0)
+    }));
+  }, [currentCat]);
 
   // Keyboard navigation
   useEffect(() => {
     if (!isOpen) return;
     const handler = (e) => {
-      if (e.key === "ArrowDown") goNext();
-      if (e.key === "ArrowUp") goPrev();
+      if (e.key === "ArrowDown") goNextReel();
+      if (e.key === "ArrowUp") goPrevReel();
+      if (e.key === "ArrowLeft") goNextCategory();
+      if (e.key === "ArrowRight") goPrevCategory();
       if (e.key === "Escape") onClose();
     };
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
-  }, [isOpen, goNext, goPrev, onClose]);
+  }, [isOpen, goNextReel, goPrevReel, goNextCategory, goPrevCategory, onClose]);
 
   // Touch swipe
   const handleTouchStart = (e) => { touchStartY.current = e.touches[0].clientY; };
   const handleTouchEnd = (e) => {
     if (touchStartY.current === null) return;
     const dy = touchStartY.current - e.changedTouches[0].clientY;
-    if (dy > 50) goNext();
-    else if (dy < -50) goPrev();
+    if (dy > 50) goNextReel();
+    else if (dy < -50) goPrevReel();
     touchStartY.current = null;
   };
-
-  const usedCategories = ["all", ...new Set(videoOnly.map(v => v.category).filter(Boolean))];
 
   if (!isOpen) return null;
 
@@ -336,23 +365,23 @@ export default function ReelsModal({ isOpen, onClose }) {
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
           <span className="text-white font-bold text-base">ריילס</span>
-          <span className="text-gray-400 text-sm">({filtered.length} סרטונים)</span>
+          <span className="text-gray-400 text-sm">({currentReels.length} סרטונים)</span>
         </div>
         <button onClick={onClose} className="p-2 hover:bg-gray-800 rounded-full transition-colors">
           <X className="w-6 h-6 text-white" />
         </button>
       </div>
 
-      {/* Category Filter */}
-      <div className="flex gap-2 px-3 py-2 overflow-x-auto bg-black/60 flex-shrink-0">
-        {usedCategories.map(cat => (
+      {/* Categories Horizontal Scroll */}
+      <div className="flex gap-3 px-3 py-3 overflow-x-auto bg-black/60 flex-shrink-0 scrollbar-hide">
+        {usedCategories.map((cat, idx) => (
           <button
             key={cat}
-            onClick={() => setSelectedCategory(cat)}
-            className={`flex-shrink-0 px-3 py-1 rounded-full text-xs font-bold transition-all ${
-              selectedCategory === cat
-                ? "bg-[#E31E24] text-white"
-                : "bg-gray-800 text-gray-400 hover:bg-gray-700"
+            onClick={() => { setCategoryIdx(idx); setReelIndices({}); }}
+            className={`flex-shrink-0 px-4 py-2 rounded-lg text-xs font-bold transition-all ${
+              categoryIdx === idx
+                ? "bg-[#E31E24] text-white border-2 border-[#E31E24]"
+                : "bg-gray-800 text-gray-400 hover:bg-gray-700 border-2 border-transparent"
             }`}
           >
             {CATEGORY_LABELS[cat] || customCatMap[cat] || cat}
@@ -360,7 +389,7 @@ export default function ReelsModal({ isOpen, onClose }) {
         ))}
       </div>
 
-      {/* Reels Feed */}
+      {/* Reels Container */}
       <div
         ref={containerRef}
         className="flex-1 relative overflow-hidden"
@@ -371,50 +400,44 @@ export default function ReelsModal({ isOpen, onClose }) {
           <div className="flex items-center justify-center h-full">
             <div className="w-10 h-10 border-4 border-gray-600 border-t-white rounded-full animate-spin" />
           </div>
-        ) : filtered.length === 0 ? (
+        ) : currentReels.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center px-8">
             <div className="text-5xl mb-4">🎬</div>
-            <p className="text-white font-bold text-xl mb-2">אין סרטוני ריילס עדיין</p>
-            <p className="text-gray-400 text-sm mb-6">כדי להוסיף ריילס - העלה סרטון ובחר פיד "ריילס"</p>
-            <button
-              onClick={() => { onClose(); window.dispatchEvent(new CustomEvent('openUploadVideo')); }}
-              className="bg-[#E31E24] text-white px-6 py-3 rounded-full font-bold text-sm"
-            >
-              📹 העלה סרטון עכשיו
-            </button>
+            <p className="text-white font-bold text-xl mb-2">אין סרטוני ריילס בקטגוריה זו</p>
+            <p className="text-gray-400 text-sm mb-6">בחר קטגוריה אחרת או העלה סרטון</p>
           </div>
         ) : (
           <AnimatePresence mode="wait">
             <motion.div
-              key={`${selectedCategory}-${activeIdx}-${filtered[activeIdx]?.id}`}
-              initial={{ y: activeIdx === 0 ? 0 : 100, opacity: 0 }}
+              key={`${currentCat}-${currentReelIdx}-${currentReel?.id}`}
+              initial={{ y: 100, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               exit={{ y: -100, opacity: 0 }}
               transition={{ duration: 0.25, ease: "easeInOut" }}
               className="absolute inset-0"
             >
               <ReelItem
-                video={filtered[activeIdx]}
+                video={currentReel}
                 isActive={true}
-                onNext={goNext}
-                onPrev={goPrev}
+                onNext={goNextReel}
+                onPrev={goPrevReel}
                 customCatMap={customCatMap}
               />
             </motion.div>
           </AnimatePresence>
         )}
 
-        {/* Progress dots */}
-        {filtered.length > 1 && (
-          <div className="absolute right-2 top-1/2 -translate-y-1/2 flex flex-col gap-1">
-            {filtered.slice(Math.max(0, activeIdx - 3), activeIdx + 4).map((_, i) => {
-              const realIdx = Math.max(0, activeIdx - 3) + i;
+        {/* Progress dots - אנכי */}
+        {currentReels.length > 1 && (
+          <div className="absolute left-4 top-1/2 -translate-y-1/2 flex flex-col gap-1">
+            {currentReels.slice(Math.max(0, currentReelIdx - 3), currentReelIdx + 4).map((_, i) => {
+              const realIdx = Math.max(0, currentReelIdx - 3) + i;
               return (
                 <button
                   key={realIdx}
-                  onClick={() => setActiveIdx(realIdx)}
+                  onClick={() => setReelIndices(prev => ({ ...prev, [currentCat]: realIdx }))}
                   className={`rounded-full transition-all ${
-                    realIdx === activeIdx ? "w-1.5 h-5 bg-white" : "w-1.5 h-1.5 bg-white/40"
+                    realIdx === currentReelIdx ? "w-1.5 h-5 bg-white" : "w-1.5 h-1.5 bg-white/40"
                   }`}
                 />
               );
@@ -424,9 +447,9 @@ export default function ReelsModal({ isOpen, onClose }) {
       </div>
 
       {/* Bottom counter */}
-      {filtered.length > 0 && (
+      {currentReels.length > 0 && (
         <div className="text-center py-2 text-gray-500 text-xs bg-black flex-shrink-0">
-          {activeIdx + 1} / {filtered.length}
+          {currentReelIdx + 1} / {currentReels.length} • {currentCat}
         </div>
       )}
     </motion.div>
