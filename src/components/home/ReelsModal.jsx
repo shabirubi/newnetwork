@@ -111,7 +111,7 @@ function ReelItem({ video, isActive, onNext, onPrev, customCatMap = {} }) {
     if (!videoRef.current) return;
     if (isActive) {
       videoRef.current.currentTime = 0;
-      videoRef.current.play().then(() => setPlaying(true)).catch(() => {});
+      videoRef.current.play().then(() => setPlaying(true)).catch(() => { setPlaying(false); });
       // Save to view history
       const history = JSON.parse(localStorage.getItem("view_history") || "[]");
       const newEntry = {
@@ -126,7 +126,7 @@ function ReelItem({ video, isActive, onNext, onPrev, customCatMap = {} }) {
       const updated = [newEntry, ...filtered].slice(0, 50);
       localStorage.setItem("view_history", JSON.stringify(updated));
     } else {
-      videoRef.current.pause();
+      try { videoRef.current.pause(); } catch(e) {}
       setPlaying(false);
     }
   }, [isActive, video.id, video.video_url, video.title, video.thumbnail_url]);
@@ -134,11 +134,10 @@ function ReelItem({ video, isActive, onNext, onPrev, customCatMap = {} }) {
   const togglePlay = () => {
     if (!videoRef.current) return;
     if (playing) {
-      videoRef.current.pause();
+      try { videoRef.current.pause(); } catch(e) {}
       setPlaying(false);
     } else {
-      videoRef.current.play();
-      setPlaying(true);
+      videoRef.current.play().then(() => setPlaying(true)).catch(() => {});
     }
   };
 
