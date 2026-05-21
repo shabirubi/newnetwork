@@ -377,7 +377,11 @@ export default function ArticleEditor({ article, isOpen, onClose, onPublish }) {
                       <p className="text-white/70 text-sm mb-4">{editData.description}</p>
                       <div className="flex gap-2 mb-4 flex-wrap">
                         <span className="px-3 py-1 bg-[#E31E24] text-white text-xs rounded-full font-bold">
-                          {editData.category}
+                          {{
+                            breaking: "חדשות עכשיו", security: "ביטחון", economy: "כלכלה",
+                            politics: "פוליטיקה", technology: "טכנולוגיה", sports: "ספורט",
+                            entertainment: "בידור", world: "עולם", health: "בריאות"
+                          }[editData.category] || editData.category}
                         </span>
                         {editData.tags.map((tag) => (
                           <span key={tag} className="px-3 py-1 bg-white/10 text-white text-xs rounded-full">

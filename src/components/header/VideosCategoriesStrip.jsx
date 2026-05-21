@@ -74,34 +74,13 @@ export default function VideosCategoriesStrip() {
         
         let videos = [];
         
-        // Try localStorage first
-        const savedVideos = localStorage.getItem('videoDownloadHistory');
-        if (savedVideos) {
-          try {
-            const parsed = JSON.parse(savedVideos);
-            if (Array.isArray(parsed) && parsed.length > 0) {
-              videos = parsed.map(v => ({
-                id: v.id || Math.random().toString(),
-                title: v.title || 'סרטון ללא כותרת',
-                video_url: v.videoUrl,
-                thumbnail_url: v.thumbnail || v.videoUrl,
-                created_date: v.timestamp,
-                views: 0,
-                category: v.category || 'all'
-              }));
-              console.log('✅ טעינת סרטונים מ-localStorage:', videos.length, 'סרטונים');
-            }
-          } catch (e) {
-            console.error('שגיאה בפרסום JSON:', e);
-          }
-        }
-        
-        // Fallback to database if no localStorage videos
-        if (videos.length === 0) {
-          try {
-            const dbVideos = await base44.entities.UserVideo.list('-created_date', 100);
-            if (dbVideos && Array.isArray(dbVideos) && dbVideos.length > 0) {
-              videos = dbVideos.map(v => ({
+        // Always fetch from database (single source of truth, no duplicates)
+        try {
+          const dbVideos = await base44.entities.UserVideo.list('-created_date', 100);
+          if (dbVideos && Array.isArray(dbVideos)) {
+            videos = dbVideos
+              .filter(v => v.video_url && v.feed !== 'podcasts')
+              .map(v => ({
                 id: v.id,
                 title: v.title || 'סרטון ללא כותרת',
                 video_url: v.video_url,
@@ -110,11 +89,9 @@ export default function VideosCategoriesStrip() {
                 views: v.views || 0,
                 category: v.category || 'all'
               }));
-              console.log('✅ טעינת סרטונים מהמאגר:', videos.length, 'סרטונים');
-            }
-          } catch (error) {
-            console.error('שגיאה בטעינה מהמאגר:', error);
           }
+        } catch (error) {
+          console.error('שגיאה בטעינה מהמאגר:', error);
         }
         
         // Filter by category
@@ -138,9 +115,7 @@ export default function VideosCategoriesStrip() {
     gcTime: 120000,
   });
 
-  React.useEffect(() => {
-    console.log('🎬 CategoryVideos updated - count:', categoryVideos.length, 'status:', status);
-  }, [categoryVideos, status]);
+
 
   const currentVideo = categoryVideos[currentVideoIndex];
 
