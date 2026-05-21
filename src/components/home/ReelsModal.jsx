@@ -285,10 +285,11 @@ export default function ReelsModal({ isOpen, onClose }) {
       const title = (v.title || "").trim();
       const isAudio = url.includes(".mp3") || url.includes(".m4a") || url.includes(".wav") || url.includes(".ogg") || url.includes(".aac");
       if (isAudio || v.feed === "podcasts") return false;
+      if (!title || title.match(/^[a-f0-9]{24}$/i)) return false; // הסר סרטונים ללא כותרת או עם ID כותרת
       if (seenUrls.has(url)) return false;
-      if (title && seenTitles.has(title)) return false;
+      if (seenTitles.has(title)) return false;
       seenUrls.add(url);
-      if (title) seenTitles.add(title);
+      seenTitles.add(title);
       return true;
     });
   })();
