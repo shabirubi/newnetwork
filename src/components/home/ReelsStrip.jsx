@@ -20,8 +20,16 @@ function ReelThumb({ video, onClick }) {
   return (
     <button
       onClick={onClick}
-      onMouseEnter={() => { setHovered(true); videoRef.current?.play(); }}
-      onMouseLeave={() => { setHovered(false); videoRef.current?.pause(); }}
+      onMouseEnter={() => {
+        setHovered(true);
+        const v = videoRef.current;
+        if (v) v.play().catch(() => {});
+      }}
+      onMouseLeave={() => {
+        setHovered(false);
+        const v = videoRef.current;
+        if (v) { v.pause(); v.currentTime = 0; }
+      }}
       className="flex-shrink-0 relative w-24 h-36 sm:w-28 sm:h-44 rounded-xl overflow-hidden group cursor-pointer"
     >
       <video
