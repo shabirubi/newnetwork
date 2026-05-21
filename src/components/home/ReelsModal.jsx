@@ -372,21 +372,36 @@ export default function ReelsModal({ isOpen, onClose }) {
         </button>
       </div>
 
-      {/* Categories Horizontal Scroll */}
-      <div className="flex gap-3 px-3 py-3 overflow-x-auto bg-black/60 flex-shrink-0 scrollbar-hide">
-        {usedCategories.map((cat, idx) => (
-          <button
-            key={cat}
-            onClick={() => { setCategoryIdx(idx); setReelIndices({}); }}
-            className={`flex-shrink-0 px-4 py-2 rounded-lg text-xs font-bold transition-all ${
-              categoryIdx === idx
-                ? "bg-[#E31E24] text-white border-2 border-[#E31E24]"
-                : "bg-gray-800 text-gray-400 hover:bg-gray-700 border-2 border-transparent"
-            }`}
-          >
-            {CATEGORY_LABELS[cat] || customCatMap[cat] || cat}
-          </button>
-        ))}
+      {/* Categories Stories-Style Horizontal Scroll */}
+      <div className="flex gap-4 px-3 py-3 overflow-x-auto bg-black flex-shrink-0" style={{scrollbarWidth:'none'}}>
+        {usedCategories.map((cat, idx) => {
+          const catReel = (cat === "all" ? videoOnly : videoOnly.filter(v => v.category === cat))[0];
+          const isActive = categoryIdx === idx;
+          const catLabel = CATEGORY_LABELS[cat] || customCatMap[cat] || cat;
+          return (
+            <button
+              key={cat}
+              onClick={() => { setCategoryIdx(idx); setReelIndices({}); }}
+              className="flex-shrink-0 flex flex-col items-center gap-1.5"
+            >
+              <div className={`w-16 h-16 rounded-full overflow-hidden border-3 transition-all ${
+                isActive ? "border-[#E31E24] shadow-[0_0_0_3px_#E31E24]" : "border-gray-600"
+              }`}
+              style={{ border: isActive ? '3px solid #E31E24' : '3px solid #444', boxShadow: isActive ? '0 0 0 2px #E31E24' : 'none' }}>
+                {catReel?.thumbnail_url ? (
+                  <img src={catReel.thumbnail_url} alt={catLabel} className="w-full h-full object-cover" />
+                ) : (
+                  <div className={`w-full h-full flex items-center justify-center text-lg ${isActive ? 'bg-[#E31E24]/30' : 'bg-gray-800'}`}>
+                    {cat === "all" ? "🎬" : cat === "breaking" ? "🔴" : cat === "sports" ? "⚽" : cat === "politics" ? "🏛️" : cat === "technology" ? "💻" : cat === "security" ? "🛡️" : cat === "economy" ? "📈" : cat === "entertainment" ? "🎭" : cat === "world" ? "🌍" : cat === "health" ? "❤️" : "📰"}
+                  </div>
+                )}
+              </div>
+              <span className={`text-[10px] font-bold max-w-[64px] truncate ${isActive ? 'text-[#E31E24]' : 'text-gray-400'}`}>
+                {catLabel}
+              </span>
+            </button>
+          );
+        })}
       </div>
 
       {/* Reels Container */}
