@@ -276,15 +276,19 @@ export default function ReelsModal({ isOpen, onClose }) {
     return () => window.removeEventListener("videoUploaded", handler);
   }, [queryClient]);
 
-  // הצג את כל הסרטונים — להוציא פודקאסטים, אודיו וכפולים
+  // הצג את כל הסרטונים — להוציא פודקאסטים, אודיו וכפולים (לפי URL וגם לפי כותרת)
   const videoOnly = (() => {
-    const seen = new Set();
+    const seenUrls = new Set();
+    const seenTitles = new Set();
     return videos.filter(v => {
       const url = (v.video_url || "").toLowerCase();
+      const title = (v.title || "").trim();
       const isAudio = url.includes(".mp3") || url.includes(".m4a") || url.includes(".wav") || url.includes(".ogg") || url.includes(".aac");
       if (isAudio || v.feed === "podcasts") return false;
-      if (seen.has(url)) return false;
-      seen.add(url);
+      if (seenUrls.has(url)) return false;
+      if (title && seenTitles.has(title)) return false;
+      seenUrls.add(url);
+      if (title) seenTitles.add(title);
       return true;
     });
   })();
@@ -488,7 +492,7 @@ export default function ReelsModal({ isOpen, onClose }) {
       {/* Bottom counter */}
       {currentReels.length > 0 && (
         <div className="text-center py-2 text-gray-500 text-xs bg-black flex-shrink-0">
-          {currentReelIdx + 1} / {currentReels.length} • {currentCat}
+          {currentReelIdx + 1} / {currentReels.length} • {getCatLabel(currentCat)}
         </div>
       )}
     </motion.div>

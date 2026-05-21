@@ -78,13 +78,17 @@ export default function ReelsStrip() {
   });
 
   const reels = (() => {
-    const seen = new Set();
+    const seenUrls = new Set();
+    const seenTitles = new Set();
     return videos.filter(v => {
       const url = (v.video_url || "").toLowerCase();
+      const title = (v.title || "").trim();
       const isAudio = url.includes(".mp3") || url.includes(".m4a") || url.includes(".wav") || url.includes(".ogg") || url.includes(".aac");
       if (isAudio || v.feed === "podcasts") return false;
-      if (seen.has(url)) return false;
-      seen.add(url);
+      if (seenUrls.has(url)) return false;
+      if (title && seenTitles.has(title)) return false;
+      seenUrls.add(url);
+      if (title) seenTitles.add(title);
       return true;
     });
   })();
