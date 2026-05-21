@@ -277,15 +277,19 @@ export default function ReelsModal({ isOpen, onClose }) {
     return () => window.removeEventListener("videoUploaded", handler);
   }, [queryClient]);
 
+  // הצג את כל הסרטונים — להוציא רק פודקאסטים ואודיו
   const videoOnly = videos.filter(v => {
-    const url = v.video_url || "";
-    const isAudio = url.includes(".mp3") || url.includes(".m4a") || url.includes(".wav") || url.includes(".ogg");
-    const isPodcastFeed = v.feed === "podcasts";
-    const isKanArchive = v.feed === "kan-archive";
-    return !isAudio && !isPodcastFeed && !isKanArchive;
+    const url = (v.video_url || "").toLowerCase();
+    const isAudio = url.includes(".mp3") || url.includes(".m4a") || url.includes(".wav") || url.includes(".ogg") || url.includes(".aac");
+    const isPodcast = v.feed === "podcasts";
+    return !isAudio && !isPodcast;
   });
 
+  // קטגוריות ייחודיות מהסרטונים
   const usedCategories = ["all", ...new Set(videoOnly.map(v => v.category).filter(Boolean))];
+  
+  // פונקציה לקבלת שם קטגוריה
+  const getCatLabel = (cat) => CATEGORY_LABELS[cat] || customCatMap[cat] || cat;
 
   // בנית מפת קטגוריה → ריילסים
   const categorizedReels = usedCategories.reduce((acc, cat) => {
@@ -376,28 +380,43 @@ export default function ReelsModal({ isOpen, onClose }) {
       {/* Categories Stories-Style Horizontal Scroll */}
       <div className="flex gap-4 px-3 py-3 overflow-x-auto bg-black flex-shrink-0" style={{scrollbarWidth:'none'}}>
         {usedCategories.map((cat, idx) => {
-          const catReel = (cat === "all" ? videoOnly : videoOnly.filter(v => v.category === cat))[0];
+          const catReels = cat === "all" ? videoOnly : videoOnly.filter(v => v.category === cat);
+          const catReel = catReels[0];
           const isActive = categoryIdx === idx;
           const catLabel = CATEGORY_LABELS[cat] || customCatMap[cat] || cat;
+          const catCount = catReels.length;
+          const catEmoji = cat === "all" ? "🎬" : cat === "breaking" ? "🔴" : cat === "sports" ? "⚽" : cat === "politics" ? "🏛️" : cat === "technology" ? "💻" : cat === "security" ? "🛡️" : cat === "economy" ? "📈" : cat === "entertainment" ? "🎭" : cat === "world" ? "🌍" : cat === "health" ? "❤️" : cat === "science" ? "🔬" : cat === "crime" ? "🔍" : "📰";
           return (
             <button
               key={cat}
               onClick={() => { setCategoryIdx(idx); setReelIndices({}); }}
               className="flex-shrink-0 flex flex-col items-center gap-1.5"
             >
-              <div className={`w-16 h-16 rounded-full overflow-hidden border-3 transition-all ${
-                isActive ? "border-[#E31E24] shadow-[0_0_0_3px_#E31E24]" : "border-gray-600"
-              }`}
-              style={{ border: isActive ? '3px solid #E31E24' : '3px solid #444', boxShadow: isActive ? '0 0 0 2px #E31E24' : 'none' }}>
-                {catReel?.thumbnail_url ? (
-                  <img src={catReel.thumbnail_url} alt={catLabel} className="w-full h-full object-cover" />
+              <div
+                style={{ border: isActive ? '3px solid #E31E24' : '3px solid #444', boxShadow: isActive ? '0 0 0 2px rgba(227,30,36,0.5)' : 'none' }}
+                className="w-16 h-16 rounded-full overflow-hidden relative transition-all"
+              >
+                {catReel?.video_url ? (
+                  <video
+                    src={catReel.video_url}
+                    className="w-full h-full object-cover"
+                    muted
+                    playsInline
+                    preload="metadata"
+                  />
                 ) : (
-                  <div className={`w-full h-full flex items-center justify-center text-lg ${isActive ? 'bg-[#E31E24]/30' : 'bg-gray-800'}`}>
-                    {cat === "all" ? "🎬" : cat === "breaking" ? "🔴" : cat === "sports" ? "⚽" : cat === "politics" ? "🏛️" : cat === "technology" ? "💻" : cat === "security" ? "🛡️" : cat === "economy" ? "📈" : cat === "entertainment" ? "🎭" : cat === "world" ? "🌍" : cat === "health" ? "❤️" : "📰"}
+                  <div className={`w-full h-full flex items-center justify-center text-2xl ${isActive ? 'bg-[#E31E24]/40' : 'bg-gray-800'}`}>
+                    {catEmoji}
+                  </div>
+                )}
+                {/* count badge */}
+                {catCount > 0 && (
+                  <div className="absolute bottom-0 left-0 right-0 bg-black/70 text-[9px] text-center text-white font-bold py-0.5">
+                    {catCount}
                   </div>
                 )}
               </div>
-              <span className={`text-[10px] font-bold max-w-[64px] truncate ${isActive ? 'text-[#E31E24]' : 'text-gray-400'}`}>
+              <span className={`text-[10px] font-bold max-w-[64px] truncate ${isActive ? 'text-[#E31E24]' : 'text-gray-300'}`}>
                 {catLabel}
               </span>
             </button>
