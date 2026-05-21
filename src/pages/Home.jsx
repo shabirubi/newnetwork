@@ -41,6 +41,7 @@ import YouTubeFloatingButton from "../components/home/YouTubeFloatingButton";
 import OrefAlertsPanel from "../components/home/OrefAlertsPanel";
 import OrefNewsSection from "../components/home/OrefNewsSection";
 import OrefEmergencyPopup from "../components/home/OrefEmergencyPopup";
+import ReelsStrip from "../components/home/ReelsStrip";
 
 // Lazy loaded components
 const NewsReels = React.lazy(() => import("../components/news/NewsReels"));
@@ -189,6 +190,9 @@ export default function Home() {
       {/* OREF Alerts - TOP PRIORITY */}
       <OrefAlertsPanel />
 
+
+      {/* Reels Strip */}
+      <ReelsStrip />
 
       {/* Featured Article Editor - above war news */}
       <FeaturedArticleEditor />
