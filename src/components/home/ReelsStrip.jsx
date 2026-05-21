@@ -85,7 +85,7 @@ export default function ReelsStrip() {
       const title = (v.title || "").trim();
       const isAudio = url.includes(".mp3") || url.includes(".m4a") || url.includes(".wav") || url.includes(".ogg") || url.includes(".aac");
       if (isAudio || v.feed === "podcasts") return false;
-      if (!title || title.match(/^[a-f0-9]{24}$/i)) return false; // הסר סרטונים ללא כותרת או עם ID כותרת
+      if (!title || /^[a-f0-9]{16,}$/i.test(title) || /^[a-f0-9_\-]{16,}$/i.test(title)) return false; // הסר ID כותרת
       if (seenUrls.has(url)) return false;
       if (seenTitles.has(title)) return false;
       seenUrls.add(url);

@@ -82,7 +82,7 @@ export default function VideosCategoriesStrip() {
               .filter(v => {
                 if (!v.video_url || v.feed === 'podcasts') return false;
                 const t = (v.title || '').trim();
-                if (!t || /^[a-f0-9]{24}$/i.test(t)) return false; // הסר ללא כותרת / ID כותרת
+                if (!t || /^[a-f0-9]{16,}$/i.test(t) || /^[a-f0-9_\-]{16,}$/i.test(t)) return false; // הסר ID כותרת
                 return true;
               })
               .map(v => ({
