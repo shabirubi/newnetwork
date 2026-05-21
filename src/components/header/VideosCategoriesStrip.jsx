@@ -79,7 +79,12 @@ export default function VideosCategoriesStrip() {
           const dbVideos = await base44.entities.UserVideo.list('-created_date', 100);
           if (dbVideos && Array.isArray(dbVideos)) {
             videos = dbVideos
-              .filter(v => v.video_url && v.feed !== 'podcasts')
+              .filter(v => {
+                if (!v.video_url || v.feed === 'podcasts') return false;
+                const t = (v.title || '').trim();
+                if (!t || /^[a-f0-9]{24}$/i.test(t)) return false; // הסר ללא כותרת / ID כותרת
+                return true;
+              })
               .map(v => ({
                 id: v.id,
                 title: v.title || 'סרטון ללא כותרת',
