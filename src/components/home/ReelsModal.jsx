@@ -276,13 +276,18 @@ export default function ReelsModal({ isOpen, onClose }) {
     return () => window.removeEventListener("videoUploaded", handler);
   }, [queryClient]);
 
-  // הצג את כל הסרטונים — להוציא רק פודקאסטים ואודיו
-  const videoOnly = videos.filter(v => {
-    const url = (v.video_url || "").toLowerCase();
-    const isAudio = url.includes(".mp3") || url.includes(".m4a") || url.includes(".wav") || url.includes(".ogg") || url.includes(".aac");
-    const isPodcast = v.feed === "podcasts";
-    return !isAudio && !isPodcast;
-  });
+  // הצג את כל הסרטונים — להוציא פודקאסטים, אודיו וכפולים
+  const videoOnly = (() => {
+    const seen = new Set();
+    return videos.filter(v => {
+      const url = (v.video_url || "").toLowerCase();
+      const isAudio = url.includes(".mp3") || url.includes(".m4a") || url.includes(".wav") || url.includes(".ogg") || url.includes(".aac");
+      if (isAudio || v.feed === "podcasts") return false;
+      if (seen.has(url)) return false;
+      seen.add(url);
+      return true;
+    });
+  })();
 
   // קטגוריות ייחודיות מהסרטונים
   const usedCategories = ["all", ...new Set(videoOnly.map(v => v.category).filter(Boolean))];
