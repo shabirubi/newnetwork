@@ -72,9 +72,10 @@ export default function ReelsStrip() {
   const [reelsOpen, setReelsOpen] = useState(false);
 
   const { data: videos = [] } = useQuery({
-    queryKey: ["reels-strip-videos"],
-    queryFn: () => base44.entities.UserVideo.list("-created_date", 30),
+    queryKey: ["home-all-videos"],
+    queryFn: () => base44.entities.UserVideo.list("-created_date", 200),
     staleTime: 5 * 60 * 1000,
+    gcTime: 15 * 60 * 1000,
   });
 
   const reels = (() => {
