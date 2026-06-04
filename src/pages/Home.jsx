@@ -42,6 +42,7 @@ import OrefAlertsPanel from "../components/home/OrefAlertsPanel";
 import OrefNewsSection from "../components/home/OrefNewsSection";
 import OrefEmergencyPopup from "../components/home/OrefEmergencyPopup";
 import ReelsStrip from "../components/home/ReelsStrip";
+import HomeCategoryFeed from "../components/home/HomeCategoryFeed";
 
 // Lazy loaded components
 const NewsReels = React.lazy(() => import("../components/news/NewsReels"));
@@ -196,6 +197,9 @@ export default function Home() {
 
       {/* Category Article Editors — one per category with full editor */}
       <AllCategoryEditors />
+
+      {/* Home Category Feed — reels strip + articles per category */}
+      <HomeCategoryFeed />
 
       {/* Category Rows removed - AllCategoryEditors above already covers all categories */}
 

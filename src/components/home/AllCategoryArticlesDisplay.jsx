@@ -118,11 +118,14 @@ function CategorySection({ category, articles }) {
 
   if (articles.length === 0 && (!videos || videos.length === 0)) return null;
 
+  // Resolve display label — for custom categories the id is a MongoDB-style id, use category.label directly
+  const displayLabel = category.label;
+
   return (
     <div className="mb-8">
       <div className="flex items-center gap-2 mb-4">
         <div className="w-1 h-6 rounded-full" style={{ backgroundColor: category.color }} />
-        <h3 className="text-white font-bold text-lg">{category.label}</h3>
+        <h3 className="text-white font-bold text-lg">{displayLabel}</h3>
         <Badge className="text-xs" style={{ backgroundColor: category.color, color: '#fff' }}>
           {articles.length} כתבות
         </Badge>

@@ -205,6 +205,7 @@ export default function ArticleEditorModal({ article, onClose, onSaved }) {
         await base44.entities.NewsArticle.create(data);
       }
       queryClient.invalidateQueries({ queryKey: ['featured-articles'] });
+      queryClient.invalidateQueries({ queryKey: ['home-all-articles'] });
       toast.success("הכתבה נשמרה!");
       onSaved();
     } catch { toast.error("שגיאה בשמירה"); }
