@@ -1,32 +1,16 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../../utils";
-import { Flame, Clock, AlertTriangle } from "lucide-react";
+import { Flame, Clock } from "lucide-react";
 import moment from "moment";
-import { base44 } from "@/api/base44Client";
-import { useQuery } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function UpdatesFeed() {
-  const { data: breakingNews = [] } = useQuery({
-    queryKey: ['breaking-news-shared'],
-    queryFn: async () => {
-      try {
-        return await base44.entities.NewsArticle.filter(
-          { is_breaking: true },
-          '-created_date',
-          12
-        );
-      } catch {
-        return [];
-      }
-    },
-    initialData: [],
-    refetchInterval: false,
-    refetchOnWindowFocus: false,
-    staleTime: 10 * 60 * 1000,
-    gcTime: 15 * 60 * 1000
-  });
+  // Reuse shared cache — no new API call
+  const queryClient = useQueryClient();
+  const allArticles = queryClient.getQueryData(['featured-articles']) || [];
+  const breakingNews = allArticles.filter(a => a.is_breaking).slice(0, 12);
 
   return (
     <div className="sticky top-6 bg-black">

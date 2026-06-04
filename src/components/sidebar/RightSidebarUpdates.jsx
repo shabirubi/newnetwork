@@ -1,6 +1,5 @@
 import React from "react";
-import { base44 } from "@/api/base44Client";
-import { useQuery } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 import { Flame } from "lucide-react";
 import moment from "moment";
@@ -8,25 +7,10 @@ import { Link } from "react-router-dom";
 import { createPageUrl } from "../../utils";
 
 export default function RightSidebarUpdates() {
-  const { data: updates = [] } = useQuery({
-    queryKey: ['breaking-news-shared'],
-    queryFn: async () => {
-      try {
-        return base44.entities.NewsArticle.filter(
-          { is_breaking: true },
-          '-created_date',
-          12
-        );
-      } catch {
-        return [];
-      }
-    },
-    initialData: [],
-    refetchInterval: false,
-    refetchOnWindowFocus: false,
-    staleTime: 10 * 60 * 1000,
-    gcTime: 15 * 60 * 1000
-  });
+  // Reuse the shared cache — no new API call
+  const queryClient = useQueryClient();
+  const allArticles = queryClient.getQueryData(['featured-articles']) || [];
+  const updates = allArticles.filter(a => a.is_breaking).slice(0, 12);
 
   if (updates.length === 0) return null;
 

@@ -1,10 +1,11 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useMemo, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Film, Clapperboard, Baby, Vote, Trophy, Heart, Globe, Cpu, Music, Star, X, Play, MessageCircle, Send } from "lucide-react";
 import { Link } from "react-router-dom";
 import { createPageUrl } from "../../utils";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+
 import { Input } from "@/components/ui/input";
 import VideoModalPortal from "./VideoModalPortal";
 
@@ -36,12 +37,7 @@ export default function VideosCategoriesStrip() {
   const [hoveredCategory, setHoveredCategory] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [currentVideoIndex, setCurrentVideoIndex] = useState(0);
-  const { data: customCategories = [] } = useQuery({
-    queryKey: ["custom-categories-strip"],
-    queryFn: () => base44.entities.CustomCategory.list('-created_date', 50),
-    staleTime: 60000,
-  });
-  const customCatMap = Object.fromEntries(customCategories.map(c => [c.id, c.label]));
+
   const [message, setMessage] = useState("");
   const [userName, setUserName] = useState(() => {
     if (typeof window !== 'undefined') {
@@ -66,59 +62,31 @@ export default function VideosCategoriesStrip() {
   };
 
   // Load videos from localStorage or database
-  const { data: categoryVideos = [], status } = useQuery({
-    queryKey: ['cached-videos', selectedCategory],
-    queryFn: async () => {
-      try {
-        if (typeof window === 'undefined') return [];
-        
-        let videos = [];
-        
-        // Always fetch from database (single source of truth, no duplicates)
-        try {
-          const dbVideos = await base44.entities.UserVideo.list('-created_date', 100);
-          if (dbVideos && Array.isArray(dbVideos)) {
-            videos = dbVideos
-              .filter(v => {
-                if (!v.video_url || v.feed === 'podcasts') return false;
-                const t = (v.title || '').trim();
-                if (!t || /^[a-f0-9]{16,}$/i.test(t) || /^[a-f0-9_\-]{16,}$/i.test(t)) return false; // הסר ID כותרת
-                return true;
-              })
-              .map(v => ({
-                id: v.id,
-                title: v.title || 'סרטון ללא כותרת',
-                video_url: v.video_url,
-                thumbnail_url: v.thumbnail_url || v.video_url,
-                created_date: v.created_date,
-                views: v.views || 0,
-                category: v.category || 'all'
-              }));
-          }
-        } catch (error) {
-          console.error('שגיאה בטעינה מהמאגר:', error);
-        }
-        
-        // Filter by category
-        if (selectedCategory && selectedCategory !== 'all') {
-          videos = videos.filter(v => v.category === selectedCategory);
-          console.log(`🔍 סינון לפי קטגוריה "${selectedCategory}":`, videos.length, 'סרטונים');
-        }
-        
-        if (videos.length === 0) {
-          console.warn('⚠️ אין סרטונים זמינים לקטגוריה זו');
-        }
-        
-        return videos;
-      } catch (error) {
-        console.error('Failed to load videos:', error);
-        return [];
-      }
-    },
-    enabled: selectedCategory !== null,
-    staleTime: 60000,
-    gcTime: 120000,
+  // Reuse the shared "home-all-videos" cache — no extra API call
+  const { data: allVideos = [] } = useQuery({
+    queryKey: ['home-all-videos'],
+    queryFn: () => base44.entities.UserVideo.list('-created_date', 200),
+    staleTime: 5 * 60 * 1000,
+    gcTime: 15 * 60 * 1000,
   });
+
+  const categoryVideos = React.useMemo(() => {
+    const clean = allVideos.filter(v => {
+      if (!v.video_url || v.feed === 'podcasts') return false;
+      const t = (v.title || '').trim();
+      return t && !/^[a-f0-9]{16,}$/i.test(t);
+    }).map(v => ({
+      id: v.id,
+      title: v.title || 'סרטון ללא כותרת',
+      video_url: v.video_url,
+      thumbnail_url: v.thumbnail_url || v.video_url,
+      created_date: v.created_date,
+      views: v.views || 0,
+      category: v.category || 'all'
+    }));
+    if (!selectedCategory || selectedCategory === 'all') return clean;
+    return clean.filter(v => v.category === selectedCategory);
+  }, [allVideos, selectedCategory]);
 
 
 
