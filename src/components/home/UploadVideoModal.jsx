@@ -164,7 +164,7 @@ export default function UploadVideoModal({ isOpen, onClose }) {
                   <div className="border-2 border-dashed border-gray-600 rounded-2xl p-4 text-center hover:border-red-500 transition-colors cursor-pointer group">
                     <input
                       type="file"
-                      accept="video/*,image/*"
+                      accept="video/*,image/*,audio/*"
                       onChange={(e) => {
                         const file = e.target.files?.[0];
                         if (file && file.size > 100 * 1024 * 1024) {
@@ -191,7 +191,7 @@ export default function UploadVideoModal({ isOpen, onClose }) {
                       <p className="text-gray-400 text-sm">
                         {formData.videoFile
                           ? `${formData.videoFile.name} (${(formData.videoFile.size / (1024 * 1024)).toFixed(1)}MB)`
-                          : "MP4, WebM או MOV"}
+                          : "MP4, WebM, MOV, MP3, M4A"}
                       </p>
                     </label>
                   </div>
