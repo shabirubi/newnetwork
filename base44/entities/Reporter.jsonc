@@ -1,0 +1,68 @@
+{
+  "name": "Reporter",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "\u05e9\u05dd \u05d4\u05db\u05ea\u05d1/\u05ea"
+    },
+    "role": {
+      "type": "string",
+      "description": "\u05ea\u05e4\u05e7\u05d9\u05d3 \u05d4\u05db\u05ea\u05d1/\u05ea"
+    },
+    "image": {
+      "type": "string",
+      "description": "\u05ea\u05de\u05d5\u05e0\u05ea \u05e4\u05e8\u05d5\u05e4\u05d9\u05dc"
+    },
+    "gender": {
+      "type": "string",
+      "enum": [
+        "male",
+        "female"
+      ],
+      "description": "\u05de\u05d2\u05d3\u05e8"
+    },
+    "categories": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      },
+      "description": "\u05e7\u05d8\u05d2\u05d5\u05e8\u05d9\u05d5\u05ea \u05e9\u05d4\u05db\u05ea\u05d1 \u05de\u05ea\u05de\u05d7\u05d4 \u05d1\u05d4\u05df"
+    },
+    "specialty": {
+      "type": "string",
+      "description": "\u05d4\u05ea\u05de\u05d7\u05d5\u05ea"
+    },
+    "bio": {
+      "type": "string",
+      "description": "\u05d1\u05d9\u05d5\u05d2\u05e8\u05e4\u05d9\u05d4 \u05e7\u05e6\u05e8\u05d4"
+    },
+    "social_media": {
+      "type": "object",
+      "properties": {
+        "twitter": {
+          "type": "string"
+        },
+        "facebook": {
+          "type": "string"
+        },
+        "instagram": {
+          "type": "string"
+        }
+      }
+    },
+    "is_active": {
+      "type": "boolean",
+      "default": true,
+      "description": "\u05d4\u05d0\u05dd \u05d4\u05db\u05ea\u05d1 \u05e4\u05e2\u05d9\u05dc"
+    }
+  },
+  "required": [
+    "name",
+    "role",
+    "image",
+    "gender",
+    "categories",
+    "specialty"
+  ]
+}

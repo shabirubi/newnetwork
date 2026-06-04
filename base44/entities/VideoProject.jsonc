@@ -1,0 +1,48 @@
+{
+  "name": "VideoProject",
+  "type": "object",
+  "properties": {
+    "title": {
+      "type": "string",
+      "description": "\u05e9\u05dd \u05d4\u05e4\u05e8\u05d5\u05d9\u05e7\u05d8"
+    },
+    "clips": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "description": "\u05e8\u05e9\u05d9\u05de\u05ea \u05d4\u05e7\u05dc\u05d9\u05e4\u05d9\u05dd"
+    },
+    "audioTrack": {
+      "type": "object",
+      "description": "\u05e8\u05e6\u05d5\u05e2\u05ea \u05d0\u05d5\u05d3\u05d9\u05d5"
+    },
+    "transitions": {
+      "type": "object",
+      "description": "\u05de\u05e2\u05d1\u05e8\u05d9\u05dd \u05d1\u05d9\u05df \u05e7\u05dc\u05d9\u05e4\u05d9\u05dd"
+    },
+    "overlays": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      },
+      "description": "\u05d8\u05e7\u05e1\u05d8\u05d9\u05dd \u05d5\u05dc\u05d5\u05d2\u05d5\u05d0\u05d9\u05dd"
+    },
+    "thumbnail": {
+      "type": "string",
+      "description": "\u05ea\u05de\u05d5\u05e0\u05ea \u05ea\u05e6\u05d5\u05d2\u05d4 \u05de\u05e7\u05d3\u05d9\u05de\u05d4"
+    },
+    "duration": {
+      "type": "number",
+      "description": "\u05de\u05e9\u05da \u05db\u05d5\u05dc\u05dc"
+    },
+    "creator_email": {
+      "type": "string",
+      "description": "\u05de\u05d9\u05d9\u05dc \u05d4\u05d9\u05d5\u05e6\u05e8"
+    }
+  },
+  "required": [
+    "title",
+    "creator_email"
+  ]
+}

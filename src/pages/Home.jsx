@@ -194,14 +194,6 @@ export default function Home() {
       {/* Reels Strip */}
       <ReelsStrip />
 
-      {/* Featured Article Editor - above war news */}
-      <FeaturedArticleEditor />
-
-      {/* Oref News Section - removed WarNewsSection */}
-
-      {/* All Category Articles - Full display of all articles from all categories */}
-      <AllCategoryArticlesDisplay />
-
       {/* Category Article Editors — one per category with full editor */}
       <AllCategoryEditors />
 
