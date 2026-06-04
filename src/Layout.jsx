@@ -28,6 +28,7 @@ import AccessibilityFloatingButton from "./components/accessibility/Accessibilit
 import InstallAppButton from "./components/shared/InstallAppButton";
 import PodcastsFloatingButton from "./components/home/PodcastsFloatingButton";
 import { base44 } from "@/api/base44Client";
+import { useQueryClient } from "@tanstack/react-query";
 import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import UserProfileModal from "./components/user/UserProfileModal";
@@ -46,22 +47,11 @@ const LogoVideo = ({ className }) => (
 
 // Vertical Carousel Breaking News Component
 function TypewriterDate() {
-  const [news, setNews] = React.useState([]);
   const [currentIndex, setCurrentIndex] = React.useState(0);
-
-  React.useEffect(() => {
-    const fetchNews = async () => {
-      try {
-        const articles = await base44.entities.NewsArticle.filter({ is_breaking: true }, '-created_date', 10);
-        setNews(articles || []);
-      } catch (err) {
-        console.error('Failed to fetch breaking news:', err);
-      }
-    };
-    fetchNews();
-    const interval = setInterval(fetchNews, 5 * 60 * 1000);
-    return () => clearInterval(interval);
-  }, []);
+  const queryClient = useQueryClient();
+  // Reuse shared cache — no extra DB call
+  const allArticles = queryClient.getQueryData(['featured-articles']) || [];
+  const news = allArticles.filter(a => a.is_breaking).slice(0, 10);
 
   React.useEffect(() => {
     if (news.length <= 1) return;
@@ -70,6 +60,7 @@ function TypewriterDate() {
     }, 3500);
     return () => clearInterval(timer);
   }, [news.length]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
 
   if (news.length === 0) {
     return (
@@ -166,19 +157,13 @@ export default function Layout({ children, currentPageName }) {
     return () => window.removeEventListener('openReels', handler);
   }, []);
 
-  // בדיקת מצב האתר
+  // בדיקת מצב האתר — פעם אחת בלבד
   useEffect(() => {
-    const checkSiteStatus = async () => {
-      try {
-        const settings = await base44.entities.SiteSettings.list('-created_date', 1);
-        if (settings && settings[0]) {
-          setSiteSettings(settings[0]);
-        }
-      } catch (err) {
-        console.error('Failed to check site status:', err);
-      }
-    };
-    checkSiteStatus();
+    let cancelled = false;
+    base44.entities.SiteSettings.list('-created_date', 1)
+      .then(settings => { if (!cancelled && settings?.[0]) setSiteSettings(settings[0]); })
+      .catch(() => {});
+    return () => { cancelled = true; };
   }, []);
 
   // חיפוש כתבות
