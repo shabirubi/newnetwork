@@ -18,10 +18,34 @@ function ReelThumb({ video, onClick, customCatMap }) {
   const [hovered, setHovered] = useState(false);
   const [videoLoaded, setVideoLoaded] = useState(false);
   const [videoError, setVideoError] = useState(false);
+  const [posterDataUrl, setPosterDataUrl] = useState(null);
 
   // Capture first frame as thumbnail when video loads
   const handleVideoLoad = () => {
-    setVideoLoaded(true);
+    const v = videoRef.current;
+    if (v) {
+      try {
+        // Seek to 1 second to get a better frame
+        v.currentTime = 1;
+        v.addEventListener('seeked', function captureFrame() {
+          try {
+            const canvas = document.createElement('canvas');
+            canvas.width = v.videoWidth || 320;
+            canvas.height = v.videoHeight || 568;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(v, 0, 0, canvas.width, canvas.height);
+            const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
+            setPosterDataUrl(dataUrl);
+            setVideoLoaded(true);
+          } catch (e) {
+            setVideoLoaded(true);
+          }
+          v.removeEventListener('seeked', captureFrame);
+        }, { once: true });
+      } catch (e) {
+        setVideoLoaded(true);
+      }
+    }
   };
 
   return (
@@ -41,14 +65,23 @@ function ReelThumb({ video, onClick, customCatMap }) {
       }}
       className="flex-shrink-0 relative w-24 h-36 sm:w-28 sm:h-44 rounded-xl overflow-hidden group cursor-pointer"
     >
-      {/* Video element - preload to show first frame */}
+      {/* Poster image from captured frame - shown immediately */}
+      {posterDataUrl && (
+        <img
+          src={posterDataUrl}
+          alt={video.title}
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+      )}
+      
+      {/* Video element - hidden until loaded, used for playback */}
       <video
         ref={videoRef}
         src={video.video_url}
         muted
         playsInline
-        preload="auto"
-        loading="eager"
+        preload="metadata"
+        loading="lazy"
         className={`absolute inset-0 w-full h-full object-cover ${videoLoaded ? 'opacity-100' : 'opacity-0'}`}
         onLoadedMetadata={handleVideoLoad}
         onError={() => {
@@ -57,7 +90,9 @@ function ReelThumb({ video, onClick, customCatMap }) {
       />
       
       {/* Background gradient - visible while loading or on error */}
-      <div className={`absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-800 transition-opacity ${videoLoaded ? 'opacity-0' : 'opacity-100'}`} />
+      {!posterDataUrl && !videoError && (
+        <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-800" />
+      )}
       
       {/* Fallback gradient if video fails to load */}
       {videoError && (
