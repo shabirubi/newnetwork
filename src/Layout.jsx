@@ -31,19 +31,6 @@ import { base44 } from "@/api/base44Client";
 import { useQueryClient } from "@tanstack/react-query";
 import UserProfileModal from "./components/user/UserProfileModal";
 
-const LOGO_URL = "https://media.base44.com/videos/public/695b39080025f4d38a586978/be7e061f7_shavit1313.mp4";
-const LogoVideo = ({ className }) => (
-  <video
-    src={LOGO_URL}
-    autoPlay
-    loop
-    muted
-    playsInline
-    preload="none"
-    className={className}
-  />
-);
-
 // Vertical Carousel Breaking News Component
 function TypewriterDate() {
   const [currentIndex, setCurrentIndex] = React.useState(0);
@@ -283,13 +270,7 @@ export default function Layout({ children, currentPageName }) {
                 playsInline
                 preload="auto"
                 className="w-full h-full object-cover"
-                onError={() => {
-                  // Fallback to text if video fails to load
-                  const el = document.querySelector('[data-logo-video]');
-                  if (el) el.style.display = 'none';
-                }}
               />
-              <span data-logo-fallback className="text-white font-bold text-xl sm:text-2xl hidden">ר</span>
             </div>
             <div className="flex-col text-right hidden sm:flex">
               <h1 className="text-lg sm:text-2xl font-bold text-white">הרשת החדשה</h1>
