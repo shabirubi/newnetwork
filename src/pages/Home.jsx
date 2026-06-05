@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 
 import LivePlayer from "../components/news/LivePlayer";
 import HomeCategoryFeed from "../components/home/HomeCategoryFeed";
+import FeaturedArticleEditor from "../components/home/FeaturedArticleEditor";
 
 import WeatherAlertsContainer from "../components/weather/WeatherAlertsContainer";
 import CategoriesMenu from "../components/shared/CategoriesMenu";
@@ -75,8 +76,14 @@ export default function Home() {
       {/* OREF Alerts */}
       <OrefAlertsPanel />
 
-      {/* Reels Strip — only user uploaded videos */}
+      {/* Reels Strip — user uploaded videos at the top */}
       <ReelsStrip />
+
+      {/* Featured Article Editor (כתבה מרכזית) */}
+      <FeaturedArticleEditor />
+
+      {/* All categories with articles and videos */}
+      <HomeCategoryFeed />
 
       {/* ── Modals ── */}
       <VODModal isOpen={vodModalOpen} onClose={() => setVodModalOpen(false)} />

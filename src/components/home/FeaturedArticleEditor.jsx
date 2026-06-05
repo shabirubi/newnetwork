@@ -309,6 +309,7 @@ function EditorModal({ article, onClose, onSaved }) {
       queryClient.invalidateQueries({ queryKey: ['featured-main-article'] });
       queryClient.invalidateQueries({ queryKey: ['featured-articles'] });
       queryClient.invalidateQueries({ queryKey: ['cat-articles'] });
+      queryClient.invalidateQueries({ queryKey: ['home-all-videos'] });
       toast.success("הכתבה נשמרה!");
       onSaved();
     } catch {
