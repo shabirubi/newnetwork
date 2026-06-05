@@ -65,9 +65,9 @@ export default function VideosCategoriesStrip() {
   // Reuse the shared "home-all-videos" cache — no extra API call
   const { data: allVideos = [] } = useQuery({
     queryKey: ['home-all-videos'],
-    queryFn: () => base44.entities.UserVideo.list('-created_date', 200),
-    staleTime: 5 * 60 * 1000,
-    gcTime: 15 * 60 * 1000,
+    queryFn: () => base44.entities.UserVideo.list('-created_date', 30),
+    staleTime: 30 * 60 * 1000,
+    gcTime: 60 * 60 * 1000,
   });
 
   const categoryVideos = React.useMemo(() => {

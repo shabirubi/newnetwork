@@ -39,6 +39,7 @@ const LogoVideo = ({ className }) => (
     loop
     muted
     playsInline
+    preload="none"
     className={className}
   />
 );
@@ -49,7 +50,7 @@ function TypewriterDate() {
   const queryClient = useQueryClient();
   // Reuse shared cache — no extra DB call
   const allArticles = queryClient.getQueryData(['featured-articles']) || [];
-  const news = allArticles.filter(a => a.is_breaking).slice(0, 10);
+  const news = allArticles.filter(a => a.is_breaking).slice(0, 5);
 
   React.useEffect(() => {
     if (news.length <= 1) return;
@@ -136,16 +137,17 @@ export default function Layout({ children, currentPageName }) {
 
 
   // הפעל אנימציית לוגו - מבוטל לביצועים
-  // const triggerLogoFloat = () => {
-  //   setLogoFloat(true);
-  //   setTimeout(() => setLogoFloat(false), 1200);
-  // };
+  const [logoFloat, setLogoFloat] = useState(false);
+  const triggerLogoFloat = () => {
+    setLogoFloat(true);
+    setTimeout(() => setLogoFloat(false), 1200);
+  };
 
-  // useEffect(() => {
-  //   const handleUserAction = () => triggerLogoFloat();
-  //   window.addEventListener('click', handleUserAction);
-  //   return () => window.removeEventListener('click', handleUserAction);
-  // }, []);
+  useEffect(() => {
+    const handleUserAction = () => triggerLogoFloat();
+    window.addEventListener('click', handleUserAction);
+    return () => window.removeEventListener('click', handleUserAction);
+  }, []);
 
   useEffect(() => {
     const handler = () => setReelsOpen(true);
@@ -153,11 +155,21 @@ export default function Layout({ children, currentPageName }) {
     return () => window.removeEventListener('openReels', handler);
   }, []);
 
-  // בדיקת מצב האתר — פעם אחת בלבד עם caching
+  // בדיקת מצב האתר — פעם אחת בלבד עם caching ארוך
   useEffect(() => {
+    const cached = localStorage.getItem('site_settings');
+    if (cached) {
+      try { setSiteSettings(JSON.parse(cached)); return; }
+      catch(e) {}
+    }
     let cancelled = false;
     base44.entities.SiteSettings.list('-created_date', 1)
-      .then(settings => { if (!cancelled && settings?.[0]) setSiteSettings(settings[0]); })
+      .then(settings => { 
+        if (!cancelled && settings?.[0]) {
+          setSiteSettings(settings[0]);
+          localStorage.setItem('site_settings', JSON.stringify(settings[0]));
+        }
+      })
       .catch(() => {});
     return () => { cancelled = true; };
   }, []);
@@ -335,7 +347,9 @@ export default function Layout({ children, currentPageName }) {
           
           {/* Logo — always visible */}
           <div className="flex items-center gap-2 flex-shrink-0">
-            <LogoVideo className="h-14 w-14 sm:h-20 sm:w-20 object-contain flex-shrink-0 rounded-full" />
+            <div className="h-14 w-14 sm:h-20 sm:w-20 rounded-full bg-gradient-to-br from-[#0057B8] to-[#E31E24] flex items-center justify-center flex-shrink-0 shadow-lg">
+              <span className="text-white font-bold text-lg">ר</span>
+            </div>
             <div className="flex-col text-right hidden sm:flex">
               <h1 className="text-base sm:text-xl font-bold text-white">הרשת החדשה</h1>
             </div>
@@ -427,6 +441,11 @@ export default function Layout({ children, currentPageName }) {
         <VideosCategoriesStrip />
       </React.Suspense>
 
+      {/* News Ticker - lazy loaded */}
+      <React.Suspense fallback={<div className="h-20 bg-black/40" />}>
+        <NewsTicker darkMode={darkMode} setDarkMode={setDarkMode} onMenuClick={() => setMobileMenuOpen(true)} />
+      </React.Suspense>
+
 
 
       {/* User Profile Modal */}
@@ -448,8 +467,13 @@ export default function Layout({ children, currentPageName }) {
         <PodcastsFloatingButton />
       </React.Suspense>
 
+      {/* Sidebars - lazy loaded */}
+      <React.Suspense fallback={null}>
+        <RightSidebarUpdates />
+      </React.Suspense>
+
       {/* Logo Float Animation - disabled for performance */}
-      {/* <AnimatePresence>
+      <AnimatePresence>
         {logoFloat && (
           <motion.div
             initial={{ opacity: 0, scale: 0.1 }}
@@ -457,10 +481,12 @@ export default function Layout({ children, currentPageName }) {
             transition={{ duration: 1.4, ease: "easeOut", times: [0, 0.2, 0.5, 0.75, 1] }}
             className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[99998] pointer-events-none"
           >
-            <LogoVideo className="h-32 w-32 rounded-full shadow-2xl shadow-red-500/50 border-2 border-red-500/40" />
+            <div className="h-32 w-32 rounded-full bg-gradient-to-br from-[#0057B8] to-[#E31E24] shadow-2xl shadow-red-500/50 border-2 border-red-500/40 flex items-center justify-center">
+              <span className="text-white font-bold text-6xl">ר</span>
+            </div>
           </motion.div>
         )}
-      </AnimatePresence> */}
+      </AnimatePresence>
 
       {/* Main Menu Sidebar */}
       <AnimatePresence>
@@ -748,7 +774,9 @@ export default function Layout({ children, currentPageName }) {
                 {/* Drawer Header */}
                 <div className="sticky top-0 bg-gradient-to-br from-black via-[#E31E24]/20 to-black p-4 shadow-lg border-b border-[#E31E24]/30">
                   <div className="flex items-center justify-between">
-                    <LogoVideo className="h-12 w-12 object-contain rounded-full" />
+                    <div className="h-12 w-12 rounded-full bg-gradient-to-br from-[#0057B8] to-[#E31E24] flex items-center justify-center">
+                      <span className="text-white font-bold text-lg">ר</span>
+                    </div>
                     <button
                       onClick={() => setMobileMenuOpen(false)}
                       className="p-2 rounded-full bg-[#E31E24]/20 hover:bg-[#E31E24]/40 text-white active:scale-95 transition-all"
@@ -918,7 +946,9 @@ export default function Layout({ children, currentPageName }) {
         <div className="max-w-7xl mx-auto px-4 py-12">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
             <div>
-              <LogoVideo className="h-16 w-16 mb-4 object-contain rounded-full" />
+              <div className="h-16 w-16 mb-4 rounded-full bg-gradient-to-br from-[#0057B8] to-[#E31E24] flex items-center justify-center shadow-lg">
+                <span className="text-white font-bold text-2xl">ר</span>
+              </div>
               <p className="text-gray-400 text-sm">
                 ערוץ חדשות דיגיטלי מבוסס AI עם בקרה אנושית, המייצר תוכן דיגיטלי במהירות ובאיכות.
               </p>
