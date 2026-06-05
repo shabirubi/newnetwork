@@ -308,7 +308,7 @@ export default function Layout({ children, currentPageName }) {
           <div className="flex items-center gap-3 flex-shrink-0">
             <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-full bg-gradient-to-br from-[#0057B8] to-[#E31E24] flex items-center justify-center flex-shrink-0 shadow-xl border-2 border-white/20 overflow-hidden">
               <video
-                src="https://media.base44.com/videos/public/695b39080025f4d38a586978/be7e061f7_shavit1313.mp4"
+                src="https://media.base44.com/videos/public/695b39080025f4d38a586978/8e449bcbb_shavit1313.mp4"
                 autoPlay
                 loop
                 muted
