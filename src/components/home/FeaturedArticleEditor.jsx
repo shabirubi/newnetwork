@@ -702,10 +702,10 @@ export default function FeaturedArticleEditor() {
 
         {/* Article Display */}
          <div className="bg-[#0d0d0d] rounded-2xl overflow-hidden border border-gray-800">
-           <div className="flex flex-col lg:flex-row h-auto lg:h-auto">
+           <div className="flex flex-col lg:flex-row">
 
              {/* LEFT: Media Gallery */}
-             <div className="w-full lg:w-1/2 h-48 sm:h-64 lg:h-auto">
+             <div className="w-full lg:w-1/2 min-h-[200px] lg:min-h-[300px]">
                <MediaGallery
                  mainImage={article?.image_url}
                  mainVideo={article?.video_url}
@@ -715,26 +715,26 @@ export default function FeaturedArticleEditor() {
              </div>
 
              {/* RIGHT: Content */}
-             <div className="w-full lg:w-1/2 flex flex-col p-4 sm:p-6 gap-2 justify-between">
+             <div className="w-full lg:w-1/2 flex flex-col p-4 sm:p-6 gap-2 justify-start">
                {selectedCat && (
                  <span className="px-2 py-0.5 bg-[#0057B8]/20 text-[#0057B8] rounded text-xs font-bold w-fit">
                    {selectedCat.label}
                  </span>
                )}
-               <h1 className="text-white text-base sm:text-lg font-bold line-clamp-2 break-words">
+               <h1 className="text-white text-base sm:text-lg font-bold leading-tight break-words">
                  {article?.title || "אין כתבה מרכזית"}
                </h1>
                {article?.subtitle && (
-                 <p className="text-gray-300 text-xs sm:text-sm line-clamp-2 break-words">{article.subtitle}</p>
+                 <p className="text-gray-300 text-xs sm:text-sm leading-snug break-words">{article.subtitle}</p>
                )}
                {article?.content && (
-                 <p className="text-gray-400 text-xs sm:text-sm line-clamp-3 break-words">
+                 <p className="text-gray-400 text-xs sm:text-sm leading-snug break-words line-clamp-3">
                    {article.content}
                  </p>
                )}
                {article && (
                  <a href={`/Article?id=${article.id}`}
-                   className="inline-flex items-center gap-2 px-3 py-1 bg-[#0057B8] hover:bg-[#1a6fd4] text-white text-xs font-bold rounded transition-colors">
+                   className="inline-flex items-center gap-2 px-3 py-1 bg-[#0057B8] hover:bg-[#1a6fd4] text-white text-xs font-bold rounded transition-colors w-fit mt-2">
                    קרא עוד →
                  </a>
                )}
