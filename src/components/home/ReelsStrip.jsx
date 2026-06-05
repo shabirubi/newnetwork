@@ -18,9 +18,11 @@ function ReelThumb({ video, onClick, customCatMap }) {
   const [hovered, setHovered] = useState(false);
   const [videoLoaded, setVideoLoaded] = useState(false);
   const [videoError, setVideoError] = useState(false);
-  const [imgError, setImgError] = useState(false);
 
-  const hasThumbnail = video.thumbnail_url && !imgError;
+  // Capture first frame as thumbnail when video loads
+  const handleVideoLoad = () => {
+    setVideoLoaded(true);
+  };
 
   return (
     <button
@@ -37,50 +39,29 @@ function ReelThumb({ video, onClick, customCatMap }) {
         const v = videoRef.current;
         if (v) { v.pause(); v.currentTime = 0; }
       }}
-      className="flex-shrink-0 relative w-24 h-36 sm:w-28 sm:h-44 rounded-xl overflow-hidden group cursor-pointer bg-gray-800"
+      className="flex-shrink-0 relative w-24 h-36 sm:w-28 sm:h-44 rounded-xl overflow-hidden group cursor-pointer"
     >
-      {/* Background color fallback - lowest layer */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-800" />
+      {/* Video element - preload to show first frame */}
+      <video
+        ref={videoRef}
+        src={video.video_url}
+        muted
+        playsInline
+        preload="auto"
+        loading="eager"
+        className={`absolute inset-0 w-full h-full object-cover ${videoLoaded ? 'opacity-100' : 'opacity-0'}`}
+        onLoadedMetadata={handleVideoLoad}
+        onError={() => {
+          setVideoError(true);
+        }}
+      />
       
-      {/* Thumbnail image - middle layer, only if no video loaded yet */}
-      {hasThumbnail && !videoLoaded && !videoError && (
-        <img
-          src={video.thumbnail_url}
-          alt={video.title}
-          className="absolute inset-0 w-full h-full object-cover"
-          onError={() => {
-            setImgError(true);
-          }}
-        />
-      )}
+      {/* Background gradient - visible while loading or on error */}
+      <div className={`absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-800 transition-opacity ${videoLoaded ? 'opacity-0' : 'opacity-100'}`} />
       
-      {/* Video element - top layer, only show when loaded */}
-      {!videoError && (
-        <video
-          ref={videoRef}
-          src={video.video_url}
-          muted
-          playsInline
-          loop
-          preload="metadata"
-          loading="lazy"
-          poster={video.thumbnail_url}
-          className={`absolute inset-0 w-full h-full object-cover ${videoLoaded ? 'opacity-100' : 'opacity-0'}`}
-          onLoadedMetadata={() => {
-            setVideoLoaded(true);
-          }}
-          onCanPlay={() => {
-            setVideoLoaded(true);
-          }}
-          onError={() => {
-            setVideoError(true);
-          }}
-        />
-      )}
-      
-      {/* Fallback - show color gradient if video fails */}
+      {/* Fallback gradient if video fails to load */}
       {videoError && (
-        <div className="absolute inset-0 bg-gradient-to-br from-[#E31E24]/20 to-[#0057B8]/20 flex items-center justify-center">
+        <div className="absolute inset-0 bg-gradient-to-br from-[#E31E24]/30 to-[#0057B8]/30 flex items-center justify-center">
           <Play className="w-12 h-12 text-white/40" />
         </div>
       )}
@@ -138,7 +119,7 @@ export default function ReelsStrip() {
       const title = (v.title || "").trim();
       const isAudio = url.includes(".mp3") || url.includes(".m4a") || url.includes(".wav") || url.includes(".ogg") || url.includes(".aac");
       if (isAudio || v.feed === "podcasts") return false;
-      if (!title || /^[a-f0-9]{16,}$/i.test(title) || /^[a-f0-9_\-]{16,}$/i.test(title)) return false; // הסר ID כותרת
+      if (!title || /^[a-f0-9]{16,}$/i.test(title) || /^[a-f0-9_\-]{16,}$/i.test(title)) return false;
       if (seenUrls.has(url)) return false;
       if (seenTitles.has(title)) return false;
       seenUrls.add(url);
