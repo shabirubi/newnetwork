@@ -702,10 +702,10 @@ export default function FeaturedArticleEditor() {
 
         {/* Article Display */}
          <div className="bg-[#0d0d0d] rounded-2xl overflow-hidden border border-gray-800">
-           <div className="flex flex-col lg:flex-row">
+           <div className="flex flex-col">
 
-             {/* LEFT: Media Gallery */}
-             <div className="w-full lg:w-1/2 h-40 sm:h-48 lg:h-auto">
+             {/* TOP: Media Gallery */}
+             <div className="w-full h-48 sm:h-64">
                <MediaGallery
                  mainImage={article?.image_url}
                  mainVideo={article?.video_url}
@@ -714,8 +714,8 @@ export default function FeaturedArticleEditor() {
                />
              </div>
 
-             {/* RIGHT: Content */}
-             <div className="w-full lg:w-1/2 flex flex-col p-3 sm:p-4 gap-1.5 justify-start">
+             {/* BOTTOM: Content */}
+             <div className="w-full flex flex-col p-4 sm:p-5 gap-2">
                {selectedCat && (
                  <span className="px-2 py-0.5 bg-[#0057B8]/20 text-[#0057B8] rounded text-xs font-bold w-fit">
                    {selectedCat.label}
