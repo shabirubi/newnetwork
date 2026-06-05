@@ -201,10 +201,8 @@ export default function HomeCategoryFeed() {
     return !isAudio && v.feed !== "podcasts" && title && !isObjectId(title);
   });
 
-  // Filter articles to show only user's own articles (or all if not logged in)
-  const userArticles = currentUser 
-    ? allArticles.filter(a => a.created_by_id === currentUser.id)
-    : allArticles;
+  // Show all articles (no filtering)
+  const userArticles = allArticles;
 
   // Determine active categories — builtin + custom ones that have content
   const activeCategories = [];

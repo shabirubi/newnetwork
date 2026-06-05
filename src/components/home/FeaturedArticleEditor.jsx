@@ -719,16 +719,18 @@ export default function FeaturedArticleEditor() {
                   {selectedCat.label}
                 </span>
               )}
-              <h1 className="text-white text-2xl sm:text-3xl font-bold leading-tight">
+              <h1 className="text-white text-2xl sm:text-3xl font-bold leading-tight line-clamp-3">
                 {article?.title || "אין כתבה מרכזית — לחץ 'כתבה חדשה' להוספה"}
               </h1>
               {article?.subtitle && (
-                <p className="text-gray-300 text-base sm:text-lg">{article.subtitle}</p>
+                <p className="text-gray-300 text-base sm:text-lg line-clamp-2">{article.subtitle}</p>
               )}
               {article?.content && (
-                <p className="text-gray-400 text-sm leading-relaxed flex-1" style={{ whiteSpace: 'pre-wrap' }}>
-                  {article.content}
-                </p>
+                <div className="flex-1 overflow-y-auto max-h-[40vh] pr-2">
+                  <p className="text-gray-400 text-sm leading-relaxed" style={{ whiteSpace: 'pre-wrap' }}>
+                    {article.content}
+                  </p>
+                </div>
               )}
               {article?.source && (
                 <p className="text-gray-500 text-xs">מקור: {article.source}</p>
