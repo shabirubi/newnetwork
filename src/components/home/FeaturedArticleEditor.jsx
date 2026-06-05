@@ -301,10 +301,20 @@ function EditorModal({ article, onClose, onSaved }) {
     if (!form.title.trim()) { toast.error("חובה להזין כותרת"); return; }
     setSaving(true);
     try {
-      if (article?.id) {
-        await base44.entities.NewsArticle.update(article.id, form);
+      // If creating new article, set it as featured and remove featured from others
+      if (!article?.id) {
+        // Remove is_featured from all existing articles
+        const allArticles = await base44.entities.NewsArticle.list();
+        for (const art of allArticles) {
+          if (art.is_featured) {
+            await base44.entities.NewsArticle.update(art.id, { is_featured: false });
+          }
+        }
+        // Create new article as featured
+        await base44.entities.NewsArticle.create({ ...form, is_featured: true });
       } else {
-        await base44.entities.NewsArticle.create(form);
+        // Update existing article
+        await base44.entities.NewsArticle.update(article.id, form);
       }
       queryClient.invalidateQueries({ queryKey: ['featured-main-article'] });
       queryClient.invalidateQueries({ queryKey: ['featured-articles'] });

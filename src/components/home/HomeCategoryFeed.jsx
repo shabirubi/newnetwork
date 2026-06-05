@@ -160,6 +160,12 @@ function CategoryBlock({ category, videos, articles }) {
 }
 
 export default function HomeCategoryFeed() {
+  // Get current user
+  const [currentUser, setCurrentUser] = React.useState(null);
+  React.useEffect(() => {
+    base44.auth.me().then(setCurrentUser).catch(() => setCurrentUser(null));
+  }, []);
+
   // Load all videos + articles once
   // Share the same cache as ReelsStrip — no double fetch
   const { data: allVideos = [] } = useQuery({
@@ -180,6 +186,44 @@ export default function HomeCategoryFeed() {
     gcTime: 60 * 60 * 1000,
   });
 
+  // Filter articles to show only user's own articles (or all if not logged in)
+  const userArticles = currentUser 
+    ? allArticles.filter(a => a.created_by_id === currentUser.id)
+    : allArticles;
+
+  // Determine active categories — builtin + custom ones that have content
+  const activeCategories = [];
+  const seenIds = new Set();
+
+  // built-in categories that have videos or articles (show even if empty for first 3)
+  let displayedCount = 0;
+  for (const cat of CATEGORIES) {
+    const catVideos = cleanVideos.filter(v => v.category === cat.id);
+    const catArticles = userArticles.filter(a => a.category === cat.id);
+    // Show first 3 categories even if empty, others only if they have content
+    if (catVideos.length > 0 || catArticles.length > 0 || displayedCount < 3) {
+      activeCategories.push({ ...cat, videos: catVideos, articles: catArticles });
+      seenIds.add(cat.id);
+      if (catVideos.length > 0 || catArticles.length > 0) displayedCount++;
+    }
+  }
+
+  // custom categories from DB that have content
+  for (const dbCat of customCatsDB) {
+    if (seenIds.has(dbCat.id)) continue;
+    const catVideos = cleanVideos.filter(v => v.category === dbCat.id);
+    const catArticles = userArticles.filter(a => (a.category === "custom" || a.category === dbCat.id) && (a.custom_category === dbCat.label || !a.custom_category));
+    if (catVideos.length > 0 || catArticles.length > 0) {
+      activeCategories.push({
+        id: dbCat.id,
+        label: dbCat.label,
+        color: dbCat.color || "#6366F1",
+        videos: catVideos,
+        articles: catArticles,
+      });
+    }
+  }
+
   const { data: customCatsDB = [] } = useQuery({
     queryKey: ["custom-categories-db"],
     queryFn: () => base44.entities.CustomCategory.list("-created_date", 20),
@@ -195,39 +239,6 @@ export default function HomeCategoryFeed() {
     const isAudio = [".mp3", ".m4a", ".wav", ".ogg", ".aac"].some(ext => url.includes(ext));
     return !isAudio && v.feed !== "podcasts" && title && !isObjectId(title);
   });
-
-  // Determine active categories — builtin + custom ones that have content
-  const activeCategories = [];
-  const seenIds = new Set();
-
-  // built-in categories that have videos or articles (show even if empty for first 3)
-  let displayedCount = 0;
-  for (const cat of CATEGORIES) {
-    const catVideos = cleanVideos.filter(v => v.category === cat.id);
-    const catArticles = allArticles.filter(a => a.category === cat.id);
-    // Show first 3 categories even if empty, others only if they have content
-    if (catVideos.length > 0 || catArticles.length > 0 || displayedCount < 3) {
-      activeCategories.push({ ...cat, videos: catVideos, articles: catArticles });
-      seenIds.add(cat.id);
-      if (catVideos.length > 0 || catArticles.length > 0) displayedCount++;
-    }
-  }
-
-  // custom categories from DB that have content
-  for (const dbCat of customCatsDB) {
-    if (seenIds.has(dbCat.id)) continue;
-    const catVideos = cleanVideos.filter(v => v.category === dbCat.id);
-    const catArticles = allArticles.filter(a => (a.category === "custom" || a.category === dbCat.id) && (a.custom_category === dbCat.label || !a.custom_category));
-    if (catVideos.length > 0 || catArticles.length > 0) {
-      activeCategories.push({
-        id: dbCat.id,
-        label: dbCat.label,
-        color: dbCat.color || "#6366F1",
-        videos: catVideos,
-        articles: catArticles,
-      });
-    }
-  }
 
   return (
     <div className="w-full">
