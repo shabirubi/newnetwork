@@ -17,6 +17,7 @@ function ReelThumb({ video, onClick, customCatMap }) {
   const videoRef = useRef(null);
   const [hovered, setHovered] = useState(false);
   const [videoLoaded, setVideoLoaded] = useState(false);
+  const [videoError, setVideoError] = useState(false);
 
   return (
     <button
@@ -24,7 +25,7 @@ function ReelThumb({ video, onClick, customCatMap }) {
       onMouseEnter={() => {
         setHovered(true);
         const v = videoRef.current;
-        if (v && videoLoaded) {
+        if (v && videoLoaded && !videoError) {
           v.play().catch(() => {});
         }
       }}
@@ -36,23 +37,35 @@ function ReelThumb({ video, onClick, customCatMap }) {
       className="flex-shrink-0 relative w-24 h-36 sm:w-28 sm:h-44 rounded-xl overflow-hidden group cursor-pointer bg-gray-800"
     >
       {/* Video element - shows first frame as thumbnail */}
-      <video
-        ref={videoRef}
-        src={video.video_url}
-        muted
-        playsInline
-        loop
-        preload="auto"
-        loading="eager"
-        className="absolute inset-0 w-full h-full object-cover"
-        onLoadedMetadata={() => {
-          setVideoLoaded(true);
-        }}
-        onCanPlay={() => {
-          setVideoLoaded(true);
-        }}
-        style={{ opacity: 1 }}
-      />
+      {!videoError ? (
+        <video
+          ref={videoRef}
+          src={video.video_url}
+          muted
+          playsInline
+          loop
+          preload="auto"
+          loading="eager"
+          className="absolute inset-0 w-full h-full object-cover"
+          onLoadedMetadata={() => {
+            setVideoLoaded(true);
+          }}
+          onCanPlay={() => {
+            setVideoLoaded(true);
+          }}
+          onError={() => {
+            setVideoError(true);
+          }}
+          style={{ opacity: videoLoaded ? 1 : 0.5 }}
+        />
+      ) : null}
+      
+      {/* Fallback thumbnail if video fails to load */}
+      {videoError && (
+        <div className="absolute inset-0 bg-gradient-to-br from-[#E31E24]/40 to-[#0057B8]/40 flex items-center justify-center">
+          <Play className="w-12 h-12 text-white/60" />
+        </div>
+      )}
       
       {/* Gradient overlay - always visible */}
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
