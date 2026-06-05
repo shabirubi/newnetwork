@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 
 import LivePlayer from "../components/news/LivePlayer";
 import AllCategoryEditors from "../components/home/CategoryArticleEditor";
+import FeaturedArticleEditor from "../components/home/FeaturedArticleEditor";
 import HomeCategoryFeed from "../components/home/HomeCategoryFeed";
 
 import WeatherAlertsContainer from "../components/weather/WeatherAlertsContainer";
@@ -78,6 +79,9 @@ export default function Home() {
 
       {/* Reels Strip — shares "home-all-videos" cache with HomeCategoryFeed */}
       <ReelsStrip />
+
+      {/* Featured Article Editor (כתבה מרכזית) */}
+      <FeaturedArticleEditor />
 
       {/* Category Article Editor toolbar */}
       <AllCategoryEditors />

@@ -94,7 +94,19 @@ function ArticleCard({ article, catColor, catLabel }) {
 function CategoryBlock({ category, videos, articles }) {
   const openReels = () => window.dispatchEvent(new Event('openReels'));
 
-  if (videos.length === 0 && articles.length === 0) return null;
+  if (videos.length === 0 && articles.length === 0) {
+    return (
+      <div className="mb-10 px-3" dir="rtl">
+        <div className="flex items-center gap-2 mb-4">
+          <div className="w-1.5 h-7 rounded-full flex-shrink-0" style={{ backgroundColor: category.color }} />
+          <h3 className="text-white font-bold text-lg">{category.label}</h3>
+        </div>
+        <div className="bg-[#111] rounded-xl border border-gray-800 p-6 text-center text-gray-500 text-sm">
+          אין תוכן בקטגוריה זו עדיין. <Link to={createPageUrl("Category?cat=" + category.id)} className="text-[#0057B8] hover:underline">הוסף כתבה ←</Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="mb-10" dir="rtl">
@@ -188,13 +200,16 @@ export default function HomeCategoryFeed() {
   const activeCategories = [];
   const seenIds = new Set();
 
-  // built-in categories that have videos or articles
+  // built-in categories that have videos or articles (show even if empty for first 3)
+  let displayedCount = 0;
   for (const cat of CATEGORIES) {
     const catVideos = cleanVideos.filter(v => v.category === cat.id);
     const catArticles = allArticles.filter(a => a.category === cat.id);
-    if (catVideos.length > 0 || catArticles.length > 0) {
+    // Show first 3 categories even if empty, others only if they have content
+    if (catVideos.length > 0 || catArticles.length > 0 || displayedCount < 3) {
       activeCategories.push({ ...cat, videos: catVideos, articles: catArticles });
       seenIds.add(cat.id);
+      if (catVideos.length > 0 || catArticles.length > 0) displayedCount++;
     }
   }
 
@@ -213,8 +228,6 @@ export default function HomeCategoryFeed() {
       });
     }
   }
-
-  if (activeCategories.length === 0) return null;
 
   return (
     <div className="w-full">
