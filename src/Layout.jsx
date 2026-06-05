@@ -24,9 +24,7 @@ import DIDLiveChat from "./components/avatar/DIDLiveChat";
 import AdminLoginModal from "./components/admin/AdminLoginModal";
 import ReelsModal from "./components/home/ReelsModal";
 
-import AccessibilityFloatingButton from "./components/accessibility/AccessibilityFloatingButton";
-import InstallAppButton from "./components/shared/InstallAppButton";
-import PodcastsFloatingButton from "./components/home/PodcastsFloatingButton";
+
 import { base44 } from "@/api/base44Client";
 import { useQueryClient } from "@tanstack/react-query";
 import UserProfileModal from "./components/user/UserProfileModal";
@@ -358,11 +356,7 @@ export default function Layout({ children, currentPageName }) {
         {reelsOpen && <ReelsModal isOpen={reelsOpen} onClose={() => setReelsOpen(false)} />}
       </AnimatePresence>
 
-      {/* Floating Buttons - lazy loaded */}
-      <React.Suspense fallback={null}>
-        <AccessibilityFloatingButton />
-        <InstallAppButton />
-      </React.Suspense>
+
 
       {/* Sidebars - lazy loaded */}
       <React.Suspense fallback={null}>
