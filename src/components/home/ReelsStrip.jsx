@@ -16,6 +16,10 @@ const BUILTIN_LABELS = {
 function ReelThumb({ video, onClick, customCatMap }) {
   const videoRef = useRef(null);
   const [hovered, setHovered] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+
+  // Placeholder image for videos without thumbnail
+  const placeholderImg = "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=300&h=400&fit=crop";
 
   return (
     <button
@@ -23,47 +27,63 @@ function ReelThumb({ video, onClick, customCatMap }) {
       onMouseEnter={() => {
         setHovered(true);
         const v = videoRef.current;
-        if (v) v.play().catch(() => {});
+        if (v) {
+          v.play().catch(() => {});
+        }
       }}
       onMouseLeave={() => {
         setHovered(false);
         const v = videoRef.current;
         if (v) { v.pause(); v.currentTime = 0; }
       }}
-      className="flex-shrink-0 relative w-24 h-36 sm:w-28 sm:h-44 rounded-xl overflow-hidden group cursor-pointer"
+      className="flex-shrink-0 relative w-24 h-36 sm:w-28 sm:h-44 rounded-xl overflow-hidden group cursor-pointer bg-gray-800"
     >
+      {/* Background image (thumbnail or placeholder) */}
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{
+          backgroundImage: video.thumbnail_url 
+            ? `url(${video.thumbnail_url})` 
+            : `url(${placeholderImg})`
+        }}
+        onLoad={() => setLoaded(true)}
+      />
+      
+      {/* Video for hover playback - only loads when hovered */}
       <video
         ref={videoRef}
         src={video.video_url}
         muted
         playsInline
         loop
-        preload="metadata"
-        className="w-full h-full object-cover"
+        className="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-300"
+        style={{ opacity: hovered ? 1 : 0 }}
       />
-      {/* Gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent" />
+      
+      {/* Gradient overlay - always visible */}
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
 
-      {/* Play icon */}
+      {/* Play icon - show when not hovered */}
       {!hovered && (
-        <div className="absolute inset-0 flex items-center justify-center">
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <div className="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
             <Play className="w-4 h-4 text-white fill-white" />
           </div>
         </div>
       )}
-
-      {/* Title */}
-      <p className="absolute bottom-2 right-2 left-2 text-white text-[10px] font-bold line-clamp-2 leading-tight">
+      
+      {/* Title - always visible on top */}
+      <p className="absolute bottom-2 right-2 left-2 text-white text-[10px] font-bold line-clamp-2 leading-tight drop-shadow-lg z-10">
         {video.title}
       </p>
 
-      {/* Category badge */}
+      {/* Category badge - always visible on top */}
       {video.category && (
-        <div className="absolute top-2 right-2 bg-[#E31E24]/90 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full">
+        <div className="absolute top-2 right-2 bg-[#E31E24]/90 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full z-10">
           {BUILTIN_LABELS[video.category] || customCatMap?.[video.category] || video.category}
         </div>
       )}
+
     </button>
   );
 }
