@@ -151,12 +151,12 @@ export default function Article() {
           </Badge>
         </div>
 
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 leading-tight">
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
           {article.title}
         </h1>
 
         {article.subtitle && (
-          <p className="text-xl text-gray-200 mb-6">
+          <p className="text-2xl text-gray-200 mb-6">
             {article.subtitle}
           </p>
         )}
@@ -269,32 +269,32 @@ export default function Article() {
         className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12 p-6 bg-gradient-to-r from-gray-900 to-gray-800 rounded-2xl border border-gray-700"
       >
         <div className="space-y-1">
-          <p className="text-gray-400 text-sm flex items-center gap-2">
-            <Eye size={16} />
+          <p className="text-gray-400 text-base flex items-center gap-2">
+            <Eye size={18} />
             צפיות
           </p>
-          <p className="text-white text-lg font-bold">{article.viewers || 0}+</p>
+          <p className="text-white text-xl font-bold">{article.viewers || 0}+</p>
         </div>
         <div className="space-y-1">
-          <p className="text-gray-400 text-sm flex items-center gap-2">
-            <User size={16} />
+          <p className="text-gray-400 text-base flex items-center gap-2">
+            <User size={18} />
             כותב
           </p>
-          <p className="text-white text-lg font-bold">הרשת החדשה</p>
+          <p className="text-white text-xl font-bold">הרשת החדשה</p>
         </div>
         <div className="space-y-1">
-          <p className="text-gray-400 text-sm flex items-center gap-2">
-            <Clock size={16} />
+          <p className="text-gray-400 text-base flex items-center gap-2">
+            <Clock size={18} />
             זמן קריאה
           </p>
-          <p className="text-white text-lg font-bold">{Math.ceil((article.content || '').split(' ').length / 200)} דק'</p>
+          <p className="text-white text-xl font-bold">{Math.ceil((article.content || '').split(' ').length / 200)} דק'</p>
         </div>
         <div className="space-y-1">
-          <p className="text-gray-400 text-sm flex items-center gap-2">
-            <TrendingUp size={16} />
+          <p className="text-gray-400 text-base flex items-center gap-2">
+            <TrendingUp size={18} />
             חום
           </p>
-          <p className="text-orange-400 text-lg font-bold">🔥 חם</p>
+          <p className="text-orange-400 text-xl font-bold">🔥 חם</p>
         </div>
       </motion.div>
 
@@ -306,10 +306,10 @@ export default function Article() {
         className="mb-12 p-8 bg-gradient-to-r from-blue-900/20 to-indigo-900/20 border-r-4 border-blue-600 rounded-xl"
       >
         <div className="flex gap-3 mb-3">
-          <Lightbulb className="text-blue-400 flex-shrink-0" />
-          <h2 className="text-xl font-bold text-blue-300">סיכום קצר</h2>
+          <Lightbulb className="text-blue-400 flex-shrink-0 w-8 h-8" />
+          <h2 className="text-2xl font-bold text-blue-300">סיכום קצר</h2>
         </div>
-        <p className="text-gray-100 text-lg leading-relaxed">
+        <p className="text-gray-100 text-xl leading-relaxed">
           {article.subtitle || 'קרא את הכתבה המורחבת למעלה כדי להבין את הנושא בעומק'}
         </p>
       </motion.div>
@@ -322,7 +322,7 @@ export default function Article() {
         className="mb-12"
       >
         <div className="prose prose-lg max-w-none text-white">
-          <div className="leading-relaxed text-lg text-gray-100 space-y-4">
+          <div className="leading-relaxed text-xl text-gray-100 space-y-5">
             {article.content?.split('\n').map((paragraph, idx) => {
               let cleanText = paragraph
                 .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
@@ -339,7 +339,7 @@ export default function Article() {
                 .replace(/\(\s*\)/g, '')
                 .replace(/\[\s*\]/g, '')
                 .trim();
-              return cleanText ? <p key={idx} className="mb-5 leading-loose">{cleanText}</p> : null;
+              return cleanText ? <p key={idx} className="mb-6 leading-loose text-justify">{cleanText}</p> : null;
             })}
           </div>
         </div>
@@ -358,7 +358,7 @@ export default function Article() {
       {/* Related Articles */}
       {filteredRelated.length > 0 && (
         <section className="border-t pt-8">
-          <h2 className="text-2xl font-bold mb-6 text-white">ידיעות נוספות</h2>
+          <h2 className="text-3xl font-bold mb-6 text-white">ידיעות נוספות</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {filteredRelated.map((relatedArticle, index) => (
               <NewsCard 
