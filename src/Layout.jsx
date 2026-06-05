@@ -305,12 +305,13 @@ export default function Layout({ children, currentPageName }) {
         <div className="max-w-7xl mx-auto px-3 flex items-center justify-between gap-2 relative z-[200]">
           
           {/* Logo — always visible */}
-          <div className="flex items-center gap-2 flex-shrink-0">
-            <div className="h-14 w-14 sm:h-20 sm:w-20 rounded-full bg-gradient-to-br from-[#0057B8] to-[#E31E24] flex items-center justify-center flex-shrink-0 shadow-lg">
-              <span className="text-white font-bold text-lg">ר</span>
+          <div className="flex items-center gap-3 flex-shrink-0">
+            <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-full bg-gradient-to-br from-[#0057B8] to-[#E31E24] flex items-center justify-center flex-shrink-0 shadow-xl border-2 border-white/20">
+              <span className="text-white font-bold text-xl sm:text-2xl">ר</span>
             </div>
             <div className="flex-col text-right hidden sm:flex">
-              <h1 className="text-base sm:text-xl font-bold text-white">הרשת החדשה</h1>
+              <h1 className="text-lg sm:text-2xl font-bold text-white">הרשת החדשה</h1>
+              <p className="text-xs text-gray-300">חדשות 24/7</p>
             </div>
           </div>
 
