@@ -202,7 +202,7 @@ export default function HomeCategoryFeed() {
   for (const dbCat of customCatsDB) {
     if (seenIds.has(dbCat.id)) continue;
     const catVideos = cleanVideos.filter(v => v.category === dbCat.id);
-    const catArticles = allArticles.filter(a => a.category === "custom" && a.custom_category === dbCat.label);
+    const catArticles = allArticles.filter(a => (a.category === "custom" || a.category === dbCat.id) && (a.custom_category === dbCat.label || !a.custom_category));
     if (catVideos.length > 0 || catArticles.length > 0) {
       activeCategories.push({
         id: dbCat.id,

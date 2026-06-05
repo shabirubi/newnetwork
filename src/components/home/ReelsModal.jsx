@@ -39,7 +39,7 @@ function fireHeartConfetti() {
   fire(0.1, { spread: 70, startVelocity: 15, decay: 0.85 });
 }
 
-const CATEGORY_LABELS = {
+const BUILTIN_LABELS = {
   all: "הכל",
   breaking: "חדשות עכשיו",
   security: "ביטחון",
@@ -54,9 +54,19 @@ const CATEGORY_LABELS = {
   horoscope: "הורוסקופ",
   finance: "פיננסים",
   custom: "מותאם",
+  crime: "פלילים",
+  israel: "ישראל",
+  military: "צבא",
+  education: "חינוך",
+  culture: "תרבות",
+  environment: "סביבה",
+  science: "מדע",
+  local: "מקומי",
+  law: "משפט",
+  vod: "VOD",
 };
 
-function ReelItem({ video, isActive, onNext, onPrev, customCatMap = {} }) {
+function ReelItem({ video, isActive, onNext, onPrev, customCatMap = {}, builtinLabels = BUILTIN_LABELS }) {
   const videoRef = useRef(null);
   const [muted, setMuted] = useState(true);
   const [playing, setPlaying] = useState(false);
@@ -172,7 +182,7 @@ function ReelItem({ video, isActive, onNext, onPrev, customCatMap = {} }) {
       {/* Category badge */}
       {video.category && (
         <div className="absolute top-4 right-4 bg-[#E31E24]/90 text-white text-xs font-bold px-3 py-1 rounded-full">
-          {CATEGORY_LABELS[video.category] || customCatMap[video.category] || video.category}
+          {builtinLabels[video.category] || customCatMap[video.category] || video.category}
         </div>
       )}
 
@@ -298,7 +308,7 @@ export default function ReelsModal({ isOpen, onClose }) {
   const usedCategories = ["all", ...new Set(videoOnly.map(v => v.category).filter(Boolean))];
   
   // פונקציה לקבלת שם קטגוריה
-  const getCatLabel = (cat) => CATEGORY_LABELS[cat] || customCatMap[cat] || cat;
+  const getCatLabel = (cat) => BUILTIN_LABELS[cat] || customCatMap[cat] || cat;
 
   // בנית מפת קטגוריה → ריילסים
   const categorizedReels = usedCategories.reduce((acc, cat) => {
@@ -392,7 +402,7 @@ export default function ReelsModal({ isOpen, onClose }) {
           const catReels = cat === "all" ? videoOnly : videoOnly.filter(v => v.category === cat);
           const catReel = catReels[0];
           const isActive = categoryIdx === idx;
-          const catLabel = CATEGORY_LABELS[cat] || customCatMap[cat] || cat;
+          const catLabel = BUILTIN_LABELS[cat] || customCatMap[cat] || cat;
           const catCount = catReels.length;
           const catEmoji = cat === "all" ? "🎬" : cat === "breaking" ? "🔴" : cat === "sports" ? "⚽" : cat === "politics" ? "🏛️" : cat === "technology" ? "💻" : cat === "security" ? "🛡️" : cat === "economy" ? "📈" : cat === "entertainment" ? "🎭" : cat === "world" ? "🌍" : cat === "health" ? "❤️" : cat === "science" ? "🔬" : cat === "crime" ? "🔍" : "📰";
           return (
@@ -466,6 +476,7 @@ export default function ReelsModal({ isOpen, onClose }) {
                 onNext={goNextReel}
                 onPrev={goPrevReel}
                 customCatMap={customCatMap}
+                builtinLabels={BUILTIN_LABELS}
               />
             </motion.div>
           </AnimatePresence>

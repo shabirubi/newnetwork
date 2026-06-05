@@ -75,14 +75,19 @@ export default function UploadVideoModal({ isOpen, onClose }) {
       setStep(3);
       setUploading(false);
       
-      // רענן את כל ה-queries
+      // רענן את כל ה-queries — כולל caches משותפים
       console.log('🔄 מרענן פידים...');
+      queryClient.invalidateQueries({ queryKey: ['home-all-videos'] });
+      queryClient.invalidateQueries({ queryKey: ['reels-videos'] });
       queryClient.invalidateQueries({ queryKey: ['userVideos'] });
       queryClient.invalidateQueries({ queryKey: ['all-user-videos'] });
       queryClient.invalidateQueries({ queryKey: ['live-stream'] });
       queryClient.invalidateQueries({ queryKey: ['user-videos-manage'] });
-      await queryClient.refetchQueries({ queryKey: ['userVideos'] });
-      await queryClient.refetchQueries({ queryKey: ['all-user-videos'] });
+      queryClient.invalidateQueries({ queryKey: ['featured-articles'] });
+      queryClient.invalidateQueries({ queryKey: ['custom-categories'] });
+      queryClient.invalidateQueries({ queryKey: ['custom-categories-db'] });
+      await queryClient.refetchQueries({ queryKey: ['home-all-videos'] });
+      await queryClient.refetchQueries({ queryKey: ['reels-videos'] });
       await queryClient.refetchQueries({ queryKey: ['live-stream'] });
       console.log('✅ פידים עודכנו!');
       

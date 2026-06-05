@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 import { Play, Radio } from "lucide-react";
 import ReelsModal from "./ReelsModal";
 
-const CATEGORY_LABELS = {
+const BUILTIN_LABELS = {
   all: "הכל", breaking: "חדשות עכשיו", security: "ביטחון", economy: "כלכלה",
   politics: "פוליטיקה", technology: "טכנולוגיה", sports: "ספורט", entertainment: "בידור",
   world: "עולם", health: "בריאות", music: "מוזיקה", horoscope: "הורוסקופ",
@@ -13,7 +13,7 @@ const CATEGORY_LABELS = {
   local: "מקומי", law: "משפט", vod: "VOD",
 };
 
-function ReelThumb({ video, onClick }) {
+function ReelThumb({ video, onClick, customCatMap }) {
   const videoRef = useRef(null);
   const [hovered, setHovered] = useState(false);
 
@@ -61,7 +61,7 @@ function ReelThumb({ video, onClick }) {
       {/* Category badge */}
       {video.category && (
         <div className="absolute top-2 right-2 bg-[#E31E24]/90 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full">
-          {CATEGORY_LABELS[video.category] || video.category}
+          {BUILTIN_LABELS[video.category] || customCatMap?.[video.category] || video.category}
         </div>
       )}
     </button>
@@ -77,6 +77,13 @@ export default function ReelsStrip() {
     staleTime: 5 * 60 * 1000,
     gcTime: 15 * 60 * 1000,
   });
+
+  const { data: customCats = [] } = useQuery({
+    queryKey: ["custom-categories-db"],
+    queryFn: () => base44.entities.CustomCategory.list("-created_date", 50),
+    staleTime: 10 * 60 * 1000,
+  });
+  const customCatMap = Object.fromEntries(customCats.map(c => [c.id, c.label]));
 
   const reels = (() => {
     const seenUrls = new Set();
@@ -125,6 +132,7 @@ export default function ReelsStrip() {
               key={video.id}
               video={video}
               onClick={() => setReelsOpen(true)}
+              customCatMap={customCatMap}
             />
           ))}
         </div>
