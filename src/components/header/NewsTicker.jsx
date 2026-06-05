@@ -11,54 +11,15 @@ import ChannelSelector from "./ChannelSelector";
 
 
 export default function NewsTicker({ darkMode, setDarkMode, onMenuClick }) {
-  const [news, setNews] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [currencies, setCurrencies] = useState([]);
+  const news = [
+    "🎬 פרמיירה: כל הסדרות והתכניות החדשות משודרות החל מ-7 למרץ 2026",
+    "📺 עונות חדשות של סדרות הפופולריות יותר ביותר מגיעות לערוץ",
+    "🔥 תכנים בלעדיים ומקוריים - אל תפספסו את ההשקה הגדולה",
+    "⭐ צפייה ישירה ללא הגבלה בכל הסדרות והתכניות שלנו",
+    "🎭 דרמה, קומדיה, אקשן ועוד - הכל במקום אחד החל מ-7 למרץ"
+  ];
 
-  useEffect(() => {
-    loadBreakingNews();
-    fetchCurrencyRates();
-    
-    // Listen for news updates from AutoNewsUpdater only
-    const handleNewsUpdate = () => {
-      loadBreakingNews();
-    };
-    
-    window.addEventListener('newsUpdated', handleNewsUpdate);
-    
-    return () => {
-      window.removeEventListener('newsUpdated', handleNewsUpdate);
-    };
-  }, []);
 
-  const fetchCurrencyRates = async () => {
-    // Currency ticker disabled
-    setCurrencies([]);
-  };
-
-  const loadBreakingNews = async () => {
-    setNews([
-      "🎬 פרמיירה: כל הסדרות והתכניות החדשות משודרות החל מ-7 למרץ 2026",
-      "📺 עונות חדשות של סדרות הפופולריות יותר ביותר מגיעות לערוץ",
-      "🔥 תכנים בלעדיים ומקוריים - אל תפספסו את ההשקה הגדולה",
-      "⭐ צפייה ישירה ללא הגבלה בכל הסדרות והתכניות שלנו",
-      "🎭 דרמה, קומדיה, אקשן ועוד - הכל במקום אחד החל מ-7 למרץ"
-    ]);
-    setLoading(false);
-  };
-
-  if (loading || news.length === 0) {
-    return (
-      <div className="bg-gradient-to-br from-black/80 via-[#E31E24]/60 to-black/80 backdrop-blur-sm border-b-2 border-[#E31E24]/40 text-white py-2 overflow-hidden relative">
-        <div className="flex items-center">
-          <span className="bg-black/40 text-white px-4 py-1 font-bold text-sm shrink-0 mr-4 flex items-center gap-2">
-            <Flame className="w-4 h-4" />
-            טוען חדשות...
-          </span>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div className="bg-gradient-to-r from-black via-[#001a40] to-black border-b border-[#0055BB]/40 backdrop-blur-xl shadow-xl shadow-[#0055BB]/30 relative overflow-hidden z-[37] text-white w-full flex justify-center">

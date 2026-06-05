@@ -130,11 +130,8 @@ export default function Layout({ children, currentPageName }) {
   const [authLoading, setAuthLoading] = useState(true);
   const [didChatOpen, setDidChatOpen] = useState(false);
   const [menuSidebarOpen, setMenuSidebarOpen] = useState(false);
-  const [siteSettings, setSiteSettings] = useState(null);
-
   const [profileModalOpen, setProfileModalOpen] = useState(false);
   const [reelsOpen, setReelsOpen] = useState(false);
-
 
   // הפעל אנימציית לוגו - מבוטל לביצועים
   const [logoFloat, setLogoFloat] = useState(false);
@@ -155,26 +152,7 @@ export default function Layout({ children, currentPageName }) {
     return () => window.removeEventListener('openReels', handler);
   }, []);
 
-  // בדיקת מצב האתר — פעם אחת בלבד עם caching ארוך
-  useEffect(() => {
-    const cached = localStorage.getItem('site_settings');
-    if (cached) {
-      try { setSiteSettings(JSON.parse(cached)); return; }
-      catch(e) {}
-    }
-    let cancelled = false;
-    base44.entities.SiteSettings.list('-created_date', 1)
-      .then(settings => { 
-        if (!cancelled && settings?.[0]) {
-          setSiteSettings(settings[0]);
-          localStorage.setItem('site_settings', JSON.stringify(settings[0]));
-        }
-      })
-      .catch(() => {});
-    return () => { cancelled = true; };
-  }, []);
-
-  // בדיקת משתמש מחובר — מוקדם יותר
+  // בדיקת משתמש מחובר
   useEffect(() => {
     const checkAuth = async () => {
       try {
@@ -255,30 +233,11 @@ export default function Layout({ children, currentPageName }) {
     await base44.auth.redirectToLogin(createPageUrl('Home'));
   };
 
-  // בדיקת מצב סגירה
-  if (siteSettings?.is_closed) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-black via-[#0057B8]/20 to-black flex items-center justify-center p-4" dir="rtl">
-        <div className="max-w-2xl w-full bg-black/80 backdrop-blur-xl rounded-3xl border-2 border-[#0057B8]/50 shadow-2xl shadow-[#0057B8]/30 p-8 text-center">
-          <LogoVideo className="h-20 w-20 mx-auto mb-6 drop-shadow-2xl object-contain rounded-full" />
-          <h1 className="text-4xl font-bold text-white mb-4">
-            {siteSettings.closure_title}
-          </h1>
-          <p className="text-xl text-gray-300 mb-6">
-            {siteSettings.closure_message}
-          </p>
-          {siteSettings.estimated_reopen && (
-            <div className="text-[#0057B8] text-lg font-bold">
-              זמן פתיחה משוער: {siteSettings.estimated_reopen}
-            </div>
-          )}
-        </div>
-      </div>
-    );
-  }
+  // בדיקת מצב סגירה - מבוטל לביצועים
 
   // דפים ללא Layout
-  if (currentPageName === 'VODContent' || currentPageName === 'ReporterStudio' || currentPageName === 'BroadcastStudio' || currentPageName === 'VideoEditor' || currentPageName === 'VideoCreator' || currentPageName === 'ToMovieeStudio' || currentPageName === 'AdminPanel') {
+  const noLayoutPages = ['VODContent', 'ReporterStudio', 'BroadcastStudio', 'VideoEditor', 'VideoCreator', 'ToMovieeStudio', 'AdminPanel'];
+  if (noLayoutPages.includes(currentPageName)) {
     return children;
   }
 
@@ -436,15 +395,8 @@ export default function Layout({ children, currentPageName }) {
 
 
 
-      {/* Videos Categories Strip - lazy loaded */}
-      <React.Suspense fallback={<div className="h-[72px] bg-black/40" />}>
-        <VideosCategoriesStrip />
-      </React.Suspense>
-
-      {/* News Ticker - lazy loaded */}
-      <React.Suspense fallback={<div className="h-20 bg-black/40" />}>
-        <NewsTicker darkMode={darkMode} setDarkMode={setDarkMode} onMenuClick={() => setMobileMenuOpen(true)} />
-      </React.Suspense>
+      {/* News Ticker */}
+      <NewsTicker darkMode={darkMode} setDarkMode={setDarkMode} onMenuClick={() => setMobileMenuOpen(true)} />
 
 
 
