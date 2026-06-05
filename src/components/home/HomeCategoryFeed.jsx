@@ -15,18 +15,18 @@ const CATEGORIES = [
   { id: "entertainment", label: "בידור ותרבות", color: "#EC4899" },
   { id: "world", label: "חדשות עולם", color: "#4F46E5" },
   { id: "health", label: "בריאות", color: "#0D9488" },
-  { id: "israel", label: "חדשות ישראל", color: "#1D4ED8" },
+  { id: "music", label: "מוזיקה", color: "#DB2777" },
+  { id: "horoscope", label: "אסטרולוגיה", color: "#8B5CF6" },
+  { id: "finance", label: "פיננסים", color: "#10B981" },
   { id: "crime", label: "פלילים", color: "#DC2626" },
+  { id: "israel", label: "חדשות ישראל", color: "#1D4ED8" },
+  { id: "military", label: "צבא וביטחון", color: "#78716C" },
   { id: "education", label: "חינוך", color: "#0891B2" },
   { id: "culture", label: "תרבות", color: "#7C3AED" },
   { id: "environment", label: "סביבה", color: "#059669" },
   { id: "science", label: "מדע", color: "#6366F1" },
-  { id: "military", label: "צבא וביטחון", color: "#78716C" },
   { id: "law", label: "משפט", color: "#A855F7" },
   { id: "local", label: "חדשות מקומיות", color: "#EA580C" },
-  { id: "finance", label: "פיננסים", color: "#10B981" },
-  { id: "music", label: "מוזיקה", color: "#DB2777" },
-  { id: "horoscope", label: "אסטרולוגיה", color: "#8B5CF6" },
 ];
 
 const isObjectId = (str) => /^[a-f0-9]{16,}$/i.test(str);
@@ -48,7 +48,8 @@ function ReelThumb({ video, onOpen }) {
         muted
         playsInline
         loop
-        preload="metadata"
+        preload="auto"
+        poster={video.thumbnail_url || ''}
         className="w-full h-full object-cover"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
@@ -72,7 +73,13 @@ function ArticleCard({ article, catColor, catLabel }) {
       className="flex gap-2 p-2.5 bg-[#111] rounded-xl border border-gray-800 hover:border-gray-600 transition-all"
     >
       {article.image_url ? (
-        <img src={article.image_url} alt={article.title} className="w-16 h-14 object-cover rounded-lg flex-shrink-0" />
+        <img 
+          src={article.image_url} 
+          alt={article.title} 
+          loading="eager"
+          fetchpriority="high"
+          className="w-16 h-14 object-cover rounded-lg flex-shrink-0" 
+        />
       ) : article.video_url ? (
         <div className="w-16 h-14 bg-gray-900 rounded-lg flex-shrink-0 flex items-center justify-center border border-gray-700">
           <Play className="w-4 h-4 text-gray-500" />
@@ -204,21 +211,16 @@ export default function HomeCategoryFeed() {
   // Show only articles WITHOUT external source (filter out external articles)
   const userArticles = allArticles.filter(a => !a.source || a.source.trim() === "");
 
-  // Determine active categories — builtin + custom ones that have content
+  // Determine active categories — builtin + custom ones
   const activeCategories = [];
   const seenIds = new Set();
 
-  // built-in categories that have videos or articles (show even if empty for first 3)
-  let displayedCount = 0;
+  // ALL built-in categories (show all, even if empty)
   for (const cat of CATEGORIES) {
     const catVideos = cleanVideos.filter(v => v.category === cat.id);
     const catArticles = userArticles.filter(a => a.category === cat.id);
-    // Show first 3 categories even if empty, others only if they have content
-    if (catVideos.length > 0 || catArticles.length > 0 || displayedCount < 3) {
-      activeCategories.push({ ...cat, videos: catVideos, articles: catArticles });
-      seenIds.add(cat.id);
-      if (catVideos.length > 0 || catArticles.length > 0) displayedCount++;
-    }
+    activeCategories.push({ ...cat, videos: catVideos, articles: catArticles });
+    seenIds.add(cat.id);
   }
 
   // custom categories from DB that have content

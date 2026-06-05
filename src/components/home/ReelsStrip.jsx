@@ -36,14 +36,13 @@ function ReelThumb({ video, onClick, customCatMap }) {
         }}
         className="flex-shrink-0 relative w-24 h-36 sm:w-28 sm:h-44 rounded-xl overflow-hidden group cursor-pointer bg-gray-900"
       >
-        {/* Video element with poster */}
+        {/* Video element with instant loading */}
         <video
           ref={videoRef}
           src={video.video_url}
           muted
           playsInline
-          preload="none"
-          loading="lazy"
+          preload="auto"
           poster={video.thumbnail_url || ''}
           className="absolute inset-0 w-full h-full object-cover"
           onError={() => {
