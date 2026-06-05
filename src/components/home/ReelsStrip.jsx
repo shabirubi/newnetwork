@@ -18,6 +18,9 @@ function ReelThumb({ video, onClick, customCatMap }) {
   const [hovered, setHovered] = useState(false);
   const [videoLoaded, setVideoLoaded] = useState(false);
   const [videoError, setVideoError] = useState(false);
+  const [imgError, setImgError] = useState(false);
+
+  const hasThumbnail = video.thumbnail_url && !imgError;
 
   return (
     <button
@@ -36,21 +39,23 @@ function ReelThumb({ video, onClick, customCatMap }) {
       }}
       className="flex-shrink-0 relative w-24 h-36 sm:w-28 sm:h-44 rounded-xl overflow-hidden group cursor-pointer bg-gray-800"
     >
-      {/* Background color fallback */}
+      {/* Background color fallback - lowest layer */}
       <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-800" />
       
-      {/* Thumbnail image if available */}
-      {video.thumbnail_url && (
+      {/* Thumbnail image - middle layer, only if no video loaded yet */}
+      {hasThumbnail && !videoLoaded && !videoError && (
         <img
           src={video.thumbnail_url}
           alt={video.title}
           className="absolute inset-0 w-full h-full object-cover"
-          onError={(e) => { e.target.style.display = 'none'; }}
+          onError={() => {
+            setImgError(true);
+          }}
         />
       )}
       
-      {/* Video element - shows first frame as thumbnail */}
-      {!videoError ? (
+      {/* Video element - top layer, only show when loaded */}
+      {!videoError && (
         <video
           ref={videoRef}
           src={video.video_url}
@@ -60,7 +65,7 @@ function ReelThumb({ video, onClick, customCatMap }) {
           preload="metadata"
           loading="lazy"
           poster={video.thumbnail_url}
-          className="absolute inset-0 w-full h-full object-cover"
+          className={`absolute inset-0 w-full h-full object-cover ${videoLoaded ? 'opacity-100' : 'opacity-0'}`}
           onLoadedMetadata={() => {
             setVideoLoaded(true);
           }}
@@ -71,19 +76,21 @@ function ReelThumb({ video, onClick, customCatMap }) {
             setVideoError(true);
           }}
         />
-      ) : null}
+      )}
       
       {/* Fallback - show color gradient if video fails */}
       {videoError && (
-        <div className="absolute inset-0 bg-gradient-to-br from-[#E31E24]/20 to-[#0057B8]/20 flex items-center justify-center" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#E31E24]/20 to-[#0057B8]/20 flex items-center justify-center">
+          <Play className="w-12 h-12 text-white/40" />
+        </div>
       )}
       
       {/* Gradient overlay - always visible */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none z-10" />
 
       {/* Play icon - show when not hovered */}
       {!hovered && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
           <div className="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
             <Play className="w-4 h-4 text-white fill-white" />
           </div>
@@ -91,13 +98,13 @@ function ReelThumb({ video, onClick, customCatMap }) {
       )}
       
       {/* Title - always visible on top */}
-      <p className="absolute bottom-2 right-2 left-2 text-white text-[10px] font-bold line-clamp-2 leading-tight drop-shadow-lg z-10">
+      <p className="absolute bottom-2 right-2 left-2 text-white text-[10px] font-bold line-clamp-2 leading-tight drop-shadow-lg z-30">
         {video.title}
       </p>
 
       {/* Category badge - always visible on top */}
       {video.category && (
-        <div className="absolute top-2 right-2 bg-[#E31E24]/90 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full z-10">
+        <div className="absolute top-2 right-2 bg-[#E31E24]/90 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full z-30">
           {BUILTIN_LABELS[video.category] || customCatMap?.[video.category] || video.category}
         </div>
       )}
