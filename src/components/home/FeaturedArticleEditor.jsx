@@ -726,8 +726,8 @@ export default function FeaturedArticleEditor() {
                 <p className="text-gray-300 text-base sm:text-lg line-clamp-2">{article.subtitle}</p>
               )}
               {article?.content && (
-                <div className="flex-1 overflow-y-auto max-h-[40vh] pr-2">
-                  <p className="text-gray-400 text-sm leading-relaxed" style={{ whiteSpace: 'pre-wrap' }}>
+                <div className="flex-1 overflow-y-auto max-h-[40vh] pr-2 min-w-0">
+                  <p className="text-gray-400 text-sm leading-relaxed break-words overflow-hidden" style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word' }}>
                     {article.content}
                   </p>
                 </div>
