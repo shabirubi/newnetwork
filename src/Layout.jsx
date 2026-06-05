@@ -313,9 +313,15 @@ export default function Layout({ children, currentPageName }) {
                 loop
                 muted
                 playsInline
-                preload="metadata"
+                preload="auto"
                 className="w-full h-full object-cover"
+                onError={() => {
+                  // Fallback to text if video fails to load
+                  const el = document.querySelector('[data-logo-video]');
+                  if (el) el.style.display = 'none';
+                }}
               />
+              <span data-logo-fallback className="text-white font-bold text-xl sm:text-2xl hidden">ר</span>
             </div>
             <div className="flex-col text-right hidden sm:flex">
               <h1 className="text-lg sm:text-2xl font-bold text-white">הרשת החדשה</h1>
