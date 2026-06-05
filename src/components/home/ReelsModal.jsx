@@ -71,6 +71,8 @@ function ReelItem({ video, isActive, onNext, onPrev, customCatMap = {}, builtinL
   const [muted, setMuted] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [heartAnim, setHeartAnim] = useState(false);
+  const [showComments, setShowComments] = useState(false);
+  const [commentText, setCommentText] = useState("");
   const qc = useQueryClient();
   const userId = getUserId();
 
@@ -85,6 +87,14 @@ function ReelItem({ video, isActive, onNext, onPrev, customCatMap = {}, builtinL
   const totalLikes = likesData?.length ?? (video.likes ?? 0);
   const myLike = likesData?.find(l => l.user_identifier === userId);
   const liked = !!myLike;
+
+  // Fetch comments
+  const { data: commentsData = [] } = useQuery({
+    queryKey: ["video-comments", video.id],
+    queryFn: () => base44.entities.VideoComment.filter({ video_id: video.id, is_approved: true }),
+    staleTime: 5000,
+    enabled: !!video.id,
+  });
 
   const likeMutation = useMutation({
     mutationFn: async () => {
@@ -101,6 +111,28 @@ function ReelItem({ video, isActive, onNext, onPrev, customCatMap = {}, builtinL
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ["video-likes", video.id] }),
   });
+
+  const commentMutation = useMutation({
+    mutationFn: async (content) => {
+      return await base44.entities.VideoComment.create({
+        video_id: video.id,
+        user_name: "אורח",
+        user_email: userId,
+        content,
+        is_approved: true,
+      });
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["video-comments", video.id] });
+      setCommentText("");
+    },
+  });
+
+  const handleAddComment = () => {
+    if (commentText.trim()) {
+      commentMutation.mutate(commentText.trim());
+    }
+  };
 
   const handleLike = () => {
     if (!liked) {
@@ -227,6 +259,18 @@ function ReelItem({ video, isActive, onNext, onPrev, customCatMap = {}, builtinL
         </button>
 
         <button
+          onClick={() => setShowComments(true)}
+          className="flex flex-col items-center gap-1"
+        >
+          <div className="w-9 h-9 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center">
+            <MessageCircle className="w-4 h-4 text-white" />
+          </div>
+          <span className="text-[10px] font-bold text-white">
+            {commentsData?.length || 0}
+          </span>
+        </button>
+
+        <button
           onClick={() => navigator.share?.({ title: video.title, url: window.location.href })}
           className="flex flex-col items-center gap-1"
         >
@@ -240,6 +284,58 @@ function ReelItem({ video, isActive, onNext, onPrev, customCatMap = {}, builtinL
       <div className="absolute bottom-28 right-4 left-16 pointer-events-none z-10">
         <p className="text-white font-bold text-sm leading-snug drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] line-clamp-2 bg-black/40 backdrop-blur-sm rounded-lg px-2 py-1">{video.title}</p>
       </div>
+
+      {/* Comments Modal */}
+      {showComments && (
+        <div className="absolute inset-0 bg-black/80 z-50 flex items-end justify-center">
+          <div className="bg-[#181818] w-full max-w-md rounded-t-2xl p-4 max-h-[70vh] overflow-y-auto">
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-white font-bold text-lg">תגובות ({commentsData?.length || 0})</h3>
+              <button onClick={() => setShowComments(false)} className="p-2 hover:bg-white/10 rounded-full">
+                <X className="w-5 h-5 text-white" />
+              </button>
+            </div>
+
+            {/* Comments List */}
+            <div className="space-y-3 mb-4 max-h-64 overflow-y-auto">
+              {commentsData?.length === 0 ? (
+                <p className="text-gray-400 text-center py-4">אין תגובות עדיין. היה הראשון!</p>
+              ) : (
+                commentsData.map((comment, idx) => (
+                  <div key={idx} className="bg-black/30 rounded-lg p-3">
+                    <div className="flex items-center gap-2 mb-1">
+                      <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center text-white text-xs font-bold">
+                        {comment.user_name?.charAt(0) || 'A'}
+                      </div>
+                      <span className="text-white font-bold text-sm">{comment.user_name}</span>
+                    </div>
+                    <p className="text-gray-200 text-sm">{comment.content}</p>
+                  </div>
+                ))
+              )}
+            </div>
+
+            {/* Add Comment */}
+            <div className="flex gap-2">
+              <input
+                type="text"
+                value={commentText}
+                onChange={(e) => setCommentText(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && handleAddComment()}
+                placeholder="כתוב תגובה..."
+                className="flex-1 bg-black/50 border border-gray-700 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-[#0057B8]"
+              />
+              <button
+                onClick={handleAddComment}
+                disabled={!commentText.trim() || commentMutation.isPending}
+                className="bg-[#0057B8] hover:bg-[#0066cc] disabled:opacity-50 text-white rounded-lg px-4 py-2 text-sm font-bold transition-colors"
+              >
+                {commentMutation.isPending ? "שולח..." : "שלח"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Nav arrows (desktop) */}
       <button
