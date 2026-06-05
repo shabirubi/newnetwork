@@ -186,6 +186,21 @@ export default function HomeCategoryFeed() {
     gcTime: 60 * 60 * 1000,
   });
 
+  const { data: customCatsDB = [] } = useQuery({
+    queryKey: ["custom-categories-db"],
+    queryFn: () => base44.entities.CustomCategory.list("-created_date", 20),
+    staleTime: 30 * 60 * 1000,
+    gcTime: 2 * 60 * 60 * 1000,
+  });
+
+  // Filter valid videos (no ObjectID titles, no audio, no podcasts)
+  const cleanVideos = allVideos.filter(v => {
+    const title = (v.title || "").trim();
+    const url = (v.video_url || "").toLowerCase();
+    const isAudio = [".mp3", ".m4a", ".wav", ".ogg", ".aac"].some(ext => url.includes(ext));
+    return !isAudio && v.feed !== "podcasts" && title && !isObjectId(title);
+  });
+
   // Filter articles to show only user's own articles (or all if not logged in)
   const userArticles = currentUser 
     ? allArticles.filter(a => a.created_by_id === currentUser.id)
@@ -223,22 +238,6 @@ export default function HomeCategoryFeed() {
       });
     }
   }
-
-  const { data: customCatsDB = [] } = useQuery({
-    queryKey: ["custom-categories-db"],
-    queryFn: () => base44.entities.CustomCategory.list("-created_date", 20),
-    staleTime: 30 * 60 * 1000,
-    gcTime: 2 * 60 * 60 * 1000,
-  });
-  const customCatMap = Object.fromEntries(customCatsDB.map(c => [c.id, c]));
-
-  // Filter valid videos (no ObjectID titles, no audio, no podcasts)
-  const cleanVideos = allVideos.filter(v => {
-    const title = (v.title || "").trim();
-    const url = (v.video_url || "").toLowerCase();
-    const isAudio = [".mp3", ".m4a", ".wav", ".ogg", ".aac"].some(ext => url.includes(ext));
-    return !isAudio && v.feed !== "podcasts" && title && !isObjectId(title);
-  });
 
   return (
     <div className="w-full">
