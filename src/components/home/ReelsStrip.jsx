@@ -73,15 +73,15 @@ export default function ReelsStrip() {
 
   const { data: videos = [] } = useQuery({
     queryKey: ["home-all-videos"],
-    queryFn: () => base44.entities.UserVideo.list("-created_date", 200),
-    staleTime: 5 * 60 * 1000,
-    gcTime: 15 * 60 * 1000,
+    queryFn: () => base44.entities.UserVideo.list("-created_date", 100),
+    staleTime: 10 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
   });
 
   const { data: customCats = [] } = useQuery({
     queryKey: ["custom-categories-db"],
-    queryFn: () => base44.entities.CustomCategory.list("-created_date", 50),
-    staleTime: 10 * 60 * 1000,
+    queryFn: () => base44.entities.CustomCategory.list("-created_date", 30),
+    staleTime: 15 * 60 * 1000,
   });
   const customCatMap = Object.fromEntries(customCats.map(c => [c.id, c.label]));
 

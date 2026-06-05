@@ -59,12 +59,12 @@ export default function Home() {
   useQuery({
     queryKey: ['featured-articles'],
     queryFn: async () => {
-      try { return await base44.entities.NewsArticle.list('-created_date', 200); }
+      try { return await base44.entities.NewsArticle.list('-created_date', 100); }
       catch { return []; }
     },
     initialData: [],
-    staleTime: 5 * 60 * 1000,
-    gcTime: 15 * 60 * 1000,
+    staleTime: 10 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
   });
 
   return (

@@ -152,27 +152,27 @@ export default function HomeCategoryFeed() {
   // Share the same cache as ReelsStrip — no double fetch
   const { data: allVideos = [] } = useQuery({
     queryKey: ["home-all-videos"],
-    queryFn: () => base44.entities.UserVideo.list("-created_date", 200),
-    staleTime: 5 * 60 * 1000,
-    gcTime: 15 * 60 * 1000,
+    queryFn: () => base44.entities.UserVideo.list("-created_date", 100),
+    staleTime: 10 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
   });
 
   // Share the same cache as pages/Home featured-articles
   const { data: allArticles = [] } = useQuery({
     queryKey: ["featured-articles"],
     queryFn: async () => {
-      try { return await base44.entities.NewsArticle.list("-created_date", 200); }
+      try { return await base44.entities.NewsArticle.list("-created_date", 100); }
       catch { return []; }
     },
-    staleTime: 5 * 60 * 1000,
-    gcTime: 15 * 60 * 1000,
+    staleTime: 10 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
   });
 
   const { data: customCatsDB = [] } = useQuery({
     queryKey: ["custom-categories-db"],
-    queryFn: () => base44.entities.CustomCategory.list("-created_date", 50),
-    staleTime: 10 * 60 * 1000,
-    gcTime: 20 * 60 * 1000,
+    queryFn: () => base44.entities.CustomCategory.list("-created_date", 30),
+    staleTime: 15 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
   });
   const customCatMap = Object.fromEntries(customCatsDB.map(c => [c.id, c]));
 

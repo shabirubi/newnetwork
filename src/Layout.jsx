@@ -29,8 +29,6 @@ import InstallAppButton from "./components/shared/InstallAppButton";
 import PodcastsFloatingButton from "./components/home/PodcastsFloatingButton";
 import { base44 } from "@/api/base44Client";
 import { useQueryClient } from "@tanstack/react-query";
-import { Search } from "lucide-react";
-import { Input } from "@/components/ui/input";
 import UserProfileModal from "./components/user/UserProfileModal";
 
 const LOGO_URL = "https://media.base44.com/videos/public/695b39080025f4d38a586978/be7e061f7_shavit1313.mp4";
@@ -132,24 +130,22 @@ export default function Layout({ children, currentPageName }) {
   const [didChatOpen, setDidChatOpen] = useState(false);
   const [menuSidebarOpen, setMenuSidebarOpen] = useState(false);
   const [siteSettings, setSiteSettings] = useState(null);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
-  const [showSearchResults, setShowSearchResults] = useState(false);
+
   const [profileModalOpen, setProfileModalOpen] = useState(false);
   const [reelsOpen, setReelsOpen] = useState(false);
-  const [logoFloat, setLogoFloat] = useState(false);
 
-  // הפעל אנימציית לוגו בכל פעולה של המשתמש
-  const triggerLogoFloat = () => {
-    setLogoFloat(true);
-    setTimeout(() => setLogoFloat(false), 1200);
-  };
 
-  useEffect(() => {
-    const handleUserAction = () => triggerLogoFloat();
-    window.addEventListener('click', handleUserAction);
-    return () => window.removeEventListener('click', handleUserAction);
-  }, []);
+  // הפעל אנימציית לוגו - מבוטל לביצועים
+  // const triggerLogoFloat = () => {
+  //   setLogoFloat(true);
+  //   setTimeout(() => setLogoFloat(false), 1200);
+  // };
+
+  // useEffect(() => {
+  //   const handleUserAction = () => triggerLogoFloat();
+  //   window.addEventListener('click', handleUserAction);
+  //   return () => window.removeEventListener('click', handleUserAction);
+  // }, []);
 
   useEffect(() => {
     const handler = () => setReelsOpen(true);
@@ -157,7 +153,7 @@ export default function Layout({ children, currentPageName }) {
     return () => window.removeEventListener('openReels', handler);
   }, []);
 
-  // בדיקת מצב האתר — פעם אחת בלבד
+  // בדיקת מצב האתר — פעם אחת בלבד עם caching
   useEffect(() => {
     let cancelled = false;
     base44.entities.SiteSettings.list('-created_date', 1)
@@ -166,29 +162,22 @@ export default function Layout({ children, currentPageName }) {
     return () => { cancelled = true; };
   }, []);
 
-  // חיפוש כתבות
+  // בדיקת משתמש מחובר — מוקדם יותר
   useEffect(() => {
-    const searchArticles = async () => {
-      if (searchQuery.trim().length < 2) {
-        setSearchResults([]);
-        return;
-      }
-
+    const checkAuth = async () => {
       try {
-        const articles = await base44.entities.NewsArticle.list('-created_date', 100);
-        const filtered = articles.filter(article => 
-          article.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          article.content?.toLowerCase().includes(searchQuery.toLowerCase())
-        ).slice(0, 5);
-        setSearchResults(filtered);
+        const currentUser = await base44.auth.me();
+        setUser(currentUser);
       } catch (err) {
-        console.error('Search error:', err);
+        setUser(null);
+      } finally {
+        setAuthLoading(false);
       }
     };
+    checkAuth();
+  }, []);
 
-    const debounce = setTimeout(searchArticles, 300);
-    return () => clearTimeout(debounce);
-  }, [searchQuery]);
+  // חיפוש כתבות - מבוטל לביצועים
 
   useEffect(() => {
     if (darkMode) {
@@ -235,20 +224,7 @@ export default function Layout({ children, currentPageName }) {
     };
   }, []);
 
-  // בדיקת משתמש מחובר
-  useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const currentUser = await base44.auth.me();
-        setUser(currentUser);
-      } catch (err) {
-        setUser(null);
-      } finally {
-        setAuthLoading(false);
-      }
-    };
-    checkAuth();
-  }, []);
+
 
 
 
@@ -351,10 +327,7 @@ export default function Layout({ children, currentPageName }) {
         }
       `}</style>
 
-      {/* Animated Neon Blue Line */}
-      <div className="fixed top-0 left-0 right-0 h-2 bg-transparent overflow-hidden z-[35] pointer-events-none">
-        <div className="absolute top-0 h-full w-96" style={{ animation: 'slideRight 3s ease-in-out infinite, colorShift 4s ease-in-out infinite' }}></div>
-      </div>
+
 
       {/* Logo Header */}
       <div className="bg-[#000000] py-2 shadow-xl relative overflow-visible">
@@ -365,9 +338,6 @@ export default function Layout({ children, currentPageName }) {
             <LogoVideo className="h-14 w-14 sm:h-20 sm:w-20 object-contain flex-shrink-0 rounded-full" />
             <div className="flex-col text-right hidden sm:flex">
               <h1 className="text-base sm:text-xl font-bold text-white">הרשת החדשה</h1>
-              <motion.p className="text-xs text-red-500 font-bold" animate={{ opacity: [0.7, 1, 0.7] }} transition={{ duration: 2, repeat: Infinity }}>
-                🔴 NOW ONLINE
-              </motion.p>
             </div>
           </div>
 
@@ -379,43 +349,7 @@ export default function Layout({ children, currentPageName }) {
             </div>
           </div>
 
-          {/* Search Box — desktop only */}
-          <div className="relative max-w-md flex-1 hidden md:block" style={{ zIndex: 10000 }}>
-            <div className="relative">
-              <Search className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" />
-              <Input
-                type="text"
-                placeholder="חפש כתבות..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                onFocus={() => setShowSearchResults(true)}
-                className={`pr-10 rounded-xl ${darkMode ? 'bg-black/60 border-[#0057B8]/50 text-white placeholder:text-gray-400' : 'bg-gray-100 border-gray-300 text-gray-900 placeholder:text-gray-500'}`}
-              />
-            </div>
-            <AnimatePresence>
-              {showSearchResults && searchQuery.length >= 2 && (
-                <motion.div
-                  initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -10 }}
-                  style={{ zIndex: 10000 }}
-                  className={`absolute top-full mt-2 left-0 right-0 backdrop-blur-xl border-2 rounded-xl shadow-2xl max-h-96 overflow-y-auto ${darkMode ? 'bg-black border-[#0057B8]' : 'bg-white border-blue-300'}`}
-                  onMouseDown={(e) => e.preventDefault()}
-                >
-                  {searchResults.length === 0 ? (
-                    <div className={`p-4 text-center ${darkMode ? 'text-gray-400' : 'text-gray-500'}`}>לא נמצאו תוצאות</div>
-                  ) : (
-                    searchResults.map((article) => (
-                      <Link key={article.id} to={createPageUrl(`Article?id=${article.id}`)}
-                        onClick={() => { setSearchQuery(""); setShowSearchResults(false); }}
-                        className={`block p-4 transition-colors border-b last:border-b-0 ${darkMode ? 'hover:bg-[#0057B8]/20 border-gray-800' : 'hover:bg-blue-50 border-gray-100'}`}>
-                        <h4 className={`font-bold text-sm mb-1 line-clamp-1 ${darkMode ? 'text-white' : 'text-gray-900'}`}>{article.title}</h4>
-                        <span className="text-gray-500 text-xs">{new Date(article.created_date).toLocaleDateString('he-IL')}</span>
-                      </Link>
-                    ))
-                  )}
-                </motion.div>
-              )}
-            </AnimatePresence>
-          </div>
+
 
           {/* Action buttons */}
           <div className="flex items-center gap-1.5 flex-shrink-0">
@@ -488,42 +422,12 @@ export default function Layout({ children, currentPageName }) {
 
 
 
-      {/* Videos Categories Strip */}
-      <React.Suspense fallback={<div className="h-[72px] bg-black/40 animate-pulse" />}>
+      {/* Videos Categories Strip - lazy loaded */}
+      <React.Suspense fallback={<div className="h-[72px] bg-black/40" />}>
         <VideosCategoriesStrip />
       </React.Suspense>
 
-      {/* Reporters Modal */}
-      <ReportersModal 
-        isOpen={reportersModalOpen} 
-        onClose={() => setReportersModalOpen(false)} 
-      />
 
-      {/* Kan Archive Modal */}
-      <KanArchiveModal 
-        isOpen={kanArchiveOpen} 
-        onClose={() => setKanArchiveOpen(false)} 
-      />
-
-      {/* AI Announcer */}
-      <AIAnnouncer />
-
-      {/* Talking Avatar Creator */}
-      <TalkingAvatar />
-
-      {/* D-ID Live Chat */}
-      <DIDLiveChat isOpen={didChatOpen} onClose={() => setDidChatOpen(false)} />
-
-
-
-      {/* Accessibility Floating Button */}
-      <AccessibilityFloatingButton />
-
-      {/* PWA Install Banner */}
-      <InstallAppButton />
-
-      {/* Podcasts Floating Button */}
-      <PodcastsFloatingButton />
 
       {/* User Profile Modal */}
       <UserProfileModal 
@@ -537,8 +441,15 @@ export default function Layout({ children, currentPageName }) {
         {reelsOpen && <ReelsModal isOpen={reelsOpen} onClose={() => setReelsOpen(false)} />}
       </AnimatePresence>
 
-      {/* Logo Float Animation on user action */}
-      <AnimatePresence>
+      {/* Floating Buttons - lazy loaded */}
+      <React.Suspense fallback={null}>
+        <AccessibilityFloatingButton />
+        <InstallAppButton />
+        <PodcastsFloatingButton />
+      </React.Suspense>
+
+      {/* Logo Float Animation - disabled for performance */}
+      {/* <AnimatePresence>
         {logoFloat && (
           <motion.div
             initial={{ opacity: 0, scale: 0.1 }}
@@ -549,7 +460,7 @@ export default function Layout({ children, currentPageName }) {
             <LogoVideo className="h-32 w-32 rounded-full shadow-2xl shadow-red-500/50 border-2 border-red-500/40" />
           </motion.div>
         )}
-      </AnimatePresence>
+      </AnimatePresence> */}
 
       {/* Main Menu Sidebar */}
       <AnimatePresence>
@@ -947,15 +858,17 @@ export default function Layout({ children, currentPageName }) {
 
       {/* Content with Sidebars */}
             <div className="flex flex-1">
-              {/* Left Sidebar */}
-              <LeftSidebarCategories />
+              {/* Left Sidebar - lazy */}
+              <React.Suspense fallback={null}>
+                <LeftSidebarCategories />
+              </React.Suspense>
 
               {/* Main Content */}
               <main className="flex-1 px-0 sm:px-4 py-0 sm:py-6 pb-16 sm:pb-24 lg:pb-6 max-w-7xl mx-auto">
                 {children}
               </main>
 
-              {/* Right Sidebar - Categories */}
+              {/* Right Sidebar - lazy */}
               <React.Suspense fallback={null}>
                 <RightSidebarCategories />
               </React.Suspense>
