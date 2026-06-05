@@ -68,7 +68,7 @@ const BUILTIN_LABELS = {
 
 function ReelItem({ video, isActive, onNext, onPrev, customCatMap = {}, builtinLabels = BUILTIN_LABELS }) {
   const videoRef = useRef(null);
-  const [muted, setMuted] = useState(true);
+  const [muted, setMuted] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [heartAnim, setHeartAnim] = useState(false);
   const qc = useQueryClient();
@@ -168,9 +168,9 @@ function ReelItem({ video, isActive, onNext, onPrev, customCatMap = {}, builtinL
         loop
         muted={muted}
         playsInline
+        controls
         poster={video.thumbnail_url}
-        preload="metadata"
-        loading="lazy"
+        preload="auto"
         className="w-full h-full object-contain relative z-10"
         onClick={togglePlay}
       />
@@ -213,8 +213,8 @@ function ReelItem({ video, isActive, onNext, onPrev, customCatMap = {}, builtinL
         )}
       </AnimatePresence>
 
-      {/* Right side actions */}
-      <div className="absolute left-3 bottom-24 flex flex-col items-center gap-5">
+      {/* Right side actions - moved lower to not block controls */}
+      <div className="absolute left-3 bottom-32 flex flex-col items-center gap-5 z-20">
         <button onClick={() => setMuted(m => !m)} className="flex flex-col items-center gap-1">
           <div className="w-11 h-11 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center">
             {muted ? <VolumeX className="w-5 h-5 text-white" /> : <Volume2 className="w-5 h-5 text-white" />}
@@ -243,8 +243,8 @@ function ReelItem({ video, isActive, onNext, onPrev, customCatMap = {}, builtinL
         </button>
       </div>
 
-      {/* Bottom info */}
-      <div className="absolute bottom-20 right-4 left-16 pointer-events-none z-10">
+      {/* Bottom info - moved up to not block controls */}
+      <div className="absolute bottom-28 right-4 left-16 pointer-events-none z-10">
         <p className="text-white font-bold text-lg leading-snug drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] line-clamp-3 bg-black/30 rounded-lg px-2 py-1">{video.title}</p>
         {video.description && (
           <p className="text-gray-200 text-sm mt-1 line-clamp-2 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] bg-black/20 rounded px-2">{video.description}</p>
