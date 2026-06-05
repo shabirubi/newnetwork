@@ -704,14 +704,16 @@ export default function FeaturedArticleEditor() {
          <div className="bg-[#0d0d0d] rounded-2xl overflow-hidden border border-gray-800">
            <div className="flex flex-col">
 
-             {/* TOP: Media Gallery */}
-             <div className="w-full h-40 sm:h-48">
-               <MediaGallery
-                 mainImage={article?.image_url}
-                 mainVideo={article?.video_url}
-                 images={displayImages}
-                 videos={displayVideos}
-               />
+             {/* TOP: Media Gallery - Portrait Mode */}
+             <div className="w-full flex justify-center py-4">
+               <div className="relative w-[90%] sm:w-[400px] aspect-[3/4]">
+                 <MediaGallery
+                   mainImage={article?.image_url}
+                   mainVideo={article?.video_url}
+                   images={displayImages}
+                   videos={displayVideos}
+                 />
+               </div>
              </div>
 
              {/* BOTTOM: Content */}
