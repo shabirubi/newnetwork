@@ -86,15 +86,15 @@ export default function NewsCard({ article, variant, index }) {
             <span className="text-white text-[10px] font-bold">הרשת החדשה</span>
           </div>
         </div>
-        <div className="p-2">
-          <Badge className={`${categoryColors[category]} text-[8px] mb-1 rounded-full px-1.5 py-0.5 inline-block`}>
+        <div className="p-3">
+          <Badge className={`${categoryColors[category]} text-[9px] mb-2 rounded-full px-2 py-1 inline-block font-semibold`}>
             {categoryLabels[category]}
           </Badge>
-          <h3 className="font-bold text-xs text-[#0057B8] group-hover:text-[#1a6fd4] transition-colors line-clamp-2 mb-1 leading-snug">{title}</h3>
-          {subtitle && <p className="text-gray-400 text-[10px] line-clamp-1 mb-1.5">{subtitle}</p>}
+          <h3 className="font-bold text-sm text-[#0057B8] group-hover:text-[#1a6fd4] transition-colors line-clamp-2 mb-2 leading-snug">{title}</h3>
+          {subtitle && <p className="text-gray-400 text-[11px] line-clamp-1 mb-2">{subtitle}</p>}
           <div className="flex items-center justify-between gap-1">
-            <span className="flex items-center gap-1 text-gray-500 text-[9px] flex-1">
-              <Clock size={8} />
+            <span className="flex items-center gap-1 text-gray-500 text-[10px] flex-1">
+              <Clock size={10} />
               {moment(created_date).fromNow()}
             </span>
           </div>
