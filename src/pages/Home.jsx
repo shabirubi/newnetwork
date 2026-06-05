@@ -8,8 +8,6 @@ import { createPageUrl } from "../utils";
 import { Button } from "@/components/ui/button";
 
 import LivePlayer from "../components/news/LivePlayer";
-import AllCategoryEditors from "../components/home/CategoryArticleEditor";
-import FeaturedArticleEditor from "../components/home/FeaturedArticleEditor";
 import HomeCategoryFeed from "../components/home/HomeCategoryFeed";
 
 import WeatherAlertsContainer from "../components/weather/WeatherAlertsContainer";
@@ -77,17 +75,8 @@ export default function Home() {
       {/* OREF Alerts */}
       <OrefAlertsPanel />
 
-      {/* Reels Strip — shares "home-all-videos" cache with HomeCategoryFeed */}
+      {/* Reels Strip — only user uploaded videos */}
       <ReelsStrip />
-
-      {/* Featured Article Editor (כתבה מרכזית) */}
-      <FeaturedArticleEditor />
-
-      {/* Category Article Editor toolbar */}
-      <AllCategoryEditors />
-
-      {/* Main content: reels strip + articles per category */}
-      <HomeCategoryFeed />
 
       {/* ── Modals ── */}
       <VODModal isOpen={vodModalOpen} onClose={() => setVodModalOpen(false)} />
