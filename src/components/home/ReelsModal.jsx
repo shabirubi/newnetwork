@@ -266,16 +266,18 @@ export default function ReelsModal({ isOpen, onClose }) {
 
   const { data: videos = [], isLoading } = useQuery({
     queryKey: ["reels-videos"],
-    queryFn: () => base44.entities.UserVideo.list("-created_date", 200),
+    queryFn: () => base44.entities.UserVideo.list("-created_date", 100),
     enabled: isOpen,
-    staleTime: 0,
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
   });
 
   const { data: customCategories = [] } = useQuery({
     queryKey: ["custom-categories"],
-    queryFn: () => base44.entities.CustomCategory.list('-created_date', 50),
+    queryFn: () => base44.entities.CustomCategory.list('-created_date', 20),
     enabled: isOpen,
-    staleTime: 60000,
+    staleTime: 10 * 60 * 1000,
+    gcTime: 30 * 60 * 1000,
   });
 
   const customCatMap = Object.fromEntries(customCategories.map(c => [c.id, c.label]));
