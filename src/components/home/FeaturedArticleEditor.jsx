@@ -713,17 +713,17 @@ export default function FeaturedArticleEditor() {
             />
 
             {/* RIGHT: Content */}
-            <div className="flex flex-col p-5 sm:p-8 gap-4">
+            <div className="flex flex-col p-5 sm:p-8 gap-4 overflow-hidden min-w-0">
               {selectedCat && (
                 <span className="px-3 py-1 bg-[#0057B8]/20 text-[#0057B8] rounded-lg text-xs font-bold w-fit">
                   {selectedCat.label}
                 </span>
               )}
-              <h1 className="text-white text-2xl sm:text-3xl font-bold leading-tight line-clamp-3">
+              <h1 className="text-white text-2xl sm:text-3xl font-bold leading-tight line-clamp-3 break-words">
                 {article?.title || "אין כתבה מרכזית — לחץ 'כתבה חדשה' להוספה"}
               </h1>
               {article?.subtitle && (
-                <p className="text-gray-300 text-base sm:text-lg line-clamp-2">{article.subtitle}</p>
+                <p className="text-gray-300 text-base sm:text-lg line-clamp-2 break-words">{article.subtitle}</p>
               )}
               {article?.content && (
                 <div className="flex-1 overflow-y-auto max-h-[40vh] pr-2 min-w-0">
