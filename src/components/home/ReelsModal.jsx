@@ -163,7 +163,7 @@ function ReelItem({ video, isActive, onNext, onPrev, customCatMap = {}, builtinL
         playsInline
         controls
         poster={video.thumbnail_url}
-        preload="auto"
+        preload="metadata"
         className="w-full h-full object-cover relative z-10"
         onClick={togglePlay}
       />
@@ -424,7 +424,7 @@ export default function ReelsModal({ isOpen, onClose }) {
                     className="w-full h-full object-cover"
                     muted
                     playsInline
-                    preload="none"
+                    preload="metadata"
                     poster={catReel.thumbnail_url || ''}
                   />
                 ) : (
