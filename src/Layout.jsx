@@ -6,7 +6,7 @@ import {
   Vote, Cpu, Trophy, Clapperboard, Globe, Heart,
   Clock, ChevronLeft, Users, Moon, Sun, Home, Flame,
   Siren, AlertTriangle, MessageSquareWarning, Film, Tv, User, MessageCircle, Sparkles,
-  LogOut, LogIn, Loader2, Mic
+  LogOut, LogIn, Loader2, Mic, Music
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { toast } from "sonner";
@@ -49,9 +49,7 @@ function TypewriterDate() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
 
   if (news.length === 0) {
-    return (
-      <div className="text-sm font-bold text-white">פתיחה רשמית: 7 למרץ 2026</div>
-    );
+    return null;
   }
 
   return (
@@ -292,6 +290,12 @@ export default function Layout({ children, currentPageName }) {
 
           {/* Quick Actions */}
           <div className="flex items-center gap-1.5">
+            {/* Spotify Podcasts */}
+            <button onClick={() => window.open('https://open.spotify.com/show/YOUR_PODCAST_ID', '_blank')}
+              className="p-2 bg-[#1DB954] rounded-full active:scale-90 transition-transform">
+              <Music className="w-4 h-4 text-white" />
+            </button>
+
             {/* Dark Mode */}
             <button onClick={() => setDarkMode(v => !v)}
               className="p-2 bg-white/10 rounded-full active:scale-90 transition-transform">
@@ -346,7 +350,6 @@ export default function Layout({ children, currentPageName }) {
       <React.Suspense fallback={null}>
         <AccessibilityFloatingButton />
         <InstallAppButton />
-        <PodcastsFloatingButton />
       </React.Suspense>
 
       {/* Sidebars - lazy loaded */}
