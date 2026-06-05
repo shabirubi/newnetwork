@@ -16,10 +16,7 @@ const BUILTIN_LABELS = {
 function ReelThumb({ video, onClick, customCatMap }) {
   const videoRef = useRef(null);
   const [hovered, setHovered] = useState(false);
-  const [loaded, setLoaded] = useState(false);
-
-  // Placeholder image for videos without thumbnail
-  const placeholderImg = "https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=300&h=400&fit=crop";
+  const [videoLoaded, setVideoLoaded] = useState(false);
 
   return (
     <button
@@ -27,7 +24,7 @@ function ReelThumb({ video, onClick, customCatMap }) {
       onMouseEnter={() => {
         setHovered(true);
         const v = videoRef.current;
-        if (v) {
+        if (v && videoLoaded) {
           v.play().catch(() => {});
         }
       }}
@@ -38,26 +35,19 @@ function ReelThumb({ video, onClick, customCatMap }) {
       }}
       className="flex-shrink-0 relative w-24 h-36 sm:w-28 sm:h-44 rounded-xl overflow-hidden group cursor-pointer bg-gray-800"
     >
-      {/* Background image (thumbnail or placeholder) */}
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{
-          backgroundImage: video.thumbnail_url 
-            ? `url(${video.thumbnail_url})` 
-            : `url(${placeholderImg})`
-        }}
-        onLoad={() => setLoaded(true)}
-      />
-      
-      {/* Video for hover playback - only loads when hovered */}
+      {/* Video element - shows first frame as thumbnail */}
       <video
         ref={videoRef}
         src={video.video_url}
         muted
         playsInline
         loop
-        className="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-300"
-        style={{ opacity: hovered ? 1 : 0 }}
+        preload="metadata"
+        className="absolute inset-0 w-full h-full object-cover"
+        onLoadedMetadata={() => {
+          setVideoLoaded(true);
+        }}
+        style={{ opacity: 1 }}
       />
       
       {/* Gradient overlay - always visible */}
