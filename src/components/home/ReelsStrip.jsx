@@ -36,6 +36,19 @@ function ReelThumb({ video, onClick, customCatMap }) {
       }}
       className="flex-shrink-0 relative w-24 h-36 sm:w-28 sm:h-44 rounded-xl overflow-hidden group cursor-pointer bg-gray-800"
     >
+      {/* Background color fallback */}
+      <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-800" />
+      
+      {/* Thumbnail image if available */}
+      {video.thumbnail_url && (
+        <img
+          src={video.thumbnail_url}
+          alt={video.title}
+          className="absolute inset-0 w-full h-full object-cover"
+          onError={(e) => { e.target.style.display = 'none'; }}
+        />
+      )}
+      
       {/* Video element - shows first frame as thumbnail */}
       {!videoError ? (
         <video
@@ -44,8 +57,9 @@ function ReelThumb({ video, onClick, customCatMap }) {
           muted
           playsInline
           loop
-          preload="auto"
-          loading="eager"
+          preload="metadata"
+          loading="lazy"
+          poster={video.thumbnail_url}
           className="absolute inset-0 w-full h-full object-cover"
           onLoadedMetadata={() => {
             setVideoLoaded(true);
@@ -56,15 +70,12 @@ function ReelThumb({ video, onClick, customCatMap }) {
           onError={() => {
             setVideoError(true);
           }}
-          style={{ opacity: videoLoaded ? 1 : 0.5 }}
         />
       ) : null}
       
-      {/* Fallback thumbnail if video fails to load */}
+      {/* Fallback - show color gradient if video fails */}
       {videoError && (
-        <div className="absolute inset-0 bg-gradient-to-br from-[#E31E24]/40 to-[#0057B8]/40 flex items-center justify-center">
-          <Play className="w-12 h-12 text-white/60" />
-        </div>
+        <div className="absolute inset-0 bg-gradient-to-br from-[#E31E24]/20 to-[#0057B8]/20 flex items-center justify-center" />
       )}
       
       {/* Gradient overlay - always visible */}

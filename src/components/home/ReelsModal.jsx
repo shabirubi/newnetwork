@@ -153,13 +153,23 @@ function ReelItem({ video, isActive, onNext, onPrev, customCatMap = {}, builtinL
 
   return (
     <div className="relative w-full h-full flex items-center justify-center bg-black">
+      {/* Thumbnail background */}
+      {video.thumbnail_url && (
+        <img
+          src={video.thumbnail_url}
+          alt="thumbnail"
+          className="absolute inset-0 w-full h-full object-cover blur-sm opacity-30"
+        />
+      )}
+      
       <video
         ref={videoRef}
         src={video.video_url}
         loop
         muted={muted}
         playsInline
-        className="w-full h-full object-contain"
+        poster={video.thumbnail_url}
+        className="w-full h-full object-contain relative z-10"
         onClick={togglePlay}
       />
 
