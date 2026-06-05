@@ -395,8 +395,7 @@ export default function Layout({ children, currentPageName }) {
 
 
 
-      {/* News Ticker */}
-      <NewsTicker darkMode={darkMode} setDarkMode={setDarkMode} onMenuClick={() => setMobileMenuOpen(true)} />
+
 
 
 
