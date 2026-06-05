@@ -201,8 +201,8 @@ export default function HomeCategoryFeed() {
     return !isAudio && v.feed !== "podcasts" && title && !isObjectId(title);
   });
 
-  // Show all articles (no filtering)
-  const userArticles = allArticles;
+  // Show only articles WITHOUT external source (filter out external articles)
+  const userArticles = allArticles.filter(a => !a.source || a.source.trim() === "");
 
   // Determine active categories — builtin + custom ones that have content
   const activeCategories = [];
