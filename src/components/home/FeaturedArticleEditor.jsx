@@ -52,8 +52,8 @@ const REEL_CATEGORIES = [
 const emptyForm = {
   title: "", subtitle: "", content: "", category: "breaking",
   image_url: "", video_url: "", is_breaking: false, is_featured: true, source: "",
-  extra_images: [], // array of urls
-  extra_videos: [], // array of urls
+  extra_images: [],
+  extra_videos: [],
 };
 
 // ---- Media Gallery Viewer ----
@@ -72,10 +72,10 @@ function MediaGallery({ images = [], videos = [], mainImage, mainVideo }) {
 
   if (all.length === 0) {
     return (
-      <div className="flex-1 flex items-center justify-center bg-gray-900" style={{ minHeight: 360 }}>
-        <div className="text-center text-gray-600">
-          <Camera className="w-16 h-16 mx-auto mb-3 opacity-30" />
-          <p className="text-sm">אין תמונה או וידאו</p>
+      <div className="w-full aspect-[3/4] bg-gray-900 rounded-2xl flex items-center justify-center">
+        <div className="text-center text-gray-600 p-4">
+          <Camera className="w-12 h-12 mx-auto mb-2 opacity-30" />
+          <p className="text-xs">אין תמונה או וידאו</p>
         </div>
       </div>
     );
@@ -90,16 +90,15 @@ function MediaGallery({ images = [], videos = [], mainImage, mainVideo }) {
   };
 
   return (
-    <div className="flex-1 flex flex-col" style={{ minHeight: 360 }}>
+    <div className="w-full">
       {/* Main viewer */}
-      <div className="relative flex-1 bg-black group" style={{ minHeight: 360 }}>
+      <div className="relative w-full aspect-[3/4] bg-black rounded-2xl overflow-hidden">
         {current.type === 'video' ? (
           <>
             <video
               ref={videoRef}
               src={current.url}
               className="w-full h-full object-contain"
-              style={{ maxHeight: '70vh' }}
               onPlay={() => setPlaying(true)}
               onPause={() => setPlaying(false)}
               onEnded={() => setPlaying(false)}
@@ -109,30 +108,30 @@ function MediaGallery({ images = [], videos = [], mainImage, mainVideo }) {
               onClick={togglePlay}
               className="absolute inset-0 flex items-center justify-center cursor-pointer bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity"
             >
-              <div className="bg-white/20 backdrop-blur-sm rounded-full p-4">
-                {playing ? <Pause className="w-8 h-8 text-white" /> : <Play className="w-8 h-8 text-white fill-white" />}
+              <div className="bg-white/20 backdrop-blur-sm rounded-full p-3">
+                {playing ? <Pause className="w-6 h-6 text-white" /> : <Play className="w-6 h-6 text-white fill-white" />}
               </div>
             </div>
-            <span className="absolute top-3 left-3 bg-[#0057B8] text-white text-[10px] font-bold px-2 py-1 rounded">וידאו</span>
+            <span className="absolute top-2 left-2 bg-[#0057B8] text-white text-[9px] font-bold px-2 py-0.5 rounded">וידאו</span>
           </>
         ) : (
-          <img src={current.url} alt="" className="w-full h-full object-cover" style={{ maxHeight: '70vh' }} />
+          <img src={current.url} alt="" className="w-full h-full object-cover" />
         )}
 
         {all.length > 1 && (
           <>
             <button
               onClick={() => setIdx(i => (i - 1 + all.length) % all.length)}
-              className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 text-white rounded-full p-2 transition-all"
-            ><ChevronRight className="w-5 h-5" /></button>
+              className="absolute right-2 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 text-white rounded-full p-1.5 transition-all"
+            ><ChevronRight className="w-4 h-4" /></button>
             <button
               onClick={() => setIdx(i => (i + 1) % all.length)}
-              className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 text-white rounded-full p-2 transition-all"
-            ><ChevronLeft className="w-5 h-5" /></button>
+              className="absolute left-2 top-1/2 -translate-y-1/2 bg-black/60 hover:bg-black/80 text-white rounded-full p-1.5 transition-all"
+            ><ChevronLeft className="w-4 h-4" /></button>
             <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1">
               {all.map((_, i) => (
                 <button key={i} onClick={() => setIdx(i)}
-                  className={`w-2 h-2 rounded-full transition-all ${i === idx ? 'bg-white' : 'bg-white/40'}`} />
+                  className={`w-1.5 h-1.5 rounded-full transition-all ${i === idx ? 'bg-white' : 'bg-white/40'}`} />
               ))}
             </div>
           </>
@@ -141,12 +140,12 @@ function MediaGallery({ images = [], videos = [], mainImage, mainVideo }) {
 
       {/* Thumbnails */}
       {all.length > 1 && (
-        <div className="flex gap-2 p-2 bg-black overflow-x-auto">
+        <div className="flex gap-1.5 p-1.5 mt-2 overflow-x-auto">
           {all.map((item, i) => (
             <button key={i} onClick={() => setIdx(i)}
-              className={`flex-shrink-0 w-16 h-12 rounded overflow-hidden border-2 transition-all ${i === idx ? 'border-[#0057B8]' : 'border-transparent opacity-60 hover:opacity-100'}`}>
+              className={`flex-shrink-0 w-14 h-14 rounded-lg overflow-hidden border-2 transition-all ${i === idx ? 'border-[#0057B8]' : 'border-transparent opacity-60 hover:opacity-100'}`}>
               {item.type === 'video'
-                ? <div className="w-full h-full bg-gray-800 flex items-center justify-center"><Play className="w-4 h-4 text-white" /></div>
+                ? <div className="w-full h-full bg-gray-800 flex items-center justify-center"><Play className="w-3 h-3 text-white" /></div>
                 : <img src={item.url} alt="" className="w-full h-full object-cover" />
               }
             </button>
@@ -157,7 +156,7 @@ function MediaGallery({ images = [], videos = [], mainImage, mainVideo }) {
   );
 }
 
-// ---- Advanced Editor Modal ----
+// ---- Editor Modal ----
 function EditorModal({ article, onClose, onSaved }) {
   const [form, setForm] = useState(() => ({
     ...emptyForm,
@@ -177,7 +176,7 @@ function EditorModal({ article, onClose, onSaved }) {
   }));
 
   const [saving, setSaving] = useState(false);
-  const [uploading, setUploading] = useState(null); // 'main-image'|'main-video'|'extra-image'|'extra-video'|'reel'
+  const [uploading, setUploading] = useState(null);
   const [categoryOpen, setCategoryOpen] = useState(false);
   const [reelCategory, setReelCategory] = useState("breaking");
   const [reelTitle, setReelTitle] = useState("");
@@ -204,7 +203,6 @@ function EditorModal({ article, onClose, onSaved }) {
   const uploadVideo = async (file, type) => {
     setUploading(type);
     try {
-      // Use UploadPrivateFile for large videos, then get signed URL
       const { file_uri } = await base44.integrations.Core.UploadPrivateFile({ file });
       const { signed_url } = await base44.integrations.Core.CreateFileSignedUrl({ file_uri, expires_in: 60 * 60 * 24 * 365 });
       return signed_url;
@@ -301,19 +299,15 @@ function EditorModal({ article, onClose, onSaved }) {
     if (!form.title.trim()) { toast.error("חובה להזין כותרת"); return; }
     setSaving(true);
     try {
-      // If creating new article, set it as featured and remove featured from others
       if (!article?.id) {
-        // Remove is_featured from all existing articles
         const allArticles = await base44.entities.NewsArticle.list();
         for (const art of allArticles) {
           if (art.is_featured) {
             await base44.entities.NewsArticle.update(art.id, { is_featured: false });
           }
         }
-        // Create new article as featured
         await base44.entities.NewsArticle.create({ ...form, is_featured: true });
       } else {
-        // Update existing article
         await base44.entities.NewsArticle.update(article.id, form);
       }
       queryClient.invalidateQueries({ queryKey: ['featured-main-article'] });
@@ -336,30 +330,31 @@ function EditorModal({ article, onClose, onSaved }) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className="fixed inset-0 z-[9999] flex items-center justify-center p-2 sm:p-4"
-      style={{ background: 'rgba(0,0,0,0.92)' }}
+      className="fixed inset-0 z-[9999] flex items-end sm:items-center justify-center p-0 sm:p-4"
+      style={{ background: 'rgba(0,0,0,0.95)' }}
     >
       <motion.div
-        initial={{ scale: 0.95, opacity: 0 }}
-        animate={{ scale: 1, opacity: 1 }}
-        exit={{ scale: 0.95, opacity: 0 }}
-        className="w-full max-w-4xl max-h-[95vh] flex flex-col bg-[#0d0d0d] rounded-2xl border border-gray-800 overflow-hidden"
+        initial={{ y: "100%" }}
+        animate={{ y: 0 }}
+        exit={{ y: "100%" }}
+        transition={{ type: "spring", damping: 25, stiffness: 300 }}
+        className="w-full max-w-lg max-h-[95vh] flex flex-col bg-[#0d0d0d] rounded-t-3xl sm:rounded-2xl border-t sm:border border-gray-800 overflow-hidden"
         dir="rtl"
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-5 py-3 border-b border-gray-800 bg-[#111] flex-shrink-0">
+        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-800 bg-[#111] flex-shrink-0">
           <div className="flex items-center gap-2">
             <Edit3 className="w-5 h-5 text-[#0057B8]" />
-            <h2 className="text-white font-bold text-base">עורך כתבה מתקדם</h2>
+            <h2 className="text-white font-bold text-base">עורך כתבה</h2>
           </div>
           <div className="flex items-center gap-2">
             <button
               onClick={handleSave}
               disabled={saving}
-              className="flex items-center gap-1.5 px-4 py-2 bg-[#E31E24] hover:bg-red-700 text-white text-sm font-bold rounded-xl transition-colors disabled:opacity-50"
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#E31E24] hover:bg-red-700 text-white text-sm font-bold rounded-xl transition-colors disabled:opacity-50"
             >
               {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : <Save className="w-4 h-4" />}
-              שמור כתבה
+              שמור
             </button>
             <button onClick={onClose} className="p-2 hover:bg-gray-800 rounded-xl text-gray-400 hover:text-white transition-colors">
               <X className="w-5 h-5" />
@@ -368,29 +363,31 @@ function EditorModal({ article, onClose, onSaved }) {
         </div>
 
         {/* Scrollable Body */}
-        <div className="flex-1 overflow-y-auto p-5 space-y-5">
+        <div className="flex-1 overflow-y-auto p-4 space-y-4">
 
           {/* Category & Breaking */}
-          <div className="flex items-center gap-3 flex-wrap">
-            <div className="relative">
+          <div className="flex items-center gap-2 flex-wrap">
+            <div className="relative flex-1">
               <button
                 onClick={() => setCategoryOpen(o => !o)}
-                className="flex items-center gap-2 px-3 py-2 bg-[#0057B8]/20 hover:bg-[#0057B8]/30 text-[#0057B8] rounded-xl border border-[#0057B8]/30 text-sm transition-colors"
+                className="w-full flex items-center justify-between px-3 py-2 bg-[#0057B8]/20 hover:bg-[#0057B8]/30 text-[#0057B8] rounded-xl border border-[#0057B8]/30 text-sm transition-colors"
               >
-                <Tag className="w-4 h-4" />
-                {selectedCat?.label || "בחר קטגוריה"}
+                <span className="flex items-center gap-2">
+                  <Tag className="w-4 h-4" />
+                  {selectedCat?.label || "בחר קטגוריה"}
+                </span>
                 <ChevronDown className="w-3.5 h-3.5" />
               </button>
               <AnimatePresence>
                 {categoryOpen && (
                   <motion.div
                     initial={{ opacity: 0, y: -5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -5 }}
-                    className="absolute top-full mt-1 right-0 z-50 bg-[#1a1a1a] border border-gray-700 rounded-xl shadow-2xl max-h-56 overflow-y-auto w-52"
+                    className="absolute top-full mt-1 right-0 z-50 bg-[#1a1a1a] border border-gray-700 rounded-xl shadow-2xl max-h-48 overflow-y-auto w-full"
                   >
                     {CATEGORIES.map(cat => (
                       <button key={cat.id}
                         onClick={() => { setForm(f => ({ ...f, category: cat.id })); setCategoryOpen(false); }}
-                        className="w-full text-right px-4 py-2.5 text-sm text-gray-300 hover:bg-[#0057B8]/20 hover:text-white flex items-center justify-between"
+                        className="w-full text-right px-3 py-2 text-sm text-gray-300 hover:bg-[#0057B8]/20 hover:text-white flex items-center justify-between"
                       >
                         {cat.label}
                         {form.category === cat.id && <Check className="w-4 h-4 text-[#0057B8]" />}
@@ -403,28 +400,28 @@ function EditorModal({ article, onClose, onSaved }) {
 
             <button
               onClick={() => setForm(f => ({ ...f, is_breaking: !f.is_breaking }))}
-              className={`flex items-center gap-1.5 px-3 py-2 rounded-xl border text-sm font-bold transition-colors ${
+              className={`px-3 py-2 rounded-xl border text-sm font-bold transition-colors ${
                 form.is_breaking ? 'bg-red-600/30 border-red-600/50 text-red-400' : 'bg-gray-800 border-gray-700 text-gray-500'
               }`}
             >
-              🔴 סמן כחם
+              🔴 חם
             </button>
           </div>
 
           {/* Title */}
           <div>
-            <label className="text-gray-400 text-xs mb-1 block">כותרת ראשית *</label>
+            <label className="text-gray-400 text-xs mb-1.5 block font-bold">כותרת ראשית *</label>
             <Input
               value={form.title}
               onChange={e => setForm(f => ({ ...f, title: e.target.value }))}
               placeholder="כותרת ראשית..."
-              className="bg-[#1a1a1a] border-gray-700 text-white text-lg font-bold placeholder:text-gray-600 focus:border-[#0057B8]"
+              className="bg-[#1a1a1a] border-gray-700 text-white text-base font-bold placeholder:text-gray-600 focus:border-[#0057B8]"
             />
           </div>
 
           {/* Subtitle */}
           <div>
-            <label className="text-gray-400 text-xs mb-1 block">כותרת משנה</label>
+            <label className="text-gray-400 text-xs mb-1.5 block">כותרת משנה</label>
             <Input
               value={form.subtitle}
               onChange={e => setForm(f => ({ ...f, subtitle: e.target.value }))}
@@ -435,19 +432,19 @@ function EditorModal({ article, onClose, onSaved }) {
 
           {/* Content */}
           <div>
-            <label className="text-gray-400 text-xs mb-1 block">תוכן הכתבה</label>
+            <label className="text-gray-400 text-xs mb-1.5 block">תוכן הכתבה</label>
             <textarea
               value={form.content}
               onChange={e => setForm(f => ({ ...f, content: e.target.value }))}
               placeholder="כתוב את תוכן הכתבה כאן..."
-              rows={8}
+              rows={6}
               className="w-full bg-[#1a1a1a] border border-gray-700 text-white text-sm rounded-xl p-3 placeholder:text-gray-600 focus:border-[#0057B8] focus:outline-none resize-none"
             />
           </div>
 
           {/* Source */}
           <div>
-            <label className="text-gray-400 text-xs mb-1 block">מקור</label>
+            <label className="text-gray-400 text-xs mb-1.5 block">מקור</label>
             <Input
               value={form.source}
               onChange={e => setForm(f => ({ ...f, source: e.target.value }))}
@@ -456,142 +453,115 @@ function EditorModal({ article, onClose, onSaved }) {
             />
           </div>
 
-          {/* === MEDIA SECTION === */}
-          <div className="border border-gray-800 rounded-2xl overflow-hidden">
-            <div className="bg-[#111] px-4 py-3 border-b border-gray-800">
-              <h3 className="text-white font-bold text-sm flex items-center gap-2">
-                <Upload className="w-4 h-4 text-[#0057B8]" />
-                מדיה — תמונות וסרטונים
-              </h3>
-            </div>
-            <div className="p-4 space-y-5">
-
-              {/* Main Video */}
-              <div>
-                <label className="text-gray-400 text-xs mb-2 block">וידאו ראשי</label>
-                <input ref={mainVideoRef} type="file" accept="video/*" className="hidden" onChange={handleMainVideo} />
-                <div className="flex gap-2 items-center flex-wrap">
-                  <button
-                    onClick={() => mainVideoRef.current?.click()}
-                    disabled={uploading === 'main-video'}
-                    className="flex items-center gap-2 px-4 py-2 bg-purple-600/20 hover:bg-purple-600/40 text-purple-400 rounded-xl border border-purple-600/30 text-sm transition-colors disabled:opacity-50"
-                  >
-                    {uploading === 'main-video' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Video className="w-4 h-4" />}
-                    העלה וידאו ראשי
+          {/* Main Video */}
+          <div className="border border-gray-800 rounded-xl p-3">
+            <label className="text-gray-400 text-xs mb-2 block font-bold">וידאו ראשי</label>
+            <input ref={mainVideoRef} type="file" accept="video/*" className="hidden" onChange={handleMainVideo} />
+            <div className="flex gap-2 items-center flex-wrap">
+              <button
+                onClick={() => mainVideoRef.current?.click()}
+                disabled={uploading === 'main-video'}
+                className="flex items-center gap-2 px-3 py-2 bg-purple-600/20 hover:bg-purple-600/40 text-purple-400 rounded-xl border border-purple-600/30 text-sm transition-colors disabled:opacity-50"
+              >
+                {uploading === 'main-video' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Video className="w-4 h-4" />}
+                העלה וידאו
+              </button>
+              {form.video_url && (
+                <div className="flex items-center gap-2 flex-1 min-w-0">
+                  <span className="text-green-400 text-xs truncate flex-1">✓ וידאו הועלה</span>
+                  <button onClick={() => setForm(f => ({ ...f, video_url: '' }))} className="text-gray-500 hover:text-red-400">
+                    <Trash2 className="w-4 h-4" />
                   </button>
-                  {form.video_url && (
-                    <div className="flex items-center gap-2 flex-1 min-w-0">
-                      <span className="text-green-400 text-xs truncate flex-1">✓ {form.video_url.split('/').pop()}</span>
-                      <button onClick={() => setForm(f => ({ ...f, video_url: '' }))} className="text-gray-500 hover:text-red-400">
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  )}
                 </div>
-                <Input
-                  value={form.video_url}
-                  onChange={e => setForm(f => ({ ...f, video_url: e.target.value }))}
-                  placeholder="או הדבק URL של וידאו..."
-                  className="mt-2 bg-[#1a1a1a] border-gray-700 text-white text-xs placeholder:text-gray-600 focus:border-[#0057B8]"
-                />
-              </div>
-
-              {/* Main Image */}
-              <div>
-                <label className="text-gray-400 text-xs mb-2 block">תמונה ראשית</label>
-                <input ref={mainImageRef} type="file" accept="image/*" className="hidden" onChange={handleMainImage} />
-                <div className="flex gap-2 items-center flex-wrap">
-                  <button
-                    onClick={() => mainImageRef.current?.click()}
-                    disabled={uploading === 'main-image'}
-                    className="flex items-center gap-2 px-4 py-2 bg-[#0057B8]/20 hover:bg-[#0057B8]/40 text-[#0057B8] rounded-xl border border-[#0057B8]/30 text-sm transition-colors disabled:opacity-50"
-                  >
-                    {uploading === 'main-image' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Image className="w-4 h-4" />}
-                    העלה תמונה ראשית
-                  </button>
-                  {form.image_url && (
-                    <div className="flex items-center gap-2 flex-1 min-w-0">
-                      <img src={form.image_url} alt="" className="h-10 w-16 object-cover rounded" />
-                      <button onClick={() => setForm(f => ({ ...f, image_url: '' }))} className="text-gray-500 hover:text-red-400">
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  )}
-                </div>
-                <Input
-                  value={form.image_url}
-                  onChange={e => setForm(f => ({ ...f, image_url: e.target.value }))}
-                  placeholder="או הדבק URL של תמונה..."
-                  className="mt-2 bg-[#1a1a1a] border-gray-700 text-white text-xs placeholder:text-gray-600 focus:border-[#0057B8]"
-                />
-              </div>
-
-              {/* Extra Videos — unlimited */}
-              <div>
-                <label className="text-gray-400 text-xs mb-2 block">סרטונים נוספים (ללא הגבלה)</label>
-                <input ref={extraVideoRef} type="file" accept="video/*" multiple className="hidden" onChange={handleExtraVideos} />
-                <button
-                  onClick={() => extraVideoRef.current?.click()}
-                  disabled={uploading === 'extra-video'}
-                  className="flex items-center gap-2 px-4 py-2 bg-purple-600/20 hover:bg-purple-600/40 text-purple-400 rounded-xl border border-purple-600/30 text-sm transition-colors disabled:opacity-50 mb-3"
-                >
-                  {uploading === 'extra-video' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
-                  הוסף סרטונים
-                </button>
-                {form.extra_videos?.length > 0 && (
-                  <div className="flex flex-wrap gap-2">
-                    {form.extra_videos.map((url, i) => (
-                      <div key={i} className="relative w-28 h-20 bg-gray-900 rounded-xl overflow-hidden border border-purple-600/30 flex items-center justify-center">
-                        <Play className="w-6 h-6 text-purple-400" />
-                        <span className="absolute bottom-1 right-1 text-[9px] text-gray-400">סרטון {i + 1}</span>
-                        <button
-                          onClick={() => removeExtraVideo(i)}
-                          className="absolute top-1 left-1 bg-black/60 rounded-full p-0.5 text-red-400 hover:text-red-300"
-                        ><X className="w-3 h-3" /></button>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-
-              {/* Extra Images — unlimited */}
-              <div>
-                <label className="text-gray-400 text-xs mb-2 block">תמונות נוספות (ללא הגבלה)</label>
-                <input ref={extraImageRef} type="file" accept="image/*" multiple className="hidden" onChange={handleExtraImages} />
-                <button
-                  onClick={() => extraImageRef.current?.click()}
-                  disabled={uploading === 'extra-image'}
-                  className="flex items-center gap-2 px-4 py-2 bg-[#0057B8]/20 hover:bg-[#0057B8]/40 text-[#0057B8] rounded-xl border border-[#0057B8]/30 text-sm transition-colors disabled:opacity-50 mb-3"
-                >
-                  {uploading === 'extra-image' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
-                  הוסף תמונות
-                </button>
-                {form.extra_images?.length > 0 && (
-                  <div className="flex flex-wrap gap-2">
-                    {form.extra_images.map((url, i) => (
-                      <div key={i} className="relative w-28 h-20 rounded-xl overflow-hidden border border-[#0057B8]/30">
-                        <img src={url} alt="" className="w-full h-full object-cover" />
-                        <button
-                          onClick={() => removeExtraImage(i)}
-                          className="absolute top-1 left-1 bg-black/60 rounded-full p-0.5 text-red-400 hover:text-red-300"
-                        ><X className="w-3 h-3" /></button>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-
+              )}
             </div>
           </div>
-          {/* === REELS SECTION === */}
-          <div className="border border-purple-800/50 rounded-2xl overflow-hidden">
-            <div className="bg-[#111] px-4 py-3 border-b border-purple-800/50">
-              <h3 className="text-white font-bold text-sm flex items-center gap-2">
-                <Clapperboard className="w-4 h-4 text-purple-400" />
-                העלאת ריל (TikTok-style)
-              </h3>
+
+          {/* Main Image */}
+          <div className="border border-gray-800 rounded-xl p-3">
+            <label className="text-gray-400 text-xs mb-2 block font-bold">תמונה ראשית</label>
+            <input ref={mainImageRef} type="file" accept="image/*" className="hidden" onChange={handleMainImage} />
+            <div className="flex gap-2 items-center flex-wrap">
+              <button
+                onClick={() => mainImageRef.current?.click()}
+                disabled={uploading === 'main-image'}
+                className="flex items-center gap-2 px-3 py-2 bg-[#0057B8]/20 hover:bg-[#0057B8]/40 text-[#0057B8] rounded-xl border border-[#0057B8]/30 text-sm transition-colors disabled:opacity-50"
+              >
+                {uploading === 'main-image' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Image className="w-4 h-4" />}
+                העלה תמונה
+              </button>
+              {form.image_url && (
+                <div className="flex items-center gap-2 flex-1 min-w-0">
+                  <img src={form.image_url} alt="" className="h-8 w-12 object-cover rounded" />
+                  <button onClick={() => setForm(f => ({ ...f, image_url: '' }))} className="text-gray-500 hover:text-red-400">
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
             </div>
-            <div className="p-4 space-y-3">
+          </div>
+
+          {/* Extra Videos */}
+          <div className="border border-gray-800 rounded-xl p-3">
+            <label className="text-gray-400 text-xs mb-2 block font-bold">סרטונים נוספים</label>
+            <input ref={extraVideoRef} type="file" accept="video/*" multiple className="hidden" onChange={handleExtraVideos} />
+            <button
+              onClick={() => extraVideoRef.current?.click()}
+              disabled={uploading === 'extra-video'}
+              className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-purple-600/20 hover:bg-purple-600/40 text-purple-400 rounded-xl border border-purple-600/30 text-sm transition-colors disabled:opacity-50 mb-3"
+            >
+              {uploading === 'extra-video' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
+              הוסף סרטונים
+            </button>
+            {form.extra_videos?.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {form.extra_videos.map((url, i) => (
+                  <div key={i} className="relative w-20 h-20 bg-gray-900 rounded-lg overflow-hidden border border-purple-600/30 flex items-center justify-center">
+                    <Play className="w-5 h-5 text-purple-400" />
+                    <button
+                      onClick={() => removeExtraVideo(i)}
+                      className="absolute top-1 left-1 bg-black/60 rounded-full p-0.5 text-red-400 hover:text-red-300"
+                    ><X className="w-3 h-3" /></button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Extra Images */}
+          <div className="border border-gray-800 rounded-xl p-3">
+            <label className="text-gray-400 text-xs mb-2 block font-bold">תמונות נוספות</label>
+            <input ref={extraImageRef} type="file" accept="image/*" multiple className="hidden" onChange={handleExtraImages} />
+            <button
+              onClick={() => extraImageRef.current?.click()}
+              disabled={uploading === 'extra-image'}
+              className="w-full flex items-center justify-center gap-2 px-3 py-2 bg-[#0057B8]/20 hover:bg-[#0057B8]/40 text-[#0057B8] rounded-xl border border-[#0057B8]/30 text-sm transition-colors disabled:opacity-50 mb-3"
+            >
+              {uploading === 'extra-image' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
+              הוסף תמונות
+            </button>
+            {form.extra_images?.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {form.extra_images.map((url, i) => (
+                  <div key={i} className="relative w-20 h-20 rounded-lg overflow-hidden border border-[#0057B8]/30">
+                    <img src={url} alt="" className="w-full h-full object-cover" />
+                    <button
+                      onClick={() => removeExtraImage(i)}
+                      className="absolute top-1 left-1 bg-black/60 rounded-full p-0.5 text-red-400 hover:text-red-300"
+                    ><X className="w-3 h-3" /></button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Reels Section */}
+          <div className="border border-purple-800/50 rounded-xl p-3">
+            <div className="flex items-center gap-2 mb-3">
+              <Clapperboard className="w-4 h-4 text-purple-400" />
+              <h3 className="text-white font-bold text-sm">העלאת ריל</h3>
+            </div>
+            <div className="space-y-3">
               <div>
                 <label className="text-gray-400 text-xs mb-1 block">כותרת הריל *</label>
                 <Input
@@ -602,22 +572,13 @@ function EditorModal({ article, onClose, onSaved }) {
                 />
               </div>
               <div>
-                <label className="text-gray-400 text-xs mb-1 block">תיאור (אופציונלי)</label>
-                <Input
-                  value={reelDescription}
-                  onChange={e => setReelDescription(e.target.value)}
-                  placeholder="תיאור קצר..."
-                  className="bg-[#1a1a1a] border-gray-700 text-white text-sm placeholder:text-gray-600 focus:border-purple-500"
-                />
-              </div>
-              <div>
                 <label className="text-gray-400 text-xs mb-1 block">קטגוריה</label>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-1.5">
                   {REEL_CATEGORIES.map(cat => (
                     <button
                       key={cat.id}
                       onClick={() => setReelCategory(cat.id)}
-                      className={`px-3 py-1 rounded-full text-xs font-bold transition-all border ${
+                      className={`px-2 py-1 rounded-full text-[10px] font-bold transition-all border ${
                         reelCategory === cat.id
                           ? "bg-purple-600 border-purple-500 text-white"
                           : "bg-gray-800 border-gray-700 text-gray-400 hover:bg-gray-700"
@@ -632,22 +593,11 @@ function EditorModal({ article, onClose, onSaved }) {
               <button
                 onClick={() => reelVideoRef.current?.click()}
                 disabled={uploading === 'reel' || !reelTitle.trim()}
-                className="flex items-center gap-2 px-4 py-2.5 bg-purple-600/30 hover:bg-purple-600/50 text-purple-300 rounded-xl border border-purple-600/40 text-sm transition-colors disabled:opacity-50 w-full justify-center font-bold"
+                className="w-full flex items-center justify-center gap-2 px-3 py-2.5 bg-purple-600/30 hover:bg-purple-600/50 text-purple-300 rounded-xl border border-purple-600/40 text-sm transition-colors disabled:opacity-50 font-bold"
               >
                 {uploading === 'reel' ? <Loader2 className="w-4 h-4 animate-spin" /> : <Clapperboard className="w-4 h-4" />}
-                {uploading === 'reel' ? 'מעלה ריל...' : 'בחר קובץ וידאו לריל'}
+                {uploading === 'reel' ? 'מעלה...' : 'העלה ריל'}
               </button>
-              {uploadedReels.length > 0 && (
-                <div className="mt-2 space-y-1">
-                  {uploadedReels.map((r, i) => (
-                    <div key={i} className="flex items-center gap-2 text-xs text-green-400">
-                      <Check className="w-3 h-3" />
-                      <span>{r.title}</span>
-                      <span className="text-gray-500">· {REEL_CATEGORIES.find(c => c.id === r.category)?.label}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
             </div>
           </div>
 
@@ -692,58 +642,68 @@ export default function FeaturedArticleEditor() {
       <div className="max-w-7xl mx-auto">
 
         {/* Toolbar */}
-        <div className="flex items-center mb-3 gap-2">
-          <div className="w-1 h-6 bg-[#E31E24] rounded-full" />
-          <h2 className="text-white font-bold text-lg">כתבה מרכזית</h2>
-          {article?.is_breaking && (
-            <span className="bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded animate-pulse">🔴 חם</span>
-          )}
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center gap-2">
+            <div className="w-1 h-6 bg-[#E31E24] rounded-full" />
+            <h2 className="text-white font-bold text-lg">כתבה מרכזית</h2>
+          </div>
+          <div className="flex items-center gap-2">
+            {article?.is_breaking && (
+              <span className="bg-red-600 text-white text-[10px] font-bold px-2 py-0.5 rounded animate-pulse">🔴 חם</span>
+            )}
+            <button
+              onClick={article ? openEdit : openNew}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-[#0057B8] hover:bg-[#1a6fd4] text-white text-xs font-bold rounded-xl transition-colors"
+            >
+              <Edit3 className="w-4 h-4" />
+              {article ? 'ערוך' : 'צור כתבה'}
+            </button>
+          </div>
         </div>
 
-        {/* Article Display */}
-         <div className="bg-[#0d0d0d] rounded-2xl overflow-hidden border border-gray-800">
-           <div className="flex flex-col-reverse lg:flex-row">
+        {/* Article Display - Mobile First Layout */}
+        <div className="bg-[#0d0d0d] rounded-2xl overflow-hidden border border-gray-800">
+          <div className="flex flex-col">
+            
+            {/* Media Section - Full Width on Mobile */}
+            <div className="w-full p-3">
+              <MediaGallery
+                mainImage={article?.image_url}
+                mainVideo={article?.video_url}
+                images={displayImages}
+                videos={displayVideos}
+              />
+            </div>
 
-             {/* LEFT: Content */}
-             <div className="w-full lg:w-1/2 flex flex-col p-4 sm:p-5 gap-2">
-               {selectedCat && (
-                 <span className="px-2 py-0.5 bg-[#0057B8]/20 text-[#0057B8] rounded text-xs font-bold w-fit">
-                   {selectedCat.label}
-                 </span>
-               )}
-               <h1 className="text-white text-base sm:text-lg font-bold leading-tight break-words">
-                 {article?.title || "אין כתבה מרכזית"}
-               </h1>
-               {article?.subtitle && (
-                 <p className="text-gray-300 text-xs sm:text-sm leading-snug break-words">{article.subtitle}</p>
-               )}
-               {article?.content && (
-                 <p className="text-gray-400 text-xs sm:text-sm leading-snug break-words line-clamp-3">
-                   {article.content}
-                 </p>
-               )}
-               {article && (
-                 <a href={`/Article?id=${article.id}`}
-                   className="inline-flex items-center gap-2 px-3 py-1 bg-[#0057B8] hover:bg-[#1a6fd4] text-white text-xs font-bold rounded transition-colors w-fit mt-2">
-                   קרא עוד →
-                 </a>
-               )}
-             </div>
-
-             {/* RIGHT: Media Gallery - Portrait Mode */}
-             <div className="w-full lg:w-1/2 flex justify-center p-4 lg:p-6">
-               <div className="relative w-full max-w-[320px] aspect-[3/4]">
-                 <MediaGallery
-                   mainImage={article?.image_url}
-                   mainVideo={article?.video_url}
-                   images={displayImages}
-                   videos={displayVideos}
-                 />
-               </div>
-             </div>
-             </div>
-             </div>
-             </div>
+            {/* Content Section */}
+            <div className="w-full flex flex-col p-4 gap-2">
+              {selectedCat && (
+                <span className="px-2 py-1 bg-[#0057B8]/20 text-[#0057B8] rounded text-xs font-bold w-fit">
+                  {selectedCat.label}
+                </span>
+              )}
+              <h1 className="text-white text-base sm:text-lg font-bold leading-tight break-words">
+                {article?.title || "אין כתבה מרכזית"}
+              </h1>
+              {article?.subtitle && (
+                <p className="text-gray-300 text-xs sm:text-sm leading-snug break-words">{article.subtitle}</p>
+              )}
+              {article?.content && (
+                <p className="text-gray-400 text-xs sm:text-sm leading-snug break-words line-clamp-3">
+                  {article.content}
+                </p>
+              )}
+              {article && (
+                <a href={`/Article?id=${article.id}`}
+                  className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#0057B8] hover:bg-[#1a6fd4] text-white text-xs font-bold rounded-xl transition-colors w-fit mt-1"
+                >
+                  קרא עוד →
+                </a>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
 
       {/* Editor Modal */}
       <AnimatePresence>
