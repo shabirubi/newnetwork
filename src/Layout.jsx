@@ -227,9 +227,13 @@ export default function Layout({ children, currentPageName }) {
           --accent: #E87722;
           --accent-dark: #c25e00;
         }
-        body { background-color: ${darkMode ? '#0d1117' : '#f0f4f8'} !important; color: ${darkMode ? '#e8edf5' : '#111827'} !important; }
+        body { 
+          background-color: ${darkMode ? '#0d1117' : '#f0f4f8'} !important; 
+          color: ${darkMode ? '#e8edf5' : '#111827'} !important;
+          overscroll-behavior-y: none;
+        }
 
-        /* Hide scrollbars */
+        /* Hide scrollbars - native mobile feel */
         * {
           scrollbar-width: none;
           -ms-overflow-style: none;
@@ -238,116 +242,80 @@ export default function Layout({ children, currentPageName }) {
           display: none;
         }
 
-        /* Mobile native feel */
-        @media (max-width: 1024px) {
-          body {
-            -webkit-tap-highlight-color: transparent;
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            user-select: none;
-          }
+        /* Native mobile interactions */
+        * {
+          -webkit-tap-highlight-color: transparent;
+          touch-action: manipulation;
+        }
+        
+        /* Prevent pull-to-refresh */
+        body {
+          overscroll-behavior-y: contain;
         }
 
-
-
+        /* Safe area for notched devices */
+        .safe-area-top {
+          padding-top: env(safe-area-inset-top);
+        }
+        .safe-area-bottom {
+          padding-bottom: env(safe-area-inset-bottom);
+        }
 
       `}</style>
 
-
-
-      {/* Logo Header */}
-      <div className="bg-[#000000] py-2 shadow-xl relative overflow-visible">
-        <div className="max-w-7xl mx-auto px-3 flex items-center justify-between gap-2 relative z-[200]">
+      {/* Native Mobile Header */}
+      <div className="bg-gradient-to-b from-[#000000] to-[#0a0a0a] safe-area-top sticky top-0 z-[1000] shadow-2xl">
+        <div className="px-3 py-2.5 flex items-center justify-between">
           
-          {/* Logo — always visible with video */}
-          <div className="flex items-center gap-2 flex-shrink-0">
-            <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-gradient-to-br from-[#0057B8] to-[#E31E24] flex items-center justify-center flex-shrink-0 shadow-xl border-2 border-white/20 overflow-hidden">
+          {/* Logo */}
+          <div className="flex items-center gap-2">
+            <div className="h-9 w-9 rounded-full bg-gradient-to-br from-[#0057B8] to-[#E31E24] flex items-center justify-center shadow-lg overflow-hidden flex-shrink-0">
               <video
                 src="https://media.base44.com/videos/public/695b39080025f4d38a586978/8e449bcbb_shavit1313.mp4"
                 autoPlay
                 loop
                 muted
                 playsInline
-                preload="auto"
                 className="w-full h-full object-cover"
               />
             </div>
-            <div className="flex-col text-right hidden sm:flex">
-              <h1 className="text-base sm:text-xl font-bold text-white">הרשת החדשה</h1>
-              <p className="text-[10px] text-gray-300">חדשות 24/7</p>
+            <div className="flex-col">
+              <h1 className="text-sm font-bold text-white leading-tight">הרשת החדשה</h1>
+              <p className="text-[9px] text-gray-400">חדשות 24/7</p>
             </div>
           </div>
 
-          {/* Breaking News Vertical Carousel */}
-          <div className="flex-1 hidden md:flex items-center gap-2 bg-black/40 border border-red-700/30 rounded-lg px-3 py-1 min-w-0 max-w-sm">
-            <span className="text-red-500 text-xs font-bold shrink-0">🔴 חדש</span>
-            <div className="flex-1 min-w-0">
-              <TypewriterDate />
-            </div>
+          {/* Breaking News Ticker */}
+          <div className="flex-1 mx-2 overflow-hidden">
+            <TypewriterDate />
           </div>
 
-
-
-          {/* Action buttons */}
-          <div className="flex items-center gap-1.5 flex-shrink-0">
-            {/* Categories */}
-            <button onClick={() => setCategoriesSidebarOpen(true)}
-              className="flex items-center gap-1 px-2 py-1.5 bg-black/60 backdrop-blur-xl rounded-lg border border-gray-600 transition-all hover:scale-105 text-[11px]">
-              <Menu className="w-4 h-4 text-white" />
-              <span className="text-white font-bold hidden sm:inline">קטגוריות</span>
-            </button>
-
-            {/* Dark/Light toggle */}
+          {/* Quick Actions */}
+          <div className="flex items-center gap-1.5">
+            {/* Dark Mode */}
             <button onClick={() => setDarkMode(v => !v)}
-              className="flex items-center gap-1 px-2 py-1.5 bg-black/60 backdrop-blur-xl rounded-lg border border-gray-600 transition-all hover:scale-105 text-[11px]"
-              aria-label="Toggle dark mode">
+              className="p-2 bg-white/10 rounded-full active:scale-90 transition-transform">
               {darkMode ? <Moon className="w-4 h-4 text-blue-300" /> : <Sun className="w-4 h-4 text-yellow-400" />}
-              <span className="text-white font-bold hidden sm:inline">{darkMode ? 'לילה' : 'יום'}</span>
             </button>
-
-            {/* Admin */}
-            <button onClick={() => window.open(createPageUrl("AdminPanel"), "_blank")}
-              className="flex items-center gap-1 px-2 py-1.5 bg-black/60 backdrop-blur-xl rounded-lg border border-gray-600 transition-all hover:scale-105 text-[11px]">
-              <Shield className="w-4 h-4 text-white" />
-              <span className="text-white font-bold">Admin</span>
-            </button>
-
-            {/* Auth */}
+            
+            {/* Profile */}
             {authLoading ? (
-              <div className="flex items-center gap-2 px-3 py-2 bg-black/60 rounded-2xl">
-                <Loader2 className="w-4 h-4 text-white animate-spin" />
-              </div>
+              <Loader2 className="w-5 h-5 text-white animate-spin" />
             ) : user ? (
-              <>
-                <Link to={createPageUrl("UserProfile")} className="flex items-center transition-all cursor-pointer active:scale-95 relative">
-                  {user.profile_image ? (
-                    <img src={user.profile_image} alt={user.full_name} className="w-9 h-9 rounded-full object-contain bg-black shadow-lg" />
-                  ) : (
-                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-gray-700 to-gray-800 flex items-center justify-center text-white text-sm font-bold shadow-lg">
-                      {user.full_name?.split(' ').map(n => n[0]).join('').toUpperCase() || 'U'}
-                    </div>
-                  )}
-                </Link>
-                <button onClick={handleLogout}
-                  className="flex items-center gap-1 px-2 py-1 bg-red-600/20 hover:bg-red-600/40 backdrop-blur-xl rounded-lg shadow-lg border border-red-500/30 transition-all hover:scale-105 text-[11px]">
-                  <LogOut className="w-3.5 h-3.5 text-red-400" />
-                  <span className="text-red-300 font-bold hidden sm:inline">התנתק</span>
-                </button>
-              </>
+              <Link to={createPageUrl("UserProfile")} className="active:scale-90 transition-transform">
+                {user.profile_image ? (
+                  <img src={user.profile_image} alt="" className="w-8 h-8 rounded-full object-cover border border-white/20" />
+                ) : (
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center text-white text-xs font-bold">
+                    {user.full_name?.charAt(0) || 'U'}
+                  </div>
+                )}
+              </Link>
             ) : (
-              <button onClick={handleLogin}
-                className="flex items-center gap-1 px-2 py-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 backdrop-blur-xl rounded-lg shadow-lg transition-all text-[11px]">
-                <LogIn className="w-3.5 h-3.5 text-white" />
-                <span className="text-white font-bold hidden sm:inline">התחבר</span>
+              <button onClick={handleLogin} className="p-2 bg-blue-600 rounded-full active:scale-90">
+                <LogIn className="w-4 h-4 text-white" />
               </button>
             )}
-
-            {/* Reels — desktop */}
-            <button onClick={() => setReelsOpen(true)}
-              className="hidden sm:flex items-center gap-1 px-2 py-1 bg-[#E87722]/80 hover:bg-[#E87722] backdrop-blur-xl rounded-lg border border-orange-500/50 transition-all text-[11px]">
-              <Radio className="w-4 h-4 text-white" />
-              <span className="text-white font-bold">ריילס</span>
-            </button>
           </div>
         </div>
       </div>
@@ -784,125 +752,73 @@ export default function Layout({ children, currentPageName }) {
 
 
 
-      {/* Content with Sidebars */}
-            <div className="flex flex-1">
-              {/* Left Sidebar - lazy */}
-              <React.Suspense fallback={null}>
-                <LeftSidebarCategories />
-              </React.Suspense>
+      {/* Main Content - Mobile First */}
+      <main className="flex-1 pb-20">
+        {children}
+      </main>
 
-              {/* Main Content */}
-              <main className="flex-1 px-0 sm:px-4 py-0 sm:py-6 pb-16 sm:pb-24 lg:pb-6 max-w-7xl mx-auto">
-                {children}
-              </main>
-
-              {/* Right Sidebar - lazy */}
-              <React.Suspense fallback={null}>
-                <RightSidebarCategories />
-              </React.Suspense>
-            </div>
-
-      {/* Mobile Bottom Navigation */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 bg-black/90 backdrop-blur-xl border-t border-gray-700 z-[9999] safe-area-inset-bottom shadow-lg">
-        <div className="grid grid-cols-5 gap-1 px-2 py-3">
+      {/* Native Bottom Navigation */}
+      <nav className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-[#0a0a0a] to-[#000000] safe-area-bottom z-[1000] border-t border-white/10">
+        <div className="grid grid-cols-4 gap-1 px-1 py-2">
           <Link
             to={createPageUrl("Home")}
-            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-gray-700/30 transition-colors touch-manipulation relative z-[110]"
-            >
-            <Home size={24} className="text-gray-300 mb-1" strokeWidth={2.5} />
-            <span className="text-[10px] font-bold text-gray-300">בית</span>
+            className="flex flex-col items-center justify-center py-2 active:scale-90 transition-transform"
+          >
+            <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center mb-0.5">
+              <Home size={20} className="text-white" strokeWidth={2.5} />
+            </div>
+            <span className="text-[9px] font-bold text-white">בית</span>
           </Link>
 
           <button
             onClick={() => setReelsOpen(true)}
-            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-gray-700/30 transition-colors touch-manipulation"
+            className="flex flex-col items-center justify-center py-2 active:scale-90 transition-transform"
           >
-            <Radio size={24} className="text-red-400 mb-1" strokeWidth={2.5} />
-            <span className="text-[10px] font-bold text-red-400">ריילס</span>
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-red-600 to-red-700 flex items-center justify-center mb-0.5 shadow-lg shadow-red-600/30">
+              <Radio size={20} className="text-white" strokeWidth={2.5} />
+            </div>
+            <span className="text-[9px] font-bold text-red-400">ריילס</span>
           </button>
 
-          <div className="relative flex flex-col items-center">
-            <Link
-              to={createPageUrl("VideoCreator")}
-              className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-gray-700/30 transition-colors touch-manipulation"
-            >
-              <Sparkles size={24} className="text-gray-300 mb-1" strokeWidth={2.5} />
-              <span className="text-[10px] font-bold text-gray-300">AI</span>
-            </Link>
-          </div>
+          <Link
+            to={createPageUrl("VideoCreator")}
+            className="flex flex-col items-center justify-center py-2 active:scale-90 transition-transform"
+          >
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-purple-600 to-purple-700 flex items-center justify-center mb-0.5 shadow-lg shadow-purple-600/30">
+              <Sparkles size={20} className="text-white" strokeWidth={2.5} />
+            </div>
+            <span className="text-[9px] font-bold text-purple-400">AI</span>
+          </Link>
 
           <button
             onClick={() => setCategoriesSidebarOpen(true)}
-            className="flex flex-col items-center justify-center py-2 px-1 rounded-xl active:bg-gray-700/30 transition-colors touch-manipulation"
+            className="flex flex-col items-center justify-center py-2 active:scale-90 transition-transform"
           >
-            <Menu size={24} className="text-gray-300 mb-1" strokeWidth={2.5} />
-            <span className="text-[10px] font-bold text-gray-300">תפריט</span>
+            <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center mb-0.5">
+              <Menu size={20} className="text-white" strokeWidth={2.5} />
+            </div>
+            <span className="text-[9px] font-bold text-white">תפריט</span>
           </button>
         </div>
       </nav>
 
-      {/* Footer */}
-      <footer className="bg-gradient-to-br from-[#060c18] via-[#0d2a5e]/40 to-[#060c18] border-t-2 border-[#1565C0]/50 shadow-[0_-10px_50px_rgba(21,101,192,0.3)] text-white mt-12">
-        <div className="max-w-7xl mx-auto px-4 py-12">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <div className="h-16 w-16 mb-4 rounded-full bg-gradient-to-br from-[#0057B8] to-[#E31E24] flex items-center justify-center shadow-lg">
-                <span className="text-white font-bold text-2xl">ר</span>
-              </div>
-              <p className="text-gray-400 text-sm">
-                ערוץ חדשות דיגיטלי מבוסס AI עם בקרה אנושית, המייצר תוכן דיגיטלי במהירות ובאיכות.
-              </p>
+      {/* Compact Footer */}
+      <footer className="bg-[#0a0a0a] border-t border-white/10 py-6 mt-8">
+        <div className="px-4 text-center">
+          <div className="flex items-center justify-center gap-2 mb-3">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#0057B8] to-[#E31E24] flex items-center justify-center">
+              <span className="text-white font-bold text-xs">ר</span>
             </div>
-            <div>
-              <h4 className="font-bold mb-4">קטגוריות</h4>
-              <ul className="space-y-2 text-gray-400 text-sm">
-                <li><Link to={createPageUrl("Category?cat=security")} className="hover:text-[#E31E24]">ביטחון ומדיניות</Link></li>
-                <li><Link to={createPageUrl("Category?cat=economy")} className="hover:text-[#E31E24]">כלכלה ועסקים</Link></li>
-                <li><Link to={createPageUrl("Category?cat=politics")} className="hover:text-[#E31E24]">פוליטיקה</Link></li>
-                <li><Link to={createPageUrl("Category?cat=technology")} className="hover:text-[#E31E24]">טכנולוגיה</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-bold mb-4">עוד</h4>
-              <ul className="space-y-2 text-gray-400 text-sm">
-                <li><Link to={createPageUrl("Category?cat=sports")} className="hover:text-[#E31E24]">ספורט</Link></li>
-                <li><Link to={createPageUrl("Category?cat=entertainment")} className="hover:text-[#E31E24]">בידור ודרמה</Link></li>
-                <li><Link to={createPageUrl("Category?cat=world")} className="hover:text-[#E31E24]">חדשות עולם</Link></li>
-                <li><Link to={createPageUrl("Category?cat=health")} className="hover:text-[#E31E24]">בריאות</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-bold mb-4">התחברו אלינו</h4>
-              <p className="text-gray-400 text-sm mb-4">
-                הצטרפו למהפכה התקשורתית פורצת הדרך
-              </p>
-              <Link 
-                to={createPageUrl("Live")}
-                className="inline-flex items-center gap-2 bg-[#E87722] text-white px-6 py-3 rounded-full hover:bg-[#c25e00] transition-all"
-              >
-                <Radio size={18} />
-                צפו בשידור חי
-              </Link>
-            </div>
+            <span className="text-white font-bold text-sm">הרשת החדשה</span>
           </div>
-          <div className="border-t border-gray-800 mt-8 pt-8">
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-6">
-              <Link to={createPageUrl("Terms")} className="text-gray-400 hover:text-[#E31E24] transition-colors text-sm">
-                תקנון שימוש
-              </Link>
-              <span className="text-gray-600 hidden sm:inline">•</span>
-              <Link to={createPageUrl("Accessibility")} className="text-gray-400 hover:text-[#E31E24] transition-colors text-sm">
-                הצהרת נגישות
-              </Link>
-              <span className="text-gray-600 hidden sm:inline">•</span>
-              <a href="mailto:privacy@hareshet.co.il" className="text-gray-400 hover:text-[#E31E24] transition-colors text-sm">
-                צור קשר
-              </a>
-            </div>
-            <div className="text-center text-gray-500 text-sm">
-              © 2024 הרשת החדשה. כל הזכויות שמורות.
-            </div>
+          <div className="flex items-center justify-center gap-4 text-[10px] text-gray-500 mb-3">
+            <Link to={createPageUrl("Terms")} className="hover:text-white">תקנון</Link>
+            <span>•</span>
+            <Link to={createPageUrl("Accessibility")} className="hover:text-white">נגישות</Link>
+            <span>•</span>
+            <a href="mailto:privacy@hareshet.co.il" className="hover:text-white">צור קשר</a>
           </div>
+          <p className="text-gray-600 text-[9px]">© 2024 הרשת החדשה</p>
         </div>
       </footer>
     </div>
