@@ -702,33 +702,31 @@ export default function FeaturedArticleEditor() {
 
         {/* Article Display */}
          <div className="bg-[#0d0d0d] rounded-2xl overflow-hidden border border-gray-800">
-           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4" style={{ minHeight: 'auto' }}>
+           <div className="grid grid-cols-1 lg:grid-cols-2" style={{ minHeight: '45vh' }}>
 
              {/* LEFT: Media Gallery */}
-             <div className="h-64 sm:h-80 lg:h-full">
-               <MediaGallery
-                 mainImage={article?.image_url}
-                 mainVideo={article?.video_url}
-                 images={displayImages}
-                 videos={displayVideos}
-               />
-             </div>
+             <MediaGallery
+               mainImage={article?.image_url}
+               mainVideo={article?.video_url}
+               images={displayImages}
+               videos={displayVideos}
+             />
 
              {/* RIGHT: Content */}
-             <div className="flex flex-col p-4 sm:p-6 gap-2 justify-start">
+             <div className="flex flex-col p-5 sm:p-8 gap-3">
                {selectedCat && (
                  <span className="px-3 py-1 bg-[#0057B8]/20 text-[#0057B8] rounded-lg text-xs font-bold w-fit">
                    {selectedCat.label}
                  </span>
                )}
-               <h1 className="text-white text-lg sm:text-xl font-bold line-clamp-2">
+               <h1 className="text-white text-xl sm:text-2xl font-bold leading-tight">
                  {article?.title || "אין כתבה מרכזית"}
                </h1>
                {article?.subtitle && (
-                 <p className="text-gray-400 text-xs sm:text-sm line-clamp-2">{article.subtitle}</p>
+                 <p className="text-gray-300 text-sm sm:text-base">{article.subtitle}</p>
                )}
                {article?.content && (
-                 <p className="text-gray-500 text-xs sm:text-sm line-clamp-3">
+                 <p className="text-gray-400 text-sm flex-1 line-clamp-4">
                    {article.content}
                  </p>
                )}
