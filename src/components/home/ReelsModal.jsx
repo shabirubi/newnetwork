@@ -153,14 +153,7 @@ function ReelItem({ video, isActive, onNext, onPrev, customCatMap = {}, builtinL
 
   return (
     <div className="relative w-full h-full flex items-center justify-center bg-black">
-      {/* Thumbnail background */}
-      {video.thumbnail_url && (
-        <img
-          src={video.thumbnail_url}
-          alt="thumbnail"
-          className="absolute inset-0 w-full h-full object-cover blur-sm opacity-30"
-        />
-      )}
+      {/* Thumbnail background - removed to show full video */}
       
       <video
         ref={videoRef}
@@ -171,7 +164,7 @@ function ReelItem({ video, isActive, onNext, onPrev, customCatMap = {}, builtinL
         controls
         poster={video.thumbnail_url}
         preload="auto"
-        className="w-full h-full object-contain relative z-10"
+        className="w-full h-full object-cover relative z-10"
         onClick={togglePlay}
       />
 
@@ -191,9 +184,9 @@ function ReelItem({ video, isActive, onNext, onPrev, customCatMap = {}, builtinL
         )}
       </AnimatePresence>
 
-      {/* Category badge */}
+      {/* Category badge - moved to top-left, more transparent */}
       {video.category && (
-        <div className="absolute top-4 right-4 bg-[#E31E24]/90 text-white text-xs font-bold px-3 py-1 rounded-full">
+        <div className="absolute top-16 left-4 bg-[#E31E24]/80 backdrop-blur-sm text-white text-xs font-bold px-2 py-1 rounded-full z-20">
           {builtinLabels[video.category] || customCatMap[video.category] || video.category}
         </div>
       )}
@@ -213,22 +206,22 @@ function ReelItem({ video, isActive, onNext, onPrev, customCatMap = {}, builtinL
         )}
       </AnimatePresence>
 
-      {/* Right side actions - moved lower to not block controls */}
-      <div className="absolute left-3 bottom-32 flex flex-col items-center gap-5 z-20">
+      {/* Right side actions - compact */}
+      <div className="absolute left-3 bottom-32 flex flex-col items-center gap-4 z-20">
         <button onClick={() => setMuted(m => !m)} className="flex flex-col items-center gap-1">
-          <div className="w-11 h-11 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center">
-            {muted ? <VolumeX className="w-5 h-5 text-white" /> : <Volume2 className="w-5 h-5 text-white" />}
+          <div className="w-9 h-9 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center">
+            {muted ? <VolumeX className="w-4 h-4 text-white" /> : <Volume2 className="w-4 h-4 text-white" />}
           </div>
         </button>
 
         <button onClick={handleLike} className="flex flex-col items-center gap-1 group">
           <motion.div
             whileTap={{ scale: 1.4 }}
-            className="w-11 h-11 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center"
+            className="w-9 h-9 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center"
           >
-            <Heart className={`w-6 h-6 transition-all ${liked ? 'text-red-500 fill-red-500 scale-110' : 'text-white'}`} />
+            <Heart className={`w-5 h-5 transition-all ${liked ? 'text-red-500 fill-red-500 scale-110' : 'text-white'}`} />
           </motion.div>
-          <span className={`text-xs font-bold transition-colors ${liked ? 'text-red-400' : 'text-white'}`}>
+          <span className={`text-[10px] font-bold transition-colors ${liked ? 'text-red-400' : 'text-white'}`}>
             {totalLikes}
           </span>
         </button>
@@ -237,18 +230,15 @@ function ReelItem({ video, isActive, onNext, onPrev, customCatMap = {}, builtinL
           onClick={() => navigator.share?.({ title: video.title, url: window.location.href })}
           className="flex flex-col items-center gap-1"
         >
-          <div className="w-11 h-11 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center">
-            <Share2 className="w-5 h-5 text-white" />
+          <div className="w-9 h-9 bg-black/40 backdrop-blur-sm rounded-full flex items-center justify-center">
+            <Share2 className="w-4 h-4 text-white" />
           </div>
         </button>
       </div>
 
-      {/* Bottom info - moved up to not block controls */}
+      {/* Bottom info - moved up and more compact */}
       <div className="absolute bottom-28 right-4 left-16 pointer-events-none z-10">
-        <p className="text-white font-bold text-lg leading-snug drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] line-clamp-3 bg-black/30 rounded-lg px-2 py-1">{video.title}</p>
-        {video.description && (
-          <p className="text-gray-200 text-sm mt-1 line-clamp-2 drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] bg-black/20 rounded px-2">{video.description}</p>
-        )}
+        <p className="text-white font-bold text-sm leading-snug drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] line-clamp-2 bg-black/40 backdrop-blur-sm rounded-lg px-2 py-1">{video.title}</p>
       </div>
 
       {/* Nav arrows (desktop) */}
@@ -398,20 +388,19 @@ export default function ReelsModal({ isOpen, onClose }) {
       className="fixed inset-0 z-[99999] bg-black flex flex-col"
       dir="rtl"
     >
-      {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3 bg-black/80 backdrop-blur-sm border-b border-gray-800 flex-shrink-0 z-10">
+      {/* Header - compact */}
+      <div className="flex items-center justify-between px-3 py-2 bg-gradient-to-b from-black/90 to-transparent flex-shrink-0 z-30">
         <div className="flex items-center gap-2">
-          <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
-          <span className="text-white font-bold text-base">ריילס</span>
-          <span className="text-gray-400 text-sm">({currentReels.length} סרטונים)</span>
+          <div className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse" />
+          <span className="text-white font-bold text-sm">ריילס</span>
         </div>
-        <button onClick={onClose} className="p-2 hover:bg-gray-800 rounded-full transition-colors">
-          <X className="w-6 h-6 text-white" />
+        <button onClick={onClose} className="p-1.5 hover:bg-white/10 rounded-full transition-colors">
+          <X className="w-5 h-5 text-white" />
         </button>
       </div>
 
-      {/* Categories Stories-Style Horizontal Scroll */}
-      <div className="flex gap-4 px-3 py-3 overflow-x-auto bg-black flex-shrink-0" style={{scrollbarWidth:'none'}}>
+      {/* Categories Stories-Style - overlay on top */}
+      <div className="absolute top-12 left-0 right-0 flex gap-3 px-3 py-2 overflow-x-auto z-30" style={{scrollbarWidth:'none'}}>
         {usedCategories.map((cat, idx) => {
           const catReels = cat === "all" ? videoOnly : videoOnly.filter(v => v.category === cat);
           const catReel = catReels[0];
@@ -423,11 +412,11 @@ export default function ReelsModal({ isOpen, onClose }) {
             <button
               key={cat}
               onClick={() => { setCategoryIdx(idx); setReelIndices({}); }}
-              className="flex-shrink-0 flex flex-col items-center gap-1.5"
+              className="flex-shrink-0 flex flex-col items-center gap-1"
             >
               <div
-                style={{ border: isActive ? '3px solid #E31E24' : '3px solid #444', boxShadow: isActive ? '0 0 0 2px rgba(227,30,36,0.5)' : 'none' }}
-                className="w-16 h-16 rounded-full overflow-hidden relative transition-all"
+                style={{ border: isActive ? '2px solid #E31E24' : '2px solid rgba(255,255,255,0.3)', boxShadow: isActive ? '0 0 8px rgba(227,30,36,0.6)' : 'none' }}
+                className="w-12 h-12 rounded-full overflow-hidden relative transition-all"
               >
                 {catReel?.video_url ? (
                   <video
@@ -436,22 +425,15 @@ export default function ReelsModal({ isOpen, onClose }) {
                     muted
                     playsInline
                     preload="none"
-                    loading="lazy"
                     poster={catReel.thumbnail_url || ''}
                   />
                 ) : (
-                  <div className={`w-full h-full flex items-center justify-center text-2xl ${isActive ? 'bg-[#E31E24]/40' : 'bg-gray-800'}`}>
+                  <div className={`w-full h-full flex items-center justify-center text-xl ${isActive ? 'bg-[#E31E24]/40' : 'bg-black/40'}`}>
                     {catEmoji}
                   </div>
                 )}
-                {/* count badge */}
-                {catCount > 0 && (
-                  <div className="absolute bottom-0 left-0 right-0 bg-black/70 text-[9px] text-center text-white font-bold py-0.5">
-                    {catCount}
-                  </div>
-                )}
               </div>
-              <span className={`text-[10px] font-bold max-w-[64px] truncate ${isActive ? 'text-[#E31E24]' : 'text-gray-300'}`}>
+              <span className={`text-[9px] font-bold max-w-[56px] truncate ${isActive ? 'text-white' : 'text-gray-400'}`}>
                 {catLabel}
               </span>
             </button>
@@ -498,9 +480,9 @@ export default function ReelsModal({ isOpen, onClose }) {
           </AnimatePresence>
         )}
 
-        {/* Progress dots - אנכי */}
+        {/* Progress dots - אנכי, מוסתר חלקית */}
         {currentReels.length > 1 && (
-          <div className="absolute left-4 top-1/2 -translate-y-1/2 flex flex-col gap-1">
+          <div className="absolute left-2 top-1/2 -translate-y-1/2 flex flex-col gap-1 opacity-60 hover:opacity-100 transition-opacity">
             {currentReels.slice(Math.max(0, currentReelIdx - 3), currentReelIdx + 4).map((_, i) => {
               const realIdx = Math.max(0, currentReelIdx - 3) + i;
               return (
@@ -508,7 +490,7 @@ export default function ReelsModal({ isOpen, onClose }) {
                   key={realIdx}
                   onClick={() => setReelIndices(prev => ({ ...prev, [currentCat]: realIdx }))}
                   className={`rounded-full transition-all ${
-                    realIdx === currentReelIdx ? "w-1.5 h-5 bg-white" : "w-1.5 h-1.5 bg-white/40"
+                    realIdx === currentReelIdx ? "w-1 h-4 bg-white" : "w-1 h-1 bg-white/30"
                   }`}
                 />
               );
