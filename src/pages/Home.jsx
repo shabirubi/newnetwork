@@ -24,7 +24,6 @@ import WeatherForecastModal from "../components/weather/WeatherForecastModal";
 import YouTubeFloatingButton from "../components/home/YouTubeFloatingButton";
 import OrefAlertsPanel from "../components/home/OrefAlertsPanel";
 import OrefEmergencyPopup from "../components/home/OrefEmergencyPopup";
-import ReelsStrip from "../components/home/ReelsStrip";
 
 export default function Home() {
   const [vodModalOpen, setVodModalOpen] = useState(false);

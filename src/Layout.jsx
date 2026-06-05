@@ -288,6 +288,18 @@ export default function Layout({ children, currentPageName }) {
 
           {/* Quick Actions */}
           <div className="flex items-center gap-1.5">
+            {/* Reels */}
+            <button onClick={() => setReelsOpen(true)}
+              className="p-2 bg-gradient-to-br from-red-600 to-red-700 rounded-full active:scale-90 transition-transform">
+              <Radio className="w-4 h-4 text-white" />
+            </button>
+
+            {/* Video Creator */}
+            <Link to={createPageUrl("VideoCreator")}
+              className="p-2 bg-gradient-to-br from-purple-600 to-purple-700 rounded-full active:scale-90 transition-transform">
+              <Sparkles className="w-4 h-4 text-white" />
+            </Link>
+
             {/* Spotify Podcasts */}
             <button onClick={() => window.open('https://open.spotify.com/show/YOUR_PODCAST_ID', '_blank')}
               className="p-2 bg-[#1DB954] rounded-full active:scale-90 transition-transform">
@@ -767,7 +779,25 @@ export default function Layout({ children, currentPageName }) {
             <span className="text-[9px] font-bold text-white">בית</span>
           </Link>
 
+          <button
+            onClick={() => setReelsOpen(true)}
+            className="flex flex-col items-center justify-center py-2 active:scale-90 transition-transform"
+          >
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-red-600 to-red-700 flex items-center justify-center mb-0.5">
+              <Radio size={20} className="text-white" strokeWidth={2.5} />
+            </div>
+            <span className="text-[9px] font-bold text-white">ריילס</span>
+          </button>
 
+          <Link
+            to={createPageUrl("VideoCreator")}
+            className="flex flex-col items-center justify-center py-2 active:scale-90 transition-transform"
+          >
+            <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-purple-600 to-purple-700 flex items-center justify-center mb-0.5">
+              <Sparkles size={20} className="text-white" strokeWidth={2.5} />
+            </div>
+            <span className="text-[9px] font-bold text-white">AI</span>
+          </Link>
 
           <button
             onClick={() => setCategoriesSidebarOpen(true)}
