@@ -40,7 +40,7 @@ function ReelThumb({ video, onOpen }) {
       onClick={onOpen}
       onMouseEnter={() => videoRef.current?.play().catch(() => {})}
       onMouseLeave={() => { if (videoRef.current) { videoRef.current.pause(); videoRef.current.currentTime = 0; } }}
-      className="flex-shrink-0 relative w-28 h-44 sm:w-32 sm:h-52 rounded-2xl overflow-hidden group cursor-pointer border border-gray-800 hover:border-[#E31E24]/60 transition-all"
+      className="flex-shrink-0 relative w-24 h-40 rounded-lg overflow-hidden group cursor-pointer border border-gray-800 hover:border-[#E31E24]/60 transition-all"
     >
       <video
         ref={videoRef}
@@ -53,11 +53,11 @@ function ReelThumb({ video, onOpen }) {
       />
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/10 to-transparent" />
       <div className="absolute inset-0 flex items-center justify-center opacity-60 group-hover:opacity-0 transition-opacity">
-        <div className="w-9 h-9 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-          <Play className="w-4 h-4 text-white fill-white" />
+        <div className="w-7 h-7 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+          <Play className="w-3 h-3 text-white fill-white" />
         </div>
       </div>
-      <p className="absolute bottom-2 right-2 left-2 text-white text-[10px] font-bold line-clamp-2 leading-tight">
+      <p className="absolute bottom-1.5 right-1.5 left-1.5 text-white text-[9px] font-bold line-clamp-2 leading-tight">
         {video.title}
       </p>
     </button>
@@ -96,27 +96,27 @@ function CategoryBlock({ category, videos, articles }) {
 
   if (videos.length === 0 && articles.length === 0) {
     return (
-      <div className="mb-10 px-3" dir="rtl">
-        <div className="flex items-center gap-2 mb-4">
-          <div className="w-1.5 h-7 rounded-full flex-shrink-0" style={{ backgroundColor: category.color }} />
-          <h3 className="text-white font-bold text-lg">{category.label}</h3>
+      <div className="mb-6 px-2" dir="rtl">
+        <div className="flex items-center gap-2 mb-3">
+          <div className="w-1 h-5 rounded-full flex-shrink-0" style={{ backgroundColor: category.color }} />
+          <h3 className="text-white font-bold text-base">{category.label}</h3>
         </div>
-        <div className="bg-[#111] rounded-xl border border-gray-800 p-6 text-center text-gray-500 text-sm">
-          אין תוכן בקטגוריה זו עדיין. <Link to={createPageUrl("Category?cat=" + category.id)} className="text-[#0057B8] hover:underline">הוסף כתבה ←</Link>
+        <div className="bg-[#111] rounded-lg border border-gray-800 p-4 text-center text-gray-500 text-xs">
+          אין תוכן בקטגוריה זו עדיין
         </div>
       </div>
     );
   }
 
   return (
-    <div className="mb-10" dir="rtl">
+    <div className="mb-6" dir="rtl">
       {/* Category header */}
-      <div className="flex items-center gap-2 mb-4 px-3">
-        <div className="w-1.5 h-7 rounded-full flex-shrink-0" style={{ backgroundColor: category.color }} />
-        <h3 className="text-white font-bold text-lg">{category.label}</h3>
+      <div className="flex items-center gap-2 mb-3 px-2">
+        <div className="w-1 h-5 rounded-full flex-shrink-0" style={{ backgroundColor: category.color }} />
+        <h3 className="text-white font-bold text-base">{category.label}</h3>
         {videos.length > 0 && (
-          <span className="text-xs font-bold px-2 py-0.5 rounded-full" style={{ background: category.color + '25', color: category.color }}>
-            {videos.length} ריילס
+          <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full" style={{ background: category.color + '25', color: category.color }}>
+            {videos.length}
           </span>
         )}
       </div>
@@ -124,7 +124,7 @@ function CategoryBlock({ category, videos, articles }) {
       {/* Reels horizontal strip */}
       {videos.length > 0 && (
         <div
-          className="flex gap-2.5 overflow-x-auto px-3 pb-3"
+          className="flex gap-2 overflow-x-auto px-2 pb-2"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
           {videos.map(video => (
@@ -135,7 +135,7 @@ function CategoryBlock({ category, videos, articles }) {
 
       {/* Articles below */}
       {articles.length > 0 && (
-        <div className="px-3 space-y-2 mt-2">
+        <div className="px-2 space-y-1.5 mt-1">
           {articles.slice(0, 3).map(article => (
             <ArticleCard
               key={article.id}
@@ -147,10 +147,10 @@ function CategoryBlock({ category, videos, articles }) {
           {articles.length > 3 && (
             <Link
               to={createPageUrl(`Category?cat=${category.id}`)}
-              className="block text-center py-2.5 text-sm font-bold rounded-xl border border-gray-800 hover:border-gray-600 transition-colors"
+              className="block text-center py-2 text-xs font-bold rounded-lg border border-gray-800 hover:border-gray-600 transition-colors"
               style={{ color: category.color }}
             >
-              הצג עוד {articles.length - 3} כתבות →
+              הצג עוד →
             </Link>
           )}
         </div>
