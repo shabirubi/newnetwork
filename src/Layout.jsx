@@ -260,8 +260,8 @@ export default function Layout({ children, currentPageName }) {
         <div className="max-w-7xl mx-auto px-3 flex items-center justify-between gap-2 relative z-[200]">
           
           {/* Logo — always visible with video */}
-          <div className="flex items-center gap-3 flex-shrink-0">
-            <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-full bg-gradient-to-br from-[#0057B8] to-[#E31E24] flex items-center justify-center flex-shrink-0 shadow-xl border-2 border-white/20 overflow-hidden">
+          <div className="flex items-center gap-2 flex-shrink-0">
+            <div className="h-10 w-10 sm:h-12 sm:w-12 rounded-full bg-gradient-to-br from-[#0057B8] to-[#E31E24] flex items-center justify-center flex-shrink-0 shadow-xl border-2 border-white/20 overflow-hidden">
               <video
                 src="https://media.base44.com/videos/public/695b39080025f4d38a586978/8e449bcbb_shavit1313.mp4"
                 autoPlay
@@ -273,8 +273,8 @@ export default function Layout({ children, currentPageName }) {
               />
             </div>
             <div className="flex-col text-right hidden sm:flex">
-              <h1 className="text-lg sm:text-2xl font-bold text-white">הרשת החדשה</h1>
-              <p className="text-xs text-gray-300">חדשות 24/7</p>
+              <h1 className="text-base sm:text-xl font-bold text-white">הרשת החדשה</h1>
+              <p className="text-[10px] text-gray-300">חדשות 24/7</p>
             </div>
           </div>
 
