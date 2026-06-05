@@ -16,37 +16,7 @@ const BUILTIN_LABELS = {
 function ReelThumb({ video, onClick, customCatMap }) {
   const videoRef = useRef(null);
   const [hovered, setHovered] = useState(false);
-  const [videoLoaded, setVideoLoaded] = useState(false);
   const [videoError, setVideoError] = useState(false);
-  const [posterDataUrl, setPosterDataUrl] = useState(null);
-
-  // Capture first frame as thumbnail when video loads
-  const handleVideoLoad = () => {
-    const v = videoRef.current;
-    if (v) {
-      try {
-        // Seek to 1 second to get a better frame
-        v.currentTime = 1;
-        v.addEventListener('seeked', function captureFrame() {
-          try {
-            const canvas = document.createElement('canvas');
-            canvas.width = v.videoWidth || 320;
-            canvas.height = v.videoHeight || 568;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(v, 0, 0, canvas.width, canvas.height);
-            const dataUrl = canvas.toDataURL('image/jpeg', 0.7);
-            setPosterDataUrl(dataUrl);
-            setVideoLoaded(true);
-          } catch (e) {
-            setVideoLoaded(true);
-          }
-          v.removeEventListener('seeked', captureFrame);
-        }, { once: true });
-      } catch (e) {
-        setVideoLoaded(true);
-      }
-    }
-  };
 
   return (
     <button
@@ -54,7 +24,7 @@ function ReelThumb({ video, onClick, customCatMap }) {
       onMouseEnter={() => {
         setHovered(true);
         const v = videoRef.current;
-        if (v && videoLoaded && !videoError) {
+        if (v && !videoError) {
           v.play().catch(() => {});
         }
       }}
@@ -63,18 +33,9 @@ function ReelThumb({ video, onClick, customCatMap }) {
         const v = videoRef.current;
         if (v) { v.pause(); v.currentTime = 0; }
       }}
-      className="flex-shrink-0 relative w-24 h-36 sm:w-28 sm:h-44 rounded-xl overflow-hidden group cursor-pointer"
+      className="flex-shrink-0 relative w-24 h-36 sm:w-28 sm:h-44 rounded-xl overflow-hidden group cursor-pointer bg-gray-900"
     >
-      {/* Poster image from captured frame - shown immediately */}
-      {posterDataUrl && (
-        <img
-          src={posterDataUrl}
-          alt={video.title}
-          className="absolute inset-0 w-full h-full object-cover"
-        />
-      )}
-      
-      {/* Video element - hidden until loaded, used for playback */}
+      {/* Video element with poster */}
       <video
         ref={videoRef}
         src={video.video_url}
@@ -82,17 +43,11 @@ function ReelThumb({ video, onClick, customCatMap }) {
         playsInline
         preload="metadata"
         loading="lazy"
-        className={`absolute inset-0 w-full h-full object-cover ${videoLoaded ? 'opacity-100' : 'opacity-0'}`}
-        onLoadedMetadata={handleVideoLoad}
+        className="absolute inset-0 w-full h-full object-cover"
         onError={() => {
           setVideoError(true);
         }}
       />
-      
-      {/* Background gradient - visible while loading or on error */}
-      {!posterDataUrl && !videoError && (
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-900 to-gray-800" />
-      )}
       
       {/* Fallback gradient if video fails to load */}
       {videoError && (
@@ -102,11 +57,11 @@ function ReelThumb({ video, onClick, customCatMap }) {
       )}
       
       {/* Gradient overlay - always visible */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none z-10" />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
 
       {/* Play icon - show when not hovered */}
       {!hovered && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-20">
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <div className="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
             <Play className="w-4 h-4 text-white fill-white" />
           </div>
@@ -114,13 +69,13 @@ function ReelThumb({ video, onClick, customCatMap }) {
       )}
       
       {/* Title - always visible on top */}
-      <p className="absolute bottom-2 right-2 left-2 text-white text-[10px] font-bold line-clamp-2 leading-tight drop-shadow-lg z-30">
+      <p className="absolute bottom-2 right-2 left-2 text-white text-[10px] font-bold line-clamp-2 leading-tight drop-shadow-lg">
         {video.title}
       </p>
 
       {/* Category badge - always visible on top */}
       {video.category && (
-        <div className="absolute top-2 right-2 bg-[#E31E24]/90 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full z-30">
+        <div className="absolute top-2 right-2 bg-[#E31E24]/90 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full">
           {BUILTIN_LABELS[video.category] || customCatMap?.[video.category] || video.category}
         </div>
       )}
