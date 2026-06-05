@@ -701,8 +701,8 @@ export default function FeaturedArticleEditor() {
         </div>
 
         {/* Article Display */}
-        <div className="bg-[#0d0d0d] rounded-2xl overflow-hidden border border-gray-800">
-          <div className="grid grid-cols-1 lg:grid-cols-2" style={{ minHeight: '60vh' }}>
+         <div className="bg-[#0d0d0d] rounded-2xl overflow-hidden border border-gray-800">
+           <div className="flex flex-col lg:grid lg:grid-cols-2 lg:auto-cols-fr overflow-hidden" style={{ minHeight: '60vh' }}>
 
             {/* LEFT: Media Gallery */}
             <MediaGallery
@@ -713,21 +713,21 @@ export default function FeaturedArticleEditor() {
             />
 
             {/* RIGHT: Content */}
-            <div className="flex flex-col p-5 sm:p-8 gap-4 overflow-hidden w-full max-w-full">
+            <div className="flex flex-col p-4 sm:p-6 gap-3 overflow-hidden flex-1 min-w-0">
               {selectedCat && (
                 <span className="px-3 py-1 bg-[#0057B8]/20 text-[#0057B8] rounded-lg text-xs font-bold w-fit">
                   {selectedCat.label}
                 </span>
               )}
-              <h1 className="text-white text-2xl sm:text-3xl font-bold leading-tight line-clamp-3 break-words">
+              <h1 className="text-white text-xl sm:text-2xl font-bold leading-snug line-clamp-2">
                 {article?.title || "אין כתבה מרכזית — לחץ 'כתבה חדשה' להוספה"}
               </h1>
               {article?.subtitle && (
-                <p className="text-gray-300 text-base sm:text-lg line-clamp-2 break-words">{article.subtitle}</p>
+                <p className="text-gray-300 text-sm sm:text-base line-clamp-2">{article.subtitle}</p>
               )}
               {article?.content && (
-                <div className="w-full overflow-x-hidden">
-                  <p className="text-gray-400 text-sm leading-relaxed break-words" style={{ wordBreak: 'break-word', overflowWrap: 'break-word' }}>
+                <div className="flex-1 overflow-hidden min-w-0">
+                  <p className="text-gray-400 text-xs sm:text-sm leading-relaxed whitespace-pre-wrap">
                     {article.content}
                   </p>
                 </div>
