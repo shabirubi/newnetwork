@@ -1,4 +1,4 @@
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
 import { Play, Radio } from "lucide-react";
@@ -64,27 +64,27 @@ function ReelThumb({ video, onOpen }) {
   );
 }
 
-// Article card — compact
+// Article card — compact mobile-first
 function ArticleCard({ article, catColor, catLabel }) {
   return (
     <Link
       to={createPageUrl(`Article?id=${article.id}`)}
-      className="flex gap-3 p-3 bg-[#111] rounded-xl border border-gray-800 hover:border-gray-600 transition-all"
+      className="flex gap-2 p-2.5 bg-[#111] rounded-xl border border-gray-800 hover:border-gray-600 transition-all"
     >
       {article.image_url ? (
-        <img src={article.image_url} alt={article.title} className="w-20 h-16 object-cover rounded-lg flex-shrink-0" />
+        <img src={article.image_url} alt={article.title} className="w-16 h-14 object-cover rounded-lg flex-shrink-0" />
       ) : article.video_url ? (
-        <div className="w-20 h-16 bg-gray-900 rounded-lg flex-shrink-0 flex items-center justify-center border border-gray-700">
-          <Play className="w-5 h-5 text-gray-500" />
+        <div className="w-16 h-14 bg-gray-900 rounded-lg flex-shrink-0 flex items-center justify-center border border-gray-700">
+          <Play className="w-4 h-4 text-gray-500" />
         </div>
       ) : null}
       <div className="flex-1 min-w-0">
         {article.is_breaking && (
-          <span className="text-[9px] font-bold text-red-500 bg-red-500/10 px-1.5 py-0.5 rounded mb-1 inline-block">🔴 דחוף</span>
+          <span className="text-[8px] font-bold text-red-500 bg-red-500/10 px-1 py-0.5 rounded mb-1 inline-block">🔴 דחוף</span>
         )}
-        <h4 className="text-white text-sm font-bold leading-tight line-clamp-2">{article.title}</h4>
-        {article.subtitle && <p className="text-gray-500 text-xs mt-0.5 line-clamp-1">{article.subtitle}</p>}
-        {article.source && <p className="text-gray-600 text-[10px] mt-1">{article.source}</p>}
+        <h4 className="text-white text-xs font-bold leading-tight line-clamp-2">{article.title}</h4>
+        {article.subtitle && <p className="text-gray-500 text-[10px] mt-0.5 line-clamp-1">{article.subtitle}</p>}
+        {article.source && <p className="text-gray-600 text-[9px] mt-1">{article.source}</p>}
       </div>
     </Link>
   );
