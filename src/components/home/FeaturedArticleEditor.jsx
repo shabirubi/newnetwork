@@ -702,49 +702,41 @@ export default function FeaturedArticleEditor() {
 
         {/* Article Display */}
          <div className="bg-[#0d0d0d] rounded-2xl overflow-hidden border border-gray-800">
-           <div className="flex flex-col lg:grid lg:grid-cols-2 lg:auto-cols-fr overflow-hidden" style={{ minHeight: '60vh' }}>
+           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4" style={{ minHeight: 'auto' }}>
 
-            {/* LEFT: Media Gallery */}
-            <MediaGallery
-              mainImage={article?.image_url}
-              mainVideo={article?.video_url}
-              images={displayImages}
-              videos={displayVideos}
-            />
+             {/* LEFT: Media Gallery */}
+             <div className="h-64 sm:h-80 lg:h-full">
+               <MediaGallery
+                 mainImage={article?.image_url}
+                 mainVideo={article?.video_url}
+                 images={displayImages}
+                 videos={displayVideos}
+               />
+             </div>
 
-            {/* RIGHT: Content */}
-            <div className="flex flex-col p-4 sm:p-6 gap-3 overflow-hidden flex-1 min-w-0">
-              {selectedCat && (
-                <span className="px-3 py-1 bg-[#0057B8]/20 text-[#0057B8] rounded-lg text-xs font-bold w-fit">
-                  {selectedCat.label}
-                </span>
-              )}
-              <h1 className="text-white text-xl sm:text-2xl font-bold leading-snug line-clamp-2">
-                {article?.title || "אין כתבה מרכזית — לחץ 'כתבה חדשה' להוספה"}
-              </h1>
-              {article?.subtitle && (
-                <p className="text-gray-300 text-sm sm:text-base line-clamp-2">{article.subtitle}</p>
-              )}
-              {article?.content && (
-                <div className="flex-1 overflow-hidden min-w-0">
-                  <p className="text-gray-400 text-xs sm:text-sm leading-relaxed whitespace-pre-wrap">
-                    {article.content}
-                  </p>
-                </div>
-              )}
-              {article?.source && (
-                <p className="text-gray-500 text-xs">מקור: {article.source}</p>
-              )}
+             {/* RIGHT: Content */}
+             <div className="flex flex-col p-4 sm:p-6 gap-2 justify-start">
+               {selectedCat && (
+                 <span className="px-3 py-1 bg-[#0057B8]/20 text-[#0057B8] rounded-lg text-xs font-bold w-fit">
+                   {selectedCat.label}
+                 </span>
+               )}
+               <h1 className="text-white text-lg sm:text-xl font-bold line-clamp-2">
+                 {article?.title || "אין כתבה מרכזית"}
+               </h1>
+               {article?.subtitle && (
+                 <p className="text-gray-400 text-xs sm:text-sm line-clamp-2">{article.subtitle}</p>
+               )}
+               {article?.content && (
+                 <p className="text-gray-500 text-xs sm:text-sm line-clamp-3">
+                   {article.content}
+                 </p>
+               )}
               {article && (
-                <div className="mt-auto pt-3 flex items-center gap-3">
-                  <a href={`/Article?id=${article.id}`}
-                    className="inline-flex items-center gap-2 px-5 py-2.5 bg-[#0057B8] hover:bg-[#1a6fd4] text-white text-sm font-bold rounded-xl transition-colors">
-                    קרא עוד →
-                  </a>
-                  <span className="text-gray-600 text-xs">
-                    {displayImages.length + (article.image_url ? 1 : 0)} תמונות · {displayVideos.length + (article.video_url ? 1 : 0)} סרטונים
-                  </span>
-                </div>
+                <a href={`/Article?id=${article.id}`}
+                  className="inline-flex items-center gap-2 px-3 py-1.5 bg-[#0057B8] hover:bg-[#1a6fd4] text-white text-xs font-bold rounded-lg transition-colors mt-auto">
+                  קרא עוד →
+                </a>
               )}
             </div>
           </div>
