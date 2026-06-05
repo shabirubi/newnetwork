@@ -42,10 +42,13 @@ function ReelThumb({ video, onClick, customCatMap }) {
         muted
         playsInline
         loop
-        preload="metadata"
+        preload="auto"
         loading="eager"
         className="absolute inset-0 w-full h-full object-cover"
         onLoadedMetadata={() => {
+          setVideoLoaded(true);
+        }}
+        onCanPlay={() => {
           setVideoLoaded(true);
         }}
         style={{ opacity: 1 }}

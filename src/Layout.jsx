@@ -304,10 +304,18 @@ export default function Layout({ children, currentPageName }) {
       <div className="bg-[#000000] py-2 shadow-xl relative overflow-visible">
         <div className="max-w-7xl mx-auto px-3 flex items-center justify-between gap-2 relative z-[200]">
           
-          {/* Logo — always visible */}
+          {/* Logo — always visible with video */}
           <div className="flex items-center gap-3 flex-shrink-0">
-            <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-full bg-gradient-to-br from-[#0057B8] to-[#E31E24] flex items-center justify-center flex-shrink-0 shadow-xl border-2 border-white/20">
-              <span className="text-white font-bold text-xl sm:text-2xl">ר</span>
+            <div className="h-16 w-16 sm:h-20 sm:w-20 rounded-full bg-gradient-to-br from-[#0057B8] to-[#E31E24] flex items-center justify-center flex-shrink-0 shadow-xl border-2 border-white/20 overflow-hidden">
+              <video
+                src="https://media.base44.com/videos/public/695b39080025f4d38a586978/be7e061f7_shavit1313.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="metadata"
+                className="w-full h-full object-cover"
+              />
             </div>
             <div className="flex-col text-right hidden sm:flex">
               <h1 className="text-lg sm:text-2xl font-bold text-white">הרשת החדשה</h1>
