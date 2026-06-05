@@ -702,22 +702,10 @@ export default function FeaturedArticleEditor() {
 
         {/* Article Display */}
          <div className="bg-[#0d0d0d] rounded-2xl overflow-hidden border border-gray-800">
-           <div className="flex flex-col">
+           <div className="flex flex-col-reverse lg:flex-row">
 
-             {/* TOP: Media Gallery - Portrait Mode */}
-             <div className="w-full flex justify-center py-4">
-               <div className="relative w-[90%] sm:w-[400px] aspect-[3/4]">
-                 <MediaGallery
-                   mainImage={article?.image_url}
-                   mainVideo={article?.video_url}
-                   images={displayImages}
-                   videos={displayVideos}
-                 />
-               </div>
-             </div>
-
-             {/* BOTTOM: Content */}
-             <div className="w-full flex flex-col p-4 sm:p-5 gap-2">
+             {/* LEFT: Content */}
+             <div className="w-full lg:w-1/2 flex flex-col p-4 sm:p-5 gap-2">
                {selectedCat && (
                  <span className="px-2 py-0.5 bg-[#0057B8]/20 text-[#0057B8] rounded text-xs font-bold w-fit">
                    {selectedCat.label}
@@ -741,9 +729,21 @@ export default function FeaturedArticleEditor() {
                  </a>
                )}
              </div>
-           </div>
-         </div>
-      </div>
+
+             {/* RIGHT: Media Gallery - Portrait Mode */}
+             <div className="w-full lg:w-1/2 flex justify-center p-4 lg:p-6">
+               <div className="relative w-full max-w-[320px] aspect-[3/4]">
+                 <MediaGallery
+                   mainImage={article?.image_url}
+                   mainVideo={article?.video_url}
+                   images={displayImages}
+                   videos={displayVideos}
+                 />
+               </div>
+             </div>
+             </div>
+             </div>
+             </div>
 
       {/* Editor Modal */}
       <AnimatePresence>
