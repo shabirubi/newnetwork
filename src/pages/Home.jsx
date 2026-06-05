@@ -22,6 +22,7 @@ import ReporterLiveChat from "../components/reporter/ReporterLiveChat";
 import PodcastUploadModal from "../components/home/PodcastUploadModal";
 import WeatherForecastModal from "../components/weather/WeatherForecastModal";
 import YouTubeFloatingButton from "../components/home/YouTubeFloatingButton";
+import ReelsStrip from "../components/home/ReelsStrip";
 import OrefAlertsPanel from "../components/home/OrefAlertsPanel";
 import OrefEmergencyPopup from "../components/home/OrefEmergencyPopup";
 
@@ -74,9 +75,6 @@ export default function Home() {
 
       {/* OREF Alerts - Compact Mobile */}
       <OrefAlertsPanel />
-
-      {/* Reels Strip */}
-      <ReelsStrip />
 
       {/* Featured Article */}
       <FeaturedArticleEditor />

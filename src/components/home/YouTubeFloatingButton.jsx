@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Radio, Sparkles } from 'lucide-react';
-import { createPageUrl } from '../utils';
+import { createPageUrl } from "@/utils";
 
 export default function YouTubeFloatingButton() {
   return (
