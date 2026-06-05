@@ -13,15 +13,25 @@ const BUILTIN_LABELS = {
   local: "מקומי", law: "משפט", vod: "VOD",
 };
 
-function ReelThumb({ video, onClick, customCatMap }) {
+function ReelThumb({ video, onClick, customCatMap, loadThumbnail = true }) {
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const [hovered, setHovered] = useState(false);
   const [videoError, setVideoError] = useState(false);
   const [thumbnailUrl, setThumbnailUrl] = useState(null);
-
-  // Generate thumbnail from video frame on mount
+  const [shouldLoad, setShouldLoad] = useState(false);
+  
+  // Lazy load thumbnail generation
   useEffect(() => {
+    if (loadThumbnail) {
+      const timer = setTimeout(() => setShouldLoad(true), 100);
+      return () => clearTimeout(timer);
+    }
+  }, [loadThumbnail]);
+
+  // Generate thumbnail from video frame when shouldLoad is true
+  useEffect(() => {
+    if (!shouldLoad) return;
     const v = videoRef.current;
     const canvas = canvasRef.current;
     if (!v || !canvas) return;
@@ -150,7 +160,9 @@ function ReelThumb({ video, onClick, customCatMap }) {
 
 export default function ReelsStrip() {
   const [reelsOpen, setReelsOpen] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(8);
 
+  // Load only 12 videos initially for better performance
   const { data: videos = [] } = useQuery({
     queryKey: ["home-all-videos"],
     queryFn: () => base44.entities.UserVideo.list("-created_date", 50),
@@ -207,14 +219,23 @@ export default function ReelsStrip() {
           className="flex gap-2.5 overflow-x-auto pb-2"
           style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
         >
-          {reels.map(video => (
+          {reels.slice(0, visibleCount).map((video, index) => (
             <ReelThumb
               key={video.id}
               video={video}
               onClick={() => setReelsOpen(true)}
               customCatMap={customCatMap}
+              loadThumbnail={index < 4}
             />
           ))}
+          {visibleCount < reels.length && (
+            <button
+              onClick={() => setVisibleCount(prev => prev + 8)}
+              className="flex-shrink-0 w-24 h-36 sm:w-28 sm:h-44 rounded-xl bg-gray-800/50 border border-gray-700 flex items-center justify-center text-gray-400 text-xs font-bold hover:bg-gray-700/50 transition-colors"
+            >
+              עוד ({reels.length - visibleCount})
+            </button>
+          )}
         </div>
       </div>
 

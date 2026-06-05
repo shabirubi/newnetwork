@@ -169,6 +169,8 @@ function ReelItem({ video, isActive, onNext, onPrev, customCatMap = {}, builtinL
         muted={muted}
         playsInline
         poster={video.thumbnail_url}
+        preload="metadata"
+        loading="lazy"
         className="w-full h-full object-contain relative z-10"
         onClick={togglePlay}
       />
@@ -276,7 +278,7 @@ export default function ReelsModal({ isOpen, onClose }) {
 
   const { data: videos = [], isLoading } = useQuery({
     queryKey: ["reels-videos"],
-    queryFn: () => base44.entities.UserVideo.list("-created_date", 100),
+    queryFn: () => base44.entities.UserVideo.list("-created_date", 50), // Load only 50 for better performance
     enabled: isOpen,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
@@ -433,7 +435,8 @@ export default function ReelsModal({ isOpen, onClose }) {
                     className="w-full h-full object-cover"
                     muted
                     playsInline
-                    preload="metadata"
+                    preload="none"
+                    loading="lazy"
                   />
                 ) : (
                   <div className={`w-full h-full flex items-center justify-center text-2xl ${isActive ? 'bg-[#E31E24]/40' : 'bg-gray-800'}`}>
