@@ -42,7 +42,8 @@ function ReelThumb({ video, onClick, customCatMap }) {
         muted
         playsInline
         loop
-        preload="metadata"
+        preload="auto"
+        loading="eager"
         className="absolute inset-0 w-full h-full object-cover"
         onLoadedMetadata={() => {
           setVideoLoaded(true);
@@ -83,9 +84,9 @@ export default function ReelsStrip() {
 
   const { data: videos = [] } = useQuery({
     queryKey: ["home-all-videos"],
-    queryFn: () => base44.entities.UserVideo.list("-created_date", 100),
-    staleTime: 10 * 60 * 1000,
-    gcTime: 30 * 60 * 1000,
+    queryFn: () => base44.entities.UserVideo.list("-created_date", 50),
+    staleTime: 5 * 60 * 1000,
+    gcTime: 10 * 60 * 1000,
   });
 
   const { data: customCats = [] } = useQuery({
