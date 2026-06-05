@@ -705,7 +705,7 @@ export default function FeaturedArticleEditor() {
            <div className="flex flex-col">
 
              {/* TOP: Media Gallery */}
-             <div className="w-full h-48 sm:h-64">
+             <div className="w-full h-40 sm:h-48">
                <MediaGallery
                  mainImage={article?.image_url}
                  mainVideo={article?.video_url}
