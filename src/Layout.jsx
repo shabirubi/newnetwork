@@ -133,18 +133,7 @@ export default function Layout({ children, currentPageName }) {
   const [profileModalOpen, setProfileModalOpen] = useState(false);
   const [reelsOpen, setReelsOpen] = useState(false);
 
-  // הפעל אנימציית לוגו - מבוטל לביצועים
-  const [logoFloat, setLogoFloat] = useState(false);
-  const triggerLogoFloat = () => {
-    setLogoFloat(true);
-    setTimeout(() => setLogoFloat(false), 1200);
-  };
 
-  useEffect(() => {
-    const handleUserAction = () => triggerLogoFloat();
-    window.addEventListener('click', handleUserAction);
-    return () => window.removeEventListener('click', handleUserAction);
-  }, []);
 
   useEffect(() => {
     const handler = () => setReelsOpen(true);
@@ -272,30 +261,9 @@ export default function Layout({ children, currentPageName }) {
           }
         }
 
-        @keyframes slideRight {
-          0% { transform: translateX(-100vw); }
-          100% { transform: translateX(100vw); }
-        }
 
-        @keyframes colorShift {
-          0%, 100% { 
-            background: linear-gradient(to right, #1565C0, #E87722, #1565C0);
-            box-shadow: 0 0 40px #1565C0;
-          }
-          50% { 
-            background: linear-gradient(to right, #E87722, #1565C0, #E87722);
-            box-shadow: 0 0 40px #E87722;
-          }
-        }
 
-        @keyframes rainbow {
-          0% {
-            background-position: 0% 50%;
-          }
-          100% {
-            background-position: 200% 50%;
-          }
-        }
+
       `}</style>
 
 
@@ -387,8 +355,7 @@ export default function Layout({ children, currentPageName }) {
               </>
             ) : (
               <button onClick={handleLogin}
-                className="flex items-center gap-1 px-2 py-1 backdrop-blur-xl rounded-lg shadow-lg transition-all hover:scale-105 text-[11px] relative overflow-hidden"
-                style={{ background: 'linear-gradient(90deg, #FF0000, #FF7F00, #FFFF00, #00FF00, #0000FF, #4B0082, #9400D3)', backgroundSize: '200% 100%', animation: 'rainbow 8s linear infinite', border: '2px solid rgba(255,255,255,0.3)' }}>
+                className="flex items-center gap-1 px-2 py-1 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 backdrop-blur-xl rounded-lg shadow-lg transition-all text-[11px]">
                 <LogIn className="w-3.5 h-3.5 text-white" />
                 <span className="text-white font-bold hidden sm:inline">התחבר</span>
               </button>
@@ -396,7 +363,7 @@ export default function Layout({ children, currentPageName }) {
 
             {/* Reels — desktop */}
             <button onClick={() => setReelsOpen(true)}
-              className="hidden sm:flex items-center gap-1 px-2 py-1 bg-[#E87722]/80 hover:bg-[#E87722] backdrop-blur-xl rounded-lg border border-orange-500/50 transition-all hover:scale-105 animate-pulse text-[11px]">
+              className="hidden sm:flex items-center gap-1 px-2 py-1 bg-[#E87722]/80 hover:bg-[#E87722] backdrop-blur-xl rounded-lg border border-orange-500/50 transition-all text-[11px]">
               <Radio className="w-4 h-4 text-white" />
               <span className="text-white font-bold">ריילס</span>
             </button>
@@ -438,21 +405,7 @@ export default function Layout({ children, currentPageName }) {
         <RightSidebarUpdates />
       </React.Suspense>
 
-      {/* Logo Float Animation - disabled for performance */}
-      <AnimatePresence>
-        {logoFloat && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.1 }}
-            animate={{ opacity: [0, 1, 1, 0.8, 0], scale: [0.1, 1.5, 2.5, 3.5, 5], y: [0, -20, -50, -90, -140] }}
-            transition={{ duration: 1.4, ease: "easeOut", times: [0, 0.2, 0.5, 0.75, 1] }}
-            className="fixed bottom-24 left-1/2 -translate-x-1/2 z-[99998] pointer-events-none"
-          >
-            <div className="h-32 w-32 rounded-full bg-gradient-to-br from-[#0057B8] to-[#E31E24] shadow-2xl shadow-red-500/50 border-2 border-red-500/40 flex items-center justify-center">
-              <span className="text-white font-bold text-6xl">ר</span>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+
 
       {/* Main Menu Sidebar */}
       <AnimatePresence>
@@ -518,7 +471,7 @@ export default function Layout({ children, currentPageName }) {
                       setDidChatOpen(true);
                       setMenuSidebarOpen(false);
                     }}
-                    className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#E31E24]/20 active:bg-[#E31E24]/40 transition-all border border-transparent hover:border-[#E31E24]/30 w-full animate-pulse"
+                    className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#E31E24]/20 active:bg-[#E31E24]/40 transition-all border border-transparent hover:border-[#E31E24]/30 w-full"
                   >
                     <div className="w-10 h-10 rounded-xl bg-black/40 border border-green-500/20 flex items-center justify-center">
                       <MessageCircle size={20} className="text-green-500" />
@@ -544,7 +497,7 @@ export default function Layout({ children, currentPageName }) {
                   <Link
                     to={createPageUrl("Live")}
                     onClick={() => setMenuSidebarOpen(false)}
-                    className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#E31E24]/20 active:bg-[#E31E24]/40 transition-all border border-transparent hover:border-[#E31E24]/30 animate-pulse"
+                    className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#E31E24]/20 active:bg-[#E31E24]/40 transition-all border border-transparent hover:border-[#E31E24]/30"
                   >
                     <div className="w-10 h-10 rounded-xl bg-black/40 border border-[#E31E24]/20 flex items-center justify-center">
                       <Radio size={20} className="text-[#E31E24]" />
@@ -568,7 +521,7 @@ export default function Layout({ children, currentPageName }) {
                   <Link
                     to={createPageUrl("VideoCreator")}
                     onClick={() => setMenuSidebarOpen(false)}
-                    className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#E31E24]/20 active:bg-[#E31E24]/40 transition-all border border-transparent hover:border-[#E31E24]/30 animate-pulse"
+                    className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#E31E24]/20 active:bg-[#E31E24]/40 transition-all border border-transparent hover:border-[#E31E24]/30"
                   >
                     <div className="w-10 h-10 rounded-xl bg-black/40 border border-purple-500/20 flex items-center justify-center">
                       <Sparkles size={20} className="text-purple-500" />
@@ -598,7 +551,7 @@ export default function Layout({ children, currentPageName }) {
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={() => setMenuSidebarOpen(false)}
-                    className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#E31E24]/20 active:bg-[#E31E24]/40 transition-all border border-transparent hover:border-[#E31E24]/30 animate-pulse"
+                    className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#E31E24]/20 active:bg-[#E31E24]/40 transition-all border border-transparent hover:border-[#E31E24]/30"
                   >
                     <div className="w-10 h-10 rounded-xl bg-black/40 border border-green-500/20 flex items-center justify-center">
                       <Sparkles size={20} className="text-green-500" />
@@ -681,8 +634,8 @@ export default function Layout({ children, currentPageName }) {
                 initial={{ x: "100%" }}
                 animate={{ x: 0 }}
                 exit={{ x: "100%" }}
-                transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                className="absolute right-0 top-0 bottom-0 w-64 bg-black/90 backdrop-blur-xl border-l border-[#0057B8]/30 shadow-2xl shadow-[#0057B8]/20 overflow-y-auto"
+                transition={{ duration: 0.3 }}
+                className="absolute right-0 top-0 bottom-0 w-64 bg-black/90 backdrop-blur-xl border-l border-[#0057B8]/30 shadow-2xl overflow-y-auto"
               >
                 <div className="sticky top-0 bg-gradient-to-br from-black via-[#0057B8]/20 to-black p-4 shadow-lg border-b border-[#0057B8]/30">
                   <div className="flex items-center justify-between">
@@ -745,7 +698,7 @@ export default function Layout({ children, currentPageName }) {
                     </div>
                     <button
                       onClick={() => setMobileMenuOpen(false)}
-                      className="p-2 rounded-full bg-[#E31E24]/20 hover:bg-[#E31E24]/40 text-white active:scale-95 transition-all"
+                      className="p-2 rounded-full bg-[#E31E24]/20 hover:bg-[#E31E24]/40 text-white transition-all"
                     >
                       <X size={22} />
                     </button>
@@ -757,7 +710,7 @@ export default function Layout({ children, currentPageName }) {
                   <Link
                     to={createPageUrl("Live")}
                     onClick={() => setMobileMenuOpen(false)}
-                    className="flex items-center justify-center gap-2 w-full py-4 bg-gradient-to-r from-[#E31E24] to-[#B91C1C] text-white rounded-2xl font-bold shadow-lg shadow-[#E31E24]/30 active:scale-95 transition-transform"
+                    className="flex items-center justify-center gap-2 w-full py-4 bg-gradient-to-r from-[#E31E24] to-[#B91C1C] text-white rounded-2xl font-bold shadow-lg"
                   >
                     <Radio size={20} />
                     שידור חי
@@ -768,7 +721,7 @@ export default function Layout({ children, currentPageName }) {
                 {user && (
                   <div className="p-4 border-b border-[#E31E24]/30">
                     <div className="flex items-center gap-3 p-4 bg-gradient-to-r from-green-500/20 to-green-600/20 rounded-2xl border border-green-500/30 mb-2">
-                      <div className="w-3 h-3 rounded-full bg-green-500 animate-pulse"></div>
+                      <div className="w-3 h-3 rounded-full bg-green-500"></div>
                       <div className="flex-1">
                         <p className="text-green-300 font-bold text-sm">{user.full_name || user.email}</p>
                         <p className="text-green-200/70 text-xs">מחובר</p>
@@ -808,7 +761,7 @@ export default function Layout({ children, currentPageName }) {
                 <Link
                   to={createPageUrl("VideoCreator")}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#E31E24]/20 active:bg-[#E31E24]/40 transition-all border border-transparent hover:border-[#E31E24]/30 animate-pulse"
+                  className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#E31E24]/20 active:bg-[#E31E24]/40 transition-all border border-transparent hover:border-[#E31E24]/30"
                 >
                   <div className="w-10 h-10 rounded-xl bg-black/40 border border-purple-500/20 flex items-center justify-center">
                     <Sparkles size={20} className="text-purple-500" />
