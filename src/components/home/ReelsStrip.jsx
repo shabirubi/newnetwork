@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { Play, Radio } from "lucide-react";
@@ -15,72 +15,136 @@ const BUILTIN_LABELS = {
 
 function ReelThumb({ video, onClick, customCatMap }) {
   const videoRef = useRef(null);
+  const canvasRef = useRef(null);
   const [hovered, setHovered] = useState(false);
   const [videoError, setVideoError] = useState(false);
+  const [thumbnailUrl, setThumbnailUrl] = useState(null);
+
+  // Generate thumbnail from video frame on mount
+  useEffect(() => {
+    const v = videoRef.current;
+    const canvas = canvasRef.current;
+    if (!v || !canvas) return;
+
+    const generateThumbnail = () => {
+      if (v.readyState >= 2) {
+        try {
+          v.currentTime = 0.5;
+        } catch (e) {}
+      }
+    };
+
+    const onCanPlay = () => {
+      try {
+        v.currentTime = 0.5;
+      } catch (e) {}
+    };
+
+    const onSeeked = () => {
+      try {
+        canvas.width = v.videoWidth || 320;
+        canvas.height = v.videoHeight || 568;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(v, 0, 0, canvas.width, canvas.height);
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.6);
+        setThumbnailUrl(dataUrl);
+      } catch (e) {
+        console.error('Thumbnail generation failed:', e);
+      }
+    };
+
+    v.addEventListener('loadedmetadata', generateThumbnail);
+    v.addEventListener('canplay', onCanPlay);
+    v.addEventListener('seeked', onSeeked);
+    
+    // Fallback: try after 2 seconds
+    const timeout = setTimeout(generateThumbnail, 2000);
+
+    return () => {
+      v.removeEventListener('loadedmetadata', generateThumbnail);
+      v.removeEventListener('canplay', onCanPlay);
+      v.removeEventListener('seeked', onSeeked);
+      clearTimeout(timeout);
+    };
+  }, []);
 
   return (
-    <button
-      onClick={onClick}
-      onMouseEnter={() => {
-        setHovered(true);
-        const v = videoRef.current;
-        if (v && !videoError) {
-          v.play().catch(() => {});
-        }
-      }}
-      onMouseLeave={() => {
-        setHovered(false);
-        const v = videoRef.current;
-        if (v) { v.pause(); v.currentTime = 0; }
-      }}
-      className="flex-shrink-0 relative w-24 h-36 sm:w-28 sm:h-44 rounded-xl overflow-hidden group cursor-pointer bg-gray-900"
-    >
-      {/* Video element with poster */}
-      <video
-        ref={videoRef}
-        src={video.video_url}
-        muted
-        playsInline
-        preload="metadata"
-        loading="lazy"
-        className="absolute inset-0 w-full h-full object-cover"
-        onError={() => {
-          setVideoError(true);
+    <div className="relative">
+      <button
+        onClick={onClick}
+        onMouseEnter={() => {
+          setHovered(true);
+          const v = videoRef.current;
+          if (v && thumbnailUrl && !videoError) {
+            v.play().catch(() => {});
+          }
         }}
-      />
-      
-      {/* Fallback gradient if video fails to load */}
-      {videoError && (
-        <div className="absolute inset-0 bg-gradient-to-br from-[#E31E24]/30 to-[#0057B8]/30 flex items-center justify-center">
-          <Play className="w-12 h-12 text-white/40" />
-        </div>
-      )}
-      
-      {/* Gradient overlay - always visible */}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
-
-      {/* Play icon - show when not hovered */}
-      {!hovered && (
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-          <div className="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
-            <Play className="w-4 h-4 text-white fill-white" />
+        onMouseLeave={() => {
+          setHovered(false);
+          const v = videoRef.current;
+          if (v) { v.pause(); v.currentTime = 0; }
+        }}
+        className="flex-shrink-0 relative w-24 h-36 sm:w-28 sm:h-44 rounded-xl overflow-hidden group cursor-pointer bg-gray-900"
+      >
+        {/* Hidden canvas for thumbnail generation */}
+        <canvas ref={canvasRef} className="hidden" />
+        
+        {/* Thumbnail image */}
+        {thumbnailUrl && (
+          <img
+            src={thumbnailUrl}
+            alt={video.title}
+            className="absolute inset-0 w-full h-full object-cover"
+            loading="lazy"
+          />
+        )}
+        
+        {/* Video element */}
+        <video
+          ref={videoRef}
+          src={video.video_url}
+          muted
+          playsInline
+          preload="metadata"
+          loading="lazy"
+          className={`absolute inset-0 w-full h-full object-cover ${thumbnailUrl ? 'opacity-0' : 'opacity-100'}`}
+          onError={() => {
+            setVideoError(true);
+          }}
+        />
+        
+        {/* Fallback gradient if video fails to load */}
+        {videoError && (
+          <div className="absolute inset-0 bg-gradient-to-br from-[#E31E24]/30 to-[#0057B8]/30 flex items-center justify-center">
+            <Play className="w-12 h-12 text-white/40" />
           </div>
-        </div>
-      )}
-      
-      {/* Title - always visible on top */}
-      <p className="absolute bottom-2 right-2 left-2 text-white text-[10px] font-bold line-clamp-2 leading-tight drop-shadow-lg">
-        {video.title}
-      </p>
+        )}
+        
+        {/* Gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent pointer-events-none" />
 
-      {/* Category badge - always visible on top */}
-      {video.category && (
-        <div className="absolute top-2 right-2 bg-[#E31E24]/90 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full">
-          {BUILTIN_LABELS[video.category] || customCatMap?.[video.category] || video.category}
-        </div>
-      )}
+        {/* Play icon */}
+        {!hovered && (
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div className="w-8 h-8 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center">
+              <Play className="w-4 h-4 text-white fill-white" />
+            </div>
+          </div>
+        )}
+        
+        {/* Title */}
+        <p className="absolute bottom-2 right-2 left-2 text-white text-[10px] font-bold line-clamp-2 leading-tight drop-shadow-lg">
+          {video.title}
+        </p>
 
-    </button>
+        {/* Category badge */}
+        {video.category && (
+          <div className="absolute top-2 right-2 bg-[#E31E24]/90 text-white text-[8px] font-bold px-1.5 py-0.5 rounded-full">
+            {BUILTIN_LABELS[video.category] || customCatMap?.[video.category] || video.category}
+          </div>
+        )}
+      </button>
+    </div>
   );
 }
 
