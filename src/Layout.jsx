@@ -24,7 +24,7 @@ import DIDLiveChat from "./components/avatar/DIDLiveChat";
 import AdminLoginModal from "./components/admin/AdminLoginModal";
 import ReelsModal from "./components/home/ReelsModal";
 import PodcastUploadModal from "./components/home/PodcastUploadModal";
-import AdminPasswordModal from "./components/admin/AdminPasswordModal";
+import AdminPasswordModal from "@/components/admin/AdminPasswordModal";
 
 import { base44 } from "@/api/base44Client";
 import { useQueryClient } from "@tanstack/react-query";
