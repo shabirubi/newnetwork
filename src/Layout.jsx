@@ -812,7 +812,7 @@ export default function Layout({ children, currentPageName }) {
             <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-red-600 to-red-700 flex items-center justify-center mb-0.5">
               <Radio size={20} className="text-white" strokeWidth={2.5} />
             </div>
-            <span className="text-[9px] font-bold" style={{ color: darkMode ? '#ffffff' : '#111827' }}>ריילס</span>
+            <span className="text-[9px] font-bold" style={{ color: darkMode ? '#ffffff' : '#111827' }}>Reels</span>
           </button>
 
           <Link
