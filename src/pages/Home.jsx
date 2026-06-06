@@ -68,7 +68,7 @@ export default function Home() {
   });
 
   return (
-    <div className="min-h-screen bg-black">
+    <div className="min-h-screen" style={{ backgroundColor: 'var(--app-bg, #0d1117)', transition: 'background-color 0.3s' }}>
 
       {/* OREF Emergency Popup */}
       <OrefEmergencyPopup />

@@ -299,7 +299,7 @@ export default function Layout({ children, currentPageName }) {
       `}</style>
 
       {/* Native Mobile Header */}
-      <div className="bg-gradient-to-b from-[#000000] to-[#0a0a0a] safe-area-top sticky top-0 z-[1000] shadow-2xl">
+      <div className="safe-area-top sticky top-0 z-[1000] shadow-2xl" style={{ background: darkMode ? 'linear-gradient(to bottom, #000000, #0a0a0a)' : 'linear-gradient(to bottom, #1e3a5f, #1a2f4a)', transition: 'background 0.3s' }}>
         <div className="px-3 py-2.5 flex items-center justify-between">
           
           {/* Logo */}
@@ -812,7 +812,7 @@ export default function Layout({ children, currentPageName }) {
       </main>
 
       {/* Native Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 bg-gradient-to-t from-[#0a0a0a] to-[#000000] safe-area-bottom z-[1000] border-t border-white/10">
+      <nav className="fixed bottom-0 left-0 right-0 safe-area-bottom z-[1000] border-t border-white/10" style={{ background: darkMode ? 'linear-gradient(to top, #0a0a0a, #000000)' : 'linear-gradient(to top, #1a2f4a, #1e3a5f)', transition: 'background 0.3s' }}>
         <div className="grid grid-cols-4 gap-1 px-1 py-2">
           <Link
             to={createPageUrl("Home")}
@@ -857,7 +857,7 @@ export default function Layout({ children, currentPageName }) {
       </nav>
 
       {/* Compact Footer */}
-      <footer className="bg-[#0a0a0a] border-t border-white/10 py-6 mt-8">
+      <footer className="border-t border-white/10 py-6 mt-8" style={{ backgroundColor: darkMode ? '#0a0a0a' : '#1a2f4a', transition: 'background-color 0.3s' }}>
         <div className="px-4 text-center">
           <div className="flex items-center justify-center gap-2 mb-3">
             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#0057B8] to-[#E31E24] flex items-center justify-center">
