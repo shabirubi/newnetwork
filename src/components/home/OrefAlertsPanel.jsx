@@ -314,10 +314,10 @@ function AlertsPopup({ activeAlert, history, lastFetch, onClose }) {
 }
 
 const TICKER_TYPES = [
-    { emoji: '🔴', label: 'מבזק', color: '#cc0000' },
-    { emoji: '📹', label: 'סרטון חדש', color: '#0057B8' },
-    { emoji: '⚡', label: 'עכשיו', color: '#E87722' },
-    { emoji: '🗞️', label: 'כתבה', color: '#1565C0' },
+    { label: 'מבזק', color: '#cc0000' },
+    { label: 'סרטון', color: '#0057B8' },
+    { label: 'עדכון', color: '#E87722' },
+    { label: 'כתבה', color: '#1565C0' },
 ];
 
 function BreakingTicker({ items }) {
@@ -353,7 +353,6 @@ function BreakingTicker({ items }) {
                     className="flex-shrink-0 flex items-center gap-1 rounded-full px-2 py-0.5 text-white text-[10px] font-black"
                     style={{ background: typeInfo.color, fontFamily: FONT }}
                 >
-                    <span>{typeInfo.emoji}</span>
                     <span>{typeInfo.label}</span>
                 </motion.div>
             </AnimatePresence>
@@ -393,22 +392,7 @@ function BreakingTicker({ items }) {
                 </AnimatePresence>
             )}
 
-            {/* Dot indicator */}
-            {items.length > 1 && (
-                <div className="flex gap-0.5 flex-shrink-0">
-                    {items.slice(0, Math.min(items.length, 5)).map((_, i) => (
-                        <div
-                            key={i}
-                            className="rounded-full transition-all duration-300"
-                            style={{
-                                width: i === idx ? '8px' : '4px',
-                                height: '4px',
-                                background: i === idx ? '#0057B8' : '#93c5fd',
-                            }}
-                        />
-                    ))}
-                </div>
-            )}
+
         </div>
     );
 }

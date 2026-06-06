@@ -55,11 +55,7 @@ export default function VODModal({ isOpen, onClose }) {
                         <button onClick={onClose} className="p-2 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors">
                             <X className="w-5 h-5" />
                         </button>
-                        <div className="flex items-center gap-2">
-                            <Crown className="w-4 h-4 text-yellow-400" />
-                            <span className="text-white font-bold text-sm">VOD פרמיום</span>
-                            <Tv className="w-4 h-4 text-red-400" />
-                        </div>
+                        <span className="text-white font-bold text-sm">VOD פרמיום</span>
                         <div className="text-white/60 text-xs">{currentIndex + 1} / {allVideos.length}</div>
                     </div>
 

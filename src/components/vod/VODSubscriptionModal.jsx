@@ -83,8 +83,8 @@ export default function VODSubscriptionModal({ isOpen, onClose, onSubscribed }) 
                         {/* Crown Icon */}
                         <div className="pt-8 pb-4 px-6 text-center">
                             <motion.div
-                                animate={{ rotate: [-5, 5, -5] }}
-                                transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+                                animate={{ scale: [1, 1.05, 1] }}
+                                transition={{ repeat: Infinity, duration: 2, ease: "easeInOut" }}
                                 className="inline-flex items-center justify-center w-16 h-16 rounded-full mb-3"
                                 style={{ background: "linear-gradient(135deg, #f59e0b, #fbbf24, #f59e0b)" }}
                             >
@@ -97,10 +97,9 @@ export default function VODSubscriptionModal({ isOpen, onClose, onSubscribed }) 
                         {/* Price */}
                         <div className="mx-6 mb-4 rounded-2xl p-4 text-center"
                             style={{ background: "linear-gradient(135deg, rgba(245,158,11,0.2), rgba(251,191,36,0.1))", border: "1px solid rgba(245,158,11,0.4)" }}>
-                            <div className="flex items-baseline justify-center gap-1">
-                                <span className="text-4xl font-black text-yellow-400">29.90</span>
-                                <span className="text-yellow-300 text-lg font-bold">₪</span>
-                                <span className="text-gray-400 text-sm">/חודש</span>
+                            <div className="flex items-baseline justify-center gap-2">
+                                <span className="text-3xl font-black text-yellow-400">₪29.90</span>
+                                <span className="text-gray-400 text-sm font-normal">/חודש</span>
                             </div>
                             <p className="text-yellow-300/70 text-xs mt-1">ניתן לביטול בכל עת</p>
                         </div>
@@ -140,7 +139,7 @@ export default function VODSubscriptionModal({ isOpen, onClose, onSubscribed }) 
                                 {loading ? (
                                     <><Loader2 className="w-5 h-5 animate-spin" /> מעביר לתשלום...</>
                                 ) : (
-                                    <><Crown className="w-5 h-5" /> הירשם עכשיו</>
+                                    <>הירשם עכשיו</>
                                 )}
                             </motion.button>
                             <p className="text-center text-gray-500 text-xs mt-3">תשלום מאובטח · SSL · 256-bit</p>
