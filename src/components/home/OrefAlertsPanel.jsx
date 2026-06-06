@@ -475,7 +475,7 @@ export default function AlertsPanel() {
                         <Shield className="w-4 h-4 text-white" />
                         <span className="text-white text-sm font-black" style={{ fontFamily: FONT }}>פיקוד העורף</span>
                     </div>
-                    <div className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${hasActiveNow ? 'bg-yellow-300 animate-pulse' : 'bg-green-400'}`} />
+
                     {hasActiveNow ? (
                         <span className="text-base font-black text-yellow-200" style={{ fontFamily: FONT }}>
                             התרעה פעילה! לחץ לפרטים
