@@ -66,12 +66,12 @@ function ReelThumb({ video, onOpen }) {
 }
 
 // Article card — compact mobile-first
-function ArticleCard({ article, catColor, catLabel }) {
+function ArticleCard({ article, catColor, catLabel, cardBg, cardBorder, cardText, pageBg }) {
   return (
     <Link
       to={createPageUrl(`Article?id=${article.id}`)}
       className="flex gap-2 p-2.5 rounded-xl transition-all"
-      style={{ backgroundColor: 'var(--app-card-bg)', border: '1px solid var(--app-border)' }}
+      style={{ backgroundColor: cardBg, border: `1px solid ${cardBorder}` }}
     >
       {article.image_url ? (
         <img 
@@ -82,7 +82,7 @@ function ArticleCard({ article, catColor, catLabel }) {
           className="w-16 h-14 object-cover rounded-lg flex-shrink-0" 
         />
       ) : article.video_url ? (
-        <div className="w-16 h-14 rounded-lg flex-shrink-0 flex items-center justify-center" style={{ backgroundColor: 'var(--app-bg)', border: '1px solid var(--app-border)' }}>
+        <div className="w-16 h-14 rounded-lg flex-shrink-0 flex items-center justify-center" style={{ backgroundColor: pageBg, border: `1px solid ${cardBorder}` }}>
           <Play className="w-4 h-4 text-gray-500" />
         </div>
       ) : null}
@@ -90,16 +90,16 @@ function ArticleCard({ article, catColor, catLabel }) {
         {article.is_breaking && (
           <span className="text-[8px] font-bold text-red-500 bg-red-500/10 px-1 py-0.5 rounded mb-1 inline-block">🔴 דחוף</span>
         )}
-        <h4 className="text-xs font-bold leading-tight line-clamp-2" style={{ color: 'var(--app-text, #ffffff)' }}>{article.title}</h4>
-        {article.subtitle && <p className="text-[10px] mt-0.5 line-clamp-1 text-gray-500">{article.subtitle}</p>}
-        {article.source && <p className="text-[9px] mt-1 text-gray-600">{article.source}</p>}
+        <h4 className="text-xs font-bold leading-tight line-clamp-2" style={{ color: cardText }}>{article.title}</h4>
+        {article.subtitle && <p className="text-[10px] mt-0.5 line-clamp-1" style={{ color: cardText, opacity: 0.6 }}>{article.subtitle}</p>}
+        {article.source && <p className="text-[9px] mt-1" style={{ color: cardText, opacity: 0.4 }}>{article.source}</p>}
       </div>
     </Link>
   );
 }
 
 // One category block: reels strip + articles
-function CategoryBlock({ category, videos, articles }) {
+function CategoryBlock({ category, videos, articles, cardBg, cardBorder, cardText, pageBg }) {
   const openReels = () => window.dispatchEvent(new Event('openReels'));
 
   if (videos.length === 0 && articles.length === 0) {
@@ -107,9 +107,9 @@ function CategoryBlock({ category, videos, articles }) {
       <div className="mb-6 px-2" dir="rtl">
         <div className="flex items-center gap-2 mb-3">
           <div className="w-1 h-5 rounded-full flex-shrink-0" style={{ backgroundColor: category.color }} />
-          <h3 className="font-bold text-base" style={{ color: 'var(--app-text, #ffffff)' }}>{category.label}</h3>
+          <h3 className="font-bold text-base" style={{ color: cardText }}>{category.label}</h3>
         </div>
-        <div className="rounded-lg p-4 text-center text-gray-500 text-xs" style={{ backgroundColor: 'var(--app-card-bg)', border: '1px solid var(--app-border)' }}>
+        <div className="rounded-lg p-4 text-center text-xs" style={{ backgroundColor: cardBg, border: `1px solid ${cardBorder}`, color: cardText, opacity: 0.5 }}>
           אין תוכן בקטגוריה זו עדיין
         </div>
       </div>
@@ -121,7 +121,7 @@ function CategoryBlock({ category, videos, articles }) {
       {/* Category header */}
       <div className="flex items-center gap-2 mb-3 px-2">
         <div className="w-1 h-5 rounded-full flex-shrink-0" style={{ backgroundColor: category.color }} />
-        <h3 className="font-bold text-base" style={{ color: 'var(--app-text, #ffffff)' }}>{category.label}</h3>
+        <h3 className="font-bold text-base" style={{ color: cardText }}>{category.label}</h3>
         {videos.length > 0 && (
           <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full" style={{ background: category.color + '25', color: category.color }}>
             {videos.length}
@@ -150,13 +150,17 @@ function CategoryBlock({ category, videos, articles }) {
               article={article}
               catColor={category.color}
               catLabel={category.label}
+              cardBg={cardBg}
+              cardBorder={cardBorder}
+              cardText={cardText}
+              pageBg={pageBg}
             />
           ))}
           {articles.length > 3 && (
             <Link
               to={createPageUrl(`Category?cat=${category.id}`)}
-              className="block text-center py-2 text-xs font-bold rounded-lg border border-gray-800 hover:border-gray-600 transition-colors"
-              style={{ color: category.color }}
+              className="block text-center py-2 text-xs font-bold rounded-lg transition-colors"
+              style={{ color: category.color, border: `1px solid ${cardBorder}` }}
             >
               הצג עוד →
             </Link>
@@ -168,11 +172,20 @@ function CategoryBlock({ category, videos, articles }) {
 }
 
 export default function HomeCategoryFeed() {
-  // Get current user
-  const [currentUser, setCurrentUser] = React.useState(null);
+  const [isDark, setIsDark] = React.useState(() => localStorage.getItem('darkMode') !== 'false');
+
   React.useEffect(() => {
-    base44.auth.me().then(setCurrentUser).catch(() => setCurrentUser(null));
+    const observer = new MutationObserver(() => {
+      setIsDark(!document.documentElement.classList.contains('light-mode'));
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    return () => observer.disconnect();
   }, []);
+
+  const cardBg = isDark ? '#161b22' : '#ffffff';
+  const cardBorder = isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)';
+  const cardText = isDark ? '#e8edf5' : '#111827';
+  const pageBg = isDark ? '#0d1117' : '#f0f4f8';
 
   // Load all videos + articles once
   // Share the same cache as ReelsStrip — no double fetch
@@ -248,6 +261,10 @@ export default function HomeCategoryFeed() {
           category={cat}
           videos={cat.videos}
           articles={cat.articles}
+          cardBg={cardBg}
+          cardBorder={cardBorder}
+          cardText={cardText}
+          pageBg={pageBg}
         />
       ))}
     </div>
