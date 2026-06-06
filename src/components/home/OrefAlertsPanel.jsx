@@ -347,7 +347,7 @@ export default function AlertsPanel() {
                         <span className="text-white text-xs font-black" style={{ fontFamily: FONT }}>פיקוד העורף</span>
                     </div>
                     <div className={`w-2 h-2 rounded-full ${hasActiveNow ? 'bg-red-500 animate-pulse' : 'bg-green-500'}`} />
-                    <span className={`text-sm font-bold ${hasActiveNow ? 'text-red-300' : 'text-green-300'}`} style={{ fontFamily: FONT }}>
+                    <span className="text-sm font-bold" style={{ fontFamily: FONT, color: hasActiveNow ? '#fca5a5' : '#1e3a5f' }}>
                         {hasActiveNow ? 'התרעה פעילה! לחץ לפרטים' : 'אין התרעות פעילות — לחץ להיסטוריה'}
                     </span>
                     {lastFetch && (
