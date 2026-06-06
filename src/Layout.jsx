@@ -23,7 +23,7 @@ import TalkingAvatar from "./components/avatar/TalkingAvatar";
 import DIDLiveChat from "./components/avatar/DIDLiveChat";
 import AdminLoginModal from "./components/admin/AdminLoginModal";
 import ReelsModal from "./components/home/ReelsModal";
-
+import PodcastUploadModal from "./components/home/PodcastUploadModal";
 
 import { base44 } from "@/api/base44Client";
 import { useQueryClient } from "@tanstack/react-query";
@@ -115,6 +115,7 @@ export default function Layout({ children, currentPageName }) {
   const [menuSidebarOpen, setMenuSidebarOpen] = useState(false);
   const [profileModalOpen, setProfileModalOpen] = useState(false);
   const [reelsOpen, setReelsOpen] = useState(false);
+  const [podcastModalOpen, setPodcastModalOpen] = useState(false);
 
 
 
@@ -301,7 +302,7 @@ export default function Layout({ children, currentPageName }) {
             </Link>
 
             {/* Podcast Upload */}
-            <button onClick={() => window.dispatchEvent(new CustomEvent('openUploadPodcast'))}
+            <button onClick={() => setPodcastModalOpen(true)}
               className="p-2 bg-[#1DB954] rounded-full active:scale-90 transition-transform">
               <Music className="w-4 h-4 text-white" />
             </button>
@@ -354,6 +355,17 @@ export default function Layout({ children, currentPageName }) {
       {/* Reels Modal */}
       <AnimatePresence>
         {reelsOpen && <ReelsModal isOpen={reelsOpen} onClose={() => setReelsOpen(false)} />}
+      </AnimatePresence>
+
+      {/* Podcast Upload Modal */}
+      <AnimatePresence>
+        {podcastModalOpen && (
+          <PodcastUploadModal
+            isOpen={podcastModalOpen}
+            onClose={() => setPodcastModalOpen(false)}
+            onUploaded={() => setPodcastModalOpen(false)}
+          />
+        )}
       </AnimatePresence>
 
 

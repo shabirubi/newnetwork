@@ -113,6 +113,7 @@ export default function Home() {
       <AnimatePresence>
         {uploadPodcastModalOpen && (
           <PodcastUploadModal
+            isOpen={uploadPodcastModalOpen}
             onClose={() => setUploadPodcastModalOpen(false)}
             onUploaded={() => {
               setUploadPodcastModalOpen(false);
