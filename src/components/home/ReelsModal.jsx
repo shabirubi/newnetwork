@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Heart, MessageCircle, Share2, Volume2, VolumeX, ChevronUp, ChevronDown, Play } from "lucide-react";
+import { X, Heart, MessageCircle, Share2, Volume2, VolumeX, ChevronUp, ChevronDown, Play, Radio, Shield, TrendingUp, Vote, Cpu, Trophy, Clapperboard, Globe, HeartPulse, Music, Star, DollarSign, AlertTriangle, Newspaper, Swords, GraduationCap, Leaf, FlaskConical, MapPin, Scale, Film, Layers } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import confetti from "canvas-confetti";
@@ -503,7 +503,15 @@ export default function ReelsModal({ isOpen, onClose }) {
           const isActive = categoryIdx === idx;
           const catLabel = BUILTIN_LABELS[cat] || customCatMap[cat] || cat;
           const catCount = catReels.length;
-          const catEmoji = cat === "all" ? "🎬" : cat === "breaking" ? "🔴" : cat === "sports" ? "⚽" : cat === "politics" ? "🏛️" : cat === "technology" ? "💻" : cat === "security" ? "🛡️" : cat === "economy" ? "📈" : cat === "entertainment" ? "🎭" : cat === "world" ? "🌍" : cat === "health" ? "❤️" : cat === "science" ? "🔬" : cat === "crime" ? "🔍" : "📰";
+          const catIcons = {
+            all: Layers, breaking: Radio, security: Shield, economy: TrendingUp,
+            politics: Vote, technology: Cpu, sports: Trophy, entertainment: Clapperboard,
+            world: Globe, health: HeartPulse, music: Music, horoscope: Star,
+            finance: DollarSign, crime: AlertTriangle, israel: Newspaper, military: Swords,
+            education: GraduationCap, culture: Film, environment: Leaf, science: FlaskConical,
+            local: MapPin, law: Scale, vod: Film
+          };
+          const CatIcon = catIcons[cat] || Newspaper;
           return (
             <button
               key={cat}
@@ -511,21 +519,23 @@ export default function ReelsModal({ isOpen, onClose }) {
               className="flex-shrink-0 flex flex-col items-center gap-1"
             >
               <div
-                style={{ border: isActive ? '2px solid #E31E24' : '2px solid rgba(255,255,255,0.3)', boxShadow: isActive ? '0 0 8px rgba(227,30,36,0.6)' : 'none' }}
-                className="w-12 h-12 rounded-full overflow-hidden relative transition-all"
+                style={{ border: isActive ? '2px solid #E31E24' : '2px solid rgba(255,255,255,0.2)', boxShadow: isActive ? '0 0 10px rgba(227,30,36,0.7)' : 'none' }}
+                className="w-12 h-12 rounded-full overflow-hidden relative transition-all bg-black"
               >
                 {catReel?.thumbnail_url ? (
                   <img
                     src={catReel.thumbnail_url}
                     alt={catLabel}
                     className="w-full h-full object-cover"
-                    onError={(e) => { e.target.style.display = 'none'; }}
+                    onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'flex'; }}
                   />
-                ) : (
-                  <div className={`w-full h-full flex items-center justify-center text-xl ${isActive ? 'bg-[#E31E24]/40' : 'bg-black/40'}`}>
-                    {catEmoji}
-                  </div>
-                )}
+                ) : null}
+                <div
+                  className="w-full h-full flex items-center justify-center absolute inset-0 bg-black"
+                  style={{ display: catReel?.thumbnail_url ? 'none' : 'flex' }}
+                >
+                  <CatIcon className={`w-5 h-5 ${isActive ? 'text-[#E31E24]' : 'text-gray-400'}`} />
+                </div>
               </div>
               <span className={`text-[9px] font-bold max-w-[56px] truncate ${isActive ? 'text-white' : 'text-gray-400'}`}>
                 {catLabel}
