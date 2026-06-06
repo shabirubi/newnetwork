@@ -66,7 +66,7 @@ const BUILTIN_LABELS = {
   vod: "VOD",
 };
 
-function ReelItem({ video, isActive, onNext, onPrev, customCatMap = {}, builtinLabels = BUILTIN_LABELS }) {
+function ReelItem({ video, isActive, onNext, onPrev, customCatMap = {}, builtinLabels = BUILTIN_LABELS, priority = false }) {
   const videoRef = useRef(null);
   const [muted, setMuted] = useState(false);
   const [playing, setPlaying] = useState(false);
@@ -195,7 +195,7 @@ function ReelItem({ video, isActive, onNext, onPrev, customCatMap = {}, builtinL
         playsInline
         controls
         poster={video.thumbnail_url}
-        preload="metadata"
+        preload={priority ? "auto" : "metadata"}
         className="w-full h-full object-cover relative z-10"
         onClick={togglePlay}
       />
@@ -364,7 +364,7 @@ export default function ReelsModal({ isOpen, onClose }) {
 
   const { data: videos = [], isLoading } = useQuery({
     queryKey: ["reels-videos"],
-    queryFn: () => base44.entities.UserVideo.list("-created_date", 30),
+    queryFn: () => base44.entities.UserVideo.list("-created_date", 50),
     enabled: isOpen,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,
@@ -515,14 +515,21 @@ export default function ReelsModal({ isOpen, onClose }) {
                 className="w-12 h-12 rounded-full overflow-hidden relative transition-all"
               >
                 {catReel?.video_url ? (
-                  <video
-                    src={catReel.video_url}
-                    className="w-full h-full object-cover"
-                    muted
-                    playsInline
-                    preload="metadata"
-                    poster={catReel.thumbnail_url || ''}
-                  />
+                  catReel.thumbnail_url ? (
+                    <img
+                      src={catReel.thumbnail_url}
+                      alt={catLabel}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <video
+                      src={catReel.video_url}
+                      className="w-full h-full object-cover"
+                      muted
+                      playsInline
+                      preload="none"
+                    />
+                  )
                 ) : (
                   <div className={`w-full h-full flex items-center justify-center text-xl ${isActive ? 'bg-[#E31E24]/40' : 'bg-black/40'}`}>
                     {catEmoji}
@@ -571,6 +578,7 @@ export default function ReelsModal({ isOpen, onClose }) {
                 onPrev={goPrevReel}
                 customCatMap={customCatMap}
                 builtinLabels={BUILTIN_LABELS}
+                priority={currentReelIdx < 4}
               />
             </motion.div>
           </AnimatePresence>
