@@ -24,6 +24,7 @@ import DIDLiveChat from "./components/avatar/DIDLiveChat";
 import AdminLoginModal from "./components/admin/AdminLoginModal";
 import ReelsModal from "./components/home/ReelsModal";
 import PodcastUploadModal from "./components/home/PodcastUploadModal";
+import AdminPasswordModal from "./components/admin/AdminPasswordModal";
 
 import { base44 } from "@/api/base44Client";
 import { useQueryClient } from "@tanstack/react-query";
@@ -116,6 +117,7 @@ export default function Layout({ children, currentPageName }) {
   const [profileModalOpen, setProfileModalOpen] = useState(false);
   const [reelsOpen, setReelsOpen] = useState(false);
   const [podcastModalOpen, setPodcastModalOpen] = useState(false);
+  const [adminPasswordOpen, setAdminPasswordOpen] = useState(false);
 
 
 
@@ -301,6 +303,12 @@ export default function Layout({ children, currentPageName }) {
               <Sparkles className="w-4 h-4 text-white" />
             </Link>
 
+            {/* Admin Content Manager */}
+            <button onClick={() => setAdminPasswordOpen(true)}
+              className="p-2 bg-orange-600 rounded-full active:scale-90 transition-transform" title="ניהול תוכן">
+              <Shield className="w-4 h-4 text-white" />
+            </button>
+
             {/* Podcast Upload */}
             <button onClick={() => setPodcastModalOpen(true)}
               className="p-2 bg-[#1DB954] rounded-full active:scale-90 transition-transform">
@@ -356,6 +364,9 @@ export default function Layout({ children, currentPageName }) {
       <AnimatePresence>
         {reelsOpen && <ReelsModal isOpen={reelsOpen} onClose={() => setReelsOpen(false)} />}
       </AnimatePresence>
+
+      {/* Admin Password Modal */}
+      <AdminPasswordModal isOpen={adminPasswordOpen} onClose={() => setAdminPasswordOpen(false)} />
 
       {/* Podcast Upload Modal */}
       <AnimatePresence>
