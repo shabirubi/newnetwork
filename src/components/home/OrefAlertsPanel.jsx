@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
+import VODSubscriptionModal from "../vod/VODSubscriptionModal";
+import VODModal from "../vod/VODModal";
 import { motion, AnimatePresence } from "framer-motion";
 import { base44 } from "@/api/base44Client";
 import { AlertTriangle, Shield, MapPin, Clock, ExternalLink, Zap, Plane, Activity, Biohazard, AlertOctagon, Waves, CheckCircle2, ShieldAlert, X } from "lucide-react";
@@ -419,7 +421,19 @@ export default function AlertsPanel() {
     const [lastFetch, setLastFetch] = useState(null);
     const [hasActiveNow, setHasActiveNow] = useState(false);
     const [tickerItems, setTickerItems] = useState([]);
+    const [vodSubOpen, setVodSubOpen] = useState(false);
+    const [vodModalOpen, setVodModalOpen] = useState(false);
     const intervalRef = useRef(null);
+
+    // Check if user already subscribed (via URL param after payment)
+    useEffect(() => {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get("vod_subscribed") === "true") {
+            // Remove param and open VOD
+            window.history.replaceState({}, "", "/");
+            setVodModalOpen(true);
+        }
+    }, []);
 
     useEffect(() => {
         setLoading(false);
@@ -470,10 +484,16 @@ export default function AlertsPanel() {
                         </span>
                     )}
                 </div>
-                <span style={{ color: '#0057B8', fontSize: '12px', fontWeight: '700', fontFamily: FONT }}>▼ פתח</span>
+                <button
+                    onClick={e => { e.stopPropagation(); setVodSubOpen(true); }}
+                    className="flex-shrink-0 flex items-center gap-1 rounded-full px-3 py-1 text-white text-xs font-black transition-all active:scale-95"
+                    style={{ background: 'linear-gradient(135deg, #7c3aed, #4f46e5)', boxShadow: '0 0 12px rgba(124,58,237,0.5)', fontFamily: FONT }}
+                >
+                    📺 VOD
+                </button>
             </div>
 
-            {/* POPUP */}
+            {/* Oref POPUP */}
             <AnimatePresence>
                 {popupOpen && (
                     <AlertsPopup
@@ -484,6 +504,19 @@ export default function AlertsPanel() {
                     />
                 )}
             </AnimatePresence>
+
+            {/* VOD Subscription Modal */}
+            <VODSubscriptionModal
+                isOpen={vodSubOpen}
+                onClose={() => setVodSubOpen(false)}
+                onSubscribed={() => { setVodSubOpen(false); setVodModalOpen(true); }}
+            />
+
+            {/* VOD Content Modal */}
+            <VODModal
+                isOpen={vodModalOpen}
+                onClose={() => setVodModalOpen(false)}
+            />
         </>
     );
 }
