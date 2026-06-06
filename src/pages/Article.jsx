@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
 import { useQuery } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
@@ -45,6 +45,15 @@ const categoryColors = {
 export default function Article() {
   const urlParams = new URLSearchParams(window.location.search);
   const articleId = urlParams.get('id');
+  const [isDark, setIsDark] = React.useState(() => localStorage.getItem('darkMode') !== 'false');
+
+  React.useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsDark(!document.documentElement.classList.contains('light-mode'));
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    return () => observer.disconnect();
+  }, []);
 
   const { data: article, isLoading, error } = useQuery({
     queryKey: ['article', articleId],
@@ -151,12 +160,12 @@ export default function Article() {
           </Badge>
         </div>
 
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight" style={{ color: 'var(--app-text, #ffffff)' }}>
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight" style={{ color: isDark ? '#ffffff' : '#111827' }}>
           {article.title}
         </h1>
 
         {article.subtitle && (
-          <p className="text-2xl mb-6" style={{ color: 'var(--app-text, #e5e7eb)' }}>
+          <p className="text-2xl mb-6" style={{ color: isDark ? '#d1d5db' : '#374151' }}>
             {article.subtitle}
           </p>
         )}
