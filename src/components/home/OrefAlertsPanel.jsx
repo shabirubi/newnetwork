@@ -453,14 +453,20 @@ export default function AlertsPanel() {
     return (
         <>
             {/* STATUS BAR — click to open popup */}
-            <div
+            <motion.div
                 className="w-full flex items-center justify-between px-3 sm:px-6 py-2 cursor-pointer select-none"
-                style={{
+                animate={{
                     background: hasActiveNow
                         ? '#1a0000'
-                        : 'linear-gradient(135deg, #e0f2fe 0%, #bae6fd 40%, #7dd3fc 70%, #38bdf8 100%)',
-                    borderBottom: hasActiveNow ? '2px solid #CC0000' : '1px solid #7dd3fc',
-                    borderTop: '3px solid #0057B8',
+                        : colorPhase
+                            ? 'linear-gradient(135deg, #fde8e8 0%, #fca5a5 40%, #f87171 70%, #ef4444 100%)'
+                            : 'linear-gradient(135deg, #e0f2fe 0%, #bae6fd 40%, #7dd3fc 70%, #38bdf8 100%)',
+                    borderTopColor: colorPhase ? '#E31E24' : '#0057B8',
+                }}
+                transition={{ duration: 0.7, ease: 'easeInOut' }}
+                style={{
+                    borderBottom: hasActiveNow ? '2px solid #CC0000' : '1px solid rgba(0,0,0,0.1)',
+                    borderTop: '3px solid',
                     fontFamily: FONT,
                 }}
                 onClick={() => setPopupOpen(true)}
@@ -513,7 +519,7 @@ export default function AlertsPanel() {
                     <TvIcon className="w-3.5 h-3.5" />
                     VOD
                 </motion.button>
-            </div>
+            </motion.div>
 
             {/* Oref POPUP */}
             <AnimatePresence>
