@@ -376,8 +376,8 @@ function BreakingTicker({ items }) {
                         animate={{ y: 0, opacity: 1 }}
                         exit={{ y: -20, opacity: 0 }}
                         transition={{ duration: 0.35, ease: 'easeInOut' }}
-                        className="absolute inset-0 text-xs font-bold truncate flex items-center hover:underline cursor-pointer text-right w-full"
-                        style={{ fontFamily: FONT, color: '#1e3a5f' }}
+                        className="absolute inset-0 text-sm font-black truncate flex items-center hover:underline cursor-pointer text-right w-full"
+                        style={{ fontFamily: FONT, color: '#ffffff' }}
                     >
                         {item.title}
                     </motion.button>
@@ -453,73 +453,50 @@ export default function AlertsPanel() {
     return (
         <>
             {/* STATUS BAR — click to open popup */}
-            <motion.div
-                className="w-full flex items-center justify-between px-3 sm:px-6 py-2 cursor-pointer select-none"
-                animate={{
-                    background: hasActiveNow
-                        ? '#1a0000'
-                        : colorPhase
-                            ? 'linear-gradient(135deg, #fde8e8 0%, #fca5a5 40%, #f87171 70%, #ef4444 100%)'
-                            : 'linear-gradient(135deg, #e0f2fe 0%, #bae6fd 40%, #7dd3fc 70%, #38bdf8 100%)',
-                    borderTopColor: colorPhase ? '#E31E24' : '#0057B8',
-                }}
-                transition={{ duration: 0.7, ease: 'easeInOut' }}
+            <div
+                className="w-full flex items-center justify-between px-3 py-2.5 cursor-pointer select-none"
                 style={{
-                    borderBottom: hasActiveNow ? '2px solid #CC0000' : '1px solid rgba(0,0,0,0.1)',
-                    borderTop: '3px solid',
+                    background: hasActiveNow
+                        ? '#7f0000'
+                        : 'linear-gradient(135deg, #b91c1c 0%, #dc2626 50%, #b91c1c 100%)',
+                    borderBottom: '3px solid #7f0000',
+                    borderTop: '3px solid #ef4444',
                     fontFamily: FONT,
                 }}
                 onClick={() => setPopupOpen(true)}
                 dir="rtl"
             >
                 <div className="flex items-center gap-2 flex-1 overflow-hidden">
-                    <motion.div
-                        animate={{
-                            background: colorPhase
-                                ? 'linear-gradient(135deg, #E31E24, #b91c1c)'
-                                : 'linear-gradient(135deg, #0057B8, #1976D2)',
-                            boxShadow: colorPhase
-                                ? '0 0 14px rgba(227,30,36,0.7)'
-                                : '0 0 14px rgba(0,87,184,0.7)',
-                        }}
-                        transition={{ duration: 0.7, ease: 'easeInOut' }}
-                        className="flex items-center gap-1.5 rounded px-2 py-0.5 flex-shrink-0 cursor-pointer"
+                    <div
+                        className="flex items-center gap-1.5 rounded-xl px-3 py-1.5 flex-shrink-0 cursor-pointer"
+                        style={{ background: 'rgba(0,0,0,0.35)', border: '1.5px solid rgba(255,255,255,0.3)' }}
                         onClick={() => setPopupOpen(true)}
                     >
-                        <Shield className="w-3 h-3 text-white" />
-                        <span className="text-white text-xs font-black" style={{ fontFamily: FONT }}>פיקוד העורף</span>
-                    </motion.div>
-                    <div className={`w-2 h-2 rounded-full flex-shrink-0 ${hasActiveNow ? 'bg-red-500 animate-pulse' : 'bg-green-500'}`} />
+                        <Shield className="w-4 h-4 text-white" />
+                        <span className="text-white text-sm font-black" style={{ fontFamily: FONT }}>פיקוד העורף</span>
+                    </div>
+                    <div className={`w-2.5 h-2.5 rounded-full flex-shrink-0 ${hasActiveNow ? 'bg-yellow-300 animate-pulse' : 'bg-green-400'}`} />
                     {hasActiveNow ? (
-                        <span className="text-sm font-bold" style={{ fontFamily: FONT, color: '#fca5a5' }}>
+                        <span className="text-base font-black text-yellow-200" style={{ fontFamily: FONT }}>
                             התרעה פעילה! לחץ לפרטים
                         </span>
                     ) : tickerItems.length > 0 ? (
                         <BreakingTicker items={tickerItems} />
                     ) : (
-                        <span className="text-sm font-bold" style={{ fontFamily: FONT, color: '#1e3a5f' }}>
+                        <span className="text-sm font-bold text-white/80" style={{ fontFamily: FONT }}>
                             אין התרעות פעילות
                         </span>
                     )}
                 </div>
-                <motion.button
+                <button
                     onClick={e => { e.stopPropagation(); setVodSubOpen(true); }}
-                    animate={{
-                        background: colorPhase
-                            ? 'linear-gradient(135deg, #E31E24, #b91c1c)'
-                            : 'linear-gradient(135deg, #0057B8, #1976D2)',
-                        boxShadow: colorPhase
-                            ? '0 0 16px rgba(227,30,36,0.7)'
-                            : '0 0 16px rgba(0,87,184,0.7)',
-                    }}
-                    transition={{ duration: 0.7, ease: 'easeInOut' }}
-                    className="flex-shrink-0 flex items-center gap-1.5 rounded-full px-3 py-1 text-white text-xs font-black active:scale-95"
-                    style={{ fontFamily: FONT }}
+                    className="flex-shrink-0 flex items-center gap-1.5 rounded-xl px-3 py-1.5 text-white text-sm font-black active:scale-95 transition-transform"
+                    style={{ background: 'rgba(0,0,0,0.35)', border: '1.5px solid rgba(255,255,255,0.3)', fontFamily: FONT }}
                 >
-                    <TvIcon className="w-3.5 h-3.5" />
+                    <TvIcon className="w-4 h-4" />
                     VOD
-                </motion.button>
-            </motion.div>
+                </button>
+            </div>
 
             {/* Oref POPUP */}
             <AnimatePresence>
