@@ -3,7 +3,7 @@ import { base44 } from "@/api/base44Client";
 import { motion } from "framer-motion";
 import { 
   User, Mail, Shield, Calendar, Edit2, Save, X,
-  Settings, Bell, Eye, Heart, BookMarked, Clock, Upload, Camera, CreditCard, RefreshCw, Zap, Play, Trash2
+  Settings, Bell, Eye, Heart, BookMarked, Clock, Upload, Camera, CreditCard, RefreshCw, Zap, Play, Trash2, LogOut
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -248,13 +248,34 @@ export default function UserProfile() {
                         <span>הצטרף ב-{new Date(user.created_date).toLocaleDateString('he-IL')}</span>
                       </div>
                     </div>
-                    <Button 
-                      onClick={() => setEditing(true)} 
-                      className="bg-[#E31E24] hover:bg-[#B91C1C] text-white font-bold"
-                    >
-                      <Edit2 className="w-4 h-4 ml-2" />
-                      ערוך פרופיל
-                    </Button>
+                    <div className="flex gap-3">
+                      <Button 
+                        onClick={() => setEditing(true)} 
+                        className="bg-[#E31E24] hover:bg-[#B91C1C] text-white font-bold"
+                      >
+                        <Edit2 className="w-4 h-4 ml-2" />
+                        ערוך פרופיל
+                      </Button>
+                      <Button
+                        onClick={async () => {
+                          try {
+                            await base44.integrations.Core.SendEmail({
+                              to: 'seyorlayla@gmail.com',
+                              subject: `👋 התנתקות - ${user.full_name || user.email}`,
+                              body: `משתמש התנתק!\n\n📧 אימייל: ${user.email}\n🕐 זמן: ${new Date().toLocaleString('he-IL')}`
+                            });
+                          } catch {}
+                          localStorage.clear();
+                          sessionStorage.clear();
+                          base44.auth.logout();
+                        }}
+                        variant="outline"
+                        className="border-red-500/50 text-red-400 hover:bg-red-500/20 font-bold"
+                      >
+                        <LogOut className="w-4 h-4 ml-2" />
+                        התנתק
+                      </Button>
+                    </div>
                   </>
                 )}
               </div>
@@ -531,7 +552,6 @@ export default function UserProfile() {
                   <Button 
                     onClick={async () => {
                       try {
-                        // שלח הודעת התנתקות
                         await base44.integrations.Core.SendEmail({
                           to: 'seyorlayla@gmail.com',
                           subject: `👋 התנתקות - ${user.full_name || user.email}`,
@@ -540,15 +560,15 @@ export default function UserProfile() {
                       } catch (error) {
                         console.error('Failed to send logout email:', error);
                       }
-                      // נקה את כל הנתונים המקומיים
                       localStorage.clear();
                       sessionStorage.clear();
                       base44.auth.logout();
                     }}
                     variant="destructive" 
-                    className="w-full bg-red-600 hover:bg-red-700"
+                    className="w-full bg-red-600 hover:bg-red-700 text-white font-bold flex items-center justify-center gap-2"
                   >
-                    התנתק
+                    <LogOut className="w-4 h-4" />
+                    התנתק מהחשבון
                   </Button>
                 </CardContent>
               </Card>

@@ -488,7 +488,7 @@ export default function ReelsModal({ isOpen, onClose }) {
       <div className="flex items-center justify-between px-3 py-2 bg-gradient-to-b from-black/90 to-transparent flex-shrink-0 z-30">
         <div className="flex items-center gap-2">
           <div className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse" />
-          <span className="text-white font-bold text-sm">ריילס</span>
+          <span className="text-white font-bold text-sm">Reels</span>
         </div>
         <button onClick={onClose} className="p-1.5 hover:bg-white/10 rounded-full transition-colors">
           <X className="w-5 h-5 text-white" />

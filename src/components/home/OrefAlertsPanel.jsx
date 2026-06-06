@@ -311,6 +311,39 @@ function AlertsPopup({ activeAlert, history, lastFetch, onClose }) {
     );
 }
 
+function LatestItemTicker({ item }) {
+    const [visible, setVisible] = useState(true);
+
+    useEffect(() => {
+        const interval = setInterval(() => setVisible(v => !v), 200);
+        setTimeout(() => clearInterval(interval), 0);
+        return () => clearInterval(interval);
+    }, []);
+
+    const url = item.video_url
+        ? `/?video=${item.id}`
+        : `/Article?id=${item.id}`;
+
+    return (
+        <motion.div
+            key={item.id}
+            initial={{ x: 60, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.5, ease: 'easeOut' }}
+            className="flex items-center gap-2 overflow-hidden"
+        >
+            <span className="text-red-500 text-xs flex-shrink-0">🔴 מבזק</span>
+            <a
+                href={url}
+                className="text-sm font-bold truncate hover:underline"
+                style={{ fontFamily: FONT, color: '#1e3a5f' }}
+            >
+                {item.title}
+            </a>
+        </motion.div>
+    );
+}
+
 export default function AlertsPanel() {
     const [activeAlert, setActiveAlert] = useState(null);
     const [history, setHistory] = useState([]);
@@ -318,11 +351,17 @@ export default function AlertsPanel() {
     const [popupOpen, setPopupOpen] = useState(false);
     const [lastFetch, setLastFetch] = useState(null);
     const [hasActiveNow, setHasActiveNow] = useState(false);
+    const [latestItem, setLatestItem] = useState(null);
     const intervalRef = useRef(null);
 
     useEffect(() => {
-        // External API polling disabled — no external sources in use
         setLoading(false);
+        // Fetch latest article for ticker
+        base44.entities.NewsArticle.list('-created_date', 1)
+            .then(articles => {
+                if (articles && articles.length > 0) setLatestItem(articles[0]);
+            })
+            .catch(() => {});
     }, []);
 
     return (
@@ -341,18 +380,23 @@ export default function AlertsPanel() {
                 onClick={() => setPopupOpen(true)}
                 dir="rtl"
             >
-                <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-1.5 rounded px-2 py-0.5" style={{ background: '#0057B8' }}>
+                <div className="flex items-center gap-2 flex-1 overflow-hidden">
+                    <div className="flex items-center gap-1.5 rounded px-2 py-0.5 flex-shrink-0" style={{ background: '#0057B8' }}>
                         <Shield className="w-3 h-3 text-white" />
                         <span className="text-white text-xs font-black" style={{ fontFamily: FONT }}>פיקוד העורף</span>
                     </div>
-                    <div className={`w-2 h-2 rounded-full ${hasActiveNow ? 'bg-red-500 animate-pulse' : 'bg-green-500'}`} />
-                    <span className="text-sm font-bold" style={{ fontFamily: FONT, color: hasActiveNow ? '#fca5a5' : '#1e3a5f' }}>
-                        {hasActiveNow ? 'התרעה פעילה! לחץ לפרטים' : 'אין התרעות פעילות — לחץ להיסטוריה'}
-                    </span>
-                    {lastFetch && (
-                        <span className="text-gray-500 text-xs hidden sm:inline" style={{ fontFamily: FONT }}>
-                            • עודכן: {formatTime(lastFetch)}
+                    <div className={`w-2 h-2 rounded-full flex-shrink-0 ${hasActiveNow ? 'bg-red-500 animate-pulse' : 'bg-green-500'}`} />
+                    {hasActiveNow ? (
+                        <span className="text-sm font-bold" style={{ fontFamily: FONT, color: '#fca5a5' }}>
+                            התרעה פעילה! לחץ לפרטים
+                        </span>
+                    ) : latestItem ? (
+                        <div className="flex-1 overflow-hidden">
+                            <LatestItemTicker item={latestItem} />
+                        </div>
+                    ) : (
+                        <span className="text-sm font-bold" style={{ fontFamily: FONT, color: '#1e3a5f' }}>
+                            אין התרעות פעילות
                         </span>
                     )}
                 </div>
