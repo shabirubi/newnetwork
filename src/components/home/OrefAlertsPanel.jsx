@@ -417,6 +417,13 @@ export default function AlertsPanel() {
     const [vodSubOpen, setVodSubOpen] = useState(false);
     const [vodModalOpen, setVodModalOpen] = useState(false);
     const intervalRef = useRef(null);
+    const [colorPhase, setColorPhase] = useState(false);
+
+    // Pulsing color cycle: red ↔ blue
+    useEffect(() => {
+        const t = setInterval(() => setColorPhase(p => !p), 1200);
+        return () => clearInterval(t);
+    }, []);
 
     // Check if user already subscribed (via URL param after payment)
     useEffect(() => {
@@ -460,10 +467,22 @@ export default function AlertsPanel() {
                 dir="rtl"
             >
                 <div className="flex items-center gap-2 flex-1 overflow-hidden">
-                    <div className="flex items-center gap-1.5 rounded px-2 py-0.5 flex-shrink-0" style={{ background: '#0057B8' }}>
+                    <motion.div
+                        animate={{
+                            background: colorPhase
+                                ? 'linear-gradient(135deg, #E31E24, #b91c1c)'
+                                : 'linear-gradient(135deg, #0057B8, #1976D2)',
+                            boxShadow: colorPhase
+                                ? '0 0 14px rgba(227,30,36,0.7)'
+                                : '0 0 14px rgba(0,87,184,0.7)',
+                        }}
+                        transition={{ duration: 0.7, ease: 'easeInOut' }}
+                        className="flex items-center gap-1.5 rounded px-2 py-0.5 flex-shrink-0 cursor-pointer"
+                        onClick={() => setPopupOpen(true)}
+                    >
                         <Shield className="w-3 h-3 text-white" />
                         <span className="text-white text-xs font-black" style={{ fontFamily: FONT }}>פיקוד העורף</span>
-                    </div>
+                    </motion.div>
                     <div className={`w-2 h-2 rounded-full flex-shrink-0 ${hasActiveNow ? 'bg-red-500 animate-pulse' : 'bg-green-500'}`} />
                     {hasActiveNow ? (
                         <span className="text-sm font-bold" style={{ fontFamily: FONT, color: '#fca5a5' }}>
@@ -477,14 +496,23 @@ export default function AlertsPanel() {
                         </span>
                     )}
                 </div>
-                <button
+                <motion.button
                     onClick={e => { e.stopPropagation(); setVodSubOpen(true); }}
-                    className="flex-shrink-0 flex items-center gap-1.5 rounded-full px-3 py-1 text-white text-xs font-black transition-all active:scale-95"
-                    style={{ background: 'linear-gradient(135deg, #7c3aed, #4f46e5)', boxShadow: '0 0 12px rgba(124,58,237,0.5)', fontFamily: FONT }}
+                    animate={{
+                        background: colorPhase
+                            ? 'linear-gradient(135deg, #E31E24, #b91c1c)'
+                            : 'linear-gradient(135deg, #0057B8, #1976D2)',
+                        boxShadow: colorPhase
+                            ? '0 0 16px rgba(227,30,36,0.7)'
+                            : '0 0 16px rgba(0,87,184,0.7)',
+                    }}
+                    transition={{ duration: 0.7, ease: 'easeInOut' }}
+                    className="flex-shrink-0 flex items-center gap-1.5 rounded-full px-3 py-1 text-white text-xs font-black active:scale-95"
+                    style={{ fontFamily: FONT }}
                 >
                     <TvIcon className="w-3.5 h-3.5" />
                     VOD
-                </button>
+                </motion.button>
             </div>
 
             {/* Oref POPUP */}
