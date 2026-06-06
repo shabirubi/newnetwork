@@ -423,9 +423,9 @@ export default function Layout({ children, currentPageName }) {
                 animate={{ x: 0 }}
                 exit={{ x: "100%" }}
                 transition={{ type: "spring", damping: 25, stiffness: 200 }}
-                className="absolute right-0 top-0 bottom-0 w-80 bg-black/90 backdrop-blur-xl border-l border-[#E31E24]/30 shadow-2xl shadow-[#E31E24]/20 overflow-y-auto"
+                className="absolute right-0 top-0 bottom-0 w-80 bg-gradient-to-b from-[#0057B8]/10 to-[#E31E24]/10 backdrop-blur-xl border-l border-[#E31E24]/50 shadow-2xl shadow-[#E31E24]/30 overflow-y-auto"
               >
-                <div className="sticky top-0 bg-gradient-to-br from-black via-[#0057B8]/30 to-black p-4 shadow-lg shadow-[#0057B8]/20 border-b-2 border-[#0057B8]/50">
+                <div className="sticky top-0 bg-gradient-to-br from-[#0057B8] via-[#0057B8]/80 to-[#E31E24] p-4 shadow-lg shadow-[#E31E24]/40 border-b-2 border-[#E31E24]/80">
                   <div className="flex items-center justify-between">
                     <h2 className="text-white font-bold text-xl">תפריט ראשי</h2>
                     <button
