@@ -70,7 +70,8 @@ function ArticleCard({ article, catColor, catLabel }) {
   return (
     <Link
       to={createPageUrl(`Article?id=${article.id}`)}
-      className="flex gap-2 p-2.5 bg-[#111] rounded-xl border border-gray-800 hover:border-gray-600 transition-all"
+      className="flex gap-2 p-2.5 rounded-xl transition-all"
+      style={{ backgroundColor: 'var(--app-card-bg, #111)', border: '1px solid var(--app-border, rgba(255,255,255,0.08))' }}
     >
       {article.image_url ? (
         <img 
@@ -81,7 +82,7 @@ function ArticleCard({ article, catColor, catLabel }) {
           className="w-16 h-14 object-cover rounded-lg flex-shrink-0" 
         />
       ) : article.video_url ? (
-        <div className="w-16 h-14 bg-gray-900 rounded-lg flex-shrink-0 flex items-center justify-center border border-gray-700">
+        <div className="w-16 h-14 rounded-lg flex-shrink-0 flex items-center justify-center" style={{ backgroundColor: 'var(--app-bg, #0d1117)', border: '1px solid var(--app-border)' }}>
           <Play className="w-4 h-4 text-gray-500" />
         </div>
       ) : null}
@@ -89,9 +90,9 @@ function ArticleCard({ article, catColor, catLabel }) {
         {article.is_breaking && (
           <span className="text-[8px] font-bold text-red-500 bg-red-500/10 px-1 py-0.5 rounded mb-1 inline-block">🔴 דחוף</span>
         )}
-        <h4 className="text-white text-xs font-bold leading-tight line-clamp-2">{article.title}</h4>
-        {article.subtitle && <p className="text-gray-500 text-[10px] mt-0.5 line-clamp-1">{article.subtitle}</p>}
-        {article.source && <p className="text-gray-600 text-[9px] mt-1">{article.source}</p>}
+        <h4 className="text-xs font-bold leading-tight line-clamp-2" style={{ color: 'var(--app-text, #ffffff)' }}>{article.title}</h4>
+        {article.subtitle && <p className="text-[10px] mt-0.5 line-clamp-1 text-gray-500">{article.subtitle}</p>}
+        {article.source && <p className="text-[9px] mt-1 text-gray-600">{article.source}</p>}
       </div>
     </Link>
   );
@@ -106,9 +107,9 @@ function CategoryBlock({ category, videos, articles }) {
       <div className="mb-6 px-2" dir="rtl">
         <div className="flex items-center gap-2 mb-3">
           <div className="w-1 h-5 rounded-full flex-shrink-0" style={{ backgroundColor: category.color }} />
-          <h3 className="text-white font-bold text-base">{category.label}</h3>
+          <h3 className="font-bold text-base" style={{ color: 'var(--app-text, #ffffff)' }}>{category.label}</h3>
         </div>
-        <div className="bg-[#111] rounded-lg border border-gray-800 p-4 text-center text-gray-500 text-xs">
+        <div className="rounded-lg p-4 text-center text-gray-500 text-xs" style={{ backgroundColor: 'var(--app-card-bg, #111)', border: '1px solid var(--app-border)' }}>
           אין תוכן בקטגוריה זו עדיין
         </div>
       </div>
@@ -120,7 +121,7 @@ function CategoryBlock({ category, videos, articles }) {
       {/* Category header */}
       <div className="flex items-center gap-2 mb-3 px-2">
         <div className="w-1 h-5 rounded-full flex-shrink-0" style={{ backgroundColor: category.color }} />
-        <h3 className="text-white font-bold text-base">{category.label}</h3>
+        <h3 className="font-bold text-base" style={{ color: 'var(--app-text, #ffffff)' }}>{category.label}</h3>
         {videos.length > 0 && (
           <span className="text-[10px] font-bold px-1.5 py-0.5 rounded-full" style={{ background: category.color + '25', color: category.color }}>
             {videos.length}

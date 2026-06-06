@@ -149,15 +149,23 @@ export default function Layout({ children, currentPageName }) {
       document.documentElement.classList.add('dark');
       document.documentElement.classList.remove('light-mode');
       document.documentElement.style.colorScheme = 'dark';
-      document.body.style.backgroundColor = '#121212';
+      document.body.style.backgroundColor = '#0d1117';
       document.body.style.color = '#ffffff';
+      document.documentElement.style.setProperty('--app-bg', '#0d1117');
+      document.documentElement.style.setProperty('--app-card-bg', '#161b22');
+      document.documentElement.style.setProperty('--app-text', '#e8edf5');
+      document.documentElement.style.setProperty('--app-border', 'rgba(255,255,255,0.08)');
       localStorage.setItem('darkMode', 'true');
     } else {
       document.documentElement.classList.remove('dark');
       document.documentElement.classList.add('light-mode');
       document.documentElement.style.colorScheme = 'light';
-      document.body.style.backgroundColor = '#f5f5f5';
+      document.body.style.backgroundColor = '#f0f4f8';
       document.body.style.color = '#111111';
+      document.documentElement.style.setProperty('--app-bg', '#f0f4f8');
+      document.documentElement.style.setProperty('--app-card-bg', '#ffffff');
+      document.documentElement.style.setProperty('--app-text', '#111827');
+      document.documentElement.style.setProperty('--app-border', 'rgba(0,0,0,0.08)');
       localStorage.setItem('darkMode', 'false');
     }
   }, [darkMode]);
@@ -253,6 +261,39 @@ export default function Layout({ children, currentPageName }) {
         }
         .safe-area-bottom {
           padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        /* Day/Night mode - article cards and content areas */
+        html.light-mode .news-card,
+        html.light-mode .article-card,
+        html.light-mode [class*="bg-gray-900"],
+        html.light-mode [class*="bg-gray-800"],
+        html.light-mode [class*="bg-black/"] {
+          background-color: #ffffff !important;
+          color: #111827 !important;
+        }
+
+        html.light-mode main {
+          background-color: #f0f4f8 !important;
+        }
+
+        html.light-mode .text-white:not(.keep-white):not(button):not(a) {
+          color: #111827 !important;
+        }
+
+        html.light-mode .text-gray-300,
+        html.light-mode .text-gray-400 {
+          color: #4b5563 !important;
+        }
+
+        html.light-mode .border-white\/10,
+        html.light-mode .border-white\/5 {
+          border-color: rgba(0,0,0,0.08) !important;
+        }
+
+        /* Category sections background in light mode */
+        html.light-mode section {
+          background-color: transparent;
         }
 
       `}</style>
@@ -766,7 +807,7 @@ export default function Layout({ children, currentPageName }) {
 
 
       {/* Main Content - Mobile First */}
-      <main className="flex-1 pb-20">
+      <main className="flex-1 pb-20" style={{ backgroundColor: 'var(--app-bg)', color: 'var(--app-text)', transition: 'background-color 0.3s, color 0.3s' }}>
         {children}
       </main>
 
