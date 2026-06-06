@@ -311,36 +311,103 @@ function AlertsPopup({ activeAlert, history, lastFetch, onClose }) {
     );
 }
 
-function LatestItemTicker({ item }) {
-    const [visible, setVisible] = useState(true);
+const TICKER_TYPES = [
+    { emoji: '🔴', label: 'מבזק', color: '#cc0000' },
+    { emoji: '📹', label: 'סרטון חדש', color: '#0057B8' },
+    { emoji: '⚡', label: 'עכשיו', color: '#E87722' },
+    { emoji: '🗞️', label: 'כתבה', color: '#1565C0' },
+];
+
+function BreakingTicker({ items }) {
+    const [idx, setIdx] = useState(0);
+    const [animKey, setAnimKey] = useState(0);
 
     useEffect(() => {
-        const interval = setInterval(() => setVisible(v => !v), 200);
-        setTimeout(() => clearInterval(interval), 0);
-        return () => clearInterval(interval);
-    }, []);
+        if (items.length <= 1) return;
+        const t = setInterval(() => {
+            setIdx(i => (i + 1) % items.length);
+            setAnimKey(k => k + 1);
+        }, 4000);
+        return () => clearInterval(t);
+    }, [items.length]);
 
-    const url = item.video_url
-        ? `/?video=${item.id}`
-        : `/Article?id=${item.id}`;
+    if (!items.length) return null;
+
+    const item = items[idx];
+    const typeInfo = TICKER_TYPES[idx % TICKER_TYPES.length];
+    const url = item.video_url ? `/VideoCreator?video=${item.video_url}` : `/Article?id=${item.id}`;
+    const isVideo = !!item.video_url || !!item.thumbnail_url;
 
     return (
-        <motion.div
-            key={item.id}
-            initial={{ x: 60, opacity: 0 }}
-            animate={{ x: 0, opacity: 1 }}
-            transition={{ duration: 0.5, ease: 'easeOut' }}
-            className="flex items-center gap-2 overflow-hidden"
-        >
-            <span className="text-red-500 text-xs flex-shrink-0">🔴 מבזק</span>
-            <a
-                href={url}
-                className="text-sm font-bold truncate hover:underline"
-                style={{ fontFamily: FONT, color: '#1e3a5f' }}
-            >
-                {item.title}
-            </a>
-        </motion.div>
+        <div className="flex items-center gap-2 flex-1 overflow-hidden" onClick={e => e.stopPropagation()}>
+            {/* Type badge - animated */}
+            <AnimatePresence mode="wait">
+                <motion.div
+                    key={`badge-${animKey}`}
+                    initial={{ scale: 0.5, opacity: 0, rotate: -10 }}
+                    animate={{ scale: 1, opacity: 1, rotate: 0 }}
+                    exit={{ scale: 0.5, opacity: 0, rotate: 10 }}
+                    transition={{ duration: 0.3, type: 'spring', stiffness: 300 }}
+                    className="flex-shrink-0 flex items-center gap-1 rounded-full px-2 py-0.5 text-white text-[10px] font-black"
+                    style={{ background: typeInfo.color, fontFamily: FONT }}
+                >
+                    <span>{typeInfo.emoji}</span>
+                    <span>{typeInfo.label}</span>
+                </motion.div>
+            </AnimatePresence>
+
+            {/* Title - slides in from bottom */}
+            <div className="flex-1 overflow-hidden h-5 relative">
+                <AnimatePresence mode="wait">
+                    <motion.a
+                        key={`title-${animKey}`}
+                        href={url}
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        exit={{ y: -20, opacity: 0 }}
+                        transition={{ duration: 0.35, ease: 'easeInOut' }}
+                        className="absolute inset-0 text-xs font-bold truncate flex items-center hover:underline cursor-pointer"
+                        style={{ fontFamily: FONT, color: '#1e3a5f' }}
+                    >
+                        {item.title}
+                    </motion.a>
+                </AnimatePresence>
+            </div>
+
+            {/* Thumbnail preview if video */}
+            {isVideo && item.thumbnail_url && (
+                <AnimatePresence mode="wait">
+                    <motion.a
+                        key={`thumb-${animKey}`}
+                        href={url}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 1, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.8 }}
+                        transition={{ duration: 0.3 }}
+                        className="flex-shrink-0 w-8 h-6 rounded overflow-hidden border border-blue-300 hover:border-blue-500 transition-colors"
+                    >
+                        <img src={item.thumbnail_url} alt="" className="w-full h-full object-cover" />
+                    </motion.a>
+                </AnimatePresence>
+            )}
+
+            {/* Dot indicator */}
+            {items.length > 1 && (
+                <div className="flex gap-0.5 flex-shrink-0">
+                    {items.slice(0, Math.min(items.length, 5)).map((_, i) => (
+                        <div
+                            key={i}
+                            className="rounded-full transition-all duration-300"
+                            style={{
+                                width: i === idx ? '8px' : '4px',
+                                height: '4px',
+                                background: i === idx ? '#0057B8' : '#93c5fd',
+                            }}
+                        />
+                    ))}
+                </div>
+            )}
+        </div>
     );
 }
 
@@ -351,17 +418,22 @@ export default function AlertsPanel() {
     const [popupOpen, setPopupOpen] = useState(false);
     const [lastFetch, setLastFetch] = useState(null);
     const [hasActiveNow, setHasActiveNow] = useState(false);
-    const [latestItem, setLatestItem] = useState(null);
+    const [tickerItems, setTickerItems] = useState([]);
     const intervalRef = useRef(null);
 
     useEffect(() => {
         setLoading(false);
-        // Fetch latest article for ticker
-        base44.entities.NewsArticle.list('-created_date', 1)
-            .then(articles => {
-                if (articles && articles.length > 0) setLatestItem(articles[0]);
-            })
-            .catch(() => {});
+        // Fetch latest articles + videos for the ticker
+        Promise.all([
+            base44.entities.NewsArticle.list('-created_date', 4),
+            base44.entities.UserVideo.list('-created_date', 3),
+        ]).then(([articles, videos]) => {
+            const items = [
+                ...(articles || []).map(a => ({ ...a, _type: 'article' })),
+                ...(videos || []).map(v => ({ ...v, _type: 'video', title: v.title, video_url: v.video_url, thumbnail_url: v.thumbnail_url })),
+            ].sort(() => Math.random() - 0.5).slice(0, 6);
+            setTickerItems(items);
+        }).catch(() => {});
     }, []);
 
     return (
@@ -390,10 +462,8 @@ export default function AlertsPanel() {
                         <span className="text-sm font-bold" style={{ fontFamily: FONT, color: '#fca5a5' }}>
                             התרעה פעילה! לחץ לפרטים
                         </span>
-                    ) : latestItem ? (
-                        <div className="flex-1 overflow-hidden">
-                            <LatestItemTicker item={latestItem} />
-                        </div>
+                    ) : tickerItems.length > 0 ? (
+                        <BreakingTicker items={tickerItems} />
                     ) : (
                         <span className="text-sm font-bold" style={{ fontFamily: FONT, color: '#1e3a5f' }}>
                             אין התרעות פעילות
