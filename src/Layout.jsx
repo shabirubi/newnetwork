@@ -272,36 +272,8 @@ export default function Layout({ children, currentPageName }) {
         }
 
         /* Day/Night mode - article cards and content areas */
-        html.light-mode .news-card,
-        html.light-mode .article-card,
-        html.light-mode [class*="bg-gray-900"],
-        html.light-mode [class*="bg-gray-800"],
-        html.light-mode [class*="bg-black/"] {
-          background-color: #ffffff !important;
-          color: #111827 !important;
-        }
-
         html.light-mode main {
           background-color: #f0f4f8 !important;
-        }
-
-        html.light-mode .text-white:not(.keep-white):not(button):not(a) {
-          color: #111827 !important;
-        }
-
-        html.light-mode .text-gray-300,
-        html.light-mode .text-gray-400 {
-          color: #4b5563 !important;
-        }
-
-        html.light-mode .border-white\/10,
-        html.light-mode .border-white\/5 {
-          border-color: rgba(0,0,0,0.08) !important;
-        }
-
-        /* Category sections background in light mode */
-        html.light-mode section {
-          background-color: transparent;
         }
 
       `}</style>

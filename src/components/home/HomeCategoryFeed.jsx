@@ -67,11 +67,20 @@ function ReelThumb({ video, onOpen }) {
 
 // Article card — compact mobile-first
 function ArticleCard({ article, catColor, catLabel, cardBg, cardBorder, cardText, pageBg }) {
+  const ref = React.useRef(null);
+  React.useEffect(() => {
+    if (ref.current) {
+      ref.current.style.setProperty('background-color', cardBg, 'important');
+      ref.current.style.setProperty('color', cardText, 'important');
+    }
+  }, [cardBg, cardText]);
+
   return (
     <Link
+      ref={ref}
       to={createPageUrl(`Article?id=${article.id}`)}
-      className="flex gap-2 p-2.5 rounded-xl transition-all"
-      style={{ backgroundColor: cardBg, border: `1px solid ${cardBorder}` }}
+      className="flex gap-2 p-2.5 rounded-xl"
+      style={{ border: `1px solid ${cardBorder}` }}
     >
       {article.image_url ? (
         <img 
