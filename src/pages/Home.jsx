@@ -76,6 +76,9 @@ export default function Home() {
       {/* OREF Alerts - Compact Mobile */}
       <OrefAlertsPanel />
 
+      {/* Reels Strip */}
+      <ReelsStrip />
+
       {/* Featured Article */}
       <FeaturedArticleEditor />
 
