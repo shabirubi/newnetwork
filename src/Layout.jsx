@@ -611,41 +611,43 @@ export default function Layout({ children, currentPageName }) {
               className="fixed inset-0 z-[9999]"
             >
               <div 
-                className="absolute inset-0 bg-black/80 backdrop-blur-sm"
+                className="absolute inset-0 bg-black/60 backdrop-blur-sm"
                 onClick={() => setCategoriesSidebarOpen(false)}
               />
               <motion.nav 
                 initial={{ x: "100%" }}
                 animate={{ x: 0 }}
                 exit={{ x: "100%" }}
-                transition={{ duration: 0.3 }}
-                className="absolute right-0 top-0 bottom-0 w-64 bg-black/90 backdrop-blur-xl border-l border-[#0057B8]/30 shadow-2xl overflow-y-auto"
+                transition={{ type: "spring", damping: 28, stiffness: 260 }}
+                className="absolute right-0 top-0 bottom-0 w-72 overflow-y-auto shadow-2xl"
+                style={{ background: darkMode ? '#0f172a' : '#ffffff' }}
               >
-                <div className="sticky top-0 bg-gradient-to-br from-black via-[#0057B8]/20 to-black p-4 shadow-lg border-b border-[#0057B8]/30">
-                  <div className="flex items-center justify-between">
-                    <h2 className="text-white font-bold">קטגוריות</h2>
-                    <button
-                      onClick={() => setCategoriesSidebarOpen(false)}
-                      className="p-2 rounded-full bg-[#0057B8]/20 hover:bg-[#0057B8]/40 text-white active:scale-95 transition-all"
-                    >
-                      <X size={22} />
-                    </button>
-                  </div>
+                {/* Header */}
+                <div className="sticky top-0 z-10 p-5 flex items-center justify-between" style={{ background: 'linear-gradient(135deg, #0057B8, #E31E24)' }}>
+                  <h2 className="text-white font-black text-lg tracking-wide">קטגוריות</h2>
+                  <button
+                    onClick={() => setCategoriesSidebarOpen(false)}
+                    className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white active:scale-90 transition-transform"
+                  >
+                    <X size={18} />
+                  </button>
                 </div>
 
-                <div className="p-4 space-y-1">
-                  {categories.map((cat) => (
+                {/* Categories List */}
+                <div className="p-3 space-y-1">
+                  {categories.map((cat, i) => (
                     <Link
                       key={cat.id}
                       to={createPageUrl(cat.href)}
                       onClick={() => setCategoriesSidebarOpen(false)}
-                      className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#0057B8]/20 active:bg-[#0057B8]/40 transition-all border border-transparent hover:border-[#0057B8]/30"
+                      className="flex items-center gap-3 px-3 py-3 rounded-2xl active:scale-98 transition-all"
+                      style={{ background: darkMode ? 'rgba(255,255,255,0.04)' : 'rgba(0,87,184,0.05)' }}
                     >
-                      <div className="w-10 h-10 rounded-xl bg-black/40 border border-[#0057B8]/20 flex items-center justify-center">
-                        <cat.icon size={20} className="text-[#0057B8]" />
+                      <div className="w-10 h-10 rounded-2xl flex items-center justify-center flex-shrink-0" style={{ background: 'linear-gradient(135deg, #0057B8, #1976D2)' }}>
+                        <cat.icon size={18} className="text-white" />
                       </div>
-                      <span className="flex-1 font-medium">{cat.label}</span>
-                      <ChevronLeft size={18} className="text-[#0057B8]" />
+                      <span className="flex-1 font-bold text-sm" style={{ color: darkMode ? '#e2e8f0' : '#1e293b' }}>{cat.label}</span>
+                      <ChevronLeft size={16} style={{ color: '#0057B8' }} />
                     </Link>
                   ))}
                 </div>
