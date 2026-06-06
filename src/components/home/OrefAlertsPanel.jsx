@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import VODSubscriptionModal from "../vod/VODSubscriptionModal";
 import VODModal from "../vod/VODModal";
+import { Tv as TvIcon } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { base44 } from "@/api/base44Client";
 import { AlertTriangle, Shield, MapPin, Clock, ExternalLink, Zap, Plane, Activity, Biohazard, AlertOctagon, Waves, CheckCircle2, ShieldAlert, X } from "lucide-react";
@@ -470,10 +471,11 @@ export default function AlertsPanel() {
                 </div>
                 <button
                     onClick={e => { e.stopPropagation(); setVodSubOpen(true); }}
-                    className="flex-shrink-0 flex items-center gap-1 rounded-full px-3 py-1 text-white text-xs font-black transition-all active:scale-95"
+                    className="flex-shrink-0 flex items-center gap-1.5 rounded-full px-3 py-1 text-white text-xs font-black transition-all active:scale-95"
                     style={{ background: 'linear-gradient(135deg, #7c3aed, #4f46e5)', boxShadow: '0 0 12px rgba(124,58,237,0.5)', fontFamily: FONT }}
                 >
-                    📺 VOD
+                    <TvIcon className="w-3.5 h-3.5" />
+                    VOD
                 </button>
             </div>
 
