@@ -516,20 +516,6 @@ export default function Layout({ children, currentPageName }) {
                     </a>
                   )}
 
-                  <a
-                    href={createPageUrl("VideoCreator")}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    onClick={() => setMenuSidebarOpen(false)}
-                    className="flex items-center gap-4 px-4 py-4 text-gray-200 rounded-2xl hover:bg-[#E31E24]/20 active:bg-[#E31E24]/40 transition-all border border-transparent hover:border-[#E31E24]/30"
-                  >
-                    <div className="w-10 h-10 rounded-xl bg-black/40 border border-green-500/20 flex items-center justify-center">
-                      <Sparkles size={20} className="text-green-500" />
-                    </div>
-                    <span className="flex-1 font-medium text-green-300">יוצר AI</span>
-                    <ChevronLeft size={18} className="text-green-500" />
-                  </a>
-
                   <Link
                     to={createPageUrl("VideoEditor")}
                     onClick={() => setMenuSidebarOpen(false)}
