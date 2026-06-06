@@ -300,8 +300,8 @@ export default function Layout({ children, currentPageName }) {
               <Sparkles className="w-4 h-4 text-white" />
             </Link>
 
-            {/* Spotify Podcasts */}
-            <button onClick={() => window.open('https://open.spotify.com/show/YOUR_PODCAST_ID', '_blank')}
+            {/* Podcast Upload */}
+            <button onClick={() => window.dispatchEvent(new CustomEvent('openUploadPodcast'))}
               className="p-2 bg-[#1DB954] rounded-full active:scale-90 transition-transform">
               <Music className="w-4 h-4 text-white" />
             </button>
