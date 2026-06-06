@@ -33,6 +33,14 @@ import UserProfileModal from "./components/user/UserProfileModal";
 // Vertical Carousel Breaking News Component
 function TypewriterDate() {
   const [currentIndex, setCurrentIndex] = React.useState(0);
+  const [isDark, setIsDark] = React.useState(() => localStorage.getItem('darkMode') !== 'false');
+  React.useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsDark(!document.documentElement.classList.contains('light-mode'));
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    return () => observer.disconnect();
+  }, []);
   const queryClient = useQueryClient();
   // Reuse shared cache — no extra DB call
   const allArticles = queryClient.getQueryData(['featured-articles']) || [];
@@ -63,7 +71,7 @@ function TypewriterDate() {
           className="flex items-center gap-2 whitespace-nowrap w-full"
         >
           <span className="text-red-500 text-xs">🔴</span>
-          <span className="text-sm font-bold text-white truncate">{news[currentIndex]?.title}</span>
+          <span className="text-sm font-bold truncate" style={{ color: isDark ? '#ffffff' : '#111827' }}>{news[currentIndex]?.title}</span>
         </motion.div>
       </AnimatePresence>
     </div>
@@ -299,7 +307,7 @@ export default function Layout({ children, currentPageName }) {
       `}</style>
 
       {/* Native Mobile Header */}
-      <div className="safe-area-top sticky top-0 z-[1000] shadow-2xl" style={{ background: darkMode ? 'linear-gradient(to bottom, #000000, #0a0a0a)' : 'linear-gradient(to bottom, #1e3a5f, #1a2f4a)', transition: 'background 0.3s' }}>
+      <div className="safe-area-top sticky top-0 z-[1000] shadow-2xl" style={{ background: darkMode ? 'linear-gradient(to bottom, #000000, #0a0a0a)' : 'linear-gradient(to bottom, #ffffff, #f0f4f8)', transition: 'background 0.3s' }}>
         <div className="px-3 py-2.5 flex items-center justify-between">
           
           {/* Logo */}
@@ -315,8 +323,8 @@ export default function Layout({ children, currentPageName }) {
               />
             </div>
             <div className="flex-col">
-              <h1 className="text-sm font-bold text-white leading-tight">הרשת החדשה</h1>
-              <p className="text-[9px] text-gray-400">חדשות 24/7</p>
+              <h1 className="text-sm font-bold leading-tight" style={{ color: darkMode ? '#ffffff' : '#111827' }}>הרשת החדשה</h1>
+              <p className="text-[9px]" style={{ color: darkMode ? '#9ca3af' : '#6b7280' }}>חדשות 24/7</p>
             </div>
           </div>
 
@@ -353,8 +361,9 @@ export default function Layout({ children, currentPageName }) {
 
             {/* Dark Mode */}
             <button onClick={() => setDarkMode(v => !v)}
-              className="p-2 bg-white/10 rounded-full active:scale-90 transition-transform">
-              {darkMode ? <Moon className="w-4 h-4 text-blue-300" /> : <Sun className="w-4 h-4 text-yellow-400" />}
+              className="p-2 rounded-full active:scale-90 transition-transform"
+              style={{ backgroundColor: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)' }}>
+              {darkMode ? <Moon className="w-4 h-4 text-blue-300" /> : <Sun className="w-4 h-4 text-yellow-500" />}
             </button>
             
             {/* Profile */}
@@ -371,7 +380,7 @@ export default function Layout({ children, currentPageName }) {
                 )}
               </Link>
             ) : (
-              <button onClick={handleLogin} className="p-2 bg-blue-600 rounded-full active:scale-90">
+              <button onClick={handleLogin} className="p-2 bg-blue-600 rounded-full active:scale-90 transition-transform">
                 <LogIn className="w-4 h-4 text-white" />
               </button>
             )}
@@ -812,16 +821,16 @@ export default function Layout({ children, currentPageName }) {
       </main>
 
       {/* Native Bottom Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 safe-area-bottom z-[1000] border-t border-white/10" style={{ background: darkMode ? 'linear-gradient(to top, #0a0a0a, #000000)' : 'linear-gradient(to top, #1a2f4a, #1e3a5f)', transition: 'background 0.3s' }}>
+      <nav className="fixed bottom-0 left-0 right-0 safe-area-bottom z-[1000]" style={{ background: darkMode ? 'linear-gradient(to top, #0a0a0a, #000000)' : '#ffffff', borderTop: darkMode ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.1)', transition: 'background 0.3s' }}>
         <div className="grid grid-cols-4 gap-1 px-1 py-2">
           <Link
             to={createPageUrl("Home")}
             className="flex flex-col items-center justify-center py-2 active:scale-90 transition-transform"
           >
-            <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center mb-0.5">
-              <Home size={20} className="text-white" strokeWidth={2.5} />
+            <div className="w-10 h-10 rounded-2xl flex items-center justify-center mb-0.5" style={{ backgroundColor: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)' }}>
+              <Home size={20} strokeWidth={2.5} style={{ color: darkMode ? '#ffffff' : '#111827' }} />
             </div>
-            <span className="text-[9px] font-bold text-white">בית</span>
+            <span className="text-[9px] font-bold" style={{ color: darkMode ? '#ffffff' : '#111827' }}>בית</span>
           </Link>
 
           <button
@@ -831,7 +840,7 @@ export default function Layout({ children, currentPageName }) {
             <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-red-600 to-red-700 flex items-center justify-center mb-0.5">
               <Radio size={20} className="text-white" strokeWidth={2.5} />
             </div>
-            <span className="text-[9px] font-bold text-white">ריילס</span>
+            <span className="text-[9px] font-bold" style={{ color: darkMode ? '#ffffff' : '#111827' }}>ריילס</span>
           </button>
 
           <Link
@@ -841,38 +850,38 @@ export default function Layout({ children, currentPageName }) {
             <div className="w-10 h-10 rounded-2xl bg-gradient-to-br from-purple-600 to-purple-700 flex items-center justify-center mb-0.5">
               <Sparkles size={20} className="text-white" strokeWidth={2.5} />
             </div>
-            <span className="text-[9px] font-bold text-white">AI</span>
+            <span className="text-[9px] font-bold" style={{ color: darkMode ? '#ffffff' : '#111827' }}>AI</span>
           </Link>
 
           <button
             onClick={() => setCategoriesSidebarOpen(true)}
             className="flex flex-col items-center justify-center py-2 active:scale-90 transition-transform"
           >
-            <div className="w-10 h-10 rounded-2xl bg-white/10 flex items-center justify-center mb-0.5">
-              <Menu size={20} className="text-white" strokeWidth={2.5} />
+            <div className="w-10 h-10 rounded-2xl flex items-center justify-center mb-0.5" style={{ backgroundColor: darkMode ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)' }}>
+              <Menu size={20} strokeWidth={2.5} style={{ color: darkMode ? '#ffffff' : '#111827' }} />
             </div>
-            <span className="text-[9px] font-bold text-white">תפריט</span>
+            <span className="text-[9px] font-bold" style={{ color: darkMode ? '#ffffff' : '#111827' }}>תפריט</span>
           </button>
         </div>
       </nav>
 
       {/* Compact Footer */}
-      <footer className="border-t border-white/10 py-6 mt-8" style={{ backgroundColor: darkMode ? '#0a0a0a' : '#1a2f4a', transition: 'background-color 0.3s' }}>
+      <footer className="py-6 mt-8" style={{ backgroundColor: darkMode ? '#0a0a0a' : '#f0f4f8', borderTop: darkMode ? '1px solid rgba(255,255,255,0.1)' : '1px solid rgba(0,0,0,0.1)', transition: 'background-color 0.3s' }}>
         <div className="px-4 text-center">
           <div className="flex items-center justify-center gap-2 mb-3">
             <div className="w-8 h-8 rounded-full bg-gradient-to-br from-[#0057B8] to-[#E31E24] flex items-center justify-center">
               <span className="text-white font-bold text-xs">ר</span>
             </div>
-            <span className="text-white font-bold text-sm">הרשת החדשה</span>
+            <span className="font-bold text-sm" style={{ color: darkMode ? '#ffffff' : '#111827' }}>הרשת החדשה</span>
           </div>
-          <div className="flex items-center justify-center gap-4 text-[10px] text-gray-500 mb-3">
-            <Link to={createPageUrl("Terms")} className="hover:text-white">תקנון</Link>
+          <div className="flex items-center justify-center gap-4 text-[10px] mb-3" style={{ color: darkMode ? '#6b7280' : '#4b5563' }}>
+            <Link to={createPageUrl("Terms")} style={{ color: 'inherit' }}>תקנון</Link>
             <span>•</span>
-            <Link to={createPageUrl("Accessibility")} className="hover:text-white">נגישות</Link>
+            <Link to={createPageUrl("Accessibility")} style={{ color: 'inherit' }}>נגישות</Link>
             <span>•</span>
-            <a href="mailto:privacy@hareshet.co.il" className="hover:text-white">צור קשר</a>
+            <a href="mailto:privacy@hareshet.co.il" style={{ color: 'inherit' }}>צור קשר</a>
           </div>
-          <p className="text-gray-600 text-[9px]">© 2024 הרשת החדשה</p>
+          <p className="text-[9px]" style={{ color: darkMode ? '#4b5563' : '#9ca3af' }}>© 2024 הרשת החדשה</p>
         </div>
       </footer>
     </div>
