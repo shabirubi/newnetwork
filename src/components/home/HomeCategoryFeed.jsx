@@ -71,7 +71,7 @@ function ArticleCard({ article, catColor, catLabel }) {
     <Link
       to={createPageUrl(`Article?id=${article.id}`)}
       className="flex gap-2 p-2.5 rounded-xl transition-all"
-      style={{ backgroundColor: 'var(--app-card-bg, #111)', border: '1px solid var(--app-border, rgba(255,255,255,0.08))' }}
+      style={{ backgroundColor: 'var(--app-card-bg)', border: '1px solid var(--app-border)' }}
     >
       {article.image_url ? (
         <img 
@@ -82,7 +82,7 @@ function ArticleCard({ article, catColor, catLabel }) {
           className="w-16 h-14 object-cover rounded-lg flex-shrink-0" 
         />
       ) : article.video_url ? (
-        <div className="w-16 h-14 rounded-lg flex-shrink-0 flex items-center justify-center" style={{ backgroundColor: 'var(--app-bg, #0d1117)', border: '1px solid var(--app-border)' }}>
+        <div className="w-16 h-14 rounded-lg flex-shrink-0 flex items-center justify-center" style={{ backgroundColor: 'var(--app-bg)', border: '1px solid var(--app-border)' }}>
           <Play className="w-4 h-4 text-gray-500" />
         </div>
       ) : null}
@@ -109,7 +109,7 @@ function CategoryBlock({ category, videos, articles }) {
           <div className="w-1 h-5 rounded-full flex-shrink-0" style={{ backgroundColor: category.color }} />
           <h3 className="font-bold text-base" style={{ color: 'var(--app-text, #ffffff)' }}>{category.label}</h3>
         </div>
-        <div className="rounded-lg p-4 text-center text-gray-500 text-xs" style={{ backgroundColor: 'var(--app-card-bg, #111)', border: '1px solid var(--app-border)' }}>
+        <div className="rounded-lg p-4 text-center text-gray-500 text-xs" style={{ backgroundColor: 'var(--app-card-bg)', border: '1px solid var(--app-border)' }}>
           אין תוכן בקטגוריה זו עדיין
         </div>
       </div>
