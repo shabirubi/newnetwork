@@ -126,6 +126,9 @@ export default function Layout({ children, currentPageName }) {
   const [reelsOpen, setReelsOpen] = useState(false);
   const [podcastModalOpen, setPodcastModalOpen] = useState(false);
   const [adminPasswordOpen, setAdminPasswordOpen] = useState(false);
+  const [catTickerItems, setCatTickerItems] = useState([]);
+  const [catTickerIdx, setCatTickerIdx] = useState(0);
+  const [catTickerKey, setCatTickerKey] = useState(0);
 
 
 
@@ -134,6 +137,22 @@ export default function Layout({ children, currentPageName }) {
     window.addEventListener('openReels', handler);
     return () => window.removeEventListener('openReels', handler);
   }, []);
+
+  // Fetch latest articles for categories sidebar ticker
+  useEffect(() => {
+    base44.entities.NewsArticle.list('-created_date', 8).then(articles => {
+      setCatTickerItems(articles || []);
+    }).catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    if (catTickerItems.length <= 1) return;
+    const t = setInterval(() => {
+      setCatTickerIdx(i => (i + 1) % catTickerItems.length);
+      setCatTickerKey(k => k + 1);
+    }, 3000);
+    return () => clearInterval(t);
+  }, [catTickerItems.length]);
 
   // בדיקת משתמש מחובר
   useEffect(() => {
@@ -622,14 +641,28 @@ export default function Layout({ children, currentPageName }) {
                 className="absolute right-0 top-0 bottom-0 w-72 overflow-y-auto shadow-2xl"
                 style={{ background: darkMode ? '#0f172a' : '#ffffff' }}
               >
-                {/* Header */}
-                <div className="sticky top-0 z-10 p-5 flex items-center justify-between" style={{ background: 'linear-gradient(135deg, #0057B8, #E31E24)' }}>
-                  <h2 className="text-white font-black text-lg tracking-wide">קטגוריות</h2>
+                {/* Header - Ticker */}
+                <div className="sticky top-0 z-10 px-3 py-2 flex items-center gap-2" style={{ background: 'linear-gradient(135deg, #0057B8, #E31E24)' }}>
+                  <div className="flex-shrink-0 bg-white/20 rounded-full px-2 py-0.5 text-white text-[10px] font-black whitespace-nowrap">חדשות</div>
+                  <div className="flex-1 overflow-hidden h-5 relative">
+                    <AnimatePresence mode="wait">
+                      <motion.span
+                        key={catTickerKey}
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        exit={{ y: -20, opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="absolute inset-0 text-white text-xs font-bold truncate flex items-center"
+                      >
+                        {catTickerItems[catTickerIdx]?.title || 'קטגוריות'}
+                      </motion.span>
+                    </AnimatePresence>
+                  </div>
                   <button
                     onClick={() => setCategoriesSidebarOpen(false)}
-                    className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-white active:scale-90 transition-transform"
+                    className="flex-shrink-0 w-7 h-7 rounded-full bg-white/20 flex items-center justify-center text-white active:scale-90 transition-transform"
                   >
-                    <X size={18} />
+                    <X size={16} />
                   </button>
                 </div>
 
