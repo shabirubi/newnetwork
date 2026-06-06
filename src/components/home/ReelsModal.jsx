@@ -514,22 +514,13 @@ export default function ReelsModal({ isOpen, onClose }) {
                 style={{ border: isActive ? '2px solid #E31E24' : '2px solid rgba(255,255,255,0.3)', boxShadow: isActive ? '0 0 8px rgba(227,30,36,0.6)' : 'none' }}
                 className="w-12 h-12 rounded-full overflow-hidden relative transition-all"
               >
-                {catReel?.video_url ? (
-                  catReel.thumbnail_url ? (
-                    <img
-                      src={catReel.thumbnail_url}
-                      alt={catLabel}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <video
-                      src={catReel.video_url}
-                      className="w-full h-full object-cover"
-                      muted
-                      playsInline
-                      preload="none"
-                    />
-                  )
+                {catReel?.thumbnail_url ? (
+                  <img
+                    src={catReel.thumbnail_url}
+                    alt={catLabel}
+                    className="w-full h-full object-cover"
+                    onError={(e) => { e.target.style.display = 'none'; }}
+                  />
                 ) : (
                   <div className={`w-full h-full flex items-center justify-center text-xl ${isActive ? 'bg-[#E31E24]/40' : 'bg-black/40'}`}>
                     {catEmoji}
