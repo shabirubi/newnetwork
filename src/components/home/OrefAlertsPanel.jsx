@@ -338,8 +338,16 @@ function BreakingTicker({ items }) {
 
     const item = items[idx];
     const typeInfo = TICKER_TYPES[idx % TICKER_TYPES.length];
-    const url = item.video_url ? `/VideoCreator?video=${item.video_url}` : `/Article?id=${item.id}`;
     const isVideo = !!item.video_url || !!item.thumbnail_url;
+
+    const handleClick = (e) => {
+        e.stopPropagation();
+        if (isVideo) {
+            window.dispatchEvent(new CustomEvent('openReels'));
+        } else {
+            window.location.href = `/Article?id=${item.id}`;
+        }
+    };
 
     return (
         <div className="flex items-center gap-2 flex-1 overflow-hidden" onClick={e => e.stopPropagation()}>
@@ -361,27 +369,27 @@ function BreakingTicker({ items }) {
             {/* Title - slides in from bottom */}
             <div className="flex-1 overflow-hidden h-5 relative">
                 <AnimatePresence mode="wait">
-                    <motion.a
+                    <motion.button
                         key={`title-${animKey}`}
-                        href={url}
+                        onClick={handleClick}
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         exit={{ y: -20, opacity: 0 }}
                         transition={{ duration: 0.35, ease: 'easeInOut' }}
-                        className="absolute inset-0 text-xs font-bold truncate flex items-center hover:underline cursor-pointer"
+                        className="absolute inset-0 text-xs font-bold truncate flex items-center hover:underline cursor-pointer text-right w-full"
                         style={{ fontFamily: FONT, color: '#1e3a5f' }}
                     >
                         {item.title}
-                    </motion.a>
+                    </motion.button>
                 </AnimatePresence>
             </div>
 
             {/* Thumbnail preview if video */}
             {isVideo && item.thumbnail_url && (
                 <AnimatePresence mode="wait">
-                    <motion.a
+                    <motion.button
                         key={`thumb-${animKey}`}
-                        href={url}
+                        onClick={handleClick}
                         initial={{ opacity: 0, scale: 0.8 }}
                         animate={{ opacity: 1, scale: 1 }}
                         exit={{ opacity: 0, scale: 0.8 }}
@@ -389,7 +397,7 @@ function BreakingTicker({ items }) {
                         className="flex-shrink-0 w-8 h-6 rounded overflow-hidden border border-blue-300 hover:border-blue-500 transition-colors"
                     >
                         <img src={item.thumbnail_url} alt="" className="w-full h-full object-cover" />
-                    </motion.a>
+                    </motion.button>
                 </AnimatePresence>
             )}
 
