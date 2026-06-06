@@ -151,12 +151,12 @@ export default function Article() {
           </Badge>
         </div>
 
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 leading-tight">
+        <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4 leading-tight" style={{ color: 'var(--app-text, #ffffff)' }}>
           {article.title}
         </h1>
 
         {article.subtitle && (
-          <p className="text-2xl text-gray-200 mb-6">
+          <p className="text-2xl mb-6" style={{ color: 'var(--app-text, #e5e7eb)' }}>
             {article.subtitle}
           </p>
         )}

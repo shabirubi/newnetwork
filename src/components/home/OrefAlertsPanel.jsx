@@ -331,8 +331,10 @@ export default function AlertsPanel() {
             <div
                 className="w-full flex items-center justify-between px-3 sm:px-6 py-2 cursor-pointer select-none"
                 style={{
-                    background: hasActiveNow ? '#1a0000' : '#111',
-                    borderBottom: hasActiveNow ? '2px solid #CC0000' : '1px solid #222',
+                    background: hasActiveNow
+                        ? '#1a0000'
+                        : 'linear-gradient(135deg, #e0f2fe 0%, #bae6fd 40%, #7dd3fc 70%, #38bdf8 100%)',
+                    borderBottom: hasActiveNow ? '2px solid #CC0000' : '1px solid #7dd3fc',
                     borderTop: '3px solid #0057B8',
                     fontFamily: FONT,
                 }}
