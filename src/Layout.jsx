@@ -163,18 +163,15 @@ export default function Layout({ children, currentPageName }) {
   }, [darkMode]);
 
   useEffect(() => {
-      const savedColor = localStorage.getItem('themeColor') || '#0080FF';
-      document.documentElement.style.setProperty('--primary', savedColor);
-      document.documentElement.style.setProperty('--accent', savedColor);
+      const savedColor = localStorage.getItem('themeColor');
+      if (savedColor) {
+        document.documentElement.style.setProperty('--primary', savedColor);
+        document.documentElement.style.setProperty('--accent', savedColor);
+      }
     }, []);
 
-  // Apply dark mode on mount
+  // Cleanup video elements on unmount
   useEffect(() => {
-    if (darkMode) {
-      document.documentElement.classList.add('dark');
-    }
-    
-    // Cleanup video elements on unmount to prevent removeChild errors
     return () => {
       const videos = document.querySelectorAll('video');
       videos.forEach(video => {
@@ -182,9 +179,7 @@ export default function Layout({ children, currentPageName }) {
           video.pause();
           video.src = '';
           video.load();
-        } catch (e) {
-          // Ignore cleanup errors
-        }
+        } catch (e) {}
       });
     };
   }, []);
