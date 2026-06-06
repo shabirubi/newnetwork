@@ -612,6 +612,15 @@ export default function FeaturedArticleEditor() {
   const [editorOpen, setEditorOpen] = useState(false);
   const [creatingNew, setCreatingNew] = useState(false);
   const queryClient = useQueryClient();
+  const [isDark, setIsDark] = useState(() => localStorage.getItem('darkMode') !== 'false');
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsDark(!document.documentElement.classList.contains('light-mode'));
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    return () => observer.disconnect();
+  }, []);
 
   const { data: article, isLoading } = useQuery({
     queryKey: ['featured-main-article'],
@@ -630,8 +639,14 @@ export default function FeaturedArticleEditor() {
   const openNew = () => { setCreatingNew(true); setEditorOpen(true); };
   const handleSaved = () => { setEditorOpen(false); queryClient.invalidateQueries({ queryKey: ['featured-main-article'] }); };
 
+  const cardBg = isDark ? '#0d0d0d' : '#ffffff';
+  const cardBorder = isDark ? '#374151' : '#e5e7eb';
+  const titleColor = isDark ? '#ffffff' : '#111827';
+  const subtitleColor = isDark ? '#d1d5db' : '#374151';
+  const contentColor = isDark ? '#9ca3af' : '#4b5563';
+
   if (isLoading) {
-    return <div className="w-full h-[50vh] bg-[#0d0d0d] rounded-2xl animate-pulse mx-2 sm:mx-4 mb-6" />;
+    return <div className="w-full h-[50vh] rounded-2xl animate-pulse mx-2 sm:mx-4 mb-6" style={{ backgroundColor: cardBg }} />;
   }
 
   const displayImages = article?.extra_images || [];
@@ -645,7 +660,7 @@ export default function FeaturedArticleEditor() {
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
             <div className="w-1 h-6 bg-[#E31E24] rounded-full" />
-            <h2 className="text-white font-bold text-lg">כתבה מרכזית</h2>
+            <h2 className="font-bold text-lg" style={{ color: titleColor }}>כתבה מרכזית</h2>
           </div>
           <div className="flex items-center gap-2">
             {article?.is_breaking && (
@@ -662,7 +677,7 @@ export default function FeaturedArticleEditor() {
         </div>
 
         {/* Article Display - Mobile First Layout */}
-        <div className="bg-[#0d0d0d] rounded-2xl overflow-hidden border border-gray-800">
+        <div className="rounded-2xl overflow-hidden" style={{ backgroundColor: cardBg, border: `1px solid ${cardBorder}` }}>
           <div className="flex flex-col">
             
             {/* Media Section - Full Width on Mobile */}
@@ -682,14 +697,14 @@ export default function FeaturedArticleEditor() {
                   {selectedCat.label}
                 </span>
               )}
-              <h1 className="text-white text-base sm:text-lg font-bold leading-tight break-words">
+              <h1 className="text-base sm:text-lg font-bold leading-tight break-words" style={{ color: titleColor }}>
                 {article?.title || "אין כתבה מרכזית"}
               </h1>
               {article?.subtitle && (
-                <p className="text-gray-300 text-xs sm:text-sm leading-snug break-words">{article.subtitle}</p>
+                <p className="text-xs sm:text-sm leading-snug break-words" style={{ color: subtitleColor }}>{article.subtitle}</p>
               )}
               {article?.content && (
-                <p className="text-gray-400 text-xs sm:text-sm leading-snug break-words line-clamp-3">
+                <p className="text-xs sm:text-sm leading-snug break-words line-clamp-3" style={{ color: contentColor }}>
                   {article.content}
                 </p>
               )}
