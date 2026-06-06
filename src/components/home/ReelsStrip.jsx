@@ -87,6 +87,15 @@ function ReelThumb({ video, onClick, customCatMap }) {
 
 export default function ReelsStrip() {
   const [reelsOpen, setReelsOpen] = useState(false);
+  const [isDark, setIsDark] = useState(() => localStorage.getItem('darkMode') !== 'false');
+
+  useEffect(() => {
+    const observer = new MutationObserver(() => {
+      setIsDark(!document.documentElement.classList.contains('light-mode'));
+    });
+    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+    return () => observer.disconnect();
+  }, []);
 
   // Load only 30 videos for better performance
   const { data: videos = [] } = useQuery({
@@ -129,7 +138,7 @@ export default function ReelsStrip() {
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
             <Radio className="w-4 h-4 text-[#E31E24]" />
-            <span className="text-white font-bold text-base">ריילס</span>
+            <span className="font-bold text-base" style={{ color: isDark ? '#ffffff' : '#111827' }}>ריילס</span>
             <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse" />
           </div>
           <button
