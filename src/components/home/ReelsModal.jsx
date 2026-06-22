@@ -404,8 +404,11 @@ export default function ReelsModal({ isOpen, onClose }) {
     });
   })();
 
-  // קטגוריות ייחודיות מהסרטונים
-  const usedCategories = ["all", ...new Set(videoOnly.map(v => v.category).filter(Boolean))];
+  // כל קטגוריות ה-builtin + קטגוריות נוספות מהסרטונים
+  const ALL_CATS = ["all","breaking","security","economy","politics","technology","sports","entertainment","world","health","music","horoscope","finance","crime","israel","military","education","culture","environment","science","local","law","vod"];
+  const videoCats = new Set(videoOnly.map(v => v.category).filter(Boolean));
+  const extraCats = [...videoCats].filter(c => !ALL_CATS.includes(c));
+  const usedCategories = [...ALL_CATS, ...extraCats];
   
   // פונקציה לקבלת שם קטגוריה
   const getCatLabel = (cat) => BUILTIN_LABELS[cat] || customCatMap[cat] || cat;
@@ -490,9 +493,17 @@ export default function ReelsModal({ isOpen, onClose }) {
           <div className="w-1.5 h-1.5 bg-red-500 rounded-full animate-pulse" />
           <span className="text-white font-bold text-sm">Reels</span>
         </div>
-        <button onClick={onClose} className="p-1.5 hover:bg-white/10 rounded-full transition-colors">
-          <X className="w-5 h-5 text-white" />
-        </button>
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => window.dispatchEvent(new Event('openUploadVideo'))}
+            className="text-xs bg-white/10 hover:bg-white/20 text-white px-2 py-1 rounded-lg transition-colors flex items-center gap-1"
+          >
+            <span>+</span> העלה
+          </button>
+          <button onClick={onClose} className="p-1.5 hover:bg-white/10 rounded-full transition-colors">
+            <X className="w-5 h-5 text-white" />
+          </button>
+        </div>
       </div>
 
       {/* Categories Stories-Style - overlay on top */}
@@ -558,9 +569,15 @@ export default function ReelsModal({ isOpen, onClose }) {
           </div>
         ) : currentReels.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center px-8">
-            <div className="text-5xl mb-4">🎬</div>
-            <p className="text-white font-bold text-xl mb-2">אין סרטוני ריילס בקטגוריה זו</p>
-            <p className="text-gray-400 text-sm mb-6">בחר קטגוריה אחרת או העלה סרטון</p>
+            <Radio className="w-12 h-12 text-gray-600 mb-4" />
+            <p className="text-white font-bold text-xl mb-2">אין סרטונים בקטגוריה זו</p>
+            <p className="text-gray-400 text-sm mb-6">העלה סרטון או בחר קטגוריה אחרת</p>
+            <button
+              onClick={() => setCategoryIdx(0)}
+              className="bg-[#E31E24] text-white px-6 py-2 rounded-full font-bold text-sm"
+            >
+              הצג הכל
+            </button>
           </div>
         ) : (
           <AnimatePresence mode="wait">

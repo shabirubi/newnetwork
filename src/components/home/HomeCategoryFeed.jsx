@@ -238,11 +238,13 @@ export default function HomeCategoryFeed() {
   const activeCategories = [];
   const seenIds = new Set();
 
-  // ALL built-in categories (show all, even if empty)
+  // Only show categories that have content
   for (const cat of CATEGORIES) {
     const catVideos = cleanVideos.filter(v => v.category === cat.id);
     const catArticles = userArticles.filter(a => a.category === cat.id);
-    activeCategories.push({ ...cat, videos: catVideos, articles: catArticles });
+    if (catVideos.length > 0 || catArticles.length > 0) {
+      activeCategories.push({ ...cat, videos: catVideos, articles: catArticles });
+    }
     seenIds.add(cat.id);
   }
 
