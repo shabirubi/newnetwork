@@ -376,7 +376,7 @@ function BreakingTicker({ items }) {
                         animate={{ y: 0, opacity: 1 }}
                         exit={{ y: -20, opacity: 0 }}
                         transition={{ duration: 0.35, ease: 'easeInOut' }}
-                        className="absolute inset-0 text-sm font-black truncate flex items-center hover:underline cursor-pointer text-right w-full"
+                        className="absolute inset-0 text-base font-black truncate flex items-center hover:underline cursor-pointer text-right w-full"
                         style={{ fontFamily: FONT, color: '#ffffff' }}
                     >
                         {item.title}
