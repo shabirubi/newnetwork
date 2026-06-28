@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { base44 } from "@/api/base44Client";
-import { Trash2, Video, Newspaper, Users, MessageCircle, Loader2, RefreshCw, Eye, Search } from "lucide-react";
+import { Trash2, Video, Newspaper, Users, MessageCircle, Loader2, RefreshCw, Eye, Search, Tag, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
@@ -34,6 +34,28 @@ export default function AdminContent() {
     queryKey: ['admin-content-comments'],
     queryFn: () => base44.entities.VideoComment.list('-created_date', 500),
     enabled: selectedTab === 'comments'
+  });
+
+  const { data: customCategories = [], isLoading: loadingCategories, refetch: refetchCategories } = useQuery({
+    queryKey: ['admin-custom-categories'],
+    queryFn: () => base44.entities.CustomCategory.list('-created_date', 100),
+    enabled: selectedTab === 'categories'
+  });
+
+  const [newCatLabel, setNewCatLabel] = useState('');
+  const [newCatColor, setNewCatColor] = useState('#6366F1');
+
+  const addCategoryMutation = useMutation({
+    mutationFn: async ({ label, color }) => {
+      return await base44.entities.CustomCategory.create({ label, color });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['admin-custom-categories']);
+      queryClient.invalidateQueries(['custom-categories-db']);
+      setNewCatLabel('');
+      toast.success('קטגוריה נוספה בהצלחה');
+    },
+    onError: () => toast.error('שגיאה בהוספת קטגוריה')
   });
 
   const deleteVideoMutation = useMutation({
@@ -92,6 +114,18 @@ export default function AdminContent() {
     }
   });
 
+  const deleteCategoryMutation = useMutation({
+    mutationFn: async (id) => {
+      await base44.entities.CustomCategory.delete(id);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries(['admin-custom-categories']);
+      queryClient.invalidateQueries(['custom-categories-db']);
+      toast.success('קטגוריה נמחקה');
+    },
+    onError: () => toast.error('שגיאה במחיקת קטגוריה')
+  });
+
   const handleDelete = (id, type) => {
     if (!confirm('האם אתה בטוח?')) return;
     switch(type) {
@@ -107,6 +141,7 @@ export default function AdminContent() {
     { id: 'articles', label: 'חדשות', icon: Newspaper, count: articles.length },
     { id: 'reporters', label: 'כתבים', icon: Users, count: reporters.length },
     { id: 'comments', label: 'תגובות', icon: MessageCircle, count: comments.length },
+    { id: 'categories', label: 'קטגוריות', icon: Tag, count: customCategories.length },
   ];
 
   const currentData = {
@@ -114,6 +149,7 @@ export default function AdminContent() {
     articles: { data: articles, loading: loadingArticles, type: 'article', refetch: refetchArticles },
     reporters: { data: reporters, loading: loadingReporters, type: 'reporter', refetch: refetchReporters },
     comments: { data: comments, loading: loadingComments, type: 'comment', refetch: refetchComments },
+    categories: { data: customCategories, loading: loadingCategories, type: 'category', refetch: refetchCategories },
   }[selectedTab];
 
   return (
@@ -164,11 +200,63 @@ export default function AdminContent() {
         </Button>
       </div>
 
-      {currentData.loading ? (
+      {/* Categories manager — special UI */}
+      {selectedTab === 'categories' && (
+        <div className="space-y-4">
+          {/* Add new */}
+          <div className="bg-gray-800/50 rounded-xl p-4 flex gap-3 items-end">
+            <div className="flex-1">
+              <label className="text-gray-400 text-xs mb-1 block">שם קטגוריה</label>
+              <Input
+                placeholder="לדוגמה: כלכלה, בריאות..."
+                value={newCatLabel}
+                onChange={e => setNewCatLabel(e.target.value)}
+                className="bg-gray-700 border-gray-600 text-white"
+                onKeyDown={e => e.key === 'Enter' && newCatLabel.trim() && addCategoryMutation.mutate({ label: newCatLabel.trim(), color: newCatColor })}
+              />
+            </div>
+            <div>
+              <label className="text-gray-400 text-xs mb-1 block">צבע</label>
+              <input type="color" value={newCatColor} onChange={e => setNewCatColor(e.target.value)} className="w-10 h-10 rounded cursor-pointer border-0" />
+            </div>
+            <Button
+              onClick={() => newCatLabel.trim() && addCategoryMutation.mutate({ label: newCatLabel.trim(), color: newCatColor })}
+              disabled={!newCatLabel.trim() || addCategoryMutation.isPending}
+              className="bg-[#E31E24] hover:bg-red-700 text-white"
+            >
+              {addCategoryMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
+              הוסף
+            </Button>
+          </div>
+
+          {loadingCategories ? (
+            <div className="flex justify-center py-10"><Loader2 className="w-6 h-6 text-[#E31E24] animate-spin" /></div>
+          ) : customCategories.length === 0 ? (
+            <p className="text-gray-500 text-center py-8">אין קטגוריות מותאמות אישית עדיין</p>
+          ) : (
+            <div className="space-y-2">
+              {customCategories.map(cat => (
+                <motion.div key={cat.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }}
+                  className="bg-gray-800/50 rounded-xl p-4 flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-4 h-4 rounded-full flex-shrink-0" style={{ backgroundColor: cat.color || '#6366F1' }} />
+                    <span className="text-white font-medium">{cat.label}</span>
+                  </div>
+                  <Button onClick={() => deleteCategoryMutation.mutate(cat.id)} variant="destructive" size="sm">
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </motion.div>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      {selectedTab !== 'categories' && currentData.loading ? (
         <div className="flex items-center justify-center py-20">
           <Loader2 className="w-8 h-8 text-[#E31E24] animate-spin" />
         </div>
-      ) : (
+      ) : selectedTab !== 'categories' && (
         <div className="space-y-2">
           {currentData.data
             .filter(item => {

@@ -200,16 +200,16 @@ export default function HomeCategoryFeed() {
   // Share the same cache as ReelsStrip — no double fetch
   const { data: allVideos = [] } = useQuery({
     queryKey: ["home-all-videos"],
-    queryFn: () => base44.entities.UserVideo.list("-created_date", 50),
+    queryFn: () => base44.entities.UserVideo.list("-created_date", 100),
     staleTime: 15 * 60 * 1000,
     gcTime: 60 * 60 * 1000,
   });
 
-  // Share the same cache as pages/Home featured-articles
+  // Share the same cache as pages/Home featured-articles — load enough to cover all categories
   const { data: allArticles = [] } = useQuery({
     queryKey: ["featured-articles"],
     queryFn: async () => {
-      try { return await base44.entities.NewsArticle.list("-created_date", 50); }
+      try { return await base44.entities.NewsArticle.list("-created_date", 200); }
       catch { return []; }
     },
     staleTime: 15 * 60 * 1000,
