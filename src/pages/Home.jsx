@@ -23,9 +23,6 @@ import PodcastUploadModal from "../components/home/PodcastUploadModal";
 import WeatherForecastModal from "../components/weather/WeatherForecastModal";
 import YouTubeFloatingButton from "../components/home/YouTubeFloatingButton";
 import ReelsStrip from "../components/home/ReelsStrip";
-import OrefAlertsPanel from "../components/home/OrefAlertsPanel";
-import OrefEmergencyPopup from "../components/home/OrefEmergencyPopup";
-
 export default function Home() {
   const [vodModalOpen, setVodModalOpen] = useState(false);
   const [categoriesMenuOpen, setCategoriesMenuOpen] = useState(false);
@@ -69,12 +66,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen" style={{ backgroundColor: 'var(--app-bg, #0d1117)', transition: 'background-color 0.3s' }}>
-
-      {/* OREF Emergency Popup */}
-      <OrefEmergencyPopup />
-
-      {/* OREF Alerts - Compact Mobile */}
-      <OrefAlertsPanel />
 
       {/* Reels Strip */}
       <ReelsStrip />
